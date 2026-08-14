@@ -1,0 +1,30 @@
+# Build output (framework chosen in stage 2 — cover both until then)
+/build/
+/.pio/
+/managed_components/
+sdkconfig
+sdkconfig.old
+sdkconfig.defaults.*
+dependencies.lock
+*.bin
+*.elf
+*.map
+
+# Host-target / test artifacts
+/build_host/
+*.gcda
+*.gcno
+*.gcov
+/coverage/
+
+# Node (Wokwi CLI, tooling)
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
