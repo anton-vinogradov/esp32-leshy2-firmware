@@ -20,7 +20,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 |--:|-------|:------:|
 | 1 | [Vision & scope](#1-vision--scope) | 🟡 |
 | 2 | [Target & toolchain](#2-target--toolchain) | ✅ |
-| 3 | [System architecture](#3-system-architecture) | ⏳ |
+| 3 | [System architecture](#3-system-architecture) | ✅ |
 | 4 | [Peripheral & driver map](#4-peripheral--driver-map) | ⏳ |
 | 5 | [UI/UX & control conventions](#5-uiux--control-conventions) | ⏳ |
 | 6 | [Feature modes](#6-feature-modes) | ⏳ |
@@ -76,11 +76,22 @@ The "[port leshy, don't rewrite](#1-vision--scope)" rule points at Arduino: lesh
 
 ## 3. System architecture
 
-**⏳ Planned.** The RTOS tasks and the dual-core split on the S3, the **S3↔C5 link protocol** (frame format, DRDY handshake, timeouts, loss handling), the top-level state machines, and the **HAL boundary** that lets each driver run against a test stub. *Designed in the doc before it's implemented.*
+**✅ Spec.** The runtime shape on the S3 (RTOS tasks, dual-core split), the **S3↔C5 link protocol**, the top-level state machines, and the **HAL boundary** that lets every driver run against a test stub. The link is the novel, risky part, so it gets its own spec: **[docs/link-protocol.md](docs/link-protocol.md)**.
 
-**Decisions.** _TBD._
+**Decisions.**
 
-**Artifacts.** _TBD._
+- **The S3↔C5 link: SPI Slave HD + DMA, master-pull, `DRDY` for push.** The S3 is master and initiates every transfer; the C5 raises a `DRDY` line to ask the S3 to read a queued event. 64-byte slots, an 8-byte framed header with sequence + CRC-16, `ACK` / retransmit / timeout on state-changing commands, best-effort ordered events, `PING` / reset resync. Frame + opcode tables and the state machines are in [docs/link-protocol.md](docs/link-protocol.md). *(Pins are owned by the [hardware repo](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/hardware/c5-buses); the link never touches the shared SPI2, so a wedged C5 can't stall the UI or the wired radios.)*
+- **Reliability is asymmetric — the master pulls anything that matters.** The C5 never has to guarantee a push: scan telemetry is best-effort, and anything the S3 truly needs it requests and waits for. That keeps the slave thin.
+- **`STOP_ALL` + a C5-side dead-man put the TX-kill safety blocker in the protocol.** `STOP_ALL` is serviced ahead of everything; independently, the C5 self-stops TX if the link goes silent — so a dead S3 or a broken link can't leave the C5 transmitting. `C5_EN` low is the hard kill behind that.
+- **Dual-core split on the S3: UI on one core, radios + link on the other.** Core 1 runs render / touch / input; core 0 runs the wired-radio drivers, the 2.4 GHz Wi-Fi/BLE stack, the SD/PCAP writer, and the **link task** — so a full-screen redraw never stalls radio or link servicing. This is the firmware side of the hardware's DMA-double-buffer + bus-arbiter decisions.
+- **One task owns SPI3.** The link task is the sole owner of the S3↔C5 bus: it turns high-level mode requests into commands and dispatches incoming events to the mode handlers. Single owner ⇒ no bus contention and one home for the retry/timeout logic.
+- **HAL boundary = a portable seam per driver.** Each driver (display, radios, storage, buttons, link transport) sits behind a thin interface with a real ESP backend and a host fake. The link **codec** is pure portable C in `common/link/`, compiled into both firmwares *and* the host tests — so the two chips can't drift apart, and [§7](#7-emulation--test-harness) can exercise loss / CRC / timeout in CI without hardware.
+
+**Artifacts.**
+
+- **[docs/link-protocol.md](docs/link-protocol.md)** (+ [RU](docs/link-protocol.ru.md)) — the full link spec: physical layer, 64-byte slots, frame + opcode tables, the DRDY handshake, reliability, versioning, timing defaults, and the two state machines.
+- **`firmware/common/link/`** — the portable codec the doc specifies (framing, CRC, sequence/ACK, state machines), shared by the S3, the C5, and the host tests. Built in [§8](#8-implementation) against this design.
+- This section is the design; the RTOS task map and the driver HAL headers land with the [§8](#8-implementation) skeleton.
 
 ---
 
