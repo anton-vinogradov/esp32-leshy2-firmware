@@ -15,7 +15,7 @@ The [README](README.md) is the **source of truth**. We **design each stage in th
 - **Propose in the doc.** If you want to change how something works, propose the **decision** first (a PR to the README stage, or a Discussion). Code follows an agreed design.
 - **Trace code to a decision.** Every module should map back to a stage decision. If there is no decision yet, that stage is still open — help design it.
 - **Test before hardware.** The firmware is built to run in emulation ([stage 9](README.md#9-emulation--test-harness)) so logic, drivers, and the S3↔C5 protocol can be validated without a board. New code should come with host tests where it can.
-- **One source of truth per fact.** The [hardware repo](https://github.com/anton-vinogradov/esp32-leshy2) owns the pins, the BOM, and the capability ceiling; this repo links to them instead of copying. A CI check (`tools/check_docs.py`) fails any push whose cross-links to the hardware repo have rotted, so the two docs can't silently drift.
+- **One source of truth per fact.** The [hardware repo](https://github.com/anton-vinogradov/esp32-leshy2) owns the pins, the BOM, and the capability ceiling; this repo links to them instead of copying. A shared **docsync** check runs in CI on both repos — it fails any push whose cross-repo links have rotted or whose canonical sections drifted out of sync, so the two docs can't silently diverge.
 
 ## Ways to help
 
