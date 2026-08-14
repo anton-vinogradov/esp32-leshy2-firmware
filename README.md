@@ -19,7 +19,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 | # | Stage | Status |
 |--:|-------|:------:|
 | 1 | [Vision & scope](#1-vision--scope) | 🟡 |
-| 2 | [Target & toolchain](#2-target--toolchain) | ⏳ |
+| 2 | [Target & toolchain](#2-target--toolchain) | ✅ |
 | 3 | [System architecture](#3-system-architecture) | ⏳ |
 | 4 | [Peripheral & driver map](#4-peripheral--driver-map) | ⏳ |
 | 5 | [UI/UX & control conventions](#5-uiux--control-conventions) | ⏳ |
@@ -52,11 +52,25 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 2. Target & toolchain
 
-**⏳ Planned.** Choose the base framework — port esp32-leshy on **Arduino / PlatformIO** vs migrate to **ESP-IDF** — plus the dual-target build (S3 + C5), the repo layout, and CI. This is the first real fork, and it shapes everything downstream (including the [test harness](#7-emulation--test-harness)); it is weighed here with a steelman of each side before any code is written. *Designed in the doc before it's implemented.*
+**✅ Spec.** Pick the base framework, the two-target build (S3 + C5), the repo layout, and CI. This is the first real fork and it shapes everything downstream — the [test harness](#7-emulation--test-harness) most of all — so each side is steelmanned before any code is written.
 
-**Decisions.** _TBD._
+**Decisions.**
 
-**Artifacts.** _TBD._
+The "[port leshy, don't rewrite](#1-vision--scope)" rule points at Arduino: leshy is a mature **PlatformIO / Arduino** codebase (TFT_eSPI display, NimBLE, `WiFi.h` promiscuous, LittleFS). But the [harness](#7-emulation--test-harness) runs on **ESP-IDF** tools (Linux host-target + CMock, `idf.py qemu`), and the second chip — **ESP32-C5** — is new silicon whose first-class, current support lives in ESP-IDF (C5 v1.0 is production since IDF 5.5.2); stock PlatformIO's Espressif platform does not even carry the C5. Three ways to resolve the fork, each steelmanned:
+
+- **(A) Stay on Arduino / PlatformIO.** *For:* fastest to a running port, exact lineage match, maximum reuse, the largest community. *Against:* stock PlatformIO's Espressif platform has stalled and ships no C5 (you lean on the community `pioarduino` fork), and the §7 stack (host-target, CMock, `idf.py qemu`) is IDF-native — bolted on here, not first-class.
+- **(B) Migrate to pure ESP-IDF.** *For:* first-class, current C5 support for the 5 GHz agent on the newest silicon; the cleanest dual-chip build; a native §7 harness. *Against:* a clean-sheet rewrite drops TFT_eSPI / NimBLE / Arduino `WiFi.h` / LittleFS — exactly the rewrite the project ruled out.
+- **(C) ESP-IDF build system, Arduino kept as a component.** *For:* build with `idf.py` / CMake (so the C5 is first-class and §7 is native) while the **S3 keeps its Arduino APIs as an ESP-IDF component** — the leshy port compiles nearly as-is — and the **C5 agent is native ESP-IDF** (a thin radio agent, no Arduino). The standard path for a big Arduino codebase that also needs IDF's toolchain and a new chip. *Against:* one-time build-system setup and a component pin to keep in step.
+
+**Chosen: (C).** It is the only option that meets all three locked-in constraints at once — port-don't-rewrite (Arduino-as-component on the S3), the C5 5 GHz agent on current silicon (native IDF), and the IDF-native harness. (A) leaves §7 and the C5 second-class; (B) forces the forbidden rewrite.
+
+**Artifacts.**
+
+- **Two ESP-IDF apps, one shared link component:** `firmware/s3/` (the leshy port, Arduino as a component), `firmware/c5/` (the native 5 GHz agent), and `firmware/common/link/` — the [S3↔C5 protocol](#3-system-architecture), compiled into both firmwares *and* the host tests.
+- **Toolchain pin:** ESP-IDF **5.5.x** (carries C5 v1.0 production support, maintained into 2028) with **arduino-esp32 3.3.x** as the S3 component (that line tracks IDF 5.5). One IDF, two targets — `esp32s3` and `esp32c5`.
+- **CI:** GitHub Actions on the official `esp-idf` action — a matrix that builds the S3 app, builds the C5 app, and runs the host-target Unity + CMock suite, plus an `idf.py qemu` smoke boot. Nothing reaches copper on red (see [§7](#7-emulation--test-harness)).
+- **PlatformIO** stays as an optional convenience env via the `pioarduino` fork, but `idf.py` is canonical so the harness and CI stay first-class.
+- This section is the design; the two-app skeleton is stood up in [§8](#8-implementation) against exactly these pins.
 
 ---
 
