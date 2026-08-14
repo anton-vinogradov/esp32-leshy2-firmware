@@ -2,7 +2,7 @@
 
 *Read this in: **English** · [Русский](link-protocol.ru.md)*
 
-The deep-dive for the [System architecture](../README.md#3-system-architecture) decision. The **ESP32-S3** is the brain and bus master; the **ESP32-C5** is a thin 5 GHz agent that can only be clocked by the S3. This document is the narrow, versioned contract between them: how a byte on the wire becomes a command or an event, and how the link stays correct when frames are lost.
+The deep-dive for the [System architecture](../README.md#5-system-architecture) decision. The **ESP32-S3** is the brain and bus master; the **ESP32-C5** is a thin 5 GHz agent that can only be clocked by the S3. This document is the narrow, versioned contract between them: how a byte on the wire becomes a command or an event, and how the link stays correct when frames are lost.
 
 The wiring (pins, power gating) is owned by the hardware repo — see the [c5-buses sheet](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/hardware/c5-buses). This doc references it, it does not redefine it.
 
@@ -196,7 +196,7 @@ The `ver` byte gates the whole format. On boot the C5 sends `HELLO {ver, caps}`;
 
 ## 9. Timing constants (v1 defaults)
 
-Tunable; the final values are set on-hardware in [bring-up (§9)](../README.md#9-on-hardware-bring-up).
+Tunable; the final values are set on-hardware in [bring-up (§11)](../README.md#11-on-hardware-bring-up).
 
 | Constant | Default | Meaning |
 |----------|---------|---------|
@@ -216,6 +216,6 @@ Tunable; the final values are set on-hardware in [bring-up (§9)](../README.md#9
 The **codec** — framing, CRC, sequence and ACK logic, the two state machines — lives in `common/link/` as **portable C with no ESP-IDF calls**. It talks to the wire only through a `link_transport` interface (`send_slot`, `recv_slot`, `drdy` state). That seam is the whole point:
 
 - **On target**, `link_transport` is backed by SPI Slave HD (C5) and SPI master + ESSL (S3).
-- **On the host**, it is backed by a fake transport, so the exact same codec runs under the [Linux host-target + CMock harness](../README.md#7-emulation--test-harness) — loss, CRC errors, ACK timeouts, and resync are all exercised in CI with no hardware.
+- **On the host**, it is backed by a fake transport, so the exact same codec runs under the [Linux host-target + CMock harness](../README.md#9-emulation--test-harness) — loss, CRC errors, ACK timeouts, and resync are all exercised in CI with no hardware.
 
 Because both firmwares compile the *same* `common/link/` sources, the S3 and the C5 can never drift out of protocol with each other.
