@@ -38,6 +38,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
+- `FND-0010`: legacy combines the documented Si4732 baseline, an external volatile SSB patch, and unproven synchronous AM.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
@@ -47,6 +48,8 @@ The System/UI/storage capability slice is **Reviewed** under `REV-0002I`.
 The GNSS/navigation slice [`REQ-GNSS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-GNSS-0001-navigation-integrity.md) is **Reviewed** under `REV-0002K`. The owner accepted `IMP-0012/A` as [`DEC-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0014-casic-gnss-profile.md): NMEA is the mandatory baseline of a qualified profile, while assistance and receiver-reported jamming/spoofing remain conditional on exact revision/firmware proof. Unsupported, timeout, and parser error mean `unknown`, not “no threat,” and host heuristics are kept distinct from receiver status.
 
 `FND-0009` is closed at requirement level. UART/power hardware, parser, assistance source, actual Unit/U214 advanced-message support, RF self-desense, and HIL remain unimplemented evidence for later stages.
+
+The next prerequisite audit covers Si4732 under `REV-0002L`. [`REQ-RX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-RX-0001-si4732-receiver.md) separates the FM/RDS and ordinary-AM baseline, conditional SSB/CW, an honest sweep-RSSI bandscope, and conditional WAV/decoder features. One owner choice is required: **⚠️ Proposal [`IMP-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0013-reproducible-ssb-patch-lifecycle.md)** recommends an open generic patch loader without bundling a third-party blob until its provenance and redistribution rights are proven; synchronous AM remains deferred pending separate proof. The requirement set is **In review** until that choice.
 
 ## Deferred architecture gate
 
