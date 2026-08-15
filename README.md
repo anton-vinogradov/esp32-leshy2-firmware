@@ -4,7 +4,7 @@
 
 **Firmware for [Leshy2](https://github.com/anton-vinogradov/esp32-leshy2) — an open-source, portable, multiband RF handheld you build yourself.**
 
-Leshy2 is a two-chip field tool: a mature **ESP32-S3** brain that runs everything, plus an **ESP32-C5** co-processor for native **5 GHz** Wi-Fi. This repository is its **firmware** — designed from the device's own capabilities, reusing proven code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) (itself a fork of [ESP32-DIV](https://github.com/cifertech/ESP32-DIV)) and other open-source, with a thin C5 5 GHz agent over the S3↔C5 link. The hardware — schematic, PCB, BOM — lives in the [esp32-leshy2](https://github.com/anton-vinogradov/esp32-leshy2) repo.
+Leshy2 is a two-chip field tool: a mature **ESP32-S3** brain that runs everything, plus an **ESP32-C5** co-processor that drives native **5 GHz** Wi-Fi (+ 802.15.4) and, behind the S3↔C5 link, the 3× nRF24 (2.4 GHz raw) and IR. This repository is its **firmware** — designed from the device's own capabilities, reusing proven code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) (itself a fork of [ESP32-DIV](https://github.com/cifertech/ESP32-DIV)) and other open-source, with the C5 radio agent driven over the S3↔C5 link. The hardware — schematic, PCB, BOM — lives in the [esp32-leshy2](https://github.com/anton-vinogradov/esp32-leshy2) repo.
 
 > 🛑 **Your own gear only.** An educational security-research and radio tool. Use it only on networks, devices, and radios you own or are explicitly authorized in writing to test. Radio law differs by country — it is on you to check and obey it.
 
@@ -20,9 +20,9 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 |--:|-------|:------:|
 | 1 | [Vision & scope](#1-vision--scope) | ✅ |
 | 2 | [Capability tree](#2-capability-tree) | ✅ |
-| 3 | [Firmware tree](#3-firmware-tree) | 🔬 |
-| 4 | [Target & toolchain](#4-target--toolchain) | ✅ |
-| 5 | [System architecture](#5-system-architecture) | ✅ |
+| 3 | [Firmware tree](#3-firmware-tree) | ✅ |
+| 4 | [Target & toolchain](#4-target--toolchain) | 🔬 |
+| 5 | [System architecture](#5-system-architecture) | 🔬 |
 | 6 | [Peripheral & driver map](#6-peripheral--driver-map) | ⏳ |
 | 7 | [UI/UX & control conventions](#7-uiux--control-conventions) | ⏳ |
 | 8 | [Screen & feature design](#8-screen--feature-design) | ⏳ |
@@ -34,7 +34,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 1. Vision & scope
 
-**✅ Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add a thin **ESP32-C5 5 GHz agent** behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
+**✅ Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add the **ESP32-C5 co-processor** (5 GHz Wi-Fi + nRF24 2.4-raw + IR) behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
 
 **In scope:** the S3 main firmware (UI, display + touch, all wired radios, buses, SD / PCAP, native 2.4 GHz Wi-Fi + BLE), the C5 agent (5 GHz Wi-Fi + nRF24 2.4-raw + IR), the S3↔C5 link, TX power / band / duty as user settings (default maximum, leshy1-style), and an emulation / test harness that runs before hardware exists.
 
@@ -72,7 +72,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 3. Firmware tree
 
-**🔬 Spec.** Turn the [capability tree](#2-capability-tree) into the shape of the firmware — the home launcher, the apps, and every app's split — ordered by how often a user reaches for it. This is the map [§8](#8-screen--feature-design) then works out screen by screen. Full tree: **[docs/firmware-tree.md](docs/firmware-tree.md)**.
+**✅ Spec.** Turn the [capability tree](#2-capability-tree) into the shape of the firmware — the home launcher, the apps, and every app's split — ordered by how often a user reaches for it. This is the map [§8](#8-screen--feature-design) then works out screen by screen. Full tree: **[docs/firmware-tree.md](docs/firmware-tree.md)**.
 
 **Decisions.**
 
@@ -90,23 +90,23 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 4. Target & toolchain
 
-**✅ Spec.** Pick the base framework, the two-target build (S3 + C5), the repo layout, and CI. This is the first real fork and it shapes everything downstream — the [test harness](#9-emulation--test-harness) most of all — so each side is steelmanned before any code is written.
+**🔬 Spec.** Pick the base framework, the two-target build (S3 + C5), the repo layout, and CI. This is the first real fork and it shapes everything downstream — the [test harness](#9-emulation--test-harness) most of all — so each side is steelmanned before any code is written.
 
 **Decisions.**
 
 leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** codebases (TFT_eSPI display, NimBLE, `WiFi.h` promiscuous, LittleFS), so the toolchain has to keep that **reuse surface** open. But the [harness](#9-emulation--test-harness) runs on **ESP-IDF** tools (Linux host-target + CMock, `idf.py qemu`), and the second chip — **ESP32-C5** — is new silicon whose first-class, current support lives in ESP-IDF (C5 v1.0 is production since IDF 5.5.2); stock PlatformIO's Espressif platform does not even carry the C5. Three ways to resolve the fork, each steelmanned:
 
 - **(A) Stay on Arduino / PlatformIO.** *For:* fastest to a running device, keeps the Arduino reuse surface, the largest community. *Against:* stock PlatformIO's Espressif platform has stalled and ships no C5 (you lean on the community `pioarduino` fork), and the §9 stack (host-target, CMock, `idf.py qemu`) is IDF-native — bolted on here, not first-class.
-- **(B) Pure ESP-IDF (no Arduino).** *For:* first-class, current C5 support for the 5 GHz agent; the cleanest dual-chip build; a native §9 harness. *Against:* drops the Arduino reuse surface — every module we'd borrow (TFT_eSPI, NimBLE, code from leshy / Marauder / Bruce) has to be rewritten against raw IDF.
+- **(B) Pure ESP-IDF (no Arduino).** *For:* first-class, current C5 support for the C5 radio agent (5 GHz Wi-Fi + nRF24 2.4-raw + IR); the cleanest dual-chip build; a native §9 harness. *Against:* drops the Arduino reuse surface — every module we'd borrow (TFT_eSPI, NimBLE, code from leshy / Marauder / Bruce) has to be rewritten against raw IDF.
 - **(C) ESP-IDF build system, Arduino kept as a component.** *For:* build with `idf.py` / CMake (so the C5 is first-class and §9 is native) while the **S3 keeps the Arduino APIs as an ESP-IDF component** — so Arduino modules we borrow compile nearly as-is — and the **C5 agent is native ESP-IDF** (a thin radio agent, no Arduino). The standard path for a project that borrows from the Arduino ecosystem but needs IDF's toolchain and a new chip. *Against:* one-time build-system setup and a component pin to keep in step.
 
-**Chosen: (C).** It is the only option that meets all the constraints at once — the Arduino reuse surface (Arduino-as-component on the S3), the C5 5 GHz agent on current silicon (native IDF), and the IDF-native harness. (A) leaves §9 and the C5 second-class; (B) throws the Arduino reuse surface away.
+**Chosen: (C).** It is the only option that meets all the constraints at once — the Arduino reuse surface (Arduino-as-component on the S3), the C5 radio agent (5 GHz Wi-Fi + nRF24 2.4-raw + IR) on current silicon (native IDF), and the IDF-native harness. (A) leaves §9 and the C5 second-class; (B) throws the Arduino reuse surface away.
 
 **Artifacts.**
 
-- **Two ESP-IDF apps, one shared link component:** `firmware/s3/` (the main firmware, Arduino as a component), `firmware/c5/` (the native-IDF agent — 5 GHz Wi-Fi + nRF24 2.4-raw + IR; RF24 / Arduino-IRremote are S3-only Arduino libs, so these drivers are written against ESP-IDF), and `firmware/common/link/` — the [S3↔C5 protocol](#5-system-architecture), compiled into both firmwares *and* the host tests.
+- **Two ESP-IDF apps, one shared link component:** `firmware/s3/` (the main firmware, Arduino as a component), `firmware/c5/` (the native-IDF agent — 5 GHz Wi-Fi + nRF24 2.4-raw + IR; its nRF24 driver is written clean against **ESP-IDF SPI** — `RF24` is GPLv2 *and* Arduino, so idea-only per [capability-tree §2](docs/capability-tree.md) — and its IR codec against **ESP-IDF RMT** — Arduino-IRremote is MIT but S3/Arduino-only, per §10), and `firmware/common/link/` — the [S3↔C5 protocol](#5-system-architecture), compiled into both firmwares *and* the host tests.
 - **Toolchain pin:** ESP-IDF **5.5.x** (carries C5 v1.0 production support, maintained into 2028) with **arduino-esp32 3.3.x** as the S3 component (that line tracks IDF 5.5). One IDF, two targets — `esp32s3` and `esp32c5`.
-- **CI:** GitHub Actions on the official `esp-idf` action — a matrix that builds the S3 app, builds the C5 app, and runs the host-target Unity + CMock suite, plus an `idf.py qemu` smoke boot. Nothing reaches copper on red (see [§9](#9-emulation--test-harness)).
+- **CI:** GitHub Actions on the official `esp-idf` action — a matrix that builds the S3 app, builds the C5 app, and runs the host-target Unity + CMock suite, plus an `idf.py qemu` smoke boot of the **S3** app (the C5 is not modelled in QEMU — its bring-up is on-hardware, [§11](#11-on-hardware-bring-up)). Nothing reaches copper on red (see [§9](#9-emulation--test-harness)).
 - **PlatformIO** stays as an optional convenience env via the `pioarduino` fork, but `idf.py` is canonical so the harness and CI stay first-class.
 - This section is the design; the two-app skeleton is stood up in [§10](#10-implementation) against exactly these pins.
 
@@ -114,7 +114,7 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 
 ## 5. System architecture
 
-**✅ Spec.** The runtime shape on the S3 (RTOS tasks, dual-core split), the **S3↔C5 link protocol**, the top-level state machines, and the **HAL boundary** that lets every driver run against a test stub. The link is the novel, risky part, so it gets its own spec: **[docs/link-protocol.md](docs/link-protocol.md)**.
+**🔬 Spec.** The runtime shape on the S3 (RTOS tasks, dual-core split), the **S3↔C5 link protocol**, the **RF-coexistence arbiter**, the **update model** (self-OTA + C5 OTA-over-link), the top-level state machines, and the **HAL boundary** that lets every driver run against a test stub. The link is the novel, risky part, so it gets its own spec: **[docs/link-protocol.md](docs/link-protocol.md)**.
 
 **Decisions.**
 
@@ -122,7 +122,9 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 - **Reliability is asymmetric — the master pulls anything that matters.** The C5 never has to guarantee a push: scan telemetry is best-effort, and anything the S3 truly needs it requests and waits for. That keeps the slave thin.
 - **`STOP_ALL` + a C5-side dead-man put the TX-kill safety blocker in the protocol.** `STOP_ALL` is serviced ahead of everything; independently, the C5 self-stops TX if the link goes silent — so a dead S3 or a broken link can't leave the C5 transmitting. `C5_EN` low is the hard kill behind that.
 - **Dual-core split on the S3: UI on one core, radios + link on the other.** Core 1 runs render / touch / input; core 0 runs the wired-radio drivers, the 2.4 GHz Wi-Fi/BLE stack, the SD/PCAP writer, and the **link task** — so a full-screen redraw never stalls radio or link servicing. This is the firmware side of the hardware's DMA-double-buffer + bus-arbiter decisions.
-- **One task owns SPI3.** The link task is the sole owner of the S3↔C5 bus: it turns high-level mode requests into commands and dispatches incoming events to the mode handlers. Single owner ⇒ no bus contention and one home for the retry/timeout logic.
+- **One task owns SPI3.** The link task is the sole owner of the S3↔C5 bus: it turns high-level mode requests into commands and dispatches incoming events to the mode handlers. Single owner ⇒ no bus contention and one home for the retry/timeout logic. **The RF-Spectrum (nRF24), IR, and 5 GHz apps carry no local S3 driver** — they run as S3-side mode handlers that translate UI intent into `NRF_*` / `IR_*` / 5 GHz link commands and consume `NRF_RESULT` / `IR_CODE` / scan events via this task's dispatch; the C5 owns those radios locally.
+- **The RF-coexistence (TDD) arbiter is an always-on runtime owner, arbitrating by band across both chips.** Keying two TX chains in the same band at once desenses the receivers, so one arbiter grants exclusive TX to a single band at a time. It spans the chip boundary **without any new link primitive**: because the C5 only transmits on S3 command, the arbiter sits above the single SPI3 link task and gates C5 TX by withholding the matching commands (`NRF_TX` / `NRF_MOUSEJACK` / `DEAUTH` / `FLOOD_*`) until it owns the band — `STOP_ALL` priority and the [§6 TX dead-man](docs/link-protocol.md#6-reliability) stay the safety backstop. **Arbitration is by RF band, not by chip:** the S3's 2.4 GHz Wi-Fi TX and the C5-driven nRF24 2.4-raw set are the *same* band and are mutually exclusive; the "parallel" allowance applies only among the three nRF24 radios (one 2.4 GHz TX chain, parallel internally), never versus 2.4 GHz Wi-Fi TX. IR is optical / out-of-band and does not participate.
+- **The update model: S3 self-OTA + S3-driven C5 OTA-over-link, both owned by the link task.** The S3 updates itself over Wi-Fi / SD; the C5 has no separate flashing path in the field, so the S3 pushes its image over SPI3 (`OTA_BEGIN` / `OTA_DATA` / `OTA_END`). The C5 streams each fragment to its inactive OTA partition and commits only at `OTA_END`, then reboots and re-emits `HELLO` — re-entering the link state machine exactly like a reset re-handshake (a link drop mid-push commits nothing; see [link-protocol §1/§6](docs/link-protocol.md#1-physical-layer)). A mid-push link is never idle, so the heartbeat never trips during the multi-second transfer.
 - **HAL boundary = a portable seam per driver.** Each driver (display, radios, storage, buttons, link transport) sits behind a thin interface with a real ESP backend and a host fake. The link **codec** is pure portable C in `common/link/`, compiled into both firmwares *and* the host tests — so the two chips can't drift apart, and [§9](#9-emulation--test-harness) can exercise loss / CRC / timeout in CI without hardware.
 
 **Artifacts.**
@@ -135,7 +137,7 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 
 ## 6. Peripheral & driver map
 
-**⏳ Planned.** Every chip to a driver: 3× **nRF24L01+** (shared-CE modes — parallel RX scan, mousejack, simultaneous multi-channel TX), **CC1101** + SP4T band select, **SX1262** LoRa, **Si4732** RX, **SA868** walkie, **PCA9555** ×2, **74HC138**, **ST7796** + capacitive touch, microSD, u-blox **GPS**, **WS2812**, encoder + buttons. Each driver is defined against the HAL boundary from [stage 5](#5-system-architecture) so it can be tested without hardware. *Designed in the doc before it's implemented.*
+**⏳ Planned.** Every S3-local chip to a driver: **CC1101** + SP4T band select, **SX1262** LoRa, **Si4732** RX, **SA868** walkie, **PCA9555** ×2, **74HC138**, **ST7796** + capacitive touch, microSD, u-blox **GPS**, **WS2812**, encoder + buttons. The C5-board radios (5 GHz Wi-Fi, 3× **nRF24L01+**, IR) carry no S3 driver — they are driven by the C5 agent and reached over the [SPI3 link](#5-system-architecture) (`NRF_*` / `IR_*` / 5 GHz opcodes), so their "driver map" is the C5 agent plus the link opcodes, not an S3 peripheral. Each S3 driver is defined against the HAL boundary from [stage 5](#5-system-architecture) so it can be tested without hardware. *Designed in the doc before it's implemented.*
 
 **Decisions.** _TBD._
 
@@ -185,7 +187,7 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 
 ## 11. On-hardware bring-up
 
-**⏳ Planned.** Flash the real board, bring up power / boot / the SPI3 link / each bus, prove the C5's 5 GHz, and tune. Ties into the hardware repo's [fabrication & bring-up](https://github.com/anton-vinogradov/esp32-leshy2#11-fabrication--bring-up). *Designed in the doc before it's implemented.*
+**⏳ Planned.** Flash the real board, bring up power / boot / the SPI3 link / each bus, prove the C5's 5 GHz, its 3× nRF24 and IR, and OTA-over-link, and tune. Ties into the hardware repo's [fabrication & bring-up](https://github.com/anton-vinogradov/esp32-leshy2#11-fabrication--bring-up). *Designed in the doc before it's implemented.*
 
 **Decisions.** _TBD._
 

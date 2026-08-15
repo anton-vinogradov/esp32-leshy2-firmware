@@ -24,7 +24,7 @@ A **dedicated SPI3 bus** carries the link — separate from the shared SPI2 that
 - **Clock:** SPI mode 0, MSB-first. 20 MHz nominal (10 MHz on first bring-up, up to 40 MHz once proven — [§9](#9-timing-constants-v1-defaults)).
 - **DRDY** is the C5's only way to ask for attention. A slave cannot clock the bus, so **every transfer is master-initiated**; DRDY lets the C5 say "I have an event queued — come read it."
 - **`C5_EN`** lives on the I²C expander, not on a fast GPIO. It is a one-shot power/reset control, not a per-transfer signal, so its latency does not matter.
-- **Flashing / OTA.** The C5 flashes standalone over **its own USB-C** on the bench. In the field, **OTA rides the SPI3 link itself** — the S3 pushes the C5 image over the link (`OTA_BEGIN` / `OTA_DATA` / `OTA_END`), the C5 self-flashes and reboots. There is no S3→C5 UART flashing bridge.
+- **Flashing / OTA.** The C5 flashes standalone over **its own USB-C** on the bench. In the field, **OTA rides the SPI3 link itself** — the S3 pushes the C5 image over the link (`OTA_BEGIN` / `OTA_DATA` / `OTA_END`), the C5 streams each fragment to its inactive OTA partition and, only on `OTA_END`, verifies and reboots. A link drop mid-push is safe: nothing commits before `OTA_END`, so the running image is untouched and the S3 resumes from the last ACKed `offset` (or restarts). There is no S3→C5 UART flashing bridge.
 - **Dedicated bus = fault isolation.** A wedged C5 that holds MISO low can only break the link, never the main SPI2 bus that the UI and wired radios depend on. This is a deliberate robustness choice (a shared bus would let one stuck slave stall everything).
 
 ---
@@ -89,12 +89,12 @@ The C5 agent covers 5 GHz Wi-Fi, the 3× nRF24 (2.4 raw), IR, and OTA-over-link.
 | `0x38` | `IR_SEND` | `proto:u8, code…` | transmit an IR code (RMT) |
 | `0x39` | `IR_LEARN` | — | capture the next IR frame; returns `IR_CODE` |
 | `0x3F` | `STOP_ALL` | — | **highest priority — kill every C5 TX now (Wi-Fi, nRF24, IR)** |
-| `0x40` | `SLEEP` | — | park the C5 (5 GHz idle) |
+| `0x40` | `SLEEP` | — | park the C5 (radios idle) |
 | `0x41` | `WAKE` | — | |
 | `0x50` | `KEEPALIVE` | — | refresh the C5 dead-man while it transmits ([§6](#6-reliability)) |
 | `0x51` | `OTA_BEGIN` | `size:u32, sha256:32` | start a C5 firmware push over the link |
-| `0x52` | `OTA_DATA` | `offset:u32, bytes…` | image fragment (uses the `MORE` flag) |
-| `0x53` | `OTA_END` | — | verify + commit → the C5 reboots into the new image |
+| `0x52` | `OTA_DATA` | `offset:u32, bytes…` | one self-indexed fragment: `REQ_ACK`, keyed by `offset`, retransmitted per-fragment on ACK timeout; the C5 streams it straight to the inactive OTA partition (never reassembled in RAM). Not a `MORE` chain. |
+| `0x53` | `OTA_END` | — | verify `sha256` + commit → the C5 reboots into the new image. **Commit is END-only:** a link drop before `OTA_END` leaves the running image untouched; the S3 resumes from the last ACKed `offset` or restarts the push. |
 
 **Events — C5 → S3**
 
@@ -157,7 +157,7 @@ Reliability is **asymmetric on purpose**: the master pulls anything that matters
 - **Idempotency.** Commands are idempotent where possible (`SET_REGION`, `STOP_ALL`). `SCAN_START` carries a `scan_id`; a duplicate delivered by an ACK-loss retransmit is deduped by id, so a scan never starts twice.
 - **Resync.** Piled-up CRC errors or a `seq` disagreement trigger a `PING`/`PONG` nonce exchange. If it fails, the S3 hard-resets the C5 by driving `C5_EN` low→high and re-runs the boot handshake. The `0xA5` sync byte re-anchors framing.
 - **Heartbeat.** While the C5 is UP and idle, the S3 pings every `T_hb`; `k_miss` missed `PONG`s → FAULT → reset.
-- **Dead-man on TX (safety).** Whenever the C5 is transmitting (deauth, flood), it requires a periodic `KEEPALIVE` (or any command) from the S3. If the link goes silent for `T_deadman`, the C5 **stops its own TX** — so a dead S3 or a broken link cannot leave the C5 transmitting. This is the protocol-level half of the "[STOP kills all TX](../README.md#1-vision--scope)" safety blocker; `STOP_ALL` is the graceful path and `C5_EN` low is the hard kill.
+- **Dead-man on TX (safety).** Whenever the C5 is transmitting (Wi-Fi deauth/flood, nRF24 TX / mousejack, IR send), it requires a periodic `KEEPALIVE` (or any command) from the S3. If the link goes silent for `T_deadman`, the C5 **stops its own TX** — so a dead S3 or a broken link cannot leave the C5 transmitting. This is the protocol-level half of the "[STOP kills all TX](../README.md#1-vision--scope)" safety blocker; `STOP_ALL` is the graceful path and `C5_EN` low is the hard kill.
 
 ---
 
@@ -173,30 +173,38 @@ stateDiagram-v2
     BOOTING --> FAULT: no HELLO (timeout)
     UP --> FAULT: ack / heartbeat timeout
     FAULT --> BOOTING: reset (C5_EN low→high)
-    UP --> SLEEP: SLEEP (5 GHz idle)
+    UP --> SLEEP: SLEEP (radios idle)
     SLEEP --> BOOTING: WAKE
+    UP --> UPDATING: OTA_END (verify + commit)
+    UPDATING --> BOOTING: C5 reboots into new image
 ```
+
+The `UPDATING` edge models the expected silence after `OTA_END`: the S3 waits out the C5's self-flash-and-reboot instead of running its FAULT path on it.
 
 **C5 agent:**
 
 ```mermaid
 stateDiagram-v2
     [*] --> IDLE
-    IDLE --> SCANNING: SCAN_START
+    IDLE --> SCANNING: SCAN_START / NRF_SCAN
     IDLE --> SNIFFING: SNIFF_START
-    IDLE --> TX: DEAUTH / FLOOD_*
+    IDLE --> TX: DEAUTH / FLOOD_* / NRF_TX / NRF_MOUSEJACK / IR_SEND
+    IDLE --> CAPTURE: IR_LEARN
+    IDLE --> UPDATING: OTA_BEGIN
     SCANNING --> IDLE: SCAN_STOP / done / STOP_ALL
     SNIFFING --> IDLE: SNIFF_STOP / STOP_ALL
+    CAPTURE --> IDLE: IR_CODE / STOP_ALL
     TX --> IDLE: STOP_ALL / done / dead-man
+    UPDATING --> IDLE: OTA_END / abort
 ```
 
-`STOP_ALL` forces `IDLE` (TX off) from any state and is serviced ahead of every other command.
+Every RF-TX opcode — Wi-Fi, nRF24, and IR — lands in the one `TX` state, so all of them are covered by `STOP_ALL` and the `T_deadman` self-stop. `STOP_ALL` forces `IDLE` (TX off) from any state and is serviced ahead of every other command.
 
 ---
 
 ## 8. Versioning and capability
 
-The `ver` byte gates the whole format. On boot the C5 sends `HELLO {ver, caps}`; `caps` is a bitmap of what this C5 build actually does (5 GHz scan, sniff, deauth, flood, …). The S3:
+The `ver` byte gates the whole format. On boot the C5 sends `HELLO {ver, caps}`; `caps` is a bitmap of what this C5 build actually does (5 GHz scan, sniff, deauth, flood, nRF24 scan / TX / mousejack, IR send / learn, OTA-over-link, …). The S3:
 
 - refuses the link if `ver` is newer than it understands (and logs it),
 - offers only the features the `caps` bitmap advertises,

@@ -225,7 +225,7 @@ The non-safety platform layer — mostly MIT/Apache/BSD (LVGL, ESP-IDF, FastLED,
 | Capacitive touch + encoder/button input + on-screen keyboard | borrow — GT911/FT6x36, ESP32Encoder, LVGL (MIT) | — |
 | **USB HID keyboard injection (BadUSB / DuckyScript over USB-C)** | borrow — ESP-IDF/TinyUSB HID device (Apache/MIT); Ducky parser shared with BadBLE | S3 has **native USB-OTG** — real capability; authorized host only + STOP |
 | USB serial CLI + USB mass-storage (SD-as-drive) | borrow — ESP-IDF console + TinyUSB MSC (Apache/MIT) | — |
-| OTA over Wi-Fi + OTA from SD + C5 co-processor OTA (over SPI3) | borrow — ESP-IDF `esp_https_ota`, M5Stack-SD-Updater, `esp_serial_flasher` (Apache/MIT) | — |
+| OTA over Wi-Fi + OTA from SD + C5 co-processor OTA (over SPI3) | borrow — ESP-IDF `esp_https_ota`, M5Stack-SD-Updater; C5 side writes the link-delivered image via ESP-IDF `esp_ota_ops` (Apache/MIT) | C5 OTA rides the SPI3 link, not ROM serial — no UART bridge / BOOT strap |
 | SD file browser + config import/export + offline device DB | borrow — ESP-IDF FatFs, esp32-leshy (BSD/MIT) | — |
 | Battery gauge + charge status + sleep/power-management + peripheral & C5 power gating | borrow gauge/sleep (SparkFun, ESP-IDF `esp_sleep`); gating = write | — |
 | WS2812 status LED + buzzer feedback | borrow LED (FastLED MIT); buzzer = write | — |

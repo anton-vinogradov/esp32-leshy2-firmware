@@ -225,7 +225,7 @@ DSP-приёмник. Весь RX заимствуется из **pu2clr/SI4735*
 | Ёмкостный тач + энкодер/кнопки + экранная клавиатура | заимствовать — GT911/FT6x36, ESP32Encoder, LVGL (MIT) | — |
 | **Инъекция USB-HID клавиатуры (BadUSB / DuckyScript по USB-C)** | заимствовать — ESP-IDF/TinyUSB HID device (Apache/MIT); Ducky-парсер общий с BadBLE | у S3 **нативный USB-OTG** — реальная возможность; только авторизованный хост + STOP |
 | USB-serial CLI + USB mass-storage (SD как диск) | заимствовать — ESP-IDF console + TinyUSB MSC (Apache/MIT) | — |
-| OTA по Wi-Fi + OTA с SD + OTA сопроцессора C5 (по SPI3) | заимствовать — ESP-IDF `esp_https_ota`, M5Stack-SD-Updater, `esp_serial_flasher` (Apache/MIT) | — |
+| OTA по Wi-Fi + OTA с SD + OTA сопроцессора C5 (по SPI3) | заимствовать — ESP-IDF `esp_https_ota`, M5Stack-SD-Updater; на стороне C5 доставленный по линку образ пишет ESP-IDF `esp_ota_ops` (Apache/MIT) | OTA C5 идёт по линку SPI3, не по ROM-serial — без UART-моста / BOOT-страпа |
 | SD-файлменеджер + импорт/экспорт конфига + оффлайн-база устройств | заимствовать — ESP-IDF FatFs, esp32-leshy (BSD/MIT) | — |
 | Датчик заряда + статус зарядки + сон/power-management + гейтинг питания периферии и C5 | заимствовать датчик/сон (SparkFun, ESP-IDF `esp_sleep`); гейтинг = писать | — |
 | WS2812 статус-LED + зуммер | заимствовать LED (FastLED MIT); зуммер = писать | — |

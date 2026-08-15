@@ -37,7 +37,7 @@ Always present, around every app:
 - **BLE-keyboard text entry** (paired phone, NimBLE HID host) for long text in any field; on-screen keyboard fallback.
 - **ARM / DISARM interlock** — every Lab tool boots disarmed; nothing transmits until armed.
 
-**Always-on background services** (not menu apps): the **GPS service** (status-bar fix, RTC discipline, auto geo-tag of every capture), the **RF-coexistence TDD arbiter** (grants one exclusive different-band TX chain at a time — SA868 / LoRa / CC1101 / Wi-Fi; the 3× nRF24 stay one parallel 2.4 GHz set), the **S3↔C5 link IPC**, and **detection alerting** (WS2812 LED / buzzer / GPS-tag / toast; configured under *Settings → Alerts*).
+**Always-on background services** (not menu apps): the **GPS service** (status-bar fix, RTC discipline, auto geo-tag of every capture), the **RF-coexistence TDD arbiter** (grants one exclusive TX chain per band at a time — SA868 / LoRa / CC1101 / 2.4 GHz Wi-Fi / C5 nRF24; the 3× nRF24 count as **one** 2.4 GHz TX chain in that rotation, parallel only among themselves and mutually exclusive with 2.4 GHz Wi-Fi TX; arbitration is by band, so it spans the S3 and the C5-driven radios alike), the **S3↔C5 link IPC**, and **detection alerting** (WS2812 LED / buzzer / GPS-tag / toast; configured under *Settings → Alerts*).
 
 ## Cross-app sessions
 
