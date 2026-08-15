@@ -27,6 +27,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - cost optimization only with proof of no product loss (`DEC-0005`);
 - external M5 GNSS and external U214 LoRa+GNSS (`DEC-0006`, `DEC-0008`);
 - an NMEA baseline and a conditional per-revision advanced CASIC profile without another GNSS (`DEC-0014`);
+- an FM/RDS/ordinary-AM baseline and an open owner-imported SSB/CW patch loader without a bundled blob (`DEC-0015`);
 - onboard mono ES8311 audio with hardware-default analog bypass (`DEC-0009`);
 - target C5 ownership of 3×nRF24 and IR (`DEC-0001`), without a claim that the inter-MCU transport is solved.
 - owner-controlled signed S3/C5 updates with rollback and an open developer lifecycle (`DEC-0013`), without enabling irreversible hardware lockdown.
@@ -38,7 +39,6 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
-- `FND-0010`: legacy combines the documented Si4732 baseline, an external volatile SSB patch, and unproven synchronous AM.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
@@ -49,7 +49,7 @@ The GNSS/navigation slice [`REQ-GNSS-0001`](https://github.com/anton-vinogradov/
 
 `FND-0009` is closed at requirement level. UART/power hardware, parser, assistance source, actual Unit/U214 advanced-message support, RF self-desense, and HIL remain unimplemented evidence for later stages.
 
-The next prerequisite audit covers Si4732 under `REV-0002L`. [`REQ-RX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-RX-0001-si4732-receiver.md) separates the FM/RDS and ordinary-AM baseline, conditional SSB/CW, an honest sweep-RSSI bandscope, and conditional WAV/decoder features. One owner choice is required: **⚠️ Proposal [`IMP-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0013-reproducible-ssb-patch-lifecycle.md)** recommends an open generic patch loader without bundling a third-party blob until its provenance and redistribution rights are proven; synchronous AM remains deferred pending separate proof. The requirement set is **In review** until that choice.
+The Si4732 slice [`REQ-RX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-RX-0001-si4732-receiver.md) is **Reviewed** under `REV-0002M`. The owner accepted `IMP-0013/A` as [`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md): an open bounded loader is in the target, the SSB blob is locally imported with distinct integrity/provenance states, and synchronous AM remains deferred pending separate proof. `FND-0010` is closed at requirement level; RF/frontend, patch rights/compatibility, loader, audio/storage/decoder, and coexistence HIL remain unimplemented.
 
 ## Deferred architecture gate
 

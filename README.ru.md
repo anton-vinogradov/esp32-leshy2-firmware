@@ -32,6 +32,7 @@
 - Навигация поддерживает внешний M5Stack Unit GPS v1.1 и GNSS-backend квалифицированного комбинированного расширения; одновременно активен только один GNSS-backend. NMEA-навигация является baseline, а assistance и receiver-reported помехи/подмена доступны только для доказанной revision/firmware. Unsupported, timeout и parser error дают `unknown`, никогда не ложное «угроз нет»; host heuristics показываются отдельно ([`DEC-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0014-casic-gnss-profile.md)).
 - LoRa поддерживает M5Stack U214 как первый backend `EXT-RF14` для общепринятых профилей 868/915 в пределах модуля и региональных правил; одновременно активен только один LoRa-backend.
 - Бортовой mono-тракт ES8311 даёт prerequisite для цифровых capture, playback, routing и level control, а обычное прослушивание и голос через микрофон сохраняют аппаратный default-to-analog путь при reset или failure MCU либо codec.
+- Бортовой Si4732 даёт FM/RDS и обычный приём LW/MW/SW. SSB USB/LSB и CW через BFO доступны после локального импорта владельцем совместимого volatile patch через открытый bounded loader; сторонний blob не входит в release без доказанных provenance и права распространения. Synchronous-AM не обещается до отдельного proof ([`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md)).
 
 ## Как развивается эта страница
 
