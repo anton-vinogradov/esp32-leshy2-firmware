@@ -18,9 +18,9 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 | # | Stage | Status |
 |--:|-------|:------:|
-| 1 | [Vision & scope](#1-vision--scope) | 🔬 |
-| 2 | [Capability tree](#2-capability-tree) | 🔬 |
-| 3 | [Firmware tree](#3-firmware-tree) | ✅ |
+| 1 | [Vision & scope](#1-vision--scope) | ✅ |
+| 2 | [Capability tree](#2-capability-tree) | ✅ |
+| 3 | [Firmware tree](#3-firmware-tree) | 🔬 |
 | 4 | [Target & toolchain](#4-target--toolchain) | ✅ |
 | 5 | [System architecture](#5-system-architecture) | ✅ |
 | 6 | [Peripheral & driver map](#6-peripheral--driver-map) | ⏳ |
@@ -34,9 +34,9 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 1. Vision & scope
 
-**🔬 Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add a thin **ESP32-C5 5 GHz agent** behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
+**✅ Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add a thin **ESP32-C5 5 GHz agent** behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
 
-**In scope:** the S3 main firmware (UI, display + touch, all wired radios, buses, SD / PCAP, native 2.4 GHz Wi-Fi + BLE), the C5 5 GHz recon agent, the S3↔C5 link, per-region TX limits enforced in firmware, and an emulation / test harness that runs before hardware exists.
+**In scope:** the S3 main firmware (UI, display + touch, all wired radios, buses, SD / PCAP, native 2.4 GHz Wi-Fi + BLE), the C5 5 GHz recon agent, the S3↔C5 link, TX power / band / duty as user settings (default maximum, leshy1-style), and an emulation / test harness that runs before hardware exists.
 
 **Out of scope (same ceilings as the hardware):** full 5 GHz monitor + injection, WPA-handshake capture, Linux-class analytics, HF transmit, wideband SDR, cellular, and wideband jamming. See the hardware repo's [stage 1](https://github.com/anton-vinogradov/esp32-leshy2#1-why-a-new-device--vision) for why each is out.
 
@@ -54,7 +54,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 2. Capability tree
 
-**🔬 Spec.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem. Each leaf records a reuse call — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety / legal gate on it. This is the menu the [firmware tree](#3-firmware-tree) is then built from.
+**✅ Spec.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem. Each leaf records a reuse call — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety / legal gate on it. This is the menu the [firmware tree](#3-firmware-tree) is then built from.
 
 **Decisions.**
 
@@ -72,7 +72,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 3. Firmware tree
 
-**✅ Spec.** Turn the [capability tree](#2-capability-tree) into the shape of the firmware — the home launcher, the apps, and every app's split — ordered by how often a user reaches for it. This is the map [§8](#8-screen--feature-design) then works out screen by screen. Full tree: **[docs/firmware-tree.md](docs/firmware-tree.md)**.
+**🔬 Spec.** Turn the [capability tree](#2-capability-tree) into the shape of the firmware — the home launcher, the apps, and every app's split — ordered by how often a user reaches for it. This is the map [§8](#8-screen--feature-design) then works out screen by screen. Full tree: **[docs/firmware-tree.md](docs/firmware-tree.md)**.
 
 **Decisions.**
 
@@ -83,7 +83,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 **Artifacts.**
 
-- **[docs/firmware-tree.md](docs/firmware-tree.md)** (+ [RU](docs/firmware-tree.ru.md)) — the full tree: the Lab-boundary rule, the install agreement, global chrome + safety, the cross-app sessions, the 11 apps (main / Settings / Lab), and the deferred ceiling.
+- **[docs/firmware-tree.md](docs/firmware-tree.md)** (+ [RU](docs/firmware-tree.ru.md)) — the full tree: the Lab-boundary rule, the install agreement, global chrome + safety, the cross-app sessions, the 11 apps (main / Lab / Settings), and the deferred ceiling.
 - This map feeds the per-screen, per-feature design of [§8](#8-screen--feature-design).
 
 ---
@@ -155,7 +155,7 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 
 ## 8. Screen & feature design
 
-**⏳ Planned.** Take the [firmware tree](#3-firmware-tree) and work it out **screen by screen, feature by feature**: every screen's layout, controls, flow and states; every feature's behaviour, parameters, and its main / Settings / Lab placement; the install-agreement and Lab-arm screens; per-region TX caps surfaced in the UI. This is the detailed design the [implementation](#10-implementation) builds directly. *Designed in the doc before it's implemented.*
+**⏳ Planned.** Take the [firmware tree](#3-firmware-tree) and work it out **screen by screen, feature by feature**: every screen's layout, controls, flow and states; every feature's behaviour, parameters, and its main / Lab / Settings placement; the install-agreement and Lab-arm screens; TX power / band / duty settings surfaced in the UI (default maximum). This is the detailed design the [implementation](#10-implementation) builds directly. *Designed in the doc before it's implemented.*
 
 **Decisions.** _TBD._
 

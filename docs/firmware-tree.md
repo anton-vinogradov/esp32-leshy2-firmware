@@ -31,7 +31,7 @@ Always present, around every app:
 
 - **Home launcher** — the usage-ordered app grid; encoder scroll, `F1`/`F2` quick-slots, `OPTIONS` context menu. Locked to *Settings + Shut down* until the harm agreement is accepted.
 - **Status bar** — TX-power profile · TX-LIVE indicator · active-radio / TDD owner · battery + charge · GPS-fix · **clock (RTC)** · **SD / USB** icon.
-- **STOP key** — cuts **all TX** from a high-priority path, any screen, any state. **Long-BACK** — all-TX off **+ every Lab tool disarmed** + safe state, from any screen.
+- **STOP key** — cuts **all TX** from a high-priority path, any screen, any state — and **"all TX" includes unattended main-tab transmitters** (interval beacons, parrot repeater, cross-band relay), not only Lab tools. **Long-BACK** — all-TX off **+ every Lab tool disarmed** + safe state, from any screen.
 - **`OPTIONS` menu (global, from any screen)** — incl. **Shut down** (clean); low-battery → forced clean shutdown; watchdog / brownout → safe-state (all radios off).
 - **TX power / band / duty — settings, default maximum** ([esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy)-style). Editable per Lab tool and as a global default; the harm pledge + STOP are the mandatory safety, not a forced region gate.
 - **BLE-keyboard text entry** (paired phone, NimBLE HID host) for long text in any field; on-screen keyboard fallback.
@@ -44,8 +44,8 @@ Always present, around every app:
 A few things a user does span several apps, so they get one entry point instead of being scattered:
 
 - **Wardrive** (`F1`/`F2` quick-slot) — one action turns on the Wi-Fi + BLE + sub-GHz scanners with GPS-tagging into one Wigle-style log. The single most common multi-hour session.
-- **HID Injection (BadBLE + BadUSB)** — one access point for both DuckyScript payloads (they share the parser): over BLE, or over USB-C. Lab, disarmed, authorized-host-only.
-- **Quick replay (own, tagged)** — a shortcut to re-transmit a signal *you* captured and tagged as your own (sub-GHz / IR / ESB). Still Lab-disarmed + STOP-gated, but a short path for the frequent own-remote case.
+- **HID Injection (BadBLE + BadUSB)** — one shared DuckyScript tool (shared parser), reached from two natural Labs: BLE (BadBLE) or USB-C (BadUSB). Lab, disarmed, authorized-host-only.
+- **Quick replay (own, tagged)** — a shortcut to re-transmit a signal *you* captured and tagged as your own (sub-GHz / IR). A **main / own-authority** action — STOP-gated like all TX, but *not* behind the Lab ARM interlock — a short path for the frequent own-remote case.
 
 ---
 
@@ -55,13 +55,13 @@ Each app: **Main** (safe-to-aim) · **Lab** (own-equipment / isolated only) · *
 
 ### 1. Wi-Fi (2.4 + 5 GHz)
 *The first tool most people open; both bands unified so you pick the network view, not the chip.*
-- **Main** — AP / station scan (2.4 + 5 GHz) + channel survey + RSSI · beacon / probe sniff + raw PCAP · congestion / packet-rate waterfall · deauth + rogue-AP / evil-twin **detector** (defensive) · client / hidden-SSID inventory + 5 GHz probe harvest · **Zigbee / Thread / 802.15.4 passive sniff + energy scan** (C5, RX-only) · **Drone Remote-ID detector** (Wi-Fi + BLE, GPS-tagged) · unified dual-band survey.
+- **Main** — AP / station scan (2.4 + 5 GHz) + channel survey + RSSI · beacon / probe sniff + raw PCAP · congestion / packet-rate waterfall · deauth + rogue-AP / evil-twin **detector** (defensive) · client / hidden-SSID inventory + 5 GHz probe harvest · **Zigbee / Thread / 802.15.4 passive sniff + energy scan** (C5, RX-only) · **Drone Remote-ID detector** (Wi-Fi + BLE, GPS-tagged) · unified dual-band survey + cross-band client follow (track a station 2.4↔5 GHz).
 - **Lab** — deauth / disassoc (targeted + broadcast; no-op vs 802.11w/PMF) · management-frame floods (beacon spam random/clone/Rickroll, probe / auth / assoc) · Evil Portal · Evil Twin / rogue AP / Karma · 802.11 frame-injection console · ESP-NOW sniff / spoof · **5 GHz deauth/spam — unproven until [bring-up](../README.md#11-on-hardware-bring-up); may fall back to passive.**
 - **Settings** — STA connect (authorized nets; no credential entry by firmware) · MAC spoof / randomize · DFS channel policy (active non-DFS, passive 52–144 — the C5 has no radar detection) · ESP-NOW Leshy↔Leshy link pairing · SoftAP web-UI / OTA · C5 link status (SPI3) · scan-dwell / hop.
 
 ### 2. Bluetooth (BLE)
 *Second-most-reached; adv scan and tracker detection are everyday.*
-- **Main** — advertising scanner (ext-adv / Coded-PHY) · offline device DB (OUI + company-ID) + RSSI proximity radar · AirTag / Find My + personal-tracker (stalking) detector · Continuity / device-type sniff · GATT enumeration *(own / authorized devices only — an active connect)* · wardriving / geo-log + raw adv PCAP.
+- **Main** — advertising scanner (ext-adv / Coded-PHY) · offline device DB (OUI + company-ID) + RSSI proximity radar · AirTag / Find My + personal-tracker (stalking) detector · Continuity / Flipper / device-type sniff · GATT enumeration *(own / authorized devices only — an active connect)* · wardriving / geo-log + raw adv PCAP.
 - **Lab** — HID keyboard / media injection ([BadBLE](#cross-app-sessions)) · proximity-pairing spam (Apple / Android Fast Pair / Windows Swift Pair / Samsung) · Sour-Apple iOS crash spam (DoS) · Find My / AirTag beacon emulation · arbitrary adv broadcaster (impersonation) · BLE connection-flood / GATT DoS.
 - **Settings** — HID-host pairing (phone keystrokes = text input) · scan filters / OUI + company-ID DB · adv TX power / interval / PHY.
 
@@ -109,9 +109,9 @@ Each app: **Main** (safe-to-aim) · **Lab** (own-equipment / isolated only) · *
 
 ### 10. UHF Walkie (SA868)
 *Occasional half-duplex analog-FM voice / APRS — licence-gated legitimate comms, so no attack leaf.*
-- **Main** — NFM voice RX + TX (≤2 W) · channel / CTCSS-DCS tone scan + carrier-busy / RSSI · manual PTT voice · 1750 Hz burst / DTMF encode + decode · APRS (AFSK1200) TX / RX / iGate + AX.25 KISS TNC · SSTV TX / fox-hunt beacon · **auto-retransmitters** — simplex parrot repeater, cross-band relay *(licensed / authorized use — ID + duty; they re-transmit third-party audio)*.
+- **Main** — NFM voice RX + TX (≤2 W) · channel / CTCSS-DCS tone scan + carrier-busy / RSSI · manual PTT / VOX voice · UHF RX audio record (WAV) · 1750 Hz burst / DTMF encode + decode · APRS (AFSK1200) TX / RX / iGate + AX.25 KISS TNC · SSTV TX / fox-hunt beacon · **auto-retransmitters** — simplex parrot repeater, cross-band relay *(licensed / authorized use — ID + duty; they re-transmit third-party audio)*.
 - **Lab** — *(empty — licensed voice comms; every TX inherits STOP)*.
-- **Settings** — channel / tone / squelch / bandwidth / volume · TX power / duty / ID limits (PMR446 preset available).
+- **Settings** — channel / tone / squelch / bandwidth / volume · roger-beep · TX power / duty / ID limits (PMR446 preset available).
 
 ### 11. System & Storage
 *Setup and maintenance, opened rarely.*

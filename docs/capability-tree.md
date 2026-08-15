@@ -240,7 +240,7 @@ The non-safety platform layer — mostly MIT/Apache/BSD (LVGL, ESP-IDF, FastLED,
 | Capability | Reuse | Gate |
 |------------|-------|------|
 | **Safety interlocks** — hardware STOP-key kills all TX, long-BACK panic kill, TX-live indicator, clean shutdown, low-battery→forced shutdown, watchdog/brownout safe-state | write; watchdog borrows ESP-IDF (Apache) | **mandatory** — cut TX from a high-priority path regardless of UI state; safe default after reset = all radios off |
-| **Compliance gates** — region TX-power caps, duty-cycle limiter, band/region lockout, authorization/ethics consent gate | write | **mandatory** by ethos; region chosen at setup |
+| **Harm / authorization gate** + **TX limits as settings** — the harm agreement is the mandatory consent gate; TX power / band / duty are user settings, **default maximum** (leshy1-style), not a forced compliance gate | write | consent mandatory; power/band/duty default max, user-set |
 | **Radio-chain TDD arbitration / RF coexistence** — one owner grants exclusive TX to a single different-band chain at a time (SA868 / LoRa / CC1101 / Wi-Fi); the 3× nRF24 stay one parallel 2.4 GHz set | write | **mandatory** — keying every chain at once desenses the receivers (RF coexistence, not the SPI bus) |
 | S3↔C5 command/telemetry IPC | write — the [link protocol](link-protocol.md) | — |
 | Cross-mode target follow (2.4 GHz → 5 GHz); dual-band unified survey; unified spectrum/waterfall | write; unified view = idea-ref (Flipper/Bruce) | TX side inherits deauth/spam gates |
