@@ -1,21 +1,37 @@
 # Прошивка Leshy2
 
-Проектирование прошивки начинается заново вместе с аппаратной частью Leshy2.
+> **Целевой документ продукта.** Эта страница собирается из принятых и проверенных решений и описывает будущее готовое ПО, а не текущую реализацию. Зрелость, блокеры и открытые предложения находятся в [текущем состоянии проработки](docs/status/current-state.ru.md).
 
-- Предыдущая документация сохранена в [`drafts/legacy-2026-08-15/`](drafts/legacy-2026-08-15/README.md) и не является канонической.
-- Межрепозиторный журнал ревью ведётся в hardware-репозитории, в `docs/review/`.
-- Архитектура прошивки, toolchain, протокол, структура каталогов и набор функций не считаются принятыми до ревью соответствующего этапа.
-- Принят all-in-one профиль: security-функции находятся только в **«Лаборатории»**, а [`DEC-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0010-three-functional-levels.md) задаёт три пользовательских уровня — основной, «Лаборатория» и вложенная **«Контролируемая зона»** для действительно опасных действий. Каждый вход на третий уровень заново показывает неснимаемый warning/hold-to-confirm и требует изолированной среды, явно авторизованной цели либо обоих оснований. При первичной установке по-прежнему обязателен отдельный акт о ненападении из [`DEC-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0002-project-vision.md); вход не вооружает инструмент и не отменяет spectrum/legal-гейты.
-- Принят безопасный TX-дефолт: все передатчики стартуют выключенными, Lab-инструменты разоружены, первая передача использует консервативный профиль, а максимум требует явного выбора. Каноническое решение — [`DEC-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0003-safe-tx-defaults.md).
-- Для трёх nRF24 и IR принято только **целевое требование владения C5**, а не готовая архитектура. Его реализуемость не подтверждена: legacy-топология требует от единственного GP-SPI C5 одновременно ролей nRF-master и S3↔C5 slave. Блокер зафиксирован в [`FND-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0001-c5-single-gp-spi.md).
-- Legacy-возможности сведены в [`INV-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/inventories/INV-0001-legacy-capabilities.md) только как кандидаты. Инвентаризация выявила неопределённого владельца BLE ([`FND-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0002-ble-owner-conflict.md)) и legacy-расхождение hardware/firmware по audio ([`FND-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0003-missing-mcu-audio-path.md)).
-- После сравнительного [`REV-0002E`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002E-audio-options.md) решение [`DEC-0009`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0009-onboard-es8311-audio.md) принимает бортовой mono ES8311, существующий RX mux и два аппаратных default-to-analog selector. Связанные firmware-возможности теперь `conditional`, а не реализованы: окончательные пины, электрический тракт, драйверы, HIL и safety/legal-гейт каждой функции ещё требуют доказательства. Распространение решения прошло [`REV-0002F`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002F-es8311-decision-propagation.md).
-- Первый аудит пререквизитов System/UI выявил, что предложенная матрица кнопок и принятые audio-control одновременно занимают `U13.P10..P17` ([`FND-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0006-u13-ui-audio-pin-collision.md)), а текущая кнопка STOP является только входом I²C-экспандера и не может независимо погасить TX ([`FND-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0007-stop-is-only-i2c-input.md)). [`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md) — открытое предложение, объединяющее аппаратный STOP, безопасную перезагрузку, матрицу кнопок и перераспределение audio-пинов.
-- По [`DEC-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0004-reconsider-legacy-exclusions.md) все отвергнутые legacy-возможности проходят повторную техническую и правовую проверку; ограничение старого компонента больше не считается ограничением продукта.
-- По [`DEC-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0005-zero-loss-cost.md) полная стоимость продукта снижается только через доказанно эквивалентные реализации без потери функций, характеристик, безопасности, надёжности, автономности, ремонтопригодности и тестируемости.
-- По [`DEC-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0006-external-m5-gnss.md) бортовой GNSS удалён из базовой платы. GPS-функции условны внешним M5Stack Unit GPS v1.1 через отдельный защищённый 5-вольтовый UART Grove-порт; `FND-0004` закрыта.
-- По [`DEC-0008`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0008-u214-common-lora-bands.md) бортовой LoRa удалён, а M5Stack U214 LoRa+GNSS Cap выбран первым backend `EXT-RF14` для общепринятых профилей 868/915 МГц в пределах окна модуля 868–923 МГц и применимых региональных правил. Другие carrier опциональны; E22 не является обязательным референсом. Одновременно активны один LoRa backend и один GNSS backend.
+- [English version](README.md)
+- [Целевой документ hardware](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
+- [Канонический межрепозиторный журнал ревью](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
 
-Текущий статус реализации: **не начато**.
+## Целевое готовое ПО
 
-*English version: [README.md](README.md).*
+Прошивка Leshy2 превращает портативную двухпроцессорную платформу в автономный all-in-one полевой инструмент для наблюдения, диагностики, связи, навигации, обслуживания и разрешённых экспериментов. Возможности открываются через явные эксплуатационные и safety-контракты: техническая доступность hardware сама по себе не означает разрешение на действие.
+
+## Три уровня функциональности
+
+1. **Основной режим** — повседневные инструменты, приём, диагностика, навигация, обслуживание и законная связь вне security-сценария.
+2. **Лаборатория** — пассивные, защитные и ограниченные инструменты исследования безопасности.
+3. **Лаборатория → Контролируемая зона** — действительно опасные active/disruptive инструменты. Каждый вход требует нового неснимаемого предупреждения и hold-to-confirm, а конкретная функция — изолированной среды, явно авторизованной цели либо обоих оснований.
+
+После входа каждый инструмент третьего уровня остаётся отдельно разоружённым и применяет собственные target-, environment-, frequency-, power-, duty-, destructive-action- и STOP-гейты. Выход из раздела, reset, watchdog, блокировка устройства, session timeout, STOP или потеря требуемого аксессуара разоружают уровень; при новом входе banner обязателен снова. Канонический контракт — [`DEC-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0010-three-functional-levels.md).
+
+## Первичная установка и безопасная передача
+
+- При первичной установке пользователь явно принимает акт о ненападении. Это отдельный первый гейт, который не заменяет технические interlock и применимое право.
+- После power-on, reset, brownout, watchdog или обновления все передатчики выключены; каждый Lab-инструмент разоружён.
+- Первая передача использует консервативный профиль конкретного радиотракта. Максимальная доступная мощность требует явного действия для текущего сценария и никогда не восстанавливается как общий дефолт.
+- Активный TX и выбранная мощность видимы пользователю. Сохранённая настройка или восстановленный экран не могут скрытно вооружить передачу.
+
+## Принятая интеграция устройства
+
+- ESP32-C5 — целевой владелец всех трёх nRF24 и IR TX/RX; прошивка использует финальный транспорт только после принятия его архитектуры и аппаратного доказательства.
+- Навигация поддерживает внешний M5Stack Unit GPS v1.1 и GNSS-backend квалифицированного комбинированного расширения; одновременно активен только один GNSS-backend.
+- LoRa поддерживает M5Stack U214 как первый backend `EXT-RF14` для общепринятых профилей 868/915 в пределах модуля и региональных правил; одновременно активен только один LoRa-backend.
+- Бортовой mono-тракт ES8311 даёт prerequisite для цифровых capture, playback, routing и level control, а обычное прослушивание и голос через микрофон сохраняют аппаратный default-to-analog путь при reset или failure MCU либо codec.
+
+## Как развивается эта страница
+
+Здесь кратко отражаются только принятые продуктовые контракты. Открытые находки, зрелость реализации и непринятые предложения остаются в [текущем состоянии](docs/status/current-state.ru.md) и hardware-журнале ревью. По мере появления проверенных `REQ-*` и архитектурных артефактов эта страница станет полным стартовым документом готового firmware-продукта.
