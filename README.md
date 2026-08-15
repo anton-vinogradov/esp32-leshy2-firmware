@@ -29,7 +29,7 @@ Every third-level tool remains independently disarmed after entry and enforces i
 ## Accepted device integration
 
 - ESP32-C5 is the target owner of all three nRF24 radios and IR TX/RX; firmware uses the final transport only after its architecture and hardware proof are accepted.
-- Navigation supports the external M5Stack Unit GPS v1.1 and the GNSS backend of a qualified combined expansion, with only one GNSS backend active at a time.
+- Navigation supports the external M5Stack Unit GPS v1.1 and the GNSS backend of a qualified combined expansion, with only one GNSS backend active at a time. NMEA navigation is the baseline; assistance and receiver-reported interference/spoofing status are available only for a proven revision/firmware combination. Unsupported, timeout, and parser errors yield `unknown`, never a false “no threat,” and host heuristics are shown separately ([`DEC-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0014-casic-gnss-profile.md)).
 - LoRa supports M5Stack U214 as the first `EXT-RF14` backend for common 868/915 profiles within module and regional limits, with only one LoRa backend active at a time.
 - The onboard mono ES8311 path provides digital capture, playback, routing, and level-control prerequisites while ordinary listening and microphone voice retain a hardware-default analog path across MCU or codec failure.
 
