@@ -37,13 +37,16 @@
 - `FND-0003`: audio-направление принято, но pins, electrical behavior, drivers, HIL и feature-level gates ещё не доказаны.
 - `FND-0006`: предложенная матрица кнопок и принятые audio-control конфликтуют на `U13.P10..P17`.
 - `FND-0007`: текущий STOP — только вход I²C-экспандера и не может независимо погасить TX.
+- `FND-0009`: legacy GNSS привязан к u-blox AssistNow/UBX, а принятые M5 Unit/U214 используют AT6668; возможный CASIC-обход ждёт решения `IMP-0012` и proof конкретных firmware.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
 
-[`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) раскладывает все одиннадцать legacy-групп System/UI/storage в проверяемые требования платформы без выбора окончательной pin-map. Owner-controlled подписанные обновления приняты в [`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md); распространение прошло `REV-0002I`, capability-срез получил статус **«Проведено ревью»**.
+System/UI/storage capability-срез завершён статусом **«Проведено ревью»** в `REV-0002I`.
 
-Этап 2 продолжается со следующей группой возможностей и оставшимся аудитом legacy-исключений. Нового решения владельца по System/UI сейчас не требуется.
+Текущий GNSS/navigation срез описан в [`REQ-GNSS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-GNSS-0001-navigation-integrity.md). Prerequisite audit `REV-0002J` проведён ревью и обнаружил `FND-0009`: прежние u-blox-механизмы нельзя отправлять AT6668. При этом официальный CASIC protocol содержит собственные assistance и jamming/spoofing messages.
+
+⚠️ **Предложение `IMP-0012`:** оставить дешёвый NMEA baseline и квалифицировать advanced CASIC profile отдельно для Unit GPS v1.1 и U214; неподдерживаемое/неизвестное состояние никогда не показывать как «угроз нет». До решения владельца `REQ-GNSS-0001` остаётся **«На ревью»**.
 
 ## Отложенный архитектурный gate
 

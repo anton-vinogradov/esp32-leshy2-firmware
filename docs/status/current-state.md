@@ -37,13 +37,16 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
+- `FND-0009`: legacy GNSS is tied to u-blox AssistNow/UBX while the accepted M5 Unit/U214 use AT6668; the possible CASIC workaround awaits `IMP-0012` and proof on the actual firmware revisions.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
 
-[`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) decomposes all eleven legacy System/UI/storage groups into testable platform requirements without selecting a final pin map. Owner-controlled signed updates were accepted in [`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md); propagation passed `REV-0002I`, and this capability slice is **Reviewed**.
+The System/UI/storage capability slice is **Reviewed** under `REV-0002I`.
 
-Stage 2 now continues with the next capability group and the remaining legacy-exclusion audit. No new owner decision is currently requested for System/UI.
+The current GNSS/navigation slice is defined by [`REQ-GNSS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-GNSS-0001-navigation-integrity.md). Its prerequisite audit `REV-0002J` is Reviewed and found `FND-0009`: the old u-blox mechanisms cannot be sent to AT6668. The official CASIC protocol nevertheless defines native assistance and jamming/spoofing messages.
+
+⚠️ **Proposal `IMP-0012`:** keep the low-cost NMEA baseline and qualify an advanced CASIC profile separately for Unit GPS v1.1 and U214; unsupported/unknown must never be shown as “no threat.” `REQ-GNSS-0001` remains **In review** until the owner decides.
 
 ## Deferred architecture gate
 
