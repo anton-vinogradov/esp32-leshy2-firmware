@@ -44,7 +44,7 @@ The S3 radio does management-frame work directly. Full monitor+injection / WPA-h
 
 ## 2. Raw 2.4 GHz (3× nRF24L01+PA/LNA)
 
-Three independent nRF24 on separate antennas — energy sensing and ShockBurst tricks, no 802.11 demod. The `RF24` library is GPLv2, so the driver is written clean.
+Three independent nRF24 on separate antennas — energy sensing and ShockBurst tricks, no 802.11 demod. **They sit on the C5 board and are driven by the C5 agent** (behind the [SPI3 link](link-protocol.md#4-opcodes-v1) — `NRF_*` opcodes); the S3 commands them over the link. The `RF24` library is GPLv2 *and* Arduino, so on the native-IDF C5 the driver is written clean against ESP-IDF SPI.
 
 | Capability | Reuse | Gate |
 |------------|-------|------|
@@ -203,7 +203,7 @@ Unlike the ten soldered subsystems, NFC comes from an **optional M5 RFID2 unit (
 
 ## 10. IR (TX + RX)
 
-38 kHz demodulated RX + IR-LED TX. Everything borrows from **Arduino-IRremote** (MIT); only the *code databases* (TV-B-Gone, universal remotes) are copyleft → build our own.
+38 kHz demodulated RX + IR-LED TX, **on the C5 board, driven by the C5 agent** (behind the [link](link-protocol.md#4-opcodes-v1) — `IR_SEND` / `IR_LEARN`). **Arduino-IRremote** (MIT) is an S3-only reference — on the native-IDF C5 the codec is written clean against the **ESP-IDF RMT** peripheral (so the "borrow" rows below read as "write against IDF RMT"). The *code databases* (TV-B-Gone, universal remotes) are copyleft → build our own.
 
 | Capability | Reuse | Gate |
 |------------|-------|------|

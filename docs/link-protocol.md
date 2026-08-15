@@ -2,7 +2,7 @@
 
 *Read this in: **English** · [Русский](link-protocol.ru.md)*
 
-The deep-dive for the [System architecture](../README.md#5-system-architecture) decision. The **ESP32-S3** is the brain and bus master; the **ESP32-C5** is a thin 5 GHz agent that can only be clocked by the S3. This document is the narrow, versioned contract between them: how a byte on the wire becomes a command or an event, and how the link stays correct when frames are lost.
+The deep-dive for the [System architecture](../README.md#5-system-architecture) decision. The **ESP32-S3** is the brain and bus master; the **ESP32-C5** is the co-processor — on its own board it drives 5 GHz Wi-Fi (+ 802.15.4) **and** the 3× nRF24L01+ (2.4 GHz raw) **and** IR — an agent that can only be clocked by the S3. This document is the narrow, versioned contract between them: how a byte on the wire becomes a command or an event, and how the link stays correct when frames are lost.
 
 The wiring (pins, power gating) is owned by the hardware repo — see the [c5-buses sheet](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/hardware/c5-buses). This doc references it, it does not redefine it.
 
@@ -20,12 +20,11 @@ A **dedicated SPI3 bus** carries the link — separate from the shared SPI2 that
 | `CS` | S3 → C5 | chip select |
 | `DRDY` | C5 → S3 | **data-ready / attention** — a plain GPIO interrupt, not clocked |
 | `C5_EN` | S3 → C5 | power / reset gate (slow line, via PCA9555 #2) |
-| `C5_BOOT` | S3 → C5 | download-mode strap (slow line, via PCA9555 #2) |
 
 - **Clock:** SPI mode 0, MSB-first. 20 MHz nominal (10 MHz on first bring-up, up to 40 MHz once proven — [§9](#9-timing-constants-v1-defaults)).
 - **DRDY** is the C5's only way to ask for attention. A slave cannot clock the bus, so **every transfer is master-initiated**; DRDY lets the C5 say "I have an event queued — come read it."
-- **`C5_EN` / `C5_BOOT`** live on the I²C expander, not on fast GPIOs. They are one-shot power/reset/flash controls, not per-transfer signals, so their latency does not matter.
-- **UART0** (S3 43/44) is the C5 **flashing bridge only** — S3 puts the C5 in download mode (`C5_BOOT` low, toggle `C5_EN`) and pipes a host or an OTA image through. It carries no runtime traffic.
+- **`C5_EN`** lives on the I²C expander, not on a fast GPIO. It is a one-shot power/reset control, not a per-transfer signal, so its latency does not matter.
+- **Flashing / OTA.** The C5 flashes standalone over **its own USB-C** on the bench. In the field, **OTA rides the SPI3 link itself** — the S3 pushes the C5 image over the link (`OTA_BEGIN` / `OTA_DATA` / `OTA_END`), the C5 self-flashes and reboots. There is no S3→C5 UART flashing bridge.
 - **Dedicated bus = fault isolation.** A wedged C5 that holds MISO low can only break the link, never the main SPI2 bus that the UI and wired radios depend on. This is a deliberate robustness choice (a shared bus would let one stuck slave stall everything).
 
 ---
@@ -68,7 +67,7 @@ Every frame is an **8-byte header + payload + 2-byte CRC**, padded to the 64-byt
 
 ## 4. Opcodes (v1)
 
-Minimal on purpose — the C5 is a thin agent. Payloads are sketches; exact structs live in `common/link/`.
+The C5 agent covers 5 GHz Wi-Fi, the 3× nRF24 (2.4 raw), IR, and OTA-over-link. Payloads are sketches; exact structs live in `common/link/`.
 
 **Commands — S3 → C5**
 
@@ -84,10 +83,18 @@ Minimal on purpose — the C5 is a thin agent. Payloads are sketches; exact stru
 | `0x30` | `DEAUTH` | `bssid:6, sta:6, count:u8, reason:u16` | own-network only; region- and safety-gated |
 | `0x31` | `FLOOD_BEACON` | params | |
 | `0x32` | `FLOOD_PROBE` | params | |
-| `0x3F` | `STOP_ALL` | — | **highest priority — kill every C5 TX now** |
+| `0x33` | `NRF_SCAN` | `mode:u8, chans…, dwell_ms:u16` | 2.4 raw: RPD energy spectrum / ESB sniff; results stream back |
+| `0x34` | `NRF_TX` | `mode:u8, chans…, power:u8` | multi-channel TX / carrier / narrowband jam — TX-gated |
+| `0x35` | `NRF_MOUSEJACK` | `mode:u8, addr…, payload…` | MouseJack scan / keystroke inject — TX-gated |
+| `0x38` | `IR_SEND` | `proto:u8, code…` | transmit an IR code (RMT) |
+| `0x39` | `IR_LEARN` | — | capture the next IR frame; returns `IR_CODE` |
+| `0x3F` | `STOP_ALL` | — | **highest priority — kill every C5 TX now (Wi-Fi, nRF24, IR)** |
 | `0x40` | `SLEEP` | — | park the C5 (5 GHz idle) |
 | `0x41` | `WAKE` | — | |
 | `0x50` | `KEEPALIVE` | — | refresh the C5 dead-man while it transmits ([§6](#6-reliability)) |
+| `0x51` | `OTA_BEGIN` | `size:u32, sha256:32` | start a C5 firmware push over the link |
+| `0x52` | `OTA_DATA` | `offset:u32, bytes…` | image fragment (uses the `MORE` flag) |
+| `0x53` | `OTA_END` | — | verify + commit → the C5 reboots into the new image |
 
 **Events — C5 → S3**
 
@@ -99,9 +106,12 @@ Minimal on purpose — the C5 is a thin agent. Payloads are sketches; exact stru
 | `0x90` | `SCAN_RESULT` | `bssid:6, chan:u8, rssi:i8, auth:u8, ssid_len:u8, ssid…` | one AP per frame |
 | `0x91` | `SCAN_DONE` | `scan_id:u16, count:u16` | |
 | `0x92` | `STA_SEEN` | `sta:6, bssid:6, chan:u8, rssi:i8` | client seen |
+| `0x93` | `NRF_RESULT` | `mode:u8, chan:u8, rssi:i8, data…` | 2.4-raw spectrum bin / ESB packet / MouseJack device |
+| `0x94` | `IR_CODE` | `proto:u8, code…` | a captured IR frame (answers `IR_LEARN`) |
 | `0xA0` | `LOG` | `level:u8, text…` | C5 diagnostics → S3 console / SD |
 | `0xA1` | `ERROR` | `code:u16, ctx:u16` | |
 | `0xA2` | `STATUS` | `state:u8, tx_queue:u8, dropped:u16` | |
+| `0xA3` | `OTA_STATUS` | `state:u8, offset:u32` | OTA progress / done / error |
 
 ---
 
