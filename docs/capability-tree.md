@@ -62,9 +62,9 @@ Three independent nRF24 on separate antennas — energy sensing and ShockBurst t
 
 ---
 
-## 3. 5 GHz Wi-Fi (ESP32-C5 agent)
+## 3. 5 GHz Wi-Fi + 802.15.4 (ESP32-C5 agent)
 
-A thin C5 agent over the [SPI3 link](link-protocol.md). Scan / SoftAP / STA are native ESP-IDF (Apache); deauth/disassoc ride a patched `libnet80211` blob that permissive C5 forks (AnvilBrain MIT, maxbrito500 Apache) prove.
+A thin C5 agent over the [SPI3 link](link-protocol.md). Scan / SoftAP / STA are native ESP-IDF (Apache); deauth/disassoc ride a patched `libnet80211` blob that permissive C5 forks (maxbrito500 Apache; AnvilBrain, MIT + ethical-use restriction) demonstrate on their silicon — **unverified on our production C5 until bring-up ([§11](../README.md#11-on-hardware-bring-up))**. The C5 also carries a native **802.15.4** radio (Zigbee / Thread), used here for passive recon only.
 
 | Capability | Reuse | Gate |
 |------------|-------|------|
@@ -72,10 +72,11 @@ A thin C5 agent over the [SPI3 link](link-protocol.md). Scan / SoftAP / STA are 
 | Promiscuous sniff (partial monitor) + probe harvest | borrow — ESP-IDF promiscuous (Apache) | lossy, single-channel, no radiotap; privacy: authorized-only |
 | Client enumeration; beacon / hidden-SSID inventory | idea (Marauder GPL) / write | authorized-only |
 | Deauth-detector, rogue-AP/evil-twin detector (defensive) | write | — |
-| Deauth / disassoc | borrow — AnvilBrain (MIT), maxbrito500 (Apache) | legal: authorized-only, region caps + STOP; patched-blob risk · **no-ops against PMF** |
+| Deauth / disassoc | borrow — maxbrito500 (Apache); AnvilBrain = idea-ref (MIT + ethical-use restriction) | legal: authorized-only, region caps + STOP · **unproven on production C5 — verified at bring-up ([§11](../README.md#11-on-hardware-bring-up)); patched blob may fail → fall back to passive recon** · no-ops against PMF |
 | Beacon / probe spam | borrow beacon (AnvilBrain MIT); probe = write | legal: spectrum abuse — authorized/lab, caps, STOP |
 | Evil-twin SoftAP, evil portal, Karma | borrow SoftAP (ESP-IDF Apache); portal/Karma = idea (GhostESP/Marauder) | legal: authorized-only, non-DFS AP channel, STOP |
 | STA connect | borrow — ESP-IDF STA (Apache) | authorized nets; no credential entry by firmware |
+| **802.15.4 / Zigbee / Thread passive sniff + energy scan** | borrow — ESP-IDF `ieee802154` promiscuous (Apache); Thread parse = OpenThread (BSD-3) | RX / sniff only — no joining a Zigbee/Thread network (a full stack, out of scope) |
 | ⛔ Full 5 GHz monitor+injection · PMKID/EAPOL · assoc/auth flood · wideband jam | idea | **ceiling:** all need full 5 GHz injection / handshake capture / wideband — out of scope |
 
 ---
@@ -118,7 +119,8 @@ One narrow-channel CC1101 behind a 4-band filter. RX/RSSI/raw-capture come from 
 | Signal library / tagging / playlist replay | borrow — esp32-leshy (MIT) | replay inherits the TX gate |
 | Arbitrary CC1101 config; CW test tone | borrow — RadioLib (MIT) | freq limited to CC1101 bands; TX caps + STOP |
 | SP4T band-filter management (infra) | write | 4 filtered bands + PLL gaps bound coverage |
-| ⛔ Sub-GHz jammer · true wideband real-time SDR | idea | **legal/ceiling:** jamming illegal; CC1101 is single-channel, not an SDR |
+| Single-channel narrowband jam; reactive jam-on-detect | write — RadioLib carrier/CW TX (MIT) | legal: narrowband single-target only, authorization + duty cap + STOP |
+| ⛔ Full-band / wideband sub-GHz jam · true wideband real-time SDR | idea | **legal/ceiling:** wideband jam illegal; CC1101 is single-channel, not an SDR |
 
 ---
 
@@ -140,7 +142,8 @@ One narrow-channel CC1101 behind a 4-band filter. RX/RSSI/raw-capture come from 
 | Track / breadcrumb logging (GPX/KML) + waypoints / geofence | write — SparkFun lib (MIT) | — |
 | AssistNow offline aiding (fast fix) | borrow — SparkFun lib (MIT) | needs occasional Wi-Fi to refresh aiding |
 | **GNSS interference / spoofing indicator** | borrow — SparkFun lib (MIT), UBX-MON-HW `jamInd` / NAV-STATUS `spoofDetState` | passive defensive read-out — optionally alerts |
-| ⛔ Narrowband LoRa/carrier jam | idea | **legal/ethos:** deliberate interference is illegal |
+| Narrowband single-target LoRa / carrier jam; reactive jam-on-detect | write — RadioLib carrier/CW TX (MIT) | legal: narrowband single-target only, authorization + duty cap + STOP |
+| ⛔ Wideband / full-band LoRa-band jam | idea | **legal/ethos:** deliberate wideband interference is illegal |
 
 ---
 
@@ -161,7 +164,7 @@ A DSP receiver. All RX borrows from **pu2clr/SI4735** and the **ats-mini / ats20
 
 ---
 
-## 8. UHF walkie (SA868-U, 400–480 MHz NFM, RX + TX ≤1 W)
+## 8. UHF walkie (SA868-U, 400–480 MHz NFM, RX + TX ≤2 W)
 
 Half-duplex analog-FM module over an AT-style UART. Module settings are written clean; audio modes (APRS/SSTV/DTMF-decode) need the RX/TX audio wired to the MCU.
 
@@ -178,9 +181,9 @@ Half-duplex analog-FM module over an AT-style UART. Module settings are written 
 
 ---
 
-## 9. NFC / RFID (WS1850S, 13.56 MHz)
+## 9. NFC / RFID (optional M5 Grove RFID2 unit, WS1850S, 13.56 MHz)
 
-An MFRC522-class **reader/writer** — ISO14443A only, **no card emulation**. Read/write/dump/clone borrow from **miguelbalboa/rfid** (Unlicense). Nested/EMV/NDEF logic is copyleft → idea/write.
+Unlike the ten soldered subsystems, NFC comes from an **optional M5 RFID2 unit (WS1850S) plugged into a Grove I²C port** (see the [Grove/M5 expansion](#11-system--ui--storage--input--power--indicators) leaf) — so the whole branch is gated on runtime unit-presence detection (probe the WS1850S; hide the branch if absent). It is an MFRC522-class **reader/writer** — ISO14443A only, **no card emulation**. Read/write/dump/clone borrow from **miguelbalboa/rfid** (Unlicense); nested/EMV/NDEF logic is copyleft → idea/write.
 
 | Capability | Reuse | Gate |
 |------------|-------|------|
@@ -221,11 +224,13 @@ The non-safety platform layer — mostly MIT/Apache/BSD (LVGL, ESP-IDF, FastLED,
 | Launcher / home menu + GUI toolkit + status bar + theme/settings | borrow — esp32-leshy/DIV, LVGL, ArduinoJson (MIT) | — |
 | Capacitive touch + encoder/button input + on-screen keyboard | borrow — GT911/FT6x36, ESP32Encoder, LVGL (MIT) | — |
 | **USB HID keyboard injection (BadUSB / DuckyScript over USB-C)** | borrow — ESP-IDF/TinyUSB HID device (Apache/MIT); Ducky parser shared with BadBLE | S3 has **native USB-OTG** — real capability; authorized host only + STOP |
-| USB serial CLI + USB mass-storage (SD-as-drive) | borrow — ESP-IDF console + TinyUSB MSC (Apache/BSD) | — |
+| USB serial CLI + USB mass-storage (SD-as-drive) | borrow — ESP-IDF console + TinyUSB MSC (Apache/MIT) | — |
 | OTA over Wi-Fi + OTA from SD + C5 co-processor OTA (over SPI3) | borrow — ESP-IDF `esp_https_ota`, M5Stack-SD-Updater, `esp_serial_flasher` (Apache/MIT) | — |
 | SD file browser + config import/export + offline device DB | borrow — ESP-IDF FatFs, esp32-leshy (BSD/MIT) | — |
 | Battery gauge + charge status + sleep/power-management + peripheral & C5 power gating | borrow gauge/sleep (SparkFun, ESP-IDF `esp_sleep`); gating = write | — |
 | WS2812 status LED + buzzer feedback | borrow LED (FastLED MIT); buzzer = write | — |
+| **Grove / M5 I²C-Unit expansion** — enumerate + hot-plug-detect the 2× Grove ports; drivers for M5 RFID2 (the NFC path, [§9](#9-nfc--rfid-optional-m5-grove-rfid2-unit-ws1850s-1356-mhz)), RTC, IMU, sensors | write — thin drivers over ESP-IDF I²C (Apache) | 3.3 V I²C units only |
+| **Analog audio routing** — select the mux source (Si4732 / SA868 / off), enable/mute the PAM8302 amp, read 3.5 mm jack-detect | write — over the PCA9555 control lines | hardware: mux + amp SD on the I²C expander |
 | Device info / self-test + crash/core-dump + factory reset + RTOS task mgmt | borrow — ESP-IDF `esp_core_dump`, FreeRTOS (Apache/MIT) | — |
 
 ---
@@ -236,9 +241,10 @@ The non-safety platform layer — mostly MIT/Apache/BSD (LVGL, ESP-IDF, FastLED,
 |------------|-------|------|
 | **Safety interlocks** — hardware STOP-key kills all TX, long-BACK panic kill, TX-live indicator, clean shutdown, low-battery→forced shutdown, watchdog/brownout safe-state | write; watchdog borrows ESP-IDF (Apache) | **mandatory** — cut TX from a high-priority path regardless of UI state; safe default after reset = all radios off |
 | **Compliance gates** — region TX-power caps, duty-cycle limiter, band/region lockout, authorization/ethics consent gate | write | **mandatory** by ethos; region chosen at setup |
+| **Radio-chain TDD arbitration / RF coexistence** — one owner grants exclusive TX to a single different-band chain at a time (SA868 / LoRa / CC1101 / Wi-Fi); the 3× nRF24 stay one parallel 2.4 GHz set | write | **mandatory** — keying every chain at once desenses the receivers (RF coexistence, not the SPI bus) |
 | S3↔C5 command/telemetry IPC | write — the [link protocol](link-protocol.md) | — |
 | Cross-mode target follow (2.4 GHz → 5 GHz); dual-band unified survey; unified spectrum/waterfall | write; unified view = idea-ref (Flipper/Bruce) | TX side inherits deauth/spam gates |
-| GPS-tag every RF capture; wardriving (Wigle CSV/KML); cross-mode PCAP logging | borrow Wigle/PCAP (Marauder MIT parts, ESP-IDF pcap); tag = write | passive metadata — store/publish per local privacy law |
+| GPS-tag every RF capture; wardriving (Wigle CSV/KML); cross-mode PCAP logging | write Wigle CSV/KML + tag; borrow PCAP (ESP-IDF `pcap`, Apache) | passive metadata — store/publish per local privacy law |
 | RTC / timekeeping (GPS + NTP) | borrow — SparkFun, ESP-IDF SNTP (MIT/Apache) | — |
 | Capture/replay store (sub-GHz + IR + ESB) | idea — Flipper (GPL); esp32-leshy (MIT) | replay is TX — gated behind auth + caps + STOP |
 | BLE keyboard text entry (primary input) | borrow — esp32-leshy, NimBLE HID host (MIT/Apache) | — |
