@@ -12,6 +12,7 @@
 - По [`DEC-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0004-reconsider-legacy-exclusions.md) все отвергнутые legacy-возможности проходят повторную техническую и правовую проверку; ограничение старого компонента больше не считается ограничением продукта.
 - По [`DEC-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0005-zero-loss-cost.md) полная стоимость продукта снижается только через доказанно эквивалентные реализации без потери функций, характеристик, безопасности, надёжности, автономности, ремонтопригодности и тестируемости.
 - По [`DEC-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0006-external-m5-gnss.md) бортовой GNSS удалён из базовой платы. GPS-функции условны внешним M5Stack Unit GPS v1.1 через отдельный защищённый 5-вольтовый UART Grove-порт; `FND-0004` закрыта.
+- По [`DEC-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0007-dual-external-lora-profiles.md) бортовой LoRa удалён из базовой платы и приняты оба внешних профиля через единый `EXT-RF14`: M5Stack U214 LoRa+GNSS Cap и сменная широкополосная LoRa-carrier с обязательным reference-вариантом E22-900M22S на 850–930 МГц. Одновременно активны один LoRa backend и один GNSS backend.
 
 Текущий статус реализации: **не начато**.
 

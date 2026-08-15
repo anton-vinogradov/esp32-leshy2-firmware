@@ -12,6 +12,7 @@ The firmware design is being rebuilt from first principles together with the Les
 - Under [`DEC-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0004-reconsider-legacy-exclusions.md), every rejected legacy capability receives a new technical and legal review; a limitation of an old component is no longer treated as a product limitation.
 - Under [`DEC-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0005-zero-loss-cost.md), total product cost is optimized only through implementations proven equivalent in capability, performance, safety, reliability, autonomy, serviceability, and testability.
 - [`DEC-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0006-external-m5-gnss.md) removes onboard GNSS from the base board. GPS features are conditional on an external M5Stack Unit GPS v1.1 connected through the dedicated protected 5 V UART Grove port; this closes `FND-0004`.
+- [`DEC-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0007-dual-external-lora-profiles.md) removes onboard LoRa from the base board and accepts both external profiles through one `EXT-RF14` contract: the M5Stack U214 LoRa+GNSS Cap and a replaceable wideband LoRa carrier, with E22-900M22S as the required 850–930 MHz reference. Only one LoRa backend and one GNSS backend are active at a time.
 
 Current implementation status: **not started**.
 
