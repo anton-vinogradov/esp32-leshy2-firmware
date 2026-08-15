@@ -33,6 +33,7 @@ Every third-level tool remains independently disarmed after entry and enforces i
 - LoRa supports M5Stack U214 as the first `EXT-RF14` backend for common 868/915 profiles within module and regional limits, with only one LoRa backend active at a time.
 - The onboard mono ES8311 path provides digital capture, playback, routing, and level-control prerequisites while ordinary listening and microphone voice retain a hardware-default analog path across MCU or codec failure.
 - The onboard Si4732 provides FM/RDS and ordinary LW/MW/SW reception. SSB USB/LSB and CW via BFO become available after the owner locally imports a compatible volatile patch through an open bounded loader; no third-party blob ships without proven provenance and redistribution rights. Synchronous AM is not promised pending separate proof ([`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md)).
+- The preferred voice-radio backend is a half-duplex analog-FM SA518 covering VHF 136–174 and UHF 400–470 MHz at 0.5/1 W under explicit regional/licence profiles. A UHF-only SA868S fallback remains until price, supply, and RF qualification pass, and is never labelled dual-band. The 2 W-class→1 W peak trade is accepted for one VHF+UHF module; an external SMA is not represented as licence-exempt PMR446 equipment ([`DEC-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0016-conditional-sa518-dual-band-voice.md)).
 
 ## How this page grows
 
