@@ -28,6 +28,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - external M5 GNSS and external U214 LoRa+GNSS (`DEC-0006`, `DEC-0008`);
 - onboard mono ES8311 audio with hardware-default analog bypass (`DEC-0009`);
 - target C5 ownership of 3×nRF24 and IR (`DEC-0001`), without a claim that the inter-MCU transport is solved.
+- owner-controlled signed S3/C5 updates with rollback and an open developer lifecycle (`DEC-0013`), without enabling irreversible hardware lockdown.
 
 ## Open engineering dependencies
 
@@ -36,16 +37,13 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
-- `FND-0008`: legacy System/UI promises bind capabilities to unproven SPI, hot-plug, USB, and update-security implementations.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
 
-The System/UI prerequisite audit passed [`REV-0002H`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002H-system-ui-prerequisites.md). Draft [`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) decomposes all eleven legacy groups into testable platform requirements without selecting a final pin map.
+[`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) decomposes all eleven legacy System/UI/storage groups into testable platform requirements without selecting a final pin map. Owner-controlled signed updates were accepted in [`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md); propagation passed `REV-0002I`, and this capability slice is **Reviewed**.
 
-## Current decision gate
-
-[`IMP-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0011-signed-update-chain.md) asks whether every installable S3/C5 image must pass signature verification and rollback validation, while deferring irreversible hardware Secure Boot/Flash Encryption policy until the recovery and lifecycle architecture is proven. The requirement set remains **In review** until this choice is resolved.
+Stage 2 now continues with the next capability group and the remaining legacy-exclusion audit. No new owner decision is currently requested for System/UI.
 
 ## Deferred architecture gate
 

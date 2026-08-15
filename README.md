@@ -24,6 +24,7 @@ Every third-level tool remains independently disarmed after entry and enforces i
 - Every transmitter starts off after power-on, reset, brownout, watchdog, or update; every Lab tool starts disarmed.
 - Initial TX uses a conservative profile specific to the radio path. Maximum available power requires an explicit action for the current scenario and is never restored as a global default.
 - Active TX state and the selected power must be visible. A saved preference or restored screen cannot silently arm transmission.
+- Normal S3/C5 update paths require owner-authorized signed images, independent target-MCU validation, and working-image rollback. Keys, offline build/signing tools, and custom developer firmware remain under owner control; hardware Secure Boot, Flash Encryption, and eFuse lockdown require a separate opt-in decision after recovery proof ([`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md)).
 
 ## Accepted device integration
 

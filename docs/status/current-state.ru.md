@@ -28,6 +28,7 @@
 - внешний M5 GNSS и внешний U214 LoRa+GNSS (`DEC-0006`, `DEC-0008`);
 - бортовой mono ES8311 audio с аппаратным default-to-analog bypass (`DEC-0009`);
 - целевое владение C5 для 3×nRF24 и IR (`DEC-0001`) без заявления, что межпроцессорный транспорт уже решён.
+- owner-controlled подписанные обновления S3/C5 с rollback и открытым developer lifecycle (`DEC-0013`) без включения необратимого hardware lockdown.
 
 ## Открытые инженерные зависимости
 
@@ -36,16 +37,13 @@
 - `FND-0003`: audio-направление принято, но pins, electrical behavior, drivers, HIL и feature-level gates ещё не доказаны.
 - `FND-0006`: предложенная матрица кнопок и принятые audio-control конфликтуют на `U13.P10..P17`.
 - `FND-0007`: текущий STOP — только вход I²C-экспандера и не может независимо погасить TX.
-- `FND-0008`: legacy System/UI привязывает функции к неподтверждённым SPI-, hot-plug-, USB- и update-security реализациям.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
 
-Аудит пререквизитов System/UI прошёл [`REV-0002H`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002H-system-ui-prerequisites.md). Draft [`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) раскладывает все одиннадцать legacy-групп в проверяемые требования платформы без выбора окончательной pin-map.
+[`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) раскладывает все одиннадцать legacy-групп System/UI/storage в проверяемые требования платформы без выбора окончательной pin-map. Owner-controlled подписанные обновления приняты в [`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md); распространение прошло `REV-0002I`, capability-срез получил статус **«Проведено ревью»**.
 
-## Текущий decision gate
-
-[`IMP-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0011-signed-update-chain.md) спрашивает, должны ли все устанавливаемые S3/C5 images проходить проверку подписи и rollback validation, тогда как необратимая политика hardware Secure Boot/Flash Encryption выбирается позже — после доказанной recovery/lifecycle architecture. Набор требований остаётся **«На ревью»** до этого решения.
+Этап 2 продолжается со следующей группой возможностей и оставшимся аудитом legacy-исключений. Нового решения владельца по System/UI сейчас не требуется.
 
 ## Отложенный архитектурный gate
 
