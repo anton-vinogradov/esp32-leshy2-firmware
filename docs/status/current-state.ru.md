@@ -36,11 +36,16 @@
 - `FND-0003`: audio-направление принято, но pins, electrical behavior, drivers, HIL и feature-level gates ещё не доказаны.
 - `FND-0006`: предложенная матрица кнопок и принятые audio-control конфликтуют на `U13.P10..P17`.
 - `FND-0007`: текущий STOP — только вход I²C-экспандера и не может независимо погасить TX.
+- `FND-0008`: legacy System/UI привязывает функции к неподтверждённым SPI-, hot-plug-, USB- и update-security реализациям.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
 
-Этап 2 продолжает декомпозицию групп возможностей в проверяемые требования `include` / `conditional` / `defer` / `exclude-proven`. System/UI-срез может пройти ревью на уровне функциональных требований без выбора окончательной pin-map.
+Аудит пререквизитов System/UI прошёл [`REV-0002H`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002H-system-ui-prerequisites.md). Draft [`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) раскладывает все одиннадцать legacy-групп в проверяемые требования платформы без выбора окончательной pin-map.
+
+## Текущий decision gate
+
+[`IMP-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0011-signed-update-chain.md) спрашивает, должны ли все устанавливаемые S3/C5 images проходить проверку подписи и rollback validation, тогда как необратимая политика hardware Secure Boot/Flash Encryption выбирается позже — после доказанной recovery/lifecycle architecture. Набор требований остаётся **«На ревью»** до этого решения.
 
 ## Отложенный архитектурный gate
 

@@ -36,11 +36,16 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
+- `FND-0008`: legacy System/UI promises bind capabilities to unproven SPI, hot-plug, USB, and update-security implementations.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
 
-Stage 2 continues with decomposition of capability groups into testable `include` / `conditional` / `defer` / `exclude-proven` requirements. The System/UI slice may be reviewed at the functional-requirement level without selecting a final pin map.
+The System/UI prerequisite audit passed [`REV-0002H`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002H-system-ui-prerequisites.md). Draft [`REQ-SYS-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SYS-0001-system-ui-storage.md) decomposes all eleven legacy groups into testable platform requirements without selecting a final pin map.
+
+## Current decision gate
+
+[`IMP-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0011-signed-update-chain.md) asks whether every installable S3/C5 image must pass signature verification and rollback validation, while deferring irreversible hardware Secure Boot/Flash Encryption policy until the recovery and lifecycle architecture is proven. The requirement set remains **In review** until this choice is resolved.
 
 ## Deferred architecture gate
 
