@@ -20,12 +20,12 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 |--:|-------|:------:|
 | 1 | [Vision & scope](#1-vision--scope) | 🔬 |
 | 2 | [Capability tree](#2-capability-tree) | 🔬 |
-| 3 | [Firmware tree](#3-firmware-tree) | ⏳ |
+| 3 | [Firmware tree](#3-firmware-tree) | ✅ |
 | 4 | [Target & toolchain](#4-target--toolchain) | ✅ |
 | 5 | [System architecture](#5-system-architecture) | ✅ |
 | 6 | [Peripheral & driver map](#6-peripheral--driver-map) | ⏳ |
 | 7 | [UI/UX & control conventions](#7-uiux--control-conventions) | ⏳ |
-| 8 | [Feature modes](#8-feature-modes) | ⏳ |
+| 8 | [Screen & feature design](#8-screen--feature-design) | ⏳ |
 | 9 | [Emulation & test harness](#9-emulation--test-harness) | ⏳ |
 | 10 | [Implementation](#10-implementation) | ⏳ |
 | 11 | [On-hardware bring-up](#11-on-hardware-bring-up) | ⏳ |
@@ -72,11 +72,19 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 3. Firmware tree
 
-**⏳ Planned.** Turn the [capability tree](#2-capability-tree) into the firmware's structure: how capabilities group into modes and screens, which modules and drivers back them, and how they map onto the tasks and the HAL of [§5](#5-system-architecture). This is the backbone every later stage builds against. *Designed in the doc before it's implemented.*
+**✅ Spec.** Turn the [capability tree](#2-capability-tree) into the shape of the firmware — the home launcher, the apps, and every app's split — ordered by how often a user reaches for it. This is the map [§8](#8-screen--feature-design) then works out screen by screen. Full tree: **[docs/firmware-tree.md](docs/firmware-tree.md)**.
 
-**Decisions.** _TBD._
+**Decisions.**
 
-**Artifacts.** _TBD._
+- **Organised as usage-ordered apps, not by chip.** 11 top-level apps ranked most-used-first (Wi-Fi, BLE, sub-GHz, NFC, IR, RF-spectrum, LoRa, Radio-RX, GPS, walkie, System); the user thinks "Wi-Fi," not "which chip," so 2.4 + 5 GHz sit under one app. Follows the [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) / ESP32-DIV muscle memory a returning user already has.
+- **Every app splits into main · Settings · Lab.** The **Lab rule** is not "does it transmit" — legitimate own-authority comms transmit too. **Lab = a transmit whose effect lands on gear or spectrum you don't own / aren't authorized to test** (attack, impersonation, jam, DoS, flood, inject, spam, replay of a 3rd-party signal). Passive/receive and own-authority TX stay in main; receive-only apps carry an intentionally empty Lab.
+- **An install-time harm agreement gates the whole device** (like leshy1): a first-boot pledge (scroll-to-end + hold-to-confirm) → region/compliance wizard, so nothing transmits before a region is set. Re-shown after a factory reset and **whenever the Lab-tool set grows** vs the stored stamp; every Lab tool boots disarmed behind an ARM interlock; the hardware STOP / long-BACK kill all TX from any screen at all times.
+- **A few sessions span apps** — Wardrive (one action → Wi-Fi + BLE + sub-GHz scanners + GPS-tag), HID Injection (BadBLE + BadUSB share one access point), quick-replay of own tagged signals. GPS, the TDD arbiter, the S3↔C5 link, and detection alerting run as always-on background services, not menu apps.
+
+**Artifacts.**
+
+- **[docs/firmware-tree.md](docs/firmware-tree.md)** (+ [RU](docs/firmware-tree.ru.md)) — the full tree: the Lab-boundary rule, the install agreement, global chrome + safety, the cross-app sessions, the 11 apps (main / Settings / Lab), and the deferred ceiling.
+- This map feeds the per-screen, per-feature design of [§8](#8-screen--feature-design).
 
 ---
 
@@ -145,9 +153,9 @@ leshy and most of the open-source we'll draw on are **PlatformIO / Arduino** cod
 
 ---
 
-## 8. Feature modes
+## 8. Screen & feature design
 
-**⏳ Planned.** Downstream of the [firmware tree](#3-firmware-tree): each capability leaf designed as a mode — 2.4 GHz Wi-Fi (S3), 5 GHz recon (C5 agent), nRF24 scan / jam / mousejack, sub-GHz (CC1101), LoRa / Meshtastic (SX1262), FM / HF receive (Si4732), walkie (SA868), GPS, and PCAP logging — with the per-region TX caps enforced in firmware. *Designed in the doc before it's implemented.*
+**⏳ Planned.** Take the [firmware tree](#3-firmware-tree) and work it out **screen by screen, feature by feature**: every screen's layout, controls, flow and states; every feature's behaviour, parameters, and its main / Settings / Lab placement; the install-agreement and Lab-arm screens; per-region TX caps surfaced in the UI. This is the detailed design the [implementation](#10-implementation) builds directly. *Designed in the doc before it's implemented.*
 
 **Decisions.** _TBD._
 
