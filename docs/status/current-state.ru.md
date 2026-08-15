@@ -39,6 +39,9 @@
 - `FND-0003`: audio-направление принято, но pins, electrical behavior, drivers, HIL и feature-level gates ещё не доказаны.
 - `FND-0006`: предложенная матрица кнопок и принятые audio-control конфликтуют на `U13.P10..P17`.
 - `FND-0007`: текущий STOP — только вход I²C-экспандера и не может независимо погасить TX.
+- `FND-0011`: текущему SA868 добавлены PTT receive-default, PD power-down-default и физический low-power H/L; независимый STOP и управляемый high-power path ещё требуют stage-3 proof.
+- `FND-0012`: UHF SA868 API не доказывает VHF, 470–480 MHz control и native tone scan; направление backend открыто.
+- `FND-0013`: VOX не имеет microphone-capture path и явно отложен до общего audio/pin budget.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
@@ -50,6 +53,8 @@ GNSS/navigation срез [`REQ-GNSS-0001`](https://github.com/anton-vinogradov/e
 `FND-0009` закрыт на requirement-level. UART/power hardware, parser, assistance source, поддержка advanced messages конкретными Unit/U214, RF self-desense и HIL ещё не реализованы и проверяются на последующих этапах.
 
 Si4732-срез [`REQ-RX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-RX-0001-si4732-receiver.md) получил статус **«Проведено ревью»** в `REV-0002M`. Владелец принял `IMP-0013/A` как [`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md): открытый bounded loader входит в target, SSB blob импортируется локально и имеет отдельные integrity/provenance состояния, а synchronous-AM остаётся deferred до отдельного proof. `FND-0010` закрыт на requirement-level; RF/frontend, patch rights/compatibility, loader, audio/storage/decoder и coexistence HIL ещё не реализованы.
+
+Analog voice prerequisite audit прошёл `REV-0002N`. [`REQ-VHF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-VHF-0001-analog-voice-modem.md) разделяет ручной PTT, автоматические TX-режимы, modem/iGate и Lab-relay; ложный licence-free PMR446 preset запрещён (`FND-0014`). **⚠️ Предложение [`IMP-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0014-dual-band-sa518-voice-backend.md)** предлагает conditional migration с UHF-only SA868S на новый SA518 136–174/400–470 MHz с fallback до price/AVL/RF proof. Выигрыш — VHF и один dual-band backend; цена — несовместимый footprint, примерно +40% площади, новый supply risk и падение UHF peak с 2 W-class до 1 W. До решения requirement set **«На ревью»**.
 
 ## Отложенный архитектурный gate
 
