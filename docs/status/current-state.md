@@ -38,11 +38,12 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
-## Current decision gate
+## Current review work
 
-[`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md) awaits the owner's decision:
+Stage 2 continues with decomposition of capability groups into testable `include` / `conditional` / `defer` / `exclude-proven` requirements. The System/UI slice may be reviewed at the functional-requirement level without selecting a final pin map.
 
-- recommended A: independent hardware STOP, safe reboot, 3×3 key matrix, remove `U14`, and reuse freed LoRa-control pins for audio;
-- B: retain `U14` and point-to-point buttons, but still add an independent hardware STOP.
+## Deferred architecture gate
 
-The System/UI substage cannot receive **Reviewed** status until this choice is accepted and propagated.
+[`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md) remains open, but [`DEC-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0012-defer-imp-0010-to-pin-budget.md) defers the A/B choice to stage 3. No owner decision is requested until a consolidated pin/GPIO/resource budget covers both MCUs, expanders, fixed-function pins, inter-MCU transport, audio, UI/touch, external modules, and genuinely freed onboard GNSS/LoRa lines.
+
+`FND-0006` and `FND-0007` remain open. The deferral neither selects `U14`/the 3×3 matrix nor proves a hardware STOP.
