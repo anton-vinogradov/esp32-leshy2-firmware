@@ -64,7 +64,7 @@ Three independent nRF24 on separate antennas — energy sensing and ShockBurst t
 
 ## 3. 5 GHz Wi-Fi + 802.15.4 (ESP32-C5 agent)
 
-A thin C5 agent over the [SPI3 link](link-protocol.md). Scan / SoftAP / STA are native ESP-IDF (Apache); deauth/disassoc ride a patched `libnet80211` blob that permissive C5 forks (maxbrito500 Apache; AnvilBrain, MIT + ethical-use restriction) demonstrate on their silicon — **unverified on our production C5 until bring-up ([§11](../README.md#11-on-hardware-bring-up))**. The C5 also carries a native **802.15.4** radio (Zigbee / Thread), used here for passive recon only.
+The C5's 5 GHz agent over the [SPI3 link](link-protocol.md) — one duty of the C5 co-processor, which also drives the 3× nRF24 (§2) and IR (§10), not a 5 GHz-only agent. Scan / SoftAP / STA are native ESP-IDF (Apache); deauth/disassoc ride a patched `libnet80211` blob that permissive C5 forks (maxbrito500 Apache; AnvilBrain, MIT + ethical-use restriction) demonstrate on their silicon — **unverified on our production C5 until bring-up ([§11](../README.md#11-on-hardware-bring-up))**. The C5 also carries a native **802.15.4** radio (Zigbee / Thread), used here for passive recon only.
 
 | Capability | Reuse | Gate |
 |------------|-------|------|
@@ -241,7 +241,7 @@ The non-safety platform layer — mostly MIT/Apache/BSD (LVGL, ESP-IDF, FastLED,
 |------------|-------|------|
 | **Safety interlocks** — hardware STOP-key kills all TX, long-BACK panic kill, TX-live indicator, clean shutdown, low-battery→forced shutdown, watchdog/brownout safe-state | write; watchdog borrows ESP-IDF (Apache) | **mandatory** — cut TX from a high-priority path regardless of UI state; safe default after reset = all radios off |
 | **Harm / authorization gate** + **TX limits as settings** — the harm agreement is the mandatory consent gate; TX power / band / duty are user settings, **default maximum** (leshy1-style), not a forced compliance gate | write | consent mandatory; power/band/duty default max, user-set |
-| **Radio-chain TDD arbitration / RF coexistence** — one owner grants exclusive TX to a single different-band chain at a time (SA868 / LoRa / CC1101 / Wi-Fi); the 3× nRF24 stay one parallel 2.4 GHz set | write | **mandatory** — keying every chain at once desenses the receivers (RF coexistence, not the SPI bus) |
+| **Radio-chain TDD arbitration / RF coexistence** — one owner grants exclusive TX per band at a time (SA868 / LoRa / CC1101 / 2.4 GHz Wi-Fi / C5 nRF24); arbitration is **by band and spans both chips** — the S3's 2.4 GHz Wi-Fi TX and the C5-driven nRF24 2.4-raw set are the **same band, mutually exclusive**, so the 3× nRF24 are one 2.4 GHz TX chain (parallel only among themselves) | write | **mandatory** — keying two chains in one band at once desenses the receivers (RF coexistence, not the SPI bus) |
 | S3↔C5 command/telemetry IPC | write — the [link protocol](link-protocol.md) | — |
 | Cross-mode target follow (2.4 GHz → 5 GHz); dual-band unified survey; unified spectrum/waterfall | write; unified view = idea-ref (Flipper/Bruce) | TX side inherits deauth/spam gates |
 | GPS-tag every RF capture; wardriving (Wigle CSV/KML); cross-mode PCAP logging | write Wigle CSV/KML + tag; borrow PCAP (ESP-IDF `pcap`, Apache) | passive metadata — store/publish per local privacy law |
