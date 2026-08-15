@@ -19,7 +19,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 | # | Stage | Status |
 |--:|-------|:------:|
 | 1 | [Vision & scope](#1-vision--scope) | 🟡 |
-| 2 | [Capability tree](#2-capability-tree) | ⏳ |
+| 2 | [Capability tree](#2-capability-tree) | ✅ |
 | 3 | [Firmware tree](#3-firmware-tree) | ⏳ |
 | 4 | [Target & toolchain](#4-target--toolchain) | ✅ |
 | 5 | [System architecture](#5-system-architecture) | ✅ |
@@ -54,11 +54,19 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 2. Capability tree
 
-**⏳ Planned.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem and band. Each leaf records how the analogues solve it and a disposition — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety gate on it. This is the menu of capabilities the [firmware tree](#3-firmware-tree) is then built from. *Designed in the doc before it's implemented.*
+**✅ Spec.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem. Each leaf records a reuse call — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety / legal gate on it. This is the menu the [firmware tree](#3-firmware-tree) is then built from.
 
-**Decisions.** _TBD._
+**Decisions.**
 
-**Artifacts.** _TBD._
+- **Organised by subsystem; every leaf carries a reuse call and a gate.** The tree groups capabilities under the 11 on-board subsystems (2.4 GHz Wi-Fi, raw 2.4/nRF24, 5 GHz/C5, BLE, sub-GHz/CC1101, LoRa+GPS, Si4732, SA868, NFC, IR, system) plus a cross-cutting layer, each leaf tagged **borrow / write / idea** and gated by a hardware, safety, or legal limit — so "reuse per capability" is concrete, not a vibe.
+- **License discipline drives the reuse call.** Our firmware is MIT, so code is *copied* only from permissive donors (ESP32-DIV, esp32-leshy, ESP-IDF, RadioLib, SparkFun, Arduino-IRremote, LVGL, miguelbalboa/rfid). The big copyleft analogues — **Marauder (GPL-3.0), Bruce (AGPL-3.0), Flipper (GPL-3.0)** — are **idea only** (reimplement clean); a capability *only* they implement is never "borrow".
+- **The ceiling is the hardware's.** Every out-of-scope leaf (full 5 GHz monitor+inject, WPA-handshake capture, wideband jamming, BT-Classic, HF-TX, NFC emulation, Linux-class analytics) is marked `⛔` and matched to the hardware repo's [out-of-scope list](https://github.com/anton-vinogradov/esp32-leshy2#1-why-a-new-device--vision). Narrowband single-target jam stays in; wideband jam is out.
+- **The adversarial review surfaced real capabilities the first pass missed** and corrected licenses: **USB-HID BadUSB** (the S3's native USB-OTG makes DuckyScript-over-USB-C real), **Drone Remote-ID detection** (Wi-Fi + BLE, broadcast in the clear), **ESP-NOW** peer link, **GNSS jamming/spoofing detection**; plus the PMF/802.11w caveat on deauth and the DFS gate on active 5 GHz scanning.
+
+**Artifacts.**
+
+- **[docs/capability-tree.md](docs/capability-tree.md)** (+ [RU](docs/capability-tree.ru.md)) — the full tree: 11 subsystem branches + a cross-cutting layer + the out-of-scope ceiling, each leaf with its reuse call, donor + license, and gate.
+- This menu feeds the [firmware tree](#3-firmware-tree), which selects and structures it into modes.
 
 ---
 
