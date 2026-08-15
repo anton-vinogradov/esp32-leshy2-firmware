@@ -14,12 +14,12 @@ Leshy2 is a two-chip field tool: a mature **ESP32-S3** brain that runs everythin
 
 Like the hardware repo, this README is the project's **source of truth**. We **design the firmware in the doc before we write the code**: each stage sets a **Spec** (what and why), records the **Decisions** made in it, and only then produces **Artifacts** (code + docs) that implement exactly that design. Read it as *spec → decisions → implementation* — and every line of code should trace back to a decision written here.
 
-**Status:** ✅ done · 🟡 in progress · ⏳ planned. **Nothing is implemented yet — this is the design stage.**
+**Status:** ⏳ planned → 🟡 in progress → ✅ done → 🔬 reviewed. A stage turns 🔬 only after its own self-review; edit it afterwards and it drops back to ✅. **Nothing is implemented yet — this is the design stage.**
 
 | # | Stage | Status |
 |--:|-------|:------:|
-| 1 | [Vision & scope](#1-vision--scope) | 🟡 |
-| 2 | [Capability tree](#2-capability-tree) | ✅ |
+| 1 | [Vision & scope](#1-vision--scope) | 🔬 |
+| 2 | [Capability tree](#2-capability-tree) | 🔬 |
 | 3 | [Firmware tree](#3-firmware-tree) | ⏳ |
 | 4 | [Target & toolchain](#4-target--toolchain) | ✅ |
 | 5 | [System architecture](#5-system-architecture) | ✅ |
@@ -34,7 +34,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 1. Vision & scope
 
-**🟡 Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add a thin **ESP32-C5 5 GHz agent** behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
+**🔬 Spec.** Bring the [Leshy2 hardware](https://github.com/anton-vinogradov/esp32-leshy2) to life in firmware: **design it from the device's own capabilities**, add a thin **ESP32-C5 5 GHz agent** behind a narrow **S3↔C5 protocol**, and implement the device's control conventions and its two safety blockers. Working code from [esp32-leshy](https://github.com/anton-vinogradov/esp32-leshy) and other open-source is reused wherever it fits. The capability set is the one defined in the hardware repo's [stage 2](https://github.com/anton-vinogradov/esp32-leshy2#2-what-it-must-do--capabilities); nothing here promises radio behaviour the silicon can't do.
 
 **In scope:** the S3 main firmware (UI, display + touch, all wired radios, buses, SD / PCAP, native 2.4 GHz Wi-Fi + BLE), the C5 5 GHz recon agent, the S3↔C5 link, per-region TX limits enforced in firmware, and an emulation / test harness that runs before hardware exists.
 
@@ -54,7 +54,7 @@ Like the hardware repo, this README is the project's **source of truth**. We **d
 
 ## 2. Capability tree
 
-**✅ Spec.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem. Each leaf records a reuse call — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety / legal gate on it. This is the menu the [firmware tree](#3-firmware-tree) is then built from.
+**🔬 Spec.** Look at what open-source analogues do with hardware like ours (ESP32-DIV, Marauder, Bruce, Flipper, M5 tools, …) and enumerate **everything this device could do**, organised as a tree by subsystem. Each leaf records a reuse call — **borrow the code, write it fresh, or take only the idea** — plus the hardware / safety / legal gate on it. This is the menu the [firmware tree](#3-firmware-tree) is then built from.
 
 **Decisions.**
 
