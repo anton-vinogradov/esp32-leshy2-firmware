@@ -111,4 +111,6 @@ Hardware [`RFQ-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CST-0001-dated-candidate-cost-burden.md) passes `REV-0003S`. `2B` is the recurring-BOM minimum, `2A` the implementation-burden minimum, and `3A` the margin maximum with about a $1.10 midpoint recurring premium over `2A`, a third signed target and an open RP2354A allocation gate.
 
-All hardware prerequisites for one atomic decision are reviewed. Local [`docs/architecture/README.md`](../architecture/README.md) still prohibits a premature runtime winner; the next input is the complete `PKG-*`, and the firmware target README remains unchanged until its acceptance.
+All hardware prerequisites are reviewed. Hardware [`PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) is the single open **⚠️ proposal**: S3 application/UI/audio/storage/native Wi-Fi/BLE, C5 dual-band Wi-Fi/802.15.4/IR, RP2354A A4 direct 3×nRF24/CC1101/voice, SDIO and SPI+alert links, complete controls/update/power/RF/cost/kill gates.
+
+It is not yet accepted. Local [`docs/architecture/README.md`](../architecture/README.md) and the firmware target README remain conditional until the owner's one atomic decision.
