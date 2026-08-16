@@ -59,6 +59,7 @@
 - `FND-0026`: native BLE advertising scan не является promiscuous connection-follow sniffer, rotating address не является stable identity, а RSSI не доказывает метры или направление.
 - `FND-0027`: Continuity/iBeacon/Find My и attack labels требуют versioned corpus/spec/licence/peer proof; ordinary, passive и disruptive BLE-сценарии имеют разные security gates.
 - `FND-0028`: physical owner трёх полнофункциональных nRF24 переоткрыт; S3 shared-SPI и C5+SDIO являются предварительными вариантами, решение отложено до wishlist freeze.
+- `FND-0029`: вариант памяти S3, транспорт S3↔C5 и recovery interfaces расходуют пересекающиеся scarce pins. N8R8 не является drop-in заменой N8R2, потому что Octal PSRAM занимает GPIO35–37, а 4-bit SDIO C5 конфликтует с native USB на GPIO13/14.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
@@ -87,7 +88,9 @@ Native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/
 
 ## Активный архитектурный gate
 
-[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist и открывает этап 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) начат как единая модель: functional/concurrency demand записан, numeric pin/controller/traffic/memory/power/STOP budgets ещё заполняются.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist и открывает этап 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) является общей неизменной моделью. Functional/concurrency demand, точная инвентаризация [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md) и единые layout gates [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) уже записаны; numeric traffic/memory/power budgets и решение по STOP остаются в работе.
+
+**⚠️ [`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md)** предлагает latched hard STOP, который сбрасывает оба MCU и аппаратно inhibit/обесточивает каждый внешний TX-capable domain. Это открытое решение владельца, а не принятый target.
 
 Base/optional scope разделены: Bluetooth Classic/sniffer, дополнительные SDR/RF, cellular, LF RFID, второй NFC frontend, full-duplex voice и Linux compute не нагружают core build/base board.
 

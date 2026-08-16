@@ -59,6 +59,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0026`: native BLE advertising scan is not a promiscuous connection-follow sniffer, a rotating address is not stable identity, and RSSI does not prove metres or direction.
 - `FND-0027`: Continuity/iBeacon/Find My and attack labels require versioned corpus/spec/licence/peer proof; ordinary, passive, and disruptive BLE cases have distinct security gates.
 - `FND-0028`: physical ownership of the three full-function nRF24 radios is reopened; S3 shared-SPI and C5+SDIO are preliminary variants, with the decision deferred until wishlist freeze.
+- `FND-0029`: the S3 memory variant, S3↔C5 transport, and recovery interfaces consume overlapping scarce pins. N8R8 is not a drop-in replacement for N8R2 because Octal PSRAM consumes GPIO35–37, while C5 4-bit SDIO conflicts with native USB on GPIO13/14.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
@@ -87,7 +88,9 @@ The remaining stage-2 slices are **Reviewed** under `REQ-W24-0001`, `REQ-SUB-000
 
 ## Active architecture gate
 
-[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) freezes the wishlist and opens stage 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) has started as the one shared model; functional/concurrency demand is recorded and numeric pin/controller/traffic/memory/power/STOP budgets remain in progress.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) freezes the wishlist and opens stage 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) is the one shared model. Functional/concurrency demand, the exact [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md) inventory, and common [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) layout gates are recorded; numeric traffic/memory/power budgets and the STOP decision remain in progress.
+
+**⚠️ [`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md)** proposes a latched hard STOP that resets both MCUs and hardware-inhibits/power-cuts every TX-capable external domain. It remains an open owner decision, not an accepted target.
 
 Base and optional scope are separate: Bluetooth Classic/sniffer, additional SDR/RF, cellular, LF RFID, second NFC frontend, full-duplex voice, and Linux compute do not burden the core build or base board.
 
