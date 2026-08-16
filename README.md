@@ -93,9 +93,10 @@ physical ownership or safety boundaries.
 ## Development state
 
 Firmware implementation has not started. Repeated hardware G2 review is closed;
-G3 now awaits owner direction among three same-scope form-factor candidates.
-Reviewed hardware product design, several whole-device alternatives,
-optimality, conceptual placement and a new atomic architecture decision must
-precede target-specific runtime/HAL/toolchain work.
+hardware G2F now verifies actual device/module pin exposure and several
+complete owner/bus/GPIO maps before adapting the legacy physical mockup.
+Reviewed physical co-design, whole-device optimality, conceptual placement and
+a new atomic architecture decision must precede target-specific
+runtime/HAL/toolchain work.
 The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 is retained only as candidate/reference evidence.

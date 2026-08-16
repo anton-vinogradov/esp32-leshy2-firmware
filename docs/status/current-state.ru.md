@@ -20,11 +20,14 @@
   no integrated keyboard плюс bounded phone-assisted text. `AUD-0010/0011` и
   `REV-0002AP` завершают scope propagation. `AUD-0012/REV-0002AQ` проверяют
   факты 6 GHz/Wi-Fi 6E; `DEC-0040/REV-0002AR` полностью отклоняют его.
-  `REV-0002AS` закрывает repeat G2; активен G3 target product design.
+  `REV-0002AS` закрывает repeat G2; hardware `DEC-0041` вводит G2F logical/
+  electrical feasibility до физического макета.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: выбрать направление из hardware `LAY-0001` после
-  reviewed physical inputs `PD-0001`; chip, owner, bus и pin не зафиксированы.
+- Следующий upstream gate: hardware строит минимум две complete owner/bus/GPIO
+  карты по `DEM-0001/SRC-0002`, проверяя SoC→package→exact device/module→реально
+  выведенный контакт. `LAY-0001` P1/P2/P3 — reference; chip, owner, bus и pin не
+  зафиксированы.
 
 Hardware `FND-0039` обнаружил, что прежний процесс выбрал `SYN-3A`, exact
 owners и CAD до product design, whole-product optimality и conceptual
@@ -53,7 +56,7 @@ final firmware prerequisites. Это только candidate evidence.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. После review hardware product design,
-whole-device candidates, optimality, conceptual placement и atomic architecture
-firmware заново выведет image/owner/IPC/HAL/update/test contract, проверит его
-и только потом начнёт implementation.
+Target code/toolchain пока не создаются. Hardware сначала завершает G2F maps,
+затем адаптирует legacy physical mockup и проходит whole-device
+optimality/conceptual placement/atomic architecture. После этого firmware
+заново выведет image/owner/IPC/HAL/update/test contract и начнёт implementation.

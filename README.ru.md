@@ -93,10 +93,11 @@ safety boundaries.
 
 ## Состояние разработки
 
-Firmware implementation не начата. Повторное hardware G2 review закрыто; G3
-ждёт выбора владельцем направления из трёх same-scope form-factor candidates.
-Reviewed hardware product design, несколько whole-device alternatives,
-optimality, conceptual placement и новое atomic architecture decision обязаны
-предшествовать target-specific runtime/HAL/toolchain work. Бывший
+Firmware implementation не начата. Повторное hardware G2 review закрыто;
+hardware G2F теперь проверяет реально выведенные контакты точных
+devices/modules и несколько полных owner/bus/GPIO карт до адаптации legacy
+physical mockup. Physical co-design, whole-device optimality, conceptual
+placement и новое atomic architecture decision обязаны предшествовать
+target-specific runtime/HAL/toolchain work. Бывший
 [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 сохранён только как candidate/reference evidence.
