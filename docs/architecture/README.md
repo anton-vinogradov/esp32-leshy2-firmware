@@ -8,10 +8,11 @@
 - Current resource input: [hardware `RES-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RES-0001-hardware-neutral-resource-demand.md)
 - Current physical-fact input: [hardware `SRC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SRC-0001-primary-hardware-resource-facts.md)
 - Current whole-device candidate input: [hardware `SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SYN-0001-zero-based-whole-device-candidates.md)
+- Current exact-map input: [hardware `PIN-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md)
 
 No prior layout, nRF owner, S3↔C5 transport, queue split, HAL boundary or pin assignment is a firmware architecture input. The fixed product roles are only those already accepted at capability level: S3 application/native Wi-Fi/BLE, and C5 Wi-Fi 2.4/5 GHz, IEEE 802.15.4 and dual-path IR.
 
-The three full-function nRF24 radios have no preselected MCU, controller, bridge or runtime owner. `CON-0001` fixes only mandatory concurrency, honest time-sharing and failure behavior; `RES-0001` adds logical compute/interface/timing/power obligations without placement. `SYN-0001` now defines three complete candidate placements without selecting one; firmware services remain conditional until their exact pin/budget packages are compared.
+The three full-function nRF24 radios have no preselected MCU, controller, bridge or runtime owner. `CON-0001` fixes only mandatory concurrency, honest time-sharing and failure behavior; `RES-0001` adds logical obligations. `SYN-0001` defines three complete placements without selecting one, and `PIN-0002` gives each a collision-free exact pin/controller/recovery map. Firmware services remain conditional until quantitative budgets and the atomic package are compared.
 
 The firmware architecture document will be created after the selected hardware package fixes:
 
