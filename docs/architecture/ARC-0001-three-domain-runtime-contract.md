@@ -3,6 +3,7 @@
 - Status: **Reviewed**
 - Date: 2026-08-16
 - Hardware decision: [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)
+- Component revision decision: [`DEC-0029`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0029-c5-v1.2-production-floor.md)
 - Normative hardware package: [`PKG-0001/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md)
 - Exact pin/controller map: [`PIN-0002/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md)
 
@@ -13,7 +14,7 @@ This document fixes firmware ownership and failure boundaries. It does not claim
 | Target | Owned services | Must remain local |
 |---|---|---|
 | S3 N16R2 | product state/UI, touch and slow controls, display, files/microSD, USB/web, ES8311/Si4732 audio, native 2.4 GHz Wi-Fi/BLE, U214/GNSS/U216 profiles, orchestration | UI state, filesystem ownership, audio buffers, accessory policy, global session view |
-| C5 N8R8 rev ≥1.0 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, two-path IR RX and IR TX, SDIO slave, native-radio lease enforcement | radio/IR timing, country/profile checks available to the target, local queues, lease expiry and safe-off |
+| C5 N8R8 production rev ≥v1.2 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, two-path IR RX and IR TX, SDIO slave, native-radio lease enforcement | radio/IR timing, country/profile checks available to the target, local queues, lease expiry and safe-off |
 | RP2354A A4 | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
 
 S3 is the product orchestrator, not the sole safety authority. C5 and RP reject unsafe or stale commands independently and never require S3 to meet their peripheral deadlines.
@@ -44,6 +45,7 @@ IPC is never remote raw GPIO. A command expresses intent and bounded parameters;
 1. `AON_SAFE` holds all TX gates inactive before any programmable target runs.
 2. S3, C5 and RP boot independently into signed candidate or last-known-good images; no restored UI/session state arms TX.
 3. Each target reports silicon/board identity, firmware version, protocol range, manifest hash, reset cause, self-test and recovery capability.
+   Production firmware additionally requires C5 revision ≥v1.2. A v1.0 board is admitted only by an explicit engineering manifest, remains TX-off by default, disables HUK/Key Manager, PSRAM encryption and peripheral-domain power-down, and cannot emit production qualification evidence (`DEC-0029`).
 4. S3 admits a peer only when the compatibility manifest intersects. Unknown or mismatched peers remain visible and TX-disabled.
 5. C5 and RP keep local gates inactive until STOP is released, required self-tests pass and a fresh bounded lease is accepted.
 6. Physical RE-ARM after STOP release only permits a new TX-off session; it never restores target/channel/power or a previous lease.
@@ -100,6 +102,8 @@ S3 is the sole normal filesystem writer. USB MSC uses exclusive ownership or a r
 | RP | signed package over `CH-REC`, first-stage verification, A/B rollback | dedicated USB/SWD/RUN |
 
 Updates are sequential, power-qualified and globally TX-off. One target cannot bypass another target's verifier. Owner keys, reproducible/offline signing and intentional developer recovery remain available; irreversible eFuse/OTP lockdown is optional and outside the accepted baseline.
+
+On C5, manual flash-encryption provisioning—if a later opt-in profile accepts it—runs at CPU ≤160 MHz because `FLASH-938` also affects v1.2. `ECC-833` remains a separate security constraint. Selecting v1.2 does not itself enable encryption, HUK or irreversible lockdown.
 
 ## Build and interface boundaries
 
