@@ -13,7 +13,7 @@
 | Межрепозиторные этапы 0–1 | Проведено ревью |
 | Этап 2: возможности и исключения | Проведено ревью (`REV-0002AD`) |
 | Этап 3: архитектура и владение | Проведено ревью (`DEC-0028`, `REV-0003U`) |
-| Этапы 4–6: от компонентов до проверки hardware | Этап 4 готов к началу |
+| Этапы 4–6: от компонентов до проверки hardware | Этап 4 в работе; entry register проверен |
 | Этап 7: проектирование firmware | Architecture contract принят; detailed design не начат |
 | Этап 8: UI, safety и legal controls | Не начато |
 | Реализация firmware | Не начата |
@@ -113,4 +113,4 @@ Hardware [`CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) атомарно принят в [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md). Hardware `REV-0003U` проверяет распространение в оба target README и [`ARC-0001`](../architecture/ARC-0001-three-domain-runtime-contract.md); этап 3 получил статус **«Проведено ревью»**.
 
-Активный межрепозиторный gate — этап 4 qualification компонентов/BOM. Firmware implementation не начата и обязана потреблять exact component/profile manifests, а не выводить hardware из legacy sources.
+Активный межрепозиторный gate — этап 4 qualification компонентов/BOM. Hardware [`BOM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/components/BOM-0001-stage4-component-evidence-register.md) является полным проверенным register, а не component pass; `BOM-0002` начинает проверку exact compute/clock/recovery. Firmware implementation не начата и обязана потреблять exact component/profile manifests, а не выводить hardware из legacy sources.

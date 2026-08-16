@@ -13,7 +13,7 @@
 | Cross-repository stages 0–1 | Reviewed |
 | Stage 2: capabilities and exclusions | Reviewed (`REV-0002AD`) |
 | Stage 3: architecture and ownership | Reviewed (`DEC-0028`, `REV-0003U`) |
-| Stages 4–6: components through hardware validation | Stage 4 ready to start |
+| Stages 4–6: components through hardware validation | Stage 4 in progress; entry register reviewed |
 | Stage 7: firmware design | Architecture contract accepted; detailed design not started |
 | Stage 8: UI, safety, and legal controls | Not started |
 | Firmware implementation | Not started |
@@ -113,4 +113,4 @@ Hardware [`CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) is accepted atomically in [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md). Hardware `REV-0003U` verifies propagation into both target READMEs and [`ARC-0001`](../architecture/ARC-0001-three-domain-runtime-contract.md); stage 3 is **Reviewed**.
 
-The active cross-repository gate is stage 4 component/BOM qualification. Firmware implementation remains unstarted and must consume exact component/profile manifests rather than infer hardware from legacy sources.
+The active cross-repository gate is stage 4 component/BOM qualification. Hardware [`BOM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/components/BOM-0001-stage4-component-evidence-register.md) is a reviewed complete register, not a component pass; `BOM-0002` starts exact compute/clock/recovery verification. Firmware implementation remains unstarted and must consume exact component/profile manifests rather than infer hardware from legacy sources.
