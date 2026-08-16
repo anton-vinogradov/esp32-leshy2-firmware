@@ -98,10 +98,16 @@ S3 is the sole normal filesystem writer. USB MSC uses exclusive ownership or a r
 | Target | Normal owner-signed lifecycle | Independent physical recovery |
 |---|---|---|
 | S3 | streamed verification, A/B image, first-boot confirmation/rollback | native USB + physical GPIO0/EN |
-| C5 | signed package over `CH-REC`, target-side verification, A/B rollback | native USB GPIO13/14 + physical boot/EN |
+| C5 | signed package over `CH-REC`, target-side verification, A/B rollback | native USB GPIO13/14 + physical GPIO28/CHIP_PU; GPIO27 held high for USB/UART Joint Download Boot 0 |
 | RP | signed package over `CH-REC`, first-stage verification, A/B rollback | dedicated USB/SWD/RUN |
 
 Updates are sequential, power-qualified and globally TX-off. One target cannot bypass another target's verifier. Owner keys, reproducible/offline signing and intentional developer recovery remain available; irreversible eFuse/OTP lockdown is optional and outside the accepted baseline.
+
+C5 physical recovery does not depend on GPIO26, S3 firmware or the C5
+application image. The service fixture holds GPIO28 low, preserves GPIO27 high
+and toggles CHIP_PU before using native USB or UART0. This exact strap contract
+comes from hardware `FND-0037/REC-0001`; automated normal updates still use
+`CH-REC` and never emulate the physical recovery control.
 
 On C5, manual flash-encryption provisioning—if a later opt-in profile accepts it—runs at CPU ≤160 MHz because `FLASH-938` also affects v1.2. `ECC-833` remains a separate security constraint. Selecting v1.2 does not itself enable encryption, HUK or irreversible lockdown.
 
