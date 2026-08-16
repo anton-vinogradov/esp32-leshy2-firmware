@@ -103,4 +103,6 @@ Hardware [`SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`PIN-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md) провёл exact pin/controller/recovery mapping всех трёх candidates. `SYN-2A/2B` не имеют safe generic GPIO reserve; `SYN-3A` добавляет RP2354 target, но оставляет семь обычных C5 GPIO. `FND-0034` перенёс U214/GNSS `SYN-2A` на C5 без потери функций.
 
-Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующий hardware input — количественные memory/traffic/power/RF/cost budgets; firmware target README не меняется до атомарной приёмки всей архитектуры.
+Hardware [`BUD-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/BUD-0002-zero-based-memory-traffic-budget.md) прошёл `REV-0003P`. Он фиксирует общие S3/C5/RP memory и flash envelopes, aggregate admitted profile трёх nRF 600 kB/s, явный overflow accounting, 1.5 MB/s IPC и storage/display/audio gates без выбора owner. Теоретический single-bus maximum не называется lossless; провал admitted HIL автоматически переоткрывает split ownership.
+
+Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующие hardware inputs — power/RF qualification и dated comparable cost; firmware target README не меняется до атомарной приёмки всей архитектуры.
