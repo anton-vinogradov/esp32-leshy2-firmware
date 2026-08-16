@@ -30,6 +30,13 @@
   `DEC-0043/REV-0004J` accept task/dirty-region rendering, `≤100 ms` critical/
   menu first feedback and a corrected 256 B shared-U214 display quantum; exact
   display/optics and HIL remain open.
+  The next hardware pass `CTL-0001/REV-0004K` proves that the draft validator
+  closes MCU GPIO but not every slow endpoint: the TCA9535 has only 5/16 or
+  3/16 ports assigned. External U214/Port-A I²C also needs fault isolation from
+  the internal UI/audio bus. `⚠️ IMP-0037` proposes a `≥24`-endpoint working
+  envelope, direct U214 IRQ, bounded UI/touch polling and separated I²C
+  domains; the owner decision is open. Native USB+EN/BOOT remains the current
+  S3 recovery baseline; the unproved UART0-fallback claim is removed.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: hardware closes exact peripherals, controller concurrency,

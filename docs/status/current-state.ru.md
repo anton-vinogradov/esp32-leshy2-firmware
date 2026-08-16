@@ -29,6 +29,13 @@
   hardware `DEC-0043/REV-0004J` принимают task/dirty-region rendering,
   critical/menu first feedback `≤100 ms` и исправленный 256 B shared-U214
   display quantum; exact display/optics и HIL остаются открыты.
+  Следующий hardware pass `CTL-0001/REV-0004K` доказал, что draft validator
+  закрывает MCU GPIO, но не все slow endpoints: TCA9535 распределён только на
+  5/16 либо 3/16 портов. Внешний U214/Port-A I²C также требует fault isolation
+  от internal UI/audio bus. `⚠️ IMP-0037` предлагает рабочий envelope `≥24`
+  slow endpoints, direct U214 IRQ, bounded UI/touch polling и separated I²C
+  domains; решение владельца открыто. Native USB+EN/BOOT остаётся текущим S3
+  recovery baseline, недоказанный UART0 fallback снят.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: hardware закрывает exact peripherals, controller
