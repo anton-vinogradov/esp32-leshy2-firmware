@@ -114,6 +114,12 @@ The repository shall produce three explicit images and one compatibility manifes
 - `leshy2-rp`: packet/voice deterministic service and first-stage recovery support;
 - signed release manifest: compatible protocol ranges, hardware revisions, component/profile identifiers, hashes, rollback indices and required migrations.
 
+The hardware component/profile identifiers for the three compute targets are
+the exact C-001…003 identities from the repository-local CAD provenance
+manifest accepted by hardware DEC-0030. Firmware must not infer a board profile
+from a generic ESP32/RP family symbol, shared footprint geometry or legacy
+tsCircuit part identifier.
+
 Shared code may define message schemas, policy vocabulary, crypto/package format and test vectors. It must not erase target ownership or make a peer driver perform raw GPIO over IPC.
 
 ## Failure behavior
