@@ -107,4 +107,6 @@ Hardware [`BUD-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`PWR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0001-zero-based-power-safety-envelope.md) прошёл `REV-0003Q`: все candidates используют одинаковые rail floors разрешённых сценариев и STOP/brownout ordering. Allowance вспомогательного controller `SYN-3A` помещается в общий 3.3 V converter и добавляет расход энергии, а не ещё один supply domain.
 
-Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующие hardware inputs — RF qualification и dated comparable cost; firmware target README не меняется до атомарной приёмки всей архитектуры.
+Hardware [`RFQ-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFQ-0001-zero-based-rf-zoning-coexistence.md) прошёл `REV-0003R`. Геометрия антенн и RF paths одинаковы, обязательный three-nRF PRX сохранён, cross-domain receive пары начинаются как qualification-only, все TX пары — как запрещённые. Авторизация не отменяет shielded/conducted и spectrum gate.
+
+Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующий hardware input — dated recurring cost плюс implementation/update/HIL burden; firmware target README не меняется до атомарной приёмки всей архитектуры.
