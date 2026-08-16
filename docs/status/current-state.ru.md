@@ -9,8 +9,10 @@
 - Product behavior/safety requirements: прежние 125 leaves проверены; hardware
   G2 точечно переоткрыт для current competitor delta (`FND-0040/AUD-0004`).
 - `W-EXTRA-11` закрыт external iButton profile `DEC-0033/REQ-IBTN-0001`;
-  `AUD-0005` провёл ревью M5 coverage, а `IMP-0028` M5-first/high-speed boundary
-  требует решения владельца.
+  `DEC-0034/REQ-EXT-0001` принимает M5-first Unit/Cap, отдельный
+  high-throughput tier и отсутствие native M5-Bus. `AUD-0006` завершил fact
+  review современного FIDO2/CTAP + U2F compatibility; открытый `IMP-0029` —
+  текущее owner decision, ещё не target behavior.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
@@ -30,7 +32,8 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
   diagnostics каждого в итоге выбранного programmable target;
 - no-loss cost и явные mismatch/proposal review rules;
 - qualified accessory manifests, default-off unknown M5 profiles and external
-  iButton read/emulate/write level separation.
+  iButton read/emulate/write level separation; two-tier expansion без blanket
+  M5-Bus и без подмены raw-data path низкоскоростным command link.
 
 ## Отменённые target assumptions
 

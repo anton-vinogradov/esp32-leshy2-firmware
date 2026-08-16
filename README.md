@@ -56,6 +56,10 @@ requires explicit acceptance of the non-aggression pledge.
 - The external iButton/1-Wire profile separates ordinary owned devices, Lab
   credential reading and individually armed Controlled-Zone emulation/write;
   accessory presence never authorizes or starts an operation.
+- The accessory manager treats M5 Unit A/B/C/custom and the full U214-compatible
+  Cap as the primary low-rate tier, with a distinct high-throughput tier for
+  raw SDR/external compute/general host. It never advertises blanket M5-Bus
+  compatibility or substitutes a command link for a raw-data path.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
 

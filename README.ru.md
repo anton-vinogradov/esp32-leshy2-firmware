@@ -55,6 +55,10 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
 - External iButton/1-Wire profile distinguishes ordinary owned devices, Lab
   credential reading and separately armed Controlled-Zone emulation/write;
   accessory presence never authorizes or auto-starts an operation.
+- Accessory manager считает M5 Unit A/B/C/custom и полный U214-compatible Cap
+  основным low-rate tier, а raw SDR/external compute/general host — отдельным
+  high-throughput tier. Он не объявляет blanket M5-Bus compatibility и не
+  выдаёт command link за raw-data path.
 - Unknown hardware/firmware/accessory identity видим и fails closed; firmware
   не включает скрытый permissive compatibility mode.
 

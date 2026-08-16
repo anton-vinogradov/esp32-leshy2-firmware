@@ -11,8 +11,10 @@
   hardware G2 is narrowly reopened for the current competitor delta
   (`FND-0040/AUD-0004`).
 - `W-EXTRA-11` is closed by external iButton profile
-  `DEC-0033/REQ-IBTN-0001`; `AUD-0005` reviews M5 coverage while the
-  `IMP-0028` M5-first/high-speed boundary awaits owner disposition.
+  `DEC-0033/REQ-IBTN-0001`; `DEC-0034/REQ-EXT-0001` accepts M5-first Unit/Cap,
+  a separate high-throughput tier and no native M5-Bus. `AUD-0006` completed
+  the modern FIDO2/CTAP + U2F-compatibility fact review; open `IMP-0029` is the
+  current owner decision and is not yet target behavior.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: close the hardware G2 delta; G3 product-design research
@@ -32,7 +34,8 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
   diagnostics for every eventually selected programmable target;
 - no-loss cost and explicit mismatch/proposal review rules;
 - qualified accessory manifests, default-off unknown M5 profiles and separate
-  level gates for external iButton read/emulate/write.
+  level gates for external iButton read/emulate/write; two-tier expansion with
+  no blanket M5-Bus or low-rate/raw-data equivalence claim.
 
 ## Invalidated target assumptions
 
