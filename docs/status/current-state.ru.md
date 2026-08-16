@@ -10,16 +10,16 @@
   G2 точечно переоткрыт для current competitor delta (`FND-0040/AUD-0004`).
 - `W-EXTRA-11` закрыт external iButton profile `DEC-0033/REQ-IBTN-0001`;
   `DEC-0034/REQ-EXT-0001` принимает M5-first Unit/Cap, отдельный
-  high-throughput tier и отсутствие native M5-Bus. `AUD-0006` завершил fact
-  review современного FIDO2/CTAP + U2F compatibility; `DEC-0035/REQ-FIDO-0001`
-  принимает open personal authenticator. `AUD-0007` проверил haptic;
+  high-throughput tier и отсутствие native M5-Bus. `DEC-0039/REQ-SCOPE-0001`
+  позже удаляют former FIDO target и reject generic USB host, сохраняя transport,
+  выведенный конкретным RF/SDR profile. `AUD-0007` проверил haptic;
   `DEC-0036/REV-0002AJ` исключают product haptic, мотор и dedicated external
   profile. `AUD-0008/DEC-0037/REQ-IMU-0001/REV-0002AL` принимают optional
   external measurement-pose profile. `AUD-0009/REV-0002AM` завершили fact
   review physical-keyboard archetype; `DEC-0038/REV-0002AN` закрывают его как
-  no integrated keyboard плюс bounded phone-assisted text. `AUD-0010/REV-0002AO`
-  завершают fact review `W-EXTRA-16` High-Speed USB host; `IMP-0033` — текущий
-  owner-вопрос.
+  no integrated keyboard плюс bounded phone-assisted text. `AUD-0010/0011` и
+  `REV-0002AP` завершают scope propagation. `AUD-0012/REV-0002AQ` проверяют
+  факты 6 GHz/Wi-Fi 6E; открытым остаётся только placement `IMP-0034`.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
@@ -41,8 +41,8 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
 - qualified accessory manifests, default-off unknown M5 profiles and external
   iButton read/emulate/write level separation; two-tier expansion без blanket
   M5-Bus и без подмены raw-data path низкоскоростным command link.
-- exclusive CTAPHID-only personal authenticator, fresh local consent,
-  non-exportable device-bound credentials и truthful non-certified assurance.
+- radio/key mission boundary; optional BadUSB — software-only Controlled-Zone
+  exception поверх existing USB-device path и не блокирует core release.
 
 ## Отменённые target assumptions
 

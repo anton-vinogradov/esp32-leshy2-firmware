@@ -10,9 +10,12 @@
 
 ## Образ готового ПО
 
-Firmware Leshy2 превращает будущую портативную hardware-платформу в автономный
-all-in-one инструмент наблюдения, диагностики, связи, навигации, обслуживания
-и разрешённых экспериментов. Hardware reachability не означает разрешение.
+Firmware Leshy2 превращает будущую portable hardware-платформу в автономный
+all-in-one radio/wireless инструмент связи, наблюдения, диагностики и
+разрешённых исследований, включая wireless/contact credential tools.
+Навигация, storage, maintenance и compute поддерживают эти результаты, а не
+образуют general-purpose peripheral-computer scope. Hardware reachability не
+означает разрешение.
 
 Compute count, target images, HAL ownership, IPC transports, pins и component
 drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` после hardware
@@ -56,28 +59,29 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   credential reading and separately armed Controlled-Zone emulation/write;
   accessory presence never authorizes or auto-starts an operation.
 - Accessory manager считает M5 Unit A/B/C/custom и полный U214-compatible Cap
-  основным low-rate tier, а raw SDR/external compute/general host — отдельным
-  high-throughput tier. Он не объявляет blanket M5-Bus compatibility и не
-  выдаёт command link за raw-data path.
+  основным low-rate tier, а принятые raw SDR и external RF/credential-analysis
+  workloads могут вывести отдельный high-throughput tier. Он не объявляет
+  generic host или blanket M5-Bus compatibility и не выдаёт command link за
+  raw-data path.
 - Unknown hardware/firmware/accessory identity видим и fails closed; firmware
   не включает скрытый permissive compatibility mode.
 - В base нет постоянной text keyboard. Заявленный редкий/длинный text workflow
   может использовать локально сопряжённый owner phone с authenticated, visible
   и revocable session. Входной текст и последствия показываются на Leshy2;
   телефон не принимает pledge, не входит в Controlled Zone, не arm/confirm TX
-  или destructive actions, не подтверждает FIDO presence и не меняет trust/
-  recovery authorization.
+  или destructive actions и не меняет trust/recovery authorization.
 - Optional external IMU profile записывает timestamped raw accel/gyro,
   pitch/roll, short-term relative rotation и motion quality только при
   qualified indexed mount/axis transform. Missing/stale IMU invalidates pose
   metadata, но не raw RF records или safety; six-axis не называется absolute
   heading или RF bearing.
-- Основной режим даёт открытый personal FIDO2/CTAP USB authenticator с U2F
-  compatibility. Clean transition включает минимальный CTAPHID-only mode без
-  radios, Lab/CZ, scripts, shared storage и других USB classes. Требуется новый
-  local consent; device-bound credentials non-exportable и исключены из общего
-  backup. Без отдельного proof нет claims certified/hardware-backed/
-  tamper-resistant.
+- Generic USB host и personal FIDO/U2F authentication находятся вне product
+  mission. High-throughput transport появляется только из конкретного принятого
+  RF/SDR profile.
+- BadUSB/DuckyScript — release-optional Controlled-Zone software exception
+  поверх существующего USB device/service path. Он не добавляет hardware/
+  architecture requirement и не блокирует radio/key release, но до поставки
+  требует fresh authorization, isolated execution, parser/USB review и HIL.
 
 ## Build boundary
 

@@ -11,9 +11,10 @@
 ## Finished-software intent
 
 Leshy2 firmware turns the future portable hardware into an autonomous all-in-one
-field instrument for observation, diagnostics, communications, navigation,
-maintenance and authorized experiments. Hardware reachability never implies
-permission to act.
+radio/wireless communication, observation, diagnostic and authorized-research
+instrument, including wireless/contact credential tools. Navigation, storage,
+maintenance and compute support those results; they are not general-purpose
+peripheral-computer scope. Hardware reachability never implies permission to act.
 
 Compute count, target images, HAL ownership, IPC transports, pins and component
 drivers remain open. The former three-domain `ARC-0001/PKG-0001/SYN-3A` is a
@@ -57,27 +58,29 @@ requires explicit acceptance of the non-aggression pledge.
   credential reading and individually armed Controlled-Zone emulation/write;
   accessory presence never authorizes or starts an operation.
 - The accessory manager treats M5 Unit A/B/C/custom and the full U214-compatible
-  Cap as the primary low-rate tier, with a distinct high-throughput tier for
-  raw SDR/external compute/general host. It never advertises blanket M5-Bus
-  compatibility or substitutes a command link for a raw-data path.
+  Cap as the primary low-rate tier, with a profile-derived high-throughput tier
+  only for accepted raw SDR and external RF/credential-analysis workloads. It
+  never advertises generic host or blanket M5-Bus compatibility or substitutes
+  a command link for a raw-data path.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
 - The base has no permanent text keyboard. A declared rare/long text workflow
   may use a locally paired owner phone with an authenticated, visible and
   revocable session. Incoming text and consequences are shown on Leshy2; the
   phone cannot accept the pledge, enter Controlled Zone, arm/confirm TX or
-  destructive actions, confirm FIDO presence, change trust or authorize recovery.
+  destructive actions, change trust or authorize recovery.
 - The optional external IMU profile records timestamped raw accel/gyro,
   pitch/roll, short-term relative rotation and motion quality only when a
   qualified indexed mount/axis transform is active. Missing or stale IMU data
   invalidates pose metadata, not raw RF records or safety; six-axis data is
   never advertised as absolute heading or RF bearing.
-- Main provides an open personal FIDO2/CTAP USB authenticator with U2F
-  compatibility. A clean transition enters a minimal CTAPHID-only mode with
-  radios, Lab/CZ, scripts, shared storage and other USB classes unavailable.
-  Fresh local consent is required; device-bound credentials are non-exportable
-  and excluded from general backup. Firmware makes no certified,
-  hardware-backed or tamper-resistant claim without separate proof.
+- Generic USB host and personal FIDO/U2F authentication are outside the product
+  mission. High-throughput transport exists only when derived by a concrete
+  accepted RF/SDR profile.
+- BadUSB/DuckyScript is a release-optional Controlled-Zone software exception
+  over the existing USB device/service path. It adds no hardware/architecture
+  requirement and cannot block the radio/key release, but still requires fresh
+  authorization, isolated execution, parser/USB review and HIL before shipping.
 
 ## Build boundary
 
