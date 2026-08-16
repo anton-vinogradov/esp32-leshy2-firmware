@@ -37,6 +37,7 @@
 - S3 как единственный baseline native-BLE owner; C5 BLE default-off, полный native nRF24 scope не сокращён (`DEC-0021`);
 - сначала полный owner-confirmed реестр хотелок, затем несколько компоновок и сводный бюджет ресурсов (`DEC-0022`);
 - замороженный wishlist из 125 leaf-функций с base/optional/deferred boundaries после делегированного саморевью (`DEC-0023`);
+- latched physical hard STOP, который сбрасывает оба MCU, независимо inhibit/обесточивает внешние TX-домены и требует физического re-arm (`DEC-0024`);
 - бортовой mono ES8311 audio с аппаратным default-to-analog bypass (`DEC-0009`);
 - IR остаётся у C5; physical owner трёх полнофункциональных nRF24 открыт для сравнения этапа 3 и больше не указан как принятый C5 target (`DEC-0001`, `DEC-0023`, `FND-0028`).
 - owner-controlled подписанные обновления S3/C5 с rollback и открытым developer lifecycle (`DEC-0013`) без включения необратимого hardware lockdown.
@@ -46,7 +47,7 @@
 - `FND-0001`: единственный general-purpose SPI C5 не может одновременно выполнять legacy-роли nRF-master и S3↔C5-slave.
 - `FND-0003`: audio-направление принято, но pins, electrical behavior, drivers, HIL и feature-level gates ещё не доказаны.
 - `FND-0006`: предложенная матрица кнопок и принятые audio-control конфликтуют на `U13.P10..P17`.
-- `FND-0007`: текущий STOP — только вход I²C-экспандера и не может независимо погасить TX.
+- `FND-0007`: текущий артефакт всё ещё имеет только I²C-expander STOP input. `DEC-0024` исправляет target architecture, но firmware integration latch/gates/rails и fault-injection HIL не реализованы.
 - `FND-0011`: текущему SA868 добавлены PTT receive-default, PD power-down-default и физический low-power H/L; независимый STOP и управляемый high-power path ещё требуют stage-3 proof.
 - `FND-0013`: VOX не имеет microphone-capture path и явно отложен до общего audio/pin budget.
 - `FND-0015`: оба документированных M5 NFC Unit требуют PORT.A power profile 5 V, а текущие hardware `J40/J41` дают 3.3 V; электрическое исправление ждёт общего port/power design.
@@ -60,6 +61,7 @@
 - `FND-0027`: Continuity/iBeacon/Find My и attack labels требуют versioned corpus/spec/licence/peer proof; ordinary, passive и disruptive BLE-сценарии имеют разные security gates.
 - `FND-0028`: physical owner трёх полнофункциональных nRF24 переоткрыт; S3 shared-SPI и C5+SDIO являются предварительными вариантами, решение отложено до wishlist freeze.
 - `FND-0029`: вариант памяти S3, транспорт S3↔C5 и recovery interfaces расходуют пересекающиеся scarce pins. N8R8 не является drop-in заменой N8R2, потому что Octal PSRAM занимает GPIO35–37, а 4-bit SDIO C5 конфликтует с native USB на GPIO13/14.
+- `FND-0030`: legacy voice power 5 V заставляет SA518 работать примерно на 31.5–31.7 dBm и до 1.07 A, что превышает принятый 1 W profile; voice rail требует отдельного решения.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
@@ -88,12 +90,14 @@ Native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/
 
 ## Активный архитектурный gate
 
-[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist и открывает этап 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) является общей неизменной моделью. Functional/concurrency demand, точная инвентаризация [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md) и единые layout gates [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) уже записаны; numeric traffic/memory/power budgets и решение по STOP остаются в работе.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist и открывает этап 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) является общей неизменной моделью. Functional/concurrency demand, точная инвентаризация [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md), единые layout gates [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) и STOP topology [`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md) прошли ревью. [`BUD-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/BUD-0001-traffic-memory-power-envelope.md) закрывает traffic/memory review; power открыт до решения по voice rail.
 
-**⚠️ [`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md)** предлагает latched hard STOP, который сбрасывает оба MCU и аппаратно inhibit/обесточивает каждый внешний TX-capable domain. Это открытое решение владельца, а не принятый target.
+[`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md) принято как `DEC-0024`. Firmware рассматривает STOP как asynchronous terminal event текущей сессии и никогда не восстанавливает stale TX lease после re-arm.
+
+**⚠️ [`IMP-0023/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0023-dedicated-4v-sa518-voice-rail.md)** рекомендует отдельный `VVOICE` 4.0 V. Firmware profiles не могут исправить недоказанный сдвиг hardware output power на 5 V; генерация layouts ждёт power-решения.
 
 Base/optional scope разделены: Bluetooth Classic/sniffer, дополнительные SDR/RF, cellular, LF RFID, второй NFC frontend, full-duplex voice и Linux compute не нагружают core build/base board.
 
 [`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, CE latch и конкретные GPIO теперь активные layout candidates. S3-heavy, C5-heavy и balanced/modular варианты проходят один pin/bus/DMA/interrupt/RAM/power/recovery/coexistence model.
 
-`FND-0006` и `FND-0007` остаются открытыми. Перенос не выбирает `U14`/матрицу 3×3 и не доказывает аппаратный STOP.
+`FND-0006` остаётся открытой. `FND-0007` исправлена на architecture level, но открыта до реализации/HIL; `U14`/матрица 3×3 не выбраны.

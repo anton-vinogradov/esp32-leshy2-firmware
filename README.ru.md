@@ -24,6 +24,7 @@
 - После power-on, reset, brownout, watchdog или обновления все передатчики выключены; каждый Lab-инструмент разоружён.
 - Первая передача использует консервативный профиль конкретного радиотракта. Максимальная доступная мощность требует явного действия для текущего сценария и никогда не восстанавливается как общий дефолт.
 - Активный TX и выбранная мощность видимы пользователю. Сохранённая настройка или восстановленный экран не могут скрытно вооружить передачу.
+- Физический STOP асинхронно защёлкивает hardware kill, сбрасывает оба MCU и аннулирует все TX lease без ожидания UI или flush журнала. Отпускание STOP не выполняет re-arm: отдельное физическое действие либо power cycle запускает новый TX-off boot без восстановления прежних target/channel/power/session. Фактическая TX-индикация остаётся независимой ([`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md)).
 - Штатные пути обновления S3/C5 требуют owner-authorized подписанных образов, независимой проверки целевым MCU и rollback на рабочий image. Ключи, offline build/signing tools и собственная developer firmware остаются под контролем владельца; hardware Secure Boot, Flash Encryption и eFuse lockdown требуют отдельного добровольного решения после recovery proof ([`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md)).
 
 ## Принятая интеграция устройства

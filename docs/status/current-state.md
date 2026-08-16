@@ -37,6 +37,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - S3 as the sole baseline native-BLE owner, with C5 BLE default-off and no reduction of the full native nRF24 scope (`DEC-0021`);
 - a complete owner-confirmed wishlist before multiple layouts and a consolidated resource budget (`DEC-0022`);
 - a frozen 125-leaf wishlist with base/optional/deferred boundaries after delegated self-review (`DEC-0023`);
+- a latched physical hard STOP that resets both MCUs, independently inhibits/power-cuts external TX domains, and requires physical re-arm (`DEC-0024`);
 - onboard mono ES8311 audio with hardware-default analog bypass (`DEC-0009`);
 - IR remains on C5; physical ownership of the three full-function nRF24 radios is open for stage-3 comparison and is no longer an accepted C5 target (`DEC-0001`, `DEC-0023`, `FND-0028`).
 - owner-controlled signed S3/C5 updates with rollback and an open developer lifecycle (`DEC-0013`), without enabling irreversible hardware lockdown.
@@ -46,7 +47,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0001`: C5's single general-purpose SPI controller cannot perform both legacy nRF-master and S3↔C5-slave roles.
 - `FND-0003`: the audio direction is accepted, but pins, electrical behavior, drivers, HIL, and feature-level gates are not yet proven.
 - `FND-0006`: the proposed key matrix and accepted audio controls collide on `U13.P10..P17`.
-- `FND-0007`: the current STOP button is only an I²C-expander input and cannot independently kill TX.
+- `FND-0007`: the current artifact still has only an I²C-expander STOP input. `DEC-0024` fixes the target architecture, but latch/gate/rail firmware integration and fault-injection HIL are not implemented.
 - `FND-0011`: SA868 now has PTT receive-default, PD power-down-default, and a physical low-power H/L ceiling; independent STOP and controllable high power still require stage-3 proof.
 - `FND-0013`: VOX has no microphone-capture path and is explicitly deferred to the consolidated audio/pin budget.
 - `FND-0015`: both documented M5 NFC Units require a 5 V PORT.A power profile, while current hardware `J40/J41` provide 3.3 V; the electrical correction awaits the consolidated port/power design.
@@ -60,6 +61,7 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - `FND-0027`: Continuity/iBeacon/Find My and attack labels require versioned corpus/spec/licence/peer proof; ordinary, passive, and disruptive BLE cases have distinct security gates.
 - `FND-0028`: physical ownership of the three full-function nRF24 radios is reopened; S3 shared-SPI and C5+SDIO are preliminary variants, with the decision deferred until wishlist freeze.
 - `FND-0029`: the S3 memory variant, S3↔C5 transport, and recovery interfaces consume overlapping scarce pins. N8R8 is not a drop-in replacement for N8R2 because Octal PSRAM consumes GPIO35–37, while C5 4-bit SDIO conflicts with native USB on GPIO13/14.
+- `FND-0030`: legacy 5 V voice power would drive SA518 at about 31.5–31.7 dBm and up to 1.07 A, exceeding the accepted 1 W profile; the voice rail requires a separate decision.
 - Legacy firmware documents and source candidates remain non-authoritative until their producing stages are reviewed.
 
 ## Current review work
@@ -88,12 +90,14 @@ The remaining stage-2 slices are **Reviewed** under `REQ-W24-0001`, `REQ-SUB-000
 
 ## Active architecture gate
 
-[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) freezes the wishlist and opens stage 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) is the one shared model. Functional/concurrency demand, the exact [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md) inventory, and common [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) layout gates are recorded; numeric traffic/memory/power budgets and the STOP decision remain in progress.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) freezes the wishlist and opens stage 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) is the one shared model. Functional/concurrency demand, the exact [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md) inventory, common [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md) layout gates, and the [`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md) STOP topology are reviewed. [`BUD-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/BUD-0001-traffic-memory-power-envelope.md) completes traffic/memory review; power remains open on the voice-rail decision.
 
-**⚠️ [`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md)** proposes a latched hard STOP that resets both MCUs and hardware-inhibits/power-cuts every TX-capable external domain. It remains an open owner decision, not an accepted target.
+[`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md) is accepted as `DEC-0024`. Firmware must treat STOP as an asynchronous terminal event for the current session and must never restore a stale TX lease after re-arm.
+
+**⚠️ [`IMP-0023/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0023-dedicated-4v-sa518-voice-rail.md)** recommends a dedicated 4.0 V `VVOICE` rail. Firmware profiles cannot correct an unqualified 5 V hardware output-power shift; layout generation waits for the power decision.
 
 Base and optional scope are separate: Bluetooth Classic/sniffer, additional SDR/RF, cellular, LF RFID, second NFC frontend, full-duplex voice, and Linux compute do not burden the core build or base board.
 
 [`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, the CE latch, and exact GPIO are active layout candidates. S3-heavy, C5-heavy, and balanced/modular variants must pass the same pin/bus/DMA/interrupt/RAM/power/recovery/coexistence model.
 
-`FND-0006` and `FND-0007` remain open. The deferral neither selects `U14`/the 3×3 matrix nor proves a hardware STOP.
+`FND-0006` remains open. `FND-0007` is corrected at architecture level but remains open for implementation and HIL; `U14`/the 3×3 matrix are not selected.
