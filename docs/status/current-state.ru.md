@@ -19,7 +19,8 @@
   review physical-keyboard archetype; `DEC-0038/REV-0002AN` закрывают его как
   no integrated keyboard плюс bounded phone-assisted text. `AUD-0010/0011` и
   `REV-0002AP` завершают scope propagation. `AUD-0012/REV-0002AQ` проверяют
-  факты 6 GHz/Wi-Fi 6E; открытым остаётся только placement `IMP-0034`.
+  факты 6 GHz/Wi-Fi 6E; `DEC-0040/REV-0002AR` полностью отклоняют его.
+  `REV-0002AS` закрывает repeat G2; активен G3 target product design.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design

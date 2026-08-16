@@ -74,8 +74,8 @@ requires explicit acceptance of the non-aggression pledge.
   qualified indexed mount/axis transform is active. Missing or stale IMU data
   invalidates pose metadata, not raw RF records or safety; six-axis data is
   never advertised as absolute heading or RF bearing.
-- Generic USB host and personal FIDO/U2F authentication are outside the product
-  mission. High-throughput transport exists only when derived by a concrete
+- Generic USB host, personal FIDO/U2F authentication and 6 GHz/Wi-Fi 6E are
+  outside the product mission. High-throughput transport exists only when derived by a concrete
   accepted RF/SDR profile.
 - BadUSB/DuckyScript is a release-optional Controlled-Zone software exception
   over the existing USB device/service path. It adds no hardware/architecture

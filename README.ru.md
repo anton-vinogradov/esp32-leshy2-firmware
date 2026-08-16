@@ -75,9 +75,9 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   qualified indexed mount/axis transform. Missing/stale IMU invalidates pose
   metadata, но не raw RF records или safety; six-axis не называется absolute
   heading или RF bearing.
-- Generic USB host и personal FIDO/U2F authentication находятся вне product
-  mission. High-throughput transport появляется только из конкретного принятого
-  RF/SDR profile.
+- Generic USB host, personal FIDO/U2F authentication и 6 GHz/Wi-Fi 6E находятся
+  вне product mission. High-throughput transport появляется только из
+  конкретного принятого RF/SDR profile.
 - BadUSB/DuckyScript — release-optional Controlled-Zone software exception
   поверх существующего USB device/service path. Он не добавляет hardware/
   architecture requirement и не блокирует radio/key release, но до поставки

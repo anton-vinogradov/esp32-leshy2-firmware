@@ -21,7 +21,8 @@
   physical-keyboard archetype fact review; `DEC-0038/REV-0002AN` close it as
   no integrated keyboard plus bounded phone-assisted text. `AUD-0010/0011` and
   `REV-0002AP` complete the scope propagation. `AUD-0012/REV-0002AQ` review
-  6 GHz/Wi-Fi 6E facts; only owner placement `IMP-0034` remains open.
+  6 GHz/Wi-Fi 6E facts; `DEC-0040/REV-0002AR` fully reject it. Repeated G2 is
+  closed by `REV-0002AS`; G3 target product design is active.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: close the hardware G2 delta; G3 product-design research
