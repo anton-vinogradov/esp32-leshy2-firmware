@@ -1,6 +1,6 @@
-# Firmware architecture — zero-based gate
+# Firmware architecture — accepted zero-based target
 
-- Status: **Waiting for zero-based hardware synthesis**
+- Status: **Reviewed**
 - Date: 2026-08-16
 - Canonical method: [hardware `DEC-0027`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0027-zero-based-capability-driven-architecture.md)
 - Current functional input: [hardware `CAP-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CAP-0001-zero-based-capability-input.md)
@@ -13,13 +13,14 @@
 - Current power input: [hardware `PWR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0001-zero-based-power-safety-envelope.md)
 - Current RF input: [hardware `RFQ-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFQ-0001-zero-based-rf-zoning-coexistence.md)
 - Current cost/burden input: [hardware `CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CST-0001-dated-candidate-cost-burden.md)
-- Atomic proposal: [hardware `PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) — **not accepted yet**
+- Accepted package: [hardware `PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md), [decision `DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)
+- Normative runtime contract: [`ARC-0001`](ARC-0001-three-domain-runtime-contract.md)
 
-No prior layout, nRF owner, S3↔C5 transport, queue split, HAL boundary or pin assignment is a firmware architecture input. The fixed product roles are only those already accepted at capability level: S3 application/native Wi-Fi/BLE, and C5 Wi-Fi 2.4/5 GHz, IEEE 802.15.4 and dual-path IR.
+No legacy layout, nRF owner, transport or pin assignment was treated as an input. The accepted architecture was derived from the complete reviewed capability/concurrency/resource graph.
 
-The reviewed inputs no longer leave an analytical gap. `PKG-0001` proposes one complete result: S3 application/UI/audio/storage/native Wi-Fi/BLE, C5 dual-band Wi-Fi/802.15.4/IR, and an RP2354A A4 deterministic domain for 3×nRF24/CC1101/voice. This is still a proposal: firmware ownership and target README remain conditional until the owner accepts the package atomically.
+`PKG-0001/SYN-3A` is accepted: S3 owns application/UI/audio/storage/native Wi-Fi/BLE and external-profile orchestration; C5 owns dual-band Wi-Fi/802.15.4/IR; RP2354A A4 owns deterministic 3×nRF24/CC1101/voice control. S3↔C5 is 1-bit SDIO and S3↔RP is SPI+alert.
 
-The firmware architecture document will be created after the selected hardware package fixes:
+[`ARC-0001`](ARC-0001-three-domain-runtime-contract.md) fixes:
 
 - every programmable domain and its recovery/update boundary;
 - control, event, bulk-data and safety transports;
@@ -28,4 +29,4 @@ The firmware architecture document will be created after the selected hardware p
 - STOP, TX lease and actual-TX evidence boundaries;
 - optional accessory and open-build profiles.
 
-Until then, this directory intentionally contains no speculative runtime contract. Target firmware READMEs remain product-level and do not claim an accepted implementation architecture.
+Current source remains unverified implementation material until later stages prove conformance. Architecture changes must follow hardware package change control rather than silently changing owners, transports, pins or safety behavior in code.

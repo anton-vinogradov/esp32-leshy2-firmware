@@ -12,13 +12,13 @@
 |---|---|
 | Cross-repository stages 0–1 | Reviewed |
 | Stage 2: capabilities and exclusions | Reviewed (`REV-0002AD`) |
-| Stage 3: architecture and ownership | In progress |
-| Stages 4–6: components through hardware validation | Not started |
-| Stage 7: firmware design | Not started |
+| Stage 3: architecture and ownership | Reviewed (`DEC-0028`, `REV-0003U`) |
+| Stages 4–6: components through hardware validation | Stage 4 ready to start |
+| Stage 7: firmware design | Architecture contract accepted; detailed design not started |
 | Stage 8: UI, safety, and legal controls | Not started |
 | Firmware implementation | Not started |
 
-The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/stages.md). No firmware architecture, toolchain, protocol, directory structure, or implementation claim is accepted yet.
+The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/stages.md). Firmware ownership, transport, safety, update and failure boundaries are accepted in [`ARC-0001`](../architecture/ARC-0001-three-domain-runtime-contract.md); toolchain, concrete wire encoding, directory structure and implementation remain later work.
 
 ## Accepted target constraints
 
@@ -38,10 +38,10 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - S3 as the sole baseline native-BLE owner, with C5 BLE default-off and no reduction of the full native nRF24 scope (`DEC-0021`);
 - a complete owner-confirmed wishlist before multiple layouts and a consolidated resource budget (`DEC-0022`);
 - a frozen 125-leaf wishlist with base/optional/deferred boundaries after delegated self-review (`DEC-0023`);
-- a latched physical hard STOP that resets both MCUs, independently inhibits/power-cuts external TX domains, and requires physical re-arm (`DEC-0024`);
+- a latched physical hard STOP that drives RP `RUN` and the S3/C5 reset/enable policy, independently inhibits/power-cuts external TX domains, and requires physical re-arm (`DEC-0024`, `DEC-0028`);
 - onboard mono ES8311 audio with hardware-default analog bypass (`DEC-0009`);
-- IR remains on C5; physical ownership of the three full-function nRF24 radios is open for stage-3 comparison and is no longer an accepted C5 target (`DEC-0001`, `DEC-0023`, `FND-0028`).
-- owner-controlled signed S3/C5 updates with rollback and an open developer lifecycle (`DEC-0013`), without enabling irreversible hardware lockdown.
+- the accepted three-domain `PKG-0001/SYN-3A`: S3 N16R2 application/UI/audio/storage/native Wi-Fi/BLE, C5 N8R8 dual-band Wi-Fi/802.15.4/IR and RP2354A A4 direct 3×nRF24/CC1101/voice (`DEC-0028`);
+- owner-controlled signed S3/C5/RP updates with A/B rollback, physical recovery and an open developer lifecycle (`DEC-0013`, `DEC-0028`), without enabling irreversible hardware lockdown.
 
 ## Open engineering dependencies
 
@@ -82,7 +82,7 @@ The NFC/RFID slice [`REQ-NFC-0001`](https://github.com/anton-vinogradov/esp32-le
 
 The consumer-IR slice [`REQ-IR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-IR-0001-consumer-infrared.md) is **Reviewed** under `REV-0002S`. The owner accepted `IMP-0015/A` as [`DEC-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0018-dual-path-consumer-ir.md): C5 uses TSOP38238 for robust demodulated 38 kHz receive and TSMP95000 for measured-carrier learning from 30 to 60 kHz, consuming both C5 RX RMT channels; TSAL6200 is the first conditional 940 nm emitter candidate. Cheaper single-learning/fixed-38 variants lose an accepted capability and cannot be substituted silently. `FND-0018` is closed at requirement level; automatic 455 kHz/out-of-band learning remains deferred. Own remote/replay is Main, passive analysis is Lab, unknown replay is Controlled Zone `AUTHORIZED_TARGET`, and TV-B-Gone/brute-force/multi-code sweep is Controlled Zone `BOTH`. `FND-0017`, C5 pins/transport, exact BOM, STOP, optics, licences and HIL remain open implementation work.
 
-The 3×nRF24 capability audit passed `REV-0002T`/`REV-0002U`: [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md) preserves three simultaneous full-function radios and accepted [`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), a calibrated binary RPD hit-rate sector comparison that is never RSSI/dBm/bearing/VSWR. Physical ownership is fully open. `REV-0002Z`/`AUD-0003`/`IMP-0021` are historical idea and risk sources only; the new synthesis does not inherit their layouts. [`DEC-0026`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0026-atomic-integrated-architecture-acceptance.md) still forbids accepting owner/transport separately. `FND-0019` and `FND-0021` remain implementation gates.
+The 3×nRF24 capability audit passed `REV-0002T`/`REV-0002U`: [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md) preserves three simultaneous full-function radios and accepted [`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), a calibrated binary RPD hit-rate sector comparison that is never RSSI/dBm/bearing/VSWR. Ownership remained open at this stage-2 checkpoint and was later resolved to direct RP2354A control by `DEC-0028`. `REV-0002Z`/`AUD-0003`/`IMP-0021` remain historical idea/risk sources; `FND-0019` and `FND-0021` remain implementation gates.
 
 The C5 Wi-Fi/IEEE 802.15.4 prerequisite audit passed `REV-0002V`, and final propagation under [`REV-0002W`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002W-c5-wifi-802154-decision-propagation.md) makes [`REQ-W5-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-W5-0001-c5-wifi-ieee802154.md) **Reviewed**. The owner accepted `IMP-0018/A` as [`DEC-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0020-open-first-thread-conditional-zigbee.md): OpenThread is the open baseline and Zigbee is an optional conditional adapter not required by core/raw/Thread builds. Main/Lab/Controlled Zone are separated, and the shared C5 2.4 GHz path is not represented as simultaneous radios. `FND-0025` is closed at requirement level. `FND-0022`–`FND-0024`, transport/STOP, binary lifecycle, and coexistence HIL remain implementation work. `IMP-0003` and a private patched Wi-Fi backend were not accepted automatically.
 
@@ -91,15 +91,15 @@ The native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogra
 The remaining stage-2 slices are **Reviewed** under `REQ-W24-0001`, `REQ-SUB-0001`, `REQ-LORA-0001`, and `REQ-X-0001`. `INV-0004` accounts for 125/125 candidate leaves and twelve decisions from ten source extras; `REV-0002AD` closes stage 2 at requirement level.
 
 
-## Active architecture gate
+## Reviewed architecture and next gate
 
 Hardware stage 3 was restarted under [`DEC-0027`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0027-zero-based-capability-driven-architecture.md). [`FND-0033`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0033-legacy-layout-assumptions-leaked-into-synthesis.md) records why: prior work optimized legacy owners, buses and pins instead of independently deriving hardware from the accepted capabilities.
 
 All previous stage-3 layouts and nRF-owner proposals are now reference-only archives. They do not determine firmware ownership, transport or HAL. The new canonical chain begins with hardware [`CAP-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CAP-0001-zero-based-capability-input.md), which covers the full wishlist without pin/bus allocation and is **Reviewed** under `REV-0003J`. Hardware [`CON-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CON-0001-hardware-neutral-concurrency-model.md) fixes mandatory parallelism, time-sharing and failure behavior without owner placement (`REV-0003K`), while [`RES-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RES-0001-hardware-neutral-resource-demand.md) derives logical compute/interface/timing/power obligations without MCU/GPIO placement (`REV-0003L`). Hardware [`SRC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SRC-0001-primary-hardware-resource-facts.md) then records package/controller/peripheral facts from primary sources without choosing a layout (`REV-0003M`).
 
-Only explicitly accepted product roles are fixed in advance: the S3 application/native Wi-Fi/BLE domain, and the C5 2.4/5 GHz Wi-Fi, IEEE 802.15.4 and dual-path IR domain. The owner/controller/bridge for all three nRF24 radios, inter-controller transport, runtime split, queues and update transfer remain open until zero-based hardware synthesis.
+The zero-based method initially fixed only product-level roles. `DEC-0028` now resolves the full target: RP2354A directly owns all three nRF24 radios, CC1101 and voice real-time control; 1-bit SDIO and SPI+alert are the accepted links. [`ARC-0001`](../architecture/ARC-0001-three-domain-runtime-contract.md) propagates the runtime contract.
 
-Hardware [`SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SYN-0001-zero-based-whole-device-candidates.md) now contains three complete zero-based placements: two-domain S3 packet-radio with U214/GNSS on free C5 interfaces, two-domain C5 packet-radio service, and a three-domain deterministic RP2354A A4 design. `REV-0003N/3O` review the set without choosing a winner, so firmware ownership of all external radios remains conditional.
+Hardware [`SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SYN-0001-zero-based-whole-device-candidates.md) compared three complete zero-based placements. `REV-0003N/3O` reviewed them without choosing a winner; the later atomic package selected the three-domain deterministic RP2354A A4 design in `DEC-0028`.
 
 Hardware [`PIN-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md) completes exact pin/controller/recovery mapping for all three candidates. `SYN-2A/2B` have no safe generic GPIO reserve; `SYN-3A` adds an RP2354 target but retains seven ordinary C5 GPIO. `FND-0034` moves `SYN-2A` U214/GNSS to C5 without dropping capability.
 
@@ -111,6 +111,6 @@ Hardware [`RFQ-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CST-0001-dated-candidate-cost-burden.md) passes `REV-0003S`. `2B` is the recurring-BOM minimum, `2A` the implementation-burden minimum, and `3A` the margin maximum with about a $1.10 midpoint recurring premium over `2A`, a third signed target and an open RP2354A allocation gate.
 
-All hardware prerequisites are reviewed. Hardware [`PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) is the single open **⚠️ proposal**: S3 application/UI/audio/storage/native Wi-Fi/BLE, C5 dual-band Wi-Fi/802.15.4/IR, RP2354A A4 direct 3×nRF24/CC1101/voice, SDIO and SPI+alert links, complete controls/update/power/RF/cost/kill gates.
+Hardware [`PKG-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md) is accepted atomically in [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md). Hardware `REV-0003U` verifies propagation into both target READMEs and [`ARC-0001`](../architecture/ARC-0001-three-domain-runtime-contract.md); stage 3 is **Reviewed**.
 
-It is not yet accepted. Local [`docs/architecture/README.md`](../architecture/README.md) and the firmware target README remain conditional until the owner's one atomic decision.
+The active cross-repository gate is stage 4 component/BOM qualification. Firmware implementation remains unstarted and must consume exact component/profile manifests rather than infer hardware from legacy sources.

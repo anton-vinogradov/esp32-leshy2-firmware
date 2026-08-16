@@ -1,0 +1,137 @@
+# ARC-0001 — accepted three-domain runtime contract
+
+- Status: **Reviewed**
+- Date: 2026-08-16
+- Hardware decision: [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)
+- Normative hardware package: [`PKG-0001/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md)
+- Exact pin/controller map: [`PIN-0002/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md)
+
+This document fixes firmware ownership and failure boundaries. It does not claim that the current source tree implements them.
+
+## Runtime domains
+
+| Target | Owned services | Must remain local |
+|---|---|---|
+| S3 N16R2 | product state/UI, touch and slow controls, display, files/microSD, USB/web, ES8311/Si4732 audio, native 2.4 GHz Wi-Fi/BLE, U214/GNSS/U216 profiles, orchestration | UI state, filesystem ownership, audio buffers, accessory policy, global session view |
+| C5 N8R8 rev ≥1.0 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, two-path IR RX and IR TX, SDIO slave, native-radio lease enforcement | radio/IR timing, country/profile checks available to the target, local queues, lease expiry and safe-off |
+| RP2354A A4 | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
+
+S3 is the product orchestrator, not the sole safety authority. C5 and RP reject unsafe or stale commands independently and never require S3 to meet their peripheral deadlines.
+
+## Inter-domain links
+
+| Link | Physical transport | Roles | Qualified floor |
+|---|---|---|---|
+| S3↔C5 | S3 SDMMC host, C5 1-bit SDIO slave | S3 policy/orchestration; C5 native-radio/IR service | ≥1.5 MB/s framed payload, ≤70% admitted occupancy, control RTT ≤2 ms |
+| S3↔RP | S3 GP-SPI3 master, RP SPI1 slave, initial 20 MHz, dedicated `RP_ALERT_N` | S3 policy/orchestration; RP packet/voice service | ≥1.5 MB/s framed payload with measured latency/liveness |
+
+Both links expose the same semantic channel classes:
+
+| Channel | Purpose | Backpressure/failure rule |
+|---|---|---|
+| `CH-CTL` | bounded commands, configuration and acknowledgements | never dropped silently; timeout fails closed |
+| `CH-EVT` | state transitions, actual-TX, faults and completion | priority bounded queue; overflow is a persistent fault |
+| `CH-BULK` | captures, packet batches and update blocks | credit based; may pause or produce explicit gaps |
+| `CH-LIVE` | heartbeat, compatibility, lease renewal and time calibration | loss expires local leases |
+| `CH-REC` | signed update/recovery transfer and result | globally TX-off; resumable only at verified block boundaries |
+
+Every frame carries protocol version, source domain, channel, sequence, payload length and integrity check. Events and records additionally carry source-local monotonic time, S3-time mapping uncertainty, loss/gap counters and the exact physical source. Wall-clock or GNSS corrections never reorder safety evidence.
+
+IPC is never remote raw GPIO. A command expresses intent and bounded parameters; the owner performs hardware sequencing and reports actual result.
+
+## Boot and compatibility state machine
+
+1. `AON_SAFE` holds all TX gates inactive before any programmable target runs.
+2. S3, C5 and RP boot independently into signed candidate or last-known-good images; no restored UI/session state arms TX.
+3. Each target reports silicon/board identity, firmware version, protocol range, manifest hash, reset cause, self-test and recovery capability.
+4. S3 admits a peer only when the compatibility manifest intersects. Unknown or mismatched peers remain visible and TX-disabled.
+5. C5 and RP keep local gates inactive until STOP is released, required self-tests pass and a fresh bounded lease is accepted.
+6. Physical RE-ARM after STOP release only permits a new TX-off session; it never restores target/channel/power or a previous lease.
+
+Missing C5 permits S3-only non-dependent receive/UI/storage functions. Missing RP disables nRF/CC/voice functions. Missing or unhealthy S3 leaves C5/RP TX-off and recoverable through their physical service paths.
+
+## Safety lease contract
+
+Every TX-capable action uses one per-owner lease containing at least:
+
+- capability/action and exact physical source;
+- functional level and fresh Controlled-Zone entry generation where required;
+- authorized target and/or contained-environment evidence class;
+- region/profile, frequency/channel, power and duration/duty bounds;
+- monotonic issue/expiry times and unique nonce;
+- STOP generation, accessory identity and required rail/profile state.
+
+The owner validates the lease against local state before touching a TX gate. Renewal is bounded and explicit. STOP, reset, watchdog, brownout, peer/link loss, manifest change, accessory removal, profile violation, expiry or a safety-relevant queue fault invalidates the lease. A stale message cannot renew it.
+
+Commanded TX, rail/current observation, device-reported TX and independent actual-TX evidence are distinct states. UI and logs must not collapse them into one boolean.
+
+## Functional-level enforcement
+
+- `Main`: ordinary owned-device, reception, navigation, files, maintenance and legal communication flows.
+- `Laboratory`: passive/defensive analysis and bounded experiments after the installation non-aggression pledge.
+- `Laboratory → Controlled Zone`: every entry shows a fresh non-suppressible banner and hold-to-confirm. Each action remains separately disarmed and validates exact authorization/containment requirements.
+
+Leaving the level, device lock, session timeout, STOP, watchdog, reset, update or loss of a required peer/accessory invalidates every affected arm and lease.
+
+## Data, memory and admission
+
+| Contract | Accepted floor/ceiling |
+|---|---|
+| S3 PSRAM | ≥1792 KiB usable: 896 KiB resident +512 KiB worst overlay +384 KiB reserve |
+| S3 internal DMA | ≥192 KiB available before foreground I/O; planned use ≤160 KiB |
+| C5 PSRAM | ≥7168 KiB usable with ≥2048 KiB margin |
+| RP SRAM | planned use ≤416 KiB; ≥104 KiB guard |
+| three nRF PRX | 200 kB/s payload each, 600 kB/s aggregate admitted |
+| mixed packet profile | nRF aggregate 450 kB/s + CC 60 kB/s |
+| audio | 48 kHz mono 16-bit full duplex, 192 kB/s, no unexplained DMA loss |
+| display | 480×320 RGB565 envelope, 10 full-frame-equivalents/s, ≥4.5 MB/s measured path |
+| storage | ≤1.5 MB/s admitted records, ≥4 MB/s qualified SD, ≥512 KiB queue over 250 ms stall |
+
+The theoretical 3×nRF+CC maximum is not a lossless product promise. Admission either rejects, schedules gaps or records overflow explicitly. Safety/control/event traffic preempts bulk traffic.
+
+S3 is the sole normal filesystem writer. USB MSC uses exclusive ownership or a read-only snapshot; host and firmware never write the same filesystem simultaneously.
+
+## Update and recovery
+
+| Target | Normal owner-signed lifecycle | Independent physical recovery |
+|---|---|---|
+| S3 | streamed verification, A/B image, first-boot confirmation/rollback | native USB + physical GPIO0/EN |
+| C5 | signed package over `CH-REC`, target-side verification, A/B rollback | native USB GPIO13/14 + physical boot/EN |
+| RP | signed package over `CH-REC`, first-stage verification, A/B rollback | dedicated USB/SWD/RUN |
+
+Updates are sequential, power-qualified and globally TX-off. One target cannot bypass another target's verifier. Owner keys, reproducible/offline signing and intentional developer recovery remain available; irreversible eFuse/OTP lockdown is optional and outside the accepted baseline.
+
+## Build and interface boundaries
+
+The repository shall produce three explicit images and one compatibility manifest:
+
+- `leshy2-s3`: product application and orchestration;
+- `leshy2-c5`: native-radio/IR service;
+- `leshy2-rp`: packet/voice deterministic service and first-stage recovery support;
+- signed release manifest: compatible protocol ranges, hardware revisions, component/profile identifiers, hashes, rollback indices and required migrations.
+
+Shared code may define message schemas, policy vocabulary, crypto/package format and test vectors. It must not erase target ownership or make a peer driver perform raw GPIO over IPC.
+
+## Failure behavior
+
+| Failure | Required visible result |
+|---|---|
+| IPC CRC/version/sequence error | reject frame, increment evidence counter; safety-relevant error expires lease |
+| heartbeat timeout | local safe-off, peer degraded, no hidden automatic re-arm |
+| bulk queue pressure | explicit pause/gap/drop counters; control/event channels preserved |
+| storage stall/removal | RAM queue then explicit gap; recording failure cannot hold TX |
+| STOP or brownout | asynchronous hardware safe state; best-effort post-boot reason reconstruction only |
+| incompatible or rollback image | reject/rollback target, keep dependent capabilities disabled |
+| unknown accessory/profile | power/isolation safe-off and visible unsupported state |
+
+## Verification gates
+
+Firmware release remains blocked until the hardware `KG-01…08` evidence exists. In particular:
+
+- shared-bus three-nRF 600 kB/s timing and latency must pass on RP;
+- both IPC links must pass payload, RTT, malformed-frame, stall and lease-expiry tests;
+- all three memory/DMA floors and A/B recovery paths must pass;
+- STOP, actual-TX evidence, rail faults and brownout must pass hardware-in-the-loop fault injection;
+- unqualified RF/TX pairs remain disabled even when the user is authorized.
+
+Failure reopens the complete affected architecture package; firmware must not silently switch to `SYN-2A`, reduce the radio count or weaken recovery/safety behavior.
