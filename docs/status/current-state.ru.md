@@ -16,7 +16,10 @@
   `DEC-0036/REV-0002AJ` исключают product haptic, мотор и dedicated external
   profile. `AUD-0008/DEC-0037/REQ-IMU-0001/REV-0002AL` принимают optional
   external measurement-pose profile. `AUD-0009/REV-0002AM` завершили fact
-  review physical-keyboard archetype; `IMP-0032` — текущий owner-вопрос.
+  review physical-keyboard archetype; `DEC-0038/REV-0002AN` закрывают его как
+  no integrated keyboard плюс bounded phone-assisted text. `AUD-0010/REV-0002AO`
+  завершают fact review `W-EXTRA-16` High-Speed USB host; `IMP-0033` — текущий
+  owner-вопрос.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design

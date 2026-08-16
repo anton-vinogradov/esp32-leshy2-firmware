@@ -62,6 +62,11 @@ requires explicit acceptance of the non-aggression pledge.
   compatibility or substitutes a command link for a raw-data path.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
+- The base has no permanent text keyboard. A declared rare/long text workflow
+  may use a locally paired owner phone with an authenticated, visible and
+  revocable session. Incoming text and consequences are shown on Leshy2; the
+  phone cannot accept the pledge, enter Controlled Zone, arm/confirm TX or
+  destructive actions, confirm FIDO presence, change trust or authorize recovery.
 - The optional external IMU profile records timestamped raw accel/gyro,
   pitch/roll, short-term relative rotation and motion quality only when a
   qualified indexed mount/axis transform is active. Missing or stale IMU data
