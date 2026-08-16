@@ -70,6 +70,10 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   и revocable session. Входной текст и последствия показываются на Leshy2;
   телефон не принимает pledge, не входит в Controlled Zone, не arm/confirm TX
   или destructive actions и не меняет trust/recovery authorization.
+- Renderer использует dirty/tiled preemptible updates, а не video-like
+  full-frame target. Critical state и первый menu feedback видимы за `≤100 ms`
+  при admitted concurrent load; waterfall coalescing/drop явно учитывается и
+  никогда молча не обменивается на потерю raw radio/audio capture.
 - Optional external IMU profile записывает timestamped raw accel/gyro,
   pitch/roll, short-term relative rotation и motion quality только при
   qualified indexed mount/axis transform. Missing/stale IMU invalidates pose

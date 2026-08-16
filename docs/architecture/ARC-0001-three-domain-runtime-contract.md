@@ -14,6 +14,11 @@
 > not be used as a prerequisite for implementation. Target firmware ownership
 > and failure boundaries will be selected only after product design,
 > whole-device comparison and conceptual hardware/software co-design.
+>
+> Its `10 full-frame-equivalents/s`/`≥4.5 MB/s` display row is additionally
+> superseded by hardware `DEC-0043`. The active software contract uses
+> dirty/tiled preemptible updates, `≤100 ms` critical/menu first feedback and
+> explicit waterfall coalescing/drop evidence.
 
 This document remains useful as a reviewed source of candidate requirements,
 risks and measurements. It does not claim that the current source tree
@@ -96,7 +101,7 @@ Leaving the level, device lock, session timeout, STOP, watchdog, reset, update o
 | three nRF PRX | 200 kB/s payload each, 600 kB/s aggregate admitted |
 | mixed packet profile | nRF aggregate 450 kB/s + CC 60 kB/s |
 | audio | 48 kHz mono 16-bit full duplex, 192 kB/s, no unexplained DMA loss |
-| display | 480×320 RGB565 envelope, 10 full-frame-equivalents/s, ≥4.5 MB/s measured path |
+| display | historical 480×320/10-full-frame candidate; superseded by hardware `DEC-0043` task contract |
 | storage | ≤1.5 MB/s admitted records, ≥4 MB/s qualified SD, ≥512 KiB queue over 250 ms stall |
 
 The theoretical 3×nRF+CC maximum is not a lossless product promise. Admission either rejects, schedules gaps or records overflow explicitly. Safety/control/event traffic preempts bulk traffic.

@@ -69,6 +69,10 @@ requires explicit acceptance of the non-aggression pledge.
   revocable session. Incoming text and consequences are shown on Leshy2; the
   phone cannot accept the pledge, enter Controlled Zone, arm/confirm TX or
   destructive actions, change trust or authorize recovery.
+- The renderer uses dirty/tiled, preemptible display updates rather than a
+  video-like full-frame target. Critical and first menu feedback is visible
+  within 100 ms under admitted concurrent load; waterfall coalescing/drop is
+  explicit and never silently trades away raw radio/audio capture.
 - The optional external IMU profile records timestamped raw accel/gyro,
   pitch/roll, short-term relative rotation and motion quality only when a
   qualified indexed mount/axis transform is active. Missing or stale IMU data

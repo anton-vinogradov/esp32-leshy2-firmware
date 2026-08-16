@@ -26,8 +26,10 @@
   review one exact-device/net source and two structurally checked draft maps.
   Hardware `DSP-0001/REV-0003Z` verify three real display/touch boundaries and
   one microSD socket. `FND-0051` rejects the old generic 24-pin display mapping
-  and proves that ST7796S cannot meet the inherited 4.5 MB/s gate; `IMP-0036`
-  is open between scenario/dirty-rectangle acceptance and a wider display path.
+  and proves that ST7796S cannot meet the inherited 4.5 MB/s gate. Hardware
+  `DEC-0043/REV-0004J` accept task/dirty-region rendering, `≤100 ms` critical/
+  menu first feedback and a corrected 256 B shared-U214 display quantum; exact
+  display/optics and HIL remain open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: hardware closes exact peripherals, controller concurrency,

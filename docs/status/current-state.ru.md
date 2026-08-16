@@ -26,8 +26,9 @@
   Hardware `DSP-0001/REV-0003Z` проверяют три реальные display/touch boundaries
   и один microSD socket. `FND-0051` отвергает старый generic 24-pin display
   mapping и доказывает, что ST7796S не выполняет унаследованный gate 4.5 MB/s;
-  `IMP-0036` открыт между scenario/dirty-rectangle acceptance и более широкой
-  display-шиной.
+  hardware `DEC-0043/REV-0004J` принимают task/dirty-region rendering,
+  critical/menu first feedback `≤100 ms` и исправленный 256 B shared-U214
+  display quantum; exact display/optics и HIL остаются открыты.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: hardware закрывает exact peripherals, controller
