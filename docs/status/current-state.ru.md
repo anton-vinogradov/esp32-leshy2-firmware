@@ -85,6 +85,8 @@ Native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/
 
 [`DEC-0022`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0022-capability-first-before-layout.md) требует сначала собрать и подтвердить полный `INV-0002`: 125 известных кандидатов, owner additions и явно подсвеченные extras. Реестр ещё не заморожен.
 
+`INV-0003` распределяет все 125 строк без дублей по девяти пользовательским группам и десять extras по четырём review-пакетам. Статус — **«На ревью владельца»**; функции оптом не принимаются.
+
 [`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, CE latch и конкретные GPIO остаются layout candidates. После wishlist freeze сравниваются минимум S3-heavy, C5-heavy и balanced/modular компоновки на одном demand model.
 
 `FND-0006` и `FND-0007` остаются открытыми. Перенос не выбирает `U14`/матрицу 3×3 и не доказывает аппаратный STOP.

@@ -85,6 +85,8 @@ The native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogra
 
 [`DEC-0022`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0022-capability-first-before-layout.md) requires the complete `INV-0002` to be assembled and owner-confirmed first: 125 known candidates, owner additions, and explicitly highlighted extras. The registry is not frozen yet.
 
+`INV-0003` assigns all 125 rows exactly once to nine user-facing groups and the ten extras to four review packets. It is **In owner review**; functions are not accepted in bulk.
+
 [`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, the CE latch, and exact GPIO remain layout candidates. After wishlist freeze, at least S3-heavy, C5-heavy, and balanced/modular layouts are compared against one demand model.
 
 `FND-0006` and `FND-0007` remain open. The deferral neither selects `U14`/the 3×3 matrix nor proves a hardware STOP.
