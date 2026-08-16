@@ -12,8 +12,11 @@
   `DEC-0034/REQ-EXT-0001` принимает M5-first Unit/Cap, отдельный
   high-throughput tier и отсутствие native M5-Bus. `AUD-0006` завершил fact
   review современного FIDO2/CTAP + U2F compatibility; `DEC-0035/REQ-FIDO-0001`
-  принимает open personal authenticator. `AUD-0007` проверил haptic и открыл
-  `IMP-0030`; это текущий owner-вопрос, а не target behavior.
+  принимает open personal authenticator. `AUD-0007` проверил haptic;
+  `DEC-0036/REV-0002AJ` исключают product haptic, мотор и dedicated external
+  profile. `AUD-0008/REV-0002AK` завершили IMU fact review; `IMP-0031`
+  рекомендует optional external measurement-pose profile, и это текущий
+  owner-вопрос.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
