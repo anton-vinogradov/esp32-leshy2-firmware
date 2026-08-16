@@ -62,6 +62,12 @@ requires explicit acceptance of the non-aggression pledge.
   compatibility or substitutes a command link for a raw-data path.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
+- Main provides an open personal FIDO2/CTAP USB authenticator with U2F
+  compatibility. A clean transition enters a minimal CTAPHID-only mode with
+  radios, Lab/CZ, scripts, shared storage and other USB classes unavailable.
+  Fresh local consent is required; device-bound credentials are non-exportable
+  and excluded from general backup. Firmware makes no certified,
+  hardware-backed or tamper-resistant claim without separate proof.
 
 ## Build boundary
 
@@ -73,7 +79,7 @@ physical ownership or safety boundaries.
 
 ## Development state
 
-Firmware implementation has not started. The current competitor delta in
+Firmware implementation has not started. The remaining competitor delta in
 hardware G2 closes first; G3 product-design research may proceed in parallel.
 Reviewed hardware product design, several
 whole-device alternatives, optimality, conceptual placement and a new atomic

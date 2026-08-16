@@ -61,6 +61,12 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   выдаёт command link за raw-data path.
 - Unknown hardware/firmware/accessory identity видим и fails closed; firmware
   не включает скрытый permissive compatibility mode.
+- Основной режим даёт открытый personal FIDO2/CTAP USB authenticator с U2F
+  compatibility. Clean transition включает минимальный CTAPHID-only mode без
+  radios, Lab/CZ, scripts, shared storage и других USB classes. Требуется новый
+  local consent; device-bound credentials non-exportable и исключены из общего
+  backup. Без отдельного proof нет claims certified/hardware-backed/
+  tamper-resistant.
 
 ## Build boundary
 
@@ -72,7 +78,7 @@ safety boundaries.
 
 ## Состояние разработки
 
-Firmware implementation не начата. Сначала закрывается current competitor
+Firmware implementation не начата. Сначала закрывается remaining competitor
 delta hardware G2; G3 product-design research может идти параллельно. Reviewed
 hardware product design, несколько
 whole-device alternatives, optimality, conceptual placement и новое atomic

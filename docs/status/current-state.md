@@ -13,8 +13,9 @@
 - `W-EXTRA-11` is closed by external iButton profile
   `DEC-0033/REQ-IBTN-0001`; `DEC-0034/REQ-EXT-0001` accepts M5-first Unit/Cap,
   a separate high-throughput tier and no native M5-Bus. `AUD-0006` completed
-  the modern FIDO2/CTAP + U2F-compatibility fact review; open `IMP-0029` is the
-  current owner decision and is not yet target behavior.
+  the modern FIDO2/CTAP + U2F-compatibility fact review; `DEC-0035/REQ-FIDO-0001`
+  accepts the open personal authenticator. `AUD-0007` reviewed haptic and
+  opened `IMP-0030`; it is the current owner question, not target behavior.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: close the hardware G2 delta; G3 product-design research
@@ -36,6 +37,8 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
 - qualified accessory manifests, default-off unknown M5 profiles and separate
   level gates for external iButton read/emulate/write; two-tier expansion with
   no blanket M5-Bus or low-rate/raw-data equivalence claim.
+- exclusive CTAPHID-only personal-authenticator behavior, fresh local consent,
+  non-exportable device-bound credentials and truthful non-certified assurance.
 
 ## Invalidated target assumptions
 

@@ -11,8 +11,9 @@
 - `W-EXTRA-11` закрыт external iButton profile `DEC-0033/REQ-IBTN-0001`;
   `DEC-0034/REQ-EXT-0001` принимает M5-first Unit/Cap, отдельный
   high-throughput tier и отсутствие native M5-Bus. `AUD-0006` завершил fact
-  review современного FIDO2/CTAP + U2F compatibility; открытый `IMP-0029` —
-  текущее owner decision, ещё не target behavior.
+  review современного FIDO2/CTAP + U2F compatibility; `DEC-0035/REQ-FIDO-0001`
+  принимает open personal authenticator. `AUD-0007` проверил haptic и открыл
+  `IMP-0030`; это текущий owner-вопрос, а не target behavior.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
@@ -34,6 +35,8 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
 - qualified accessory manifests, default-off unknown M5 profiles and external
   iButton read/emulate/write level separation; two-tier expansion без blanket
   M5-Bus и без подмены raw-data path низкоскоростным command link.
+- exclusive CTAPHID-only personal authenticator, fresh local consent,
+  non-exportable device-bound credentials и truthful non-certified assurance.
 
 ## Отменённые target assumptions
 
