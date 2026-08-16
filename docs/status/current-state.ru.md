@@ -105,4 +105,6 @@ Hardware [`PIN-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`BUD-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/BUD-0002-zero-based-memory-traffic-budget.md) прошёл `REV-0003P`. Он фиксирует общие S3/C5/RP memory и flash envelopes, aggregate admitted profile трёх nRF 600 kB/s, явный overflow accounting, 1.5 MB/s IPC и storage/display/audio gates без выбора owner. Теоретический single-bus maximum не называется lossless; провал admitted HIL автоматически переоткрывает split ownership.
 
-Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующие hardware inputs — power/RF qualification и dated comparable cost; firmware target README не меняется до атомарной приёмки всей архитектуры.
+Hardware [`PWR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0001-zero-based-power-safety-envelope.md) прошёл `REV-0003Q`: все candidates используют одинаковые rail floors разрешённых сценариев и STOP/brownout ordering. Allowance вспомогательного controller `SYN-3A` помещается в общий 3.3 V converter и добавляет расход энергии, а не ещё один supply domain.
+
+Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) сохраняет запрет на преждевременный runtime winner. Следующие hardware inputs — RF qualification и dated comparable cost; firmware target README не меняется до атомарной приёмки всей архитектуры.
