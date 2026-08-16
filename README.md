@@ -1,55 +1,73 @@
 # Leshy2 Firmware
 
-> **Target product document.** This page is assembled from accepted, reviewed decisions and describes the intended finished software—not the current implementation. See the [current engineering state](docs/status/current-state.md) for maturity, blockers, and pending proposals.
+> **Target product document.** This page describes reviewed software behavior
+> independent of a selected electronic architecture. See the
+> [current engineering state](docs/status/current-state.md).
 
 - [Русская версия](README.ru.md)
 - [Hardware target product](https://github.com/anton-vinogradov/esp32-leshy2)
 - [Canonical cross-repository review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
 
-## Finished software target
+## Finished-software intent
 
-Leshy2 firmware turns the portable three-domain S3/C5/RP2354A hardware into an autonomous all-in-one field instrument for observation, diagnostics, communications, navigation, maintenance, and authorized experiments. The product exposes capabilities through explicit operating and safety contracts rather than treating hardware reachability as permission to act.
+Leshy2 firmware turns the future portable hardware into an autonomous all-in-one
+field instrument for observation, diagnostics, communications, navigation,
+maintenance and authorized experiments. Hardware reachability never implies
+permission to act.
+
+Compute count, target images, HAL ownership, IPC transports, pins and component
+drivers remain open. The former three-domain `ARC-0001/PKG-0001/SYN-3A` is a
+candidate study only after hardware `DEC-0032`.
 
 ## Three functional levels
 
-1. **Main** — everyday tools, reception, diagnostics, navigation, maintenance, and legitimate communications outside a security-research scenario.
-2. **Lab** — passive, defensive, and bounded security-research tools.
-3. **Lab → Controlled Zone** — genuinely dangerous active or disruptive tools. Every entry requires a fresh non-suppressible warning and hold-to-confirm, plus an isolated environment, an explicitly authorized target, or both as required by the tool.
+1. **Main** — everyday tools, reception, diagnostics, navigation, maintenance
+   and legitimate communications.
+2. **Lab** — passive, defensive and bounded security-research tools.
+3. **Lab → Controlled Zone** — dangerous active/disruptive tools. Every entry
+   requires a fresh non-suppressible warning; every action separately checks
+   authorized target and/or isolated/conducted environment requirements.
 
-Every third-level tool remains independently disarmed after entry and enforces its own target, environment, frequency, power, duty-cycle, destructive-action, and stop gates. Leaving the section, reset, watchdog, device lock, session timeout, STOP, or loss of a required accessory disarms the level and requires the banner again on re-entry. The canonical contract is [`DEC-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0010-three-functional-levels.md).
+Leaving the level, lock, timeout, reset, watchdog, update, STOP or loss of a
+required accessory invalidates every affected arm and lease. Initial setup also
+requires explicit acceptance of the non-aggression pledge.
 
-## Onboarding and safe transmission
+## Architecture-independent software contracts
 
-- Initial setup requires explicit acceptance of the non-aggression pledge. It is a separate first gate and never substitutes for technical interlocks or applicable law.
-- Every transmitter starts off after power-on, reset, brownout, watchdog, or update; every Lab tool starts disarmed.
-- Initial TX uses a conservative profile specific to the radio path. Maximum available power requires an explicit action for the current scenario and is never restored as a global default.
-- Active TX state and the selected power must be visible. A saved preference or restored screen cannot silently arm transmission.
-- Physical STOP asynchronously latches the hardware kill, drives RP `RUN` and the S3/C5 reset/enable policy, and invalidates every TX lease without waiting for UI or log flush. Releasing STOP does not re-arm: a separate physical action or power cycle starts a fresh TX-off boot without restoring the previous target/channel/power/session. Actual-TX indication remains independent ([`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md), [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)).
-- Normal S3, C5 and RP2354A update paths require owner-authorized signed images, independent target validation, A/B rollback and physical recovery. Keys, offline build/signing tools, and custom developer firmware remain under owner control; irreversible hardware lockdown requires a separate opt-in decision after recovery proof ([`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md)).
-- All three compute domains retain permanent independent development access. S3, C5 and RP each have a dedicated USB-C port, a common keyed DBG10 header and physical BOOT/RESET controls; C5 exposes UART0 permanently and RP exposes SWD. No recovery or diagnostic path depends on another MCU or its firmware, and service access never bypasses TX safety gates ([`DEC-0031`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0031-permanent-three-domain-development-access.md)).
+- Every transmitter starts off after power, reset, brownout, watchdog or update.
+- Initial TX uses a conservative per-path profile; maximum available power
+  requires an explicit current-scenario choice and is never a restored default.
+- Commanded TX, observed current, device-reported TX and independent actual-TX
+  evidence remain distinct states.
+- Physical STOP dominates UI, IPC and storage; releasing it never restores a
+  prior target/channel/power/session.
+- Each future physical radio owner enforces timing, bounded queues, lease expiry
+  and local safe-off; IPC cannot be remote raw GPIO.
+- Normal updates use owner-authorized signed images, target validation and
+  rollback. Keys, reproducible/offline build/signing and developer firmware
+  remain owner-controlled; irreversible lockdown is optional and separate.
+- Every selected programmable target remains independently recoverable and
+  diagnosable without a healthy peer or application image.
+- Three full-function nRF24 paths retain independent PTX/PRX, simultaneous
+  reception and explicit timestamp/drop/overflow evidence.
+- Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
+  broadcast/audio, IR and qualified external GNSS/LoRa/NFC profiles retain
+  their reviewed capability and safety boundaries.
+- Unknown hardware, firmware or accessory identity is visible and fails closed;
+  it never silently selects a permissive compatibility mode.
 
-## Accepted device integration
+## Build boundary
 
-- The accepted target is the complete zero-based `PKG-0001/SYN-3A`: S3 N16R2 owns product application/UI/storage/audio and native Wi-Fi/BLE; production C5 N8R8 uses silicon ≥v1.2 and owns dual-band Wi-Fi, IEEE 802.15.4 and dual-path IR; RP2354A A4 owns deterministic 3×nRF24, CC1101, voice control/PTT and local dead-man ([`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md), [`DEC-0029`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0029-c5-v1.2-production-floor.md)).
-- S3↔C5 uses typed channels over 1-bit SDIO; S3↔RP uses the same channel classes over SPI plus a dedicated alert. Radio/voice deadlines and lease expiry remain local to the owning peer; IPC never acts as remote raw GPIO. The normative firmware contract is [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md).
-- The three nRF24 radios retain direct RP CSN/CE/IRQ lines, independent PTX/PRX sessions, simultaneous full-function reception and explicit timestamp/drop/overflow evidence.
-- C5 Wi-Fi operates in one selected 2.4/5 GHz band; `AUTO` does not mean simultaneous operation. OpenThread is the open ordinary-Thread baseline, while Zigbee coordinator/router/end-device support is an optional conditional adapter with separate provenance/rights/SBOM/version/hash/signature/update/rollback gates and no proprietary-binary dependency for core/raw/Thread builds. Main covers owner-administered networks, Lab covers passive raw 802.15.4/Wi-Fi analysis, and Controlled Zone contains bounded active tests. DFS SoftAP, full/lossless monitor, and public deauth/disassociation support are not promised ([`DEC-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0020-open-first-thread-conditional-zigbee.md)).
-- S3 Wi-Fi supports ordinary 2.4 GHz STA/AP, authenticated local SoftAP/Web UI, signed OTA, and explicitly keyed ESP-NOW. Passive public-API capture and defensive detection are Lab; identity tests are Controlled Zone, and disruptive load requires both authorization and conducted or shielded containment. Full/lossless monitor, public deauth/disassociation, arbitrary management injection, and on-device password cracking are not product claims ([`REQ-W24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-W24-0001-s3-wifi-espnow.md)).
-- ESP32-S3 is the sole baseline native Bluetooth LE owner for ordinary scan/advertise, GAP/GATT/SMP/HID, product identity, and bond storage; C5 BLE is default-off. This does not reduce the nRF24 radios: only their extra experimental legacy-1M BLE-compatible subset is limited because nRF24 is not a complete BLE controller ([`DEC-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0021-s3-native-ble-owner.md)).
-- Each of the three nRF24 paths retains the native transceiver feature set, independent PTX/PRX sessions, and simultaneous reception. They also provide 2.4 GHz energy sampling and calibrated binary RPD hit-rate sector comparison. Records retain sampling and calibration state; UI/exports never invent RSSI/dBm, bearing, angle, or VSWR. Passive ESB discovery is Lab, authorized single-target exploitation is Controlled Zone, and interference/carrier tests require both authorization and conducted or RF-shielded containment ([`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md)).
-- Navigation supports the external M5Stack Unit GPS v1.1 and the GNSS backend of a qualified combined expansion, with only one GNSS backend active at a time. NMEA navigation is the baseline; assistance and receiver-reported interference/spoofing status are available only for a proven revision/firmware combination. Unsupported, timeout, and parser errors yield `unknown`, never a false “no threat,” and host heuristics are shown separately ([`DEC-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0014-casic-gnss-profile.md)).
-- LoRa supports M5Stack U214 as the first `EXT-RF14` backend for common 868/915 profiles within the module's actual 868–923 MHz and regional limits, with only one LoRa backend active at a time. P2P, conditional APRS/LoRaWAN, measured link tests, bounded file transfer, and an optional later Meshtastic-compatible adapter have separate profiles and key/storage gates ([`REQ-LORA-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-LORA-0001-external-sx1262.md)).
-- The onboard mono ES8311 path provides digital capture, playback, routing, and level-control prerequisites while ordinary listening and microphone voice retain a hardware-default analog path across MCU or codec failure.
-- The onboard Si4732 provides FM/RDS and ordinary LW/MW/SW reception. SSB USB/LSB and CW via BFO become available after the owner locally imports a compatible volatile patch through an open bounded loader; no third-party blob ships without proven provenance and redistribution rights. Synchronous AM is not promised pending separate proof ([`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md)).
-- The preferred voice-radio backend is a half-duplex analog-FM SA518 covering VHF 136–174 and UHF 400–470 MHz at conducted-qualified 0.5/1 W under explicit regional/licence profiles. It uses a dedicated STOP-dominant 4.0 V `VVOICE`; firmware refuses TX for an unknown or mismatched stuffing/supply manifest and never treats a profile label as measured RF output. The UHF-only SA868S fallback has a separate explicit manifest and is never labelled dual-band ([`DEC-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0016-conditional-sa518-dual-band-voice.md), [`DEC-0025`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0025-dedicated-4v-sa518-voice-rail.md)).
-- The CC1101 application provides qualified-band RSSI hunting, sequential waterfall, RAW OOK capture, versioned decode, and a provenance-aware library. It never calls these an SDR, realtime FFT, precision counter, or universal rolling-code tool. Unknown/security replay is separately gated, and brute-force/carrier/interference-resilience tests are conducted-or-shielded `BOTH` scenarios ([`REQ-SUB-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SUB-0001-cc1101-subghz.md)).
-- HF NFC/RFID uses an external M5 Unit NFC U216 through a qualified 5 V `PORT.A-NFC`, with ordinary NFC-A/B/F/V tag operations in Main. Credential analysis belongs to Lab; recovery, credential writing/cloning, emulation, and a two-frontend relay belong to the Controlled Zone and require an authorized target. RFID2 is limited compatibility and a custom PN7160 design is only a qualification fallback. Exact U216 revision/lifecycle support is conditional, and the software makes no universal-clone, payment-compliance, or LF 125 kHz claim ([`DEC-0017`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0017-u216-hf-nfc-backend.md)).
-- Consumer IR uses two C5 receive paths: TSOP38238 for robust demodulated 38 kHz reception and TSMP95000 for measured-carrier learning from 30 to 60 kHz; TSAL6200 is the first conditional 940 nm emitter candidate. Carrier provenance is retained in typed records. Own-device remote/replay is Main, passive analysis is Lab, unknown/security replay requires an authorized target in the Controlled Zone, and disruptive multi-code sweeps require both isolation and authorization. Automatic 455 kHz/out-of-band learning remains deferred ([`DEC-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0018-dual-path-consumer-ir.md)).
+The future architecture may produce one or several images. It must publish an
+explicit compatibility manifest containing hardware/profile identities,
+protocol ranges, hashes, rollback indices and required migrations. Shared code
+may define policy vocabulary, package formats and test vectors but cannot erase
+physical ownership or safety boundaries.
 
-## Optional profiles
+## Development state
 
-The frozen wishlist retains later profiles for dedicated BLE connection sniffing, Bluetooth Mesh and Classic, additional HF/VHF/DRM/SDR, digital voice and full-duplex repeating, Linux-class analytics, cellular, LF RFID, two-frontend NFC relay, and off-device heavy recovery. These profiles do not add drivers or dependencies to the core build until a concrete external backend, rights, power, security, and HIL contract is qualified ([`INV-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/inventories/INV-0004-wishlist-self-review.md)).
-
-## How this page grows
-
-Only accepted product contracts are summarized here. Stage 3 fixed the complete runtime ownership, transport, update and safety architecture; implementation, component and HIL maturity remains in the [current-state page](docs/status/current-state.md) and the hardware-owned review ledger.
+Firmware implementation has not started. Hardware product design, several
+whole-device alternatives, optimality, conceptual placement and a new atomic
+architecture decision must precede target-specific runtime/HAL/toolchain work.
+The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
+is retained only as candidate/reference evidence.

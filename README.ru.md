@@ -1,55 +1,72 @@
 # Прошивка Leshy2
 
-> **Целевой документ продукта.** Эта страница собирается из принятых и проверенных решений и описывает будущее готовое ПО, а не текущую реализацию. Зрелость, блокеры и открытые предложения находятся в [текущем состоянии проработки](docs/status/current-state.ru.md).
+> **Целевой документ продукта.** Страница описывает проверенное поведение ПО
+> независимо от ещё не выбранной электронной архитектуры. Текущее состояние —
+> в [current state](docs/status/current-state.ru.md).
 
 - [English version](README.md)
-- [Целевой документ hardware](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
-- [Канонический межрепозиторный журнал ревью](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
+- [Целевой hardware-продукт](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
+- [Канонический межрепозиторный журнал](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
 
-## Целевое готовое ПО
+## Образ готового ПО
 
-Прошивка Leshy2 превращает портативную трёхдоменную платформу S3/C5/RP2354A в автономный all-in-one полевой инструмент для наблюдения, диагностики, связи, навигации, обслуживания и разрешённых экспериментов. Возможности открываются через явные эксплуатационные и safety-контракты: техническая доступность hardware сама по себе не означает разрешение на действие.
+Firmware Leshy2 превращает будущую портативную hardware-платформу в автономный
+all-in-one инструмент наблюдения, диагностики, связи, навигации, обслуживания
+и разрешённых экспериментов. Hardware reachability не означает разрешение.
+
+Compute count, target images, HAL ownership, IPC transports, pins и component
+drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` после hardware
+`DEC-0032` является только candidate study.
 
 ## Три уровня функциональности
 
-1. **Основной режим** — повседневные инструменты, приём, диагностика, навигация, обслуживание и законная связь вне security-сценария.
-2. **Лаборатория** — пассивные, защитные и ограниченные инструменты исследования безопасности.
-3. **Лаборатория → Контролируемая зона** — действительно опасные active/disruptive инструменты. Каждый вход требует нового неснимаемого предупреждения и hold-to-confirm, а конкретная функция — изолированной среды, явно авторизованной цели либо обоих оснований.
+1. **Основной режим** — повседневные инструменты, приём, диагностика,
+   навигация, обслуживание и законная связь.
+2. **Лаборатория** — пассивные, защитные и ограниченные security-инструменты.
+3. **Лаборатория → Контролируемая зона** — dangerous active/disruptive tools.
+   Каждый вход требует нового неснимаемого предупреждения, а каждое действие
+   отдельно проверяет authorized target и/или isolated/conducted environment.
 
-После входа каждый инструмент третьего уровня остаётся отдельно разоружённым и применяет собственные target-, environment-, frequency-, power-, duty-, destructive-action- и STOP-гейты. Выход из раздела, reset, watchdog, блокировка устройства, session timeout, STOP или потеря требуемого аксессуара разоружают уровень; при новом входе banner обязателен снова. Канонический контракт — [`DEC-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0010-three-functional-levels.md).
+Выход, lock, timeout, reset, watchdog, update, STOP или потеря accessory
+аннулируют affected arm/lease. Первичная установка отдельно требует принятия
+акта о ненападении.
 
-## Первичная установка и безопасная передача
+## Независимые от архитектуры software-контракты
 
-- При первичной установке пользователь явно принимает акт о ненападении. Это отдельный первый гейт, который не заменяет технические interlock и применимое право.
-- После power-on, reset, brownout, watchdog или обновления все передатчики выключены; каждый Lab-инструмент разоружён.
-- Первая передача использует консервативный профиль конкретного радиотракта. Максимальная доступная мощность требует явного действия для текущего сценария и никогда не восстанавливается как общий дефолт.
-- Активный TX и выбранная мощность видимы пользователю. Сохранённая настройка или восстановленный экран не могут скрытно вооружить передачу.
-- Физический STOP асинхронно защёлкивает hardware kill, управляет RP `RUN` и S3/C5 reset/enable policy и аннулирует все TX lease без ожидания UI или flush журнала. Отпускание STOP не выполняет re-arm: отдельное физическое действие либо power cycle запускает новый TX-off boot без восстановления прежних target/channel/power/session. Фактическая TX-индикация остаётся независимой ([`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md), [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)).
-- Штатные пути обновления S3, C5 и RP2354A требуют owner-authorized подписанных образов, независимой проверки target, A/B rollback и физического recovery. Ключи, offline build/signing tools и собственная developer firmware остаются под контролем владельца; необратимый hardware lockdown требует отдельного добровольного решения после recovery proof ([`DEC-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0013-owner-controlled-signed-updates.md)).
-- Все три compute domains сохраняют постоянный независимый development access. S3, C5 и RP имеют собственные USB-C, одинаковые keyed DBG10 и физические BOOT/RESET controls; C5 постоянно выводит UART0, RP — SWD. Ни recovery, ни диагностика не зависят от другого MCU или его firmware, а service access не обходит TX safety gates ([`DEC-0031`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0031-permanent-three-domain-development-access.md)).
+- Каждый transmitter стартует выключенным после power/reset/brownout/watchdog/update.
+- Первая TX использует консервативный per-path profile; максимум требует
+  явного выбора текущего сценария и не восстанавливается как default.
+- Commanded TX, observed current, device-reported TX и independent actual-TX
+  evidence остаются разными состояниями.
+- Physical STOP доминирует над UI/IPC/storage; отпускание не восстанавливает
+  прежние target/channel/power/session.
+- Каждый будущий physical radio owner локально обеспечивает timing, bounded
+  queues, lease expiry и safe-off; IPC не становится remote raw GPIO.
+- Штатные updates используют owner-authorized signed images, target validation
+  и rollback. Keys, reproducible/offline build/signing и developer firmware
+  остаются у владельца; irreversible lockdown optional и отделён.
+- Каждый выбранный programmable target независимо recoverable/diagnosable без
+  исправного peer или application image.
+- Три полнофункциональных nRF24 сохраняют independent PTX/PRX, simultaneous RX
+  и явные timestamp/drop/overflow evidence.
+- Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
+  broadcast/audio, IR и qualified external GNSS/LoRa/NFC profiles сохраняют
+  проверенные capability/safety boundaries.
+- Unknown hardware/firmware/accessory identity видим и fails closed; firmware
+  не включает скрытый permissive compatibility mode.
 
-## Принятая интеграция устройства
+## Build boundary
 
-- Принят цельный zero-based target `PKG-0001/SYN-3A`: S3 N16R2 владеет product application/UI/storage/audio и native Wi-Fi/BLE; production C5 N8R8 использует silicon ≥v1.2 и владеет dual-band Wi-Fi, IEEE 802.15.4 и dual-path IR; RP2354A A4 — deterministic-управлением 3×nRF24, CC1101, voice/PTT и local dead-man ([`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md), [`DEC-0029`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0029-c5-v1.2-production-floor.md)).
-- S3↔C5 использует typed channels поверх 1-bit SDIO; S3↔RP — те же классы каналов поверх SPI с отдельным alert. Radio/voice deadlines и lease expiry остаются локальными для owner peer; IPC никогда не используется как remote raw GPIO. Нормативный firmware-контракт — [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md).
-- Три nRF24 сохраняют прямые RP CSN/CE/IRQ, независимые PTX/PRX sessions, одновременный полнофункциональный приём и явные timestamp/drop/overflow evidence.
-- C5 Wi-Fi работает в одной выбранной полосе 2.4/5 ГГц; `AUTO` не означает одновременную работу. OpenThread — открытый baseline ordinary Thread, а Zigbee coordinator/router/end-device — optional conditional adapter с отдельными provenance/rights/SBOM/version/hash/signature/update/rollback gates и без зависимости core/raw/Thread build от proprietary binary. Main содержит работу со своими сетями, Lab — пассивный raw 802.15.4/Wi-Fi analysis, Controlled Zone — bounded active tests. DFS SoftAP, full/lossless monitor и public deauth/disassoc не обещаются ([`DEC-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0020-open-first-thread-conditional-zigbee.md)).
-- S3 Wi-Fi поддерживает обычные 2.4 GHz STA/AP, authenticated local SoftAP/Web UI, подписанное OTA и явно ключованный ESP-NOW. Пассивный public-API capture и защитный detector находятся в Lab; identity tests — в Controlled Zone, а disruptive load требует одновременно разрешения и проводной либо экранированной среды. Full/lossless monitor, public deauth/disassoc, arbitrary management injection и on-device password cracking не являются обещаниями продукта ([`REQ-W24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-W24-0001-s3-wifi-espnow.md)).
-- ESP32-S3 — единственный baseline-владелец native Bluetooth LE для обычных scan/advertise, GAP/GATT/SMP/HID, product identity и bond storage; BLE C5 выключен по умолчанию. Это не сокращает nRF24: ограничен только их дополнительный experimental legacy-1M BLE-compatible subset, потому что nRF24 не является полноценным BLE controller ([`DEC-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0021-s3-native-ble-owner.md)).
-- Каждый из трёх трактов nRF24 сохраняет native transceiver feature set, независимые PTX/PRX sessions и одновременный приём. Они также дают измерение энергии 2.4 ГГц и калиброванное сравнение секторов по бинарной доле RPD. Записи сохраняют sampling и calibration state; UI/exports никогда не выдумывают RSSI/dBm, пеленг, угол или VSWR. Пассивный ESB discovery относится к «Лаборатории», активная проверка одной авторизованной цели — к «Контролируемой зоне», а interference/carrier tests требуют одновременно разрешения и проводной либо RF-экранированной среды ([`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md)).
-- Навигация поддерживает внешний M5Stack Unit GPS v1.1 и GNSS-backend квалифицированного комбинированного расширения; одновременно активен только один GNSS-backend. NMEA-навигация является baseline, а assistance и receiver-reported помехи/подмена доступны только для доказанной revision/firmware. Unsupported, timeout и parser error дают `unknown`, никогда не ложное «угроз нет»; host heuristics показываются отдельно ([`DEC-0014`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0014-casic-gnss-profile.md)).
-- LoRa поддерживает M5Stack U214 как первый backend `EXT-RF14` для общепринятых профилей 868/915 в пределах фактических 868–923 МГц модуля и региональных правил; одновременно активен только один LoRa-backend. P2P, условные APRS/LoRaWAN, измеряемые link tests, bounded file transfer и более поздний optional Meshtastic-compatible adapter имеют отдельные profiles и key/storage gates ([`REQ-LORA-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-LORA-0001-external-sx1262.md)).
-- Бортовой mono-тракт ES8311 даёт prerequisite для цифровых capture, playback, routing и level control, а обычное прослушивание и голос через микрофон сохраняют аппаратный default-to-analog путь при reset или failure MCU либо codec.
-- Бортовой Si4732 даёт FM/RDS и обычный приём LW/MW/SW. SSB USB/LSB и CW через BFO доступны после локального импорта владельцем совместимого volatile patch через открытый bounded loader; сторонний blob не входит в release без доказанных provenance и права распространения. Synchronous-AM не обещается до отдельного proof ([`DEC-0015`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0015-open-si4732-ssb-patch-loader.md)).
-- Предпочтительный voice-radio backend — half-duplex analog-FM SA518 с VHF 136–174 и UHF 400–470 МГц и проведённо квалифицированными 0.5/1 W в явных региональных/licence-профилях. Он использует отдельный STOP-dominant `VVOICE` 4.0 V; firmware запрещает TX при неизвестном или несовпадающем stuffing/supply manifest и не выдаёт название профиля за измеренный RF output. UHF-only SA868S fallback имеет отдельный явный manifest и никогда не называется dual-band ([`DEC-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0016-conditional-sa518-dual-band-voice.md), [`DEC-0025`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0025-dedicated-4v-sa518-voice-rail.md)).
-- CC1101 application даёт RSSI hunt в квалифицированных полосах, sequential waterfall, RAW OOK capture, versioned decode и signal library с provenance. Он не называет это SDR, realtime FFT, precision counter или universal rolling-code tool. Unknown/security replay имеет отдельный gate, а brute-force/carrier/interference-resilience работает только как `BOTH` в проводной либо экранированной среде ([`REQ-SUB-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-SUB-0001-cc1101-subghz.md)).
-- HF NFC/RFID использует внешний M5 Unit NFC U216 через квалифицированный 5-вольтовый `PORT.A-NFC`; обычная работа с NFC-A/B/F/V метками находится в основном режиме. Анализ credentials относится к «Лаборатории», а recovery, credential write/clone, emulation и relay с двумя frontend — к «Контролируемой зоне» и требуют авторизованной цели. RFID2 остаётся limited compatibility, custom PN7160 — только fallback при провале qualification. Поддержка зависит от проверки точной revision/lifecycle U216; universal clone, payment compliance и LF 125 kHz не обещаются ([`DEC-0017`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0017-u216-hf-nfc-backend.md)).
-- Consumer IR использует два приёмных тракта C5: TSOP38238 для надёжного demodulated 38 kHz приёма и TSMP95000 для обучения с измерением несущей 30–60 kHz; TSAL6200 — первый условный кандидат 940 nm emitter. Provenance несущей сохраняется в typed records. Пульт/replay собственного устройства находится в основном режиме, пассивный анализ — в «Лаборатории», unknown/security replay требует авторизованной цели в «Контролируемой зоне», а disruptive multi-code sweep — одновременно изоляции и авторизации. Автоматическое обучение 455 kHz/out-of-band отложено ([`DEC-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0018-dual-path-consumer-ir.md)).
+Будущая architecture может породить один или несколько images. Обязателен
+явный compatibility manifest с hardware/profile identities, protocol ranges,
+hashes, rollback indices и migrations. Shared code может задавать policy
+vocabulary/package formats/test vectors, но не стирает physical ownership или
+safety boundaries.
 
-## Опциональные профили
+## Состояние разработки
 
-Замороженный wishlist сохраняет будущие профили dedicated BLE connection sniffing, Bluetooth Mesh/Classic, дополнительных HF/VHF/DRM/SDR, digital voice/full-duplex repeater, Linux-class analytics, cellular, LF RFID, two-frontend NFC relay и off-device heavy recovery. Они не добавляют drivers/dependencies в core build до квалификации конкретного внешнего backend, прав, питания, безопасности и HIL ([`INV-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/inventories/INV-0004-wishlist-self-review.md)).
-
-## Как развивается эта страница
-
-Здесь кратко отражаются только принятые продуктовые контракты. Этап 3 зафиксировал полную runtime ownership, transport, update и safety architecture; зрелость реализации, компонентов и HIL остаётся в [текущем состоянии](docs/status/current-state.ru.md) и hardware-журнале ревью.
+Firmware implementation не начата. Hardware product design, несколько
+whole-device alternatives, optimality, conceptual placement и новое atomic
+architecture decision обязаны предшествовать target-specific runtime/HAL/
+toolchain work. Бывший [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
+сохранён только как candidate/reference evidence.

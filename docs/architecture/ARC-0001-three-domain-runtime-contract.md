@@ -1,14 +1,23 @@
-# ARC-0001 — accepted three-domain runtime contract
+# ARC-0001 — former three-domain runtime candidate
 
-- Status: **Reviewed**
+- Status: **Superseded as the target architecture; retained as a candidate/reference**
 - Date: 2026-08-16
+- Superseding process decision: [`DEC-0032`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0032-reopen-product-design-before-cad.md)
 - Hardware decision: [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)
 - Component revision decision: [`DEC-0029`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0029-c5-v1.2-production-floor.md)
 - Development-access decision: [`DEC-0031`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0031-permanent-three-domain-development-access.md)
 - Normative hardware package: [`PKG-0001/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md)
 - Exact pin/controller map: [`PIN-0002/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md)
 
-This document fixes firmware ownership and failure boundaries. It does not claim that the current source tree implements them.
+> The entire model below records the former `SYN-3A` candidate. It is not a
+> normative target, does not select S3/C5/RP or any exact interconnect, and must
+> not be used as a prerequisite for implementation. Target firmware ownership
+> and failure boundaries will be selected only after product design,
+> whole-device comparison and conceptual hardware/software co-design.
+
+This document remains useful as a reviewed source of candidate requirements,
+risks and measurements. It does not claim that the current source tree
+implements them.
 
 ## Runtime domains
 
