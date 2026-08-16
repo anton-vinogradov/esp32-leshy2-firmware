@@ -22,13 +22,15 @@
   `REV-0002AP` complete the scope propagation. `AUD-0012/REV-0002AQ` review
   6 GHz/Wi-Fi 6E facts; `DEC-0040/REV-0002AR` fully reject it. Repeated G2 is
   closed by `REV-0002AS`; hardware `DEC-0041` inserts G2F logical/electrical
-  feasibility before the physical mockup.
+  feasibility before the physical mockup. Hardware `DEC-0042/REV-0003Y` now
+  review one exact-device/net source and two structurally checked draft maps.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware builds at least two complete owner/bus/GPIO maps
-  from `DEM-0001/SRC-0002`, checking SoC→package→exact device/module→actual
-  exposed contact. `LAY-0001` P1/P2/P3 is reference-only; no chip, owner, bus
-  or pin is fixed.
+- Next upstream gate: hardware closes exact peripherals, controller concurrency,
+  timing, power/service and HIL for the two `G2F-2R/G2F-3D` draft maps. Their
+  machine-checked GPIO accounting is evidence, not an owner/architecture
+  decision. `LAY-0001` P1/P2/P3 is reference-only; no chip, owner, bus or pin
+  is fixed.
 
 Hardware `FND-0039` found that the prior process selected `SYN-3A`, exact owners
 and CAD before product design, whole-product optimality and conceptual
@@ -57,7 +59,7 @@ final firmware prerequisites. They remain useful candidate evidence only.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. Hardware first completes G2F maps,
-then adapts the legacy physical mockup and completes whole-device optimality,
+No target code or toolchain is created yet. Hardware first qualifies and
+reviews one G2F working map, then adapts the legacy physical mockup and completes whole-device optimality,
 conceptual placement and atomic architecture. Firmware will then derive and
 review the new image/owner/IPC/HAL/update/test contract before implementation.

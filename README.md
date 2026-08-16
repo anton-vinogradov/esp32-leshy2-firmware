@@ -93,8 +93,9 @@ physical ownership or safety boundaries.
 ## Development state
 
 Firmware implementation has not started. Repeated hardware G2 review is closed;
-hardware G2F now verifies actual device/module pin exposure and several
-complete owner/bus/GPIO maps before adapting the legacy physical mockup.
+hardware G2F now has one exact-device/net source and two structurally checked
+draft maps. Exact peripherals plus timing/power/HIL must close before one map
+can feed the adapted legacy physical mockup.
 Reviewed physical co-design, whole-device optimality, conceptual placement and
 a new atomic architecture decision must precede target-specific
 runtime/HAL/toolchain work.

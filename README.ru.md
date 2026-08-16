@@ -94,9 +94,10 @@ safety boundaries.
 ## Состояние разработки
 
 Firmware implementation не начата. Повторное hardware G2 review закрыто;
-hardware G2F теперь проверяет реально выведенные контакты точных
-devices/modules и несколько полных owner/bus/GPIO карт до адаптации legacy
-physical mockup. Physical co-design, whole-device optimality, conceptual
+hardware G2F теперь имеет единый exact-device/net source и две structurally
+checked draft-карты. Exact peripherals, timing/power/HIL должны закрыться до
+того, как одна карта попадёт в адаптированный legacy physical mockup. Physical
+co-design, whole-device optimality, conceptual
 placement и новое atomic architecture decision обязаны предшествовать
 target-specific runtime/HAL/toolchain work. Бывший
 [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
