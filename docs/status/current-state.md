@@ -11,8 +11,9 @@
 | Layer | State |
 |---|---|
 | Cross-repository stages 0–1 | Reviewed |
-| Stage 2: capabilities and exclusions | In progress |
-| Stages 3–6: architecture through hardware validation | Not started |
+| Stage 2: capabilities and exclusions | Reviewed (`REV-0002AD`) |
+| Stage 3: architecture and ownership | In progress |
+| Stages 4–6: components through hardware validation | Not started |
 | Stage 7: firmware design | Not started |
 | Stage 8: UI, safety, and legal controls | Not started |
 | Firmware implementation | Not started |
@@ -35,8 +36,9 @@ The canonical stage table is [`docs/review/stages.md`](https://github.com/anton-
 - OpenThread as the open Thread baseline and an optional conditional Zigbee adapter without closing the core product (`DEC-0020`);
 - S3 as the sole baseline native-BLE owner, with C5 BLE default-off and no reduction of the full native nRF24 scope (`DEC-0021`);
 - a complete owner-confirmed wishlist before multiple layouts and a consolidated resource budget (`DEC-0022`);
+- a frozen 125-leaf wishlist with base/optional/deferred boundaries after delegated self-review (`DEC-0023`);
 - onboard mono ES8311 audio with hardware-default analog bypass (`DEC-0009`);
-- IR remains on C5; historically accepted C5 ownership of 3×nRF24 is reopened and retained only as the last target state until `IMP-0021` is decided (`DEC-0001`, `FND-0028`).
+- IR remains on C5; physical ownership of the three full-function nRF24 radios is open for stage-3 comparison and is no longer an accepted C5 target (`DEC-0001`, `DEC-0023`, `FND-0028`).
 - owner-controlled signed S3/C5 updates with rollback and an open developer lifecycle (`DEC-0013`), without enabling irreversible hardware lockdown.
 
 ## Open engineering dependencies
@@ -75,18 +77,20 @@ The NFC/RFID slice [`REQ-NFC-0001`](https://github.com/anton-vinogradov/esp32-le
 
 The consumer-IR slice [`REQ-IR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-IR-0001-consumer-infrared.md) is **Reviewed** under `REV-0002S`. The owner accepted `IMP-0015/A` as [`DEC-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0018-dual-path-consumer-ir.md): C5 uses TSOP38238 for robust demodulated 38 kHz receive and TSMP95000 for measured-carrier learning from 30 to 60 kHz, consuming both C5 RX RMT channels; TSAL6200 is the first conditional 940 nm emitter candidate. Cheaper single-learning/fixed-38 variants lose an accepted capability and cannot be substituted silently. `FND-0018` is closed at requirement level; automatic 455 kHz/out-of-band learning remains deferred. Own remote/replay is Main, passive analysis is Lab, unknown replay is Controlled Zone `AUTHORIZED_TARGET`, and TV-B-Gone/brute-force/multi-code sweep is Controlled Zone `BOTH`. `FND-0017`, C5 pins/transport, exact BOM, STOP, optics, licences and HIL remain open implementation work.
 
-The 3×nRF24 capability audit passed `REV-0002T`/`REV-0002U`: [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md) preserves three simultaneous full-function radios and accepted [`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), a calibrated binary RPD hit-rate sector comparison that is never RSSI/dBm/bearing/VSWR. After the full-function clarification, physical ownership was reopened. `REV-0002Z`/`AUD-0003` produced preliminary S3/C5 variants; on the known scope **⚠️ `IMP-0021/A`** is a strong S3-heavy candidate. Under `DEC-0022` there is no decision now: `INV-0002` is completed first, then variants are recalculated on the full demand model and pass pin/recovery/performance HIL. `FND-0019` and `FND-0021` remain implementation gates.
+The 3×nRF24 capability audit passed `REV-0002T`/`REV-0002U`: [`REQ-N24-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-N24-0001-three-nrf24-raw-2g4.md) preserves three simultaneous full-function radios and accepted [`DEC-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0019-calibrated-rpd-three-antenna-hunt.md), a calibrated binary RPD hit-rate sector comparison that is never RSSI/dBm/bearing/VSWR. Physical ownership remains open. `REV-0002Z`/`AUD-0003` produced preliminary variants and **⚠️ `IMP-0021/A`** remains a strong candidate, but `DEC-0023` requires recalculation against the complete frozen demand model. `FND-0019` and `FND-0021` remain implementation gates.
 
 The C5 Wi-Fi/IEEE 802.15.4 prerequisite audit passed `REV-0002V`, and final propagation under [`REV-0002W`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002W-c5-wifi-802154-decision-propagation.md) makes [`REQ-W5-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-W5-0001-c5-wifi-ieee802154.md) **Reviewed**. The owner accepted `IMP-0018/A` as [`DEC-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0020-open-first-thread-conditional-zigbee.md): OpenThread is the open baseline and Zigbee is an optional conditional adapter not required by core/raw/Thread builds. Main/Lab/Controlled Zone are separated, and the shared C5 2.4 GHz path is not represented as simultaneous radios. `FND-0025` is closed at requirement level. `FND-0022`–`FND-0024`, transport/STOP, binary lifecycle, and coexistence HIL remain implementation work. `IMP-0003` and a private patched Wi-Fi backend were not accepted automatically.
 
-The native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002X-ble-prerequisites.md) is completed by [`DEC-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0021-s3-native-ble-owner.md) and `REV-0002Y`: S3 is the sole baseline native-BLE owner, C5 BLE is default-off, [`REQ-BLE-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-BLE-0001-native-ble-and-security.md) is **Reviewed**, and `FND-0002` is closed. Only the extra experimental legacy-1M BLE-compatible nRF24 subset is limited; native PTX/PRX/Enhanced-ShockBurst/rate/channel/ACK/pipe/FIFO/IRQ/RPD functions remain intact. Native scan is not represented as a connection sniffer, identifier, or ranging system (`FND-0026`), and vendor/emulation/attack claims retain corpus, rights, and three-level gates (`FND-0027`). **⚠️ Dedicated nRF52 connection sniffer `W-EXTRA-02`** and **⚠️ Bluetooth Mesh `W-EXTRA-03`** await separate functional decisions before wishlist freeze.
+The native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0002X-ble-prerequisites.md) is completed by [`DEC-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0021-s3-native-ble-owner.md) and `REV-0002Y`: S3 is the sole baseline native-BLE owner, C5 BLE is default-off, [`REQ-BLE-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/requirements/REQ-BLE-0001-native-ble-and-security.md) is **Reviewed**, and `FND-0002` is closed. Only the extra experimental legacy-1M BLE-compatible nRF24 subset is limited; native nRF24 functions remain intact. Dedicated nRF52 connection sniffing and Bluetooth Mesh are retained as optional deferred-release profiles, not core-build blockers.
 
-## Deferred architecture gate
+The remaining stage-2 slices are **Reviewed** under `REQ-W24-0001`, `REQ-SUB-0001`, `REQ-LORA-0001`, and `REQ-X-0001`. `INV-0004` accounts for 125/125 candidate leaves and twelve decisions from ten source extras; `REV-0002AD` closes stage 2 at requirement level.
 
-[`DEC-0022`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0022-capability-first-before-layout.md) requires the complete `INV-0002` to be assembled and owner-confirmed first: 125 known candidates, owner additions, and explicitly highlighted extras. The registry is not frozen yet.
+## Active architecture gate
 
-`INV-0003` assigns all 125 rows exactly once to nine user-facing groups and the ten extras to four review packets. It is **In owner review**; functions are not accepted in bulk.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) freezes the wishlist and opens stage 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md) has started as the one shared model; functional/concurrency demand is recorded and numeric pin/controller/traffic/memory/power/STOP budgets remain in progress.
 
-[`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, the CE latch, and exact GPIO remain layout candidates. After wishlist freeze, at least S3-heavy, C5-heavy, and balanced/modular layouts are compared against one demand model.
+Base and optional scope are separate: Bluetooth Classic/sniffer, additional SDR/RF, cellular, LF RFID, second NFC frontend, full-duplex voice, and Linux compute do not burden the core build or base board.
+
+[`IMP-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0010-hardware-stop-and-expander-consolidation.md), **⚠️ `IMP-0021`**, SDIO, the CE latch, and exact GPIO are active layout candidates. S3-heavy, C5-heavy, and balanced/modular variants must pass the same pin/bus/DMA/interrupt/RAM/power/recovery/coexistence model.
 
 `FND-0006` and `FND-0007` remain open. The deferral neither selects `U14`/the 3×3 matrix nor proves a hardware STOP.
