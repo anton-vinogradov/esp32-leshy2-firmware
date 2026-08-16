@@ -4,6 +4,7 @@
 - Date: 2026-08-16
 - Hardware decision: [`DEC-0028`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0028-accept-zero-based-syn-3a.md)
 - Component revision decision: [`DEC-0029`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0029-c5-v1.2-production-floor.md)
+- Development-access decision: [`DEC-0031`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0031-permanent-three-domain-development-access.md)
 - Normative hardware package: [`PKG-0001/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PKG-0001-zero-based-target-architecture-proposal.md)
 - Exact pin/controller map: [`PIN-0002/SYN-3A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0002-zero-based-exact-pin-maps.md)
 
@@ -97,9 +98,9 @@ S3 is the sole normal filesystem writer. USB MSC uses exclusive ownership or a r
 
 | Target | Normal owner-signed lifecycle | Independent physical recovery |
 |---|---|---|
-| S3 | streamed verification, A/B image, first-boot confirmation/rollback | native USB + physical GPIO0/EN |
-| C5 | signed package over `CH-REC`, target-side verification, A/B rollback | native USB GPIO13/14 + physical GPIO28/CHIP_PU; GPIO27 held high for USB/UART Joint Download Boot 0 |
-| RP | signed package over `CH-REC`, first-stage verification, A/B rollback | dedicated USB/SWD/RUN |
+| S3 | streamed verification, A/B image, first-boot confirmation/rollback | dedicated USB-C + physical GPIO0/EN + UART0 on DBG10 |
+| C5 | signed package over `CH-REC`, target-side verification, A/B rollback | dedicated USB-C GPIO13/14 + physical GPIO28/CHIP_PU + UART0 GPIO11/12 on DBG10; GPIO27 held high for USB/UART Joint Download Boot 0 |
+| RP | signed package over `CH-REC`, first-stage verification, A/B rollback | dedicated USB-C + USB_BOOT/RUN + SWD on DBG10 |
 
 Updates are sequential, power-qualified and globally TX-off. One target cannot bypass another target's verifier. Owner keys, reproducible/offline signing and intentional developer recovery remain available; irreversible eFuse/OTP lockdown is optional and outside the accepted baseline.
 
@@ -108,6 +109,30 @@ application image. The service fixture holds GPIO28 low, preserves GPIO27 high
 and toggles CHIP_PU before using native USB or UART0. This exact strap contract
 comes from hardware `FND-0037/REC-0001`; automated normal updates still use
 `CH-REC` and never emulate the physical recovery control.
+
+### Permanent development access
+
+Each domain has a permanently fitted keyed 2×5 DBG10 header with common
+semantics: pin 1 `VTREF_SENSE`, 2 GND, 3 active-low reset, 4 active-low boot,
+5/6 target debug pair, 7 GND, 8 `ID0`, 9 GND and 10 `ID1`. The fixture first
+reads passive `ID1:ID0` (`00=S3`, `01=C5`, `10=RP`, `11=invalid`) while reset,
+boot and debug drivers remain high-impedance. It senses target voltage but
+never powers the target through DBG10.
+
+The target mappings are S3 `EN/GPIO0/UART0 TX GPIO43/RX GPIO44`, C5
+`CHIP_PU/GPIO28/UART0 TX GPIO11/RX GPIO12`, and RP
+`RUN/USB_BOOT/SWDIO/SWCLK`. GPIO11/12 are therefore service-reserved on C5,
+leaving GPIO2/4/5/23/24 as the five generic C5 reserve pins (`FND-0038`). Each
+domain also has parallel physical BOOT and RESET buttons. None of these paths
+depends on a peer, expander, running image or USB mux.
+
+S3 USB remains the product data/protected-power path. C5 and RP USB are
+self-powered data-only service ports: their VBUS may be sensed through
+protected high-impedance circuitry but cannot feed the board power tree.
+Connecting three hosts simultaneously must not cause backfeed, false attach,
+reset storms or TX re-arm. Reset, BOOT and debug events expire affected TX
+leases; service firmware remains subject to STOP and all RF authorization and
+containment gates.
 
 On C5, manual flash-encryption provisioning—if a later opt-in profile accepts it—runs at CPU ≤160 MHz because `FLASH-938` also affects v1.2. `ECC-833` remains a separate security constraint. Selecting v1.2 does not itself enable encryption, HUK or irreversible lockdown.
 
