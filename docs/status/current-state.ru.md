@@ -23,6 +23,11 @@
   `REV-0002AS` закрывает repeat G2; hardware `DEC-0041` вводит G2F logical/
   electrical feasibility до физического макета. Hardware `DEC-0042/REV-0003Y`
   проверяют единый exact-device/net source и две structurally checked draft-карты.
+  Hardware `DSP-0001/REV-0003Z` проверяют три реальные display/touch boundaries
+  и один microSD socket. `FND-0051` отвергает старый generic 24-pin display
+  mapping и доказывает, что ST7796S не выполняет унаследованный gate 4.5 MB/s;
+  `IMP-0036` открыт между scenario/dirty-rectangle acceptance и более широкой
+  display-шиной.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: hardware закрывает exact peripherals, controller

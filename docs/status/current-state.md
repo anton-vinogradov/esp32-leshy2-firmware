@@ -24,6 +24,10 @@
   closed by `REV-0002AS`; hardware `DEC-0041` inserts G2F logical/electrical
   feasibility before the physical mockup. Hardware `DEC-0042/REV-0003Y` now
   review one exact-device/net source and two structurally checked draft maps.
+  Hardware `DSP-0001/REV-0003Z` verify three real display/touch boundaries and
+  one microSD socket. `FND-0051` rejects the old generic 24-pin display mapping
+  and proves that ST7796S cannot meet the inherited 4.5 MB/s gate; `IMP-0036`
+  is open between scenario/dirty-rectangle acceptance and a wider display path.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: hardware closes exact peripherals, controller concurrency,
