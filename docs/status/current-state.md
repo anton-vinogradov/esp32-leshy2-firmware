@@ -109,4 +109,6 @@ Hardware [`PWR-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main
 
 Hardware [`RFQ-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFQ-0001-zero-based-rf-zoning-coexistence.md) passes `REV-0003R`. It holds antenna geometry and RF paths constant, keeps mandatory three-nRF PRX, starts cross-domain receive pairs as qualification-only and all TX pairs as prohibited. Authorization does not bypass the shielded/conducted or spectrum gate.
 
-Local [`docs/architecture/README.md`](../architecture/README.md) keeps the prohibition on a premature runtime winner. The next hardware input is dated recurring cost plus implementation/update/HIL burden; the firmware target README remains unchanged until atomic acceptance of the complete architecture.
+Hardware [`CST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CST-0001-dated-candidate-cost-burden.md) passes `REV-0003S`. `2B` is the recurring-BOM minimum, `2A` the implementation-burden minimum, and `3A` the margin maximum with about a $1.10 midpoint recurring premium over `2A`, a third signed target and an open RP2354A allocation gate.
+
+All hardware prerequisites for one atomic decision are reviewed. Local [`docs/architecture/README.md`](../architecture/README.md) still prohibits a premature runtime winner; the next input is the complete `PKG-*`, and the firmware target README remains unchanged until its acceptance.
