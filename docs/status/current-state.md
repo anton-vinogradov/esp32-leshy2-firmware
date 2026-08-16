@@ -99,4 +99,6 @@ All previous stage-3 layouts and nRF-owner proposals are now reference-only arch
 
 Only explicitly accepted product roles are fixed in advance: the S3 application/native Wi-Fi/BLE domain, and the C5 2.4/5 GHz Wi-Fi, IEEE 802.15.4 and dual-path IR domain. The owner/controller/bridge for all three nRF24 radios, inter-controller transport, runtime split, queues and update transfer remain open until zero-based hardware synthesis.
 
-Local [`docs/architecture/README.md`](../architecture/README.md) records this prohibition on premature runtime design. The next hardware inputs are several complete `SYN-*` variants; the firmware target README remains unchanged until atomic acceptance of the complete architecture.
+Hardware [`SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SYN-0001-zero-based-whole-device-candidates.md) now contains three complete zero-based placements: two-domain S3 external-I/O, two-domain C5 packet-radio service, and a three-domain deterministic RP2354A A4 design. `REV-0003N` reviews the set without choosing a winner, so firmware ownership of all external radios remains conditional.
+
+Local [`docs/architecture/README.md`](../architecture/README.md) records this prohibition on premature runtime design. The next hardware inputs are exact `PIN-*` maps and quantitative budgets for all three; the firmware target README remains unchanged until atomic acceptance of the complete architecture.

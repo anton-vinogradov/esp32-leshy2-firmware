@@ -99,4 +99,6 @@ Hardware stage 3 перезапущен по [`DEC-0027`](https://github.com/ant
 
 Заранее фиксированы только явно принятые продуктовые роли: S3 native Wi-Fi/BLE и application domain; C5 Wi-Fi 2.4/5 GHz, IEEE 802.15.4 и dual-path IR. Владелец/controller/bridge трёх nRF24, межконтроллерный transport, runtime split, queues и update transfer остаются открыты до zero-based hardware synthesis.
 
-Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) фиксирует этот запрет на преждевременный runtime design. Следующий hardware input — несколько полных `SYN-*`; firmware target README не меняется до атомарной приёмки всей архитектуры.
+Hardware [`SYN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SYN-0001-zero-based-whole-device-candidates.md) теперь содержит три полных zero-based placement: двухдоменный S3-external-I/O, двухдоменный C5 packet-radio service и трёхдоменный deterministic RP2354A A4. `REV-0003N` провёл ревью набора, но winner не выбран; firmware ownership всех external radios остаётся conditional.
+
+Локальная firmware-страница [`docs/architecture/README.md`](../architecture/README.md) фиксирует этот запрет на преждевременный runtime design. Следующий hardware input — exact `PIN-*` и количественные budgets всех трёх; firmware target README не меняется до атомарной приёмки всей архитектуры.
