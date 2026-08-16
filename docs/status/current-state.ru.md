@@ -6,10 +6,12 @@
 ## Текущая зрелость
 
 - Firmware implementation: **не начата**.
-- Product behavior/safety requirements: проверены на hardware stages 1–2.
+- Product behavior/safety requirements: прежние 125 leaves проверены; hardware
+  G2 точечно переоткрыт для current competitor delta (`FND-0040/AUD-0004`).
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: hardware target physical/product design.
+- Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
+  research идёт параллельно без final review.
 
 Hardware `FND-0039` обнаружил, что прежний процесс выбрал `SYN-3A`, exact
 owners и CAD до product design, whole-product optimality и conceptual
@@ -33,7 +35,8 @@ final firmware prerequisites. Это только candidate evidence.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. После hardware product design,
+Target code/toolchain пока не создаются. После нового hardware G2 review,
+hardware product design,
 whole-device candidates, optimality, conceptual placement и atomic architecture
 firmware заново выведет image/owner/IPC/HAL/update/test contract, проверит его
 и только потом начнёт implementation.

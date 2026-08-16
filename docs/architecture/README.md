@@ -1,11 +1,13 @@
 # Firmware architecture workspace
 
-- Status: **target-specific architecture blocked; hardware product design active**
+- Status: **target-specific architecture blocked; hardware G2 delta and G3 research active**
 - Superseding hardware decision: [`DEC-0032`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0032-reopen-product-design-before-cad.md)
 - Corrected method: [`FLOW-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/FLOW-0001-product-to-cad-gates.md)
 
-Firmware currently consumes reviewed capability, safety, update, failure and
-evidence requirements only. It must not select compute ownership, image count,
+Firmware currently consumes only the already reviewed capability, safety,
+update, failure and evidence subset. Hardware `FND-0040/AUD-0004` is resolving
+the missing current-competitor delta; pending candidates are not silently added
+or rejected here. Firmware must not select compute ownership, image count,
 IPC, pins or HAL before the hardware whole-device architecture is accepted.
 
 [`ARC-0001`](ARC-0001-three-domain-runtime-contract.md) preserves the former

@@ -65,7 +65,9 @@ safety boundaries.
 
 ## Состояние разработки
 
-Firmware implementation не начата. Hardware product design, несколько
+Firmware implementation не начата. Сначала закрывается current competitor
+delta hardware G2; G3 product-design research может идти параллельно. Reviewed
+hardware product design, несколько
 whole-device alternatives, optimality, conceptual placement и новое atomic
 architecture decision обязаны предшествовать target-specific runtime/HAL/
 toolchain work. Бывший [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)

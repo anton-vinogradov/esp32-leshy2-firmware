@@ -66,7 +66,9 @@ physical ownership or safety boundaries.
 
 ## Development state
 
-Firmware implementation has not started. Hardware product design, several
+Firmware implementation has not started. The current competitor delta in
+hardware G2 closes first; G3 product-design research may proceed in parallel.
+Reviewed hardware product design, several
 whole-device alternatives, optimality, conceptual placement and a new atomic
 architecture decision must precede target-specific runtime/HAL/toolchain work.
 The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)

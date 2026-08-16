@@ -7,10 +7,13 @@
 ## Current maturity
 
 - Firmware implementation: **not started**.
-- Product behavior/safety requirements: reviewed at hardware stages 1–2.
+- Product behavior/safety requirements: the prior 125 leaves are reviewed;
+  hardware G2 is narrowly reopened for the current competitor delta
+  (`FND-0040/AUD-0004`).
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware target physical/product design.
+- Next upstream gate: close the hardware G2 delta; G3 product-design research
+  proceeds in parallel without final review.
 
 Hardware `FND-0039` found that the prior process selected `SYN-3A`, exact owners
 and CAD before product design, whole-product optimality and conceptual
@@ -34,7 +37,8 @@ final firmware prerequisites. They remain useful candidate evidence only.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. After hardware product design,
+No target code or toolchain is created yet. After the new hardware G2 review,
+hardware product design,
 whole-device candidates, optimality, conceptual placement and atomic
 architecture are reviewed, firmware will derive the new image/owner/IPC/HAL/
 update/test contract and review it before implementation.
