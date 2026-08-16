@@ -53,6 +53,9 @@ requires explicit acceptance of the non-aggression pledge.
 - Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
   broadcast/audio, IR and qualified external GNSS/LoRa/NFC profiles retain
   their reviewed capability and safety boundaries.
+- The external iButton/1-Wire profile separates ordinary owned devices, Lab
+  credential reading and individually armed Controlled-Zone emulation/write;
+  accessory presence never authorizes or starts an operation.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
 

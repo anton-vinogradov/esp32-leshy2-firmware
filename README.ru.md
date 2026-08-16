@@ -52,6 +52,9 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
 - Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
   broadcast/audio, IR и qualified external GNSS/LoRa/NFC profiles сохраняют
   проверенные capability/safety boundaries.
+- External iButton/1-Wire profile distinguishes ordinary owned devices, Lab
+  credential reading and separately armed Controlled-Zone emulation/write;
+  accessory presence never authorizes or auto-starts an operation.
 - Unknown hardware/firmware/accessory identity видим и fails closed; firmware
   не включает скрытый permissive compatibility mode.
 

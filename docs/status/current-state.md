@@ -10,6 +10,9 @@
 - Product behavior/safety requirements: the prior 125 leaves are reviewed;
   hardware G2 is narrowly reopened for the current competitor delta
   (`FND-0040/AUD-0004`).
+- `W-EXTRA-11` is closed by external iButton profile
+  `DEC-0033/REQ-IBTN-0001`; `AUD-0005` reviews M5 coverage while the
+  `IMP-0028` M5-first/high-speed boundary awaits owner disposition.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: close the hardware G2 delta; G3 product-design research
@@ -27,7 +30,9 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
 - complete capability/concurrency/failure requirements;
 - owner-controlled signed updates, rollback and independent physical recovery/
   diagnostics for every eventually selected programmable target;
-- no-loss cost and explicit mismatch/proposal review rules.
+- no-loss cost and explicit mismatch/proposal review rules;
+- qualified accessory manifests, default-off unknown M5 profiles and separate
+  level gates for external iButton read/emulate/write.
 
 ## Invalidated target assumptions
 
