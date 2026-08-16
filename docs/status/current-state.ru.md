@@ -60,9 +60,10 @@
 - `FND-0024`: country/DFS/PMF/privacy state machine ещё не реализована; DFS SoftAP исключён текущим contract.
 - `FND-0026`: native BLE advertising scan не является promiscuous connection-follow sniffer, rotating address не является stable identity, а RSSI не доказывает метры или направление.
 - `FND-0027`: Continuity/iBeacon/Find My и attack labels требуют versioned corpus/spec/licence/peer proof; ordinary, passive и disruptive BLE-сценарии имеют разные security gates.
-- `FND-0028`: physical owner трёх полнофункциональных nRF24 переоткрыт; S3 shared-SPI и C5+SDIO являются предварительными вариантами, решение отложено до wishlist freeze.
+- `FND-0028`: три полные static nRF ownership maps сравнены. `LAY-S3` рекомендуется условно; owner decision и measured kill gates остаются открытыми.
 - `FND-0029`: вариант памяти S3, транспорт S3↔C5 и recovery interfaces расходуют пересекающиеся scarce pins. N8R8 не является drop-in заменой N8R2, потому что Octal PSRAM занимает GPIO35–37, а 4-bit SDIO C5 конфликтует с native USB на GPIO13/14.
 - `FND-0030`: legacy voice power 5 V превышает принятый SA518 1 W profile. `DEC-0025` исправляет target отдельным rail 4.0 V; legacy schematic и conducted HIL остаются открытыми.
+- `FND-0032`: старый matrix budget ошибочно освобождал U214 RESET. Corrected candidate сохраняет `EXT_RF_RST`, переносит C5 BOOT в physical recovery и агрегирует touch IRQ; matrix/U14 всё ещё требует решения и HIL.
 - Legacy-документы и кандидаты source code firmware неканоничны до ревью производящих стадий.
 
 ## Текущая работа ревью
@@ -91,11 +92,13 @@ Native BLE prerequisite audit [`REV-0002X`](https://github.com/anton-vinogradov/
 
 ## Активный архитектурный gate
 
-[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist и открывает этап 3. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md), [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md), [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md), [`DEC-0024`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0024-latched-hard-stop.md) и полный [`BUD-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/BUD-0001-traffic-memory-power-envelope.md) traffic/memory/power envelope прошли ревью. Генерация трёх полных layouts открыта.
+[`DEC-0023`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0023-wishlist-freeze.md) замораживает wishlist. Hardware [`DM-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DM-0001-resource-demand-model.md), [`PIN-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0001-mcu-controller-inventory.md), [`SC-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SC-0001-layout-scorecard.md), STOP и numeric budgets прошли ревью. Теперь существуют три static maps: [`LAY-S3`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/LAY-S3-0001-shared-spi-nrf-owner.md), [`LAY-C5`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/LAY-C5-0001-sdio-nrf-owner.md) и [`LAY-BAL`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/LAY-BAL-0001-rp2040-rf-controller.md). Static comparison не нашёл неизбежного pin/controller contradiction; weighted scores ждут measurements и quotes.
 
 [`IMP-0022/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0022-latched-hard-stop-tree.md) принято как `DEC-0024`. Firmware рассматривает STOP как asynchronous terminal event текущей сессии и никогда не восстанавливает stale TX lease после re-arm.
 
 [`IMP-0023/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0023-dedicated-4v-sa518-voice-rail.md) принято как `DEC-0025`. Firmware manifest/readback logic обязана разделять SA518 и SA868S stuffing/supply profiles; exact implementation остаётся работой следующих этапов.
+
+**⚠️ [`IMP-0021/A`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0021-s3-owns-three-full-function-nrf24.md)** рекомендует `LAY-S3` как conditional target. nRF scheduler остаётся локальным S3 и не требует raw-frame IPC, но вариант не проходит без измерения N8R2 memory, shared-SPI latency/loss и independent C5 recovery gates.
 
 Base/optional scope разделены: Bluetooth Classic/sniffer, дополнительные SDR/RF, cellular, LF RFID, второй NFC frontend, full-duplex voice и Linux compute не нагружают core build/base board.
 
