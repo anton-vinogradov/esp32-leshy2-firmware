@@ -1,6 +1,6 @@
 # Leshy2 Firmware — current engineering state
 
-> Snapshot: 2026-08-16. Intended software behavior is in the
+> Snapshot: 2026-08-17. Intended software behavior is in the
 > [target README](../../README.md). Canonical decisions live in the
 > [hardware review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review).
 
@@ -16,9 +16,10 @@
   the modern FIDO2/CTAP + U2F-compatibility fact review; `DEC-0035/REQ-FIDO-0001`
   accepts the open personal authenticator. `AUD-0007` reviewed haptic;
   `DEC-0036/REV-0002AJ` reject product haptic, motor and a dedicated external
-  profile. `AUD-0008/REV-0002AK` complete the IMU fact review; `IMP-0031`
-  recommends an optional external measurement-pose profile, and owner
-  disposition is the current question.
+  profile. `AUD-0008/DEC-0037/REQ-IMU-0001/REV-0002AL` accept the optional
+  external measurement-pose profile. `AUD-0009/REV-0002AM` complete the
+  physical-keyboard archetype fact review; `IMP-0032` is the current owner
+  question.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - Next upstream gate: close the hardware G2 delta; G3 product-design research

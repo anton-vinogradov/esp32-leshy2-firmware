@@ -61,6 +61,11 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   выдаёт command link за raw-data path.
 - Unknown hardware/firmware/accessory identity видим и fails closed; firmware
   не включает скрытый permissive compatibility mode.
+- Optional external IMU profile записывает timestamped raw accel/gyro,
+  pitch/roll, short-term relative rotation и motion quality только при
+  qualified indexed mount/axis transform. Missing/stale IMU invalidates pose
+  metadata, но не raw RF records или safety; six-axis не называется absolute
+  heading или RF bearing.
 - Основной режим даёт открытый personal FIDO2/CTAP USB authenticator с U2F
   compatibility. Clean transition включает минимальный CTAPHID-only mode без
   radios, Lab/CZ, scripts, shared storage и других USB classes. Требуется новый

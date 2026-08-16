@@ -62,6 +62,11 @@ requires explicit acceptance of the non-aggression pledge.
   compatibility or substitutes a command link for a raw-data path.
 - Unknown hardware, firmware or accessory identity is visible and fails closed;
   it never silently selects a permissive compatibility mode.
+- The optional external IMU profile records timestamped raw accel/gyro,
+  pitch/roll, short-term relative rotation and motion quality only when a
+  qualified indexed mount/axis transform is active. Missing or stale IMU data
+  invalidates pose metadata, not raw RF records or safety; six-axis data is
+  never advertised as absolute heading or RF bearing.
 - Main provides an open personal FIDO2/CTAP USB authenticator with U2F
   compatibility. A clean transition enters a minimal CTAPHID-only mode with
   radios, Lab/CZ, scripts, shared storage and other USB classes unavailable.

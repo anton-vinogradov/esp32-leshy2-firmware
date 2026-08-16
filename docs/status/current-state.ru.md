@@ -1,6 +1,6 @@
 # Прошивка Leshy2 — текущее состояние проработки
 
-> Снимок: 2026-08-16. Образ software — в [target README](../../README.ru.md).
+> Снимок: 2026-08-17. Образ software — в [target README](../../README.ru.md).
 > Канонические decisions — в [hardware review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review).
 
 ## Текущая зрелость
@@ -14,9 +14,9 @@
   review современного FIDO2/CTAP + U2F compatibility; `DEC-0035/REQ-FIDO-0001`
   принимает open personal authenticator. `AUD-0007` проверил haptic;
   `DEC-0036/REV-0002AJ` исключают product haptic, мотор и dedicated external
-  profile. `AUD-0008/REV-0002AK` завершили IMU fact review; `IMP-0031`
-  рекомендует optional external measurement-pose profile, и это текущий
-  owner-вопрос.
+  profile. `AUD-0008/DEC-0037/REQ-IMU-0001/REV-0002AL` принимают optional
+  external measurement-pose profile. `AUD-0009/REV-0002AM` завершили fact
+  review physical-keyboard archetype; `IMP-0032` — текущий owner-вопрос.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
