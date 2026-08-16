@@ -6,8 +6,8 @@
 ## Текущая зрелость
 
 - Firmware implementation: **не начата**.
-- Product behavior/safety requirements: прежние 125 leaves проверены; hardware
-  G2 точечно переоткрыт для current competitor delta (`FND-0040/AUD-0004`).
+- Product behavior/safety requirements: 125 leaves и competitor delta прошли
+  повторное hardware G2 review (`REV-0002AS`).
 - `W-EXTRA-11` закрыт external iButton profile `DEC-0033/REQ-IBTN-0001`;
   `DEC-0034/REQ-EXT-0001` принимает M5-first Unit/Cap, отдельный
   high-throughput tier и отсутствие native M5-Bus. `DEC-0039/REQ-SCOPE-0001`
@@ -23,8 +23,8 @@
   `REV-0002AS` закрывает repeat G2; активен G3 target product design.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: закрытие hardware G2 delta; G3 product-design
-  research идёт параллельно без final review.
+- Следующий upstream gate: выбрать направление из hardware `LAY-0001` после
+  reviewed physical inputs `PD-0001`; chip, owner, bus и pin не зафиксированы.
 
 Hardware `FND-0039` обнаружил, что прежний процесс выбрал `SYN-3A`, exact
 owners и CAD до product design, whole-product optimality и conceptual
@@ -53,8 +53,7 @@ final firmware prerequisites. Это только candidate evidence.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. После нового hardware G2 review,
-hardware product design,
+Target code/toolchain пока не создаются. После review hardware product design,
 whole-device candidates, optimality, conceptual placement и atomic architecture
 firmware заново выведет image/owner/IPC/HAL/update/test contract, проверит его
 и только потом начнёт implementation.

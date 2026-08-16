@@ -75,8 +75,8 @@ requires explicit acceptance of the non-aggression pledge.
   invalidates pose metadata, not raw RF records or safety; six-axis data is
   never advertised as absolute heading or RF bearing.
 - Generic USB host, personal FIDO/U2F authentication and 6 GHz/Wi-Fi 6E are
-  outside the product mission. High-throughput transport exists only when derived by a concrete
-  accepted RF/SDR profile.
+  outside the product mission. High-throughput transport exists only when
+  derived by a concrete accepted RF/SDR profile.
 - BadUSB/DuckyScript is a release-optional Controlled-Zone software exception
   over the existing USB device/service path. It adds no hardware/architecture
   requirement and cannot block the radio/key release, but still requires fresh
@@ -92,10 +92,10 @@ physical ownership or safety boundaries.
 
 ## Development state
 
-Firmware implementation has not started. The remaining competitor delta in
-hardware G2 closes first; G3 product-design research may proceed in parallel.
-Reviewed hardware product design, several
-whole-device alternatives, optimality, conceptual placement and a new atomic
-architecture decision must precede target-specific runtime/HAL/toolchain work.
+Firmware implementation has not started. Repeated hardware G2 review is closed;
+G3 now awaits owner direction among three same-scope form-factor candidates.
+Reviewed hardware product design, several whole-device alternatives,
+optimality, conceptual placement and a new atomic architecture decision must
+precede target-specific runtime/HAL/toolchain work.
 The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 is retained only as candidate/reference evidence.

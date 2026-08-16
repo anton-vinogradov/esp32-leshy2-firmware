@@ -7,9 +7,8 @@
 ## Current maturity
 
 - Firmware implementation: **not started**.
-- Product behavior/safety requirements: the prior 125 leaves are reviewed;
-  hardware G2 is narrowly reopened for the current competitor delta
-  (`FND-0040/AUD-0004`).
+- Product behavior/safety requirements: the 125 leaves and competitor delta
+  have received repeated hardware G2 review (`REV-0002AS`).
 - `W-EXTRA-11` is closed by external iButton profile
   `DEC-0033/REQ-IBTN-0001`; `DEC-0034/REQ-EXT-0001` accepts M5-first Unit/Cap,
   a separate high-throughput tier and no native M5-Bus. `DEC-0039/REQ-SCOPE-0001`
@@ -25,8 +24,8 @@
   closed by `REV-0002AS`; G3 target product design is active.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: close the hardware G2 delta; G3 product-design research
-  proceeds in parallel without final review.
+- Next upstream gate: choose a direction from hardware `LAY-0001` after
+  reviewed physical inputs `PD-0001`; no chip, owner, bus or pin is fixed.
 
 Hardware `FND-0039` found that the prior process selected `SYN-3A`, exact owners
 and CAD before product design, whole-product optimality and conceptual
@@ -55,8 +54,7 @@ final firmware prerequisites. They remain useful candidate evidence only.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. After the new hardware G2 review,
-hardware product design,
+No target code or toolchain is created yet. After hardware product design,
 whole-device candidates, optimality, conceptual placement and atomic
 architecture are reviewed, firmware will derive the new image/owner/IPC/HAL/
 update/test contract and review it before implementation.
