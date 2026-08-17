@@ -103,7 +103,9 @@ hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей re
 map с независимыми radio buses/IPC и bounded display+SD sharing. Hardware
 `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
-interfaces. Firmware consequences записаны в
+interfaces. `DEC-0047/N24H-0001` используют второй device как reversible HIL
+observer/peer qualified internal RF envelope, а не как зависимость base
+product. Firmware consequences записаны в
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
 RF, exact peripherals, power и HIL должны закрыться до адаптированного legacy
 physical mockup. Physical co-design, whole-device optimality, conceptual

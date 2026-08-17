@@ -21,8 +21,10 @@ buses, dedicated RP/C5 IPC, bounded display+SD scheduling and complete
 recovery inputs. It also records hardware `DEC-0045/0046`: one active
 top-level group, `SG-N24` as three concurrently full-function PTX/PRX radios,
 and verified quiet states for every unused interface. It is a reviewed upstream
-input, not a target/HAL/toolchain freeze; exact nRF mixed-RF acceptance,
-physical RF, exact parts/power and HIL remain open.
+input, not a target/HAL/toolchain freeze; exact nRF mixed-RF measurements,
+physical RF, exact parts/power and HIL remain open. Hardware `DEC-0047` closes
+the policy choice with a qualified internal envelope; `N24H-0001` uses the
+second device as a reversible observer/peer, with measurements still pending.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

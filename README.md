@@ -102,7 +102,9 @@ hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
 paper map with independent radio buses/IPC and bounded display+SD sharing.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
-interface. Its firmware consequences are recorded in
+interface. `DEC-0047/N24H-0001` use a second device as a reversible HIL
+observer/peer for the qualified internal RF envelope, not as a base-product
+dependency. Its firmware consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
 RF, exact peripherals, power and HIL must close before the adapted legacy
 physical mockup. Reviewed physical co-design, whole-device optimality,

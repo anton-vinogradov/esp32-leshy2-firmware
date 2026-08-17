@@ -47,12 +47,14 @@
   full-function in every PTX/PRX mix with no peer standby/gaps. Unused
   interfaces enter hardware/native power-down and digital quiet states; RP
   GPIO15/GPIO23 and C5 GPIO4 become group-level power controls. Exact mixed-RF
-  sensitivity `IMP-0039`, power parts, physical RF/self-desense and HIL remain
-  open.
+  envelope policy is now accepted by `DEC-0047`; a second device becomes the
+  reversible `N24H-0001` observer/peer. Exact modules, measured sensitivity
+  points, power parts, physical RF/self-desense and HIL remain open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware selects `IMP-0039`, then closes the exact nRF
-  full-mix envelope, quiet-state power controls, physical RF/self-desense,
+- Next upstream gate: hardware selects exact nRF modules/antennas, instantiates
+  `N24H-0001`, then closes measured full-mix points, quiet-state power controls,
+  physical RF/self-desense,
   peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.
   Its reviewed paper ownership/pins/resources are inputs, not an atomic target.
   `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain references.

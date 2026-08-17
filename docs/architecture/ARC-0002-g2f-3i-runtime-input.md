@@ -7,7 +7,7 @@
 - Exact generated map: [`G2F-pin-ledger`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-pin-ledger.md)
 - Signal groups: [`DEC-0045`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0045-one-active-signal-group.md)
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
-- Open nRF RF acceptance: [`IMP-0039`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0039-three-nrf-full-mix-acceptance.md)
+- nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
 
 ## Boundary
 
@@ -103,13 +103,21 @@ therefore S3=4, C5=1 and RP=0; firmware cannot invent another direct RP control.
 8. every non-member quiet-state transition, no-back-power/fault injection and
    active-receiver desense under maximum valid system-plane traffic.
 
+The two-device fixture uses one shared test ID and explicit DUT/observer roles.
+It exchanges manifests and ordinary packet streams, never remote raw CE/GPIO.
+Both devices retain their own per-radio logs; results join by test ID, radio
+identity, packet sequence and timestamps with recorded synchronization error.
+Every role mix is repeated after swapping DUT and observer. The observer is HIL
+equipment, not a runtime dependency of the base product.
+
 ## Explicitly open
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open
 is the measured channel/power/rate/antenna/wanted-level envelope: same/adjacent
 local TX can desensitize a weak peer RX, and same-channel packets also collide.
-Firmware must publish the exact qualified profile selected through `IMP-0039`;
+Firmware must publish the exact qualified profile selected by `DEC-0047` and
+measured through `N24H-0001`;
 it must neither claim isolated sensitivity nor synthesize RX continuity by
 silently pausing peers. C5 protocols still share one native RF resource and use
 visible vendor coexistence inside their own group.
