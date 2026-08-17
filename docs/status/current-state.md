@@ -69,22 +69,29 @@
   target RF HIL open.
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
-  semantics and treats pin-17 UPDATE/recovery as an unresolved fixture gate.
+  semantics. New hardware `PIN-0003/REV-0004V` reviews the machine-generated
+  principled owner/net/pad atlas. Current budgets are S3 `29/3/4`, C5
+  `14/6/1`, RP `48/0/0` and slow I/O `23/1/0`; `FND-0059` corrects the stale
+  prior C5/RP figures. SA518 UART/PTT/activity and recovery now terminate on
+  exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI
+  terminate on exact package contacts. UPDATE must not be driven before
+  specimen proof resolves its direction/timing ambiguity. `FND-0060` leaves
+  exact display/codec/IR, STOP/supervisor, load-switch/isolation, audio/Unit
+  protection and service mechanics open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - ⚠️ Hardware proposal `IMP-0043` awaits a decision: adopt the profiled antenna
   kit. For firmware this means an explicit antenna MPN/profile, disarm on every
   change, and unconditional TX denial for unknown/mismatch; SMA itself proves
   no identity.
-- Next upstream gate: decide `IMP-0043`, then hardware closes `FND-0058`,
-  selects the exact production nRF MPN/lot and
-  SMA/feed/protection/antenna-profile implementation, advances `N24H-0001`
-  from `L0` to target `T1`, then closes
-  measured full-mix points, quiet-state power controls,
-  physical RF/self-desense,
-  peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.
-  Its reviewed paper ownership/pins/resources are inputs, not an atomic target.
-  `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain references.
+- Next upstream action: reviewed `PIN-0003` now permits G3 adaptation of the
+  legacy physical/product mockup and conceptual-placement review. In parallel,
+  hardware closes `IMP-0043/FND-0058/FND-0060`, selects exact production
+  parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
+  `T1`. Measured full-mix, quiet-state, RF/self-desense, signal-integrity,
+  service and HIL gates still follow. The paper pinout remains a reopenable
+  input, not an atomic target; `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain
+  references.
 
 Hardware `FND-0039` found that the prior process selected `SYN-3A`, exact owners
 and CAD before product design, whole-product optimality and conceptual
@@ -113,8 +120,8 @@ RP2354A and three-USB/DBG10 assumptions remain reference evidence only.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. Hardware first qualifies physical
-RF, exact parts/power and HIL for `G2F-3I`, then adapts the legacy physical
-mockup and completes whole-device optimality, conceptual placement and atomic
-architecture. Firmware will then turn the `ARC-0002` input into the normative
-image/owner/IPC/HAL/update/test contract before implementation.
+No target code or toolchain is created yet. Hardware uses reviewed `PIN-0003`
+to adapt the legacy physical mockup while closing exact electrical parts,
+power/RF and HIL, then completes whole-device optimality, conceptual placement
+and atomic architecture. Firmware will then turn the `ARC-0002` input into the
+normative image/owner/IPC/HAL/update/test contract before implementation.

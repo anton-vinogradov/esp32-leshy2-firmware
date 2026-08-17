@@ -32,6 +32,13 @@ MPN. Open `IMP-0043` would require explicit profiled-kit identity, disarm on
 profile changes and TX denial for unknown/mismatch. Exact two-source hardware
 and measurements remain pending under `FND-0058`.
 
+Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
+owner/net/pad atlas. Current direct budgets are S3 `29/3/4`, C5 `14/6/1`, RP
+`48/0/0` and slow I/O `23/1/0`; exact SA518 service and Si4732 control/antenna
+contacts are represented. This is a reviewed paper input, not final electrical
+closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
+power, isolation and service endpoints open.
+
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No
 implementation may silently make that decision first.

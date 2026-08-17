@@ -119,15 +119,19 @@ Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polari
 изменения runtime identities; polarity становится assembly metadata.
 `ANT-0002/REV-0004U` проводят ревью procurement shortlist, но выбор kit,
 exact two-source assemblies и target RF qualification остаются upstream gates.
-`FND-0056` также
-заменяет ложную SA518 `SQ` pin на qualified-only `VOICE_ACTIVITY` и оставляет
-открытым UPDATE recovery fixture. Ни один observer не
-является зависимостью base product.
+`FND-0056` также заменяет ложную SA518 `SQ` pin на qualified-only
+`VOICE_ACTIVITY`. `PIN-0003/REV-0004V` проводят ревью machine-generated
+principle owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0`, slow I/O
+`23/1/0`; exact SA518 service и Si4732 control/antenna contacts представлены.
+`FND-0060` сохраняет открытыми final electrical peripherals, STOP/supervisor,
+power/isolation и service mechanics. Ни один observer не является зависимостью
+base product.
 Firmware consequences записаны в
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
-RF, exact peripherals, power и HIL должны закрыться до адаптированного legacy
-physical mockup. Physical co-design, whole-device optimality, conceptual
-placement и новое atomic architecture decision обязаны предшествовать
-target-specific runtime/HAL/toolchain work. Бывший
+RF, exact peripherals, power и HIL остаются параллельными gates. Reviewed
+pinout уже служит входом для адаптированного legacy physical mockup; physical
+co-design, whole-device optimality, conceptual placement и новое atomic
+architecture decision обязаны предшествовать target-specific runtime/HAL/
+toolchain work. Бывший
 [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 сохранён только как candidate/reference evidence.

@@ -118,15 +118,18 @@ without changing runtime identities; polarity becomes assembly metadata and
 `ANT-0002/REV-0004U` provide a reviewed procurement shortlist while kit
 selection, exact two-source assemblies and target RF qualification remain
 upstream gates.
-`FND-0056` also replaces
-the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
-its UPDATE recovery fixture open. No observer is a
-base-product dependency. Its firmware
+`FND-0056` also replaces the false SA518 `SQ` pin with a qualified-only
+`VOICE_ACTIVITY` input. `PIN-0003/REV-0004V` review the machine-generated
+principled owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0` and slow
+I/O `23/1/0`; exact SA518 service and Si4732 control/antenna contacts are
+represented. `FND-0060` keeps final electrical peripherals, STOP/supervisor,
+power/isolation and service mechanics open. No observer is a base-product
+dependency. Its firmware
 consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
-RF, exact peripherals, power and HIL must close before the adapted legacy
-physical mockup. Reviewed physical co-design, whole-device optimality,
-conceptual placement and a new atomic architecture decision must precede
-target-specific runtime/HAL/toolchain work.
+RF, exact peripherals, power and HIL remain parallel gates. The reviewed
+pinout now feeds the adapted legacy physical mockup; physical co-design,
+whole-device optimality, conceptual placement and a new atomic architecture
+decision must precede target-specific runtime/HAL/toolchain work.
 The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 is retained only as candidate/reference evidence.

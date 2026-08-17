@@ -5,6 +5,7 @@
 - Canonical hardware decision: [`DEC-0044`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0044-delegated-noninterference-layout.md)
 - Hardware artifact: [`NIF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NIF-0001-digital-noninterference-layout.md)
 - Exact generated map: [`G2F-pin-ledger`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-pin-ledger.md)
+- Reviewed principled pinout: [`PIN-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0003-g2f-3i-principled-pinout.md), [`generated atlas`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-3I-principled-pinout.md)
 - Signal groups: [`DEC-0045`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0045-one-active-signal-group.md)
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
@@ -42,6 +43,10 @@ permanent channel: any new fixed DMA consumer changes the upstream contract.
 The quiet-state decision also consumes RP GPIO15/GPIO23 for common nRF and CC
 power gates and C5 GPIO4 for the IR frontend gate. Direct free GPIO reserve is
 therefore S3=4, C5=1 and RP=0; firmware cannot invent another direct RP control.
+Hardware `PIN-0003/REV-0004V` re-derived these figures from the machine source:
+S3 is `29 used / 3 reserved / 4 free`, C5 is `14/6/1`, RP is `48/0/0`,
+and the slow plane is `23/1/0`. The previously published C5/RP reserve was
+stale and is corrected by `FND-0059`.
 
 ## Mandatory scheduler/queue contract
 
@@ -151,10 +156,20 @@ arbitrary long coax remains default-denied.
 Hardware `FND-0056` also removes a false SA518 assumption: rev 1.1 has no
 dedicated `SQ` contact. The runtime input is therefore neutral
 `VOICE_ACTIVITY`; firmware may assign carrier/squelch meaning only after exact
-pin-18 `Audio_ON` HIL. Pin 17 `UPDATE` remains a physical recovery-fixture gate
-because its documented direction and pull-down-at-boot description conflict.
+pin-18 `AUDIO_ON` HIL. `PIN-0003` now terminates UART, PTT, activity and the
+service breakout on exact SA518 contacts, including pin 17 `UPDATE`; driving
+that contact remains forbidden until its documented direction/pull-down
+ambiguity passes specimen proof. The same atlas terminates the Si4732 I²C,
+reset, interrupt, clock, audio and separate `FMI`/`AMI` routes on exact package
+contacts.
 
 ## Explicitly open
+
+Hardware `FND-0060` lists the remaining `abstract:*` electrical endpoints:
+exact display/touch and codec packages, IR frontends/driver/evidence, hard STOP
+latch, power/current/thermal supervision, load switching/isolation, audio
+selectors, Unit protection and service-connector mechanics. Firmware must not
+infer drivers, levels or safe states for those boundaries before they close.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open
