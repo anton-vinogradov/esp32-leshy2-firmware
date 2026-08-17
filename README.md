@@ -100,9 +100,9 @@ physical ownership or safety boundaries.
 Firmware implementation has not started. Repeated hardware G2 review is closed;
 hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
 paper map with independent radio buses/IPC and bounded display+SD sharing.
-Hardware `DSP-0002/REV-0004W` establish direct-QSPI feasibility on S3, but
-`IMP-0044` remains open: the target does not yet promise an exact panel or new
-quantum.
+Hardware `DEC-0052/REV-0004X` accept direct QSPI on S3 GPIO41/42 and `<=1 ms`
+display occupancy. `DSP-0003/IMP-0045` still select the new 3.5-inch screen
+class; the target does not yet promise an exact panel/controller.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
@@ -123,7 +123,7 @@ selection, exact two-source assemblies and target RF qualification remain
 upstream gates.
 `FND-0056` also replaces the false SA518 `SQ` pin with a qualified-only
 `VOICE_ACTIVITY` input. `PIN-0003/REV-0004V` review the machine-generated
-principled owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0` and slow
+principled owner/net/pad atlas: S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0` and slow
 I/O `23/1/0`; exact SA518 service and Si4732 control/antenna contacts are
 represented. `FND-0060` keeps final electrical peripherals, STOP/supervisor,
 power/isolation and service mechanics open. No observer is a base-product

@@ -101,8 +101,9 @@ safety boundaries.
 Firmware implementation не начата. Повторное hardware G2 review закрыто;
 hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей reviewed paper
 map с независимыми radio buses/IPC и bounded display+SD sharing. Hardware
-`DSP-0002/REV-0004W` подтверждают direct-QSPI feasibility на S3, но
-`IMP-0044` ещё открыт: target не обещает exact panel или новый quantum.
+`DEC-0052/REV-0004X` принимают direct QSPI на S3 GPIO41/42 и `≤1 ms`
+display occupancy. `DSP-0003/IMP-0045` ещё выбирают новый 3.5-inch screen
+class; target пока не обещает exact panel/controller.
 Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
 interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как
@@ -123,7 +124,7 @@ Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polari
 exact two-source assemblies и target RF qualification остаются upstream gates.
 `FND-0056` также заменяет ложную SA518 `SQ` pin на qualified-only
 `VOICE_ACTIVITY`. `PIN-0003/REV-0004V` проводят ревью machine-generated
-principle owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0`, slow I/O
+principle owner/net/pad atlas: S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O
 `23/1/0`; exact SA518 service и Si4732 control/antenna contacts представлены.
 `FND-0060` сохраняет открытыми final electrical peripherals, STOP/supervisor,
 power/isolation и service mechanics. Ни один observer не является зависимостью

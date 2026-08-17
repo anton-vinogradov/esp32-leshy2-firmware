@@ -46,9 +46,10 @@ channels. The reserves are not permission for an unreviewed driver to claim a
 permanent channel: any new fixed DMA consumer changes the upstream contract.
 The quiet-state decision also consumes RP GPIO15/GPIO23 for common nRF and CC
 power gates and C5 GPIO4 for the IR frontend gate. Direct free GPIO reserve is
-therefore S3=4, C5=1 and RP=0; firmware cannot invent another direct RP control.
-Hardware `PIN-0003/REV-0004V` re-derived these figures from the machine source:
-S3 is `29 used / 3 reserved / 4 free`, C5 is `14/6/1`, RP is `48/0/0`,
+later reduced by `DEC-0052`, which consumes S3 GPIO41/GPIO42 for QSPI D2/D3.
+It is therefore S3=2, C5=1 and RP=0; firmware cannot invent another direct RP
+control. Hardware `PIN-0003/REV-0004V/0004X` derive these figures from the
+machine source: S3 is `31 used / 3 reserved / 2 free`, C5 is `14/6/1`, RP is `48/0/0`,
 and the slow plane is `23/1/0`. The previously published C5/RP reserve was
 stale and is corrected by `FND-0059`.
 
@@ -66,17 +67,13 @@ stale and is corrected by `FND-0059`.
   TX authorization.
 - C5↔S3 4-bit SDIO must qualify ≥1.5 MB/s framed payload and ≤2 ms control RTT;
   it exclusively owns the S3 SD/MMC host in this candidate.
-- Display and microSD deliberately share SPI2. The scheduler uses separate CS
-  and per-device clocks, display transactions ≤256 B, bounded SD commands/data
-  chunks and critical-UI priority. The combined HIL must show first visible
-  response ≤100 ms, storage ≥4.0 MB/s, 1.5 MB/s record and survival of a
-  measured 250 ms card stall.
-- The `256 B` value remains the accepted contract only until hardware
-  `FND-0061/IMP-0044` is decided. It was derived for a former display/U214
-  shared bus, while current U214 is dedicated to RP. The reviewed candidate
-  replaces byte slicing with measured `<=1 ms` SPI2 occupancy and may widen
-  the display to QSPI on S3 GPIO41/42; firmware must not freeze either change
-  before the hardware decision and regenerated pin/resource contracts.
+- Display and microSD deliberately share SPI2. `DEC-0052` assigns direct QSPI
+  D2/D3 to S3 GPIO41/42 and replaces stale `256 B` slicing with measured
+  `<=1 ms` uninterrupted display occupancy. The scheduler uses separate CS,
+  per-device modes/clocks, QSPI only while SD CS is high, derived byte quanta,
+  bounded SD commands/data chunks and critical-UI priority. Combined HIL must
+  prove shared-D1 high-Z/no-contention, first visible response ≤100 ms, storage
+  ≥4.0 MB/s, 1.5 MB/s record and survival of a measured 250 ms card stall.
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
@@ -181,11 +178,11 @@ latch, power/current/thermal supervision, load switching/isolation, audio
 selectors, Unit protection and service-connector mechanics. Firmware must not
 infer drivers, levels or safe states for those boundaries before they close.
 
-Hardware `FND-0061` also keeps display arbitration open. `DSP-0002/REV-0004W`
-prove that display+SD is the only deliberately shared high-rate pair and that
-direct S3 QSPI fits the current free-pin envelope. `IMP-0044` is still an
-owner decision; no QSPI pin, time quantum, panel controller or display
-coprocessor is therefore a frozen firmware ABI.
+Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
+the time-based arbitration contract are now runtime inputs. `DSP-0003/IMP-0045`
+keep the exact display class/controller open; firmware may implement reusable
+QSPI scheduler/driver interfaces but cannot freeze an ST77922, AXS15231B,
+touch protocol or panel init table before that decision and specimen proof.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open

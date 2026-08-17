@@ -30,10 +30,11 @@
   and proves that ST7796S cannot meet the inherited 4.5 MB/s gate. Hardware
   `DEC-0043/REV-0004J` accept task/dirty-region rendering, `≤100 ms` critical/
   menu first feedback and a 256 B quantum corrected for the former shared-U214
-  map. Hardware `DSP-0002/REV-0004W` now record `FND-0061`: U214 is already on
-  a dedicated RP bus, so that limit is stale. ⚠️ Proposal `IMP-0044` replaces
-  it with a `<=1 ms` time-based arbitration contract and tests direct QSPI on
-  free S3 GPIO41/42; exact display/optics and HIL remain open.
+  map. Hardware `DSP-0002/REV-0004W` record `FND-0061`: U214 is already on a
+  dedicated RP bus, so that limit is stale. `DEC-0052/REV-0004X` close it by
+  accepting direct QSPI on S3 GPIO41/42 and `<=1 ms` time-based arbitration.
+  `DSP-0003/REV-0004Y` leave ⚠️ proposal `IMP-0045`: a new 3.5-inch QSPI class
+  versus the old 4-inch A0 fixture; exact display/optics and HIL remain open.
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
@@ -73,7 +74,7 @@
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics. New hardware `PIN-0003/REV-0004V` reviews the machine-generated
-  principled owner/net/pad atlas. Current budgets are S3 `29/3/4`, C5
+  principled owner/net/pad atlas. Current budgets are S3 `31/3/2`, C5
   `14/6/1`, RP `48/0/0` and slow I/O `23/1/0`; `FND-0059` corrects the stale
   prior C5/RP figures. SA518 UART/PTT/activity and recovery now terminate on
   exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI

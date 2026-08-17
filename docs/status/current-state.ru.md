@@ -29,11 +29,12 @@
   mapping и доказывает, что ST7796S не выполняет унаследованный gate 4.5 MB/s;
   hardware `DEC-0043/REV-0004J` принимают task/dirty-region rendering,
   critical/menu first feedback `≤100 ms` и исправленный для прежней карты
-  256 B shared-U214 display quantum. Hardware `DSP-0002/REV-0004W` теперь
-  фиксируют `FND-0061`: U214 уже находится на dedicated RP bus, поэтому лимит
-  устарел. ⚠️ Предложение `IMP-0044` — заменить его временным `≤1 ms`
-  arbitration contract и перейти к direct QSPI на свободных S3 GPIO41/42;
-  exact display/optics и HIL остаются открыты.
+  256 B shared-U214 display quantum. Hardware `DSP-0002/REV-0004W` фиксируют
+  `FND-0061`: U214 уже находится на dedicated RP bus, поэтому limit устарел.
+  `DEC-0052/REV-0004X` закрывают находку: принимают direct QSPI на S3
+  GPIO41/42 и `≤1 ms` time-based arbitration. `DSP-0003/REV-0004Y` оставляют
+  ⚠️ предложение `IMP-0045`: новый 3.5-inch QSPI class против старого 4-inch
+  A0 fixture; exact display/optics и HIL открыты.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
@@ -74,7 +75,7 @@
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`. Новый hardware `PIN-0003/REV-0004V` провёл
   ревью machine-generated principle owner/net/pad atlas. Текущий бюджет:
-  S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0`, slow I/O `23/1/0`; прежние значения
+  S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O `23/1/0`; прежние значения
   C5/RP были stale и исправлены через `FND-0059`. SA518 UART/PTT/activity и
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
