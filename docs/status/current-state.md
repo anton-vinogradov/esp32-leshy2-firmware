@@ -120,13 +120,13 @@
   evidence is `unknown/unavailable`, never inferred safe. RF taps, thresholds
   and HIL remain `I6`, while the exact AON source/hold-up is now an `I3` input.
 - Hardware `PWR-0002/FND-0073/REV-0005P` review the `I3` prerequisites from
-  the current device/scenario set. They preserve 2S, the 2.5/3-A 3.3-V floor
-  and separate 4-V voice rail, but reject the legacy power sheet as a target:
+  the current device/scenario set. They preserve the 2.5/3-A 3.3-V floor and
+  separate 4-V voice rail, but reject the legacy power sheet as a target:
   no system power path, no real fuel gauge, no justified Type-C current
   detection, obsolete rail sizes and no current quiet-state/safety branches.
-  The owner accepted `IMP-0052/B` as `DEC-0062`: two 18650 cells remain
-  individually replaceable but are admitted as one supervised pair. Firmware
-  exposes distinct cell and pair state, cannot override the hardware-open
+  The owner accepted `IMP-0052/B` as `DEC-0062`: two 18650 slots remain
+  individually replaceable behind fail-closed admission. Firmware exposes
+  distinct cell and set/bus state, cannot override the hardware-open
   charge/discharge boundary, and treats mismatch, removal/contact bounce and
   incomplete identity as blocked/unknown. `REV-0005Q` reviews propagation.
   The owner accepted `IMP-0053/B` as `DEC-0063`: sink-only USB-PD supports
@@ -135,12 +135,13 @@
   review exact TPS25751D/BQ25798, mandatory recoverable CAT24C512 EEPROM,
   TVS2200, shared SYS-I2C0/IRQ behavior, signed dual-region policy updates and
   reset-default charge disable. ARC-0002 now consumes that runtime contract.
-  Hardware `PWR-0005/FND-0075` next review the still-open cell-manager gate:
-  an integrated gauge protects and measures an admitted stack but cannot by
-  itself qualify two loose cells before pack closure. `IMP-0054` therefore
-  compares exact fail-closed gauge plus always-on admission-controller
-  topologies. No manager MPN or firmware owner is accepted yet; a replaced
-  cell always invalidates prior pair SOC/SOH and starts admission/relearning.
+  Hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` then reopen only the
+  electrical topology and compare supervised 2S, controlled two-slot 1S and a
+  one-slot 1S variant. Direct parallel is rejected; 1S doubles common-path
+  current and changes the major rail classes. `IMP-0055` is now the owner
+  gate. `PWR-0005/IMP-0054` remain reviewed evidence for the 2S branch. No
+  manager MPN or firmware owner is accepted yet; a replaced cell invalidates
+  affected SOC/SOH and starts admission/relearning.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

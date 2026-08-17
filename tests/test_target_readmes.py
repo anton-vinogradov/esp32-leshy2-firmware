@@ -44,13 +44,13 @@ class TargetReadmeTests(unittest.TestCase):
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (
-                "two replaceable 18650 cells",
-                "blocks operation/charging",
+                "two replaceable qualified 18650 slots",
+                "blocks affected operation/charging",
                 "cannot be overridden in software",
             ),
             "README.ru.md": (
-                "две заменяемые 18650",
-                "блокируют работу/зарядку",
+                "два слота для заменяемых квалифицированных 18650",
+                "блокируют затронутую работу/зарядку",
                 "не могут быть обойдены программно",
             ),
         }

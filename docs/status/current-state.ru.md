@@ -121,13 +121,13 @@
   `unknown/unavailable`, но не безопасным. RF taps, thresholds и HIL остаются
   в `I6`, а exact AON source/hold-up стал входом `I3`.
 - Hardware `PWR-0002/FND-0073/REV-0005P` проводят ревью prerequisites `I3` из
-  текущей начинки и сценариев. Они сохраняют 2S, 3.3-V floor `2.5/3 A` и
-  отдельный 4-V voice rail, но отклоняют legacy power sheet как target: нет
+  текущей начинки и сценариев. Они сохраняют 3.3-V floor `2.5/3 A` и отдельный
+  4-V voice rail, но отклоняют legacy power sheet как target: нет
   system power path, настоящего fuel gauge, доказанного Type-C current
   detection, правильных rail sizes и current quiet-state/safety branches.
-  Владелец принял `IMP-0052/B` как `DEC-0062`: две 18650 остаются отдельно
-  заменяемыми, но допускаются как одна контролируемая пара. Firmware отдельно
-  показывает состояние ячеек и пары, не может обойти аппаратно разомкнутую
+  Владелец принял `IMP-0052/B` как `DEC-0062`: два слота 18650 остаются
+  отдельно заменяемыми за fail-closed admission. Firmware отдельно показывает
+  состояние ячеек и set/bus, не может обойти аппаратно разомкнутую
   границу charge/discharge и считает mismatch, извлечение/дребезг контакта или
   неполную identity состоянием blocked/unknown. Распространение проверено в
   `REV-0005Q`. Владелец принял `IMP-0053/B` как `DEC-0063`: sink-only USB-PD
@@ -137,13 +137,13 @@
   CAT24C512, TVS2200, общий SYS-I2C0/IRQ, подписанное dual-region обновление
   policy и reset-default запрет заряда. ARC-0002 теперь потребляет этот runtime
   contract.
-  Затем hardware `PWR-0005/FND-0075` проводят ревью всё ещё открытого выбора
-  cell manager: integrated gauge защищает и измеряет уже допущенный stack, но
-  сам не может квалифицировать две свободно заменяемые ячейки до замыкания
-  pack boundary. Поэтому `IMP-0054` сравнивает exact fail-closed связки gauge
-  и always-on admission controller. MPN manager и firmware owner пока не
-  приняты; замена любой ячейки всегда сбрасывает прежние SOC/SOH пары и
-  запускает admission/relearning заново.
+  Затем hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` переоткрывают только
+  электрическую топологию и сравнивают supervised 2S, controlled two-slot 1S
+  и one-slot 1S variant. Direct parallel отклонён; 1S удваивает ток общей
+  шины и меняет классы основных rails. Текущий owner gate — `IMP-0055`, а
+  `PWR-0005/IMP-0054` остаются reviewed evidence 2S branch. MPN manager и
+  firmware owner пока не приняты; замена ячейки сбрасывает затронутые SOC/SOH
+  и запускает admission/relearning заново.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

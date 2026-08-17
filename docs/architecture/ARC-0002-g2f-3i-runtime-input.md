@@ -21,7 +21,8 @@
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
-- open cell-manager review: [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`FND-0075`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0075-pack-gauge-is-not-loose-cell-admission.md), [`IMP-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0054-fail-closed-2s-admission-manager.md)
+- reopened electrical topology: [`DEC-0064`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0064-reopen-battery-electrical-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`IMP-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0055-battery-electrical-topology-after-reopen.md)
+- reviewed 2S manager branch: [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`FND-0075`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0075-pack-gauge-is-not-loose-cell-admission.md)
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 
 ## Boundary
@@ -124,23 +125,25 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 
 ## Replaceable-cell admission input
 
-- The battery is a 2S pair made from two individually replaceable 18650 cells;
-  individual replacement does not imply that arbitrary mixed cells are valid.
-- `PWR-0005/FND-0075` separate an integrated pack gauge/protector from the
-  product-specific controller that admits loose cells before pack closure.
-  `IMP-0054` remains open, so no exact manager/controller driver, image or bus
-  owner is frozen by this document.
+- The battery has two individually replaceable qualified 18650 slots;
+  individual replacement does not imply that an arbitrary cell or combination
+  is valid. Series versus controlled common-1S operation remains upstream.
+- `PWR-0005/FND-0075` separate gauging from pre-closure admission, while
+  `PWR-0006/FND-0076` add the controlled-1S cross-charge, common-current and
+  SOC consequences. `IMP-0055` remains open, so no exact manager/controller
+  driver, image or bus owner is frozen by this document.
 - Hardware owns reverse-insertion prevention, observation before admission and
   the charge/discharge FET boundary. Firmware may request admission but cannot
   force a refused pair on or use balancing to mask an unsafe mismatch.
-- Firmware retains distinct `cell_0`, `cell_1`, pair, temperature, contact and
+- Firmware retains distinct `cell_0`, `cell_1`, set/bus, temperature, contact and
   admission states. Missing/inconsistent evidence is `unknown` and blocks
   charge, high-load operation and TX leases rather than inheriting the prior
   battery state.
 - Single-cell removal, contact bounce, a single-cell replacement and reset are
-  fresh admission events. No previous state-of-charge, health or approved-pair
-  identity is restored until both cells pass the hardware/firmware contract.
-- If the recommended separate admission-MCU topology is later accepted, that
+  fresh admission events. No previous state-of-charge, health or approved-set
+  identity is restored until the active slot set passes the hardware/firmware
+  contract. One-cell operation is exposed only if the selected topology admits it.
+- If a separate admission-MCU topology is later accepted, that
   controller owns local gauge polling, diagnostic-load sequencing and the
   release decision. S3 consumes a read-only state/fault window and may request
   evaluation but cannot access the local gauge bus directly or override a
