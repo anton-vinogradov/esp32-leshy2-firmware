@@ -38,6 +38,9 @@ owner/net/pad atlas. Current direct budgets are S3 `29/3/4`, C5 `14/6/1`, RP
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
+Hardware `DEC-0051` publishes the same projection in its target README as the
+visible G3 working design; firmware still treats it as reopenable upstream
+input until atomic architecture.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

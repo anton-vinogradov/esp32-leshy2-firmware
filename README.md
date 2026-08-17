@@ -124,7 +124,10 @@ principled owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0` and slow
 I/O `23/1/0`; exact SA518 service and Si4732 control/antenna contacts are
 represented. `FND-0060` keeps final electrical peripherals, STOP/supervisor,
 power/isolation and service mechanics open. No observer is a base-product
-dependency. Its firmware
+dependency.
+Hardware `DEC-0051` publishes this reviewed map in its target README as the
+principled G3 working design; firmware still treats it as a reopenable input,
+not a frozen HAL/G7. Its firmware
 consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
 RF, exact peripherals, power and HIL remain parallel gates. The reviewed

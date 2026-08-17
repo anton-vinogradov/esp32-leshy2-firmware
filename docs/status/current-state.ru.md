@@ -77,6 +77,8 @@
   нельзя драйвить до specimen proof его direction/timing ambiguity.
   `FND-0060` оставляет открытыми exact display/codec/IR, STOP/supervisor,
   load-switch/isolation, audio/Unit protection и service mechanics.
+  Hardware `DEC-0051` теперь публикует эту карту в target README как visible
+  principle-level working design для G3, не превращая её в frozen HAL/G7.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
 - ⚠️ Предложение hardware `IMP-0043` ожидает решения: принять profiled antenna

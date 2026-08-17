@@ -126,6 +126,9 @@ principle owner/net/pad atlas: S3 `29/3/4`, C5 `14/6/1`, RP `48/0/0`, slow I/O
 `FND-0060` сохраняет открытыми final electrical peripherals, STOP/supervisor,
 power/isolation и service mechanics. Ни один observer не является зависимостью
 base product.
+Hardware `DEC-0051` публикует эту reviewed карту в своём target README как
+принципиальный G3 working design; для firmware она остаётся reopenable input,
+а не frozen HAL/G7.
 Firmware consequences записаны в
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
 RF, exact peripherals, power и HIL остаются параллельными gates. Reviewed

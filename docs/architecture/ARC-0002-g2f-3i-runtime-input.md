@@ -6,6 +6,7 @@
 - Hardware artifact: [`NIF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NIF-0001-digital-noninterference-layout.md)
 - Exact generated map: [`G2F-pin-ledger`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-pin-ledger.md)
 - Reviewed principled pinout: [`PIN-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PIN-0003-g2f-3i-principled-pinout.md), [`generated atlas`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-3I-principled-pinout.md)
+- Working-design decision: [`DEC-0051`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0051-principled-pinout-as-working-design.md)
 - Signal groups: [`DEC-0045`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0045-one-active-signal-group.md)
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
@@ -21,6 +22,9 @@ This document records the firmware consequences of the leading reviewed
 images, select exact peripheral drivers or restore the superseded `ARC-0001`
 as target. Physical RF, exact parts/power/mechanics and HIL can still remap the
 architecture before the atomic decision.
+Hardware `DEC-0051` makes this reviewed projection visible as the current G3
+working design. It does not convert the input into a frozen firmware HAL or G7
+architecture.
 
 ## Candidate runtime domains
 

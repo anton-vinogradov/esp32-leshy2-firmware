@@ -78,6 +78,8 @@
   specimen proof resolves its direction/timing ambiguity. `FND-0060` leaves
   exact display/codec/IR, STOP/supervisor, load-switch/isolation, audio/Unit
   protection and service mechanics open.
+  Hardware `DEC-0051` now publishes this map in its target README as the visible
+  principle-level working design for G3 without making it a frozen HAL/G7.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
 - ⚠️ Hardware proposal `IMP-0043` awaits a decision: adopt the profiled antenna
