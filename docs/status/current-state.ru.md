@@ -110,9 +110,16 @@
   selector, а direct S3 GPIO6 `AUDIO_ARM` использовать для возврата analog
   defaults при reset даже со старыми P11/P12. Firmware теперь считает GPIO6 и
   disarm-first sequencing нормативными; measured gain/mute/passive values открыты.
-- Следующий upstream ход: reviewed `PIN-0003` уже позволяет начать G3 —
-  адаптацию legacy physical/product mockup и проверку conceptual placement.
-  Параллельно hardware закрывает `FND-0058/FND-0060/FND-0066/FND-0067`,
+- Hardware `SAFE-0001/REV-0005M` провели ревью safety-пререквизитов `I2` и
+  открыли `FND-0071`: STOP обязан сбрасывать RP2354B вместе с S3/C5, а 3×nRF и
+  CC1101 пока не имеют source-specific physical TX evidence. **⚠️ Предложение
+  `IMP-0050/A`** даёт общий hardware `ANY_TX` на RP GPIO22 и восьмибитный
+  source mask через local I²C без новой ноги. До решения это не frozen HAL:
+  firmware различает commanded/current/actual/unknown и не синтезирует факт TX.
+- Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
+  цепочки `INT-0001`. Hardware сначала принимает и распространяет `I2`
+  safety/evidence topology, затем закрывает power/UI/audio/RF/expansion
+  internals. Параллельно остаются `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
   target `T1`. Затем обязательны measured full-mix, quiet-state, RF/
   self-desense, signal-integrity, service и HIL gates. Paper pinout остаётся
@@ -147,9 +154,9 @@ references до своих downstream gates.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. Hardware использует reviewed
-`PIN-0003` для адаптации legacy physical mockup, одновременно закрывая exact
-electrical parts, power/RF и HIL; затем проходит whole-device optimality,
+Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
+с открытого `I2` STOP/evidence package; integrated physical mockup возобновится
+после joint internal review. Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт
 implementation.

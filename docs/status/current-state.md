@@ -110,9 +110,16 @@
   and use direct S3 GPIO6 `AUDIO_ARM` to force analog defaults across reset even
   if P11/P12 remain stale. Firmware now treats GPIO6 and the disarm-first
   selector sequence as normative; measured gain/mute/passive values remain open.
-- Next upstream action: reviewed `PIN-0003` now permits G3 adaptation of the
-  legacy physical/product mockup and conceptual-placement review. In parallel,
-  hardware closes `FND-0058/FND-0060/FND-0066/FND-0067`, selects
+- Hardware `SAFE-0001/REV-0005M` review the `I2` safety prerequisites and open
+  `FND-0071`: STOP must reset RP2354B together with S3/C5, while 3×nRF and
+  CC1101 still lack source-specific physical TX evidence. **⚠️ Proposal
+  `IMP-0050/A`** provides hardware `ANY_TX` on RP GPIO22 and an eight-bit source
+  mask over local I2C without a new pin. Until the decision this is not a
+  frozen HAL; firmware keeps commanded/current/actual/unknown distinct.
+- The integrated mockup remains paused until the `INT-0001` chain closes.
+  Hardware first accepts and propagates the `I2` safety/evidence topology, then
+  closes power/UI/audio/RF/expansion internals. In parallel it keeps
+  `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
   exact production parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
   `T1`. Measured full-mix, quiet-state, RF/self-desense, signal-integrity,
   service and HIL gates still follow. The paper pinout remains a reopenable
@@ -147,8 +154,9 @@ remain references until their downstream gates.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. Hardware uses reviewed `PIN-0003`
-to adapt the legacy physical mockup while closing exact electrical parts,
-power/RF and HIL, then completes whole-device optimality, conceptual placement
-and atomic architecture. Firmware will then turn the `ARC-0002` input into the
+No target code or toolchain is created yet. Hardware follows `INT-0001`,
+starting with the open `I2` STOP/evidence package; the integrated physical
+mockup resumes after the joint internal review. Whole-device optimality,
+conceptual placement and atomic architecture follow. Firmware will then turn
+the `ARC-0002` input into the
 normative image/owner/IPC/HAL/update/test contract before implementation.
