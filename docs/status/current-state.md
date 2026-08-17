@@ -135,13 +135,13 @@
   review exact TPS25751D/BQ25798, mandatory recoverable CAT24C512 EEPROM,
   TVS2200, shared SYS-I2C0/IRQ behavior, signed dual-region policy updates and
   reset-default charge disable. ARC-0002 now consumes that runtime contract.
-  Hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` then reopen only the
-  electrical topology and compare supervised 2S, controlled two-slot 1S and a
-  one-slot 1S variant. Direct parallel is rejected; 1S doubles common-path
-  current and changes the major rail classes. `IMP-0055` is now the owner
-  gate. `PWR-0005/IMP-0054` remain reviewed evidence for the 2S branch. No
+  Hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` then reopened and compared
+  supervised 2S, controlled two-slot 1S and a one-slot 1S variant. The owner
+  selected supervised 2S in `DEC-0065/REV-0005T`: both admitted cells are
+  required, while direct parallel stays rejected. `PWR-0005/REV-0005U` now
+  revalidate the exact manager candidates and `IMP-0054` is the owner gate. No
   manager MPN or firmware owner is accepted yet; a replaced cell invalidates
-  affected SOC/SOH and starts admission/relearning.
+  pair SOC/SOH and starts admission/relearning.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

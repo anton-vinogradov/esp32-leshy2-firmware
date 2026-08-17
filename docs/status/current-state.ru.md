@@ -137,13 +137,13 @@
   CAT24C512, TVS2200, общий SYS-I2C0/IRQ, подписанное dual-region обновление
   policy и reset-default запрет заряда. ARC-0002 теперь потребляет этот runtime
   contract.
-  Затем hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` переоткрывают только
-  электрическую топологию и сравнивают supervised 2S, controlled two-slot 1S
-  и one-slot 1S variant. Direct parallel отклонён; 1S удваивает ток общей
-  шины и меняет классы основных rails. Текущий owner gate — `IMP-0055`, а
-  `PWR-0005/IMP-0054` остаются reviewed evidence 2S branch. MPN manager и
-  firmware owner пока не приняты; замена ячейки сбрасывает затронутые SOC/SOH
-  и запускает admission/relearning заново.
+  Затем hardware `DEC-0064/PWR-0006/FND-0076/REV-0005S` переоткрывают и
+  сравнивают supervised 2S, controlled two-slot 1S и one-slot 1S variant.
+  Владелец выбирает supervised 2S в `DEC-0065/REV-0005T`: для работы нужны
+  обе допущенные ячейки, а direct parallel остаётся отклонён. `PWR-0005/
+  REV-0005U` повторно проверяют exact manager candidates; текущий owner gate —
+  `IMP-0054`. MPN manager и firmware owner пока не приняты; замена ячейки
+  сбрасывает SOC/SOH пары и запускает admission/relearning заново.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

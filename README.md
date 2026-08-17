@@ -123,10 +123,10 @@ flowchart TD
   inconsistent evidence is shown as `Unknown`, never silently treated as safe.
 - Leaving a tool or level, lock, timeout, link loss, accessory removal and
   profile error immediately invalidate affected TX permissions.
-- The two replaceable qualified 18650 slots are reported separately and as a
-  supervised battery set. An unsafe combination, removed cell, contact fault
-  or incomplete battery identity blocks affected operation/charging and
-  cannot be overridden in software.
+- The supervised 2S battery reports its two replaceable qualified 18650 cells
+  separately and as one required pair. An unsafe combination, either removed
+  cell, contact fault or incomplete battery identity blocks battery operation
+  and charging and cannot be overridden in software.
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.

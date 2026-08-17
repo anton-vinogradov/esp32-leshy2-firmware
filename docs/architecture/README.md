@@ -48,18 +48,19 @@ UART service paths. M5 Unit UART moves to UART1 on unchanged GPIO7/8. The link
 still requires ≥1.5 MB/s framed HIL; 4-bit is fallback evidence, not a parallel
 runtime profile.
 Hardware `DEC-0062/REV-0005Q` retain two individually replaceable 18650 slots
-behind fail-closed admission. `DEC-0064/PWR-0006/REV-0005S` later reopen only
-their electrical series/controlled-1S topology; `IMP-0055` is the owner gate.
+behind fail-closed admission. `DEC-0064/PWR-0006/REV-0005S` later reopened the
+electrical alternatives; `DEC-0065/REV-0005T` select supervised 2S for the
+base product, with both cells required.
 `DEC-0063/PWR-0004/REV-0005R` accept
 the exact sink-only 30-W TPS25751DREFR/BQ25798RQMR frontend with mandatory
 CAT24C512WI-GT3 boot image and TVS2200DRVR. ARC-0002 consumes the fixed 5/9/15-V
 contracts, direct S3 USB2, shared I2C/IRQ status, charge-disable defaults and
 signed dual-region PD-image recovery; the cell manager and complete rail/HIL
 tree remain upstream I3 work. Hardware `PWR-0005/FND-0075` prove that gauge and
-pre-closure loose-cell admission are separate jobs for the 2S branch;
-`PWR-0006/FND-0076` add the controlled-1S cross-charge, rail/current and SOC
-consequences. Firmware does not freeze a manager driver/image until `IMP-0055`
-closes.
+pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
+the controlled-1S cross-charge, rail/current and SOC consequences as future
+variant evidence. Firmware does not freeze a manager driver/image until the
+current `IMP-0054` owner gate closes.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch
