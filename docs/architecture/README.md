@@ -59,8 +59,10 @@ signed dual-region PD-image recovery; the cell manager and complete rail/HIL
 tree remain upstream I3 work. Hardware `PWR-0005/FND-0075` prove that gauge and
 pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
 the controlled-1S cross-charge, rail/current and SOC consequences as future
-variant evidence. Firmware does not freeze a manager driver/image until the
-current `IMP-0054` owner gate closes.
+variant evidence. Hardware `DEC-0066/REV-0005V` accept exact
+MAX17320G20+T plus MSPM0C1104SDGS20R: the MSP owns local admission and becomes
+a fourth independently recoverable image domain; S3 sees only bounded
+read-only state/fault and cannot override refusal.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch

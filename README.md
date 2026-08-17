@@ -126,7 +126,9 @@ flowchart TD
 - The supervised 2S battery reports its two replaceable qualified 18650 cells
   separately and as one required pair. An unsafe combination, either removed
   cell, contact fault or incomplete battery identity blocks battery operation
-  and charging and cannot be overridden in software.
+  and charging and cannot be overridden in software. A dedicated fail-closed
+  admission controller makes that decision before the application processor
+  is required and retains independent programming and recovery.
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.

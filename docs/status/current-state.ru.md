@@ -141,9 +141,12 @@
   сравнивают supervised 2S, controlled two-slot 1S и one-slot 1S variant.
   Владелец выбирает supervised 2S в `DEC-0065/REV-0005T`: для работы нужны
   обе допущенные ячейки, а direct parallel остаётся отклонён. `PWR-0005/
-  REV-0005U` повторно проверяют exact manager candidates; текущий owner gate —
-  `IMP-0054`. MPN manager и firmware owner пока не приняты; замена ячейки
-  сбрасывает SOC/SOH пары и запускает admission/relearning заново.
+  REV-0005U` повторно проверяют exact candidates; `DEC-0066/REV-0005V`
+  принимают `MAX17320G20+T` как gauge/protector и `MSPM0C1104SDGS20R` как
+  local admission owner. Последний становится четвёртым независимо
+  восстанавливаемым firmware-image domain; S3 видит bounded read-only state и
+  не может подключить отклонённую пару. Замена ячейки сбрасывает SOC/SOH пары
+  и запускает admission/relearning заново.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

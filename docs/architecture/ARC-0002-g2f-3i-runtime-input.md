@@ -22,7 +22,7 @@
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
 - accepted supervised 2S topology: [`DEC-0065`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0065-supervised-2s-battery-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`REV-0005T`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005T-supervised-2s-topology-decision-propagation.md)
-- current 2S manager gate: [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`FND-0075`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0075-pack-gauge-is-not-loose-cell-admission.md), [`IMP-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0054-fail-closed-2s-admission-manager.md)
+- accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 
 ## Boundary
@@ -131,8 +131,10 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   for battery operation.
 - `PWR-0005/FND-0075` separate gauging from pre-closure admission, while
   `PWR-0006/FND-0076` retain the controlled-1S cross-charge, common-current and
-  SOC consequences as future-variant evidence. `IMP-0054` remains open, so no
-  exact manager/controller driver, image or bus owner is frozen here.
+  SOC consequences as future-variant evidence. `DEC-0066` freezes the hardware
+  identities and roles: `MAX17320G20+T` is the local gauge/protector and
+  `MSPM0C1104SDGS20R` is the admission owner. Register policy and image format
+  remain implementation outputs, not permission to change those roles.
 - Hardware owns reverse-insertion prevention, observation before admission and
   the charge/discharge FET boundary. Firmware may request admission but cannot
   force a refused pair on or use balancing to mask an unsafe mismatch.
@@ -144,12 +146,15 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   fresh admission events. No previous state-of-charge, health or approved-pair
   identity is restored until both cells pass the hardware/firmware contract.
   The base product exposes no one-cell battery-operation mode.
-- If a separate admission-MCU topology is later accepted, that
-  controller owns local gauge polling, diagnostic-load sequencing and the
-  release decision. S3 consumes a read-only state/fault window and may request
-  evaluation but cannot access the local gauge bus directly or override a
-  refusal. Its independently recoverable firmware image and service path then
-  become mandatory, not an application task silently hosted on S3.
+- The admission MCU owns local gauge polling, protected-NVM verification,
+  diagnostic-load sequencing and the release decision. S3 consumes a
+  read-only state/fault window and may request evaluation but cannot access the
+  local gauge bus directly or override a refusal. The admission MCU is a
+  fourth independently recoverable firmware image and service domain, not an
+  application task silently hosted on S3.
+- The admission image runs a bounded low-clock/duty state machine from AOLDO.
+  Flash programming/recovery uses isolated fixture or admitted system power;
+  firmware must not assume AOLDO can supply erase/program current.
 
 ## Sink-only USB-PD and charge input
 
