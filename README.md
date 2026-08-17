@@ -108,6 +108,12 @@ identify exact current assembly candidate `HMX035CTFT-001` and review its
 40-contact fit: GPIO39 is touch IRQ, GPIO41/42 are QSPI D2/D3 and slow P06/P07
 are display/touch reset. Production ordering/drawing/connector and vendor init
 table remain open; neither development board is target BOM.
+Hardware `AUDIO-0001/REV-0005B` also instantiate the exact `ES8311` QFN-20
+digital boundary on S3 GPIO1/2/15/16/17/18. Codec address is `0x19`, MCLK uses
+the BCLK-derived mode with no extra GPIO, and slow P10 is external
+`CODEC_PWR_EN` because physical `CE` is only the address strap. S3 remains
+`31/3/2`; differential analog routing is still the explicit `IMP-0046`
+decision and firmware does not freeze its gain/mute/selector sequence.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early

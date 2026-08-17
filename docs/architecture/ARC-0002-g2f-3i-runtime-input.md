@@ -14,6 +14,8 @@
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - feed-interface review: [`RFH-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFH-0001-module-to-external-sma-interface-review.md)
+- exact codec fit: [`AUDIO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0001-es8311-exact-electrical-fit.md), [`REV-0005B`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005B-es8311-digital-fit-and-analog-gap.md)
+- open analog topology: [`IMP-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0046-es8311-analog-routing-topology.md)
 
 ## Boundary
 
@@ -118,6 +120,8 @@ stale and is corrected by `FND-0059`.
    timing proof;
 8. every non-member quiet-state transition, no-back-power/fault injection and
    active-receiver desense under maximum valid system-plane traffic.
+9. ES8311 address/readback, BCLK-derived simultaneous ADC+DAC, power-off
+   no-backfeed and hardware-default analog bypass under reset/watchdog/fault.
 
 The fixture has two explicitly different evidence levels. Ordered ESP32-DIV
 units form `L0 DIV↔DIV` pre-HIL: they validate the manifest/log workflow and
@@ -170,10 +174,39 @@ ambiguity passes specimen proof. The same atlas terminates the Si4732 I²C,
 reset, interrupt, clock, audio and separate `FMI`/`AMI` routes on exact package
 contacts.
 
+## Exact ES8311 runtime boundary
+
+Hardware `AUDIO-0001/REV-0005B` instantiate exact Everest Semiconductor
+`ES8311` QFN-20 contacts without changing S3 `31/3/2`:
+
+- `GPIO1/SYS_I2C_SDA` ↔ codec `CDATA` pin 19;
+- `GPIO2/SYS_I2C_SCL` → codec `CCLK` pin 1;
+- `GPIO15/I2S_BCLK` → codec `SCLK` pin 6;
+- `GPIO16/I2S_WS` → codec `LRCK` pin 8;
+- `GPIO17/I2S_DOUT` → codec `DSDIN` pin 9;
+- `GPIO18/I2S_DIN` ← codec `ASDOUT` pin 7;
+- codec `MCLK` pin 2 is unconnected under the reviewed BCLK-derived-clock
+  contract;
+- codec `CE` pin 20 is fixed high through the documented `10 kΩ` reference
+  strap for 7-bit address `0x19`.
+
+`CE` is **not** enable or reset. Slow P10 is external `CODEC_PWR_EN` controlling
+a still-unselected quiet-rail switch/sequencer. Firmware must never toggle CE,
+must not start I2S clocks before valid power/readback, and must keep both analog
+selectors in hardware bypass until the codec and selected analog conditioner
+are proven ready. Any codec/readback/DMA/watchdog fault stops I2S, returns
+bypass and leaves PTT off.
+
+Exact ADC `MIC1P/MIC1N` and DAC `OUTP/OUTN` are differential. Hardware
+`FND-0065/IMP-0046` therefore keep the conditioner/selector circuit open.
+Firmware may define logical capture/playback/inject modes, but must not freeze
+gain, mute timing, codec register script or claim lossless TX/speaker routing
+before that owner decision and electrical/HIL closure.
+
 ## Explicitly open
 
 Hardware `FND-0060` lists the remaining `abstract:*` electrical endpoints:
-display connector/backlight/protection/sourcing, exact codec package, IR
+display connector/backlight/protection/sourcing, exact codec power and analog routing, IR
 frontends/driver/evidence, hard STOP latch, power/current/thermal supervision,
 load switching/isolation, audio selectors, Unit protection and service-
 connector mechanics. Firmware must not infer drivers, levels or safe states

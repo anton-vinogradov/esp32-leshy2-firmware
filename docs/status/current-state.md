@@ -40,6 +40,10 @@
   identify exact current assembly candidate `HMX035CTFT-001` and review its
   40-contact fit without changing S3 `31/3/2`; production ordering/drawing/
   connector, optics, init table and HIL remain open.
+  Hardware `AUDIO-0001/REV-0005B` also instantiate exact `ES8311` QFN-20
+  I2C/I2S contacts without changing that budget. `CE` is fixed address strap
+  `0x19`; P10 is external `CODEC_PWR_EN`. `FND-0065/IMP-0046` keep exact
+  differential analog routing and power implementation open.
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
@@ -85,7 +89,8 @@
   exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI
   terminate on exact package contacts. UPDATE must not be driven before
   specimen proof resolves its direction/timing ambiguity. `FND-0060` leaves
-  exact display/codec/IR, STOP/supervisor, load-switch/isolation, audio/Unit
+  display production details, codec power/analog routing, exact IR,
+  STOP/supervisor, load-switch/isolation, audio/Unit
   protection and service mechanics open.
   Hardware `DEC-0051` now publishes this map in its target README as the visible
   principle-level working design for G3 without making it a frozen HAL/G7.
@@ -95,6 +100,9 @@
   kit. For firmware this means an explicit antenna MPN/profile, disarm on every
   change, and unconditional TX denial for unknown/mismatch; SMA itself proves
   no identity.
+- ⚠️ Hardware proposal `IMP-0046` awaits a decision on exact ES8311 analog
+  routing. Firmware keeps hardware bypass and does not freeze gain/mute/
+  selector sequencing until it closes.
 - Next upstream action: reviewed `PIN-0003` now permits G3 adaptation of the
   legacy physical/product mockup and conceptual-placement review. In parallel,
   hardware closes `IMP-0043/FND-0058/FND-0060`, selects exact production

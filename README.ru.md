@@ -109,6 +109,12 @@ exact current assembly candidate `HMX035CTFT-001` и проводят ревью
 40-contact fit: GPIO39 — touch IRQ, GPIO41/42 — QSPI D2/D3, slow P06/P07 —
 display/touch reset. Production ordering/drawing/connector и vendor init table
 остаются открыты; ни одна dev board не является target BOM.
+Hardware `AUDIO-0001/REV-0005B` также вносят exact digital boundary `ES8311`
+QFN-20 на S3 GPIO1/2/15/16/17/18. Адрес codec — `0x19`, MCLK берётся из BCLK
+без дополнительного GPIO, а slow P10 — внешний `CODEC_PWR_EN`, поскольку
+physical `CE` только address strap. S3 остаётся `31/3/2`; differential analog
+routing — открытое решение `IMP-0046`, поэтому firmware пока не фиксирует
+gain/mute/selector sequence.
 Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
 interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как

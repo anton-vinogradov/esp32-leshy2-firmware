@@ -40,6 +40,10 @@
   `HMX035CTFT-001` и проводят ревью его 40-contact fit без изменения S3
   `31/3/2`; production ordering/drawing/connector, optics, init table и HIL
   остаются открыты.
+  Hardware `AUDIO-0001/REV-0005B` также вносят exact I2C/I2S contacts
+  `ES8311` QFN-20 без изменения бюджета. `CE` — fixed address strap `0x19`,
+  P10 — внешний `CODEC_PWR_EN`. `FND-0065/IMP-0046` оставляют открытыми exact
+  differential analog routing и power implementation.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
@@ -85,8 +89,9 @@
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
   нельзя драйвить до specimen proof его direction/timing ambiguity.
-  `FND-0060` оставляет открытыми exact display/codec/IR, STOP/supervisor,
-  load-switch/isolation, audio/Unit protection и service mechanics.
+  `FND-0060` оставляет открытыми production display details, codec power/
+  analog routing, exact IR, STOP/supervisor, load-switch/isolation, audio/Unit
+  protection и service mechanics.
   Hardware `DEC-0051` теперь публикует эту карту в target README как visible
   principle-level working design для G3, не превращая её в frozen HAL/G7.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
@@ -95,6 +100,9 @@
   kit. Для firmware это означает explicit antenna MPN/profile, disarm при его
   смене и безусловный запрет TX при unknown/mismatch; SMA сам по себе identity
   не доказывает.
+- ⚠️ Предложение hardware `IMP-0046` ожидает решения по exact ES8311 analog
+  routing. Firmware сохраняет hardware bypass и не фиксирует gain/mute/
+  selector sequencing до его закрытия.
 - Следующий upstream ход: reviewed `PIN-0003` уже позволяет начать G3 —
   адаптацию legacy physical/product mockup и проверку conceptual placement.
   Параллельно hardware закрывает `IMP-0043/FND-0058/FND-0060`, выбирает exact
