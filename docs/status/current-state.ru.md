@@ -137,6 +137,13 @@
   CAT24C512, TVS2200, общий SYS-I2C0/IRQ, подписанное dual-region обновление
   policy и reset-default запрет заряда. ARC-0002 теперь потребляет этот runtime
   contract.
+  Затем hardware `PWR-0005/FND-0075` проводят ревью всё ещё открытого выбора
+  cell manager: integrated gauge защищает и измеряет уже допущенный stack, но
+  сам не может квалифицировать две свободно заменяемые ячейки до замыкания
+  pack boundary. Поэтому `IMP-0054` сравнивает exact fail-closed связки gauge
+  и always-on admission controller. MPN manager и firmware owner пока не
+  приняты; замена любой ячейки всегда сбрасывает прежние SOC/SOH пары и
+  запускает admission/relearning заново.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

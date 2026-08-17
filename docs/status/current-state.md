@@ -135,6 +135,12 @@
   review exact TPS25751D/BQ25798, mandatory recoverable CAT24C512 EEPROM,
   TVS2200, shared SYS-I2C0/IRQ behavior, signed dual-region policy updates and
   reset-default charge disable. ARC-0002 now consumes that runtime contract.
+  Hardware `PWR-0005/FND-0075` next review the still-open cell-manager gate:
+  an integrated gauge protects and measures an admitted stack but cannot by
+  itself qualify two loose cells before pack closure. `IMP-0054` therefore
+  compares exact fail-closed gauge plus always-on admission-controller
+  topologies. No manager MPN or firmware owner is accepted yet; a replaced
+  cell always invalidates prior pair SOC/SOH and starts admission/relearning.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
