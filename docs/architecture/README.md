@@ -26,6 +26,7 @@ physical RF, exact parts/power and HIL remain open. Hardware `DEC-0047` closes
 the policy choice with a qualified internal envelope; `N24H-0001` separates
 the ordered ESP32-DIV `L0` pre-HIL observer from target Leshy2 `T1`.
 `DEC-0048` adds external-SMA port/antenna identity to the runtime manifest;
+`DEC-0050` adds assembly polarity metadata without changing logical paths;
 exact production hardware and measurements remain pending.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new

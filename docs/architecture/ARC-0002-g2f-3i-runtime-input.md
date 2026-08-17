@@ -134,10 +134,11 @@ U.FL/MHF I/AMC-compatible S3/C5 connectors from Ebyte's undocumented generic
 `IPX` name. Firmware/test manifests must record exact module lot, harness MPN,
 length and measured feed identity; they must not merge S3/C5/nRF feeds under
 one generic pigtail SKU before the Ebyte specimen-fit/VNA gate. External
-standard-versus-RP SMA choice `IMP-0042` changes assembly metadata, not the
-nine logical path identities. Hardware `RFH-0002/REV-0004S` narrows the mixed
-candidate to RP-SMA only for the two native-Wi-Fi paths and standard SMA for
-the other seven; exact qualified antenna MPN remains an upstream hardware gate.
+standard-versus-RP SMA choice changes assembly metadata, not the nine logical
+path identities. Hardware `DEC-0050/REV-0004T` fixes RP-SMA jack/pin only for
+`S3-2G4` and `C5-2G4/5`; the other seven use standard SMA jack/socket. The
+detachable mates are respectively RP-SMA plug/socket and standard SMA
+plug/pin. Exact qualified antenna MPN remains an upstream hardware gate.
 
 Hardware `ANT-0001/REV-0004P` further proves that the Si4732 receiver has two
 physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. `DEC-0049` selects

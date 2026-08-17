@@ -59,15 +59,16 @@
   Hardware `RFH-0001/REV-0004R` подтверждают first-generation U.FL/MHF I/AMC
   только для S3/C5; Ebyte пишет generic `IPX`, поэтому `FND-0057` требует
   specimen-fit/VNA gate. `RFH-0002/REV-0004S` проверяют реальные antenna
-  ecosystems и переводят `IMP-0042` в выбор uniform standard SMA против
-  ограниченного `2 native-Wi-Fi RP-SMA + 7 standard SMA`; девять runtime
-  identities от polarity не меняются.
+  ecosystems; `DEC-0050/REV-0004T` принимают ограниченный
+  `2 native-Wi-Fi RP-SMA + 7 standard SMA`. Девять runtime identities от
+  polarity не меняются; exact antenna shortlist остаётся upstream gate.
   Та же hardware проверка фиксирует `FND-0056`: SA518 rev 1.1 не выводит
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`, а pin-17 UPDATE/recovery остаётся fixture gate.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: hardware решает `IMP-0042`, затем выбирает exact production nRF MPN/lot и
+- Следующий upstream gate: hardware выбирает exact current-orderable antenna
+  shortlist, затем exact production nRF MPN/lot и
   SMA/feed/protection/antenna-profile implementation, переводит `N24H-0001`
   из `L0` в target `T1`, затем закрывает
   measured full-mix points,

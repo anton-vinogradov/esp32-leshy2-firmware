@@ -113,8 +113,9 @@ AM/LW accepts only a manifest-qualified loop/pod profile. Hardware
 `RFH-0001/FND-0057` forbid treating generic Ebyte `IPX` as proven U.FL/MHF I;
 the specimen-fit/VNA gate remains mandatory. `RFH-0002/REV-0004S` show RP-SMA
 as typical for native Wi-Fi, standard SMA in Ebyte/nRF and both polarities in
-sub-GHz. `IMP-0042` therefore compares uniform standard SMA with a bounded
-`2 RP-SMA + 7 standard SMA` option without changing runtime identities.
+sub-GHz. `DEC-0050/REV-0004T` accept bounded `2 RP-SMA + 7 standard SMA`
+without changing runtime identities; polarity becomes assembly metadata and
+the exact antenna shortlist remains an upstream gate.
 `FND-0056` also replaces
 the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
 its UPDATE recovery fixture open. No observer is a
