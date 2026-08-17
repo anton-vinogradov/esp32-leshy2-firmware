@@ -45,12 +45,16 @@
   P10 — внешний `CODEC_PWR_EN`. `FND-0065/IMP-0046` оставляют открытыми exact
   whole analog routing и power implementation; `FND-0066` дополнительно
   фиксирует ES8311 line-input warning и differential capability PAM8302A.
+  `AUDIO-0002/REV-0005C` проводят ревью всего capture/playback/TX/reset тракта.
+  `FND-0067` исправляет пропущенный ordinary RX-source control на slow P27 и
+  показывает, что P11/P12 могут остаться старыми при S3-only reset.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
   RP2354B/QFN80, пять независимых radio/accessory SPI paths, dedicated 4-bit
-  SDIO S3↔C5, dedicated SPI3 S3↔RP, 23/24 slow endpoints и изолированный U214
-  I²C. Единственная high-rate scheduled pair — display+SD на SPI2 с bounded
+  SDIO S3↔C5, dedicated SPI3 S3↔RP, тогдашние 23/24 slow endpoints и
+  изолированный U214 I²C. Последующее audio review занимает последний контакт.
+  Единственная high-rate scheduled pair — display+SD на SPI2 с bounded
   quantum; radio FIFO/IPC её не ждут. C5 UART0+EN/BOOT/strap остаётся recovery
   path, потому что GPIO13/14 заняты SDIO. Firmware consequence зафиксирован в
   `ARC-0002`. Повторная exact-device проверка обнаружила и исправила crossing
@@ -85,7 +89,7 @@
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`. Новый hardware `PIN-0003/REV-0004V` провёл
   ревью machine-generated principle owner/net/pad atlas. Текущий бюджет:
-  S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O `23/1/0`; прежние значения
+  S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
   C5/RP были stale и исправлены через `FND-0059`. SA518 UART/PTT/activity и
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
@@ -101,12 +105,14 @@
   kit. Для firmware это означает explicit antenna MPN/profile, disarm при его
   смене и безусловный запрет TX при unknown/mismatch; SMA сам по себе identity
   не доказывает.
-- ⚠️ Предложение hardware `IMP-0046` ожидает решения по exact ES8311 analog
-  routing. Firmware сохраняет hardware bypass и не фиксирует gain/mute/
-  selector sequencing до его закрытия.
+- ⚠️ Предложение hardware `IMP-0046/A` ожидает одного решения по всему тракту:
+  сохранить ES8311, добавить active high-Z capture, differential speaker и
+  отдельный attenuated TX selector, а direct S3 GPIO6 `AUDIO_ARM` использовать
+  для возврата analog defaults при reset даже со старыми P11/P12. Firmware не
+  назначает этот GPIO и не фиксирует gain/mute/selector sequencing до принятия.
 - Следующий upstream ход: reviewed `PIN-0003` уже позволяет начать G3 —
   адаптацию legacy physical/product mockup и проверку conceptual placement.
-  Параллельно hardware закрывает `IMP-0043/FND-0058/FND-0060`, выбирает exact
+  Параллельно hardware закрывает `IMP-0043/IMP-0046/FND-0058/FND-0060/FND-0067`, выбирает exact
   production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
   target `T1`. Затем обязательны measured full-mix, quiet-state, RF/
   self-desense, signal-integrity, service и HIL gates. Paper pinout остаётся

@@ -34,7 +34,7 @@ and measurements remain pending under `FND-0058`.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `31/3/2`, C5 `14/6/1`, RP
-`48/0/0` and slow I/O `23/1/0`; exact SA518 service and Si4732 control/antenna
+`48/0/0` and slow I/O `24/0/0`; exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
@@ -55,8 +55,12 @@ QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable. The S3
 budget remains `31/3/2`. `FND-0065/0066/IMP-0046` leave the whole analog path
 open: PAM8302A can take differential audio, while the ES8311 ADC is documented
-as microphone-oriented rather than a recommended line input. Firmware cannot
-freeze gain/mute or routing registers yet.
+as microphone-oriented rather than a recommended line input. Hardware
+`AUDIO-0002/REV-0005C/FND-0067` now add the missing P27 RX-source control and
+compare the complete high-Z capture, differential playback, attenuated TX and
+reset-default paths. Recommended `IMP-0046/A` would consume direct GPIO6 as
+`AUDIO_ARM`, changing S3 to `32/3/1`, but is not yet accepted or machine
+allocated. Firmware cannot freeze gain/mute or routing registers yet.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

@@ -15,6 +15,7 @@
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - feed-interface review: [`RFH-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFH-0001-module-to-external-sma-interface-review.md)
 - exact codec fit: [`AUDIO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0001-es8311-exact-electrical-fit.md), [`REV-0005B`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005B-es8311-digital-fit-and-analog-gap.md)
+- complete audio-path review: [`AUDIO-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0002-complete-audio-path-comparison.md), [`FND-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0067-audio-source-select-and-reset-bypass.md), [`REV-0005C`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005C-complete-audio-path-prerequisites.md)
 - open analog topology: [`IMP-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0046-es8311-analog-routing-topology.md)
 
 ## Boundary
@@ -52,8 +53,10 @@ later reduced by `DEC-0052`, which consumes S3 GPIO41/GPIO42 for QSPI D2/D3.
 It is therefore S3=2, C5=1 and RP=0; firmware cannot invent another direct RP
 control. Hardware `PIN-0003/REV-0004V/0004X` derive these figures from the
 machine source: S3 is `31 used / 3 reserved / 2 free`, C5 is `14/6/1`, RP is `48/0/0`,
-and the slow plane is `23/1/0`. The previously published C5/RP reserve was
-stale and is corrected by `FND-0059`.
+and the slow plane is `24/0/0` after `FND-0067` assigns the previously omitted
+ordinary `RX_AUDIO_SOURCE_SEL` to P27. The previously published C5/RP reserve
+was stale and is corrected by `FND-0059`. Proposed direct GPIO6 `AUDIO_ARM`
+would change S3 to `32/3/1`, but remains unaccepted and is not a machine input.
 
 ## Mandatory scheduler/queue contract
 
@@ -78,6 +81,8 @@ stale and is corrected by `FND-0059`.
   ≥4.0 MB/s, 1.5 MB/s record and survival of a measured 250 ms card stall.
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
+  P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
+  a safety-deadline line and does not assert PTT.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
@@ -121,7 +126,9 @@ stale and is corrected by `FND-0059`.
 8. every non-member quiet-state transition, no-back-power/fault injection and
    active-receiver desense under maximum valid system-plane traffic.
 9. ES8311 address/readback, BCLK-derived simultaneous ADC+DAC, power-off
-   no-backfeed and hardware-default analog bypass under reset/watchdog/fault.
+   no-backfeed and hardware-default analog bypass under reset/watchdog/fault,
+   including stale P11/P12 after S3-only reset and proof that arm-low overrides
+   both selector requests if `IMP-0046/A` is accepted.
 
 The fixture has two explicitly different evidence levels. Ordered ESP32-DIV
 units form `L0 DIV↔DIV` pre-HIL: they validate the manifest/log workflow and
@@ -198,19 +205,36 @@ are proven ready. Any codec/readback/DMA/watchdog fault stops I2S, returns
 bypass and leaves PTT off.
 
 Exact ADC `MIC1P/MIC1N` and DAC `OUTP/OUTN` are differential. Hardware
-`FND-0065/0066/IMP-0046` therefore keep the conditioner/selector circuit open.
-The PAM8302A physically accepts differential input even though legacy wiring
-is single-ended; conversely, the ES8311 user guide calls its ADC input a
-microphone interface not recommended for blind line-input use. Firmware must
-not hide either distinction behind a generic `audio_route` abstraction.
-Firmware may define logical capture/playback/inject modes, but must not freeze
-gain, mute timing, codec register script or claim lossless TX/speaker routing
-before that owner decision and electrical/HIL closure.
+`AUDIO-0002/REV-0005C` reviews the complete path rather than treating the
+codec as an isolated endpoint:
+
+- ordinary Si4732/SA518 AFOUT analog bypass to PAM8302A remains available with
+  the codec off or faulty;
+- the selected RX source reaches the ADC only through a high-impedance capture
+  branch, because a direct ES8311 tap can load the Si4732 bypass;
+- both DAC legs reach both PAM8302A inputs through a dual selector; no central
+  differential-to-single-ended amplifier is required;
+- DAC-to-SA518 injection has its own selector and roughly 35–45 dB attenuation,
+  while electret-to-SA518 remains the default and audio selection never asserts
+  PTT;
+- P27 selects the ordinary receive source. P11/P12 request codec speaker/TX
+  routing but can remain stale when only S3 resets.
+
+Open `IMP-0046/A` recommends keeping ES8311, adding active high-Z capture, and
+gating both P11/P12 requests through an always-powered dual AND with direct
+pulled-low GPIO6 `AUDIO_ARM`. Arm-low would force both selectors to analog
+defaults independent of stale expander state and leave GPIO43 free. Passive
+capture stays a same-PCB DNP/cost-down experiment; TAC5111IRGER stays a more
+expensive new-driver reference. None of those proposed endpoints is normative
+before owner acceptance. Firmware may define logical capture/playback/inject
+modes, but must not freeze gain, mute timing, codec register script or claim
+lossless TX/speaker routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060` lists the remaining `abstract:*` electrical endpoints:
-display connector/backlight/protection/sourcing, exact codec power and analog routing, IR
+Hardware `FND-0060/0067` list the remaining `abstract:*` electrical endpoints:
+display connector/backlight/protection/sourcing, exact codec power, analog
+routing and reset-safe selector logic, IR
 frontends/driver/evidence, hard STOP latch, power/current/thermal supervision,
 load switching/isolation, audio selectors, Unit protection and service-
 connector mechanics. Firmware must not infer drivers, levels or safe states

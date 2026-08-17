@@ -114,8 +114,15 @@ the BCLK-derived mode with no extra GPIO, and slow P10 is external
 `CODEC_PWR_EN` because physical `CE` is only the address strap. S3 remains
 `31/3/2`; `FND-0066` additionally notes that PAM8302A accepts differential
 input but the ES8311 ADC is microphone-oriented and not recommended blindly
-for line input. The whole analog path remains `IMP-0046`; firmware does not
-freeze its gain/mute/selector sequence.
+for line input. Hardware `AUDIO-0002/REV-0005C` now reviews the complete path,
+not just the codec: a direct ADC tap can load ordinary Si4732 bypass, SA518 TX
+needs a separately attenuated DAC branch, and slow-expander selector outputs
+can remain stale through S3 reset. The omitted ordinary RX-source selector is
+corrected on slow P27, making slow I/O `24/0/0`. `IMP-0046/A` remains an open
+owner proposal: ES8311 plus active high-Z capture, differential speaker and
+separate TX selectors, with their P11/P12 requests gated by direct GPIO6
+`AUDIO_ARM`. Firmware does not freeze that unaccepted GPIO, gain, mute or
+selector sequence.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
@@ -137,7 +144,7 @@ upstream gates.
 `FND-0056` also replaces the false SA518 `SQ` pin with a qualified-only
 `VOICE_ACTIVITY` input. `PIN-0003/REV-0004V` review the machine-generated
 principled owner/net/pad atlas: S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0` and slow
-I/O `23/1/0`; exact SA518 service and Si4732 control/antenna contacts are
+I/O `24/0/0`; exact SA518 service and Si4732 control/antenna contacts are
 represented. `FND-0060` keeps final electrical peripherals, STOP/supervisor,
 power/isolation and service mechanics open. No observer is a base-product
 dependency.
