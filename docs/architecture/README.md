@@ -44,9 +44,12 @@ input until atomic architecture.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch
-class and two HIL controller profiles. ARC-0002 still freezes only the
-scheduler/pin/resource contract: exact production MPN and vendor init table
-remain open in hardware `DSP-0004`.
+class and two HIL controller profiles. Hardware `DSP-0005/REV-0005A` now
+instantiate exact current assembly candidate `HMX035CTFT-001`; GPIO39 is touch
+IRQ and slow P06/P07 terminate display/touch reset without changing the
+`31/3/2` S3 budget. ARC-0002 still freezes only the scheduler/pin/resource
+contract: production ordering/drawing/connector and vendor init table remain
+open.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

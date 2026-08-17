@@ -35,8 +35,11 @@
   GPIO41/42 и `≤1 ms` time-based arbitration. `DSP-0003/REV-0004Y` оставляют
   фактическую базу, а `DEC-0053/REV-0004Z` принимают 3.5-inch portrait
   `320×480` IPS QSPI+touch class. `DLE06235B/ES3C35P` (`ST77922`) — primary
-  HIL, Waveshare SKU `31137` (`AXS15231B`) — secondary HIL; exact production
-  panel/connector, optics, init table и HIL остаются открыты в `DSP-0004`.
+  HIL, Waveshare SKU `31137` (`AXS15231B`) — secondary HIL. Hardware
+  `FND-0063/DSP-0005/REV-0005A` устанавливают exact current assembly candidate
+  `HMX035CTFT-001` и проводят ревью его 40-contact fit без изменения S3
+  `31/3/2`; production ordering/drawing/connector, optics, init table и HIL
+  остаются открыты.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:

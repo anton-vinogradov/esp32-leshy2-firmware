@@ -103,8 +103,11 @@ paper map with independent radio buses/IPC and bounded display+SD sharing.
 Hardware `DEC-0052/REV-0004X` accept direct QSPI on S3 GPIO41/42 and `<=1 ms`
 display occupancy. Hardware `DEC-0053/REV-0004Z` accept a 3.5-inch portrait
 `320×480` IPS direct-QSPI capacitive-touch class with `ST77922` primary HIL
-and `AXS15231B` secondary HIL. Production panel/connector MPN and init table
-remain open in hardware `DSP-0004`; neither development board is target BOM.
+and `AXS15231B` secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A`
+identify exact current assembly candidate `HMX035CTFT-001` and review its
+40-contact fit: GPIO39 is touch IRQ, GPIO41/42 are QSPI D2/D3 and slow P06/P07
+are display/touch reset. Production ordering/drawing/connector and vendor init
+table remain open; neither development board is target BOM.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early

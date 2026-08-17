@@ -104,8 +104,11 @@ map с независимыми radio buses/IPC и bounded display+SD sharing. H
 `DEC-0052/REV-0004X` принимают direct QSPI на S3 GPIO41/42 и `≤1 ms`
 display occupancy. Hardware `DEC-0053/REV-0004Z` принимают 3.5-inch portrait
 `320×480` IPS direct-QSPI capacitive-touch class с `ST77922` primary HIL и
-`AXS15231B` secondary HIL. Production panel/connector MPN и init table остаются
-открытыми в hardware `DSP-0004`; ни одна dev board не является target BOM.
+`AXS15231B` secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A` устанавливают
+exact current assembly candidate `HMX035CTFT-001` и проводят ревью его
+40-contact fit: GPIO39 — touch IRQ, GPIO41/42 — QSPI D2/D3, slow P06/P07 —
+display/touch reset. Production ordering/drawing/connector и vendor init table
+остаются открыты; ни одна dev board не является target BOM.
 Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
 interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как

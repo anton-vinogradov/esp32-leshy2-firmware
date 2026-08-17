@@ -173,18 +173,22 @@ contacts.
 ## Explicitly open
 
 Hardware `FND-0060` lists the remaining `abstract:*` electrical endpoints:
-exact display/touch and codec packages, IR frontends/driver/evidence, hard STOP
-latch, power/current/thermal supervision, load switching/isolation, audio
-selectors, Unit protection and service-connector mechanics. Firmware must not
-infer drivers, levels or safe states for those boundaries before they close.
+display connector/backlight/protection/sourcing, exact codec package, IR
+frontends/driver/evidence, hard STOP latch, power/current/thermal supervision,
+load switching/isolation, audio selectors, Unit protection and service-
+connector mechanics. Firmware must not infer drivers, levels or safe states
+for those boundaries before they close.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
 `DEC-0053/REV-0004Z` additionally accept a 3.5-inch portrait `320×480` IPS
 QSPI+touch class, with `ST77922` primary HIL and `AXS15231B` secondary HIL.
+Hardware `FND-0063/DSP-0005/REV-0005A` additionally instantiate exact current
+assembly candidate `HMX035CTFT-001`: S3 GPIO39 is touch IRQ, GPIO41/42 are
+QSPI D2/D3, slow P06/P07 are display/touch reset and GPIO6/GPIO43 remain free.
 Firmware may implement reusable scheduler and distinct prototype driver
-profiles, but cannot freeze a production controller/panel MPN, touch protocol
-or vendor init table before the `DSP-0004` sourcing and specimen proof gates.
+profiles, but cannot freeze a production-qualified assembly, touch protocol or
+vendor init table before the sourcing and specimen proof gates.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open

@@ -36,8 +36,10 @@
   `DSP-0003/REV-0004Y` retain the factual basis, while `DEC-0053/REV-0004Z`
   accept a 3.5-inch portrait `320×480` IPS QSPI+touch class.
   `DLE06235B/ES3C35P` (`ST77922`) is primary HIL and Waveshare SKU `31137`
-  (`AXS15231B`) secondary HIL; exact production panel/connector, optics, init
-  table and HIL remain open in `DSP-0004`.
+  (`AXS15231B`) secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A`
+  identify exact current assembly candidate `HMX035CTFT-001` and review its
+  40-contact fit without changing S3 `31/3/2`; production ordering/drawing/
+  connector, optics, init table and HIL remain open.
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
