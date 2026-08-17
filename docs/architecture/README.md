@@ -42,9 +42,11 @@ Hardware `DEC-0051` publishes the same projection in its target README as the
 visible G3 working design; firmware still treats it as reopenable upstream
 input until atomic architecture.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
-and `<=1 ms` display occupancy reviewed runtime inputs. Exact panel/controller
-remains open under `DSP-0003/IMP-0045`, so ARC-0002 freezes the scheduler and
-pin/resource contract, not an ST77922/AXS15231B driver or init table.
+and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
+`DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch
+class and two HIL controller profiles. ARC-0002 still freezes only the
+scheduler/pin/resource contract: exact production MPN and vendor init table
+remain open in hardware `DSP-0004`.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

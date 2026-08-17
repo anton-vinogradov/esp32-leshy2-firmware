@@ -101,8 +101,10 @@ Firmware implementation has not started. Repeated hardware G2 review is closed;
 hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
 paper map with independent radio buses/IPC and bounded display+SD sharing.
 Hardware `DEC-0052/REV-0004X` accept direct QSPI on S3 GPIO41/42 and `<=1 ms`
-display occupancy. `DSP-0003/IMP-0045` still select the new 3.5-inch screen
-class; the target does not yet promise an exact panel/controller.
+display occupancy. Hardware `DEC-0053/REV-0004Z` accept a 3.5-inch portrait
+`320×480` IPS direct-QSPI capacitive-touch class with `ST77922` primary HIL
+and `AXS15231B` secondary HIL. Production panel/connector MPN and init table
+remain open in hardware `DSP-0004`; neither development board is target BOM.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early

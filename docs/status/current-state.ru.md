@@ -33,8 +33,10 @@
   `FND-0061`: U214 уже находится на dedicated RP bus, поэтому limit устарел.
   `DEC-0052/REV-0004X` закрывают находку: принимают direct QSPI на S3
   GPIO41/42 и `≤1 ms` time-based arbitration. `DSP-0003/REV-0004Y` оставляют
-  ⚠️ предложение `IMP-0045`: новый 3.5-inch QSPI class против старого 4-inch
-  A0 fixture; exact display/optics и HIL открыты.
+  фактическую базу, а `DEC-0053/REV-0004Z` принимают 3.5-inch portrait
+  `320×480` IPS QSPI+touch class. `DLE06235B/ES3C35P` (`ST77922`) — primary
+  HIL, Waveshare SKU `31137` (`AXS15231B`) — secondary HIL; exact production
+  panel/connector, optics, init table и HIL остаются открыты в `DSP-0004`.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:

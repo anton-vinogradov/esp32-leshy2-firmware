@@ -33,8 +33,11 @@
   map. Hardware `DSP-0002/REV-0004W` record `FND-0061`: U214 is already on a
   dedicated RP bus, so that limit is stale. `DEC-0052/REV-0004X` close it by
   accepting direct QSPI on S3 GPIO41/42 and `<=1 ms` time-based arbitration.
-  `DSP-0003/REV-0004Y` leave ⚠️ proposal `IMP-0045`: a new 3.5-inch QSPI class
-  versus the old 4-inch A0 fixture; exact display/optics and HIL remain open.
+  `DSP-0003/REV-0004Y` retain the factual basis, while `DEC-0053/REV-0004Z`
+  accept a 3.5-inch portrait `320×480` IPS QSPI+touch class.
+  `DLE06235B/ES3C35P` (`ST77922`) is primary HIL and Waveshare SKU `31137`
+  (`AXS15231B`) secondary HIL; exact production panel/connector, optics, init
+  table and HIL remain open in `DSP-0004`.
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:

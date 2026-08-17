@@ -179,10 +179,12 @@ selectors, Unit protection and service-connector mechanics. Firmware must not
 infer drivers, levels or safe states for those boundaries before they close.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
-the time-based arbitration contract are now runtime inputs. `DSP-0003/IMP-0045`
-keep the exact display class/controller open; firmware may implement reusable
-QSPI scheduler/driver interfaces but cannot freeze an ST77922, AXS15231B,
-touch protocol or panel init table before that decision and specimen proof.
+the time-based arbitration contract are now runtime inputs. Hardware
+`DEC-0053/REV-0004Z` additionally accept a 3.5-inch portrait `320×480` IPS
+QSPI+touch class, with `ST77922` primary HIL and `AXS15231B` secondary HIL.
+Firmware may implement reusable scheduler and distinct prototype driver
+profiles, but cannot freeze a production controller/panel MPN, touch protocol
+or vendor init table before the `DSP-0004` sourcing and specimen proof gates.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open
