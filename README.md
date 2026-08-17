@@ -107,8 +107,9 @@ interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
 revision. `DEC-0048` fixes three nRF IPEX→external-SMA paths and external SMA
 for every onboard antenna endpoint; firmware records port/antenna identity in
 the TX manifest. Hardware `ANT-0001` now proves separate Si4732 FM/SW and
-AM/LW antenna domains; the open `IMP-0041` eight-vs-nine SMA decision does not
-allow firmware to merge their profile identities. `FND-0056` also replaces
+AM/LW antenna domains; `DEC-0049` accepts nine labelled SMA and separate
+`RX-FM/SW`/`RX-AM/LW` paths. Firmware does not merge their identities, and
+AM/LW accepts only a manifest-qualified loop/pod profile. `FND-0056` also replaces
 the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
 its UPDATE recovery fixture open. No observer is a
 base-product dependency. Its firmware

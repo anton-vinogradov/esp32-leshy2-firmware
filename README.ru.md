@@ -108,8 +108,9 @@ interfaces. `DEC-0047/N24H-0001` используют заказанный вт�
 Leshy2 revision. `DEC-0048` фиксирует три nRF IPEX→external-SMA paths и внешний
 SMA для всех бортовых antenna endpoints; firmware сохраняет port/antenna
 identity в TX manifest. Hardware `ANT-0001` подтверждает отдельные Si4732
-FM/SW и AM/LW antenna domains; открытый выбор `IMP-0041` между 8 и 9 SMA не
-разрешает firmware объединять их profile identities. `FND-0056` также
+FM/SW и AM/LW antenna domains; `DEC-0049` принимает девять labelled SMA и
+раздельные `RX-FM/SW`/`RX-AM/LW`. Firmware не объединяет их identities, а
+AM/LW допускает только manifest-qualified loop/pod profile. `FND-0056` также
 заменяет ложную SA518 `SQ` pin на qualified-only `VOICE_ACTIVITY` и оставляет
 открытым UPDATE recovery fixture. Ни один observer не
 является зависимостью base product.

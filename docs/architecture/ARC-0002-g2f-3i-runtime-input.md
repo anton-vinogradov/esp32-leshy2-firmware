@@ -10,6 +10,7 @@
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
+- exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 
 ## Boundary
 
@@ -128,10 +129,12 @@ selected band/path/antenna profile, permitted power and qualified feed loss.
 External M5 accessories report their own antenna identity separately.
 
 Hardware `ANT-0001/REV-0004P` further proves that the Si4732 receiver has two
-physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. Until `IMP-0041`
-selects nine dedicated SMA or an eight-port switched implementation, firmware
-must retain two logical antenna-profile identities and must not treat a generic
-`RX` connector, cable or antenna as compatible with both.
+physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. `DEC-0049` selects
+nine dedicated SMA, including separate `RX-FM/SW` and `RX-AM/LW`. Firmware
+must retain both logical antenna-profile identities and must not treat a generic
+`RX` connector, cable or antenna as compatible with both. The AM/LW profile
+accepts only a manifest-qualified direct loop/pod or buffered implementation;
+arbitrary long coax remains default-denied.
 
 Hardware `FND-0056` also removes a false SA518 assumption: rev 1.1 has no
 dedicated `SQ` contact. The runtime input is therefore neutral
