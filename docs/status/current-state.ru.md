@@ -22,27 +22,32 @@
   факты 6 GHz/Wi-Fi 6E; `DEC-0040/REV-0002AR` полностью отклоняют его.
   `REV-0002AS` закрывает repeat G2; hardware `DEC-0041` вводит G2F logical/
   electrical feasibility до физического макета. Hardware `DEC-0042/REV-0003Y`
-  проверяют единый exact-device/net source и две structurally checked draft-карты.
+  проверяют единый exact-device/net source; теперь он имеет три structurally
+  checked maps и ведущий `G2F-3I`.
   Hardware `DSP-0001/REV-0003Z` проверяют три реальные display/touch boundaries
   и один microSD socket. `FND-0051` отвергает старый generic 24-pin display
   mapping и доказывает, что ST7796S не выполняет унаследованный gate 4.5 MB/s;
   hardware `DEC-0043/REV-0004J` принимают task/dirty-region rendering,
   critical/menu first feedback `≤100 ms` и исправленный 256 B shared-U214
   display quantum; exact display/optics и HIL остаются открыты.
-  Следующий hardware pass `CTL-0001/REV-0004K` доказал, что draft validator
-  закрывает MCU GPIO, но не все slow endpoints: TCA9535 распределён только на
-  5/16 либо 3/16 портов. Внешний U214/Port-A I²C также требует fault isolation
-  от internal UI/audio bus. `⚠️ IMP-0037` предлагает рабочий envelope `≥24`
-  slow endpoints, direct U214 IRQ, bounded UI/touch polling и separated I²C
-  domains; решение владельца открыто. Native USB+EN/BOOT остаётся текущим S3
-  recovery baseline, недоказанный UART0 fallback снят.
+  Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
+  Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
+  `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
+  RP2354B/QFN80, пять независимых radio/accessory SPI paths, dedicated 4-bit
+  SDIO S3↔C5, dedicated SPI3 S3↔RP, 23/24 slow endpoints и изолированный U214
+  I²C. Единственная high-rate scheduled pair — display+SD на SPI2 с bounded
+  quantum; radio FIFO/IPC её не ждут. C5 UART0+EN/BOOT/strap остаётся recovery
+  path, потому что GPIO13/14 заняты SDIO. Firmware consequence зафиксирован в
+  `ARC-0002`. Повторная exact-device проверка обнаружила и исправила crossing
+  реального RP2354B PIO GPIO-window; теперь PIO data pins находятся в
+  `GPIO30…46`, fixed mux закреплён контрактами, а RP оставляет 7/12 PIO SM и
+  3/16 DMA в резерве. Physical RF/self-desense и HIL открыты.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: hardware закрывает exact peripherals, controller
-  concurrency, timing, power/service и HIL двух draft-карт `G2F-2R/G2F-3D`.
-  Их machine-checked GPIO accounting — evidence, а не owner/architecture
-  decision. `LAY-0001` P1/P2/P3 — reference; chip, owner, bus и pin не
-  зафиксированы.
+- Следующий upstream gate: hardware закрывает physical RF/self-desense, exact
+  peripherals, signal integrity, power/service и HIL ведущего `G2F-3I`.
+  Его reviewed paper ownership/pins/resources — вход, а не atomic target.
+  `G2F-2R/3D` и `LAY-0001` P1/P2/P3 остаются references.
 
 Hardware `FND-0039` обнаружил, что прежний процесс выбрал `SYN-3A`, exact
 owners и CAD до product design, whole-product optimality и conceptual
@@ -65,13 +70,14 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
 
 ## Отменённые target assumptions
 
-S3/C5/RP ownership, exact variants, три images, 1-bit SDIO, SPI+alert, exact
-pins, memory budgets и three-USB/DBG10 implementation нельзя потреблять как
-final firmware prerequisites. Это только candidate evidence.
+`G2F-3I` owners, RP2354B, 4-bit SDIO, SPI IPC и exact pins нельзя потреблять
+как final firmware prerequisites до atomic package. Бывшие 1-bit SDIO,
+RP2354A и three-USB/DBG10 assumptions тем более остаются reference evidence.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. Hardware сначала квалифицирует и
-проверяет одну рабочую G2F-карту, затем адаптирует legacy physical mockup и проходит whole-device
-optimality/conceptual placement/atomic architecture. После этого firmware
-заново выведет image/owner/IPC/HAL/update/test contract и начнёт implementation.
+Target code/toolchain пока не создаются. Hardware сначала квалифицирует
+physical RF, exact parts/power и HIL `G2F-3I`, затем адаптирует legacy physical
+mockup и проходит whole-device optimality/conceptual placement/atomic
+architecture. После этого firmware превратит `ARC-0002` input в normative
+image/owner/IPC/HAL/update/test contract и начнёт implementation.

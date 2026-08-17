@@ -1,6 +1,6 @@
 # Firmware architecture workspace
 
-- Status: **target-specific architecture blocked; hardware G2 delta and G3 research active**
+- Status: **target-specific architecture blocked; G2F-3I paper runtime input reviewed**
 - Superseding hardware decision: [`DEC-0032`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0032-reopen-product-design-before-cad.md)
 - Corrected method: [`FLOW-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/FLOW-0001-product-to-cad-gates.md)
 
@@ -14,6 +14,12 @@ IPC, pins or HAL before the hardware whole-device architecture is accepted.
 `SYN-3A` three-domain runtime study. Its typed-channel, local-deadline, lease,
 compatibility, update and failure ideas may be reused, but its S3/C5/RP owners,
 1-bit SDIO, SPI+alert, exact budgets and three-image lifecycle are not normative.
+
+[`ARC-0002`](ARC-0002-g2f-3i-runtime-input.md) records the leading `G2F-3I`
+paper map after hardware `DEC-0044/NIF-0001/REV-0004L`: independent radio
+buses, dedicated RP/C5 IPC, bounded display+SD scheduling and complete
+recovery inputs. It is a reviewed upstream input, not a target/HAL/toolchain
+freeze; physical RF, exact parts/power and HIL remain open.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

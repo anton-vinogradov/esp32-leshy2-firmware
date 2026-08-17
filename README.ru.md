@@ -98,10 +98,12 @@ safety boundaries.
 ## Состояние разработки
 
 Firmware implementation не начата. Повторное hardware G2 review закрыто;
-hardware G2F теперь имеет единый exact-device/net source и две structurally
-checked draft-карты. Exact peripherals, timing/power/HIL должны закрыться до
-того, как одна карта попадёт в адаптированный legacy physical mockup. Physical
-co-design, whole-device optimality, conceptual
+hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей reviewed paper
+map с независимыми radio buses/IPC и bounded display+SD sharing. Firmware
+consequences записаны в
+[`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
+RF, exact peripherals, power и HIL должны закрыться до адаптированного legacy
+physical mockup. Physical co-design, whole-device optimality, conceptual
 placement и новое atomic architecture decision обязаны предшествовать
 target-specific runtime/HAL/toolchain work. Бывший
 [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)

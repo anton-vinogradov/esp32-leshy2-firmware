@@ -23,27 +23,32 @@
   6 GHz/Wi-Fi 6E facts; `DEC-0040/REV-0002AR` fully reject it. Repeated G2 is
   closed by `REV-0002AS`; hardware `DEC-0041` inserts G2F logical/electrical
   feasibility before the physical mockup. Hardware `DEC-0042/REV-0003Y` now
-  review one exact-device/net source and two structurally checked draft maps.
+  review one exact-device/net source; it now has three structurally checked
+  maps and leading `G2F-3I`.
   Hardware `DSP-0001/REV-0003Z` verify three real display/touch boundaries and
   one microSD socket. `FND-0051` rejects the old generic 24-pin display mapping
   and proves that ST7796S cannot meet the inherited 4.5 MB/s gate. Hardware
   `DEC-0043/REV-0004J` accept task/dirty-region rendering, `≤100 ms` critical/
   menu first feedback and a corrected 256 B shared-U214 display quantum; exact
   display/optics and HIL remain open.
-  The next hardware pass `CTL-0001/REV-0004K` proves that the draft validator
-  closes MCU GPIO but not every slow endpoint: the TCA9535 has only 5/16 or
-  3/16 ports assigned. External U214/Port-A I²C also needs fault isolation from
-  the internal UI/audio bus. `⚠️ IMP-0037` proposes a `≥24`-endpoint working
-  envelope, direct U214 IRQ, bounded UI/touch polling and separated I²C
-  domains; the owner decision is open. Native USB+EN/BOOT remains the current
-  S3 recovery baseline; the unproved UART0-fallback claim is removed.
+  The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
+  The owner delegated layout search; hardware `DEC-0044` accepts
+  `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
+  RP2354B/QFN80, five independent radio/accessory SPI paths, dedicated 4-bit
+  SDIO S3↔C5, dedicated SPI3 S3↔RP, 23/24 slow endpoints and isolated U214 I²C.
+  The only high-rate scheduled pair is display+SD on SPI2 with bounded quanta;
+  radio FIFO/IPC never waits for it. C5 UART0+EN/BOOT/strap is the recovery
+  path because GPIO13/14 carry SDIO. Firmware consequences are recorded in
+  `ARC-0002`. A repeated exact-device check found and fixed an RP2354B PIO
+  GPIO-window crossing; PIO data now stays on `GPIO30..46`, fixed mux groups
+  are contracted, and the RP retains seven of twelve PIO state machines plus
+  three of sixteen DMA channels. Physical RF/self-desense and HIL remain open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware closes exact peripherals, controller concurrency,
-  timing, power/service and HIL for the two `G2F-2R/G2F-3D` draft maps. Their
-  machine-checked GPIO accounting is evidence, not an owner/architecture
-  decision. `LAY-0001` P1/P2/P3 is reference-only; no chip, owner, bus or pin
-  is fixed.
+- Next upstream gate: hardware closes physical RF/self-desense, exact
+  peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.
+  Its reviewed paper ownership/pins/resources are inputs, not an atomic target.
+  `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain references.
 
 Hardware `FND-0039` found that the prior process selected `SYN-3A`, exact owners
 and CAD before product design, whole-product optimality and conceptual
@@ -66,13 +71,14 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
 
 ## Invalidated target assumptions
 
-S3/C5/RP ownership, exact variants, three images, 1-bit SDIO, SPI+alert, exact
-pins, memory budgets and three-USB/DBG10 implementation cannot be consumed as
-final firmware prerequisites. They remain useful candidate evidence only.
+`G2F-3I` owners, RP2354B, 4-bit SDIO, SPI IPC and exact pins cannot be consumed
+as final firmware prerequisites before the atomic package. Former 1-bit SDIO,
+RP2354A and three-USB/DBG10 assumptions remain reference evidence only.
 
 ## Next firmware action
 
-No target code or toolchain is created yet. Hardware first qualifies and
-reviews one G2F working map, then adapts the legacy physical mockup and completes whole-device optimality,
-conceptual placement and atomic architecture. Firmware will then derive and
-review the new image/owner/IPC/HAL/update/test contract before implementation.
+No target code or toolchain is created yet. Hardware first qualifies physical
+RF, exact parts/power and HIL for `G2F-3I`, then adapts the legacy physical
+mockup and completes whole-device optimality, conceptual placement and atomic
+architecture. Firmware will then turn the `ARC-0002` input into the normative
+image/owner/IPC/HAL/update/test contract before implementation.

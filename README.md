@@ -97,11 +97,13 @@ physical ownership or safety boundaries.
 ## Development state
 
 Firmware implementation has not started. Repeated hardware G2 review is closed;
-hardware G2F now has one exact-device/net source and two structurally checked
-draft maps. Exact peripherals plus timing/power/HIL must close before one map
-can feed the adapted legacy physical mockup.
-Reviewed physical co-design, whole-device optimality, conceptual placement and
-a new atomic architecture decision must precede target-specific
-runtime/HAL/toolchain work.
+hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
+paper map with independent radio buses/IPC and bounded display+SD sharing. Its
+firmware consequences are recorded in
+[`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
+RF, exact peripherals, power and HIL must close before the adapted legacy
+physical mockup. Reviewed physical co-design, whole-device optimality,
+conceptual placement and a new atomic architecture decision must precede
+target-specific runtime/HAL/toolchain work.
 The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
 is retained only as candidate/reference evidence.
