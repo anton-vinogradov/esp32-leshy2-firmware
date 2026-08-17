@@ -18,8 +18,11 @@ compatibility, update and failure ideas may be reused, but its S3/C5/RP owners,
 [`ARC-0002`](ARC-0002-g2f-3i-runtime-input.md) records the leading `G2F-3I`
 paper map after hardware `DEC-0044/NIF-0001/REV-0004L`: independent radio
 buses, dedicated RP/C5 IPC, bounded display+SD scheduling and complete
-recovery inputs. It is a reviewed upstream input, not a target/HAL/toolchain
-freeze; physical RF, exact parts/power and HIL remain open.
+recovery inputs. It also records hardware `DEC-0045/0046`: one active
+top-level group, `SG-N24` as three concurrently full-function PTX/PRX radios,
+and verified quiet states for every unused interface. It is a reviewed upstream
+input, not a target/HAL/toolchain freeze; exact nRF mixed-RF acceptance,
+physical RF, exact parts/power and HIL remain open.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

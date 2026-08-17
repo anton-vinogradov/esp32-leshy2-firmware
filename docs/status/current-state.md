@@ -42,10 +42,17 @@
   `ARC-0002`. A repeated exact-device check found and fixed an RP2354B PIO
   GPIO-window crossing; PIO data now stays on `GPIO30..46`, fixed mux groups
   are contracted, and the RP retains seven of twelve PIO state machines plus
-  three of sixteen DMA channels. Physical RF/self-desense and HIL remain open.
+  three of sixteen DMA channels. Later `DEC-0045/0046` accept one top-level
+  signal group, while `SG-N24` still requires all three nRF concurrently
+  full-function in every PTX/PRX mix with no peer standby/gaps. Unused
+  interfaces enter hardware/native power-down and digital quiet states; RP
+  GPIO15/GPIO23 and C5 GPIO4 become group-level power controls. Exact mixed-RF
+  sensitivity `IMP-0039`, power parts, physical RF/self-desense and HIL remain
+  open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware closes physical RF/self-desense, exact
+- Next upstream gate: hardware selects `IMP-0039`, then closes the exact nRF
+  full-mix envelope, quiet-state power controls, physical RF/self-desense,
   peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.
   Its reviewed paper ownership/pins/resources are inputs, not an atomic target.
   `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain references.

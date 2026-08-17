@@ -50,8 +50,9 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
   остаются у владельца; irreversible lockdown optional и отделён.
 - Каждый выбранный programmable target независимо recoverable/diagnosable без
   исправного peer или application image.
-- Три полнофункциональных nRF24 сохраняют independent PTX/PRX, simultaneous RX
-  и явные timestamp/drop/overflow evidence.
+- Три полнофункциональных nRF24 сохраняют independent PTX/PRX и поддерживают
+  любой одновременный mix `3R/1T2R/2T1R/3T` без automatic peer standby или
+  скрытых RX gaps; exact mixed-RF sensitivity остаётся measured profile gate.
 - Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
   broadcast/audio, IR и qualified external GNSS/LoRa/NFC profiles сохраняют
   проверенные capability/safety boundaries.
@@ -99,8 +100,10 @@ safety boundaries.
 
 Firmware implementation не начата. Повторное hardware G2 review закрыто;
 hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей reviewed paper
-map с независимыми radio buses/IPC и bounded display+SD sharing. Firmware
-consequences записаны в
+map с независимыми radio buses/IPC и bounded display+SD sharing. Hardware
+`DEC-0045/0046` дополнительно требуют одну active top-level signal group,
+three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
+interfaces. Firmware consequences записаны в
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
 RF, exact peripherals, power и HIL должны закрыться до адаптированного legacy
 physical mockup. Physical co-design, whole-device optimality, conceptual

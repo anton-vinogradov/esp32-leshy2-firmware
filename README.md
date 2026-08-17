@@ -49,8 +49,9 @@ requires explicit acceptance of the non-aggression pledge.
   remain owner-controlled; irreversible lockdown is optional and separate.
 - Every selected programmable target remains independently recoverable and
   diagnosable without a healthy peer or application image.
-- Three full-function nRF24 paths retain independent PTX/PRX, simultaneous
-  reception and explicit timestamp/drop/overflow evidence.
+- Three full-function nRF24 paths retain independent PTX/PRX and support every
+  simultaneous `3R/1T2R/2T1R/3T` mix without automatic peer standby or hidden
+  RX gaps; exact mixed-RF sensitivity remains a measured profile gate.
 - Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
   broadcast/audio, IR and qualified external GNSS/LoRa/NFC profiles retain
   their reviewed capability and safety boundaries.
@@ -98,8 +99,10 @@ physical ownership or safety boundaries.
 
 Firmware implementation has not started. Repeated hardware G2 review is closed;
 hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
-paper map with independent radio buses/IPC and bounded display+SD sharing. Its
-firmware consequences are recorded in
+paper map with independent radio buses/IPC and bounded display+SD sharing.
+Hardware `DEC-0045/0046` additionally require one active top-level signal group,
+the three-radio `SG-N24` full mix and verified quiet states for every unused
+interface. Its firmware consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
 RF, exact peripherals, power and HIL must close before the adapted legacy
 physical mockup. Reviewed physical co-design, whole-device optimality,

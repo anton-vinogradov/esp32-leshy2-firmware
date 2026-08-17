@@ -5,6 +5,9 @@
 - Canonical hardware decision: [`DEC-0044`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0044-delegated-noninterference-layout.md)
 - Hardware artifact: [`NIF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NIF-0001-digital-noninterference-layout.md)
 - Exact generated map: [`G2F-pin-ledger`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-pin-ledger.md)
+- Signal groups: [`DEC-0045`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0045-one-active-signal-group.md)
+- Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
+- Open nRF RF acceptance: [`IMP-0039`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0039-three-nrf-full-mix-acceptance.md)
 
 ## Boundary
 
@@ -32,12 +35,19 @@ Persistent capacity is budgeted before runtime implementation: RP uses 5/12
 PIO state machines and 13/16 DMA channels; S3 uses 3/5 GDMA TX and 3/5 GDMA RX
 channels. The reserves are not permission for an unreviewed driver to claim a
 permanent channel: any new fixed DMA consumer changes the upstream contract.
+The quiet-state decision also consumes RP GPIO15/GPIO23 for common nRF and CC
+power gates and C5 GPIO4 for the IR frontend gate. Direct free GPIO reserve is
+therefore S3=4, C5=1 and RP=0; firmware cannot invent another direct RP control.
 
 ## Mandatory scheduler/queue contract
 
 - `nrf0`, `nrf1`, `nrf2`, `cc` and `u214` are separate event sources with
   independent IRQ timestamps, queues and overflow/drop counters. A shared
   worker may dispatch them, but no lock may serialize physical bus ownership.
+- `SG-N24` keeps all three nRF powered and active. Each independently selects
+  `PRX` or `PTX`; `3R`, `1T+2R`, `2T+1R` and `3T` must execute concurrently.
+  A local TX must not silently put peers in standby or create unreported RX
+  gaps. Physical sensitivity limits are profile evidence, not scheduler gaps.
 - RP↔S3 SPI must qualify ≥1.5 MB/s framed payload and alert-to-read ≤250 µs;
   control/safety events preempt bulk records and a stalled peer cannot retain
   TX authorization.
@@ -53,10 +63,32 @@ permanent channel: any new fixed DMA consumer changes the upstream contract.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
+## Signal-group and quiet-state contract
+
+- Exactly one top-level `active_signal_group` exists; boot/reset/fault/STOP
+  enters `NONE` with every TX hardware-off. `SG-N24` is one group containing
+  three concurrently full-function transceivers, not three mutually exclusive
+  groups.
+- Before a group switch, firmware revokes leases, proves actual TX off, stops
+  controllers/DMA, establishes endpoint-safe levels, isolates/high-Z signal
+  paths and only then rail-gates every non-member interface. Wake powers and
+  settles the endpoint while I/O remains isolated, then connects safe parked
+  signals. Failure or unknown evidence leaves `NONE`; prior TX state is never
+  restored.
+- S3 UI CPU, RP arbiter, power/fault supervision and required IPC remain system
+  planes. Their peripheral clocks run only for bounded transactions, and they
+  must pass active-receiver EMI HIL rather than being mislabeled powered-off.
+- No background scan, advertising, beacon, periodic service log, accessory
+  poll or update check may wake a non-member interface. It requires a visible
+  manifest member or an explicit group switch.
+- Quiet is verified from rail/current/status/actual-TX evidence where available;
+  a successful driver call alone is not proof.
+
 ## Firmware HIL that follows from this map
 
-1. simultaneous three-nRF PRX plus CC/U214 events with per-source latency,
-   overflow and unexplained-loss assertions;
+1. every simultaneous three-nRF `3R/1T2R/2T1R/3T` role mix with independent
+   channel/rate/address/session, per-source latency, overflow, loss/gap and
+   exact RF-profile evidence;
 2. RP IPC stress at accepted radio load while display, storage, audio and C5
    traffic run;
 3. C5 IPC control-priority/RTT, link-loss visibility and TX lease expiry under
@@ -64,15 +96,20 @@ permanent channel: any new fixed DMA consumer changes the upstream contract.
 4. display+SD scheduling, hot removal and injected 250 ms card stalls;
 5. U214 I²C stuck-low/hot-plug fault injection and independent Unit/internal
    bus operation;
-6. independent programming/recovery/diagnostics for all three domains.
+6. independent programming/recovery/diagnostics for all three domains;
 7. PIO instruction placement, DMA arbitration and SRAM-bank contention under
    the same simultaneous event load; static channel counts alone are not the
-   timing proof.
+   timing proof;
+8. every non-member quiet-state transition, no-back-power/fault injection and
+   active-receiver desense under maximum valid system-plane traffic.
 
 ## Explicitly open
 
-Independent digital buses do not prove RF coexistence. Same/adjacent-band
-transmitters can desensitize co-located receivers, and C5 protocols share
-on-chip RF/coexistence resources. Firmware must not promise arbitrary
-simultaneous RF operation until the hardware zoning/filter/antenna gate either
-qualifies it or publishes an explicit, visible time-sharing contract.
+Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
+requires real concurrent roles with no hidden time-sharing. What remains open
+is the measured channel/power/rate/antenna/wanted-level envelope: same/adjacent
+local TX can desensitize a weak peer RX, and same-channel packets also collide.
+Firmware must publish the exact qualified profile selected through `IMP-0039`;
+it must neither claim isolated sensitivity nor synthesize RX continuity by
+silently pausing peers. C5 protocols still share one native RF resource and use
+visible vendor coexistence inside their own group.
