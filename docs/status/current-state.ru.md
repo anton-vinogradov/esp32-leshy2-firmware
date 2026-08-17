@@ -48,12 +48,14 @@
   это забирает RP GPIO15/GPIO23 и C5 GPIO4 под group-level power gates. Exact
   envelope policy теперь принята `DEC-0047`; заказанный второй ESP32-DIV
   становится `L0 DIV↔DIV` pre-HIL observer в `N24H-0001`, но target pass
-  требует `T1` на exact Leshy2 revision. Exact modules, измеренные sensitivity
-  points, power parts, physical RF/self-desense и target HIL открыты.
+  требует `T1` на exact Leshy2 revision. `DEC-0048` принимает external SMA для
+  всех onboard antenna endpoints и три compact nRF IPEX→SMA paths. Exact
+  production lots/feeds, измеренные sensitivity points, power parts, physical
+  RF/self-desense и target HIL открыты.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: hardware решает `IMP-0040`, выбирает exact nRF
-  modules/antennas, переводит `N24H-0001` из `L0` в target `T1`, затем закрывает
+- Следующий upstream gate: hardware выбирает exact production nRF MPN/lot и
+  SMA/feed implementation, переводит `N24H-0001` из `L0` в target `T1`, затем закрывает
   measured full-mix points,
   quiet-state power controls, physical RF/self-desense,
   peripherals, signal integrity, power/service и HIL ведущего `G2F-3I`.

@@ -104,8 +104,10 @@ Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
 `L0 DIV↔DIV` pre-HIL observer; final pass requires `T1` on the exact Leshy2
-revision. No observer is a base-product dependency. Its firmware consequences
-are recorded in
+revision. `DEC-0048` fixes three nRF IPEX→external-SMA paths and external SMA
+for every onboard antenna endpoint; firmware records port/antenna identity in
+the TX manifest. No observer is a base-product dependency. Its firmware
+consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
 RF, exact peripherals, power and HIL must close before the adapted legacy
 physical mockup. Reviewed physical co-design, whole-device optimality,

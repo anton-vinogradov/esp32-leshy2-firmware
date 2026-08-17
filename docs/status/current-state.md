@@ -49,13 +49,14 @@
   GPIO15/GPIO23 and C5 GPIO4 become group-level power controls. Exact mixed-RF
   envelope policy is now accepted by `DEC-0047`; the ordered second ESP32-DIV
   becomes the `N24H-0001` `L0 DIV↔DIV` pre-HIL observer, but target pass
-  requires `T1` on the exact Leshy2 revision. Exact modules, measured
-  sensitivity points, power parts, physical RF/self-desense and target HIL
-  remain open.
+  requires `T1` on the exact Leshy2 revision. `DEC-0048` accepts external SMA
+  for all onboard antenna endpoints and three compact nRF IPEX→SMA paths.
+  Exact production lots/feeds, measured sensitivity points, power parts,
+  physical RF/self-desense and target HIL remain open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware decides `IMP-0040`, selects exact nRF
-  modules/antennas, advances `N24H-0001` from `L0` to target `T1`, then closes
+- Next upstream gate: hardware selects the exact production nRF MPN/lot and
+  SMA/feed implementation, advances `N24H-0001` from `L0` to target `T1`, then closes
   measured full-mix points, quiet-state power controls,
   physical RF/self-desense,
   peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.

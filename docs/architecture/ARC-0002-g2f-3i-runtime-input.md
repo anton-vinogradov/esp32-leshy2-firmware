@@ -9,6 +9,7 @@
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
+- external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 
 ## Boundary
 
@@ -118,6 +119,13 @@ identity, packet sequence and timestamps with recorded synchronization error.
 Role reversal on `L0` measures DIV asymmetry only; role reversal/reproducibility
 on `T1` closes target evidence. The observer is HIL equipment, not a runtime
 dependency of the base product.
+
+`DEC-0048` makes antenna identity part of every manifest. All onboard paths
+terminate at labelled external SMA; nRF0/1/2 map permanently to three distinct
+SMA positions through compact IPEX modules and short feeds. Firmware must not
+infer a correct antenna merely from connector presence: TX arming records the
+selected band/path/antenna profile, permitted power and qualified feed loss.
+External M5 accessories report their own antenna identity separately.
 
 ## Explicitly open
 
