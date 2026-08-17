@@ -11,6 +11,7 @@
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
+- feed-interface review: [`RFH-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFH-0001-module-to-external-sma-interface-review.md)
 
 ## Boundary
 
@@ -127,6 +128,14 @@ SMA positions through compact IPEX modules and short feeds. Firmware must not
 infer a correct antenna merely from connector presence: TX arming records the
 selected band/path/antenna profile, permitted power and qualified feed loss.
 External M5 accessories report their own antenna identity separately.
+
+Hardware `RFH-0001/FND-0057` distinguishes the verified first-generation
+U.FL/MHF I/AMC-compatible S3/C5 connectors from Ebyte's undocumented generic
+`IPX` name. Firmware/test manifests must record exact module lot, harness MPN,
+length and measured feed identity; they must not merge S3/C5/nRF feeds under
+one generic pigtail SKU before the Ebyte specimen-fit/VNA gate. External
+standard-versus-RP SMA choice `IMP-0042` changes assembly metadata, not the
+nine logical path identities.
 
 Hardware `ANT-0001/REV-0004P` further proves that the Si4732 receiver has two
 physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. `DEC-0049` selects

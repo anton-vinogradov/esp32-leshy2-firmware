@@ -110,7 +110,11 @@ SMA для всех бортовых antenna endpoints; firmware сохраня�
 identity в TX manifest. Hardware `ANT-0001` подтверждает отдельные Si4732
 FM/SW и AM/LW antenna domains; `DEC-0049` принимает девять labelled SMA и
 раздельные `RX-FM/SW`/`RX-AM/LW`. Firmware не объединяет их identities, а
-AM/LW допускает только manifest-qualified loop/pod profile. `FND-0056` также
+AM/LW допускает только manifest-qualified loop/pod profile. Hardware
+`RFH-0001/FND-0057` запрещают пока считать generic Ebyte `IPX`
+доказанным U.FL/MHF I; specimen-fit/VNA gate остаётся обязательным, а
+`IMP-0042` выбирает внешний SMA gender без изменения runtime identities.
+`FND-0056` также
 заменяет ложную SA518 `SQ` pin на qualified-only `VOICE_ACTIVITY` и оставляет
 открытым UPDATE recovery fixture. Ни один observer не
 является зависимостью base product.

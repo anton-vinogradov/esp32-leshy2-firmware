@@ -109,7 +109,10 @@ for every onboard antenna endpoint; firmware records port/antenna identity in
 the TX manifest. Hardware `ANT-0001` now proves separate Si4732 FM/SW and
 AM/LW antenna domains; `DEC-0049` accepts nine labelled SMA and separate
 `RX-FM/SW`/`RX-AM/LW` paths. Firmware does not merge their identities, and
-AM/LW accepts only a manifest-qualified loop/pod profile. `FND-0056` also replaces
+AM/LW accepts only a manifest-qualified loop/pod profile. Hardware
+`RFH-0001/FND-0057` forbid treating generic Ebyte `IPX` as proven U.FL/MHF I;
+the specimen-fit/VNA gate remains mandatory, while `IMP-0042` selects external
+SMA gender without changing runtime identities. `FND-0056` also replaces
 the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
 its UPDATE recovery fixture open. No observer is a
 base-product dependency. Its firmware
