@@ -125,9 +125,13 @@
   отдельный 4-V voice rail, но отклоняют legacy power sheet как target: нет
   system power path, настоящего fuel gauge, доказанного Type-C current
   detection, правильных rail sizes и current quiet-state/safety branches.
-  Активный owner input — **⚠️ Предложение `IMP-0052`**: две отдельно заменяемые 18650 из старого
-  mockup могут быть неявной функцией; firmware не фиксирует pack identity/
-  removal model до распространения этого выбора.
+  Владелец принял `IMP-0052/B` как `DEC-0062`: две 18650 остаются отдельно
+  заменяемыми, но допускаются как одна контролируемая пара. Firmware отдельно
+  показывает состояние ячеек и пары, не может обойти аппаратно разомкнутую
+  границу charge/discharge и считает mismatch, извлечение/дребезг контакта или
+  неполную identity состоянием blocked/unknown. Распространение проверено в
+  `REV-0005Q`. Активный owner input — **⚠️ Предложение `IMP-0053`** между
+  полным 5-V Type-C/NVDC и USB-PD/buck-boost трактами.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -167,8 +171,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
-с уже reviewed `I2` и reviewed prerequisites `I3`; сейчас активен owner input
-по формату батареи, а integrated physical mockup возобновится
+с уже reviewed `I2`, prerequisites `I3` и формата replaceable-cell; сейчас
+активен owner input по charge/power path, а integrated physical mockup возобновится
 после joint internal review. Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт

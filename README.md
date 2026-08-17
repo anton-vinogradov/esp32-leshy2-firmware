@@ -123,6 +123,9 @@ flowchart TD
   inconsistent evidence is shown as `Unknown`, never silently treated as safe.
 - Leaving a tool or level, lock, timeout, link loss, accessory removal and
   profile error immediately invalidate affected TX permissions.
+- The two replaceable 18650 cells are reported separately and as a supervised
+  pair. A mismatch, removed cell, contact fault or incomplete battery identity
+  blocks operation/charging and cannot be overridden in software.
 - Ordinary UI effects may be muted, but active TX, STOP failure, critical
   battery and other unsafe states cannot be hidden.
 

@@ -124,9 +124,13 @@
   and separate 4-V voice rail, but reject the legacy power sheet as a target:
   no system power path, no real fuel gauge, no justified Type-C current
   detection, obsolete rail sizes and no current quiet-state/safety branches.
-  **⚠️ Proposal `IMP-0052`** is the active owner input: the old mockup's two separately
-  replaceable 18650 cells may be an unstated feature; firmware must not assume
-  a pack identity/removal model until that choice propagates.
+  The owner accepted `IMP-0052/B` as `DEC-0062`: two 18650 cells remain
+  individually replaceable but are admitted as one supervised pair. Firmware
+  exposes distinct cell and pair state, cannot override the hardware-open
+  charge/discharge boundary, and treats mismatch, removal/contact bounce and
+  incomplete identity as blocked/unknown. `REV-0005Q` reviews propagation.
+  **⚠️ Proposal `IMP-0053`** is the active owner input between the complete
+  5-V Type-C/NVDC and USB-PD/buck-boost charge paths.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -166,8 +170,8 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-with `I2` reviewed and `I3` power prerequisites reviewed; the battery-format
-owner input is active and the integrated physical
+with `I2` reviewed and `I3` power prerequisites plus the replaceable-cell
+format reviewed; the charge/power-path owner input is active and the integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the

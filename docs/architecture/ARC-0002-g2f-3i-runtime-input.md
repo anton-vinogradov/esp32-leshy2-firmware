@@ -117,6 +117,21 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - Quiet is verified from rail/current/status/actual-TX evidence where available;
   a successful driver call alone is not proof.
 
+## Replaceable-cell admission input
+
+- The battery is a 2S pair made from two individually replaceable 18650 cells;
+  individual replacement does not imply that arbitrary mixed cells are valid.
+- Hardware owns reverse-insertion prevention, observation before admission and
+  the charge/discharge FET boundary. Firmware may request admission but cannot
+  force a refused pair on or use balancing to mask an unsafe mismatch.
+- Firmware retains distinct `cell_0`, `cell_1`, pair, temperature, contact and
+  admission states. Missing/inconsistent evidence is `unknown` and blocks
+  charge, high-load operation and TX leases rather than inheriting the prior
+  battery state.
+- Single-cell removal, contact bounce, a single-cell replacement and reset are
+  fresh admission events. No previous state-of-charge, health or approved-pair
+  identity is restored until both cells pass the hardware/firmware contract.
+
 ## Hard STOP and actual-TX input
 
 - The AON hardware latch, not firmware, owns the dominant stop path. STOP or an

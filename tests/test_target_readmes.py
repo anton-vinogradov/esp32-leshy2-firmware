@@ -41,6 +41,26 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token, normalized, f"{readme_name}: {token}")
 
+    def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
+        required_tokens = {
+            "README.md": (
+                "two replaceable 18650 cells",
+                "blocks operation/charging",
+                "cannot be overridden in software",
+            ),
+            "README.ru.md": (
+                "две заменяемые 18650",
+                "блокируют работу/зарядку",
+                "не могут быть обойдены программно",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            ).lower()
+            for token in tokens:
+                self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
+
 
 if __name__ == "__main__":
     unittest.main()
