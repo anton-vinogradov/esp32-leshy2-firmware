@@ -42,6 +42,11 @@ power, isolation and service endpoints open.
 Hardware `DEC-0051` publishes the same projection in its target README as the
 visible G3 working design; firmware still treats it as reopenable upstream
 input until atomic architecture.
+Hardware `DEC-0059/REV-0005L` amend the same input to dedicated 1-bit
+S3↔C5 SDIO, restoring C5 native USB and S3 default UART0 while retaining both
+UART service paths. M5 Unit UART moves to UART1 on unchanged GPIO7/8. The link
+still requires ≥1.5 MB/s framed HIL; 4-bit is fallback evidence, not a parallel
+runtime profile.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch

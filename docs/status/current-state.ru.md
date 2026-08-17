@@ -50,13 +50,14 @@
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
-  RP2354B/QFN80, пять независимых radio/accessory SPI paths, dedicated 4-bit
-  SDIO S3↔C5, dedicated SPI3 S3↔RP, тогдашние 23/24 slow endpoints и
+  RP2354B/QFN80, пять независимых radio/accessory SPI paths, dedicated SDIO
+  S3↔C5, dedicated SPI3 S3↔RP, тогдашние 23/24 slow endpoints и
   изолированный U214 I²C. Последующее audio review занимает последний контакт.
   Единственная high-rate scheduled pair — display+SD на SPI2 с bounded
-  quantum; radio FIFO/IPC её не ждут. C5 UART0+EN/BOOT/strap остаётся recovery
-  path, потому что GPIO13/14 заняты SDIO. Firmware consequence зафиксирован в
-  `ARC-0002`. Повторная exact-device проверка обнаружила и исправила crossing
+  quantum; radio FIFO/IPC её не ждут. Hardware `DEC-0059` затем выбирает
+  1-bit SDIO и восстанавливает C5 USB+UART и S3 USB+UART service; M5 Unit UART
+  использует UART1. Firmware consequence зафиксирован в `ARC-0002`. Повторная
+  exact-device проверка обнаружила и исправила crossing
   реального RP2354B PIO GPIO-window; теперь PIO data pins находятся в
   `GPIO30…46`, fixed mux закреплён контрактами, а RP оставляет 7/12 PIO SM и
   3/16 DMA в резерве. Последующие `DEC-0045/0046` принимают ровно одну
@@ -139,9 +140,10 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
 
 ## Отменённые target assumptions
 
-`G2F-3I` owners, RP2354B, 4-bit SDIO, SPI IPC и exact pins нельзя потреблять
-как final firmware prerequisites до atomic package. Бывшие 1-bit SDIO,
-RP2354A и three-USB/DBG10 assumptions тем более остаются reference evidence.
+`G2F-3I` owners, RP2354B, 1-bit SDIO, SPI IPC и exact pins нельзя потреблять
+как final firmware prerequisites до atomic package. 4-bit SDIO остаётся
+только fallback evidence; RP2354A и прежние service-component assumptions —
+references до своих downstream gates.
 
 ## Следующее firmware-действие
 

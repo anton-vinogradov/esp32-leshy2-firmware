@@ -18,6 +18,7 @@
 - exact codec fit: [`AUDIO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0001-es8311-exact-electrical-fit.md), [`REV-0005B`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005B-es8311-digital-fit-and-analog-gap.md)
 - complete audio-path review: [`AUDIO-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0002-complete-audio-path-comparison.md), [`FND-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0067-audio-source-select-and-reset-bypass.md), [`REV-0005C`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005C-complete-audio-path-prerequisites.md)
 - accepted audio topology: [`DEC-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0054-fail-safe-complete-audio-path.md), [`REV-0005D`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005D-audio-decision-propagation.md)
+- service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 
 ## Boundary
 
@@ -34,15 +35,17 @@ architecture.
 
 | Domain | Candidate local ownership | Dedicated transports/resources | Local invariants |
 |---|---|---|---|
-| S3 | product policy/UI, display, audio, microSD, native BLE, Unit profile | SPI3 to RP, 4-bit SDMMC host to C5, SPI2 display+SD scheduler, I²S0, internal I²C0, separate Unit profile | UI feedback ≤100 ms; storage stalls never block radio leases/queues; native USB recovery |
-| C5 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, dual-path IR RX and IR TX | exclusive 4-bit SDIO slave to S3; direct IR RMT/evidence | local RF/IR queues, lease expiry and safe-off; permanent UART0+EN/BOOT/strap recovery because runtime SDIO consumes USB pins |
+| S3 | product policy/UI, display, audio, microSD, native BLE, Unit profile | SPI3 to RP, 1-bit SDMMC host to C5, SPI2 display+SD scheduler, I²S0, internal I²C0, separate I²C1/UART1/GPIO Unit profile | UI feedback ≤100 ms; storage stalls never block radio leases/queues; native USB + default UART0 + EN/BOOT service |
+| C5 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, dual-path IR RX and IR TX | exclusive 1-bit SDIO slave to S3; direct IR RMT/evidence | local RF/IR queues, lease expiry and safe-off; native USB + UART0 + EN/BOOT/strap service |
 | RP2354B | 3×full-function nRF24, CC1101, voice/PTT and U214 LoRa/GNSS | four independent PIO0 compatibility-radio buses, PIO1 U214 SPI, UART1 GNSS, isolated U214 I²C, hardware SPI1 to S3 | direct IRQ/GDO/BUSY/PTT; no peer-radio bus wait; USB+SWD+RUN+BOOTSEL recovery |
 
 The exact RP map uses the real B-package PIO base rule: PIO0 and PIO1 select
 the `GPIO16..GPIO47` window, and every PIO data pin is in `GPIO30..GPIO46`.
-The hardware validator also locks the fixed mux sets for S3 USB, C5 4-bit
-SDIO, and RP SPI1/UART0/UART1/I²C0; firmware must not remap these as generic
-GPIO-matrix choices.
+The hardware validator also locks the fixed mux sets for S3 USB/UART0, C5
+1-bit SDIO/native USB, and RP SPI1/UART0/UART1/I²C0; firmware must not remap
+these as generic GPIO-matrix choices. The M5 Unit UART profile uses UART1 on
+GPIO7/8 so it cannot create a second branch on the permanent S3 UART0 service
+route.
 
 Persistent capacity is budgeted before runtime implementation: RP uses 5/12
 PIO state machines and 13/16 DMA channels; S3 uses 3/5 GDMA TX and 3/5 GDMA RX
@@ -57,8 +60,9 @@ control. Hardware `PIN-0003/REV-0004V/0004X` derive these figures from the
 machine source: S3 is `32 used / 3 reserved / 1 free`, C5 is `14/6/1`, RP is `48/0/0`,
 and the slow plane is `24/0/0` after `FND-0067` assigns the previously omitted
 ordinary `RX_AUDIO_SOURCE_SEL` to P27. The previously published C5/RP reserve
-was stale and is corrected by `FND-0059`. GPIO43 is the sole free direct S3
-contact; GPIO6 `AUDIO_ARM` is a normative machine input.
+was stale and is corrected by `FND-0059`. After `DEC-0059`, GPIO43/44 are
+permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
+`AUDIO_ARM` remains a normative machine input.
 
 ## Mandatory scheduler/queue contract
 
@@ -72,8 +76,11 @@ contact; GPIO6 `AUDIO_ARM` is a normative machine input.
 - RP↔S3 SPI must qualify ≥1.5 MB/s framed payload and alert-to-read ≤250 µs;
   control/safety events preempt bulk records and a stalled peer cannot retain
   TX authorization.
-- C5↔S3 4-bit SDIO must qualify ≥1.5 MB/s framed payload and ≤2 ms control RTT;
-  it exclusively owns the S3 SD/MMC host in this candidate.
+- C5↔S3 1-bit SDIO at 20 MHz provides 2.5 MB/s raw and must qualify
+  ≥1.5 MB/s framed payload, ≤70% admitted occupancy and ≤2 ms control RTT; it
+  exclusively owns the S3 SD/MMC host. Four-bit mode is not a runtime option:
+  it is an upstream fallback only after failed HIL and a new service-isolation
+  decision.
 - Display and microSD deliberately share SPI2. `DEC-0052` assigns direct QSPI
   D2/D3 to S3 GPIO41/42 and replaces stale `256 B` slicing with measured
   `<=1 ms` uninterrupted display occupancy. The scheduler uses separate CS,
@@ -116,8 +123,8 @@ contact; GPIO6 `AUDIO_ARM` is a normative machine input.
    exact RF-profile evidence;
 2. RP IPC stress at accepted radio load while display, storage, audio and C5
    traffic run;
-3. C5 IPC control-priority/RTT, link-loss visibility and TX lease expiry under
-   Wi-Fi/802.15.4/IR load;
+3. C5 1-bit IPC framed throughput/occupancy/control-priority/RTT, reset/link-loss
+   visibility and TX lease expiry under Wi-Fi/802.15.4/IR load;
 4. display+SD scheduling, hot removal and injected 250 ms card stalls;
 5. U214 I²C stuck-low/hot-plug fault injection and independent Unit/internal
    bus operation;

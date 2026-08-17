@@ -50,13 +50,14 @@
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
-  RP2354B/QFN80, five independent radio/accessory SPI paths, dedicated 4-bit
-  SDIO S3↔C5, dedicated SPI3 S3↔RP, the then-current 23/24 slow endpoints and
+  RP2354B/QFN80, five independent radio/accessory SPI paths, dedicated SDIO
+  S3↔C5, dedicated SPI3 S3↔RP, the then-current 23/24 slow endpoints and
   isolated U214 I²C. The later audio review closes the last slow contact.
   The only high-rate scheduled pair is display+SD on SPI2 with bounded quanta;
-  radio FIFO/IPC never waits for it. C5 UART0+EN/BOOT/strap is the recovery
-  path because GPIO13/14 carry SDIO. Firmware consequences are recorded in
-  `ARC-0002`. A repeated exact-device check found and fixed an RP2354B PIO
+  radio FIFO/IPC never waits for it. Hardware `DEC-0059` subsequently selects
+  1-bit SDIO and restores C5 USB+UART and S3 USB+UART service; M5 Unit UART
+  uses UART1. Firmware consequences are recorded in `ARC-0002`. A repeated
+  exact-device check found and fixed an RP2354B PIO
   GPIO-window crossing; PIO data now stays on `GPIO30..46`, fixed mux groups
   are contracted, and the RP retains seven of twelve PIO state machines plus
   three of sixteen DMA channels. Later `DEC-0045/0046` accept one top-level
@@ -139,9 +140,10 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
 
 ## Invalidated target assumptions
 
-`G2F-3I` owners, RP2354B, 4-bit SDIO, SPI IPC and exact pins cannot be consumed
-as final firmware prerequisites before the atomic package. Former 1-bit SDIO,
-RP2354A and three-USB/DBG10 assumptions remain reference evidence only.
+`G2F-3I` owners, RP2354B, 1-bit SDIO, SPI IPC and exact pins cannot be consumed
+as final firmware prerequisites before the atomic package. Four-bit SDIO is
+fallback evidence only; RP2354A and former service-component assumptions
+remain references until their downstream gates.
 
 ## Next firmware action
 
