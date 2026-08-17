@@ -62,14 +62,22 @@
   specimen-fit/VNA gate. `RFH-0002/REV-0004S` review the real antenna
   ecosystems; `DEC-0050/REV-0004T` accept bounded
   `2 native-Wi-Fi RP-SMA + 7 standard SMA`. Polarity does not change the nine
-  runtime identities; the exact antenna shortlist remains an upstream gate.
+  runtime identities. Hardware `ANT-0002/REV-0004U` now review the sourcing
+  shortlist: shared MPNs are viable for S3/C5 and the three nRF paths, common
+  868/915 can be combined, but CC 315/433, VOICE VHF/UHF and Si4732 whip/loop
+  require distinct profiles. `FND-0058` leaves exact two-source assemblies and
+  target RF HIL open.
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics and treats pin-17 UPDATE/recovery as an unresolved fixture gate.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware selects an exact current-orderable antenna
-  shortlist, then the exact production nRF MPN/lot and
+- ⚠️ Hardware proposal `IMP-0043` awaits a decision: adopt the profiled antenna
+  kit. For firmware this means an explicit antenna MPN/profile, disarm on every
+  change, and unconditional TX denial for unknown/mismatch; SMA itself proves
+  no identity.
+- Next upstream gate: decide `IMP-0043`, then hardware closes `FND-0058`,
+  selects the exact production nRF MPN/lot and
   SMA/feed/protection/antenna-profile implementation, advances `N24H-0001`
   from `L0` to target `T1`, then closes
   measured full-mix points, quiet-state power controls,

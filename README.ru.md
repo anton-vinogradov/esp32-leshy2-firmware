@@ -116,8 +116,9 @@ AM/LW допускает только manifest-qualified loop/pod profile. Hardw
 `RFH-0002/REV-0004S` показывают: RP-SMA типичен для native Wi-Fi,
 Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polarity. Поэтому
 `DEC-0050/REV-0004T` принимают ограниченный `2 RP-SMA + 7 standard SMA` без
-изменения runtime identities; polarity становится assembly metadata, а exact
-antenna shortlist остаётся upstream gate.
+изменения runtime identities; polarity становится assembly metadata.
+`ANT-0002/REV-0004U` проводят ревью procurement shortlist, но выбор kit,
+exact two-source assemblies и target RF qualification остаются upstream gates.
 `FND-0056` также
 заменяет ложную SA518 `SQ` pin на qualified-only `VOICE_ACTIVITY` и оставляет
 открытым UPDATE recovery fixture. Ни один observer не

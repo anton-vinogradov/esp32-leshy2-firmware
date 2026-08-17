@@ -115,7 +115,9 @@ the specimen-fit/VNA gate remains mandatory. `RFH-0002/REV-0004S` show RP-SMA
 as typical for native Wi-Fi, standard SMA in Ebyte/nRF and both polarities in
 sub-GHz. `DEC-0050/REV-0004T` accept bounded `2 RP-SMA + 7 standard SMA`
 without changing runtime identities; polarity becomes assembly metadata and
-the exact antenna shortlist remains an upstream gate.
+`ANT-0002/REV-0004U` provide a reviewed procurement shortlist while kit
+selection, exact two-source assemblies and target RF qualification remain
+upstream gates.
 `FND-0056` also replaces
 the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
 its UPDATE recovery fixture open. No observer is a
