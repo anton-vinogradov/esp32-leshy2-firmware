@@ -28,8 +28,12 @@
   и один microSD socket. `FND-0051` отвергает старый generic 24-pin display
   mapping и доказывает, что ST7796S не выполняет унаследованный gate 4.5 MB/s;
   hardware `DEC-0043/REV-0004J` принимают task/dirty-region rendering,
-  critical/menu first feedback `≤100 ms` и исправленный 256 B shared-U214
-  display quantum; exact display/optics и HIL остаются открыты.
+  critical/menu first feedback `≤100 ms` и исправленный для прежней карты
+  256 B shared-U214 display quantum. Hardware `DSP-0002/REV-0004W` теперь
+  фиксируют `FND-0061`: U214 уже находится на dedicated RP bus, поэтому лимит
+  устарел. ⚠️ Предложение `IMP-0044` — заменить его временным `≤1 ms`
+  arbitration contract и перейти к direct QSPI на свободных S3 GPIO41/42;
+  exact display/optics и HIL остаются открыты.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:

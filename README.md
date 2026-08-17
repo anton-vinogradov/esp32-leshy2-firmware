@@ -100,6 +100,9 @@ physical ownership or safety boundaries.
 Firmware implementation has not started. Repeated hardware G2 review is closed;
 hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
 paper map with independent radio buses/IPC and bounded display+SD sharing.
+Hardware `DSP-0002/REV-0004W` establish direct-QSPI feasibility on S3, but
+`IMP-0044` remains open: the target does not yet promise an exact panel or new
+quantum.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early

@@ -101,7 +101,9 @@ safety boundaries.
 Firmware implementation не начата. Повторное hardware G2 review закрыто;
 hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей reviewed paper
 map с независимыми radio buses/IPC и bounded display+SD sharing. Hardware
-`DEC-0045/0046` дополнительно требуют одну active top-level signal group,
+`DSP-0002/REV-0004W` подтверждают direct-QSPI feasibility на S3, но
+`IMP-0044` ещё открыт: target не обещает exact panel или новый quantum.
+Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
 interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как
 ранний `L0 DIV↔DIV` pre-HIL observer; финальный pass требует `T1` на exact

@@ -29,8 +29,11 @@
   one microSD socket. `FND-0051` rejects the old generic 24-pin display mapping
   and proves that ST7796S cannot meet the inherited 4.5 MB/s gate. Hardware
   `DEC-0043/REV-0004J` accept task/dirty-region rendering, `≤100 ms` critical/
-  menu first feedback and a corrected 256 B shared-U214 display quantum; exact
-  display/optics and HIL remain open.
+  menu first feedback and a 256 B quantum corrected for the former shared-U214
+  map. Hardware `DSP-0002/REV-0004W` now record `FND-0061`: U214 is already on
+  a dedicated RP bus, so that limit is stale. ⚠️ Proposal `IMP-0044` replaces
+  it with a `<=1 ms` time-based arbitration contract and tests direct QSPI on
+  free S3 GPIO41/42; exact display/optics and HIL remain open.
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:

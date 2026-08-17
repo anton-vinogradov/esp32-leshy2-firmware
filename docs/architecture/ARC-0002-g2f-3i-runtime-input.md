@@ -71,6 +71,12 @@ stale and is corrected by `FND-0059`.
   chunks and critical-UI priority. The combined HIL must show first visible
   response ≤100 ms, storage ≥4.0 MB/s, 1.5 MB/s record and survival of a
   measured 250 ms card stall.
+- The `256 B` value remains the accepted contract only until hardware
+  `FND-0061/IMP-0044` is decided. It was derived for a former display/U214
+  shared bus, while current U214 is dedicated to RP. The reviewed candidate
+  replaces byte slicing with measured `<=1 ms` SPI2 occupancy and may widen
+  the display to QSPI on S3 GPIO41/42; firmware must not freeze either change
+  before the hardware decision and regenerated pin/resource contracts.
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
@@ -174,6 +180,12 @@ exact display/touch and codec packages, IR frontends/driver/evidence, hard STOP
 latch, power/current/thermal supervision, load switching/isolation, audio
 selectors, Unit protection and service-connector mechanics. Firmware must not
 infer drivers, levels or safe states for those boundaries before they close.
+
+Hardware `FND-0061` also keeps display arbitration open. `DSP-0002/REV-0004W`
+prove that display+SD is the only deliberately shared high-rate pair and that
+direct S3 QSPI fits the current free-pin envelope. `IMP-0044` is still an
+owner decision; no QSPI pin, time quantum, panel controller or display
+coprocessor is therefore a frozen firmware ABI.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open
