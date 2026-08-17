@@ -139,9 +139,11 @@ the specimen-fit/VNA gate remains mandatory. `RFH-0002/REV-0004S` show RP-SMA
 as typical for native Wi-Fi, standard SMA in Ebyte/nRF and both polarities in
 sub-GHz. `DEC-0050/REV-0004T` accept bounded `2 RP-SMA + 7 standard SMA`
 without changing runtime identities; polarity becomes assembly metadata and
-`ANT-0002/REV-0004U` provide a reviewed procurement shortlist while kit
-selection, exact two-source assemblies and target RF qualification remain
-upstream gates.
+`ANT-0002/REV-0004U` provide a reviewed procurement shortlist;
+`DEC-0055/REV-0005E` accept the 12-item profiled kit. Firmware requires exact
+profile identity, disarms TX on change and denies unknown/mismatch. Exact MPN
+availability is checked only at selection; two-source assemblies and target RF
+qualification remain upstream gates.
 `FND-0056` also replaces the false SA518 `SQ` pin with a qualified-only
 `VOICE_ACTIVITY` input. `PIN-0003/REV-0004V` review the machine-generated
 principled owner/net/pad atlas: S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0` and slow

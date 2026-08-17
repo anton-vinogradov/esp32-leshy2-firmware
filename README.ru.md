@@ -141,8 +141,11 @@ AM/LW допускает только manifest-qualified loop/pod profile. Hardw
 Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polarity. Поэтому
 `DEC-0050/REV-0004T` принимают ограниченный `2 RP-SMA + 7 standard SMA` без
 изменения runtime identities; polarity становится assembly metadata.
-`ANT-0002/REV-0004U` проводят ревью procurement shortlist, но выбор kit,
-exact two-source assemblies и target RF qualification остаются upstream gates.
+`ANT-0002/REV-0004U` проводят ревью procurement shortlist;
+`DEC-0055/REV-0005E` принимают 12-item profiled kit. Firmware требует exact
+profile identity, сбрасывает TX arm при смене и запрещает unknown/mismatch.
+Availability exact MPN проверяется только при его выборе; two-source assemblies
+и target RF qualification остаются upstream gates.
 `FND-0056` также заменяет ложную SA518 `SQ` pin на qualified-only
 `VOICE_ACTIVITY`. `PIN-0003/REV-0004V` проводят ревью machine-generated
 principle owner/net/pad atlas: S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0`, slow I/O

@@ -28,9 +28,10 @@ the ordered ESP32-DIV `L0` pre-HIL observer from target Leshy2 `T1`.
 `DEC-0048` adds external-SMA port/antenna identity to the runtime manifest;
 `DEC-0050` adds assembly polarity metadata without changing logical paths;
 hardware `ANT-0002/REV-0004U` adds a reviewed sourcing shortlist but no target
-MPN. Open `IMP-0043` would require explicit profiled-kit identity, disarm on
-profile changes and TX denial for unknown/mismatch. Exact two-source hardware
-and measurements remain pending under `FND-0058`.
+MPN. `DEC-0055/REV-0005E` accept explicit profiled-kit identity, disarm on
+profile changes and TX denial for unknown/mismatch; availability is checked at
+exact-MPN selection. Exact two-source hardware and measurements remain pending
+under `FND-0058`.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `32/3/1`, C5 `14/6/1`, RP

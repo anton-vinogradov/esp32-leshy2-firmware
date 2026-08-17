@@ -100,10 +100,10 @@
   principle-level working design for G3 without making it a frozen HAL/G7.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- ⚠️ Hardware proposal `IMP-0043` awaits a decision: adopt the profiled antenna
-  kit. For firmware this means an explicit antenna MPN/profile, disarm on every
-  change, and unconditional TX denial for unknown/mismatch; SMA itself proves
-  no identity.
+- Hardware `IMP-0043/A` is accepted as `DEC-0055`: the 12-item profiled antenna
+  kit requires explicit MPN/profile identity, disarm on every change and
+  unconditional TX denial for unknown/mismatch; SMA itself proves no identity.
+  Availability is checked when the exact MPN is selected.
 - Hardware `IMP-0046/A` is accepted as `DEC-0054`: retain ES8311, add active
   high-Z capture, differential speaker and separate attenuated TX selectors,
   and use direct S3 GPIO6 `AUDIO_ARM` to force analog defaults across reset even
@@ -111,7 +111,7 @@
   selector sequence as normative; measured gain/mute/passive values remain open.
 - Next upstream action: reviewed `PIN-0003` now permits G3 adaptation of the
   legacy physical/product mockup and conceptual-placement review. In parallel,
-  hardware closes `IMP-0043/FND-0058/FND-0060/FND-0066/FND-0067`, selects
+  hardware closes `FND-0058/FND-0060/FND-0066/FND-0067`, selects
   exact production parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
   `T1`. Measured full-mix, quiet-state, RF/self-desense, signal-integrity,
   service and HIL gates still follow. The paper pinout remains a reopenable

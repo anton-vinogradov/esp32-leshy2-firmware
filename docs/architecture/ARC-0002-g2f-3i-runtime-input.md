@@ -13,6 +13,7 @@
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
+- profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
 - feed-interface review: [`RFH-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RFH-0001-module-to-external-sma-interface-review.md)
 - exact codec fit: [`AUDIO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0001-es8311-exact-electrical-fit.md), [`REV-0005B`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005B-es8311-digital-fit-and-analog-gap.md)
 - complete audio-path review: [`AUDIO-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0002-complete-audio-path-comparison.md), [`FND-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0067-audio-source-select-and-reset-bypass.md), [`REV-0005C`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005C-complete-audio-path-prerequisites.md)
@@ -152,6 +153,13 @@ SMA positions through compact IPEX modules and short feeds. Firmware must not
 infer a correct antenna merely from connector presence: TX arming records the
 selected band/path/antenna profile, permitted power and qualified feed loss.
 External M5 accessories report their own antenna identity separately.
+
+`DEC-0055` defines a 12-item field kit for nine simultaneous ports: one shared
+exact MPN in quantity two for S3/C5, one in quantity three for nRF0/1/2,
+separate CC 315/433/combined-868+915, separate VOICE VHF/UHF, FM/SW whip and
+AM/LW loop/pod profiles. Every CC/VOICE profile change disarms TX. Unknown,
+mismatched, expired or unqualified identities remain TX-disabled. Availability
+is an exact-MPN-selection gate, not a continuously polled architecture input.
 
 Hardware `RFH-0001/FND-0057` distinguishes the verified first-generation
 U.FL/MHF I/AMC-compatible S3/C5 connectors from Ebyte's undocumented generic
