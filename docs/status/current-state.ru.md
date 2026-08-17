@@ -37,14 +37,13 @@
   `320×480` IPS QSPI+touch class. `DLE06235B/ES3C35P` (`ST77922`) — primary
   HIL, Waveshare SKU `31137` (`AXS15231B`) — secondary HIL. Hardware
   `FND-0063/DSP-0005/REV-0005A` устанавливают exact current assembly candidate
-  `HMX035CTFT-001` и проводят ревью его 40-contact fit без изменения S3
-  `31/3/2`; production ordering/drawing/connector, optics, init table и HIL
+  `HMX035CTFT-001` и проводят ревью его 40-contact fit; production
+  ordering/drawing/connector, optics, init table и HIL
   остаются открыты.
   Hardware `AUDIO-0001/REV-0005B` также вносят exact I2C/I2S contacts
-  `ES8311` QFN-20 без изменения бюджета. `CE` — fixed address strap `0x19`,
-  P10 — внешний `CODEC_PWR_EN`. `FND-0065/IMP-0046` оставляют открытыми exact
-  whole analog routing и power implementation; `FND-0066` дополнительно
-  фиксирует ES8311 line-input warning и differential capability PAM8302A.
+  `ES8311` QFN-20. `CE` — fixed address strap `0x19`, P10 — внешний
+  `CODEC_PWR_EN`. `FND-0065/0066` фиксируют differential/line-input constraints;
+  exact passive и power implementation остаются открытыми.
   `AUDIO-0002/REV-0005C` проводят ревью всего capture/playback/TX/reset тракта.
   `FND-0067` исправляет пропущенный ordinary RX-source control на slow P27 и
   показывает, что P11/P12 могут остаться старыми при S3-only reset.
@@ -89,7 +88,7 @@
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`. Новый hardware `PIN-0003/REV-0004V` провёл
   ревью machine-generated principle owner/net/pad atlas. Текущий бюджет:
-  S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
+  S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
   C5/RP были stale и исправлены через `FND-0059`. SA518 UART/PTT/activity и
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
@@ -105,15 +104,15 @@
   kit. Для firmware это означает explicit antenna MPN/profile, disarm при его
   смене и безусловный запрет TX при unknown/mismatch; SMA сам по себе identity
   не доказывает.
-- ⚠️ Предложение hardware `IMP-0046/A` ожидает одного решения по всему тракту:
-  сохранить ES8311, добавить active high-Z capture, differential speaker и
-  отдельный attenuated TX selector, а direct S3 GPIO6 `AUDIO_ARM` использовать
-  для возврата analog defaults при reset даже со старыми P11/P12. Firmware не
-  назначает этот GPIO и не фиксирует gain/mute/selector sequencing до принятия.
+- Hardware `IMP-0046/A` принято как `DEC-0054`: сохранить ES8311, добавить
+  active high-Z capture, differential speaker и отдельный attenuated TX
+  selector, а direct S3 GPIO6 `AUDIO_ARM` использовать для возврата analog
+  defaults при reset даже со старыми P11/P12. Firmware теперь считает GPIO6 и
+  disarm-first sequencing нормативными; measured gain/mute/passive values открыты.
 - Следующий upstream ход: reviewed `PIN-0003` уже позволяет начать G3 —
   адаптацию legacy physical/product mockup и проверку conceptual placement.
-  Параллельно hardware закрывает `IMP-0043/IMP-0046/FND-0058/FND-0060/FND-0067`, выбирает exact
-  production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
+  Параллельно hardware закрывает `IMP-0043/FND-0058/FND-0060/FND-0066/FND-0067`,
+  выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
   target `T1`. Затем обязательны measured full-mix, quiet-state, RF/
   self-desense, signal-integrity, service и HIL gates. Paper pinout остаётся
   reopenable input, а не atomic target; `G2F-2R/3D` и `LAY-0001` P1/P2/P3 —

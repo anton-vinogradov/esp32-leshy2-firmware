@@ -112,18 +112,19 @@ display/touch reset. Production ordering/drawing/connector и vendor init table
 Hardware `AUDIO-0001/REV-0005B` также вносят exact digital boundary `ES8311`
 QFN-20 на S3 GPIO1/2/15/16/17/18. Адрес codec — `0x19`, MCLK берётся из BCLK
 без дополнительного GPIO, а slow P10 — внешний `CODEC_PWR_EN`, поскольку
-physical `CE` только address strap. S3 остаётся `31/3/2`; `FND-0066`
-дополнительно фиксирует, что PAM8302A принимает differential input, но ADC
+physical `CE` только address strap. `FND-0066` дополнительно фиксирует, что
+PAM8302A принимает differential input, но ADC
 ES8311 microphone-oriented и не рекомендован для слепого line input. Весь
 тракт теперь проведён ревью в hardware `AUDIO-0002/REV-0005C`: direct ADC tap
 может нагрузить обычный Si4732 bypass, SA518 TX требует отдельной ослабленной
 DAC-ветви, а selector outputs медленного expander способны сохранить старое
 состояние после S3 reset. Пропущенный ordinary RX-source selector исправлен на
-slow P27, поэтому slow budget стал `24/0/0`. `IMP-0046/A` остаётся открытым
-owner proposal: ES8311 + active high-Z capture, differential speaker и
-отдельный TX selector, а их P11/P12 requests пропускаются через direct GPIO6
-`AUDIO_ARM`. Firmware не фиксирует этот ещё не принятый GPIO, gain/mute или
-selector sequence.
+slow P27, поэтому slow budget стал `24/0/0`. Hardware `DEC-0054/REV-0005D`
+принимает весь вариант A: ES8311 + active high-Z capture, differential speaker
+и отдельный TX selector, а их P11/P12 requests пропускаются через direct GPIO6
+`AUDIO_ARM`. S3 теперь `32/3/1`; firmware обязана реализовать принятую
+fail-safe последовательность, но passive values и измеренные gain/mute
+остаются HIL inputs, а не угаданными constants.
 Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
 interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как
@@ -144,7 +145,7 @@ Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polari
 exact two-source assemblies и target RF qualification остаются upstream gates.
 `FND-0056` также заменяет ложную SA518 `SQ` pin на qualified-only
 `VOICE_ACTIVITY`. `PIN-0003/REV-0004V` проводят ревью machine-generated
-principle owner/net/pad atlas: S3 `31/3/2`, C5 `14/6/1`, RP `48/0/0`, slow I/O
+principle owner/net/pad atlas: S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0`, slow I/O
 `24/0/0`; exact SA518 service и Si4732 control/antenna contacts представлены.
 `FND-0060` сохраняет открытыми final electrical peripherals, STOP/supervisor,
 power/isolation и service mechanics. Ни один observer не является зависимостью

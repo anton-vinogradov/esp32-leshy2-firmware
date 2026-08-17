@@ -38,13 +38,12 @@
   `DLE06235B/ES3C35P` (`ST77922`) is primary HIL and Waveshare SKU `31137`
   (`AXS15231B`) secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A`
   identify exact current assembly candidate `HMX035CTFT-001` and review its
-  40-contact fit without changing S3 `31/3/2`; production ordering/drawing/
+  40-contact fit; production ordering/drawing/
   connector, optics, init table and HIL remain open.
   Hardware `AUDIO-0001/REV-0005B` also instantiate exact `ES8311` QFN-20
-  I2C/I2S contacts without changing that budget. `CE` is fixed address strap
-  `0x19`; P10 is external `CODEC_PWR_EN`. `FND-0065/IMP-0046` keep exact
-  whole analog routing and power implementation open; `FND-0066` additionally
-  records the ES8311 line-input warning and PAM8302A differential capability.
+  I2C/I2S contacts. `CE` is fixed address strap `0x19`; P10 is external
+  `CODEC_PWR_EN`. `FND-0065/0066` record the ES8311/PAM differential and
+  line-input constraints; exact passive/power implementation remains open.
   `AUDIO-0002/REV-0005C` now review the complete capture/playback/TX/reset
   path. `FND-0067` corrects the omitted ordinary RX-source control on slow P27
   and identifies that P11/P12 can stay stale through S3-only reset.
@@ -88,7 +87,7 @@
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics. New hardware `PIN-0003/REV-0004V` reviews the machine-generated
-  principled owner/net/pad atlas. Current budgets are S3 `31/3/2`, C5
+  principled owner/net/pad atlas. Current budgets are S3 `32/3/1`, C5
   `14/6/1`, RP `48/0/0` and slow I/O `24/0/0`; `FND-0059` corrects the stale
   prior C5/RP figures. SA518 UART/PTT/activity and recovery now terminate on
   exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI
@@ -105,16 +104,15 @@
   kit. For firmware this means an explicit antenna MPN/profile, disarm on every
   change, and unconditional TX denial for unknown/mismatch; SMA itself proves
   no identity.
-- ⚠️ Hardware proposal `IMP-0046/A` awaits one complete-path decision: retain
-  ES8311, add active high-Z capture, differential speaker and separate
-  attenuated TX selectors, and use direct S3 GPIO6 `AUDIO_ARM` to force analog
-  defaults across reset even if P11/P12 remain stale. Firmware keeps hardware
-  bypass and does not allocate that GPIO or freeze gain/mute/selector
-  sequencing until acceptance.
+- Hardware `IMP-0046/A` is accepted as `DEC-0054`: retain ES8311, add active
+  high-Z capture, differential speaker and separate attenuated TX selectors,
+  and use direct S3 GPIO6 `AUDIO_ARM` to force analog defaults across reset even
+  if P11/P12 remain stale. Firmware now treats GPIO6 and the disarm-first
+  selector sequence as normative; measured gain/mute/passive values remain open.
 - Next upstream action: reviewed `PIN-0003` now permits G3 adaptation of the
   legacy physical/product mockup and conceptual-placement review. In parallel,
-  hardware closes `IMP-0043/IMP-0046/FND-0058/FND-0060/FND-0067`, selects exact production
-  parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
+  hardware closes `IMP-0043/FND-0058/FND-0060/FND-0066/FND-0067`, selects
+  exact production parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
   `T1`. Measured full-mix, quiet-state, RF/self-desense, signal-integrity,
   service and HIL gates still follow. The paper pinout remains a reopenable
   input, not an atomic target; `G2F-2R/3D` and `LAY-0001` P1/P2/P3 remain
