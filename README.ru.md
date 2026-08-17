@@ -1,25 +1,24 @@
 # Прошивка Leshy2
 
-> **Целевой документ продукта.** Страница описывает проверенное поведение ПО
-> независимо от ещё не выбранной электронной архитектуры. Текущее состояние —
-> в [current state](docs/status/current-state.ru.md).
+> **Целевой сайт прошивки.** Здесь описано поведение готового Leshy2: интерфейс,
+> радиосервисы, безопасность, данные, обновление и восстановление. История
+> разработки и открытые проверки вынесены в отдельные документы.
 
 - [English version](README.md)
 - [Целевой hardware-продукт](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
-- [Канонический межрепозиторный журнал](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
+- [Состояние разработки](docs/status/current-state.ru.md)
+- [Инженерные решения и доказательства](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
 
 ## Образ готового ПО
 
-Firmware Leshy2 превращает будущую portable hardware-платформу в автономный
-all-in-one radio/wireless инструмент связи, наблюдения, диагностики и
-разрешённых исследований, включая wireless/contact credential tools.
-Навигация, storage, maintenance и compute поддерживают эти результаты, а не
-образуют general-purpose peripheral-computer scope. Hardware reachability не
-означает разрешение.
+Прошивка превращает Leshy2 в автономный all-in-one инструмент связи,
+наблюдения, диагностики и разрешённых исследований беспроводных и контактных
+систем. Все основные сценарии доступны с самого устройства: телефон или ПК
+могут помогать с вводом и экспортом, но не являются обязательным пультом.
 
-Compute count, target images, HAL ownership, IPC transports, pins и component
-drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` после hardware
-`DEC-0032` является только candidate study.
+Доступность аппаратного передатчика не означает разрешение на передачу.
+Прошивка всегда связывает действие с профилем региона, антенной, мощностью,
+целью, временем, уровнем функциональности и актуальным состоянием STOP.
 
 ## Три уровня функциональности
 
@@ -34,134 +33,124 @@ drivers открыты. Бывший three-domain `ARC-0001/PKG-0001/SYN-3A` п�
 аннулируют affected arm/lease. Первичная установка отдельно требует принятия
 акта о ненападении.
 
-## Независимые от архитектуры software-контракты
+## Как работает готовое ПО
 
-- Каждый transmitter стартует выключенным после power/reset/brownout/watchdog/update.
-- Первая TX использует консервативный per-path profile; максимум требует
-  явного выбора текущего сценария и не восстанавливается как default.
-- Commanded TX, observed current, device-reported TX и independent actual-TX
-  evidence остаются разными состояниями.
-- Physical STOP доминирует над UI/IPC/storage; отпускание не восстанавливает
-  прежние target/channel/power/session.
-- Каждый будущий physical radio owner локально обеспечивает timing, bounded
-  queues, lease expiry и safe-off; IPC не становится remote raw GPIO.
-- Штатные updates используют owner-authorized signed images, target validation
-  и rollback. Keys, reproducible/offline build/signing и developer firmware
-  остаются у владельца; irreversible lockdown optional и отделён.
-- Каждый выбранный programmable target независимо recoverable/diagnosable без
-  исправного peer или application image.
-- Три полнофункциональных nRF24 сохраняют independent PTX/PRX и поддерживают
-  любой одновременный mix `3R/1T2R/2T1R/3T` без automatic peer standby или
-  скрытых RX gaps; exact mixed-RF sensitivity остаётся measured profile gate.
-- Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
-  broadcast/audio, IR и qualified external GNSS/LoRa/NFC profiles сохраняют
-  проверенные capability/safety boundaries.
-- External iButton/1-Wire profile distinguishes ordinary owned devices, Lab
-  credential reading and separately armed Controlled-Zone emulation/write;
-  accessory presence never authorizes or auto-starts an operation.
-- Accessory manager считает M5 Unit A/B/C/custom и полный U214-compatible Cap
-  основным low-rate tier, а принятые raw SDR и external RF/credential-analysis
-  workloads могут вывести отдельный high-throughput tier. Он не объявляет
-  generic host или blanket M5-Bus compatibility и не выдаёт command link за
-  raw-data path.
-- Unknown hardware/firmware/accessory identity видим и fails closed; firmware
-  не включает скрытый permissive compatibility mode.
-- В base нет постоянной text keyboard. Заявленный редкий/длинный text workflow
-  может использовать локально сопряжённый owner phone с authenticated, visible
-  и revocable session. Входной текст и последствия показываются на Leshy2;
-  телефон не принимает pledge, не входит в Controlled Zone, не arm/confirm TX
-  или destructive actions и не меняет trust/recovery authorization.
-- Renderer использует dirty/tiled preemptible updates, а не video-like
-  full-frame target. Critical state и первый menu feedback видимы за `≤100 ms`
-  при admitted concurrent load; waterfall coalescing/drop явно учитывается и
-  никогда молча не обменивается на потерю raw radio/audio capture.
-- Optional external IMU profile записывает timestamped raw accel/gyro,
-  pitch/roll, short-term relative rotation и motion quality только при
-  qualified indexed mount/axis transform. Missing/stale IMU invalidates pose
-  metadata, но не raw RF records или safety; six-axis не называется absolute
-  heading или RF bearing.
-- Generic USB host, personal FIDO/U2F authentication и 6 GHz/Wi-Fi 6E находятся
-  вне product mission. High-throughput transport появляется только из
-  конкретного принятого RF/SDR profile.
-- BadUSB/DuckyScript — release-optional Controlled-Zone software exception
-  поверх существующего USB device/service path. Он не добавляет hardware/
-  architecture requirement и не блокирует radio/key release, но до поставки
-  требует fresh authorization, isolated execution, parser/USB review и HIL.
+```mermaid
+flowchart TD
+    boot["Включение / reset / update<br/>все TX выключены"]
+    pledge["Первичная установка<br/>акт о ненападении"]
+    main["Основной режим<br/>обычные инструменты и связь"]
+    lab["Лаборатория<br/>пассивные и защитные функции"]
+    warning["Контролируемая зона<br/>новое предупреждение при каждом входе"]
+    checks["Проверка цели, среды, региона,<br/>антенны, мощности и времени"]
+    armed["Отдельное вооружение действия<br/>preview + dead-man + lease"]
+    run["Выполнение<br/>видимый прогресс и actual-TX state"]
+    safe["SAFE / DISARMED<br/>передача прекращена"]
 
-## Build boundary
+    boot --> pledge --> main
+    main --> lab --> warning --> checks --> armed --> run
+    run -->|"release / timeout / exit"| safe
+    main -->|"STOP / fault"| safe
+    lab -->|"STOP / fault"| safe
+    warning -->|"cancel / STOP"| safe
+    armed -->|"cancel / STOP"| safe
+    run -->|"STOP / reset / brownout"| safe
+    safe -->|"новый безопасный сеанс"| main
+```
 
-Будущая architecture может породить один или несколько images. Обязателен
-явный compatibility manifest с hardware/profile identities, protocol ranges,
-hashes, rollback indices и migrations. Shared code может задавать policy
-vocabulary/package formats/test vectors, но не стирает physical ownership или
-safety boundaries.
+## Пользовательский интерфейс
 
-## Состояние разработки
+- Главный экран показывает активную группу сигналов, выбранный профиль,
+  антенну, канал/частоту, состояние записи, питание и безопасность.
+- Меню и критические предупреждения отвечают не позднее `100 мс`; водопад
+  обновляется dirty/tiled-областями и уступает радио, аудио и записи данных.
+- Любая потеря визуальных кадров учитывается явно и не означает потерю сырых
+  радио- или аудиоданных.
+- Команда TX, измеренный ток, состояние от радио и независимое actual-TX
+  evidence показываются отдельно. `Unknown` остаётся видимым.
+- Длинный текст можно передать с локально сопряжённого телефона. Предпросмотр и
+  последствия остаются на Leshy2; телефон не принимает pledge, не входит в
+  Контролируемую зону и не подтверждает TX или разрушительные действия.
 
-Firmware implementation не начата. Повторное hardware G2 review закрыто;
-hardware `DEC-0044/NIF-0001/REV-0004L` выбрали `G2F-3I` ведущей reviewed paper
-map с независимыми radio buses/IPC и bounded display+SD sharing. Hardware
-`DEC-0052/REV-0004X` принимают direct QSPI на S3 GPIO41/42 и `≤1 ms`
-display occupancy. Hardware `DEC-0053/REV-0004Z` принимают 3.5-inch portrait
-`320×480` IPS direct-QSPI capacitive-touch class с `ST77922` primary HIL и
-`AXS15231B` secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A` устанавливают
-exact current assembly candidate `HMX035CTFT-001` и проводят ревью его
-40-contact fit: GPIO39 — touch IRQ, GPIO41/42 — QSPI D2/D3, slow P06/P07 —
-display/touch reset. Production ordering/drawing/connector и vendor init table
-остаются открыты; ни одна dev board не является target BOM.
-Hardware `AUDIO-0001/REV-0005B` также вносят exact digital boundary `ES8311`
-QFN-20 на S3 GPIO1/2/15/16/17/18. Адрес codec — `0x19`, MCLK берётся из BCLK
-без дополнительного GPIO, а slow P10 — внешний `CODEC_PWR_EN`, поскольку
-physical `CE` только address strap. `FND-0066` дополнительно фиксирует, что
-PAM8302A принимает differential input, но ADC
-ES8311 microphone-oriented и не рекомендован для слепого line input. Весь
-тракт теперь проведён ревью в hardware `AUDIO-0002/REV-0005C`: direct ADC tap
-может нагрузить обычный Si4732 bypass, SA518 TX требует отдельной ослабленной
-DAC-ветви, а selector outputs медленного expander способны сохранить старое
-состояние после S3 reset. Пропущенный ordinary RX-source selector исправлен на
-slow P27, поэтому slow budget стал `24/0/0`. Hardware `DEC-0054/REV-0005D`
-принимает весь вариант A: ES8311 + active high-Z capture, differential speaker
-и отдельный TX selector, а их P11/P12 requests пропускаются через direct GPIO6
-`AUDIO_ARM`. S3 теперь `32/3/1`; firmware обязана реализовать принятую
-fail-safe последовательность, но passive values и измеренные gain/mute
-остаются HIL inputs, а не угаданными constants.
-Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
-three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых
-interfaces. `DEC-0047/N24H-0001` используют заказанный второй ESP32-DIV как
-ранний `L0 DIV↔DIV` pre-HIL observer; финальный pass требует `T1` на exact
-Leshy2 revision. `DEC-0048` фиксирует три nRF IPEX→external-SMA paths и внешний
-SMA для всех бортовых antenna endpoints; firmware сохраняет port/antenna
-identity в TX manifest. Hardware `ANT-0001` подтверждает отдельные Si4732
-FM/SW и AM/LW antenna domains; `DEC-0049` принимает девять labelled SMA и
-раздельные `RX-FM/SW`/`RX-AM/LW`. Firmware не объединяет их identities, а
-AM/LW допускает только manifest-qualified loop/pod profile. Hardware
-`RFH-0001/FND-0057` запрещают пока считать generic Ebyte `IPX`
-доказанным U.FL/MHF I; specimen-fit/VNA gate остаётся обязательным, а
-`RFH-0002/REV-0004S` показывают: RP-SMA типичен для native Wi-Fi,
-Ebyte/nRF использует standard SMA, а sub-GHz имеет обе polarity. Поэтому
-`DEC-0050/REV-0004T` принимают ограниченный `2 RP-SMA + 7 standard SMA` без
-изменения runtime identities; polarity становится assembly metadata.
-`ANT-0002/REV-0004U` проводят ревью procurement shortlist;
-`DEC-0055/REV-0005E` принимают 12-item profiled kit. Firmware требует exact
-profile identity, сбрасывает TX arm при смене и запрещает unknown/mismatch.
-Availability exact MPN проверяется только при его выборе; two-source assemblies
-и target RF qualification остаются upstream gates.
-`FND-0056` также заменяет ложную SA518 `SQ` pin на qualified-only
-`VOICE_ACTIVITY`. `PIN-0003/REV-0004V` проводят ревью machine-generated
-principle owner/net/pad atlas: S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0`, slow I/O
-`24/0/0`; exact SA518 service и Si4732 control/antenna contacts представлены.
-`FND-0060` сохраняет открытыми final electrical peripherals, STOP/supervisor,
-power/isolation и service mechanics. Ни один observer не является зависимостью
-base product.
-Hardware `DEC-0051` публикует эту reviewed карту в своём target README как
-принципиальный G3 working design; для firmware она остаётся reopenable input,
-а не frozen HAL/G7.
-Firmware consequences записаны в
-[`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
-RF, exact peripherals, power и HIL остаются параллельными gates. Reviewed
-pinout уже служит входом для адаптированного legacy physical mockup; physical
-co-design, whole-device optimality, conceptual placement и новое atomic
-architecture decision обязаны предшествовать target-specific runtime/HAL/
-toolchain work. Бывший
-[`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
-сохранён только как candidate/reference evidence.
+## Радиосервисы
+
+- Каждый физический владелец радио локально обслуживает timing, очереди,
+  timestamp, timeout, TX lease и safe-off. Межпроцессорная связь передаёт
+  команды и данные, а не превращается в удалённый raw GPIO.
+- Три nRF24 сохраняют независимые PTX/PRX и любой одновременный mix
+  `3R/1T2R/2T1R/3T` без автоматического standby соседей.
+- Верхний уровень одновременно активирует только одну квалифицированную группу
+  сигналов; все неиспользуемые интерфейсы переводятся в тихое состояние.
+- Wi-Fi 2,4/5, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
+  broadcast receiver, IR и внешние GNSS/LoRa/NFC имеют отдельные профили,
+  разрешения и доказательства результата.
+- iButton/1-Wire разделяет обычную работу с собственным устройством, Lab-чтение
+  и отдельно вооружаемые emulation/write-действия Контролируемой зоны;
+  подключение адаптера само по себе ничего не разрешает.
+- M5 Unit и U214 Cap обслуживаются как профилированные аксессуары. Если внешний
+  raw-SDR/RF-analysis модуль требует high-throughput transport, этот transport
+  определяется его профилем и не подменяется низкоскоростным command link.
+- При смене антенны, частотного профиля, аксессуара или региона TX-arm
+  сбрасывается. Неизвестная или несовместимая идентичность запрещает передачу.
+
+## Данные и приватность
+
+- Каждая запись содержит время, источник, профиль, частоту/канал, антенну,
+  качество, пропуски и применимые calibration metadata.
+- Raw capture сохраняется отдельно от decoded/derived результатов; повторная
+  обработка не переписывает исходник.
+- Импортированные файлы, скрипты и захваты всегда инертны до явного выбора
+  инструмента, проверки и вооружения.
+- Секреты, credential data и записи третьих лиц получают явную область хранения,
+  срок жизни, правила экспорта и безопасного удаления.
+- Отсутствующие GNSS/IMU/accessory metadata помечаются недоступными и не
+  подменяются догадкой.
+- Квалифицированный внешний IMU может сохранить raw accel/gyro, pitch/roll и
+  кратковременное относительное вращение. Без indexed mount эти данные не
+  называются абсолютным курсом или RF-пеленгом.
+
+## STOP и безопасное состояние
+
+- Каждый transmitter стартует выключенным после power, reset, brownout,
+  watchdog или update. Старые цель, мощность, payload, session и lease не
+  восстанавливаются.
+- Физический STOP доминирует над UI, IPC, storage и зависшим вычислительным
+  доменом. Отпускание STOP не выполняет re-arm.
+- Выход из инструмента или уровня, lock, timeout, потеря связи, удаление
+  аксессуара и ошибка профиля немедленно инвалидируют связанные TX-разрешения.
+- Обычные интерфейсные эффекты можно приглушить, но active-TX, STOP failure,
+  critical battery и другое опасное состояние скрыть нельзя.
+
+## Обновление и восстановление
+
+- Каждый устанавливаемый image имеет подписанный manifest с hardware/profile
+  identity, protocol range, hash, rollback index и правилами migration.
+- Нормальное обновление проверяет target и подпись до активации, поддерживает
+  A/B rollback и никогда не вооружает TX после перезапуска.
+- Каждый программируемый домен можно независимо прошить, восстановить и
+  диагностировать без исправной основной прошивки или соседнего процессора.
+- Владелец сохраняет offline/reproducible build и signing tools. Установка
+  собственной прошивки остаётся возможной через явный recovery workflow;
+  irreversible lockdown не является стандартным режимом.
+
+## Границы ПО
+
+Прошивка не обещает 6 ГГц/Wi-Fi 6E, generic USB host, персональный FIDO/U2F,
+встроенную клавиатуру или функции встроенного IMU. BadUSB/DuckyScript — только
+необязательный инструмент Контролируемой зоны поверх существующего USB
+device-пути; он не запускается автоматически и не блокирует выпуск radio/key
+ядра продукта.
+
+## Архитектурный контракт
+
+Готовое устройство может использовать несколько подписанных images. Общие
+типы событий, manifest, package format и test vectors едины, но физическое
+владение радио, локальные deadlines и независимые recovery paths не скрываются
+за общей абстракцией.
+
+## Документация проекта
+
+- [Текущее состояние разработки прошивки](docs/status/current-state.ru.md)
+- [Архитектурные входы прошивки](docs/architecture/README.md)
+- [Целевое описание аппаратной части](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
+- [Полный журнал требований, решений и проверок](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)

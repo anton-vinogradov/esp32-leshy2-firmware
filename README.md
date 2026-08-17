@@ -1,24 +1,25 @@
 # Leshy2 Firmware
 
-> **Target product document.** This page describes reviewed software behavior
-> independent of a selected electronic architecture. See the
-> [current engineering state](docs/status/current-state.md).
+> **Target firmware site.** This page describes the finished Leshy2 behavior:
+> its interface, radio services, safety, data, updates and recovery. Engineering
+> history and open validation work live in separate documents.
 
 - [Русская версия](README.ru.md)
 - [Hardware target product](https://github.com/anton-vinogradov/esp32-leshy2)
-- [Canonical cross-repository review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
+- [Current engineering state](docs/status/current-state.md)
+- [Engineering decisions and evidence](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
 
 ## Finished-software intent
 
-Leshy2 firmware turns the future portable hardware into an autonomous all-in-one
-radio/wireless communication, observation, diagnostic and authorized-research
-instrument, including wireless/contact credential tools. Navigation, storage,
-maintenance and compute support those results; they are not general-purpose
-peripheral-computer scope. Hardware reachability never implies permission to act.
+The firmware turns Leshy2 into an autonomous all-in-one instrument for
+communication, observation, diagnostics and authorized research into wireless
+and contact systems. Every core workflow is available on the device: a phone or
+computer may assist with text entry and export, but never becomes the required
+control surface.
 
-Compute count, target images, HAL ownership, IPC transports, pins and component
-drivers remain open. The former three-domain `ARC-0001/PKG-0001/SYN-3A` is a
-candidate study only after hardware `DEC-0032`.
+Hardware reachability does not imply permission to transmit. Firmware always
+binds an action to a region, antenna, power, target, duration, functional level
+and the current physical STOP state.
 
 ## Three functional levels
 
@@ -33,132 +34,121 @@ Leaving the level, lock, timeout, reset, watchdog, update, STOP or loss of a
 required accessory invalidates every affected arm and lease. Initial setup also
 requires explicit acceptance of the non-aggression pledge.
 
-## Architecture-independent software contracts
+## How the finished software works
 
-- Every transmitter starts off after power, reset, brownout, watchdog or update.
-- Initial TX uses a conservative per-path profile; maximum available power
-  requires an explicit current-scenario choice and is never a restored default.
-- Commanded TX, observed current, device-reported TX and independent actual-TX
-  evidence remain distinct states.
-- Physical STOP dominates UI, IPC and storage; releasing it never restores a
-  prior target/channel/power/session.
-- Each future physical radio owner enforces timing, bounded queues, lease expiry
-  and local safe-off; IPC cannot be remote raw GPIO.
-- Normal updates use owner-authorized signed images, target validation and
-  rollback. Keys, reproducible/offline build/signing and developer firmware
-  remain owner-controlled; irreversible lockdown is optional and separate.
-- Every selected programmable target remains independently recoverable and
-  diagnosable without a healthy peer or application image.
-- Three full-function nRF24 paths retain independent PTX/PRX and support every
-  simultaneous `3R/1T2R/2T1R/3T` mix without automatic peer standby or hidden
-  RX gaps; exact mixed-RF sensitivity remains a measured profile gate.
-- Wi-Fi 2.4/5, IEEE 802.15.4, native BLE, packet Sub-GHz, analog voice,
-  broadcast/audio, IR and qualified external GNSS/LoRa/NFC profiles retain
-  their reviewed capability and safety boundaries.
-- The external iButton/1-Wire profile separates ordinary owned devices, Lab
-  credential reading and individually armed Controlled-Zone emulation/write;
-  accessory presence never authorizes or starts an operation.
-- The accessory manager treats M5 Unit A/B/C/custom and the full U214-compatible
-  Cap as the primary low-rate tier, with a profile-derived high-throughput tier
-  only for accepted raw SDR and external RF/credential-analysis workloads. It
-  never advertises generic host or blanket M5-Bus compatibility or substitutes
-  a command link for a raw-data path.
-- Unknown hardware, firmware or accessory identity is visible and fails closed;
-  it never silently selects a permissive compatibility mode.
-- The base has no permanent text keyboard. A declared rare/long text workflow
-  may use a locally paired owner phone with an authenticated, visible and
-  revocable session. Incoming text and consequences are shown on Leshy2; the
-  phone cannot accept the pledge, enter Controlled Zone, arm/confirm TX or
-  destructive actions, change trust or authorize recovery.
-- The renderer uses dirty/tiled, preemptible display updates rather than a
-  video-like full-frame target. Critical and first menu feedback is visible
-  within 100 ms under admitted concurrent load; waterfall coalescing/drop is
-  explicit and never silently trades away raw radio/audio capture.
-- The optional external IMU profile records timestamped raw accel/gyro,
-  pitch/roll, short-term relative rotation and motion quality only when a
-  qualified indexed mount/axis transform is active. Missing or stale IMU data
-  invalidates pose metadata, not raw RF records or safety; six-axis data is
-  never advertised as absolute heading or RF bearing.
-- Generic USB host, personal FIDO/U2F authentication and 6 GHz/Wi-Fi 6E are
-  outside the product mission. High-throughput transport exists only when
-  derived by a concrete accepted RF/SDR profile.
-- BadUSB/DuckyScript is a release-optional Controlled-Zone software exception
-  over the existing USB device/service path. It adds no hardware/architecture
-  requirement and cannot block the radio/key release, but still requires fresh
-  authorization, isolated execution, parser/USB review and HIL before shipping.
+```mermaid
+flowchart TD
+    boot["Power / reset / update<br/>all TX disabled"]
+    pledge["Initial setup<br/>non-aggression pledge"]
+    main["Main<br/>ordinary tools and communication"]
+    lab["Lab<br/>passive and defensive tools"]
+    warning["Controlled Zone<br/>fresh warning on every entry"]
+    checks["Check target, environment, region,<br/>antenna, power and duration"]
+    armed["Arm this action<br/>preview + dead-man + lease"]
+    run["Execute<br/>visible progress and actual-TX state"]
+    safe["SAFE / DISARMED<br/>transmission stopped"]
 
-## Build boundary
+    boot --> pledge --> main
+    main --> lab --> warning --> checks --> armed --> run
+    run -->|"release / timeout / exit"| safe
+    main -->|"STOP / fault"| safe
+    lab -->|"STOP / fault"| safe
+    warning -->|"cancel / STOP"| safe
+    armed -->|"cancel / STOP"| safe
+    run -->|"STOP / reset / brownout"| safe
+    safe -->|"new safe session"| main
+```
 
-The future architecture may produce one or several images. It must publish an
-explicit compatibility manifest containing hardware/profile identities,
-protocol ranges, hashes, rollback indices and required migrations. Shared code
-may define policy vocabulary, package formats and test vectors but cannot erase
-physical ownership or safety boundaries.
+## User interface
 
-## Development state
+- The home screen shows the active signal group, profile, antenna,
+  channel/frequency, recording, power and safety state.
+- Menus and critical warnings respond within `100 ms`; dirty/tiled waterfall
+  updates yield to radio, audio and storage service.
+- Any visual frame loss is reported explicitly and never implies loss of raw
+  radio or audio data.
+- Commanded TX, measured current, radio-reported state and independent
+  actual-TX evidence are displayed separately. `Unknown` remains visible.
+- Long-form text may come from a locally paired phone. Preview and consequences
+  remain on Leshy2; the phone cannot accept the pledge, enter Controlled Zone
+  or authorize TX and destructive actions.
 
-Firmware implementation has not started. Repeated hardware G2 review is closed;
-hardware `DEC-0044/NIF-0001/REV-0004L` select `G2F-3I` as the leading reviewed
-paper map with independent radio buses/IPC and bounded display+SD sharing.
-Hardware `DEC-0052/REV-0004X` accept direct QSPI on S3 GPIO41/42 and `<=1 ms`
-display occupancy. Hardware `DEC-0053/REV-0004Z` accept a 3.5-inch portrait
-`320×480` IPS direct-QSPI capacitive-touch class with `ST77922` primary HIL
-and `AXS15231B` secondary HIL. Hardware `FND-0063/DSP-0005/REV-0005A`
-identify exact current assembly candidate `HMX035CTFT-001` and review its
-40-contact fit: GPIO39 is touch IRQ, GPIO41/42 are QSPI D2/D3 and slow P06/P07
-are display/touch reset. Production ordering/drawing/connector and vendor init
-table remain open; neither development board is target BOM.
-Hardware `AUDIO-0001/REV-0005B` also instantiate the exact `ES8311` QFN-20
-digital boundary on S3 GPIO1/2/15/16/17/18. Codec address is `0x19`, MCLK uses
-the BCLK-derived mode with no extra GPIO, and slow P10 is external
-`CODEC_PWR_EN` because physical `CE` is only the address strap. `FND-0066`
-additionally notes that PAM8302A accepts differential
-input but the ES8311 ADC is microphone-oriented and not recommended blindly
-for line input. Hardware `AUDIO-0002/REV-0005C` now reviews the complete path,
-not just the codec: a direct ADC tap can load ordinary Si4732 bypass, SA518 TX
-needs a separately attenuated DAC branch, and slow-expander selector outputs
-can remain stale through S3 reset. The omitted ordinary RX-source selector is
-corrected on slow P27, making slow I/O `24/0/0`. Hardware `DEC-0054/REV-0005D`
-accepts the whole option A: ES8311 plus active high-Z capture, differential
-speaker and separate TX selectors, with their P11/P12 requests gated by direct
-GPIO6 `AUDIO_ARM`. S3 is now `32/3/1`; firmware must implement the accepted
-fail-safe sequence while passive values and measured gain/mute remain HIL
-inputs rather than guessed constants.
-Hardware `DEC-0045/0046` additionally require one active top-level signal group,
-the three-radio `SG-N24` full mix and verified quiet states for every unused
-interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
-`L0 DIV↔DIV` pre-HIL observer; final pass requires `T1` on the exact Leshy2
-revision. `DEC-0048` fixes three nRF IPEX→external-SMA paths and external SMA
-for every onboard antenna endpoint; firmware records port/antenna identity in
-the TX manifest. Hardware `ANT-0001` now proves separate Si4732 FM/SW and
-AM/LW antenna domains; `DEC-0049` accepts nine labelled SMA and separate
-`RX-FM/SW`/`RX-AM/LW` paths. Firmware does not merge their identities, and
-AM/LW accepts only a manifest-qualified loop/pod profile. Hardware
-`RFH-0001/FND-0057` forbid treating generic Ebyte `IPX` as proven U.FL/MHF I;
-the specimen-fit/VNA gate remains mandatory. `RFH-0002/REV-0004S` show RP-SMA
-as typical for native Wi-Fi, standard SMA in Ebyte/nRF and both polarities in
-sub-GHz. `DEC-0050/REV-0004T` accept bounded `2 RP-SMA + 7 standard SMA`
-without changing runtime identities; polarity becomes assembly metadata and
-`ANT-0002/REV-0004U` provide a reviewed procurement shortlist;
-`DEC-0055/REV-0005E` accept the 12-item profiled kit. Firmware requires exact
-profile identity, disarms TX on change and denies unknown/mismatch. Exact MPN
-availability is checked only at selection; two-source assemblies and target RF
-qualification remain upstream gates.
-`FND-0056` also replaces the false SA518 `SQ` pin with a qualified-only
-`VOICE_ACTIVITY` input. `PIN-0003/REV-0004V` review the machine-generated
-principled owner/net/pad atlas: S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0` and slow
-I/O `24/0/0`; exact SA518 service and Si4732 control/antenna contacts are
-represented. `FND-0060` keeps final electrical peripherals, STOP/supervisor,
-power/isolation and service mechanics open. No observer is a base-product
-dependency.
-Hardware `DEC-0051` publishes this reviewed map in its target README as the
-principled G3 working design; firmware still treats it as a reopenable input,
-not a frozen HAL/G7. Its firmware
-consequences are recorded in
-[`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
-RF, exact peripherals, power and HIL remain parallel gates. The reviewed
-pinout now feeds the adapted legacy physical mockup; physical co-design,
-whole-device optimality, conceptual placement and a new atomic architecture
-decision must precede target-specific runtime/HAL/toolchain work.
-The former [`ARC-0001`](docs/architecture/ARC-0001-three-domain-runtime-contract.md)
-is retained only as candidate/reference evidence.
+## Radio services
+
+- Every physical radio owner locally enforces timing, queues, timestamps,
+  timeouts, TX leases and safe-off. Inter-processor communication carries
+  commands and data rather than becoming remote raw GPIO.
+- Three nRF24 paths retain independent PTX/PRX in every simultaneous
+  `3R/1T2R/2T1R/3T` mix without automatic peer standby.
+- Only one qualified top-level signal group is active at a time; unused
+  interfaces enter a verified quiet state.
+- 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
+  broadcast reception, IR and external GNSS/LoRa/NFC use separate profiles,
+  permissions and result evidence.
+- iButton/1-Wire separates ordinary use of owned devices, Lab reading and
+  individually armed Controlled-Zone emulation/write; attaching the adapter
+  authorizes nothing by itself.
+- M5 Unit and U214 Cap accessories are profile-managed. If an external raw-SDR
+  or RF-analysis module needs high-throughput transport, its profile defines
+  that transport rather than relabelling a low-rate command link.
+- Changing an antenna, regional profile, frequency profile or accessory clears
+  TX arm. Unknown or incompatible identity denies transmission.
+
+## Data and privacy
+
+- Every record carries time, source, profile, frequency/channel, antenna,
+  quality, gaps and applicable calibration metadata.
+- Raw capture stays separate from decoded and derived results; reprocessing
+  never rewrites the original.
+- Imported files, scripts and captures remain inert until a tool is explicitly
+  selected, checked and armed.
+- Secrets, credential data and third-party recordings have explicit storage
+  scope, lifetime, export policy and secure-deletion behavior.
+- Missing GNSS, IMU or accessory metadata is marked unavailable and never
+  replaced by an inference.
+- A qualified external IMU may record raw acceleration/gyro, pitch/roll and
+  short-term relative rotation. Without an indexed mount it is never described
+  as absolute heading or RF bearing.
+
+## STOP and safe state
+
+- Every transmitter starts disabled after power, reset, brownout, watchdog or
+  update. Previous target, power, payload, session and lease are not restored.
+- Physical STOP dominates UI, IPC, storage and a hung compute domain. Releasing
+  STOP does not re-arm the device.
+- Leaving a tool or level, lock, timeout, link loss, accessory removal and
+  profile error immediately invalidate affected TX permissions.
+- Ordinary UI effects may be muted, but active TX, STOP failure, critical
+  battery and other unsafe states cannot be hidden.
+
+## Updates and recovery
+
+- Every installable image has a signed manifest with hardware/profile identity,
+  protocol range, hash, rollback index and migration rules.
+- Normal update validates target and signature before activation, supports A/B
+  rollback and never arms TX after restart.
+- Every programmable domain can be independently flashed, recovered and
+  diagnosed without a healthy application image or peer processor.
+- The owner retains offline/reproducible build and signing tools. Owner firmware
+  remains installable through an explicit recovery workflow; irreversible
+  lockdown is not the standard mode.
+
+## Software boundary
+
+Firmware does not promise 6 GHz/Wi-Fi 6E, generic USB host, personal FIDO/U2F,
+an integrated keyboard or onboard-IMU functions. BadUSB/DuckyScript is only an
+optional Controlled-Zone tool over the existing USB device path; it never
+autoruns and cannot block delivery of the radio/key product core.
+
+## Architecture contract
+
+The finished device may use multiple signed images. Event types, manifests,
+package formats and test vectors are shared, while physical radio ownership,
+local deadlines and independent recovery paths remain explicit.
+
+## Project documentation
+
+- [Current firmware engineering state](docs/status/current-state.md)
+- [Firmware architecture inputs](docs/architecture/README.md)
+- [Hardware target product](https://github.com/anton-vinogradov/esp32-leshy2)
+- [Complete requirements, decisions and evidence ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)

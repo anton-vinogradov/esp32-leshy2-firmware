@@ -160,3 +160,9 @@ mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the
 normative image/owner/IPC/HAL/update/test contract before implementation.
+
+Documentation `FND-0072/IMP-0051/DEC-0060/REV-0005N` moves engineering
+chronology out of all four target README files. The root firmware page now
+describes the finished UI, radio services, data/privacy, STOP and
+update/recovery behavior without narrating hardware decisions. Current maturity
+and open inputs remain canonical here and in the hardware review ledger.

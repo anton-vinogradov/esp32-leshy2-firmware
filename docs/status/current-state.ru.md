@@ -160,3 +160,9 @@ Target code/toolchain пока не создаются. Hardware следует 
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт
 implementation.
+
+Документационный `FND-0072/IMP-0051/DEC-0060/REV-0005N` вынес инженерную
+chronology из четырёх target README. Корневая firmware-страница теперь
+описывает готовый UI, radio services, data/privacy, STOP и update/recovery
+без пересказа hardware decisions. Вся текущая зрелость и открытые входы
+по-прежнему канонически находятся на этой странице и в hardware review ledger.
