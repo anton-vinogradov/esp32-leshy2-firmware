@@ -115,7 +115,12 @@ flowchart TD
 - Every transmitter starts disabled after power, reset, brownout, watchdog or
   update. Previous target, power, payload, session and lease are not restored.
 - Physical STOP dominates UI, IPC, storage and a hung compute domain. Releasing
-  STOP does not re-arm the device.
+  STOP does not re-arm the device; a separate fresh physical RE-ARM starts a
+  new TX-off boot of every compute domain.
+- Eight source-specific hardware observations cover the two native radios,
+  three nRF paths, packet Sub-GHz, analog voice and optical IR. A separate
+  wired aggregate and red indicator do not depend on firmware; missing or
+  inconsistent evidence is shown as `Unknown`, never silently treated as safe.
 - Leaving a tool or level, lock, timeout, link loss, accessory removal and
   profile error immediately invalidate affected TX permissions.
 - Ordinary UI effects may be muted, but active TX, STOP failure, critical

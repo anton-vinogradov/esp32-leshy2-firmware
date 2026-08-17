@@ -19,6 +19,7 @@
 - complete audio-path review: [`AUDIO-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0002-complete-audio-path-comparison.md), [`FND-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0067-audio-source-select-and-reset-bypass.md), [`REV-0005C`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005C-complete-audio-path-prerequisites.md)
 - accepted audio topology: [`DEC-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0054-fail-safe-complete-audio-path.md), [`REV-0005D`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005D-audio-decision-propagation.md)
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
+- hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 
 ## Boundary
 
@@ -115,6 +116,29 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   manifest member or an explicit group switch.
 - Quiet is verified from rail/current/status/actual-TX evidence where available;
   a successful driver call alone is not proof.
+
+## Hard STOP and actual-TX input
+
+- The AON hardware latch, not firmware, owns the dominant stop path. STOP or an
+  open normally-closed loop asynchronously blocks every reviewed TX/rail
+  request and holds `S3.EN`, `C5.EN` and `RP.RUN` low. Firmware therefore cannot
+  observe a live STOP session from those targets; it reconstructs the cause
+  best-effort after a new physical RE-ARM and fresh TX-off boot.
+- Releasing STOP does nothing. Only a new edge from the normally-open RE-ARM
+  control permits the three processors to boot, and no target/profile/power/
+  payload/lease state is restored.
+- RP GPIO22 is direct active-low `RP_ANY_TX_N`. It is independent of software,
+  I2C and the source-mask expander. Low means at least one qualified evidence
+  channel asserts; high alone does not convert missing or faulty evidence into
+  proof of no transmission.
+- RP local I2C0 also reads TCA9534A address `0x20`: P0..P7 map exactly to
+  `S3_RF`, `C5_RF`, `NRF0_RF`, `NRF1_RF`, `NRF2_RF`, `CC_RF`, `VOICE_RF` and
+  `IR_OPTICAL`. Its interrupt is a test point, not a new RP GPIO dependency.
+- Firmware reports `commanded`, `device-reported`, `actual` and
+  `unknown/unavailable` independently. All eight evidence lines low are
+  sufficient positive observations; an impossible aggregate/mask combination,
+  I2C failure or an unqualified accessory is a fault/unknown state and expires
+  any proof-dependent lease.
 
 ## Firmware HIL that follows from this map
 
@@ -263,13 +287,16 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067` list the remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, exact codec power and passive
-analog networks, IR
-frontends/driver/evidence, hard STOP latch, power/current/thermal supervision,
+analog networks, IR frontend/driver, power/current/thermal supervision,
 load switching/isolation, audio HIL, Unit protection and service-
 connector mechanics. Firmware must not infer drivers, levels or safe states
 for those boundaries before they close.
+
+The hard STOP latch, reset fanout, gate topology and digital evidence delivery
+are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,
+matching, thresholds and fault-injection HIL remain open under hardware `I6`.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware

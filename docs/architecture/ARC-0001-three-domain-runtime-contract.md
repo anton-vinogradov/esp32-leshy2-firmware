@@ -65,6 +65,11 @@ IPC is never remote raw GPIO. A command expresses intent and bounded parameters;
 5. C5 and RP keep local gates inactive until STOP is released, required self-tests pass and a fresh bounded lease is accepted.
 6. Physical RE-ARM after STOP release only permits a new TX-off session; it never restores target/channel/power or a previous lease.
 
+For the current G2F working input, hardware `DEC-0061` supersedes the former
+steps 5–6 implementation detail: STOP resets all three compute domains through
+the AON circuit, release alone does not boot them, and a fresh physical RE-ARM
+starts a new TX-off boot. Firmware cannot be part of the dominant stop path.
+
 Missing C5 permits S3-only non-dependent receive/UI/storage functions. Missing RP disables nRF/CC/voice functions. Missing or unhealthy S3 leaves C5/RP TX-off and recoverable through their physical service paths.
 
 ## Safety lease contract

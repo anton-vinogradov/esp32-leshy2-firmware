@@ -110,15 +110,19 @@
   selector, а direct S3 GPIO6 `AUDIO_ARM` использовать для возврата analog
   defaults при reset даже со старыми P11/P12. Firmware теперь считает GPIO6 и
   disarm-first sequencing нормативными; measured gain/mute/passive values открыты.
-- Hardware `SAFE-0001/REV-0005M` провели ревью safety-пререквизитов `I2` и
-  открыли `FND-0071`: STOP обязан сбрасывать RP2354B вместе с S3/C5, а 3×nRF и
-  CC1101 пока не имеют source-specific physical TX evidence. **⚠️ Предложение
-  `IMP-0050/A`** даёт общий hardware `ANY_TX` на RP GPIO22 и восьмибитный
-  source mask через local I²C без новой ноги. До решения это не frozen HAL:
-  firmware различает commanded/current/actual/unknown и не синтезирует факт TX.
+- Hardware `DEC-0061/SAFE-0002/REV-0005O` принимают и проводят ревью `I2`:
+  always-on непрограммируемая защёлка сбрасывает S3, C5 и RP, независимо
+  блокирует все девять TX/rail requests и требует нового физического RE-ARM.
+  Восемь active-low состояний actual-TX (`S3`, `C5`, `nRF0..2`, `CC`, voice и
+  optical IR) поступают в маску TCA9534A по локальному RP I2C с адресом `0x20`;
+  их diode-OR aggregate — прямой active-low `RP_ANY_TX_N` на RP GPIO22 — также
+  зажигает физический красный LED. Низкий evidence line означает actual TX;
+  несогласованное, отсутствующее или неквалифицированное evidence считается
+  `unknown/unavailable`, но не безопасным. RF taps, thresholds и HIL остаются
+  в `I6`, а exact AON source/hold-up стал входом `I3`.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
-  цепочки `INT-0001`. Hardware сначала принимает и распространяет `I2`
-  safety/evidence topology, затем закрывает power/UI/audio/RF/expansion
+  цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
+  `I3` power, затем UI/audio/RF/expansion
   internals. Параллельно остаются `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
   target `T1`. Затем обязательны measured full-mix, quiet-state, RF/
@@ -155,7 +159,7 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
-с открытого `I2` STOP/evidence package; integrated physical mockup возобновится
+с уже reviewed `I2` и активного `I3` power; integrated physical mockup возобновится
 после joint internal review. Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт

@@ -110,15 +110,18 @@
   and use direct S3 GPIO6 `AUDIO_ARM` to force analog defaults across reset even
   if P11/P12 remain stale. Firmware now treats GPIO6 and the disarm-first
   selector sequence as normative; measured gain/mute/passive values remain open.
-- Hardware `SAFE-0001/REV-0005M` review the `I2` safety prerequisites and open
-  `FND-0071`: STOP must reset RP2354B together with S3/C5, while 3×nRF and
-  CC1101 still lack source-specific physical TX evidence. **⚠️ Proposal
-  `IMP-0050/A`** provides hardware `ANY_TX` on RP GPIO22 and an eight-bit source
-  mask over local I2C without a new pin. Until the decision this is not a
-  frozen HAL; firmware keeps commanded/current/actual/unknown distinct.
+- Hardware `DEC-0061/SAFE-0002/REV-0005O` accept and review `I2`: an always-on
+  non-programmable latch resets S3, C5 and RP, independently gates all nine
+  TX/rail requests and requires a fresh physical RE-ARM. Eight active-low
+  actual-TX states (`S3`, `C5`, `nRF0..2`, `CC`, voice and optical IR) reach a
+  TCA9534A mask at local RP I2C address `0x20`; their diode-OR aggregate is
+  direct active-low `RP_ANY_TX_N` on RP GPIO22 and drives a physical red LED.
+  A low evidence line is actual TX; inconsistent, missing or unqualified
+  evidence is `unknown/unavailable`, never inferred safe. RF taps, thresholds
+  and HIL remain `I6`, while the exact AON source/hold-up is now an `I3` input.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
-  Hardware first accepts and propagates the `I2` safety/evidence topology, then
-  closes power/UI/audio/RF/expansion internals. In parallel it keeps
+  Hardware has marked `I2` reviewed and is now closing `I3` power, then
+  UI/audio/RF/expansion internals. In parallel it keeps
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
   exact production parts/feeds/protection/power and advances `N24H-0001` from `L0` to target
   `T1`. Measured full-mix, quiet-state, RF/self-desense, signal-integrity,
@@ -155,7 +158,7 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-starting with the open `I2` STOP/evidence package; the integrated physical
+with `I2` reviewed and `I3` power now active; the integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the
