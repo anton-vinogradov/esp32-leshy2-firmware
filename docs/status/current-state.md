@@ -59,8 +59,10 @@
   physical RF/self-desense and target HIL remain open.
   Hardware `RFH-0001/REV-0004R` prove first-generation U.FL/MHF I/AMC only
   for S3/C5; Ebyte says generic `IPX`, so `FND-0057` requires a
-  specimen-fit/VNA gate. `IMP-0042` leaves external SMA polarity/gender as the
-  current owner decision without changing the nine runtime identities.
+  specimen-fit/VNA gate. `RFH-0002/REV-0004S` review the real antenna
+  ecosystems and refine `IMP-0042` to uniform standard SMA versus a bounded
+  `2 native-Wi-Fi RP-SMA + 7 standard SMA`; polarity does not change the nine
+  runtime identities.
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics and treats pin-17 UPDATE/recovery as an unresolved fixture gate.

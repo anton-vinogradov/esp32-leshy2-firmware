@@ -111,8 +111,11 @@ AM/LW antenna domains; `DEC-0049` accepts nine labelled SMA and separate
 `RX-FM/SW`/`RX-AM/LW` paths. Firmware does not merge their identities, and
 AM/LW accepts only a manifest-qualified loop/pod profile. Hardware
 `RFH-0001/FND-0057` forbid treating generic Ebyte `IPX` as proven U.FL/MHF I;
-the specimen-fit/VNA gate remains mandatory, while `IMP-0042` selects external
-SMA gender without changing runtime identities. `FND-0056` also replaces
+the specimen-fit/VNA gate remains mandatory. `RFH-0002/REV-0004S` show RP-SMA
+as typical for native Wi-Fi, standard SMA in Ebyte/nRF and both polarities in
+sub-GHz. `IMP-0042` therefore compares uniform standard SMA with a bounded
+`2 RP-SMA + 7 standard SMA` option without changing runtime identities.
+`FND-0056` also replaces
 the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
 its UPDATE recovery fixture open. No observer is a
 base-product dependency. Its firmware
