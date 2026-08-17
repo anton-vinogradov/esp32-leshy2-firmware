@@ -120,6 +120,14 @@
   несогласованное, отсутствующее или неквалифицированное evidence считается
   `unknown/unavailable`, но не безопасным. RF taps, thresholds и HIL остаются
   в `I6`, а exact AON source/hold-up стал входом `I3`.
+- Hardware `PWR-0002/FND-0073/REV-0005P` проводят ревью prerequisites `I3` из
+  текущей начинки и сценариев. Они сохраняют 2S, 3.3-V floor `2.5/3 A` и
+  отдельный 4-V voice rail, но отклоняют legacy power sheet как target: нет
+  system power path, настоящего fuel gauge, доказанного Type-C current
+  detection, правильных rail sizes и current quiet-state/safety branches.
+  Активный owner input — **⚠️ Предложение `IMP-0052`**: две отдельно заменяемые 18650 из старого
+  mockup могут быть неявной функцией; firmware не фиксирует pack identity/
+  removal model до распространения этого выбора.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -159,7 +167,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
-с уже reviewed `I2` и активного `I3` power; integrated physical mockup возобновится
+с уже reviewed `I2` и reviewed prerequisites `I3`; сейчас активен owner input
+по формату батареи, а integrated physical mockup возобновится
 после joint internal review. Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт
