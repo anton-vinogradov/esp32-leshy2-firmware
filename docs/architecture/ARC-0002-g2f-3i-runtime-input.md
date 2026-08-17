@@ -127,6 +127,18 @@ infer a correct antenna merely from connector presence: TX arming records the
 selected band/path/antenna profile, permitted power and qualified feed loss.
 External M5 accessories report their own antenna identity separately.
 
+Hardware `ANT-0001/REV-0004P` further proves that the Si4732 receiver has two
+physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. Until `IMP-0041`
+selects nine dedicated SMA or an eight-port switched implementation, firmware
+must retain two logical antenna-profile identities and must not treat a generic
+`RX` connector, cable or antenna as compatible with both.
+
+Hardware `FND-0056` also removes a false SA518 assumption: rev 1.1 has no
+dedicated `SQ` contact. The runtime input is therefore neutral
+`VOICE_ACTIVITY`; firmware may assign carrier/squelch meaning only after exact
+pin-18 `Audio_ON` HIL. Pin 17 `UPDATE` remains a physical recovery-fixture gate
+because its documented direction and pull-down-at-boot description conflict.
+
 ## Explicitly open
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless

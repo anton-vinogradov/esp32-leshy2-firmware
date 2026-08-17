@@ -107,7 +107,12 @@ interfaces. `DEC-0047/N24H-0001` используют заказанный вт�
 ранний `L0 DIV↔DIV` pre-HIL observer; финальный pass требует `T1` на exact
 Leshy2 revision. `DEC-0048` фиксирует три nRF IPEX→external-SMA paths и внешний
 SMA для всех бортовых antenna endpoints; firmware сохраняет port/antenna
-identity в TX manifest. Ни один observer не является зависимостью base product.
+identity в TX manifest. Hardware `ANT-0001` подтверждает отдельные Si4732
+FM/SW и AM/LW antenna domains; открытый выбор `IMP-0041` между 8 и 9 SMA не
+разрешает firmware объединять их profile identities. `FND-0056` также
+заменяет ложную SA518 `SQ` pin на qualified-only `VOICE_ACTIVITY` и оставляет
+открытым UPDATE recovery fixture. Ни один observer не
+является зависимостью base product.
 Firmware consequences записаны в
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), но physical
 RF, exact peripherals, power и HIL должны закрыться до адаптированного legacy

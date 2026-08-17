@@ -106,7 +106,12 @@ interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early
 `L0 DIV↔DIV` pre-HIL observer; final pass requires `T1` on the exact Leshy2
 revision. `DEC-0048` fixes three nRF IPEX→external-SMA paths and external SMA
 for every onboard antenna endpoint; firmware records port/antenna identity in
-the TX manifest. No observer is a base-product dependency. Its firmware
+the TX manifest. Hardware `ANT-0001` now proves separate Si4732 FM/SW and
+AM/LW antenna domains; the open `IMP-0041` eight-vs-nine SMA decision does not
+allow firmware to merge their profile identities. `FND-0056` also replaces
+the false SA518 `SQ` pin with a qualified-only `VOICE_ACTIVITY` input and keeps
+its UPDATE recovery fixture open. No observer is a
+base-product dependency. Its firmware
 consequences are recorded in
 [`ARC-0002`](docs/architecture/ARC-0002-g2f-3i-runtime-input.md), but physical
 RF, exact peripherals, power and HIL must close before the adapted legacy

@@ -51,11 +51,17 @@
   becomes the `N24H-0001` `L0 DIV↔DIV` pre-HIL observer, but target pass
   requires `T1` on the exact Leshy2 revision. `DEC-0048` accepts external SMA
   for all onboard antenna endpoints and three compact nRF IPEX→SMA paths.
-  Exact production lots/feeds, measured sensitivity points, power parts,
+  Hardware `ANT-0001/REV-0004P` additionally prove separate Si4732 `FMI`
+  FM/SW and `AMI` AM/LW antenna domains; `IMP-0041` leaves 8 versus 9 SMA open
+  and requires distinct runtime antenna-profile identities either way. Exact
+  production lots/feeds, measured sensitivity points, power parts,
   physical RF/self-desense and target HIL remain open.
+  The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
+  dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
+  semantics and treats pin-17 UPDATE/recovery as an unresolved fixture gate.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware selects the exact production nRF MPN/lot and
+- Next upstream gate: hardware resolves `IMP-0041`, then selects the exact production nRF MPN/lot and
   SMA/feed implementation, advances `N24H-0001` from `L0` to target `T1`, then closes
   measured full-mix points, quiet-state power controls,
   physical RF/self-desense,
