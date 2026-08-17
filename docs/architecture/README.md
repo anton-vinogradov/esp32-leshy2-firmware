@@ -23,8 +23,9 @@ top-level group, `SG-N24` as three concurrently full-function PTX/PRX radios,
 and verified quiet states for every unused interface. It is a reviewed upstream
 input, not a target/HAL/toolchain freeze; exact nRF mixed-RF measurements,
 physical RF, exact parts/power and HIL remain open. Hardware `DEC-0047` closes
-the policy choice with a qualified internal envelope; `N24H-0001` uses the
-second device as a reversible observer/peer, with measurements still pending.
+the policy choice with a qualified internal envelope; `N24H-0001` separates
+the ordered ESP32-DIV `L0` pre-HIL observer from target Leshy2 `T1`, with
+measurements still pending.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

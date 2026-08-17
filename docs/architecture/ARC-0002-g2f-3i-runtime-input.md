@@ -8,6 +8,7 @@
 - Signal groups: [`DEC-0045`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0045-one-active-signal-group.md)
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
+- nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 
 ## Boundary
 
@@ -103,12 +104,20 @@ therefore S3=4, C5=1 and RP=0; firmware cannot invent another direct RP control.
 8. every non-member quiet-state transition, no-back-power/fault injection and
    active-receiver desense under maximum valid system-plane traffic.
 
-The two-device fixture uses one shared test ID and explicit DUT/observer roles.
-It exchanges manifests and ordinary packet streams, never remote raw CE/GPIO.
-Both devices retain their own per-radio logs; results join by test ID, radio
+The fixture has two explicitly different evidence levels. Ordered ESP32-DIV
+units form `L0 DIV↔DIV` pre-HIL: they validate the manifest/log workflow and
+reproduce loss/self-desense, but cannot close Leshy2 RF, rail, antenna or
+thermal acceptance. `T1 TARGET` uses two comparable Leshy2 revisions, or a
+Leshy2 DUT plus a calibrated conducted/OTA peer, and is the only production
+acceptance level.
+
+Both levels use one shared test ID and explicit DUT/observer roles. They
+exchange manifests and ordinary packet streams, never remote raw CE/GPIO.
+Every device retains its own per-radio logs; results join by test ID, hardware
 identity, packet sequence and timestamps with recorded synchronization error.
-Every role mix is repeated after swapping DUT and observer. The observer is HIL
-equipment, not a runtime dependency of the base product.
+Role reversal on `L0` measures DIV asymmetry only; role reversal/reproducibility
+on `T1` closes target evidence. The observer is HIL equipment, not a runtime
+dependency of the base product.
 
 ## Explicitly open
 

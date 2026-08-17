@@ -47,13 +47,16 @@
   full-function in every PTX/PRX mix with no peer standby/gaps. Unused
   interfaces enter hardware/native power-down and digital quiet states; RP
   GPIO15/GPIO23 and C5 GPIO4 become group-level power controls. Exact mixed-RF
-  envelope policy is now accepted by `DEC-0047`; a second device becomes the
-  reversible `N24H-0001` observer/peer. Exact modules, measured sensitivity
-  points, power parts, physical RF/self-desense and HIL remain open.
+  envelope policy is now accepted by `DEC-0047`; the ordered second ESP32-DIV
+  becomes the `N24H-0001` `L0 DIV↔DIV` pre-HIL observer, but target pass
+  requires `T1` on the exact Leshy2 revision. Exact modules, measured
+  sensitivity points, power parts, physical RF/self-desense and target HIL
+  remain open.
 - Target-specific firmware architecture: **reopened/not selected**.
 - Former `ARC-0001` three-domain contract: candidate/reference only.
-- Next upstream gate: hardware selects exact nRF modules/antennas, instantiates
-  `N24H-0001`, then closes measured full-mix points, quiet-state power controls,
+- Next upstream gate: hardware decides `IMP-0040`, selects exact nRF
+  modules/antennas, advances `N24H-0001` from `L0` to target `T1`, then closes
+  measured full-mix points, quiet-state power controls,
   physical RF/self-desense,
   peripherals, signal integrity, power/service and HIL for leading `G2F-3I`.
   Its reviewed paper ownership/pins/resources are inputs, not an atomic target.

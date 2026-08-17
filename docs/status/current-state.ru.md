@@ -46,13 +46,15 @@
   полнофункциональными в любом PTX/PRX mix без standby/gaps. Неиспользуемые
   interfaces переходят в hardware/native power-down и digital quiet-state;
   это забирает RP GPIO15/GPIO23 и C5 GPIO4 под group-level power gates. Exact
-  envelope policy теперь принята `DEC-0047`; второй device становится
-  reversible observer/peer `N24H-0001`. Exact modules, измеренные sensitivity
-  points, power parts, physical RF/self-desense и HIL открыты.
+  envelope policy теперь принята `DEC-0047`; заказанный второй ESP32-DIV
+  становится `L0 DIV↔DIV` pre-HIL observer в `N24H-0001`, но target pass
+  требует `T1` на exact Leshy2 revision. Exact modules, измеренные sensitivity
+  points, power parts, physical RF/self-desense и target HIL открыты.
 - Target-specific firmware architecture: **переоткрыта/не выбрана**.
 - Бывший three-domain `ARC-0001`: candidate/reference only.
-- Следующий upstream gate: hardware выбирает exact nRF modules/antennas,
-  инстанцирует `N24H-0001`, затем закрывает measured full-mix points,
+- Следующий upstream gate: hardware решает `IMP-0040`, выбирает exact nRF
+  modules/antennas, переводит `N24H-0001` из `L0` в target `T1`, затем закрывает
+  measured full-mix points,
   quiet-state power controls, physical RF/self-desense,
   peripherals, signal integrity, power/service и HIL ведущего `G2F-3I`.
   Его reviewed paper ownership/pins/resources — вход, а не atomic target.
