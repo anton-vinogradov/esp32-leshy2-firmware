@@ -144,6 +144,11 @@
   owner. The latter becomes a fourth independently recoverable firmware image
   domain; S3 sees bounded read-only state and cannot release a refused pair.
   A replaced cell invalidates pair SOC/SOH and starts admission/relearning.
+  `DEC-0067/REV-0005X` then accept no in-device deep-cell recovery and the
+  exact fully-switching surrounding path. The protected image keeps zero-volt
+  and prequal disabled; a deep cell is refused, PA24/PA25 provide midpoint/
+  stack evidence, and external recovery research belongs only to an isolated
+  Controlled-Zone fixture.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

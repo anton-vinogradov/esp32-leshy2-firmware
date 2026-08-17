@@ -63,6 +63,11 @@ variant evidence. Hardware `DEC-0066/REV-0005V` accept exact
 MAX17320G20+T plus MSPM0C1104SDGS20R: the MSP owns local admission and becomes
 a fourth independently recoverable image domain; S3 sees only bounded
 read-only state/fault and cannot override refusal.
+Hardware `DEC-0067/REV-0005X` additionally disable in-product zero-volt and
+linear-prequalification recovery, accept the exact fully-switching pack path
+and consume PA24/PA25 as midpoint/full-stack evidence. Firmware refuses a
+deep cell and exposes no recovery command; any recovery research is a separate
+isolated Controlled-Zone fixture operation.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch

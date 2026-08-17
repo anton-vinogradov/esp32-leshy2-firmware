@@ -48,12 +48,16 @@ class TargetReadmeTests(unittest.TestCase):
                 "as one required pair",
                 "blocks battery operation and charging",
                 "cannot be overridden in software",
+                "deeply discharged cell is refused",
+                "no zero-volt/prequalification recovery command",
             ),
             "README.ru.md": (
                 "контролируемая батарея 2s",
                 "как одну обязательную пару",
                 "блокируют работу от батареи и зарядку",
                 "не могут быть обойдены программно",
+                "глубоко разряженная банка отклоняется",
+                "нет команды zero-volt/ prequalification recovery",
             ),
         }
         for readme_name, tokens in required_tokens.items():

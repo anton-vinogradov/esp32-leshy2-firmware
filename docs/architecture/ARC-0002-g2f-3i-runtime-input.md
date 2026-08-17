@@ -23,6 +23,7 @@
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
 - accepted supervised 2S topology: [`DEC-0065`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0065-supervised-2s-battery-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`REV-0005T`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005T-supervised-2s-topology-decision-propagation.md)
 - accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
+- accepted deep-cell/circuit boundary: [`DEC-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0067-no-in-device-deep-cell-recovery.md), [`PWR-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0007-max17320-2s-surrounding-circuit.md), [`REV-0005X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005X-deep-cell-policy-propagation.md)
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 
 ## Boundary
@@ -138,6 +139,16 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - Hardware owns reverse-insertion prevention, observation before admission and
   the charge/discharge FET boundary. Firmware may request admission but cannot
   force a refused pair on or use balancing to mask an unsafe mismatch.
+- `DEC-0067` forbids in-device deep-cell recovery. A cell below the qualified
+  admission floor is refused; `3.0 V` relaxed/no-load per cell is a paper
+  starting point, not yet a firmware constant. The protected MAX17320 image
+  keeps zero-volt charge and linear prequalification disabled, and firmware
+  must verify that state before requesting release. There is no S3, admission-
+  MCU or product-menu command that can enable either path.
+- The physical `ZVC` contact is unused by hardware. Firmware must not describe
+  a register write as an alternative recovery path. Any characterization or
+  attempted recovery uses a separately powered isolated Controlled-Zone
+  fixture and is outside the handheld runtime protocol.
 - Firmware retains distinct `cell_0`, `cell_1`, set/bus, temperature, contact and
   admission states. Missing/inconsistent evidence is `unknown` and blocks
   charge, high-load operation and TX leases rather than inheriting the prior
@@ -147,7 +158,8 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   identity is restored until both cells pass the hardware/firmware contract.
   The base product exposes no one-cell battery-operation mode.
 - The admission MCU owns local gauge polling, protected-NVM verification,
-  diagnostic-load sequencing and the release decision. S3 consumes a
+  midpoint/full-stack ADC evidence on PA24/PA25, diagnostic-load sequencing
+  and the release decision. S3 consumes a
   read-only state/fault window and may request evaluation but cannot access the
   local gauge bus directly or override a refusal. The admission MCU is a
   fourth independently recoverable firmware image and service domain, not an
@@ -155,6 +167,10 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - The admission image runs a bounded low-clock/duty state machine from AOLDO.
   Flash programming/recovery uses isolated fixture or admitted system power;
   firmware must not assume AOLDO can supply erase/program current.
+- Runtime diagnostics name the exact protected path without controlling it:
+  `CSD87313DMST` CHG/DIS state, two slot-fuse/NTC channels, the 5-mOhm shunt,
+  reset-default ALRT hold and admission-supply source. Unknown or inconsistent
+  evidence keeps the path open; it never falls back to a software estimate.
 
 ## Sink-only USB-PD and charge input
 
@@ -182,7 +198,7 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   Firmware presents recovery instructions but cannot claim that an
   application-only update path is independent recovery.
 - HIL covers every supported/fallback cable and source, blank/corrupt image,
-  interrupted update, shared-IRQ concurrency, no-battery/deep-cell boot,
+  interrupted update, shared-IRQ concurrency, no-battery/deep-cell refusal,
   supplement/removal/bounce, thermal derating and proof that 20 V/source/OTG
   never reaches the connector.
 

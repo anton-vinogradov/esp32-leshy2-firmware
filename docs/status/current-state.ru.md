@@ -147,6 +147,11 @@
   восстанавливаемым firmware-image domain; S3 видит bounded read-only state и
   не может подключить отклонённую пару. Замена ячейки сбрасывает SOC/SOH пары
   и запускает admission/relearning заново.
+  `DEC-0067/REV-0005X` затем принимают отсутствие in-device deep-cell recovery
+  и exact fully-switching surrounding path. Protected image держит zero-volt и
+  prequal выключенными; глубоко разряженная банка отклоняется, PA24/PA25 дают
+  midpoint/stack evidence, а исследование восстановления возможно только
+  внешней изолированной оснасткой Controlled Zone.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
