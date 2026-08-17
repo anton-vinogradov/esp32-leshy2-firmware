@@ -61,6 +61,28 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
 
+    def test_target_readmes_keep_sink_only_pd_and_recovery_behavior(self):
+        required_tokens = {
+            "README.md": (
+                "USB-C power is sink-only",
+                "15 V/2 A",
+                "never enables 20 V",
+                "inactive EEPROM region",
+            ),
+            "README.ru.md": (
+                "USB-C только принимает питание",
+                "15 В/2 А",
+                "никогда не включает 20 В",
+                "неактивный регион EEPROM",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            ).lower()
+            for token in tokens:
+                self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
+
 
 if __name__ == "__main__":
     unittest.main()

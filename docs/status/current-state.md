@@ -1,6 +1,6 @@
 # Leshy2 Firmware — current engineering state
 
-> Snapshot: 2026-08-17. Intended software behavior is in the
+> Snapshot: 2026-08-18. Intended software behavior is in the
 > [target README](../../README.md). Canonical decisions live in the
 > [hardware review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review).
 
@@ -129,8 +129,12 @@
   exposes distinct cell and pair state, cannot override the hardware-open
   charge/discharge boundary, and treats mismatch, removal/contact bounce and
   incomplete identity as blocked/unknown. `REV-0005Q` reviews propagation.
-  **⚠️ Proposal `IMP-0053`** is the active owner input between the complete
-  5-V Type-C/NVDC and USB-PD/buck-boost charge paths.
+  The owner accepted `IMP-0053/B` as `DEC-0063`: sink-only USB-PD supports
+  5-V fallback, 9 V/3 A and 15 V/2 A up to 30 W, while source/power-bank/
+  20-V/PPS/OTG stay disabled and S3 USB2 remains direct. `PWR-0004/REV-0005R`
+  review exact TPS25751D/BQ25798, mandatory recoverable CAT24C512 EEPROM,
+  TVS2200, shared SYS-I2C0/IRQ behavior, signed dual-region policy updates and
+  reset-default charge disable. ARC-0002 now consumes that runtime contract.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -171,7 +175,8 @@ remain references until their downstream gates.
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
 with `I2` reviewed and `I3` power prerequisites plus the replaceable-cell
-format reviewed; the charge/power-path owner input is active and the integrated physical
+format and sink-only USB-PD frontend reviewed; the cell manager and complete
+rail/loss/thermal/fault tree are the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the

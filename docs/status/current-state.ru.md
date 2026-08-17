@@ -1,6 +1,6 @@
 # Прошивка Leshy2 — текущее состояние проработки
 
-> Снимок: 2026-08-17. Образ software — в [target README](../../README.ru.md).
+> Снимок: 2026-08-18. Образ software — в [target README](../../README.ru.md).
 > Канонические decisions — в [hardware review ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review).
 
 ## Текущая зрелость
@@ -130,8 +130,13 @@
   показывает состояние ячеек и пары, не может обойти аппаратно разомкнутую
   границу charge/discharge и считает mismatch, извлечение/дребезг контакта или
   неполную identity состоянием blocked/unknown. Распространение проверено в
-  `REV-0005Q`. Активный owner input — **⚠️ Предложение `IMP-0053`** между
-  полным 5-V Type-C/NVDC и USB-PD/buck-boost трактами.
+  `REV-0005Q`. Владелец принял `IMP-0053/B` как `DEC-0063`: sink-only USB-PD
+  поддерживает fallback 5 В, 9 В/3 А и 15 В/2 А до 30 Вт; source/power-bank/
+  20-V/PPS/OTG выключены, а USB2 S3 остаётся прямым. `PWR-0004/REV-0005R`
+  проверяют exact TPS25751D/BQ25798, обязательную восстанавливаемую EEPROM
+  CAT24C512, TVS2200, общий SYS-I2C0/IRQ, подписанное dual-region обновление
+  policy и reset-default запрет заряда. ARC-0002 теперь потребляет этот runtime
+  contract.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -171,9 +176,10 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
-с уже reviewed `I2`, prerequisites `I3` и формата replaceable-cell; сейчас
-активен owner input по charge/power path, а integrated physical mockup возобновится
-после joint internal review. Затем проходят whole-device optimality,
+с уже reviewed `I2`, prerequisites `I3`, формата replaceable-cell и sink-only
+USB-PD frontend; сейчас активны cell manager и полный rail/loss/thermal/fault
+tree. Integrated physical mockup возобновится после joint internal review.
+Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт
 implementation.

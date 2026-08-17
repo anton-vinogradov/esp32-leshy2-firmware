@@ -47,6 +47,13 @@ S3↔C5 SDIO, restoring C5 native USB and S3 default UART0 while retaining both
 UART service paths. M5 Unit UART moves to UART1 on unchanged GPIO7/8. The link
 still requires ≥1.5 MB/s framed HIL; 4-bit is fallback evidence, not a parallel
 runtime profile.
+Hardware `DEC-0062/REV-0005Q` retain two individually replaceable 18650 cells
+behind fail-closed pair admission. `DEC-0063/PWR-0004/REV-0005R` then accept
+the exact sink-only 30-W TPS25751DREFR/BQ25798RQMR frontend with mandatory
+CAT24C512WI-GT3 boot image and TVS2200DRVR. ARC-0002 consumes the fixed 5/9/15-V
+contracts, direct S3 USB2, shared I2C/IRQ status, charge-disable defaults and
+signed dual-region PD-image recovery; the cell manager and complete rail/HIL
+tree remain upstream I3 work.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch

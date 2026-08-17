@@ -1,7 +1,7 @@
 # ARC-0002 — G2F-3I runtime input
 
 - Status: **reviewed paper-layout input; target firmware architecture remains blocked**
-- Date: 2026-08-17
+- Date: 2026-08-18
 - Canonical hardware decision: [`DEC-0044`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0044-delegated-noninterference-layout.md)
 - Hardware artifact: [`NIF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NIF-0001-digital-noninterference-layout.md)
 - Exact generated map: [`G2F-pin-ledger`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/generated/G2F-pin-ledger.md)
@@ -20,6 +20,8 @@
 - accepted audio topology: [`DEC-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0054-fail-safe-complete-audio-path.md), [`REV-0005D`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005D-audio-decision-propagation.md)
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
+- replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
+- sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 
 ## Boundary
 
@@ -92,7 +94,9 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
   P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
-  a safety-deadline line and does not assert PTT.
+  a safety-deadline line and does not assert PTT. TPS25751D is another bounded
+  target on this bus. Its active-low IRQ shares GPIO37 with TCA6424 `INT`;
+  every wake reads both status blocks and no driver assumes a unique source.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
@@ -131,6 +135,36 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - Single-cell removal, contact bounce, a single-cell replacement and reset are
   fresh admission events. No previous state-of-charge, health or approved-pair
   identity is restored until both cells pass the hardware/firmware contract.
+
+## Sink-only USB-PD and charge input
+
+- `TPS25751DREFR` autonomously loads its policy from dedicated
+  `CAT24C512WI-GT3`; `BQ25798RQMR` is on the TPS-local I2C controller bus.
+  S3 is a host/observer through TPS I2Ct, not the component required to make
+  an ordinary dead-battery attachment negotiate safely.
+- The only accepted contracts are 5-V fallback, 9 V/3 A and 15 V/2 A. Firmware
+  never requests or exposes 20 V, PPS, source/power-bank or BQ OTG. Any
+  unexpected role/PDO is a latched power-policy fault and charge is disabled.
+- Runtime state is explicit: negotiated voltage/current/power, cable/source
+  class, input/charge limits, charger mode/faults, both cell states, EEPROM
+  image version/hash/active region and whether recovery is required. Unknown
+  is never converted into 30-W availability.
+- The first charge-current ceiling is 2 A and is further reduced or paused by
+  system load, connector/charger/cell temperature, weak-source behavior and
+  cell-manager decisions. The 5-A IC capability is not a runtime default.
+- Product USB2 stays direct on S3 GPIO19/20. There is no firmware profile that
+  enables TPS BC1.2/liquid pins or BQ DPDM on the data pair.
+- A PD image update is permitted only while TX is disarmed, input and cells are
+  stable, the signed manifest targets the exact board/controller/tool version,
+  and the inactive EEPROM region is writable. Readback/hash/boot validation
+  occurs before retiring the previous region; interruption preserves rollback.
+- Factory/recovery pads remain the authority for a blank or corrupt EEPROM.
+  Firmware presents recovery instructions but cannot claim that an
+  application-only update path is independent recovery.
+- HIL covers every supported/fallback cable and source, blank/corrupt image,
+  interrupted update, shared-IRQ concurrency, no-battery/deep-cell boot,
+  supplement/removal/bounce, thermal derating and proof that 20 V/source/OTG
+  never reaches the connector.
 
 ## Hard STOP and actual-TX input
 

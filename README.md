@@ -126,6 +126,9 @@ flowchart TD
 - The two replaceable 18650 cells are reported separately and as a supervised
   pair. A mismatch, removed cell, contact fault or incomplete battery identity
   blocks operation/charging and cannot be overridden in software.
+- USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
+  up to 30 W, reports the actual contract and load-aware charge limit, and
+  never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
 - Ordinary UI effects may be muted, but active TX, STOP failure, critical
   battery and other unsafe states cannot be hidden.
 
@@ -137,6 +140,9 @@ flowchart TD
   rollback and never arms TX after restart.
 - Every programmable domain can be independently flashed, recovered and
   diagnosed without a healthy application image or peer processor.
+- The PD policy image is a versioned, reproducible, owner-signed artifact.
+  Field update writes an inactive EEPROM region and keeps rollback; direct
+  factory/recovery pads can restore a blank or corrupt device without S3.
 - The owner retains offline/reproducible build and signing tools. Owner firmware
   remains installable through an explicit recovery workflow; irreversible
   lockdown is not the standard mode.
