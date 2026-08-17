@@ -53,9 +53,10 @@ open.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable. The S3
-budget remains `31/3/2`. `FND-0065/IMP-0046` leave differential analog
-conditioning and selector topology open, so firmware cannot freeze gain/mute
-or routing registers yet.
+budget remains `31/3/2`. `FND-0065/0066/IMP-0046` leave the whole analog path
+open: PAM8302A can take differential audio, while the ES8311 ADC is documented
+as microphone-oriented rather than a recommended line input. Firmware cannot
+freeze gain/mute or routing registers yet.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

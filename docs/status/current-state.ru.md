@@ -43,7 +43,8 @@
   Hardware `AUDIO-0001/REV-0005B` также вносят exact I2C/I2S contacts
   `ES8311` QFN-20 без изменения бюджета. `CE` — fixed address strap `0x19`,
   P10 — внешний `CODEC_PWR_EN`. `FND-0065/IMP-0046` оставляют открытыми exact
-  differential analog routing и power implementation.
+  whole analog routing и power implementation; `FND-0066` дополнительно
+  фиксирует ES8311 line-input warning и differential capability PAM8302A.
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:

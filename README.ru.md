@@ -112,8 +112,10 @@ display/touch reset. Production ordering/drawing/connector и vendor init table
 Hardware `AUDIO-0001/REV-0005B` также вносят exact digital boundary `ES8311`
 QFN-20 на S3 GPIO1/2/15/16/17/18. Адрес codec — `0x19`, MCLK берётся из BCLK
 без дополнительного GPIO, а slow P10 — внешний `CODEC_PWR_EN`, поскольку
-physical `CE` только address strap. S3 остаётся `31/3/2`; differential analog
-routing — открытое решение `IMP-0046`, поэтому firmware пока не фиксирует
+physical `CE` только address strap. S3 остаётся `31/3/2`; `FND-0066`
+дополнительно фиксирует, что PAM8302A принимает differential input, но ADC
+ES8311 microphone-oriented и не рекомендован для слепого line input. Весь
+analog path остаётся `IMP-0046`, поэтому firmware не фиксирует
 gain/mute/selector sequence.
 Hardware `DEC-0045/0046` дополнительно требуют одну active top-level signal group,
 three-radio `SG-N24` full mix и verified quiet states всех неиспользуемых

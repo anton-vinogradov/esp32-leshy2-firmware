@@ -112,8 +112,10 @@ Hardware `AUDIO-0001/REV-0005B` also instantiate the exact `ES8311` QFN-20
 digital boundary on S3 GPIO1/2/15/16/17/18. Codec address is `0x19`, MCLK uses
 the BCLK-derived mode with no extra GPIO, and slow P10 is external
 `CODEC_PWR_EN` because physical `CE` is only the address strap. S3 remains
-`31/3/2`; differential analog routing is still the explicit `IMP-0046`
-decision and firmware does not freeze its gain/mute/selector sequence.
+`31/3/2`; `FND-0066` additionally notes that PAM8302A accepts differential
+input but the ES8311 ADC is microphone-oriented and not recommended blindly
+for line input. The whole analog path remains `IMP-0046`; firmware does not
+freeze its gain/mute/selector sequence.
 Hardware `DEC-0045/0046` additionally require one active top-level signal group,
 the three-radio `SG-N24` full mix and verified quiet states for every unused
 interface. `DEC-0047/N24H-0001` use the ordered second ESP32-DIV as an early

@@ -198,7 +198,11 @@ are proven ready. Any codec/readback/DMA/watchdog fault stops I2S, returns
 bypass and leaves PTT off.
 
 Exact ADC `MIC1P/MIC1N` and DAC `OUTP/OUTN` are differential. Hardware
-`FND-0065/IMP-0046` therefore keep the conditioner/selector circuit open.
+`FND-0065/0066/IMP-0046` therefore keep the conditioner/selector circuit open.
+The PAM8302A physically accepts differential input even though legacy wiring
+is single-ended; conversely, the ES8311 user guide calls its ADC input a
+microphone interface not recommended for blind line-input use. Firmware must
+not hide either distinction behind a generic `audio_route` abstraction.
 Firmware may define logical capture/playback/inject modes, but must not freeze
 gain, mute timing, codec register script or claim lossless TX/speaker routing
 before that owner decision and electrical/HIL closure.
