@@ -225,9 +225,13 @@
   scan, with P7 reserved; encoder A/B use direct PCNT0 on S3 GPIO39/GPIO47; touch IRQ joins
   shared GPIO37 through a specimen-selected polarity adapter. PTT remains
   direct RP GPIO21, while STOP and RE-ARM remain asynchronous AON hardware.
-  Firmware runtime details are in `ARC-0003`; exact switch mechanics, touch
-  polarity, SYS-I2C address scan and matrix/encoder concurrent-load HIL remain
-  upstream.
+  `FND-0092/UI-0002/DEC-0087/REV-0005AR` then select exact low-current
+  `Y78B23214FP` switches for every ordinary position, PTT and RE-ARM, plus an
+  exact gold-clad `AEQ10410` COM+NC STOP switch. Separate matrix,
+  encoder/PTT and safety ESD arrays and exact pull/filter networks terminate
+  every path. Firmware runtime details are in `ARC-0003`; cap/plunger and STOP
+  guard/harness mechanics, touch polarity, SYS-I2C address scan and
+  control/ESD/fault/concurrent-load HIL remain upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper
@@ -304,8 +308,8 @@ remain references until their downstream gates.
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
 `I2` and I3 paper electrical scope reviewed and I4 now the active dependent
-paper block; exact protected product-USB, display and isolated microSD paper
-endpoints and the local-control inventory/pin fit are reviewed, while exact UI
+paper block; exact protected product-USB, display, isolated microSD and local-
+control switch/protection paper endpoints are reviewed, while UI enclosure
 mechanics and HIL remain active. Specimen mechanics,
 exact-cell droop and timer/load hot HIL plus
 complete transition/rail/loss/thermal/fault evidence remain mandatory physical

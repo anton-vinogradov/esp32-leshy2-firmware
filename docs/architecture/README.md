@@ -34,12 +34,15 @@ exact-MPN selection. Exact two-source hardware and measurements remain pending
 under `FND-0058`.
 
 [`ARC-0003`](ARC-0003-local-controls-runtime-contract.md) consumes hardware
-`DEC-0086/UI-0001`: dedicated TCA9534A P0…P6 gives the complete
+`DEC-0086/UI-0001` plus the exact `DEC-0087/UI-0002` electrical endpoint:
+dedicated TCA9534A P0…P6 gives the complete
 D-pad/OK/BACK/OPT/F1/F2 set and encoder push an interrupt-driven bounded 4×3
 scan while P7 remains reserved; encoder A/B use direct S3 PCNT0 on GPIO39/GPIO47,
-physical PTT stays direct RP GPIO21 and STOP/RE-ARM remain asynchronous AON
-controls. Touch IRQ joins shared GPIO37 through a specimen-selected polarity
-adapter and never falls back to polling-only operation.
+physical PTT stays direct RP GPIO21, and STOP/RE-ARM remain asynchronous AON
+controls. Exact low-current switches, separate matrix/encoder-PTT/safety ESD
+arrays and pull/filter networks now make those software boundaries physical.
+Touch IRQ joins shared GPIO37 through a specimen-selected polarity adapter and
+never falls back to polling-only operation.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP

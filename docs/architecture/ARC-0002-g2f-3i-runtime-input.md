@@ -661,7 +661,7 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092` list remaining electrical/HIL endpoints:
 display standalone sourcing/final mate and display/touch/backlight HIL,
 microSD socket access, real media/endurance, throughput/contention, hot removal,
 fault injection and corruption recovery, passive codec/analog networks,
@@ -670,7 +670,7 @@ HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
 source-transition, brownout, thermal/source-handover/fault HIL, Unit
 protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
-feedback parts, ten control resistors, direct AON EN strap, exact AON-PG/POR/main sequence, switches and
+feedback parts, ten control resistors, direct AON EN strap, exact AON-PG/POR/main sequence, exact control switches/protection and
 independent AON/main/voice post-buck cutoffs with protected PG, plus
 external eFuse plus its eight profile passives, and the corrected dual-channel
 pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
@@ -706,6 +706,13 @@ pulls, source damping, full socket-contact/detect ESD and always-readable
 detect. Firmware may freeze the session sequencing and error semantics above,
 but cannot freeze a production media set, final clock/RC values, endurance or
 corruption guarantees before physical and HIL evidence.
+Hardware `FND-0090/UI-0001/DEC-0086/REV-0005AQ` then restore the complete
+local-control inventory and its pin fit. `FND-0092/UI-0002/DEC-0087/REV-0005AR`
+instantiate the exact low-current switches, fail-open COM+NC STOP loop,
+matrix/encoder-PTT/safety ESD separation and pull/filter networks. Firmware may
+freeze the physical-source identities, active levels and asynchronous STOP
+dominance in `ARC-0003`; it cannot claim final debounce, ergonomics or ESD and
+fault tolerance before physical/HIL evidence.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open

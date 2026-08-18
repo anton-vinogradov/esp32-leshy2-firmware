@@ -53,6 +53,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "TCA9534APWR",
                 "PCNT0 on GPIO39/GPIO47",
                 "direct RP GPIO21 input",
+                "Every ordinary position, including F1 and F2",
+                "Panasonic AEQ10410",
+                "pressing it or losing its connection stops",
                 "do not replace any of them",
             ),
             "README.ru.md": (
@@ -65,6 +68,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "TCA9534APWR",
                 "PCNT0 на GPIO39/GPIO47",
                 "прямой вход RP GPIO21",
+                "Каждая обычная позиция, включая F1 и F2",
+                "Panasonic AEQ10410",
+                "нажатие, и потеря соединения",
                 "не заменяют эти органы управления",
             ),
         }

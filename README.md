@@ -70,10 +70,14 @@ flowchart TD
   recessed RE-ARM. Touch and phone text input do not replace any of them.
 - D-pad/OK/BACK/OPT/F1/F2 and encoder push use a dedicated `TCA9534APWR`
   (`P0…P6`, candidate address `0x3F`) for an interrupt-started 4×3 scan; `P7`
-  remains reserved for local control growth.
+  remains reserved for local control growth. Every ordinary position, including
+  F1 and F2, is its own `C&K Y78B23214FP` low-current switch, and all eight
+  expander lines have dedicated keypad/GPIO ESD protection.
   Encoder phases are captured independently by S3 PCNT0 on GPIO39/GPIO47, so
-  display, storage and I²C work cannot lose quadrature edges. PTT is a direct
-  RP GPIO21 input; STOP and RE-ARM remain asynchronous AON hardware controls.
+  display, storage and I²C work cannot lose quadrature edges. PTT is a separate
+  filtered direct RP GPIO21 input. STOP uses an independent normally-closed
+  `Panasonic AEQ10410` AON loop, so pressing it or losing its connection stops
+  the device; RE-ARM remains a separate recessed physical control.
 - Display and touch stay in hardware reset until their common protected logic
   rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
   `100 ms` before touch use, then enables the PWM backlight last. A latched

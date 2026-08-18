@@ -1,8 +1,9 @@
 # ARC-0003 — local-controls runtime contract
 
 - Status: **reviewed upstream runtime input; implementation not started**
-- Hardware input: [`DEC-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0086-complete-local-controls-and-direct-encoder.md)
-- Hardware topology: [`UI-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/UI-0001-complete-local-control-topology.md)
+- Hardware inventory/pin input: [`DEC-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0086-complete-local-controls-and-direct-encoder.md)
+- Hardware electrical input: [`DEC-0087`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0087-exact-control-switch-and-protection-endpoint.md)
+- Exact hardware topology: [`UI-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/UI-0002-exact-switch-and-control-protection.md)
 
 ## Stable logical controls
 
@@ -35,6 +36,12 @@ return low after the fourth row. The coordinate map is:
 | 1 | RIGHT | OK | BACK |
 | 2 | OPT | F1 | F2 |
 | 3 | ENCODER_PUSH | unused | unused |
+
+Each of the nine ordinary positions is a separate exact `C&K Y78B23214FP`
+ultra-low-current switch; F1 and F2 therefore remain independent physical
+inputs rather than aliases or touch-only commands. `TPD8E003DQDR` protects
+P0…P7 individually, including the reserved position, without changing the
+logical coordinate map.
 
 Debounce state is per physical position. Multiple simultaneous positions are
 never collapsed into an invented third key. A complete scan and first visible
@@ -69,13 +76,29 @@ physical buttons and STOP remain usable.
 
 ## PTT, STOP and RE-ARM
 
-- RP GPIO21 owns physical PTT edges and local debounce/dead-man behavior. PTT
-  is effective only in an armed foreground voice lease; matrix/touch/phone
-  events cannot synthesize it.
-- STOP is asynchronous hardware. Firmware only reconstructs and displays the
-  latched cause after reset; no task, queue or I²C transaction precedes it.
-- Releasing STOP does nothing. Only a fresh physical RE-ARM edge after safe
-  checks permits a new TX-off session; it never restores prior context.
+- A separate exact `C&K Y78B23214FP` PTT switch pulls the raw line low. Its
+  10-kOhm pull-up, 100-nF filter, `TPD4E05U06DQAR` ESD channel and 1-kOhm
+  series resistor terminate directly on RP GPIO21. RP owns both physical
+  edges and local debounce/dead-man behavior; scan, I²C, touch and phone input
+  are not in this path and cannot synthesize PTT. PTT is effective only in an
+  armed foreground voice lease, and a qualified release or loss/fault revokes
+  the request locally.
+- Exact `Panasonic AEQ10410` COM+NC is the hard-STOP loop. Its 10-kOhm AON
+  pull-up and 10-nF filter make press, connector loss or an open wire assert
+  STOP. A dedicated `TPD4E05U06DQAR` returns only to safety ground. STOP
+  remains asynchronous hardware: firmware neither debounces nor gates its
+  assertion and only reconstructs/displays the latched cause after reset.
+- A separate recessed `C&K Y78B23214FP` with a 47-kOhm AON pull-up, 100-nF
+  filter and the dedicated safety ESD array provides RE-ARM. Releasing STOP
+  does nothing. Only a fresh physical RE-ARM edge after safe checks permits a
+  new TX-off session; it never restores prior context.
+
+The switch data-sheet bounce limit is an input to the initial driver profile,
+not permission to hard-code final debounce timing. HIL must qualify press and
+release latency, contact chatter, stuck/open/short lines, ESD, simultaneous
+matrix positions and PTT loss while the full system is loaded. Diagnostics
+name the raw source and protection/fault path without turning a software event
+into a physical control.
 
 This contract is an upstream paper input, not a HAL implementation or a claim
-that switch/touch/encoder HIL has passed.
+that control/touch/encoder HIL has passed.

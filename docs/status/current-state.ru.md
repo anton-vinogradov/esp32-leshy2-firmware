@@ -230,9 +230,13 @@
   а P7 остаётся резервом; A/B энкодера напрямую входят в PCNT0 S3 GPIO39/GPIO47;
   touch IRQ входит в общий GPIO37 через выбираемый по specimen polarity
   adapter. PTT остаётся прямым RP GPIO21, а STOP и RE-ARM — асинхронным AON
-  hardware. Runtime описан в `ARC-0003`; exact mechanics переключателей,
-  touch polarity, SYS-I2C address scan и concurrent-load HIL матрицы/энкодера
-  остаются upstream.
+  hardware. `FND-0092/UI-0002/DEC-0087/REV-0005AR` затем выбирают exact
+  low-current `Y78B23214FP` для каждой ordinary-позиции, PTT и RE-ARM, а также
+  exact gold-clad `AEQ10410` COM+NC для STOP. Отдельные ESD-массивы матрицы,
+  encoder/PTT и safety-пары вместе с exact pull/filter networks завершают
+  каждый тракт. Runtime описан в `ARC-0003`; cap/plunger и STOP guard/harness
+  mechanics, touch polarity, SYS-I2C address scan и control/ESD/fault/
+  concurrent-load HIL остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -310,9 +314,9 @@ references до своих downstream gates.
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
 бумажная электрическая часть I3 прошли ревью, а I4 стал следующим активным
-бумажным блоком; exact protected product-USB, display и isolated microSD paper
-endpoints и inventory/pin fit локальных controls reviewed; exact UI mechanics
-и HIL остаются активны. Mechanics, exact-cell droop,
+бумажным блоком; exact protected product-USB, display, isolated microSD и
+local-control switch/protection paper endpoints reviewed; UI enclosure
+mechanics и HIL остаются активны. Mechanics, exact-cell droop,
 timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными
 физическими I3-gates; они больше не маскируются под незакрытую
