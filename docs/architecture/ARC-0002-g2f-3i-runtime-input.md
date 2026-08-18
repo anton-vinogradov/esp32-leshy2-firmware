@@ -29,6 +29,7 @@
 - latch-off external eFuse: [`DEC-0069`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0069-latch-off-external-efuse.md), [`REV-0005Z`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Z-latch-off-efuse-propagation.md)
 - enable-qualified switched-rail PG: [`DEC-0070`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0070-enable-qualified-switched-rail-pg.md), [`PWR-0009`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0009-enable-qualified-switched-rail-pg.md), [`REV-0005AA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AA-switched-rail-pg-qualification.md)
 - external-eFuse passive/startup profile: [`DEC-0071`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0071-post-start-accessory-transient-profile.md), [`PWR-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0010-external-efuse-passive-profile.md), [`REV-0005AB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AB-external-efuse-passive-profile.md)
+- exact converter passive profile: [`DEC-0072`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0072-exact-converter-energy-feedback-passives.md), [`PWR-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0011-application-converter-passive-profile.md), [`REV-0005AC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AC-application-converter-passive-profile.md)
 
 ## Boundary
 
@@ -213,6 +214,12 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   `VVOICE_4V` and the pre-protection 5-V accessory rail each use a separate
   `TPS564252DRLR`. Firmware has no voltage selector, feedback-network mode or
   supported command that can turn the 4-V voice output into 5 V.
+- The fixed hardware profile is exact rather than runtime-configurable:
+  TPS629203 selects 3.3 V with open `FB/VSET` and a 42.2-kOhm MODE/S-CONF
+  strap; the three TPS564252 dividers produce nominal 3.318/4.000/5.000 V.
+  Their paper limits are acceptance inputs, not ADC calibration values or
+  software-adjustable set points. Firmware exposes the rail identity and
+  measured qualification result, never a voltage-setting API.
 - AON power is autonomous. Its hardware enable is pulled on from admitted
   `SYS`; `AON_PG_N` must be valid before the STOP supervisor/sequencer may
   release the compute domains. Application firmware observes the post-boot
@@ -446,12 +453,12 @@ routing before electrical/HIL closure.
 
 Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, application-converter feedback/capacitor values, charger and
-diagnostic-load passives, thermal/source-handover/fault HIL, Unit protection
-and service-connector mechanics. The active downstream converters, switches
-and external eFuse plus its eight profile passives are now exact reviewed
-inputs, but firmware must not infer unmeasured delays, thresholds or safe
-states for their still-open HIL boundaries.
+IR frontend/driver, charger and diagnostic-load passives, converter EN/PG
+pulls, thermal/source-handover/fault HIL, Unit protection and service-connector
+mechanics. The active downstream converters, their 24 energy/configuration/
+feedback parts, switches and external eFuse plus its eight profile passives
+are now exact reviewed inputs, but firmware must not infer unmeasured delays,
+thresholds or safe states for their still-open HIL boundaries.
 
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
 are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,

@@ -157,9 +157,9 @@
   преобразователей вычислительных 3,3 В, voice 4,0 В и защищённых accessory
   5,0 В, пяти reset-off quiet-state load switches и внешней eFuse с reverse
   blocking/current limit. ARC-0002 теперь потребляет fixed-voltage,
-  PG/fault, shutdown/discharge и nRF common-branch sequencing. В I3 остаются
-  exact feedback/capacitor/discharge и charger/diagnostic-load passives, а
-  также полный rail/thermal/fault HIL.
+  PG/fault, shutdown/discharge и nRF common-branch sequencing. На этом
+  checkpoint пассивы преобразователей ещё были открыты; в I3 остаются
+  charger/diagnostic-load passives и полный rail/thermal/fault HIL.
   `DEC-0069/REV-0005Z` затем заменяют ранний auto-retry suffix внешней eFuse
   на exact latch-off `TPS259470LRPWR`: runtime retry loops запрещены, после
   устранения физической причины требуется новое явное действие.
@@ -174,6 +174,12 @@
   после запуска. OVLO recovery обходит обычный ramp и потому считается новым
   admission; сигналы остаются изолированы до повторной квалификации шины.
   Exact профиль из восьми деталей потребляется без выдуманных порогов и retry.
+  `PWR-0011/DEC-0072/REV-0005AC` затем закрывают 24 детали энергии,
+  конфигурации и feedback преобразователей. Firmware потребляет фиксированные
+  nominal rail identities 3,318/4,000/5,000 В и результаты квалификации, но не
+  предоставляет API настройки напряжения и не выдаёт бумажные границы за
+  измеренные пороги. Converter EN/PG pulls и все timing/load-step/HIL остаются
+  upstream hardware inputs.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -213,9 +219,10 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager и exact active downstream-rail topology внутри I3 уже
-прошли ревью; сейчас активны passive values и полный rail/loss/thermal/fault
-evidence. Integrated physical mockup возобновится после joint internal review.
+source, battery manager, exact active downstream-rail topology, eFuse и
+converter energy/feedback passives внутри I3 уже прошли ревью; сейчас активны
+charger/EN/PG/diagnostic values и полный rail/loss/thermal/fault evidence.
+Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт

@@ -154,8 +154,9 @@
   voice and protected 5.0-V accessory converters, five reset-off quiet-state
   load switches and a reverse-blocking/current-limited external eFuse.
   ARC-0002 now consumes their fixed-voltage, PG/fault, shutdown/discharge and
-  nRF common-branch sequencing rules. Exact feedback/capacitor/discharge and
-  charger/diagnostic-load passives plus rail/thermal/fault HIL remain in I3.
+  nRF common-branch sequencing rules. Converter passives were still open at
+  that checkpoint; charger/diagnostic-load passives plus rail/thermal/fault
+  HIL remain in I3.
   `DEC-0069/REV-0005Z` then replace the early external auto-retry eFuse suffix
   with exact latch-off `TPS259470LRPWR`; runtime retry loops are forbidden and
   a new explicit action is required after physical fault removal.
@@ -170,6 +171,12 @@
   OVLO recovery bypasses the normal ramp and is therefore a fresh admission;
   signals remain isolated until the rail is requalified. The exact eight-part
   profile is consumed without inventing unmeasured thresholds or retry paths.
+  `PWR-0011/DEC-0072/REV-0005AC` then close the 24 converter energy,
+  configuration and feedback parts. Firmware consumes fixed nominal
+  3.318/4.000/5.000-V rail identities and qualification results but exposes no
+  voltage-setting API and does not reinterpret their paper limits as measured
+  thresholds. Converter EN/PG pulls and all timing/load-step/HIL evidence stay
+  upstream hardware inputs.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -209,9 +216,10 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-with `I2` reviewed and the I3 source, battery-manager and exact active
-downstream-rail topology reviewed; passive values and the complete
-rail/loss/thermal/fault evidence are the active I3 work. The integrated physical
+with `I2` reviewed and the I3 source, battery-manager, active rail topology,
+eFuse and converter energy/feedback passives reviewed; the remaining
+charger/EN/PG/diagnostic values and complete rail/loss/thermal/fault evidence
+are the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the

@@ -61,8 +61,11 @@ now add four separate fixed rails: autonomous low-IQ `AON_SAFE_3V3`,
 power. Exact TPS22919 branches gate nRF, CC1101, microSD, ES8311 and Si4732;
 the runtime contract consumes reset-off defaults, PG/fault sequencing and
 measured-discharge gates without inventing programmable rail voltages.
-Application-converter passive values and complete rail/thermal/fault HIL
-remain upstream I3 work. Hardware
+Hardware `PWR-0011/DEC-0072/REV-0005AC` now also fixes the 24 converter
+energy/configuration/feedback parts. Firmware gains no voltage-setting API:
+the nominal 3.318/4.000/5.000-V outputs and their qualification evidence are
+read-only hardware facts. Converter EN/PG pulls and complete
+rail/thermal/fault HIL remain upstream I3 work. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware
