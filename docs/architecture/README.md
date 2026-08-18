@@ -90,6 +90,12 @@ uses protected-side PG only, revokes leases on a latch fault, offers no eFuse
 bypass/reset API and requires a fresh validated power session; persistent
 main faults need complete source removal, while AON hardware owns bounded
 auto-retry and cannot release compute before stable PG/SENSE/CT. Hardware
+`FND-0086/PWR-0021/DEC-0082/REV-0005AM` then review the consolidated I3
+source/heat/fault ledger and activate I4 paper work. Firmware may consume those
+exact contracts, but cell/holder procurement and received-lot, transition,
+rail, destructive-fault and thermal HIL remain upstream evidence; no measured
+threshold or production qualification is inferred.
+Hardware
 `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
 exact PA25/PA26 divider/filter frontends. Its C0G timing network has a

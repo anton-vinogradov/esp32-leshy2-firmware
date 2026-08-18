@@ -36,6 +36,7 @@
 - exact converter control-passive profile: [`DEC-0073`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0073-exact-converter-control-passives.md), [`PWR-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0012-exact-converter-control-passives.md), [`REV-0005AD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AD-converter-control-passive-profile.md)
 - exact source/AON/POR/main sequence: [`DEC-0080`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0080-exact-aon-pg-por-main-sequence.md), [`PWR-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0019-exact-source-sequence-and-power-reserve.md), [`FND-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0084-abstract-main-source-sequencer.md), [`REV-0005AK`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AK-source-sequence-propagation.md)
 - independent internal-rail containment: [`DEC-0081`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0081-independent-internal-rail-containment.md), [`PWR-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0020-independent-post-buck-containment.md), [`FND-0085`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0085-uncontained-internal-buck-high-side-short.md), [`REV-0005AL`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AL-internal-rail-containment-propagation.md)
+- consolidated I3 paper closure: [`DEC-0082`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0082-i3-paper-closure.md), [`PWR-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0021-i3-consolidated-paper-closure.md), [`FND-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0086-i3-paper-and-hil-closure-were-conflated.md), [`REV-0005AM`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AM-i3-paper-closure-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -48,6 +49,11 @@ architecture before the atomic decision.
 Hardware `DEC-0051` makes this reviewed projection visible as the current G3
 working design. It does not convert the input into a frozen firmware HAL or G7
 architecture.
+Hardware `DEC-0082/PWR-0021` now mark the I3 paper electrical subset reviewed
+and activate dependent I4 paper work. That maturity only makes the exact
+source/rail/fault contracts consumable here: procurement and prototype HIL
+remain open, measured thresholds do not appear from calculations, and any
+functional or derating conflict reopens I3 before it changes this input.
 
 ## Candidate runtime domains
 
@@ -586,7 +592,7 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
@@ -600,7 +606,7 @@ pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 indu
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
 support components and hardware SafeMode straps, plus exact polarized 1048P
 holder contacts, two exact XTAR cell instances and the three-NTC physical roles,
-are now reviewed inputs,
+are now reviewed paper inputs under `DEC-0082/PWR-0021`,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 

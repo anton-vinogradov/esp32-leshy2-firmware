@@ -195,6 +195,12 @@
   session; защёлкнутая ошибка main требует полного снятия источника, а AON
   выполняет только ограниченный hardware auto-retry и не выпускает main до
   устойчивых PG/SENSE/CT. Trip energy, load-step и hot HIL остаются upstream.
+  `FND-0086/PWR-0021/DEC-0082/REV-0005AM` затем проводят ревью сводного
+  I3-реестра источников, тепла, отказов и recovery. Бумажная
+  электрическая часть I3 теперь имеет статус **«Проведено ревью»**, а I4
+  стал активным бумажным блоком; procurement, received-lot,
+  source-transition, rail, destructive-fault и thermal HIL остаются явными
+  upstream gates и не могут стать firmware constants.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -231,9 +237,10 @@
   сертификации, specimen fit, droop/thermal-stack и continuity/thermal HIL
   остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
-  цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
-  `I3` power, затем UI/audio/RF/expansion
-  internals. Параллельно остаются `FND-0058/FND-0060/FND-0066/FND-0067`,
+  цепочки `INT-0001`. Hardware отметил `I2` и бумажную часть I3 как reviewed и
+  теперь закрывает I4 UI/storage/USB, затем audio/RF/expansion internals.
+  Параллельно остаются явные физические I3 HIL-gates и
+  `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
   target `T1`. Затем обязательны measured full-mix, quiet-state, RF/
   self-desense, signal-integrity, service и HIL gates. Paper pinout остаётся
@@ -268,13 +275,12 @@ references до своих downstream gates.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager, BQ25798, TPS/EEPROM, polarized-holder/NTC и
-diagnostic-lockout paper profiles, exact active
-downstream-rail topology, eFuse и converter energy/feedback/control passives
-внутри I3 уже прошли ревью; сейчас активны mechanics, exact-cell droop,
-timer/load hot HIL и полный
-rail/loss/thermal/fault evidence.
+Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
+бумажная электрическая часть I3 прошли ревью, а I4 стал следующим
+активным бумажным блоком. Mechanics, exact-cell droop, timer/load hot HIL и
+полный transition/rail/loss/thermal/fault evidence остаются обязательными
+физическими I3-gates; они больше не маскируются под незакрытую
+бумажную архитектуру.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
