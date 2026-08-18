@@ -175,8 +175,10 @@
   configuration and feedback parts. Firmware consumes fixed nominal
   3.318/4.000/5.000-V rail identities and qualification results but exposes no
   voltage-setting API and does not reinterpret their paper limits as measured
-  thresholds. Converter EN/PG pulls and all timing/load-step/HIL evidence stay
-  upstream hardware inputs.
+  thresholds. `PWR-0012/DEC-0073/REV-0005AD` then close the direct AON EN
+  strap and all nine converter EN/PG/qualifier/fault resistors. Firmware keeps
+  the existing safe-default and `EN AND NOT(PG)` semantics without a new API
+  or paper-derived deadline; all timing/load-step/HIL evidence stays upstream.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -217,9 +219,9 @@ remain references until their downstream gates.
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
 with `I2` reviewed and the I3 source, battery-manager, active rail topology,
-eFuse and converter energy/feedback passives reviewed; the remaining
-charger/EN/PG/diagnostic values and complete rail/loss/thermal/fault evidence
-are the active I3 work. The integrated physical
+eFuse and converter energy/feedback/control passives reviewed; the remaining
+charger/diagnostic values and complete rail/loss/thermal/fault evidence are
+the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the

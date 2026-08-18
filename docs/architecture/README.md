@@ -64,8 +64,11 @@ measured-discharge gates without inventing programmable rail voltages.
 Hardware `PWR-0011/DEC-0072/REV-0005AC` now also fixes the 24 converter
 energy/configuration/feedback parts. Firmware gains no voltage-setting API:
 the nominal 3.318/4.000/5.000-V outputs and their qualification evidence are
-read-only hardware facts. Converter EN/PG pulls and complete
-rail/thermal/fault HIL remain upstream I3 work. Hardware
+read-only hardware facts. Hardware `PWR-0012/DEC-0073/REV-0005AD` then fixes
+the direct AON EN strap and all nine converter EN/PG/qualifier/fault
+resistors. This preserves the existing runtime truth table without adding an
+API or paper-derived timing constant; complete rail/thermal/fault HIL remains
+upstream I3 work. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware

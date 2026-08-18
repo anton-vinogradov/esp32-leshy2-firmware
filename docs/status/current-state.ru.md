@@ -178,8 +178,10 @@
   конфигурации и feedback преобразователей. Firmware потребляет фиксированные
   nominal rail identities 3,318/4,000/5,000 В и результаты квалификации, но не
   предоставляет API настройки напряжения и не выдаёт бумажные границы за
-  измеренные пороги. Converter EN/PG pulls и все timing/load-step/HIL остаются
-  upstream hardware inputs.
+  измеренные пороги. `PWR-0012/DEC-0073/REV-0005AD` затем закрывают direct AON
+  EN strap и все девять резисторов converter EN/PG/qualifier/fault. Firmware
+  сохраняет принятые safe defaults и semantics `EN AND NOT(PG)` без нового API
+  или бумажного deadline; все timing/load-step/HIL остаются upstream inputs.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -220,8 +222,8 @@ references до своих downstream gates.
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
 source, battery manager, exact active downstream-rail topology, eFuse и
-converter energy/feedback passives внутри I3 уже прошли ревью; сейчас активны
-charger/EN/PG/diagnostic values и полный rail/loss/thermal/fault evidence.
+converter energy/feedback/control passives внутри I3 уже прошли ревью; сейчас
+активны charger/diagnostic values и полный rail/loss/thermal/fault evidence.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит

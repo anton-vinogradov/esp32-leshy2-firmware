@@ -30,6 +30,7 @@
 - enable-qualified switched-rail PG: [`DEC-0070`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0070-enable-qualified-switched-rail-pg.md), [`PWR-0009`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0009-enable-qualified-switched-rail-pg.md), [`REV-0005AA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AA-switched-rail-pg-qualification.md)
 - external-eFuse passive/startup profile: [`DEC-0071`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0071-post-start-accessory-transient-profile.md), [`PWR-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0010-external-efuse-passive-profile.md), [`REV-0005AB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AB-external-efuse-passive-profile.md)
 - exact converter passive profile: [`DEC-0072`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0072-exact-converter-energy-feedback-passives.md), [`PWR-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0011-application-converter-passive-profile.md), [`REV-0005AC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AC-application-converter-passive-profile.md)
+- exact converter control-passive profile: [`DEC-0073`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0073-exact-converter-control-passives.md), [`PWR-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0012-exact-converter-control-passives.md), [`REV-0005AD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AD-converter-control-passive-profile.md)
 
 ## Boundary
 
@@ -220,11 +221,16 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   Their paper limits are acceptance inputs, not ADC calibration values or
   software-adjustable set points. Firmware exposes the rail identity and
   measured qualification result, never a voltage-setting API.
-- AON power is autonomous. Its hardware enable is pulled on from admitted
-  `SYS`; `AON_PG_N` must be valid before the STOP supervisor/sequencer may
-  release the compute domains. Application firmware observes the post-boot
-  result but is neither the source of AON availability nor an override for
-  AON collapse.
+- AON power is autonomous. `TPS629203.EN` is strapped directly to admitted
+  `SYS`, while its PG uses the exact 47-kOhm hardware pull-up. `AON_PG_N` must
+  be valid before the STOP supervisor/sequencer may release the compute
+  domains. Application firmware observes the post-boot result but is neither
+  the source of AON availability nor an override for AON collapse.
+- The three application-converter EN fail-low pulls, both optional PG pulls,
+  both qualifier-base resistors and the common fault pull are exact hardware
+  instances. Their values do not create a firmware setting, timing constant
+  or retry path: runtime consumes only the existing safe defaults and
+  `EN AND NOT(PG)` truth table, then uses measured HIL deadlines.
 - `3V3_MAIN` is admitted by hardware after a valid battery or USB source and
   supplies the three compute domains. `MAIN_3V3_PG_N` loss joins
   `POWER_FAULT_N`; firmware immediately revokes every lease and returns the
@@ -453,12 +459,13 @@ routing before electrical/HIL closure.
 
 Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, charger and diagnostic-load passives, converter EN/PG
-pulls, thermal/source-handover/fault HIL, Unit protection and service-connector
+IR frontend/driver, charger and diagnostic-load passives,
+thermal/source-handover/fault HIL, Unit protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
-feedback parts, switches and external eFuse plus its eight profile passives
-are now exact reviewed inputs, but firmware must not infer unmeasured delays,
-thresholds or safe states for their still-open HIL boundaries.
+feedback parts, nine control resistors, direct AON EN strap, switches and
+external eFuse plus its eight profile passives are now exact reviewed inputs,
+but firmware must not infer unmeasured delays, thresholds or safe states for
+their still-open HIL boundaries.
 
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
 are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,
