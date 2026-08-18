@@ -75,6 +75,13 @@ exact PA25/PA26 divider/filter frontends. Its C0G timing network has a
 pulses. Firmware emits one PA22 edge, samples against the internal 1.4-V
 reference only after `>=10 ms` settling and cannot extend the pulse;
 production thresholds/cooldown remain HIL inputs. Hardware
+`PWR-0014/DEC-0075/REV-0005AF` then fixes the BQ25798 2S/750-kHz strap,
+2.2-uH/7-A inductor, complete physical capacitor banks, BATP/TS/ILIM, local
+pulls, reset-high open-drain CE and Rev-C special-pin terminations. Runtime
+therefore starts from 1-A reset charge, writes contract-derived IINDPM before
+CE, never exceeds 2-A charge and never ignores the independent BQ TS sensor.
+`FND-0079` returns product USB-C/USB2 protection to dependent hardware I4;
+TPS25751/CAT24C512 support passives remain the next I3 paper input. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware

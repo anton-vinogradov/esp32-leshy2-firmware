@@ -219,6 +219,17 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - The first charge-current ceiling is 2 A and is further reduced or paused by
   system load, connector/charger/cell temperature, weak-source behavior and
   cell-manager decisions. The 5-A IC capability is not a runtime default.
+- Hardware fixes BQ25798 to 2S/750 kHz with an exact 2.2-uH/7-A inductor.
+  POR or charger-watchdog reset restores 1-A charge, 7.0-V VSYSMIN and 8.4-V
+  VREG; firmware has no frequency/cell-count profile selector.
+- Before TPS GPIO1 may sink the reset-high CE line, the controller must
+  validate the source contract, write and read back IINDPM at or below the
+  advertised current and the 2.71-3.29-A physical ILIM envelope, confirm both
+  cells and direct BQ TS are valid, then calculate a load-aware charge current
+  no greater than 2 A. Unknown power or temperature releases CE.
+- BQ TS uses a third electrically independent B57332V5103F360 and remains
+  enabled. Firmware may narrow the qualified charge window, but must never set
+  `TS_IGNORE`; the two MAX17320 cell sensors remain separate evidence.
 - Product USB2 stays direct on S3 GPIO19/20. There is no firmware profile that
   enables TPS BC1.2/liquid pins or BQ DPDM on the data pair.
 - A PD image update is permitted only while TX is disarmed, input and cells are
@@ -482,14 +493,15 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, charger passives, diagnostic thresholds/cooldown,
+IR frontend/driver, TPS25751/CAT24C512 support passives, diagnostic thresholds/cooldown,
 thermal/source-handover/fault HIL, Unit protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
 feedback parts, nine control resistors, direct AON EN strap, switches and
 external eFuse plus its eight profile passives, and all 19 pack diagnostic
-timer/load/divider/filter instances are now exact reviewed inputs,
+timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
+capacitor instances, ten resistors and third NTC are now reviewed inputs,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 

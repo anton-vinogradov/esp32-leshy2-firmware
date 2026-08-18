@@ -191,6 +191,13 @@
   reference 1,4 В через exact filtered dividers; baseline и loaded samples ждут
   `>=10 мс` settling. Droop thresholds, calibration и межимпульсный cooldown
   остаются HIL inputs, а screen 0,57-0,88 А не выдаётся за full-load proof.
+  `PWR-0014/DEC-0075/REV-0005AF` затем закрывают exact физический профиль
+  BQ25798. Firmware потребляет фиксированные 2S/750 кГц, reset charge 1 А,
+  hardware ILIM 2,71-3,29 А, независимый non-ignored BQ TS и open-drain CE:
+  contract-derived IINDPM записывается и проверяется до зарядки, а штатный
+  charge остаётся <=2 А. `FND-0079` возвращает product USB-C/USB2 protection
+  в зависимый I4; support passives TPS25751/CAT24C512 становятся следующим
+  бумажным пререквизитом I3.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -230,9 +237,10 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager, exact active downstream-rail topology, eFuse и
-converter energy/feedback/control passives внутри I3 уже прошли ревью; сейчас
-активны charger values, diagnostic thresholds/cooldown и полный
+source, battery manager, BQ25798 passive profile, exact active downstream-rail
+topology, eFuse и converter energy/feedback/control passives внутри I3 уже
+прошли ревью; сейчас активны support passives TPS/EEPROM, mechanics,
+diagnostic thresholds/cooldown и полный
 rail/loss/thermal/fault evidence.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,

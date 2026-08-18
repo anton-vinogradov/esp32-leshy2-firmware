@@ -141,6 +141,10 @@ flowchart TD
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
+- The charger is physically fixed to 2S/750 kHz. Reset charging is `1 A`;
+  runtime may use at most `2 A` only after it applies the actual USB current
+  contract, accounts for system load, verifies both cells and passes the
+  charger's independent battery-temperature gate.
 - Always-on safety, 3.3-V compute, 4.0-V voice and protected 5.0-V accessory
   power are separate fixed rails. Unused nRF, CC1101, storage, codec and
   receiver branches are powered down, discharged and verified quiet; software
