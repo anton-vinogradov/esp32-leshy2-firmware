@@ -39,6 +39,7 @@
 - consolidated I3 paper closure: [`DEC-0082`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0082-i3-paper-closure.md), [`PWR-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0021-i3-consolidated-paper-closure.md), [`FND-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0086-i3-paper-and-hil-closure-were-conflated.md), [`REV-0005AM`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AM-i3-paper-closure-propagation.md)
 - exact protected product USB port: [`DEC-0083`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0083-exact-protected-product-usb-port.md), [`USB-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/USB-0001-exact-product-usb-c-and-protection.md), [`FND-0087`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0087-product-usb-ended-on-abstract-port.md), [`REV-0005AN`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AN-product-usb-port-propagation.md)
 - exact protected display electrical endpoint: [`DEC-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0084-exact-protected-display-electrical-endpoint.md), [`DSP-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DSP-0006-exact-display-rail-backlight-and-mate-profile.md), [`FND-0088`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0088-display-endpoint-still-contained-abstract-circuits.md), [`REV-0005AO`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AO-display-endpoint-propagation.md)
+- exact isolated microSD endpoint: [`DEC-0085`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0085-exact-isolated-microsd-electrical-endpoint.md), [`STO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/STO-0001-exact-isolated-microsd-endpoint.md), [`FND-0089`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0089-microsd-endpoint-was-backpowered-and-unprotected.md), [`REV-0005AP`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AP-microsd-endpoint-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -67,6 +68,13 @@ reset-dark PWM backlight and hardware latch-off with power-cycle-only
 recovery. It has no direct backlight-fault GPIO and therefore must not invent a
 runtime fault readback from the fixture-only `FAULT_N` point. The exact first
 connector candidate does not freeze a production mate or vendor init table.
+Hardware `DEC-0085/STO-0001` close the third I4 paper endpoint. Firmware may
+consume an always-readable active-low detect input, a fail-low/QOD switched
+card rail, Ioff host-to-card isolation and a DAT0/MISO return enabled only while
+`SD_CS_N` is low. It must perform SPI-mode entry before other bus traffic after
+every card-power cycle and distinguish clean unmount from unexpected removal.
+No unmeasured media, throughput, corruption-window or fault behavior becomes a
+production claim.
 
 ## Candidate runtime domains
 
@@ -125,6 +133,18 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   bounded SD commands/data chunks and critical-UI priority. Combined HIL must
   prove shared-D1 high-Z/no-contention, first visible response ≤100 ms, storage
   ≥4.0 MB/s, 1.5 MB/s record and survival of a measured 250 ms card stall.
+- `DEC-0085` makes storage session admission explicit. With `SD_PWR_EN` low,
+  stop SPI2 work and park `LCD_CS_N`/`SD_CS_N` high, SCK low and MOSI/D1 high.
+  Accept a debounced insertion, enable the rail, wait for its bounded rise and,
+  with every other CS high, issue low-speed startup clocks and enter SPI mode
+  before display work resumes. Timeout or failed identity leaves the rail off
+  and the storage service unavailable; it does not weaken the sequence.
+- Clean unmount first rejects new writers, synchronizes and drains queues,
+  closes the filesystem, raises CS, clears `SD_PWR_EN` and waits for the
+  qualified QOD discharge boundary before reporting safe removal. Unexpected
+  detect loss aborts new I/O, marks the unwritten tail possibly lost, preserves
+  last committed metadata and requires checked recovery/remount. Firmware must
+  never label that path a clean or lossless recording.
 - Hardware reset sequencing is independent of that scheduler. On boot, keep
   GPIO40 low and both expander reset outputs low until `3V3_MAIN` is stable;
   issue a pulse of at least 10 us, release display reset and wait at least
@@ -450,8 +470,11 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   also latches thermal/latched faults in hardware until EN is explicitly taken
   below shutdown or input power is cycled; the former 110-ms auto-retry suffix
   is not a target behavior.
-- microSD is unmounted/flushed and SPI pins are parked before `SD_PWR_EN`
-  clears. ES8311 follows the stricter audio-arm sequence below. Si4732 and
+- microSD follows the full `DEC-0085` clean/unexpected-removal state machine;
+  SPI pins are parked before `SD_PWR_EN` clears, then firmware waits the
+  HIL-qualified QOD interval because no card-rail ADC exists. A failed
+  unmount/settle gate blocks the next session. ES8311 follows the stricter
+  audio-arm sequence below. Si4732 and
   CC1101 similarly park reset/bus pins before their independent branches open.
   A failed settle, readback or discharge gate leaves the whole requested group
   unavailable rather than silently weakening the quiet-state contract.
@@ -626,8 +649,10 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088` list remaining electrical/HIL endpoints:
-display standalone sourcing/final mate and display/touch/backlight HIL, passive codec/analog networks,
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089` list remaining electrical/HIL endpoints:
+display standalone sourcing/final mate and display/touch/backlight HIL,
+microSD socket access, real media/endurance, throughput/contention, hot removal,
+fault injection and corruption recovery, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
 source-transition, brownout, thermal/source-handover/fault HIL, Unit
@@ -662,6 +687,12 @@ backlight circuit. Firmware may freeze the reset/off/recovery ordering and
 implement reusable scheduler plus distinct prototype driver profiles, but
 cannot freeze a production-qualified assembly, final connector, touch
 protocol or vendor init table before sourcing and specimen proof gates.
+Hardware `FND-0089/STO-0001/DEC-0085/REV-0005AP` then instantiate exact
+microSD switched power, card-side Ioff buffers, CS-gated DAT0/MISO, mandatory
+pulls, source damping, full socket-contact/detect ESD and always-readable
+detect. Firmware may freeze the session sequencing and error semantics above,
+but cannot freeze a production media set, final clock/RC values, endurance or
+corruption guarantees before physical and HIL evidence.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open

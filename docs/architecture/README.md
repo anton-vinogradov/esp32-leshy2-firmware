@@ -105,6 +105,11 @@ electrical endpoint. ARC-0002 consumes reset-low defaults, 120-ms display and
 100-ms touch post-release waits, backlight-last startup and no automatic retry
 after a latch fault. The first ZIF candidate remains a physical-HIL input and
 the fixture-only backlight fault point is not exposed as a firmware sensor.
+`FND-0089/STO-0001/DEC-0085/REV-0005AP` then close the isolated microSD paper
+endpoint. ARC-0002 consumes always-readable detect, fail-low switched power,
+SPI-mode-first admission, card-CS-gated DAT0/MISO, clean drain/unmount and
+explicit unexpected-removal recovery. Media/endurance, final timing/RC,
+throughput/contention and fault/corruption HIL remain upstream evidence.
 Hardware
 `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
@@ -164,6 +169,10 @@ uses GPIO6 and changes the total S3 budget to `32/3/1`. ARC-0002 still freezes
 the scheduler/pin/resource and `DEC-0084` reset/backlight-fault contract:
 production ordering/drawing, final connector, specimen electrical HIL and
 vendor init table remain open.
+Hardware `STO-0001/DEC-0085/REV-0005AP` also close the paper storage endpoint
+without a GPIO change. ARC-0002 freezes card-power/session sequencing and
+clean-versus-unexpected-removal semantics, while socket access, media set,
+throughput, hot-removal and corruption evidence remain open.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

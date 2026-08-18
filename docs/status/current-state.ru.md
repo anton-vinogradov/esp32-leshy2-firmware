@@ -214,6 +214,15 @@
   `FAULT_N` доступна только оснастке, поэтому software не изображает из неё
   sensor. Final FPC mate, standalone sourcing панели и display/touch/backlight
   HIL остаются upstream; S3 остаётся `32/3/1`.
+  `FND-0089/STO-0001/DEC-0085/REV-0005AP` затем закрывают isolated microSD
+  paper endpoint. Firmware допускает storage session только после устойчивого
+  detect, подъёма switched rail и входа карты в SPI mode при поднятых остальных
+  CS; штатное извлечение сначала drain/unmount, затем QOD power-off, а
+  неожиданное помечает незаписанный хвост как возможно потерянный и запускает
+  checked recovery. Card-side Ioff-буферы и CS-gated DAT0 делают эти состояния
+  аппаратными без нового GPIO. Socket access, media/endurance,
+  throughput/contention, hot-removal, ESD/short/brownout и corruption-recovery
+  HIL остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -251,8 +260,8 @@
   остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` и бумажную часть I3 как reviewed,
-  закрыл первый product-USB endpoint I4 и теперь закрывает оставшуюся
-  UI/storage часть I4, затем audio/RF/expansion internals.
+  закрыл первые три paper endpoints I4 для product USB, display и microSD и
+  теперь закрывает оставшуюся UI-часть I4 перед audio/RF/expansion internals.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -291,8 +300,8 @@ references до своих downstream gates.
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
 бумажная электрическая часть I3 прошли ревью, а I4 стал следующим активным
-бумажным блоком; exact protected product-USB и display paper endpoints
-reviewed, microSD и остальные UI endpoints активны. Mechanics, exact-cell droop,
+бумажным блоком; exact protected product-USB, display и isolated microSD paper
+endpoints reviewed, остальные UI endpoints активны. Mechanics, exact-cell droop,
 timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными
 физическими I3-gates; они больше не маскируются под незакрытую

@@ -72,6 +72,11 @@ flowchart TD
   recording or the physical STOP path.
 - Any visual frame loss is reported explicitly and never implies loss of raw
   radio or audio data.
+- A microSD session starts only after stable insertion, isolated-rail power-up
+  and card entry into SPI mode while display CS remains high. Safe removal
+  blocks new writers and drains committed data before power-off. Unexpected
+  removal is reported as possible loss of the unwritten tail and enters checked
+  recovery; it is never presented as a clean recording.
 - Commanded TX, measured current, radio-reported state and independent
   actual-TX evidence are displayed separately. `Unknown` remains visible.
 - Long-form text may come from a locally paired phone. Preview and consequences
