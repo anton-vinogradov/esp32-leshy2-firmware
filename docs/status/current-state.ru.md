@@ -246,8 +246,14 @@
   `0x2A`, bounded recovery общей шины, fallback полного reset main-rail и
   неизменную изолированную полярность P22/P23 STOP/evidence. Возврат microSD
   подтверждён на реальном GPIO4. Paper electrical scope I4 имеет
-  **«Проведено ревью»**, активен I5; physical/no-back-power/SI/HIL остаются
-  upstream.
+  **«Проведено ревью»**; physical/no-back-power/SI/HIL остаются upstream.
+  `FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` затем закрывают paper electrical
+  scope I5. Firmware получает exact reset-off/supervisor-held интерфейсы
+  ES8311, Si4732 и SA518; P00/P01/P02 для capture/speaker/headphone;
+  receiver- или microphone-recording; bypass/codec playback; ordinary либо
+  явно armed codec-injected voice audio; host VOX никогда не означает PTT.
+  Активны upstream RF front ends I6; acoustic, address/clock, RF-immunity и
+  concurrent-load HIL остаются открыты.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -284,9 +290,8 @@
   сертификации, specimen fit, droop/thermal-stack и continuity/thermal HIL
   остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
-  цепочки `INT-0001`. Hardware отметил paper electrical scope `I2`, I3 и I4
-  как reviewed; теперь активен зависимый I5 audio/Si4732 перед RF/expansion
-  internals.
+  цепочки `INT-0001`. Hardware отметил paper electrical scope `I2`…I5 как
+  reviewed; теперь активны зависимые RF front ends I6 перед expansion internals.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -324,9 +329,9 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`, I3 и I4 прошёл ревью, а I5 стал следующим активным
-блоком; exact protected product-USB, display, isolated microSD, controls,
-touch и consolidated slow-I/O/shared-interface contracts reviewed. Их
+electrical scope `I2`…I5 прошёл ревью, а I6 стал следующим активным блоком;
+exact protected product-USB, display, isolated microSD, controls, touch,
+consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,
 timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными

@@ -47,11 +47,14 @@ operation.
 The consolidated I4 input fixes main `TCA6424ARGJR` at `0x22` and pack
 admission at `0x2A`, defines bounded bus recovery plus full-main-rail reset,
 and preserves isolated P22/P23 STOP/evidence polarity. I4 paper electrical
-scope is reviewed; I5 audio/Si4732 is the next upstream block.
+scope is reviewed. Hardware `AUDIO-0003/DEC-0090/REV-0005AU` then closes I5:
+exact ES8311/Si4732/SA518 power and interface admission, capture/playback/TX
+modes and physical acoustic endpoints are runtime inputs. I6 RF endpoints are
+the next upstream block.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
-`48/0/0`, main slow I/O `18/0/6` and dedicated UI I/O `7/1/0`; exact SA518 service and Si4732 control/antenna
+`48/0/0`, main slow I/O `21/0/3` and dedicated UI I/O `7/1/0`; exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
@@ -195,7 +198,11 @@ throughput, hot-removal and corruption evidence remain open.
 Hardware `FND-0094/IOX-0001/DEC-0089/REV-0005AT` then completes the I4
 dependency audit: exact slow-I/O/pack addresses, recovery, shared IRQ,
 cross-domain observation polarity and real microSD GPIO4 are runtime inputs.
-I5 is active; the firmware implementation boundary remains unfrozen.
+At that checkpoint I5 became active; the firmware implementation boundary
+remained unfrozen.
+The following `FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` pass closes I5,
+assigns P00/P01/P02, freezes safe endpoint sequencing and activates I6 while
+leaving the firmware implementation boundary unfrozen.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.
@@ -205,8 +212,9 @@ ADC is documented as microphone-oriented rather than a recommended line input. H
 compare the complete high-Z capture, differential playback, attenuated TX and
 reset-default paths. `DEC-0054/REV-0005D` accept option A and machine-allocate
 direct GPIO6 as `AUDIO_ARM`, changing S3 to the then-current `32/3/1`;
-`DEC-0086` later closes it to `33/3/0` for encoder capture. Firmware may now freeze
-safe control sequencing, but not unmeasured gain/mute/passive values.
+`DEC-0086` later closes it to `33/3/0` for encoder capture. I5 then freezes
+safe power/interface/control sequencing, exact addresses and mode semantics,
+but not unmeasured gain, noise, mute delay, crystal trim or RF behavior.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new
 runtime/HAL/toolchain contract from the selected complete architecture. No

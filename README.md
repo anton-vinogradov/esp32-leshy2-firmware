@@ -93,6 +93,13 @@ flowchart TD
   recording or the physical STOP path.
 - Any visual frame loss is reported explicitly and never implies loss of raw
   radio or audio data.
+- Receive audio keeps a hardware bypass and remains usable while the codec is
+  off or recovering. Recording independently selects the active receiver or
+  the local microphone; microphone analysis and host-side VOX never imply PTT.
+- Codec playback is enabled only after physical power/readiness, I²C readback
+  at `0x19` and stable I²S. Headphone insertion immediately disables the
+  reset-off speaker path; any audio/bus/DMA/brownout fault disarms codec
+  playback and TX injection before shutdown.
 - A microSD session starts only after stable insertion, isolated-rail power-up
   and card entry into SPI mode while display CS remains high. Safe removal
   blocks new writers and drains committed data before power-off. Unexpected
@@ -116,6 +123,11 @@ flowchart TD
 - 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
   broadcast reception, IR and external GNSS/LoRa/NFC use separate profiles,
   permissions and result evidence.
+- The broadcast receiver is admitted behind its own power/interface gate and
+  identified at supported address `0x11` or `0x63`. Analog voice defaults to
+  receive and ordinary electret audio; codec-injected TX audio still requires
+  separate direct audio arming plus the independently authorized AON-gated
+  PTT. The voice module's power mode is driven low-or-released, never high.
 - iButton/1-Wire separates ordinary use of owned devices, Lab reading and
   individually armed Controlled-Zone emulation/write; attaching the adapter
   authorizes nothing by itself.

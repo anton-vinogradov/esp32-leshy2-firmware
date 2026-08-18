@@ -123,6 +123,55 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc3)
 
+    def test_exact_i5_audio_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "hardware bypass",
+                "local microphone",
+                "host-side VOX never imply PTT",
+                "I²C readback at `0x19`",
+                "Headphone insertion immediately disables",
+                "address `0x11` or `0x63`",
+                "independently authorized AON-gated PTT",
+                "low-or-released, never high",
+            ),
+            "README.ru.md": (
+                "аппаратный bypass",
+                "локальный микрофон",
+                "host-side VOX никогда не означают PTT",
+                "I²C-readback на `0x19`",
+                "Подключение наушников немедленно выключает",
+                "адресе `0x11` либо `0x63`",
+                "независимо разрешённого AON-gated PTT",
+                "low-or-release",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0090/AUDIO-0003",
+            "main slow plane is `21/0/3`",
+            "P03/P04/P05 remain free",
+            "ES8311 `0x19`",
+            "both public strap outcomes `0x11` and `0x63`",
+            "P00 chooses either the selected RX source or exact local electret microphone",
+            "VOX analysis never implies or requests PTT",
+            "Module PTT has a physical RX pull-up",
+            "H/L is driven low or released",
+            "UPDATE is fixture-only",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

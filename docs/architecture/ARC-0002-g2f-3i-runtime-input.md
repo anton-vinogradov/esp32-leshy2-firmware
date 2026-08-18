@@ -18,6 +18,7 @@
 - exact codec fit: [`AUDIO-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0001-es8311-exact-electrical-fit.md), [`REV-0005B`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005B-es8311-digital-fit-and-analog-gap.md)
 - complete audio-path review: [`AUDIO-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0002-complete-audio-path-comparison.md), [`FND-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0067-audio-source-select-and-reset-bypass.md), [`REV-0005C`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005C-complete-audio-path-prerequisites.md)
 - accepted audio topology: [`DEC-0054`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0054-fail-safe-complete-audio-path.md), [`REV-0005D`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005D-audio-decision-propagation.md)
+- exact I5 audio/receiver endpoint: [`AUDIO-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0003-exact-audio-and-receiver-endpoint.md), [`DEC-0090`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0090-i5-exact-audio-and-receiver-paper-closure.md), [`REV-0005AU`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AU-i5-audio-receiver-propagation.md)
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
@@ -88,6 +89,13 @@ when latched; P23 S3 evidence remains active low. Their new AON open-drain
 isolation changes no logical polarity and grants no control over STOP or TX.
 Physical, signal-integrity and no-back-power behavior remains upstream HIL;
 I4 review does not freeze a HAL or authorize implementation.
+Hardware `DEC-0090/AUDIO-0003` then close the I5 paper electrical block.
+Firmware may consume exact ES8311 address `0x19`, Si4732 two-address specimen
+probing, supervisor-held power/interface admission, reset-default receive/
+electret paths, P00/P01/P02 controls and the exact endpoint mode table below.
+It may not claim measured gain, noise, pop/click, RF immunity, crystal trim or
+concurrent-load performance before HIL. I5 review does not freeze a HAL or
+authorize implementation; I6 RF front ends are now active upstream.
 
 ## Candidate runtime domains
 
@@ -116,8 +124,9 @@ After `DEC-0054` consumes S3 GPIO6 for `AUDIO_ARM`, only GPIO47 remained free.
 `DEC-0086` consumes GPIO39/GPIO47 as the direct PCNT0 encoder phase pair, so
 firmware cannot invent another direct S3 or RP control. Hardware derives these
 figures from the machine source: S3 is `33 used / 3 reserved / 0 free`, C5 is `14/6/1`, RP is `48/0/0`,
-and the slow plane is `24/0/0` after `FND-0067` assigns the previously omitted
-ordinary `RX_AUDIO_SOURCE_SEL` to P27. The previously published C5/RP reserve
+and the main slow plane is `21/0/3`: P27 selects the receive source, while I5
+uses P00 for RX/microphone capture, P01 for speaker enable and P02 for
+headphone absence; P03/P04/P05 remain free. The previously published C5/RP reserve
 was stale and is corrected by `FND-0059`. GPIO43/44 remain permanent UART0
 service; GPIO6 `AUDIO_ARM` and GPIO39/47 encoder capture are normative machine
 inputs.
@@ -167,9 +176,11 @@ inputs.
   auto-retry a latched backlight branch; a new attempt requires a complete
   main-power cycle and fresh display initialization.
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. Exact
-  currently closed addresses are TPS25751D `0x20`, main TCA6424A `0x22`, pack
-  admission `0x2A` and ST77922 `0x38`; UI TCA9534A remains candidate `0x3F`
-  until assembled HIL, while ES8311/Si4732 endpoint closure belongs to I5. The
+  currently closed addresses are ES8311 `0x19`, TPS25751D `0x20`, main
+  TCA6424A `0x22`, pack admission `0x2A` and ST77922 `0x38`; UI TCA9534A
+  remains candidate `0x3F` until assembled HIL. Si4732 initialization probes
+  both public strap outcomes `0x11` and `0x63` until specimen HIL freezes its
+  physical identity. The
   dedicated TCA9534A at candidate address `0x3F` holds P0…P3 low in idle, so
   any D-pad/OK, BACK, OPT, F1, F2 or encoder-push change starts a bounded 4×3
   scan through P4…P6; P7 is reserved. Encoder A/B edges never use that bus:
@@ -178,8 +189,10 @@ inputs.
   chatter filtering. No concurrent display/storage/radio load may lose or
   invent a detent. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
-  P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
-  a safety-deadline line and does not assert PTT. TPS25751D is another bounded
+  P27 selects the ordinary Si4732-versus-SA518 receive-audio source; P00
+  selects chosen-RX versus local-microphone capture, P01 enables the speaker
+  only when no headphones are inserted, and P02 reads headphone absence.
+  None is a safety-deadline line and none asserts PTT. TPS25751D is another bounded
   target on this bus. Its active-low IRQ shares GPIO37 with TCA6424 `INT`, UI
   TCA9534A `INT_N`, pack admission and the fixed ST77922 touch adapter; every wake
   reads all enabled status
@@ -616,7 +629,7 @@ ambiguity passes specimen proof. The same atlas terminates the Si4732 I²C,
 reset, interrupt, clock, audio and separate `FMI`/`AMI` routes on exact package
 contacts.
 
-## Exact ES8311 runtime boundary
+## Exact I5 audio and receiver runtime boundary
 
 Hardware `AUDIO-0001/REV-0005B` instantiate exact Everest Semiconductor
 `ES8311` QFN-20 digital contacts. The later direct arm made total S3 `32/3/1`
@@ -633,12 +646,12 @@ before the subsequent encoder allocation; current total is `33/3/0`:
 - codec `CE` pin 20 is fixed high through the documented `10 kΩ` reference
   strap for 7-bit address `0x19`.
 
-`CE` is **not** enable or reset. Slow P10 is external `CODEC_PWR_EN` controlling
-a still-unselected quiet-rail switch/sequencer. Firmware must never toggle CE,
-must not start I2S clocks before valid power/readback, and must keep both analog
-selectors in hardware bypass until the codec and selected analog conditioner
-are proven ready. Any codec/readback/DMA/watchdog fault stops I2S, returns
-bypass and leaves PTT off.
+`CE` is **not** enable or reset. Slow P10 is external `CODEC_PWR_EN` driving
+the exact reset-off/QOD `TPS22919DCKR` codec branch. `TPS3839K33DBZR` keeps
+dual-channel I2C isolation and four separate I2S direction buffers disabled
+until the switched rail exceeds 3.08 V for about 200 ms. Firmware must never
+toggle CE or drive through those physical gates, and it must not infer
+readiness merely from elapsed software time.
 
 Exact ADC `MIC1P/MIC1N` and DAC `OUTP/OUTN` are differential. Hardware
 `AUDIO-0002/REV-0005C` reviews the complete path rather than treating the
@@ -646,48 +659,81 @@ codec as an isolated endpoint:
 
 - ordinary Si4732/SA518 AFOUT analog bypass to PAM8302A remains available with
   the codec off or faulty;
-- the selected RX source reaches the ADC only through a high-impedance capture
+- P00 chooses either the selected RX source or exact local electret microphone;
+  the result reaches the ADC only through the high-impedance buffered capture
   branch, because a direct ES8311 tap can load the Si4732 bypass;
 - both DAC legs reach both PAM8302A inputs through a dual selector; no central
   differential-to-single-ended amplifier is required;
 - DAC-to-SA518 injection has its own selector and roughly 35–45 dB attenuation,
   while electret-to-SA518 remains the default and audio selection never asserts
   PTT;
-- P27 selects the ordinary receive source. P11/P12 request codec speaker/TX
-  routing but can remain stale when only S3 resets.
+- P27 selects the ordinary receive source. P01 is reset-off speaker enable and
+  P02 reports headphone absence; insertion forces speaker shutdown. P11/P12
+  request codec speaker/TX routing but can remain stale when only S3 resets.
 
-`DEC-0054` accepts ES8311, `TLV9061IDBVR` active high-Z capture,
+`DEC-0054` accepted ES8311, `TLV9061IDBVR` active high-Z capture,
 `TMUX1136DGSR` speaker selection, `TS5A63157DCKR` TX selection and
 `SN74LVC2G08DCUR` gating of both P11/P12 requests by direct pulled-low GPIO6
-`AUDIO_ARM`. Arm-low forces both selectors to analog defaults independently of
-stale expander state and leaves GPIO43 free. Passive capture stays a same-PCB
-DNP/cost-down experiment; TAC5111IRGER stays a more expensive new-driver
-reference.
+`AUDIO_ARM`. I5 adds a second exact `TS5A63157DCKR` for P00 capture selection,
+complete bias/coupling/attenuation, reset-off `PAM8302AASCR`, exact
+`CMEJ-0413-42-SMT-TR` microphone, `AS02404PO` speaker and protected switched
+`SJ1-3515-SMT-TR` headphone jack. Arm-low forces both codec selectors to
+analog defaults independently of stale expander state.
+
+The exact runtime modes are:
+
+| Mode | Required controls | Result and invariant |
+|---|---|---|
+| receiver bypass | P27 chooses Si4732 or SA518; `AUDIO_ARM=0`; codec may be off | selected AFOUT reaches the speaker selector's bypass input; no codec dependency |
+| receiver recording | chosen RX plus `P00=0`; admitted codec/I2S | selected receive audio reaches ES8311 capture without loading bypass |
+| microphone recording / authorized host VOX | `P00=1`; admitted codec/I2S | local microphone is captured; VOX analysis never implies or requests PTT |
+| codec playback | admitted codec/I2S; P11 request; direct `AUDIO_ARM=1`; P01 only if P02 says absent | codec reaches speaker; headphone insertion disables speaker |
+| ordinary voice TX audio | TX selector default, `AUDIO_ARM=0` | electret feeds SA518; audio selection itself never asserts PTT |
+| codec-injected voice TX audio | admitted codec/I2S; P12 request; direct `AUDIO_ARM=1` | attenuated codec output feeds SA518; separately armed AON-gated PTT is still required |
+
+Si4732 has its own reset-off/QOD `TPS22919DCKR` branch. Its 3.08-V/200-ms
+supervisor holds RST, dual I2C isolation and open-drain IRQ isolation until
+valid power. Firmware first probes `0x11` and `0x63`; a successful address is
+recorded as specimen evidence, not generalized to every BOM lot before HIL.
+
+SA518 interface readiness is separate from rail enable. The AON supervisor
+requires STOP permission, protected 4 V above about 3.73 V and about 57.6 ms
+post-threshold delay before PD, local I/O power, PTT/UART and analog isolation
+can open. Module PTT has a physical RX pull-up; H/L is driven low or released
+through an open-drain stage, never driven high. RP-to-module UART RX is
+physically disconnected and low while asleep. UPDATE is fixture-only and
+standard VOXEN is not a runtime feature.
 
 Normative firmware sequencing is disarm-first:
 
 1. On boot/reset, never drive GPIO6 high; the external pull-down establishes
    speaker-bypass/electret defaults before firmware runs.
-2. Keep `AUDIO_ARM=0` while powering and reading ES8311, starting/verifying
-   I2S clocks, and writing/verifying P11/P12 requests.
+2. Keep `AUDIO_ARM=0` while setting P00/P27, enabling P10, waiting for physical
+   codec readiness, reading ES8311 at `0x19`, starting/verifying I2S clocks,
+   and writing/verifying P11/P12 requests.
 3. Assert `AUDIO_ARM=1` last, only when the requested codec path is valid.
 4. Before changing either request, codec power or clock state, clear
    `AUDIO_ARM`, verify analog defaults, update the request, then re-arm only if
    the complete path is healthy.
-5. On any readback, DMA, I2C, watchdog, brownout or shutdown fault, clear arm
-   first; stop/mute/power-down follow. No audio selection may assert PTT.
+5. On any readback, DMA, I2C, watchdog, brownout, headphone insertion or
+   shutdown fault, clear arm and P01 first; stop/mute/power-down follow. No
+   audio selection or host-side VOX result may assert PTT.
+6. Before disabling codec or receiver power, stop its DMA/transactions, clear
+   requests, wait for physical interface isolation, then allow QOD discharge.
+   Do not leave a host output driving a collapsing local domain.
 
 Firmware may now freeze these control states and ordering, but must not freeze
-unmeasured gain/mute delays, codec register values or claim lossless TX/speaker
-routing before electrical/HIL closure.
+unmeasured gain/mute delays, crystal trim, codec register values or claim
+lossless/noiseless TX, recording or speaker routing before HIL closure.
 
 ## Explicitly open
 
 Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092` list remaining electrical/HIL endpoints:
 display standalone sourcing/final mate and display/touch/backlight HIL,
 microSD socket access, real media/endurance, throughput/contention, hot removal,
-fault injection and corruption recovery, passive codec/analog networks,
-IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
+fault injection and corruption recovery, audio gain/noise/pop/click/acoustic/
+RF-immunity and concurrent-load HIL, IR frontend/driver, TPS25751
+raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
 source-transition, brownout, thermal/source-handover/fault HIL, Unit
 protection and service-connector
@@ -721,8 +767,10 @@ remains `AUDIO_ARM`.
 Hardware `FND-0094/IOX-0001/DEC-0089/REV-0005AT` then closes the consolidated
 I4 electrical input: exact TCA6424A `0x22`, pack target `0x2A`, shared IRQ and
 recovery behavior, isolated P22/P23 observation polarity and the real GPIO4
-microSD return are now consumable. I5 becomes the next active upstream block;
-no prototype or physical qualification is inferred.
+microSD return are now consumable. Hardware
+`FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` then closes I5 and makes the exact
+runtime contract above consumable. I6 RF endpoints are active upstream; no
+prototype or physical qualification is inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and
