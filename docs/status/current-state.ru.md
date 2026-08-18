@@ -296,6 +296,15 @@
   isolation, 100-ms/three-identity admission, directional forward-power
   evidence и упорядоченное отключение общей шины. Ebyte mate, thresholds, T1
   coexistence и остальные RF endpoints I6 остаются открыты перед expansion internals.
+  `FND-0097/NAT-0001/DEC-0092/REV-0005AW` затем закрывают раздельные native S3
+  2,4 ГГц и C5 2,4/5 ГГц evidence feeds с отдельными identities и exact-feed
+  loss/EIRP profiles; входящий RF может задержать quiet, но не разрешить TX.
+  `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` следом закрывают exact CC1101
+  endpoint. Runtime потребляет cold selection 315/433/868–915, versioned S3↔RP
+  handoff, двухстороннюю изоляцию и final-line AD8314 evidence; `00` означает
+  safe isolation, а P05 остаётся единственным свободным main slow-I/O.
+  VNA/conducted tuning, thresholds, legal profiles, SMA mechanics и coexistence
+  остаются upstream; voice/IR RF endpoints всё ещё активны.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -333,7 +342,7 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 и первый I6/nRF subblock прошли ревью, а I6 остаётся активным;
+electrical scope `I2`…I5 и I6 nRF/native/CC subblocks прошли ревью, а I6 остаётся активным;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,

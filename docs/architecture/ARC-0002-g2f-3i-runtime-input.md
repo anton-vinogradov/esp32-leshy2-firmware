@@ -13,6 +13,7 @@
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 - exact three-nRF electrical endpoint: [`N24E-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24E-0001-exact-three-nrf-electrical-endpoint.md), [`DEC-0091`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0091-exact-three-nrf-electrical-endpoint.md), [`REV-0005AV`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AV-i6-three-nrf-propagation.md)
 - exact native S3/C5 RF evidence endpoints: [`NAT-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NAT-0001-exact-s3-c5-native-rf-evidence-endpoints.md), [`DEC-0092`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0092-exact-s3-c5-native-rf-endpoints.md), [`REV-0005AW`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AW-i6-native-rf-propagation.md)
+- exact CC1101 three-band endpoint: [`CCRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CCRF-0001-exact-cc1101-three-band-endpoint.md), [`DEC-0093`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0093-exact-cc1101-three-band-endpoint.md), [`REV-0005AX`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AX-i6-cc1101-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -111,6 +112,14 @@ couplers and complete LTC5532 support. It may not enable C5 ANT2, invent a
 shared native antenna, infer detector thresholds from typical values or claim
 regional EIRP before full-feed loss and antenna qualification. Exact jumper,
 chassis connector, thresholds and coexistence remain upstream physical gates.
+Hardware `DEC-0093/CCRF-0001` next close the exact CC1101 paper subblock.
+Firmware may consume dedicated RP PIO0 SM3 ownership, powered-off P03/P04
+three-band selection, dual-ended branch isolation and final-line AD8314
+evidence. It may not hot-switch a band, infer a physical switch position from
+an expander register, treat inbound RF as authorization, invent detector
+thresholds or claim the first-pass matching coupon before VNA/conducted HIL.
+The final chassis SMA, measured feed loss, legal profiles and coexistence remain
+upstream gates.
 
 ## Candidate runtime domains
 
@@ -139,9 +148,10 @@ After `DEC-0054` consumes S3 GPIO6 for `AUDIO_ARM`, only GPIO47 remained free.
 `DEC-0086` consumes GPIO39/GPIO47 as the direct PCNT0 encoder phase pair, so
 firmware cannot invent another direct S3 or RP control. Hardware derives these
 figures from the machine source: S3 is `33 used / 3 reserved / 0 free`, C5 is `14/6/1`, RP is `48/0/0`,
-and the main slow plane is `21/0/3`: P27 selects the receive source, while I5
+and the main slow plane is `23/0/1`: P27 selects the receive source, while I5
 uses P00 for RX/microphone capture, P01 for speaker enable and P02 for
-headphone absence; P03/P04/P05 remain free. The previously published C5/RP reserve
+headphone absence. P03/P04 are CC1101 rail-off band truth bits and P05 remains
+free. The previously published C5/RP reserve
 was stale and is corrected by `FND-0059`. GPIO43/44 remain permanent UART0
 service; GPIO6 `AUDIO_ARM` and GPIO39/47 encoder capture are normative machine
 inputs.
@@ -188,6 +198,25 @@ inputs.
   a native group is active. Native radio queues and lease deadlines cannot wait
   for a display refresh, microSD transaction or peer-radio operation; the
   complete device must still pass active-receiver desense/coexistence HIL.
+- CC service exposes three hardware endpoint identities: `cc_315` uses
+  V1/V2=`10` and RF1, `cc_433` uses `01` and RF2, and `cc_868_915` uses `11`
+  and RF3. The last identity still requires distinct legal `868` and `915`
+  channel/power profiles; sharing one physical branch never merges regional
+  policy. V1/V2=`00` is isolation, not a transmit or receive profile.
+- S3 is the sole writer of TCA6424A P03/P04; RP alone owns CC PIO/DMA, the
+  CC rail request and transceiver state. A versioned cross-domain transaction
+  binds requested endpoint, regional profile and generation. S3 may acknowledge
+  `BAND_PRESELECTED` only after RP reports `CC_OFF/EVIDENCE_QUIET`; RP may power
+  the endpoint only after that matching acknowledgement. Timeout, reset or a
+  generation mismatch leaves `00`/rail-off and invalidates the transaction.
+- Every CC TX lease names endpoint, channel, regional profile, requested power,
+  antenna/feed identity, calibrated complete-feed loss, evidence-calibration
+  revision and expiry. During commanded TX, final-line
+  `GJM1555C1HR47BB01D`→`AD8314ACPZ-RL7` evidence must assert and decay within
+  the qualified per-band/per-power windows. Missing, stuck or contradictory
+  evidence expires the lease and powers down the path. Strong inbound RF may
+  conservatively assert this non-directional detector and delay quiet, but can
+  never create, extend or validate a lease.
 - Display and microSD deliberately share SPI2. `DEC-0052` assigns direct QSPI
   D2/D3 to S3 GPIO41/42 and replaces stale `256 B` slicing with measured
   `<=1 ms` uninterrupted display occupancy. The scheduler uses separate CS,
@@ -266,6 +295,14 @@ inputs.
   physical through QOD fall; software neither shortens it nor treats an early
   detector shutdown as proof. Re-entry begins only after the measured rail
   discharge/no-backpower interval.
+- CC band entry is strictly `OFF → PRESELECTED → POWERING → READY_RX`; TX adds
+  `TX_ARMED → TX`, and any exit passes through `QUIETING → OFF`. To change
+  bands, reject new work, revoke the lease, command CC IDLE with CSN high and
+  SCLK/SI parked, wait for final-line evidence quiet, stop PIO/DMA, remove the
+  CC rail and wait the qualified discharge interval. Only then may S3 change
+  P03/P04. After the matching generation is acknowledged, RP powers the rail,
+  waits the qualified crystal/power interval, reads CC identity and the complete
+  register profile, then admits RX or TX. No powered-state P03/P04 write is valid.
 - S3 UI CPU, RP arbiter, power/fault supervision and required IPC remain system
   planes. Their peripheral clocks run only for bounded transactions, and they
   must pass active-receiver EMI HIL rather than being mislabeled powered-off.
@@ -597,6 +634,12 @@ inputs.
   current. Qualification is versioned at channels 0, 100 and 125. A profile
   without valid threshold/temperature/lot calibration is
   `unknown/unavailable` and cannot satisfy a proof-mandatory TX lease.
+- CC evidence comes from the high-impedance final-line
+  `GJM1555C1HR47BB01D` sample into `AD8314ACPZ-RL7`, after both band switches
+  and all populated matching. It is intentionally non-directional: assertion
+  without a matching commanded-TX generation is `unexpected_rf`, never
+  authorization. Absence during commanded TX is `evidence_missing`; either
+  state blocks or expires the lease and enters the fail-closed quiet sequence.
 - Firmware reports `commanded`, `device-reported`, `actual` and
   `unknown/unavailable` independently. All eight evidence lines low are
   sufficient positive observations; an impossible aggregate/mask combination,
@@ -627,6 +670,10 @@ inputs.
    no-backfeed and hardware-default analog bypass under reset/watchdog/fault,
    including stale P11/P12 after S3-only reset and proof that arm-low overrides
    both selector requests under accepted `DEC-0054`.
+10. CC315/433/868/915 cold band entry, identity/config readback, prohibited hot
+    switch, cross-domain generation mismatch/reset, evidence assert/decay and
+    strong-inbound false-positive handling; then VNA/conducted output,
+    sensitivity, spurious, feed-loss/EIRP and no-neighbour-stall coexistence.
 
 The fixture has two explicitly different evidence levels. Ordered ESP32-DIV
 units form `L0 DIV↔DIV` pre-HIL: they validate the manifest/log workflow and
@@ -785,7 +832,7 @@ lossless/noiseless TX, recording or speaker routing before HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092/0098` list remaining electrical/HIL endpoints:
 display standalone sourcing/final mate and display/touch/backlight HIL,
 microSD socket access, real media/endurance, throughput/contention, hot removal,
 fault injection and corruption recovery, audio gain/noise/pop/click/acoustic/
@@ -809,8 +856,11 @@ their still-open HIL boundaries.
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
 are paper-reviewed inputs from `DEC-0061`. `DEC-0091` additionally reviews the
 three exact nRF directional taps, detector bodies and powered-off isolation at
-paper level. Their pigtail mate, thresholds and fault-injection/T1 HIL remain
-open, as do the RF/optical front ends for the other I6 paths.
+paper level. `DEC-0092` does the same for independent S3/C5 native feeds, and
+`DEC-0093` reviews the exact dual-ended CC three-band path and final-line
+detector. Pigtail/chassis mates, thresholds, CC VNA/conducted results and
+fault-injection/T1 HIL remain open, as do the RF/optical front ends for the
+remaining I6 paths.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
@@ -833,6 +883,11 @@ prototype or physical qualification is inferred.
 `FND-0096/N24E-0001/DEC-0091/REV-0005AV` then reviews the first I6 nRF
 electrical subblock and makes its sequence/evidence contract consumable here.
 I6 remains active; no HAL, KiCad or target implementation is authorized.
+`FND-0097/NAT-0001/DEC-0092/REV-0005AW` and
+`FND-0098/CCRF-0001/DEC-0093/REV-0005AX` next make the separate native feeds
+and exact CC three-band state machine consumable. I6 still remains active for
+voice/IR RF closure and consolidated coexistence; no physical qualification is
+inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

@@ -160,8 +160,9 @@ class TargetReadmeTests(unittest.TestCase):
         )
         for token in (
             "DEC-0090/AUDIO-0003",
-            "main slow plane is `21/0/3`",
-            "P03/P04/P05 remain free",
+            "main slow plane is `23/0/1`",
+            "P03/P04 are CC1101 rail-off band truth bits",
+            "P05 remains free",
             "ES8311 `0x19`",
             "both public strap outcomes `0x11` and `0x63`",
             "P00 chooses either the selected RX source or exact local electret microphone",
@@ -253,6 +254,52 @@ class TargetReadmeTests(unittest.TestCase):
             "disables the affected TX profile",
             "cannot create, extend or validate a transmit lease",
             "cannot wait for a display refresh",
+        ):
+            self.assertIn(token, arc2)
+
+    def test_exact_i6_cc1101_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "CC1101 exposes separate 315-MHz, 433-MHz and combined 868/915-MHz",
+                "Two `BGS13SN8E6327XTSA1` switches isolate",
+                "code `00` is safe isolation",
+                "band changes only with CC power off",
+                "Final-line `AD8314ACPZ-RL7` evidence",
+                "never grants transmission",
+            ),
+            "README.ru.md": (
+                "CC1101 даёт раздельные аппаратные endpoints 315 МГц, 433 МГц",
+                "Два `BGS13SN8E6327XTSA1` изолируют",
+                "код `00` означает безопасную изоляцию",
+                "Диапазон меняется только при снятом питании CC",
+                "Final-line evidence на `AD8314ACPZ-RL7`",
+                "никогда не разрешает передачу",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0093/CCRF-0001",
+            "`cc_315` uses V1/V2=`10` and RF1",
+            "`cc_433` uses `01` and RF2",
+            "`cc_868_915` uses `11` and RF3",
+            "V1/V2=`00` is isolation",
+            "S3 is the sole writer of TCA6424A P03/P04",
+            "`BAND_PRESELECTED` only after RP reports `CC_OFF/EVIDENCE_QUIET`",
+            "No powered-state P03/P04 write is valid",
+            "GJM1555C1HR47BB01D`→`AD8314ACPZ-RL7",
+            "`unexpected_rf`, never authorization",
+            "CC315/433/868/915 cold band entry",
         ):
             self.assertIn(token, arc2)
 

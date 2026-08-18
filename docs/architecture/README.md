@@ -54,7 +54,8 @@ the next upstream block.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
-`48/0/0`, main slow I/O `21/0/3` and dedicated UI I/O `7/1/0`; exact SA518 service and Si4732 control/antenna
+`48/0/0`, main slow I/O `23/0/1` and dedicated UI I/O `7/1/0`; P03/P04 are
+the powered-off CC band bits and P05 is free. Exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
@@ -214,6 +215,11 @@ ARC-0002 now keeps their identities, bands, feed-loss/EIRP accounting and
 fail-closed evidence windows distinct; C5 ANT2 remains unavailable. Jumper,
 chassis connector, thresholds and whole-device coexistence stay upstream, so
 I6 and the unfrozen implementation boundary remain unchanged.
+`FND-0098/CCRF-0001/DEC-0093/REV-0005AX` then close the CC paper subblock.
+ARC-0002 consumes three cold-selected band identities, the S3↔RP generation
+handshake, exact dual-ended branch isolation and final-line AD8314 evidence.
+VNA/conducted tuning, thresholds, legal feed/EIRP profiles, SMA mechanics and
+whole-device coexistence remain upstream; I6 stays active for voice/IR RF.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

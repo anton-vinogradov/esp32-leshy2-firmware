@@ -132,6 +132,12 @@ flowchart TD
   band/channel, regional profile, calibrated feed loss and antenna identity;
   missing or inconsistent evidence disables that TX profile. Strong inbound
   RF may conservatively delay a quiet-state transition but cannot authorize TX.
+- CC1101 exposes separate 315-MHz, 433-MHz and combined 868/915-MHz hardware
+  endpoints. Two `BGS13SN8E6327XTSA1` switches isolate every unselected branch
+  at both ends; code `00` is safe isolation. A band changes only with CC power
+  off, then identity and the complete register profile are read back before RX
+  or TX. Final-line `AD8314ACPZ-RL7` evidence must match a live lease; inbound
+  RF may delay quiet but never grants transmission.
 - The broadcast receiver is admitted behind its own power/interface gate and
   identified at supported address `0x11` or `0x63`. Analog voice defaults to
   receive and ordinary electret audio; codec-injected TX audio still requires
