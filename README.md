@@ -138,6 +138,12 @@ flowchart TD
   off, then identity and the complete register profile are read back before RX
   or TX. Final-line `AD8314ACPZ-RL7` evidence must match a live lease; inbound
   RF may delay quiet but never grants transmission.
+- SA518 voice exposes separate VHF and UHF profiles over one direct protected
+  50-Ohm external feed. Every TX lease binds channel, H/L power, region and the
+  separately labelled antenna. Final-line `AD8314ACPZ-RL7` evidence must assert
+  during PTT and decay during shutdown; missing evidence revokes PTT, while
+  strong inbound RF may only report external RF and delay quiet. It never
+  creates or extends a lease.
 - The broadcast receiver is admitted behind its own power/interface gate and
   identified at supported address `0x11` or `0x63`. Analog voice defaults to
   receive and ordinary electret audio; codec-injected TX audio still requires

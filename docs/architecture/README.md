@@ -219,7 +219,12 @@ I6 and the unfrozen implementation boundary remain unchanged.
 ARC-0002 consumes three cold-selected band identities, the S3↔RP generation
 handshake, exact dual-ended branch isolation and final-line AD8314 evidence.
 VNA/conducted tuning, thresholds, legal feed/EIRP profiles, SMA mechanics and
-whole-device coexistence remain upstream; I6 stays active for voice/IR RF.
+whole-device coexistence remain upstream. `FND-0099/VRF-0001/DEC-0094/
+REV-0005AY` then close the SA518 RF paper input: the runtime consumes a direct
+protected 50-Ohm external feed, exact resistive AD8314 evidence, per-band/
+per-power lease binding and fail-closed PTT/shutdown windows. External filters
+remain a measured-failure reopen gate and P05 stays free. I6 stays active for
+IR and consolidated coexistence.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

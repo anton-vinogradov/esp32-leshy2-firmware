@@ -303,6 +303,50 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc2)
 
+    def test_exact_i6_sa518_rf_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "SA518 voice exposes separate VHF and UHF profiles",
+                "one direct protected 50-Ohm external feed",
+                "binds channel, H/L power, region",
+                "Final-line `AD8314ACPZ-RL7` evidence",
+                "missing evidence revokes PTT",
+                "never creates or extends a lease",
+            ),
+            "README.ru.md": (
+                "SA518 voice даёт раздельные VHF и UHF profiles",
+                "один direct protected 50-Ом внешний тракт",
+                "связывает channel, H/L power, region",
+                "Final-line evidence на `AD8314ACPZ-RL7`",
+                "missing evidence снимает PTT",
+                "никогда не создаёт и не продлевает lease",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0094/VRF-0001",
+            "physical ANT contact 7",
+            "exact 5.1-kOhm/52.3-Ohm attenuation",
+            "until then P05 remains free",
+            "`voice_vhf` or `voice_uhf`",
+            "arms the evidence hold before the protected 4-V rail",
+            "`external_rf_present`",
+            "RC0402FR-075K1L` + `RC0402FR-0752R3L",
+            "measured conducted failure reopens",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

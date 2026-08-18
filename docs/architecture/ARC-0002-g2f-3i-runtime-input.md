@@ -14,6 +14,7 @@
 - exact three-nRF electrical endpoint: [`N24E-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24E-0001-exact-three-nrf-electrical-endpoint.md), [`DEC-0091`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0091-exact-three-nrf-electrical-endpoint.md), [`REV-0005AV`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AV-i6-three-nrf-propagation.md)
 - exact native S3/C5 RF evidence endpoints: [`NAT-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NAT-0001-exact-s3-c5-native-rf-evidence-endpoints.md), [`DEC-0092`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0092-exact-s3-c5-native-rf-endpoints.md), [`REV-0005AW`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AW-i6-native-rf-propagation.md)
 - exact CC1101 three-band endpoint: [`CCRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CCRF-0001-exact-cc1101-three-band-endpoint.md), [`DEC-0093`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0093-exact-cc1101-three-band-endpoint.md), [`REV-0005AX`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AX-i6-cc1101-propagation.md)
+- exact SA518 RF endpoint: [`VRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/VRF-0001-exact-sa518-broadband-rf-endpoint.md), [`DEC-0094`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0094-exact-sa518-broadband-rf-endpoint.md), [`REV-0005AY`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AY-i6-sa518-rf-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -120,6 +121,14 @@ an expander register, treat inbound RF as authorization, invent detector
 thresholds or claim the first-pass matching coupon before VNA/conducted HIL.
 The final chassis SMA, measured feed loss, legal profiles and coexistence remain
 upstream gates.
+Hardware `DEC-0094/VRF-0001` then closes the SA518 RF paper subblock. Firmware
+may consume physical ANT contact 7, one direct protected 50-Ohm SMA feed and a
+separate AD8314 actual-TX channel sampled through exact 5.1-kOhm/52.3-Ohm
+attenuation. It may not treat inbound RF as PTT authorization, infer thresholds
+from nominal arithmetic, reuse the 7-V CC TVS profile, or invent an external
+VHF/UHF filter bank. A measured conducted failure reopens the hardware
+subblock; until then P05 remains free. Final SMA, antenna lots, evidence
+thresholds, emissions/legal proof and coexistence remain upstream gates.
 
 ## Candidate runtime domains
 
@@ -217,6 +226,20 @@ inputs.
   evidence expires the lease and powers down the path. Strong inbound RF may
   conservatively assert this non-directional detector and delay quiet, but can
   never create, extend or validate a lease.
+- Every voice TX lease names `voice_vhf` or `voice_uhf`, exact channel,
+  regional profile, requested H/L power, separately labelled antenna/feed
+  identity, evidence-calibration revision and expiry. An unknown, wrong-band or
+  changed antenna leaves both voice rail and PTT disarmed.
+- Voice entry arms the evidence hold before the protected 4-V rail, validates
+  the SA518 identity/configuration/ready state and only then permits the
+  independent AON-gated PTT. During PTT, the matching `AD8314ACPZ-RL7` channel
+  must assert inside its per-band/per-power window. Missing evidence revokes
+  PTT and rail as `evidence_missing`; evidence can never create a lease.
+- Voice shutdown forces RX first, waits for evidence quiet, removes the 4-V
+  rail and accepts quiet only inside the calibrated finite hold/decay window.
+  Strong inbound RF may report `external_rf_present` and conservatively delay
+  quiet, but never extends PTT. Timeout is fail-closed and requires a fresh
+  lease after the RF state clears.
 - Display and microSD deliberately share SPI2. `DEC-0052` assigns direct QSPI
   D2/D3 to S3 GPIO41/42 and replaces stale `256 B` slicing with measured
   `<=1 ms` uninterrupted display occupancy. The scheduler uses separate CS,
@@ -640,6 +663,12 @@ inputs.
   without a matching commanded-TX generation is `unexpected_rf`, never
   authorization. Absence during commanded TX is `evidence_missing`; either
   state blocks or expires the lease and enters the fail-closed quiet sequence.
+- Voice evidence comes from the final SA518 external line through exact
+  `RC0402FR-075K1L` + `RC0402FR-0752R3L` into a separate
+  `AD8314ACPZ-RL7`. The nominal approximately-40-dB calculation is not a
+  threshold: only versioned VHF/UHF and H/L-power HIL calibration enables a
+  proof-mandatory profile. Assertion without the matching lease generation is
+  `external_rf_present`/unexpected, never authorization.
 - Firmware reports `commanded`, `device-reported`, `actual` and
   `unknown/unavailable` independently. All eight evidence lines low are
   sufficient positive observations; an impossible aggregate/mask combination,
@@ -858,9 +887,10 @@ are paper-reviewed inputs from `DEC-0061`. `DEC-0091` additionally reviews the
 three exact nRF directional taps, detector bodies and powered-off isolation at
 paper level. `DEC-0092` does the same for independent S3/C5 native feeds, and
 `DEC-0093` reviews the exact dual-ended CC three-band path and final-line
-detector. Pigtail/chassis mates, thresholds, CC VNA/conducted results and
-fault-injection/T1 HIL remain open, as do the RF/optical front ends for the
-remaining I6 paths.
+detector. `DEC-0094` reviews the direct protected SA518 feed plus exact
+resistive AD8314 sample. Pigtail/chassis mates, thresholds, CC/voice
+VNA/conducted results and fault-injection/T1 HIL remain open, as does the IR
+RF/optical front end for the remaining I6 path.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
@@ -885,9 +915,10 @@ electrical subblock and makes its sequence/evidence contract consumable here.
 I6 remains active; no HAL, KiCad or target implementation is authorized.
 `FND-0097/NAT-0001/DEC-0092/REV-0005AW` and
 `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` next make the separate native feeds
-and exact CC three-band state machine consumable. I6 still remains active for
-voice/IR RF closure and consolidated coexistence; no physical qualification is
-inferred.
+and exact CC three-band state machine consumable.
+`FND-0099/VRF-0001/DEC-0094/REV-0005AY` then makes the exact voice RF lease,
+evidence and shutdown state machine consumable. I6 still remains active for IR
+closure and consolidated coexistence; no physical qualification is inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

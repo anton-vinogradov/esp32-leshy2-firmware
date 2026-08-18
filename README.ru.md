@@ -143,6 +143,12 @@ flowchart TD
   полный register profile. Final-line evidence на `AD8314ACPZ-RL7` обязано
   совпадать с действующим lease; входящий RF может задержать quiet, но никогда
   не разрешает передачу.
+- SA518 voice даёт раздельные VHF и UHF profiles через один direct protected
+  50-Ом внешний тракт. Каждый TX lease связывает channel, H/L power, region и
+  отдельно маркированную антенну. Final-line evidence на `AD8314ACPZ-RL7`
+  обязано появиться при PTT и исчезнуть при shutdown; missing evidence снимает
+  PTT, а сильный входящий RF может только сообщить external RF и задержать
+  quiet. Он никогда не создаёт и не продлевает lease.
 - Broadcast receiver допускается через собственный power/interface gate и
   определяется на поддерживаемом адресе `0x11` либо `0x63`. Analog voice по
   умолчанию остаётся в приёме с обычным electret audio; codec-injected TX audio

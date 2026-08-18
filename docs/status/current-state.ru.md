@@ -304,7 +304,12 @@
   handoff, двухстороннюю изоляцию и final-line AD8314 evidence; `00` означает
   safe isolation, а P05 остаётся единственным свободным main slow-I/O.
   VNA/conducted tuning, thresholds, legal profiles, SMA mechanics и coexistence
-  остаются upstream; voice/IR RF endpoints всё ещё активны.
+  остаются upstream. `FND-0099/VRF-0001/DEC-0094/REV-0005AY` затем закрывают
+  exact SA518 RF endpoint. Runtime потребляет один direct protected 50-Ом feed,
+  отдельные VHF/UHF antenna-bound leases, exact resistive AD8314 evidence и
+  fail-closed PTT/shutdown windows. External filter bank остаётся measured-
+  failure reopen gate, а P05 свободен. IR и consolidated coexistence всё ещё
+  активны upstream.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -342,7 +347,7 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 и I6 nRF/native/CC subblocks прошли ревью, а I6 остаётся активным;
+electrical scope `I2`…I5 и I6 nRF/native/CC/voice subblocks прошли ревью, а I6 остаётся активным;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,
