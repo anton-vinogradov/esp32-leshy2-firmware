@@ -37,6 +37,7 @@
 - exact source/AON/POR/main sequence: [`DEC-0080`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0080-exact-aon-pg-por-main-sequence.md), [`PWR-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0019-exact-source-sequence-and-power-reserve.md), [`FND-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0084-abstract-main-source-sequencer.md), [`REV-0005AK`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AK-source-sequence-propagation.md)
 - independent internal-rail containment: [`DEC-0081`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0081-independent-internal-rail-containment.md), [`PWR-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0020-independent-post-buck-containment.md), [`FND-0085`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0085-uncontained-internal-buck-high-side-short.md), [`REV-0005AL`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AL-internal-rail-containment-propagation.md)
 - consolidated I3 paper closure: [`DEC-0082`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0082-i3-paper-closure.md), [`PWR-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0021-i3-consolidated-paper-closure.md), [`FND-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0086-i3-paper-and-hil-closure-were-conflated.md), [`REV-0005AM`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AM-i3-paper-closure-propagation.md)
+- exact protected product USB port: [`DEC-0083`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0083-exact-protected-product-usb-port.md), [`USB-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/USB-0001-exact-product-usb-c-and-protection.md), [`FND-0087`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0087-product-usb-ended-on-abstract-port.md), [`REV-0005AN`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AN-product-usb-port-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -54,6 +55,11 @@ and activate dependent I4 paper work. That maturity only makes the exact
 source/rail/fault contracts consumable here: procurement and prototype HIL
 remain open, measured thresholds do not appear from calculations, and any
 functional or derating conflict reopens I3 before it changes this input.
+Hardware `DEC-0083/USB-0001` now close the first I4 paper endpoint. Firmware
+may consume a protected native S3 USB2 path, sink-only CC path, automatic
+port disconnect and the absence of Alt Mode. It may not promote unmeasured
+USB Full-Speed RC/SI, ESD/short-to-VBUS behavior or the fixture-only protector
+`FLT` signal into a production runtime claim.
 
 ## Candidate runtime domains
 
@@ -293,8 +299,21 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - BQ TS uses a third electrically independent B57332V5103F360 and remains
   enabled. Firmware may narrow the qualified charge window, but must never set
   `TS_IGNORE`; the two MAX17320 cell sensors remain separate evidence.
-- Product USB2 stays direct on S3 GPIO19/20. There is no firmware profile that
-  enables TPS BC1.2/liquid pins or BQ DPDM on the data pair.
+- Product USB2 remains native on S3 GPIO19/20 through the automatic four-line
+  port protector and exact initial 22-Ohm series resistors; its exact PHY limit
+  is Full-Speed 12 Mbit/s. Two hardware shunt-capacitor positions remain DNP
+  pending measured tuning. There is no firmware profile that enables TPS
+  BC1.2/liquid pins, BQ DPDM or physical Type-C SBU/Alt Mode on the data pair.
+- Connector overvoltage opens affected CC/data paths in hardware. Runtime
+  treats detach, PD fault or failed USB re-enumeration as a closed USB session,
+  clears any USB-derived Controlled-Zone authorization and reports the fault;
+  it does not bypass protection or enter a tight reset/re-enumeration loop.
+- Direct protector `FLT` is intentionally fixture-only because the paper map
+  preserves GPIO47. Production runtime therefore uses TPS status, native USB
+  link state and re-enumeration outcome; it never fabricates the missing direct
+  FLT observation. Full-Speed RC/signal-integrity and enumeration remain HIL;
+  a failed gate reopens hardware values, placement or protection rather than
+  changing the advertised PHY class or removing protection.
 - A PD image update is permitted only while TX is disarmed, input and cells are
   stable, the signed manifest targets the exact board/controller/tool version,
   and the inactive EEPROM region is writable. Readback/hash/boot validation

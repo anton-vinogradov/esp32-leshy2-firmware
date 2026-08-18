@@ -201,6 +201,12 @@
   стал активным бумажным блоком; procurement, received-lot,
   source-transition, rail, destructive-fault и thermal HIL остаются явными
   upstream gates и не могут стать firmware constants.
+  `FND-0087/USB-0001/DEC-0083/REV-0005AN` затем закрывают первый endpoint I4:
+  exact основной USB-C и автоматическая four-line защита CC/USB2 сохраняют
+  native S3 GPIO19/20, а GPIO47 остаётся свободным. Firmware закрывает USB
+  session при detach/PD fault/ошибке re-enumeration, не предоставляет bypass,
+  Alt Mode или source profile и не утверждает fixture-only `FLT`. USB
+  Full-Speed RC/SI, ESD, short-to-VBUS и физический placement остаются upstream HIL.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -237,8 +243,9 @@
   сертификации, specimen fit, droop/thermal-stack и continuity/thermal HIL
   остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
-  цепочки `INT-0001`. Hardware отметил `I2` и бумажную часть I3 как reviewed и
-  теперь закрывает I4 UI/storage/USB, затем audio/RF/expansion internals.
+  цепочки `INT-0001`. Hardware отметил `I2` и бумажную часть I3 как reviewed,
+  закрыл первый product-USB endpoint I4 и теперь закрывает оставшуюся
+  UI/storage часть I4, затем audio/RF/expansion internals.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -276,8 +283,10 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
-бумажная электрическая часть I3 прошли ревью, а I4 стал следующим
-активным бумажным блоком. Mechanics, exact-cell droop, timer/load hot HIL и
+бумажная электрическая часть I3 прошли ревью, а I4 стал следующим активным
+бумажным блоком; его exact protected product-USB endpoint reviewed, остальные
+UI/display/storage endpoints активны. Mechanics, exact-cell droop,
+timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными
 физическими I3-gates; они больше не маскируются под незакрытую
 бумажную архитектуру.

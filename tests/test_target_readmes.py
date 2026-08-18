@@ -98,6 +98,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "hardware SafeMode",
                 "protected VBUS path and charging remain off",
                 "inactive EEPROM region",
+                "Full-Speed data (12 Mbit/s)",
+                "short-to-VBUS/ESD protection",
+                "port fault closes the USB session",
+                "Alt Mode is not supported",
             ),
             "README.ru.md": (
                 "USB-C только принимает питание",
@@ -106,6 +110,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "аппаратный SafeMode",
                 "Защищённый тракт VBUS и заряд остаются выключены",
                 "неактивный регион EEPROM",
+                "Full-Speed data S3 (12 Мбит/с)",
+                "short-to-VBUS/ESD",
+                "Ошибка порта закрывает USB session",
+                "Alt Mode не поддерживается",
             ),
         }
         for readme_name, tokens in required_tokens.items():

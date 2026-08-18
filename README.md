@@ -150,6 +150,10 @@ flowchart TD
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
+- Native S3 USB2 Full-Speed data (12 Mbit/s) and both Type-C configuration
+  lines have automatic hardware short-to-VBUS/ESD protection. A port fault
+  closes the USB session and waits for safe physical recovery and
+  re-enumeration; Alt Mode is not supported.
 - On raw USB power the PD controller enters hardware SafeMode and loads its
   dedicated EEPROM without S3. The protected VBUS path and charging remain off
   until a valid policy is present; missing or corrupt policy requires the

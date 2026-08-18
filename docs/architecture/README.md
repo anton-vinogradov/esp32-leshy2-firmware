@@ -95,6 +95,11 @@ source/heat/fault ledger and activate I4 paper work. Firmware may consume those
 exact contracts, but cell/holder procurement and received-lot, transition,
 rail, destructive-fault and thermal HIL remain upstream evidence; no measured
 threshold or production qualification is inferred.
+`FND-0087/USB-0001/DEC-0083/REV-0005AN` now close the first I4 endpoint with
+exact four-line product-port protection. ARC-0002 consumes automatic
+disconnect, sink-only/no-Alt-Mode behavior and protected native S3 USB2 while
+keeping direct `FLT` fixture-only and USB Full-Speed RC/SI, ESD/short HIL
+upstream.
 Hardware
 `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
