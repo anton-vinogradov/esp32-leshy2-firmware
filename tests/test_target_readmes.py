@@ -41,6 +41,40 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token, normalized, f"{readme_name}: {token}")
 
+    def test_target_readmes_keep_complete_local_controls(self):
+        required_tokens = {
+            "README.md": (
+                "D-pad directions plus OK, BACK, OPT, F1, F2",
+                "rotary encoder with push",
+                "dedicated hold-to-talk PTT",
+                "hardware STOP",
+                "recessed RE-ARM",
+                "interrupt-started 4×3 scan",
+                "TCA9534APWR",
+                "PCNT0 on GPIO39/GPIO47",
+                "direct RP GPIO21 input",
+                "do not replace any of them",
+            ),
+            "README.ru.md": (
+                "направления D-pad и OK, BACK, OPT, F1, F2",
+                "энкодер с нажатием",
+                "отдельный PTT с удержанием",
+                "аппаратный STOP",
+                "утопленный RE-ARM",
+                "сканирование 4×3",
+                "TCA9534APWR",
+                "PCNT0 на GPIO39/GPIO47",
+                "прямой вход RP GPIO21",
+                "не заменяют эти органы управления",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

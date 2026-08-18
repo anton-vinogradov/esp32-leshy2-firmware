@@ -99,15 +99,15 @@ permanent channel: any new fixed DMA consumer changes the upstream contract.
 The quiet-state decision also consumes RP GPIO15/GPIO23 for common nRF and CC
 power gates and C5 GPIO4 for the IR frontend gate. Direct free GPIO reserve is
 later reduced by `DEC-0052`, which consumes S3 GPIO41/GPIO42 for QSPI D2/D3.
-After `DEC-0054` consumes S3 GPIO6 for `AUDIO_ARM`, it is S3=1, C5=1 and
-RP=0; firmware cannot invent another direct RP
-control. Hardware `PIN-0003/REV-0004V/0004X` derive these figures from the
-machine source: S3 is `32 used / 3 reserved / 1 free`, C5 is `14/6/1`, RP is `48/0/0`,
+After `DEC-0054` consumes S3 GPIO6 for `AUDIO_ARM`, only GPIO47 remained free.
+`DEC-0086` consumes GPIO39/GPIO47 as the direct PCNT0 encoder phase pair, so
+firmware cannot invent another direct S3 or RP control. Hardware derives these
+figures from the machine source: S3 is `33 used / 3 reserved / 0 free`, C5 is `14/6/1`, RP is `48/0/0`,
 and the slow plane is `24/0/0` after `FND-0067` assigns the previously omitted
 ordinary `RX_AUDIO_SOURCE_SEL` to P27. The previously published C5/RP reserve
-was stale and is corrected by `FND-0059`. After `DEC-0059`, GPIO43/44 are
-permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
-`AUDIO_ARM` remains a normative machine input.
+was stale and is corrected by `FND-0059`. GPIO43/44 remain permanent UART0
+service; GPIO6 `AUDIO_ARM` and GPIO39/47 encoder capture are normative machine
+inputs.
 
 ## Mandatory scheduler/queue contract
 
@@ -153,12 +153,23 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   Sleep In, assert both resets and only then permit main-power removal. Never
   auto-retry a latched backlight branch; a new attempt requires a complete
   main-power cycle and fresh display initialization.
-- Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
+- Internal I²C contains only slow UI/audio/receiver/control endpoints. The
+  dedicated TCA9534A at candidate address `0x3F` holds P0…P3 low in idle, so
+  any D-pad/OK, BACK, OPT, F1, F2 or encoder-push change starts a bounded 4×3
+  scan through P4…P6; P7 is reserved. Encoder A/B edges never use that bus:
+  PCNT0 captures GPIO39/GPIO47 and
+  the driver accepts only valid Gray transitions/full detents after qualified
+  chatter filtering. No concurrent display/storage/radio load may lose or
+  invent a detent. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
   P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
   a safety-deadline line and does not assert PTT. TPS25751D is another bounded
-  target on this bus. Its active-low IRQ shares GPIO37 with TCA6424 `INT`;
-  every wake reads both status blocks and no driver assumes a unique source.
+  target on this bus. Its active-low IRQ shares GPIO37 with TCA6424 `INT`, UI
+  TCA9534A `INT_N`, pack admission and the touch polarity adapter; every wake
+  reads all enabled status
+  blocks and no driver assumes a unique source. The populated touch adapter is
+  non-inverting for active-low TP_INT or pin-compatible inverting for active-high
+  TP_INT after specimen HIL; firmware does not replace the IRQ with polling.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
@@ -493,7 +504,7 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   I2C and the source-mask expander. Low means at least one qualified evidence
   channel asserts; high alone does not convert missing or faulty evidence into
   proof of no transmission.
-- RP local I2C0 also reads TCA9534A address `0x20`: P0..P7 map exactly to
+- RP local I2C0 also reads TCA9534A address `0x38`: P0..P7 map exactly to
   `S3_RF`, `C5_RF`, `NRF0_RF`, `NRF1_RF`, `NRF2_RF`, `CC_RF`, `VOICE_RF` and
   `IR_OPTICAL`. Its interrupt is a test point, not a new RP GPIO dependency.
 - Firmware reports `commanded`, `device-reported`, `actual` and
@@ -586,7 +597,8 @@ contacts.
 ## Exact ES8311 runtime boundary
 
 Hardware `AUDIO-0001/REV-0005B` instantiate exact Everest Semiconductor
-`ES8311` QFN-20 digital contacts. The later direct arm makes total S3 `32/3/1`:
+`ES8311` QFN-20 digital contacts. The later direct arm made total S3 `32/3/1`
+before the subsequent encoder allocation; current total is `33/3/0`:
 
 - `GPIO1/SYS_I2C_SDA` ↔ codec `CDATA` pin 19;
 - `GPIO2/SYS_I2C_SCL` → codec `CCLK` pin 1;
@@ -678,9 +690,10 @@ the time-based arbitration contract are now runtime inputs. Hardware
 `DEC-0053/REV-0004Z` additionally accept a 3.5-inch portrait `320×480` IPS
 QSPI+touch class, with `ST77922` primary HIL and `AXS15231B` secondary HIL.
 Hardware `FND-0063/DSP-0005/REV-0005A` additionally instantiate exact current
-assembly candidate `HMX035CTFT-001`: S3 GPIO39 is touch IRQ, GPIO41/42 are
-QSPI D2/D3, slow P06/P07 are display/touch reset and GPIO43 remains free after
-GPIO6 is assigned to `AUDIO_ARM`.
+assembly candidate `HMX035CTFT-001`: GPIO41/42 are QSPI D2/D3 and slow P06/P07
+are display/touch reset. `DEC-0086` later moves TP_INT through an open-drain
+polarity adapter into shared GPIO37 and assigns GPIO39/GPIO47 to PCNT0 encoder
+capture; GPIO6 remains `AUDIO_ARM`.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

@@ -88,7 +88,7 @@
   The same hardware pass records `FND-0056`: SA518 rev 1.1 exposes no
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics. New hardware `PIN-0003/REV-0004V` reviews the machine-generated
-  principled owner/net/pad atlas. Current budgets are S3 `32/3/1`, C5
+  principled owner/net/pad atlas. Current budgets are S3 `33/3/0`, C5
   `14/6/1`, RP `48/0/0` and slow I/O `24/0/0`; `FND-0059` corrects the stale
   prior C5/RP figures. SA518 UART/PTT/activity and recovery now terminate on
   exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI
@@ -114,7 +114,7 @@
   non-programmable latch resets S3, C5 and RP, independently gates all nine
   TX/rail requests and requires a fresh physical RE-ARM. Eight active-low
   actual-TX states (`S3`, `C5`, `nRF0..2`, `CC`, voice and optical IR) reach a
-  TCA9534A mask at local RP I2C address `0x20`; their diode-OR aggregate is
+  TCA9534A mask at local RP I2C address `0x38`; their diode-OR aggregate is
   direct active-low `RP_ANY_TX_N` on RP GPIO22 and drives a physical red LED.
   A low evidence line is actual TX; inconsistent, missing or unqualified
   evidence is `unknown/unavailable`, never inferred safe. RF taps, thresholds
@@ -199,7 +199,7 @@
   remain explicit upstream gates and cannot become firmware constants.
   `FND-0087/USB-0001/DEC-0083/REV-0005AN` then close the first I4 endpoint:
   exact product USB-C and automatic four-line CC/USB2 protection preserve
-  native S3 GPIO19/20 and GPIO47 remains free. Firmware closes the USB session
+  native S3 GPIO19/20 and, at that endpoint, leave GPIO47 free. Firmware closes the USB session
   on detach/PD fault/re-enumeration failure, exposes no protector bypass or
   Alt-Mode/source profile and does not claim fixture-only `FLT`. USB Full-Speed
   RC/SI, ESD, short-to-VBUS and physical placement remain upstream HIL.
@@ -209,7 +209,8 @@
   enables PWM last and never auto-retries a latched backlight fault. The
   `FAULT_N` point is fixture-only, so software does not fabricate a sensor.
   Final FPC mate, standalone panel sourcing and display/touch/backlight HIL
-  remain upstream; S3 stays `32/3/1`.
+  remain upstream; this endpoint itself does not change the then-current S3
+  `32/3/1` budget.
   `FND-0089/STO-0001/DEC-0085/REV-0005AP` then close the isolated microSD
   paper endpoint. Firmware admits a storage session only after stable detect,
   switched-rail rise and card SPI-mode entry with every other CS high; clean
@@ -218,6 +219,15 @@
   buffers and CS-gated DAT0 make those states hardware-real without new GPIO.
   Socket access, media/endurance, throughput/contention, hot-removal,
   ESD/short/brownout and corruption-recovery HIL remain upstream.
+  `FND-0090/UI-0001/DEC-0086/REV-0005AQ` then restore the complete physical
+  control inventory. Dedicated TCA9534A P0…P6 gives
+  D-pad/OK/BACK/OPT/F1/F2 and encoder push an interrupt-driven bounded 4x3
+  scan, with P7 reserved; encoder A/B use direct PCNT0 on S3 GPIO39/GPIO47; touch IRQ joins
+  shared GPIO37 through a specimen-selected polarity adapter. PTT remains
+  direct RP GPIO21, while STOP and RE-ARM remain asynchronous AON hardware.
+  Firmware runtime details are in `ARC-0003`; exact switch mechanics, touch
+  polarity, SYS-I2C address scan and matrix/encoder concurrent-load HIL remain
+  upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper
@@ -295,7 +305,8 @@ remain references until their downstream gates.
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
 `I2` and I3 paper electrical scope reviewed and I4 now the active dependent
 paper block; exact protected product-USB, display and isolated microSD paper
-endpoints are reviewed, while remaining UI endpoints are active. Specimen mechanics,
+endpoints and the local-control inventory/pin fit are reviewed, while exact UI
+mechanics and HIL remain active. Specimen mechanics,
 exact-cell droop and timer/load hot HIL plus
 complete transition/rail/loss/thermal/fault evidence remain mandatory physical
 I3 gates; they no longer masquerade as unresolved paper architecture. The

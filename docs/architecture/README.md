@@ -33,8 +33,16 @@ profile changes and TX denial for unknown/mismatch; availability is checked at
 exact-MPN selection. Exact two-source hardware and measurements remain pending
 under `FND-0058`.
 
+[`ARC-0003`](ARC-0003-local-controls-runtime-contract.md) consumes hardware
+`DEC-0086/UI-0001`: dedicated TCA9534A P0…P6 gives the complete
+D-pad/OK/BACK/OPT/F1/F2 set and encoder push an interrupt-driven bounded 4×3
+scan while P7 remains reserved; encoder A/B use direct S3 PCNT0 on GPIO39/GPIO47,
+physical PTT stays direct RP GPIO21 and STOP/RE-ARM remain asynchronous AON
+controls. Touch IRQ joins shared GPIO37 through a specimen-selected polarity
+adapter and never falls back to polling-only operation.
+
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
-owner/net/pad atlas. Current direct budgets are S3 `32/3/1`, C5 `14/6/1`, RP
+owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
 `48/0/0` and slow I/O `24/0/0`; exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
@@ -163,9 +171,10 @@ Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
 and `<=1 ms` display occupancy reviewed runtime inputs. Hardware
 `DEC-0053/REV-0004Z` accept the 3.5-inch portrait `320×480` IPS QSPI+touch
 class and two HIL controller profiles. Hardware `DSP-0005/REV-0005A` now
-instantiate exact current assembly candidate `HMX035CTFT-001`; GPIO39 is touch
-IRQ and slow P06/P07 terminate display/touch reset; later audio `DEC-0054`
-uses GPIO6 and changes the total S3 budget to `32/3/1`. ARC-0002 still freezes
+instantiate exact current assembly candidate `HMX035CTFT-001`; slow P06/P07
+terminate display/touch reset. `DEC-0086` later moves touch IRQ to shared
+GPIO37 and uses GPIO39/GPIO47 for encoder PCNT0; audio `DEC-0054` retains
+GPIO6. ARC-0002 still freezes
 the scheduler/pin/resource and `DEC-0084` reset/backlight-fault contract:
 production ordering/drawing, final connector, specimen electrical HIL and
 vendor init table remain open.
@@ -181,7 +190,8 @@ ADC is documented as microphone-oriented rather than a recommended line input. H
 `AUDIO-0002/REV-0005C/FND-0067` add the missing P27 RX-source control and
 compare the complete high-Z capture, differential playback, attenuated TX and
 reset-default paths. `DEC-0054/REV-0005D` accept option A and machine-allocate
-direct GPIO6 as `AUDIO_ARM`, changing S3 to `32/3/1`. Firmware may now freeze
+direct GPIO6 as `AUDIO_ARM`, changing S3 to the then-current `32/3/1`;
+`DEC-0086` later closes it to `33/3/0` for encoder capture. Firmware may now freeze
 safe control sequencing, but not unmeasured gain/mute/passive values.
 
 After hardware `FLOW-0001/G7`, this repository will derive and review a new

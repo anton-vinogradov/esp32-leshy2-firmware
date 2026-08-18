@@ -89,7 +89,7 @@
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`. Новый hardware `PIN-0003/REV-0004V` провёл
   ревью machine-generated principle owner/net/pad atlas. Текущий бюджет:
-  S3 `32/3/1`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
+  S3 `33/3/0`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
   C5/RP были stale и исправлены через `FND-0059`. SA518 UART/PTT/activity и
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
@@ -114,7 +114,7 @@
   always-on непрограммируемая защёлка сбрасывает S3, C5 и RP, независимо
   блокирует все девять TX/rail requests и требует нового физического RE-ARM.
   Восемь active-low состояний actual-TX (`S3`, `C5`, `nRF0..2`, `CC`, voice и
-  optical IR) поступают в маску TCA9534A по локальному RP I2C с адресом `0x20`;
+  optical IR) поступают в маску TCA9534A по локальному RP I2C с адресом `0x38`;
   их diode-OR aggregate — прямой active-low `RP_ANY_TX_N` на RP GPIO22 — также
   зажигает физический красный LED. Низкий evidence line означает actual TX;
   несогласованное, отсутствующее или неквалифицированное evidence считается
@@ -203,7 +203,7 @@
   upstream gates и не могут стать firmware constants.
   `FND-0087/USB-0001/DEC-0083/REV-0005AN` затем закрывают первый endpoint I4:
   exact основной USB-C и автоматическая four-line защита CC/USB2 сохраняют
-  native S3 GPIO19/20, а GPIO47 остаётся свободным. Firmware закрывает USB
+  native S3 GPIO19/20 и на этом endpoint оставляют GPIO47 свободным. Firmware закрывает USB
   session при detach/PD fault/ошибке re-enumeration, не предоставляет bypass,
   Alt Mode или source profile и не утверждает fixture-only `FLT`. USB
   Full-Speed RC/SI, ESD, short-to-VBUS и физический placement остаются upstream HIL.
@@ -213,7 +213,8 @@
   PWM последней и не повторяет latch-fault подсветки автоматически. Точка
   `FAULT_N` доступна только оснастке, поэтому software не изображает из неё
   sensor. Final FPC mate, standalone sourcing панели и display/touch/backlight
-  HIL остаются upstream; S3 остаётся `32/3/1`.
+  HIL остаются upstream; сам этот endpoint не меняет тогдашний бюджет S3
+  `32/3/1`.
   `FND-0089/STO-0001/DEC-0085/REV-0005AP` затем закрывают isolated microSD
   paper endpoint. Firmware допускает storage session только после устойчивого
   detect, подъёма switched rail и входа карты в SPI mode при поднятых остальных
@@ -223,6 +224,15 @@
   аппаратными без нового GPIO. Socket access, media/endurance,
   throughput/contention, hot-removal, ESD/short/brownout и corruption-recovery
   HIL остаются upstream.
+  `FND-0090/UI-0001/DEC-0086/REV-0005AQ` затем восстанавливают полный набор
+  физических controls. Отдельный TCA9534A P0…P6 даёт
+  D-pad/OK/BACK/OPT/F1/F2 и нажатию энкодера interrupt-driven bounded scan 4x3,
+  а P7 остаётся резервом; A/B энкодера напрямую входят в PCNT0 S3 GPIO39/GPIO47;
+  touch IRQ входит в общий GPIO37 через выбираемый по specimen polarity
+  adapter. PTT остаётся прямым RP GPIO21, а STOP и RE-ARM — асинхронным AON
+  hardware. Runtime описан в `ARC-0003`; exact mechanics переключателей,
+  touch polarity, SYS-I2C address scan и concurrent-load HIL матрицы/энкодера
+  остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -301,7 +311,8 @@ references до своих downstream gates.
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
 бумажная электрическая часть I3 прошли ревью, а I4 стал следующим активным
 бумажным блоком; exact protected product-USB, display и isolated microSD paper
-endpoints reviewed, остальные UI endpoints активны. Mechanics, exact-cell droop,
+endpoints и inventory/pin fit локальных controls reviewed; exact UI mechanics
+и HIL остаются активны. Mechanics, exact-cell droop,
 timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными
 физическими I3-gates; они больше не маскируются под незакрытую

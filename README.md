@@ -65,6 +65,15 @@ flowchart TD
   channel/frequency, recording, power and safety state.
 - Menus and critical warnings respond within `100 ms`; dirty/tiled waterfall
   updates yield to radio, audio and storage service.
+- The complete local set is D-pad directions plus OK, BACK, OPT, F1, F2,
+  rotary encoder with push, dedicated hold-to-talk PTT, hardware STOP and
+  recessed RE-ARM. Touch and phone text input do not replace any of them.
+- D-pad/OK/BACK/OPT/F1/F2 and encoder push use a dedicated `TCA9534APWR`
+  (`P0…P6`, candidate address `0x3F`) for an interrupt-started 4×3 scan; `P7`
+  remains reserved for local control growth.
+  Encoder phases are captured independently by S3 PCNT0 on GPIO39/GPIO47, so
+  display, storage and I²C work cannot lose quadrature edges. PTT is a direct
+  RP GPIO21 input; STOP and RE-ARM remain asynchronous AON hardware controls.
 - Display and touch stay in hardware reset until their common protected logic
   rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
   `100 ms` before touch use, then enables the PWM backlight last. A latched
