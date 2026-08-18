@@ -29,6 +29,7 @@
 - exact I5 audio/receiver endpoint: [`AUDIO-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/AUDIO-0003-exact-audio-and-receiver-endpoint.md), [`DEC-0090`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0090-i5-exact-audio-and-receiver-paper-closure.md), [`REV-0005AU`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AU-i5-audio-receiver-propagation.md)
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
+- exact actual-TX thresholds and AON-to-main isolation: [`SAFE-0003`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0003-exact-actual-tx-threshold-and-isolation.md), [`DEC-0101`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0101-exact-actual-tx-threshold-and-domain-isolation.md), [`REV-0005BG`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BG-actual-tx-threshold-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
 - exact holder and thermal coupling: [`DEC-0077`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0077-keystone-1048p-qualified-cell-profile.md), [`PWR-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0016-keystone-1048p-holder-and-ntc-coupling.md), [`REV-0005AH`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AH-battery-holder-and-ntc-coupling.md)
 - exact first cell target: [`DEC-0079`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0079-xtar-18650-4000mah-qualification-target.md), [`PWR-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0018-xtar-18650-4000mah-cell-profile.md), [`REV-0005AJ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AJ-exact-cell-propagation.md)
@@ -774,13 +775,26 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
 - Releasing STOP does nothing. Only a new edge from the normally-open RE-ARM
   control permits the three processors to boot, and no target/profile/power/
   payload/lease state is restored.
-- RP GPIO22 is direct active-low `RP_ANY_TX_N`. It is independent of software,
+- RP GPIO22 is the direct firmware input for active-low `RP_ANY_TX_N`. It is
+  electrically transferred from `ANY_TX_AON_N` through one channel of the
+  AON-powered `SN74LVC3G07DCUR` and a separate 10-kOhm `3V3_MAIN` pull-up, so
+  the new power-domain boundary does not invert or remap it. It remains independent of software,
   I2C and the source-mask expander. Low means at least one qualified evidence
   channel asserts; high alone does not convert missing or faulty evidence into
   proof of no transmission.
 - RP local I2C0 also reads TCA9534A address `0x38`: P0..P7 map exactly to
   `S3_RF`, `C5_RF`, `NRF0_RF`, `NRF1_RF`, `NRF2_RF`, `CC_RF`, `VOICE_RF` and
   `IR_OPTICAL`. Its interrupt is a test point, not a new RP GPIO dependency.
+- C5 GPIO23 `C5_RF_TX_EVIDENCE_N` and GPIO24 `IR_TX_EVIDENCE_N` pass through
+  the other two channels of the same non-inverting open-drain isolator and
+  separate main-domain pull-ups. All three inputs keep their accepted
+  active-low semantics across AON-only, main-off and reset states; firmware
+  neither selects nor probes an alternative electrical population.
+- Seven RF paths use the first 100-kOhm/10-kOhm/1-MOhm/10-kOhm threshold
+  population; IR uses 100-kOhm/12-kOhm/1-MOhm/10-kOhm. These produce only a
+  deterministic prototype population. Runtime admission continues to require
+  the versioned measured band/power/temperature/lot or optical calibration and
+  never derives production permission from the nominal resistor calculation.
 - NRF0/1/2 evidence specifically comes from separate
   `DC2337J5010AHF`→`AD8314ACPZ-RL7` forward samples, not command state or PA
   current. Qualification is versioned at channels 0, 100 and 125. A profile

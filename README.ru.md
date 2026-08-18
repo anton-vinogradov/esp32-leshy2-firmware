@@ -84,6 +84,11 @@ flowchart TD
   источник; невосстанавливаемый сбой expander переводит устройство в явный
   safe/degraded режим до полного reset main-rail. Изолированные наблюдения
   STOP/evidence сохраняют полярность и не включают firmware в hard-STOP path.
+- C5 GPIO23/GPIO24 и RP GPIO22 получают active-low RF/IR/ANY-TX evidence через
+  один AON-powered `SN74LVC3G07DCUR` и отдельные main-domain pull-ups. В
+  firmware нет polarity/population mode: первые resistor populations являются
+  аппаратными defaults, а measured calibration каждого тракта по-прежнему
+  включает соответствующий proof-mandatory TX profile.
 - Display и touch удерживаются аппаратным reset до устойчивого общего
   protected logic rail. Firmware ждёт минимум `120 мс` до display Sleep Out и
   `100 мс` до работы touch, после чего последней включает PWM-подсветку.

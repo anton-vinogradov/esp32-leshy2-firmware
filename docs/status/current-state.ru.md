@@ -117,11 +117,14 @@
   блокирует все девять TX/rail requests и требует нового физического RE-ARM.
   Восемь active-low состояний actual-TX (`S3`, `C5`, `nRF0..2`, `CC`, voice и
   optical IR) поступают в маску TCA9534A по локальному RP I2C с адресом `0x38`;
-  их diode-OR aggregate — прямой active-low `RP_ANY_TX_N` на RP GPIO22 — также
-  зажигает физический красный LED. Низкий evidence line означает actual TX;
+  их diode-OR aggregate зажигает физический красный LED и доходит до
+  active-low `RP_ANY_TX_N` на RP GPIO22 через non-inverting open-drain
+  AON-to-main isolation. Низкий evidence line означает actual TX;
   несогласованное, отсутствующее или неквалифицированное evidence считается
-  `unknown/unavailable`, но не безопасным. RF taps, thresholds и HIL остаются
-  в `I6`, а exact AON source/hold-up стал входом `I3`.
+  `unknown/unavailable`, но не безопасным. First exact threshold/hysteresis
+  populations и AON-to-main open-drain isolation теперь являются физическими
+  paper inputs; measured calibration и HIL остаются в `I6`, а exact AON
+  source/hold-up стал входом `I3`.
 - Hardware `PWR-0002/FND-0073/REV-0005P` проводят ревью prerequisites `I3` из
   текущей начинки и сценариев. Они сохраняют 3.3-V floor `2.5/3 A` и отдельный
   4-V voice rail, но отклоняют legacy power sheet как target: нет

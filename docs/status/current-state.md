@@ -116,11 +116,14 @@
   non-programmable latch resets S3, C5 and RP, independently gates all nine
   TX/rail requests and requires a fresh physical RE-ARM. Eight active-low
   actual-TX states (`S3`, `C5`, `nRF0..2`, `CC`, voice and optical IR) reach a
-  TCA9534A mask at local RP I2C address `0x38`; their diode-OR aggregate is
-  direct active-low `RP_ANY_TX_N` on RP GPIO22 and drives a physical red LED.
+  TCA9534A mask at local RP I2C address `0x38`; their diode-OR aggregate drives
+  a physical red LED and reaches active-low `RP_ANY_TX_N` on RP GPIO22 through
+  non-inverting open-drain AON-to-main isolation.
   A low evidence line is actual TX; inconsistent, missing or unqualified
-  evidence is `unknown/unavailable`, never inferred safe. RF taps, thresholds
-  and HIL remain `I6`, while the exact AON source/hold-up is now an `I3` input.
+  evidence is `unknown/unavailable`, never inferred safe. The first exact
+  threshold/hysteresis populations and AON-to-main open-drain isolation are
+  now physical paper inputs; measured calibration and HIL remain `I6`, while
+  the exact AON source/hold-up is an `I3` input.
 - Hardware `PWR-0002/FND-0073/REV-0005P` review the `I3` prerequisites from
   the current device/scenario set. They preserve the 2.5/3-A 3.3-V floor and
   separate 4-V voice rail, but reject the legacy power sheet as a target:

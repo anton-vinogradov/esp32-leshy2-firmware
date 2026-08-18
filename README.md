@@ -83,6 +83,11 @@ flowchart TD
   unrecoverable expander fault enters safe/degraded operation before a complete
   main-rail reset. Isolated STOP/evidence observations preserve their polarity
   without making firmware part of the hard-STOP path.
+- C5 GPIO23/GPIO24 and RP GPIO22 consume active-low RF/IR/ANY-TX evidence
+  through one AON-powered `SN74LVC3G07DCUR` and separate main-domain pull-ups.
+  Firmware has no polarity/population mode: first resistor populations are
+  hardware defaults, while measured per-path calibration still enables each
+  proof-mandatory TX profile.
 - Display and touch stay in hardware reset until their common protected logic
   rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
   `100 ms` before touch use, then enables the PWM backlight last. Integrated

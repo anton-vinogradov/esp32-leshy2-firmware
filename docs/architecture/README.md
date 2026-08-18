@@ -71,6 +71,11 @@ Hardware `FND-0109/PWR-0022/DEC-0100/REV-0005BF` subsequently repairs the
 MAX17320/MSPM0 support residue found during that inventory pass. ARC-0002 now
 consumes translated active-low PFAIL, PA23-to-NMOS passive-drain shared IRQ and
 admission-rail/reset sequencing; no runtime capability or GPIO budget changes.
+Hardware `FND-0110/SAFE-0003/DEC-0101/REV-0005BG` then instantiates every
+actual-TX threshold network and inserts one triple open-drain AON-to-main
+boundary for C5 GPIO23/GPIO24 and RP GPIO22. ARC-0002 consumes unchanged
+active-low semantics; nominal first-population values never replace measured
+per-profile calibration.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP

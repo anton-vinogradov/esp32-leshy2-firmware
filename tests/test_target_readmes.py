@@ -745,6 +745,45 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, runtime)
 
+    def test_exact_actual_tx_threshold_and_isolation_runtime_input_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "C5 GPIO23/GPIO24 and RP GPIO22 consume active-low RF/IR/ANY-TX evidence",
+                "SN74LVC3G07DCUR",
+                "Firmware has no polarity/population mode",
+                "measured per-path calibration",
+            ),
+            "README.ru.md": (
+                "C5 GPIO23/GPIO24 и RP GPIO22 получают active-low RF/IR/ANY-TX evidence",
+                "SN74LVC3G07DCUR",
+                "firmware нет polarity/population mode",
+                "measured calibration каждого тракта",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "SAFE-0003",
+            "DEC-0101",
+            "REV-0005BG",
+            "electrically transferred from `ANY_TX_AON_N`",
+            "C5 GPIO23 `C5_RF_TX_EVIDENCE_N`",
+            "GPIO24 `IR_TX_EVIDENCE_N`",
+            "100-kOhm/12-kOhm/1-MOhm/10-kOhm",
+            "never derives production permission from the nominal resistor calculation",
+        ):
+            self.assertIn(token, arc2)
+
 
 if __name__ == "__main__":
     unittest.main()
