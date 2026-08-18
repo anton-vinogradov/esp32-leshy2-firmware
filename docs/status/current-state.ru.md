@@ -160,6 +160,9 @@
   PG/fault, shutdown/discharge и nRF common-branch sequencing. В I3 остаются
   exact feedback/capacitor/discharge и charger/diagnostic-load passives, а
   также полный rail/thermal/fault HIL.
+  `DEC-0069/REV-0005Z` затем заменяют ранний auto-retry suffix внешней eFuse
+  на exact latch-off `TPS259470LRPWR`: runtime retry loops запрещены, после
+  устранения физической причины требуется новое явное действие.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

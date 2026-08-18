@@ -156,6 +156,9 @@
   ARC-0002 now consumes their fixed-voltage, PG/fault, shutdown/discharge and
   nRF common-branch sequencing rules. Exact feedback/capacitor/discharge and
   charger/diagnostic-load passives plus rail/thermal/fault HIL remain in I3.
+  `DEC-0069/REV-0005Z` then replace the early external auto-retry eFuse suffix
+  with exact latch-off `TPS259470LRPWR`; runtime retry loops are forbidden and
+  a new explicit action is required after physical fault removal.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

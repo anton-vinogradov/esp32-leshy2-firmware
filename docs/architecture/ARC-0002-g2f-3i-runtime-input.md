@@ -26,6 +26,7 @@
 - accepted deep-cell/circuit boundary: [`DEC-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0067-no-in-device-deep-cell-recovery.md), [`PWR-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0007-max17320-2s-surrounding-circuit.md), [`REV-0005X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005X-deep-cell-policy-propagation.md)
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 - fixed downstream rail tree: [`DEC-0068`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0068-separate-fixed-downstream-rails.md), [`PWR-0008`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0008-exact-downstream-rail-tree.md), [`REV-0005Y`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Y-downstream-rail-tree-propagation.md)
+- latch-off external eFuse: [`DEC-0069`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0069-latch-off-external-efuse.md), [`REV-0005Z`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Z-latch-off-efuse-propagation.md)
 
 ## Boundary
 
@@ -234,7 +235,7 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   SA518/codec path before allowing selection. Disable occurs in the opposite
   order. A 4-V PG timeout or fault cannot fall back to the accessory rail.
 - Accessory sequencing asserts the shared STOP-dominant enable of both the
-  5-V converter and `TPS259470ARPWR`, waits for converter PG and bounded eFuse
+  5-V converter and `TPS259470LRPWR`, waits for converter PG and bounded eFuse
   inrush, and only then identifies/enables U214 signal paths. The eFuse always
   blocks reverse current and enforces the hardware current limit. Its
   active-low `FLT` joins `POWER_FAULT_N`; `ILM` is a protected factory/HIL test
@@ -243,7 +244,10 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   clears, and the connector is allowed to reach its measured passive-discharge
   threshold before the UI reports it safe to remove. External 5-V injection,
   PG/FLT disagreement, timeout or unknown evidence remains a latched accessory
-  fault and cannot be cleared by re-enabling in a loop.
+  fault and cannot be cleared by re-enabling in a loop. The exact `L` suffix
+  also latches thermal/latched faults in hardware until EN is explicitly taken
+  below shutdown or input power is cycled; the former 110-ms auto-retry suffix
+  is not a target behavior.
 - microSD is unmounted/flushed and SPI pins are parked before `SD_PWR_EN`
   clears. ES8311 follows the stricter audio-arm sequence below. Si4732 and
   CC1101 similarly park reset/bus pins before their independent branches open.

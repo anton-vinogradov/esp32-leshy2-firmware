@@ -62,6 +62,9 @@ power. Exact TPS22919 branches gate nRF, CC1101, microSD, ES8311 and Si4732;
 the runtime contract consumes reset-off defaults, PG/fault sequencing and
 measured-discharge gates without inventing programmable rail voltages. Passive
 values and complete rail/thermal/fault HIL remain upstream I3 work. Hardware
+`DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
+latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
+`FLT`, and a new user action follows physical fault removal. Hardware
 `PWR-0005/FND-0075` prove that gauge and
 pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
 the controlled-1S cross-charge, rail/current and SOC consequences as future

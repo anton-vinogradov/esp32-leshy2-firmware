@@ -96,12 +96,16 @@ class TargetReadmeTests(unittest.TestCase):
                 "separate fixed rails",
                 "powered down, discharged and verified quiet",
                 "cannot select another rail voltage",
+                "external-accessory power fault latches",
+                "never runs an automatic power-retry loop",
             ),
             "README.ru.md": (
                 "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
                 "раздельными фиксированными шинами",
                 "отключаются, разряжаются и проверяются как тихие",
                 "не может выбрать другое напряжение",
+                "ошибка питания внешнего аксессуара защёлкивает",
+                "не запускает automatic power-retry loop",
             ),
         }
         for readme_name, tokens in required_tokens.items():
