@@ -21,6 +21,7 @@
 - service/IPC amendment: [`DEC-0059`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0059-full-service-over-1bit-sdio.md), [`REV-0005L`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005L-full-service-1bit-sdio-propagation.md)
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
+- exact holder and thermal coupling: [`DEC-0077`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0077-keystone-1048p-qualified-cell-profile.md), [`PWR-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0016-keystone-1048p-holder-and-ntc-coupling.md), [`REV-0005AH`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AH-battery-holder-and-ntc-coupling.md)
 - accepted supervised 2S topology: [`DEC-0065`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0065-supervised-2s-battery-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`REV-0005T`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005T-supervised-2s-topology-decision-propagation.md)
 - accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
 - accepted deep-cell/circuit boundary: [`DEC-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0067-no-in-device-deep-cell-recovery.md), [`PWR-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0007-max17320-2s-surrounding-circuit.md), [`REV-0005X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005X-deep-cell-policy-propagation.md)
@@ -137,6 +138,11 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   supervised 2S arrangement; individual replacement does not imply that an
   arbitrary cell or combination is valid. Both admitted cells are required
   for battery operation.
+- The exact reference holder is polarized `Keystone 1048P`; supported cells
+  are protected button-top exact MPNs. Raw flat-top cells are unsupported.
+  Mechanical polarity remains below firmware, while exact-cell identity is a
+  declared qualified profile: neither S3 nor the admission MCU can authenticate
+  an arbitrary two-terminal cell by measurement alone.
 - `PWR-0005/FND-0075` separate gauging from pre-closure admission, while
   `PWR-0006/FND-0076` retain the controlled-1S cross-charge, common-current and
   SOC consequences as future-variant evidence. `DEC-0066` freezes the hardware
@@ -160,6 +166,12 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   admission states. Missing/inconsistent evidence is `unknown` and blocks
   charge, high-load operation and TX leases rather than inheriting the prior
   battery state.
+- `PACK_NTC0` and `PACK_NTC1` are direct mid-can channels for their own cells.
+  The BQ25798 TS input is a third physically independent sensor populated at
+  the HIL-qualified thermally worst slot. Open, short, lifted, implausibly
+  static or mutually inconsistent temperature evidence blocks admission or
+  charge; firmware cannot substitute a model or the neighboring sensor. If no
+  single charger-TS site bounds both slots, hardware must reopen the topology.
 - Single-cell removal, contact bounce, a single-cell replacement and reset are
   fresh admission events. No previous state-of-charge, health or approved-pair
   identity is restored until both cells pass the hardware/firmware contract.
@@ -519,7 +531,7 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, diagnostic thresholds/cooldown, thermal/source-handover/fault HIL, Unit
@@ -529,7 +541,8 @@ feedback parts, nine control resistors, direct AON EN strap, switches and
 external eFuse plus its eight profile passives, and all 19 pack diagnostic
 timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
-support components and hardware SafeMode straps are now reviewed inputs,
+support components and hardware SafeMode straps, plus exact polarized 1048P
+holder contacts and the three-NTC physical roles, are now reviewed inputs,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 

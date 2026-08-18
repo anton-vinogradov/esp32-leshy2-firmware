@@ -138,6 +138,11 @@ flowchart TD
   shorter than 25 ms, preserving the filtered loaded-sample window. This
   screen is never presented as full-load
   qualification.
+- Supported cells are exact qualified protected button-top MPNs installed in
+  the polarized `Keystone 1048P`; raw flat-top cells are unsupported. Two cell
+  temperature channels and the charger's independent temperature channel must
+  all be valid. Software cannot infer cell authenticity from two contacts or
+  replace a lifted temperature sensor with an estimate.
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.

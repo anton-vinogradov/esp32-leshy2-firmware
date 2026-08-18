@@ -54,6 +54,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "independent non-retriggerable hardware timer",
                 "rejects a timer pulse shorter than 25 ms",
                 "never presented as full-load qualification",
+                "protected button-top MPNs",
+                "polarized `Keystone 1048P`",
+                "raw flat-top cells are unsupported",
+                "cannot infer cell authenticity from two contacts",
             ),
             "README.ru.md": (
                 "контролируемая батарея 2s",
@@ -66,6 +70,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "независимый non-retriggerable аппаратный таймер",
                 "бракует импульс таймера короче 25 мс",
                 "не выдаётся за полную проверку под нагрузкой",
+                "защищённых button-top",
+                "поляризованном `Keystone 1048P`",
+                "raw flat-top не поддерживаются",
+                "не определяет подлинность банки по двум контактам",
             ),
         }
         for readme_name, tokens in required_tokens.items():

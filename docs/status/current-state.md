@@ -199,6 +199,12 @@
   parts, open-drain WP and complete local/host bus pulls. Firmware consumes the
   startup and write-protection ordering without claiming that TPS itself
   verifies the owner signature at every raw-VBUS boot.
+  `PWR-0016/FND-0081/DEC-0077/REV-0005AH` then close the holder/thermal paper
+  input: exact polarized `Keystone 1048P`, four functional independent
+  contacts, protected-button-top exact-cell scope, two direct per-cell MAX NTC
+  roles and one independent BQ TS worst-slot role. Firmware cannot infer an
+  arbitrary cell identity or substitute modeled temperature for a missing
+  channel. Exact cell/thermal-stack and continuity/thermal HIL stay upstream.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -238,9 +244,9 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-with `I2` reviewed and the I3 source, battery-manager, BQ25798 and TPS/EEPROM
-passive profiles, active rail topology, eFuse and converter
-energy/feedback/control passives reviewed; the remaining mechanics, diagnostic
+with `I2` reviewed and the I3 source, battery-manager, BQ25798, TPS/EEPROM and
+polarized-holder/NTC paper profiles, active rail topology, eFuse and converter
+energy/feedback/control passives reviewed; the remaining specimen mechanics, diagnostic
 thresholds/cooldown and complete
 rail/loss/thermal/fault evidence are
 the active I3 work. The integrated physical

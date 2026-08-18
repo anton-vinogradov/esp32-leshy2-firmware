@@ -201,6 +201,12 @@
   17 exact компонентов TPS25751/CAT24, open-drain WP и полные pull-up локальной
   и host-шин. Firmware потребляет этот порядок запуска/защиты записи, не
   утверждая, что TPS сам проверяет подпись владельца при каждом raw-VBUS boot.
+  `PWR-0016/FND-0081/DEC-0077/REV-0005AH` затем закрывают holder/thermal paper
+  input: exact polarized `Keystone 1048P`, четыре функционально независимых
+  контакта, protected-button-top exact-cell boundary, две прямые per-cell роли
+  MAX NTC и одна независимая worst-slot роль BQ TS. Firmware не определяет
+  arbitrary cell identity и не заменяет отсутствующий температурный канал
+  моделью. Exact cell/thermal-stack и continuity/thermal HIL остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -240,7 +246,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager, BQ25798 и TPS/EEPROM passive profiles, exact active
+source, battery manager, BQ25798, TPS/EEPROM и polarized-holder/NTC paper
+profiles, exact active
 downstream-rail topology, eFuse и converter energy/feedback/control passives
 внутри I3 уже прошли ревью; сейчас активны mechanics, diagnostic
 thresholds/cooldown и полный

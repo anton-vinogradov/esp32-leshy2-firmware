@@ -51,6 +51,11 @@ Hardware `DEC-0062/REV-0005Q` retain two individually replaceable 18650 slots
 behind fail-closed admission. `DEC-0064/PWR-0006/REV-0005S` later reopened the
 electrical alternatives; `DEC-0065/REV-0005T` select supervised 2S for the
 base product, with both cells required.
+Hardware `DEC-0077/PWR-0016/REV-0005AH` additionally freeze exact polarized
+`Keystone 1048P`, protected-button-top compatibility and three distinct NTC
+roles. Firmware treats cell identity as a qualified profile and every missing
+or inconsistent thermal/contact channel as fail-closed; it does not infer an
+arbitrary cell's authenticity from two terminals.
 `DEC-0063/PWR-0004/REV-0005R` accept
 the exact sink-only 30-W TPS25751DREFR/BQ25798RQMR frontend with mandatory
 CAT24C512WI-GT3 boot image and TVS2200DRVR. ARC-0002 consumes the fixed 5/9/15-V
