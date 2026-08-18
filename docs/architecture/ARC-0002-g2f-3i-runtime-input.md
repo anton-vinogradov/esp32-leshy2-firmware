@@ -15,6 +15,7 @@
 - exact native S3/C5 RF evidence endpoints: [`NAT-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NAT-0001-exact-s3-c5-native-rf-evidence-endpoints.md), [`DEC-0092`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0092-exact-s3-c5-native-rf-endpoints.md), [`REV-0005AW`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AW-i6-native-rf-propagation.md)
 - exact CC1101 three-band endpoint: [`CCRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CCRF-0001-exact-cc1101-three-band-endpoint.md), [`DEC-0093`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0093-exact-cc1101-three-band-endpoint.md), [`REV-0005AX`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AX-i6-cc1101-propagation.md)
 - exact SA518 RF endpoint: [`VRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/VRF-0001-exact-sa518-broadband-rf-endpoint.md), [`DEC-0094`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0094-exact-sa518-broadband-rf-endpoint.md), [`REV-0005AY`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AY-i6-sa518-rf-propagation.md)
+- exact IR endpoint: [`IRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/IRF-0001-exact-dual-receiver-transmit-and-optical-evidence-endpoint.md), [`DEC-0095`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0095-exact-ir-endpoint.md), [`REV-0005AZ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AZ-i6-ir-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -129,6 +130,14 @@ from nominal arithmetic, reuse the 7-V CC TVS profile, or invent an external
 VHF/UHF filter bank. A measured conducted failure reopens the hardware
 subblock; until then P05 remains free. Final SMA, antenna lots, evidence
 thresholds, emissions/legal proof and coexistence remain upstream gates.
+Hardware `DEC-0095/IRF-0001` then closes the separate IR paper subblock.
+Firmware may consume exact simultaneous robust-envelope and carrier-cycle
+inputs, a reset-off/Ioff-isolated receive rail, a STOP-qualified current-limited
+emitter and physical optical evidence. It may not label the demodulated path as
+measured carrier, infer optical safety from the 69.7-mA paper bound, use
+evidence as authorization or overlap receive/learn with transmit. Receiver
+identity, optical geometry, thresholds, duty/temperature/IEC 62471 proof and
+whole-device coexistence remain upstream gates.
 
 ## Candidate runtime domains
 
@@ -635,6 +644,39 @@ inputs.
   A failed settle, readback or discharge gate leaves the whole requested group
   unavailable rather than silently weakening the quiet-state contract.
 
+## Exact IR runtime contract
+
+- C5 owns all timing locally. GPIO0/RMT RX0 is the active-low 38-kHz
+  demodulated envelope from `TSOP95238TT`; GPIO1/RMT RX1 is the active-low
+  30–60-kHz carrier-cycle stream from `TSMP95000TT`. Only a validated GPIO1
+  measurement can set carrier provenance to `measured`; GPIO0 never can.
+- Entering IR receive/learn first parks GPIO6/RMT TX0 low, confirms optical
+  evidence is dark, enables GPIO4 `IR_FRONTEND_PWR_EN`, waits the HIL-qualified
+  rail rise and clears both capture channels before starting them together.
+  A failed rise, stuck-low return or invalid carrier range makes the requested
+  mode unavailable; it never falls back to inferred timing.
+- A learned profile stores demodulated mark/space timing separately from
+  carrier frequency, source provenance, tolerance and specimen/test identity.
+  Reproduction is rejected when carrier provenance, frequency range or the
+  profile's safety envelope is missing.
+- Every IR TX lease binds target/profile identity, carrier, mark/space payload,
+  repeat count, maximum mark, duty/repetition class, temperature class and
+  expiry. Admission requires the receive rail off and discharged, both return
+  paths isolated, GPIO6 low and a qualified dark evidence state. GPIO6 reaches
+  the `VSMY14940` only through AON STOP-dominated gating and the fixed
+  `RC1206FR-0733RL`/`DMN2056U-7` current-limited driver.
+- GPIO24 is active-low physical optical evidence from the shielded
+  `VEMD1060X01` and `TLV9061IDBVR`, not a mirror of GPIO6 or LED current.
+  Evidence must assert and decay inside versioned HIL windows. Missing evidence
+  revokes the lease, stops and parks RMT TX, waits for dark and records a fault.
+  Ambient or coupled light may report `external_light_present` and delay quiet;
+  evidence never creates or extends permission.
+- IR shutdown stops RMT, forces GPIO6 low, waits for evidence high/dark, parks
+  both capture inputs and keeps GPIO4 low until the switched rail has met its
+  qualified QOD interval. `IR_QUIET` therefore means discharged RX power,
+  high-impedance returns, GPIO0/GPIO1 idle-high, GPIO6 low and GPIO24 high.
+  Any disagreement remains a fail-closed fault and blocks the next session.
+
 ## Hard STOP and actual-TX input
 
 - The AON hardware latch, not firmware, owns the dominant stop path. STOP or an
@@ -669,6 +711,10 @@ inputs.
   threshold: only versioned VHF/UHF and H/L-power HIL calibration enables a
   proof-mandatory profile. Assertion without the matching lease generation is
   `external_rf_present`/unexpected, never authorization.
+- IR evidence comes from a light-tight optical path viewing the physical
+  `VSMY14940` through `VEMD1060X01` and an AON TIA. It is interpreted only
+  against the current IR lease generation and qualified assert/decay windows;
+  missing light revokes TX, while unexpected light is never authorization.
 - Firmware reports `commanded`, `device-reported`, `actual` and
   `unknown/unavailable` independently. All eight evidence lines low are
   sufficient positive observations; an impossible aggregate/mask combination,
@@ -703,6 +749,11 @@ inputs.
     switch, cross-domain generation mismatch/reset, evidence assert/decay and
     strong-inbound false-positive handling; then VNA/conducted output,
     sensitivity, spurious, feed-loss/EIRP and no-neighbour-stall coexistence.
+11. simultaneous TSOP95238TT envelope plus TSMP95000TT carrier capture,
+    carrier/mark-space accuracy across 30–60 kHz, RX rail discharge/no-backfeed,
+    VSMY14940 current/range/duty/temperature and IEC 62471, optical-tunnel
+    threshold/assert/decay plus missing-emitter/ambient faults, STOP/reset/
+    brownout/stuck-carrier injection and no-neighbour-stall coexistence.
 
 The fixture has two explicitly different evidence levels. Ordered ESP32-DIV
 units form `L0 DIV↔DIV` pre-HIL: they validate the manifest/log workflow and
@@ -861,11 +912,12 @@ lossless/noiseless TX, recording or speaker routing before HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092/0098` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088/0089/0090/0092/0098/0100` list remaining electrical/HIL endpoints:
 display standalone sourcing/final mate and display/touch/backlight HIL,
 microSD socket access, real media/endurance, throughput/contention, hot removal,
 fault injection and corruption recovery, audio gain/noise/pop/click/acoustic/
-RF-immunity and concurrent-load HIL, IR frontend/driver, TPS25751
+RF-immunity and concurrent-load HIL, IR optical/thermal/IEC 62471 and
+coexistence HIL, TPS25751
 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
 source-transition, brownout, thermal/source-handover/fault HIL, Unit
@@ -888,9 +940,11 @@ three exact nRF directional taps, detector bodies and powered-off isolation at
 paper level. `DEC-0092` does the same for independent S3/C5 native feeds, and
 `DEC-0093` reviews the exact dual-ended CC three-band path and final-line
 detector. `DEC-0094` reviews the direct protected SA518 feed plus exact
-resistive AD8314 sample. Pigtail/chassis mates, thresholds, CC/voice
-VNA/conducted results and fault-injection/T1 HIL remain open, as does the IR
-RF/optical front end for the remaining I6 path.
+resistive AD8314 sample. `DEC-0095` reviews the exact dual-receiver IR path,
+isolated RX rail, current-limited emitter and physical optical evidence.
+Pigtail/chassis mates, thresholds, CC/voice VNA/conducted results, IR optical/
+thermal proof and fault-injection/T1 HIL remain open; only consolidated I6
+coexistence remains as the paper integration gate.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
@@ -917,8 +971,11 @@ I6 remains active; no HAL, KiCad or target implementation is authorized.
 `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` next make the separate native feeds
 and exact CC three-band state machine consumable.
 `FND-0099/VRF-0001/DEC-0094/REV-0005AY` then makes the exact voice RF lease,
-evidence and shutdown state machine consumable. I6 still remains active for IR
-closure and consolidated coexistence; no physical qualification is inferred.
+evidence and shutdown state machine consumable. `FND-0100/IRF-0001/DEC-0095/
+REV-0005AZ` next makes the exact IR receive/learn/TX, provenance, optical
+evidence and shutdown state machine consumable. Every separate I6 endpoint is
+now reviewed at paper level; consolidated coexistence remains active and no
+physical qualification is inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

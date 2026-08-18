@@ -308,8 +308,13 @@
   exact SA518 RF endpoint. Runtime потребляет один direct protected 50-Ом feed,
   отдельные VHF/UHF antenna-bound leases, exact resistive AD8314 evidence и
   fail-closed PTT/shutdown windows. External filter bank остаётся measured-
-  failure reopen gate, а P05 свободен. IR и consolidated coexistence всё ещё
-  активны upstream.
+  failure reopen gate, а P05 свободен. `FND-0100/IRF-0001/DEC-0095/
+  REV-0005AZ` затем закрывают exact IR endpoint. Runtime потребляет
+  одновременные TSOP95238TT envelope и TSMP95000TT carrier streams с разной
+  provenance, изолированную reset-off RX rail, STOP-qualified VSMY14940 TX и
+  физический VEMD1060X01/TLV9061 evidence. Optical, thermal, IEC 62471 и fault
+  HIL остаются upstream; на paper-уровне активен только consolidated I6
+  coexistence.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -347,7 +352,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 и I6 nRF/native/CC/voice subblocks прошли ревью, а I6 остаётся активным;
+electrical scope `I2`…I5 и все отдельные I6 nRF/native/CC/voice/IR subblocks
+прошли ревью, а I6 остаётся активным для consolidated coexistence;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,

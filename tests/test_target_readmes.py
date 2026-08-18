@@ -347,6 +347,51 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc2)
 
+    def test_exact_i6_ir_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "IR learning captures the robust active-low 38-kHz envelope",
+                "`TSOP95238TT`",
+                "`TSMP95000TT`",
+                "`VSMY14940` emitter is dark by reset and hard STOP",
+                "`VEMD1060X01` plus `TLV9061IDBVR` observes real emitted light",
+                "ambient light can only delay quiet and never authorizes it",
+            ),
+            "README.ru.md": (
+                "IR-learning одновременно получает устойчивую active-low огибающую 38 кГц",
+                "`TSOP95238TT`",
+                "`TSMP95000TT`",
+                "излучатель `VSMY14940` тёмный при reset и hard STOP",
+                "`VEMD1060X01` и `TLV9061IDBVR` наблюдают реальный свет",
+                "внешняя засветка может только задержать quiet и никогда не даёт разрешение",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0095/IRF-0001",
+            "GPIO0/RMT RX0",
+            "GPIO1/RMT RX1",
+            "carrier provenance to `measured`",
+            "GPIO4 `IR_FRONTEND_PWR_EN`",
+            "`RC1206FR-0733RL`/`DMN2056U-7`",
+            "GPIO24 is active-low physical optical evidence",
+            "evidence never creates or extends permission",
+            "`IR_QUIET` therefore means discharged RX power",
+            "IEC 62471",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

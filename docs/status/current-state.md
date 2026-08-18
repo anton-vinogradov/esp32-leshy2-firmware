@@ -306,8 +306,13 @@
   SA518 RF endpoint. Runtime consumes one direct protected 50-Ohm feed,
   separate VHF/UHF antenna-bound leases, exact resistive AD8314 evidence and
   fail-closed PTT/shutdown windows. An external filter bank remains a measured-
-  failure reopen gate and P05 stays free. IR and consolidated coexistence are
-  still active upstream.
+  failure reopen gate and P05 stays free. `FND-0100/IRF-0001/DEC-0095/
+  REV-0005AZ` next review the exact IR endpoint. Runtime consumes simultaneous
+  TSOP95238TT envelope and TSMP95000TT carrier streams with distinct
+  provenance, an isolated reset-off RX rail, STOP-qualified VSMY14940 TX and
+  physical VEMD1060X01/TLV9061 evidence. Optical, thermal, IEC 62471 and fault
+  HIL remain upstream; only consolidated I6 coexistence remains active at
+  paper level.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -346,8 +351,9 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I5 plus the I6 nRF, native S3/C5, CC1101 and SA518 paper electrical subblocks reviewed while
-I6 remains the active dependent paper block; exact protected product-USB, display, isolated microSD, controls,
+`I2` through I5 plus every separate I6 nRF, native S3/C5, CC1101, SA518 and IR
+paper electrical subblock reviewed while consolidated coexistence keeps I6
+active; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,
 exact-cell droop and timer/load hot HIL plus

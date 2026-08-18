@@ -144,6 +144,12 @@ flowchart TD
   during PTT and decay during shutdown; missing evidence revokes PTT, while
   strong inbound RF may only report external RF and delay quiet. It never
   creates or extends a lease.
+- IR learning captures the robust active-low 38-kHz envelope from
+  `TSOP95238TT` and the measured 30–60-kHz carrier cycles from `TSMP95000TT`
+  simultaneously, while keeping their provenance separate. A current-limited
+  `VSMY14940` emitter is dark by reset and hard STOP; a shielded
+  `VEMD1060X01` plus `TLV9061IDBVR` observes real emitted light. Missing light
+  revokes TX, while ambient light can only delay quiet and never authorizes it.
 - The broadcast receiver is admitted behind its own power/interface gate and
   identified at supported address `0x11` or `0x63`. Analog voice defaults to
   receive and ordinary electret audio; codec-injected TX audio still requires
