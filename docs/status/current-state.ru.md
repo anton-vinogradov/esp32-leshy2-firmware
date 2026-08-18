@@ -210,7 +210,14 @@
   контакта, protected-button-top exact-cell boundary, две прямые per-cell роли
   MAX NTC и одна независимая worst-slot роль BQ TS. Firmware не определяет
   arbitrary cell identity и не заменяет отсутствующий температурный канал
-  моделью. Exact cell/thermal-stack и continuity/thermal HIL остаются upstream.
+  моделью. `PWR-0018/FND-0083/DEC-0079/REV-0005AJ` затем заменяют обе generic
+  ячейки exact `XTAR 18650 4000mAh` protected button-top instances: nominal
+  28,8 Вт·ч на пару, 10-А discharge class, 2-А standard/product charge ceiling
+  и максимальный envelope `18,7 × 69,7 мм`. Runtime запрещает заряд вне
+  исходного окна `0…45 °C`, отклоняет raw/USB-equipped/third-party варианты и
+  не может вывести отсутствующую certification/lot identity. Документы
+  сертификации, specimen fit, droop/thermal-stack и continuity/thermal HIL
+  остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

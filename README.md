@@ -123,8 +123,9 @@ flowchart TD
   inconsistent evidence is shown as `Unknown`, never silently treated as safe.
 - Leaving a tool or level, lock, timeout, link loss, accessory removal and
   profile error immediately invalidate affected TX permissions.
-- The supervised 2S battery reports its two replaceable qualified 18650 cells
-  separately and as one required pair. An unsafe combination, either removed
+- The supervised 2S battery reports its two replaceable exact
+  `XTAR 18650 4000mAh` protected button-top cells separately and as one
+  required pair (`28.8 Wh` nominal). An unsafe combination, either removed
   cell, contact fault or incomplete battery identity blocks battery operation
   and charging and cannot be overridden in software. A dedicated fail-closed
   admission controller makes that decision before the application processor
@@ -139,8 +140,10 @@ flowchart TD
   timer pulse shorter than 25 ms, preserving the filtered loaded-sample window. This
   screen is never presented as full-load
   qualification.
-- Supported cells are exact qualified protected button-top MPNs installed in
-  the polarized `Keystone 1048P`; raw flat-top cells are unsupported. Two cell
+- Supported cells are exact `XTAR 18650 4000mAh` protected button-top devices
+  installed in the polarized `Keystone 1048P`; raw flat-top cells are
+  unsupported, as are USB-equipped variants. Normal charge never exceeds 2 A and is blocked
+  outside the conservative allowed temperature window, initially `0…45 °C`. Two cell
   temperature channels and the charger's independent temperature channel must
   all be valid. Software cannot infer cell authenticity from two contacts or
   replace a lifted temperature sensor with an estimate.

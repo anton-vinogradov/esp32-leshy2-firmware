@@ -207,7 +207,13 @@
   contacts, protected-button-top exact-cell scope, two direct per-cell MAX NTC
   roles and one independent BQ TS worst-slot role. Firmware cannot infer an
   arbitrary cell identity or substitute modeled temperature for a missing
-  channel. Exact cell/thermal-stack and continuity/thermal HIL stay upstream.
+  channel. `PWR-0018/FND-0083/DEC-0079/REV-0005AJ` then replace both generic
+  cells with exact `XTAR 18650 4000mAh` protected button-top instances:
+  `28.8 Wh` nominal per pair, 10-A discharge class, 2-A standard/product
+  charge ceiling and `18.7 × 69.7 mm` maximum envelope. Runtime blocks charge
+  outside initial `0…45 °C`, rejects raw/USB-equipped/third-party variants and
+  cannot infer missing certification/lot identity. Certification documents,
+  specimen fit, droop/thermal-stack and continuity/thermal HIL stay upstream.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

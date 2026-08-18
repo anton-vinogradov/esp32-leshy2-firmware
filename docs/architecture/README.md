@@ -56,6 +56,12 @@ Hardware `DEC-0077/PWR-0016/REV-0005AH` additionally freeze exact polarized
 roles. Firmware treats cell identity as a qualified profile and every missing
 or inconsistent thermal/contact channel as fail-closed; it does not infer an
 arbitrary cell's authenticity from two terminals.
+Hardware `DEC-0079/PWR-0018/REV-0005AJ` now selects two exact
+`XTAR 18650 4000mAh` protected button-top instances as the first qualification
+target: `28.8 Wh` nominal per pair, 10-A discharge class and 2-A standard/
+product charge ceiling. Firmware blocks charge outside the initial `0…45 °C`
+window and treats missing assembly certification/lot identity as an upstream
+kit fault, not as something electrical measurements can authenticate.
 `DEC-0063/PWR-0004/REV-0005R` accept
 the exact sink-only 30-W TPS25751DREFR/BQ25798RQMR frontend with mandatory
 CAT24C512WI-GT3 boot image and TVS2200DRVR. ARC-0002 consumes the fixed 5/9/15-V

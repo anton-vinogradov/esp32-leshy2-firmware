@@ -22,6 +22,7 @@
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
 - exact holder and thermal coupling: [`DEC-0077`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0077-keystone-1048p-qualified-cell-profile.md), [`PWR-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0016-keystone-1048p-holder-and-ntc-coupling.md), [`REV-0005AH`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AH-battery-holder-and-ntc-coupling.md)
+- exact first cell target: [`DEC-0079`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0079-xtar-18650-4000mah-qualification-target.md), [`PWR-0018`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0018-xtar-18650-4000mah-cell-profile.md), [`REV-0005AJ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AJ-exact-cell-propagation.md)
 - diagnostic hardware lockout: [`DEC-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0078-hardware-diagnostic-refractory-lockout.md), [`PWR-0017`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0017-hardware-diagnostic-refractory-lockout.md), [`REV-0005AI`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AI-diagnostic-lockout-propagation.md)
 - accepted supervised 2S topology: [`DEC-0065`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0065-supervised-2s-battery-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`REV-0005T`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005T-supervised-2s-topology-decision-propagation.md)
 - accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
@@ -135,15 +136,24 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 
 ## Replaceable-cell admission input
 
-- The battery has two individually replaceable qualified 18650 cells in a
-  supervised 2S arrangement; individual replacement does not imply that an
-  arbitrary cell or combination is valid. Both admitted cells are required
-  for battery operation.
-- The exact reference holder is polarized `Keystone 1048P`; supported cells
-  are protected button-top exact MPNs. Raw flat-top cells are unsupported.
+- The battery has two individually replaceable exact
+  `XTAR 18650 4000mAh` protected button-top cells in a supervised 2S
+  arrangement. The pair is `28.8 Wh` nominal; each cell is `4000 mAh` typical /
+  `3800 mAh` minimum, `10 A` maximum continuous discharge, `2 A` standard
+  charge and `<=40 mOhm` initial-resistance class. Individual replacement does
+  not imply that an arbitrary cell or combination is valid. Both admitted
+  cells are required for battery operation.
+- The exact reference holder is polarized `Keystone 1048P`; the selected cell
+  maximum envelope is `18.7 × 69.7 mm`. Raw flat-top, XTAR USB-equipped and
+  third-party protected variants are unsupported even when they share a core.
   Mechanical polarity remains below firmware, while exact-cell identity is a
   declared qualified profile: neither S3 nor the admission MCU can authenticate
   an arbitrary two-terminal cell by measurement alone.
+- The qualified profile carries exact model, approved source, assembly
+  certification/test-summary identity, lot, nominal capacity, expected
+  resistance/droop distributions and temperature policy. Missing or stale
+  certification/lot evidence blocks a production kit; firmware does not
+  manufacture identity from voltage, capacity or a packaging security code.
 - `PWR-0005/FND-0075` separate gauging from pre-closure admission, while
   `PWR-0006/FND-0076` retain the controlled-1S cross-charge, common-current and
   SOC consequences as future-variant evidence. `DEC-0066` freezes the hardware
@@ -159,6 +169,11 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   keeps zero-volt charge and linear prequalification disabled, and firmware
   must verify that state before requesting release. There is no S3, admission-
   MCU or product-menu command that can enable either path.
+- Normal charge is capped at `2 A`, the exact cell's standard value, and is
+  blocked outside `0…45 °C` until an assembly-specific qualification narrows
+  or explicitly extends that range. The 4-A manufacturer maximum is not a
+  runtime option. Source current, system load, any invalid NTC or HIL policy
+  may only reduce the 2-A ceiling.
 - The physical `ZVC` contact is unused by hardware. Firmware must not describe
   a register write as an alternative recovery path. Any characterization or
   attempted recovery uses a separately powered isolated Controlled-Zone
@@ -540,7 +555,7 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
@@ -552,7 +567,8 @@ external eFuse plus its eight profile passives, and the corrected dual-channel
 pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
 support components and hardware SafeMode straps, plus exact polarized 1048P
-holder contacts and the three-NTC physical roles, are now reviewed inputs,
+holder contacts, two exact XTAR cell instances and the three-NTC physical roles,
+are now reviewed inputs,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 
