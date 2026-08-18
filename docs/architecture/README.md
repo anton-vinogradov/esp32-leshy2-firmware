@@ -55,13 +55,18 @@ Si4732 inputs. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC` then close the
 consolidated I6 paper qualification scope: cross-group HIL cannot grant runtime
 permission, quiet contracts are independent and one matrix covers all groups,
 transitions, fixtures, actual-TX evidence and no-stall thresholds. Physical HIL
-remains explicitly open and can reopen its owner; I7 is active upstream.
+remains explicitly open and can reopen its owner; I7 is reviewed upstream.
 Hardware `FND-0105/EXP-0001/DEC-0098/REV-0005BD` now closes the I7 M5
 expansion paper subblock. [`EXT-0001`](EXT-0001-m5-expansion-runtime-state-machine.md)
 records the independent U214/native-Unit OFF-to-ACTIVE and fault-latched runtime
 contract; there is no connector presence bit or automatic power retry. Physical
 connector, hot-plug, reverse-source, profile and coexistence HIL remain open,
-and I7 continues upstream with service endpoints.
+and the M5 subblock is reviewed.
+Hardware `FND-0106…0108/SVC-0002/DEC-0099/REV-0005BE` then closes the
+remaining I7 service/recovery paper circuit. [`SVC-0001`](SVC-0001-service-recovery-runtime-contract.md)
+records attach-as-diagnostic behavior, fixture ID/VTREF ordering, independent
+USB/UART/SWD recovery and mandatory TX-off restart. I1…I7 are reviewed; I8
+consolidated BOM/lifecycle/cost evidence is active upstream.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
@@ -69,8 +74,8 @@ owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
 the powered-off CC band bits and P05 requests independent native-Unit power.
 Exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
-closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
-power, isolation and service endpoints open.
+closure: hardware `FND-0060` now keeps physical/HIL and I8 procurement
+evidence open rather than an uninstantiated service circuit.
 Hardware `DEC-0051` publishes the same projection in its target README as the
 visible G3 working design; firmware still treats it as reopenable upstream
 input until atomic architecture.

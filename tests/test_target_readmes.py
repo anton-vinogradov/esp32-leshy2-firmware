@@ -663,6 +663,52 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
 
+    def test_i7_independent_service_recovery_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "C5 uses an independent data-only USB",
+                "RP2354B uses an independent data-only USB",
+                "keyed UART0/RESET/BOOT",
+                "keyed SWD/RUN/USB_BOOT",
+                "C5/RP service VBUS never powers the product",
+                "Service attach is diagnostic only",
+                "Invalid fixture identity fails high-Z",
+                "fresh TX-off session",
+            ),
+            "README.ru.md": (
+                "C5 — независимый data-only USB",
+                "RP2354B — независимый data-only USB",
+                "keyed UART0/RESET/BOOT",
+                "keyed SWD/RUN/USB_BOOT",
+                "VBUS сервисных портов C5/RP не питает устройство",
+                "Service attach — только диагностика",
+                "Неверная идентичность fixture оставляет все линии high-Z",
+                "новая TX-off сессия",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        runtime = " ".join(
+            (REPO_ROOT / "docs/architecture/SVC-0001-service-recovery-runtime-contract.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "`00=S3`, `01=C5`, `10=RP`, `11=invalid`",
+            "hold RESET, BOOT and debug drivers high-Z",
+            "never drive these pins high",
+            "C5/RP USB data exists only while the board powers",
+            "Physical ROM/SWD recovery can proceed when application firmware is absent",
+            "No service command can create a lease",
+            "irreversible secure-boot/eFuse/OTP lockdown is not the default",
+        ):
+            self.assertIn(token, runtime)
+
 
 if __name__ == "__main__":
     unittest.main()

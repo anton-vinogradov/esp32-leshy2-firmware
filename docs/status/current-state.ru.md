@@ -331,7 +331,14 @@
   branch READY, exact signal isolation и больше не имеют вымышленного presence
   input. Firmware `EXT-0001` принимает state machine OFF/READY/IDENTIFY/ACTIVE/
   fault. Connector, hot-plug, reverse-source, exact-profile и coexistence HIL
-  остаются открыты; I7 продолжается service endpoints.
+  остаются открыты.
+- `FND-0106…0108/SVC-0002/DEC-0099/REV-0005BE` закрывают оставшийся paper
+  circuit service/recovery I7. Сервисный USB C5/RP теперь data-only и по
+  питанию, и по D-line при выключенной плате; exact зафиксированы три keyed
+  DBG10, шесть отдельных controls, passive ID и неконфликтующие STOP reset
+  sinks. Firmware `SVC-0001` принимает diagnostic-only attach, high-Z порядок
+  fixture и обязательную новую TX-off загрузку. Physical USB/fixture/recovery
+  HIL открыт; I7 reviewed, upstream активен I8.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -369,8 +376,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-scope `I2`…I6 и M5 expansion подблок I7 прошли ревью; upstream активен service
-closure I7, а physical I6/expansion evidence остаётся
+scope `I2`…I7 прошли ревью; upstream активен I8 consolidated
+BOM/lifecycle/cost review, а physical I6/I7 evidence остаётся
 явным reopen gate;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их

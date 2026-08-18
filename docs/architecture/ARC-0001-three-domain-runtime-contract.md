@@ -30,7 +30,7 @@ implements them.
 |---|---|---|
 | S3 N16R2 | product state/UI, touch and slow controls, display, files/microSD, USB/web, ES8311/Si4732 audio, native 2.4 GHz Wi-Fi/BLE, U214/GNSS/U216 profiles, orchestration | UI state, filesystem ownership, audio buffers, accessory policy, global session view |
 | C5 N8R8 production rev ≥v1.2 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, two-path IR RX and IR TX, SDIO slave, native-radio lease enforcement | radio/IR timing, country/profile checks available to the target, local queues, lease expiry and safe-off |
-| RP2354A A4 | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
+| RP2354B A4 | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
 
 S3 is the product orchestrator, not the sole safety authority. C5 and RP reject unsafe or stale commands independently and never require S3 to meet their peripheral deadlines.
 
@@ -142,16 +142,22 @@ The target mappings are S3 `EN/GPIO0/UART0 TX GPIO43/RX GPIO44`, C5
 `CHIP_PU/GPIO28/UART0 TX GPIO11/RX GPIO12`, and RP
 `RUN/USB_BOOT/SWDIO/SWCLK`. GPIO11/12 are therefore service-reserved on C5,
 leaving GPIO2/4/5/23/24 as the five generic C5 reserve pins (`FND-0038`). Each
-domain also has parallel physical BOOT and RESET buttons. None of these paths
-depends on a peer, expander, running image or USB mux.
+domain also has parallel physical BOOT and RESET buttons. None depends on a
+peer, expander, running image or firmware-controlled mux. C5/RP USB does pass
+through one fixed-selected board-powered isolation switch, so USB data is
+deliberately unavailable when the product is off while DBG10 remains passive.
 
 S3 USB remains the product data/protected-power path. C5 and RP USB are
-self-powered data-only service ports: their VBUS may be sensed through
-protected high-impedance circuitry but cannot feed the board power tree.
+board-powered data-only service ports: their VBUS reaches only a 1-MOhm
+bleeder and high-impedance test pad and cannot feed the board power tree;
+power-off isolation also blocks D-line backfeed.
 Connecting three hosts simultaneously must not cause backfeed, false attach,
 reset storms or TX re-arm. Reset, BOOT and debug events expire affected TX
 leases; service firmware remains subject to STOP and all RF authorization and
 containment gates.
+
+The complete runtime and fixture ordering, invalid-ID behavior and service
+event schema are defined by [`SVC-0001`](SVC-0001-service-recovery-runtime-contract.md).
 
 On C5, manual flash-encryption provisioning—if a later opt-in profile accepts it—runs at CPU ≤160 MHz because `FLASH-938` also affects v1.2. `ECC-833` remains a separate security constraint. Selecting v1.2 does not itself enable encryption, HUK or irreversible lockdown.
 

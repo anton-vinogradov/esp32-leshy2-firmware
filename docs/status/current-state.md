@@ -329,7 +329,14 @@
   branches, branch READY, exact signal isolation and no fictitious presence
   input. Firmware `EXT-0001` consumes the OFF/READY/IDENTIFY/ACTIVE/fault state
   machine. Connector, hot-plug, reverse-source, exact-profile and coexistence
-  HIL remain open; I7 continues with service endpoints.
+  HIL remain open.
+- `FND-0106…0108/SVC-0002/DEC-0099/REV-0005BE` close the remaining I7
+  service/recovery paper circuit. C5/RP service USB is now data-only in both
+  power and board-off D-line behavior; three keyed DBG10 headers, six separate
+  controls, passive IDs and conflict-free STOP reset sinks are exact. Firmware
+  `SVC-0001` consumes diagnostic-only attach, fixture high-Z ordering and a
+  mandatory fresh TX-off boot. Physical USB/fixture/recovery HIL remains open;
+  I7 is reviewed and I8 is active upstream.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -368,8 +375,8 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I6 paper scope and the I7 M5 expansion subblock are reviewed; I7
-service closure is active. Physical I6/expansion evidence remains
+`I2` through I7 paper scope are reviewed; I8 consolidated BOM/lifecycle/cost
+evidence is active. Physical I6/I7 evidence remains
 a named reopen gate; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,

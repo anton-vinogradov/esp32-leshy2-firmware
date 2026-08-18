@@ -286,6 +286,14 @@ flowchart TD
   rollback and never arms TX after restart.
 - Every programmable domain can be independently flashed, recovered and
   diagnosed without a healthy application image or peer processor.
+- S3 uses product USB plus keyed UART0/RESET/BOOT; C5 uses an independent
+  data-only USB plus keyed UART0/RESET/BOOT; RP2354B uses an independent
+  data-only USB plus keyed SWD/RUN/USB_BOOT. Every domain has separate physical
+  RESET and BOOT controls.
+- C5/RP service VBUS never powers the product and their D+/D- disconnect when
+  the board is off. Service attach is diagnostic only: it never arms TX or
+  authorizes Laboratory/Controlled-Zone work. Invalid fixture identity fails
+  high-Z, and every recovery restart creates a fresh TX-off session.
 - The PD policy image is a versioned, reproducible, owner-signed artifact.
   Field update writes an inactive EEPROM region and keeps rollback; direct
   factory/recovery pads can restore a blank or corrupt device without S3 after
