@@ -49,8 +49,10 @@ admission at `0x2A`, defines bounded bus recovery plus full-main-rail reset,
 and preserves isolated P22/P23 STOP/evidence polarity. I4 paper electrical
 scope is reviewed. Hardware `AUDIO-0003/DEC-0090/REV-0005AU` then closes I5:
 exact ES8311/Si4732/SA518 power and interface admission, capture/playback/TX
-modes and physical acoustic endpoints are runtime inputs. I6 RF endpoints are
-the next upstream block.
+modes and physical acoustic endpoints are runtime inputs. Hardware
+`DEC-0091…0096` now closes every separate I6 paper RF/IR endpoint, including
+both Si4732 inputs; consolidated coexistence/no-stall evidence is the active
+upstream block.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP

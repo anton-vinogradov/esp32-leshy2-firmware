@@ -89,14 +89,16 @@
   dedicated SQ pin, so firmware consumes only qualified `VOICE_ACTIVITY`
   semantics. New hardware `PIN-0003/REV-0004V` reviews the machine-generated
   principled owner/net/pad atlas. Current budgets are S3 `33/3/0`, C5
-  `14/6/1`, RP `48/0/0` and slow I/O `24/0/0`; `FND-0059` corrects the stale
+  `14/6/1`, RP `48/0/0`, main slow I/O `23/0/1` and UI I/O `7/1/0`;
+  `FND-0059` corrects the stale
   prior C5/RP figures. SA518 UART/PTT/activity and recovery now terminate on
   exact module contacts, while Si4732 I²C/reset/interrupt/clock/audio/FMI/AMI
   terminate on exact package contacts. UPDATE must not be driven before
-  specimen proof resolves its direction/timing ambiguity. `FND-0060` leaves
-  display production details, codec power/analog routing, exact IR,
-  STOP/supervisor, load-switch/isolation, audio/Unit
-  protection and service mechanics open.
+  specimen proof resolves its direction/timing ambiguity. `FND-0060`
+  originally exposed the remaining abstract endpoints; the current machine map
+  has since closed their individual paper circuits through I6. Production
+  display/connector lots, RF/optical/thermal/coexistence HIL, expansion
+  protection and service mechanics remain open.
   Hardware `DEC-0051` now publishes this map in its target README as the visible
   principle-level working design for G3 without making it a frozen HAL/G7.
 - Target-specific firmware architecture: **reopened/not selected**.
@@ -311,8 +313,11 @@
   TSOP95238TT envelope and TSMP95000TT carrier streams with distinct
   provenance, an isolated reset-off RX rail, STOP-qualified VSMY14940 TX and
   physical VEMD1060X01/TLV9061 evidence. Optical, thermal, IEC 62471 and fault
-  HIL remain upstream; only consolidated I6 coexistence remains active at
-  paper level.
+  HIL remain upstream. `FND-0101/RXF-0001/DEC-0096/REV-0005BA` then close the
+  missed Si4732 FMI/AMI paper endpoints. Runtime now keeps `rx_fm`/`rx_sw` on
+  protected FMI and `rx_am`/`rx_lw` on the separately protected non-50-Ohm
+  AMI loop-pod port, preserves qualification metadata and never infers antenna
+  presence. Only consolidated I6 coexistence remains active at paper level.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -351,8 +356,8 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I5 plus every separate I6 nRF, native S3/C5, CC1101, SA518 and IR
-paper electrical subblock reviewed while consolidated coexistence keeps I6
+`I2` through I5 plus every separate I6 nRF, native S3/C5, CC1101, SA518, IR
+and Si4732-input paper electrical subblock reviewed while consolidated coexistence keeps I6
 active; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,

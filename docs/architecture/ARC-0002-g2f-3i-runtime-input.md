@@ -16,6 +16,7 @@
 - exact CC1101 three-band endpoint: [`CCRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/CCRF-0001-exact-cc1101-three-band-endpoint.md), [`DEC-0093`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0093-exact-cc1101-three-band-endpoint.md), [`REV-0005AX`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AX-i6-cc1101-propagation.md)
 - exact SA518 RF endpoint: [`VRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/VRF-0001-exact-sa518-broadband-rf-endpoint.md), [`DEC-0094`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0094-exact-sa518-broadband-rf-endpoint.md), [`REV-0005AY`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AY-i6-sa518-rf-propagation.md)
 - exact IR endpoint: [`IRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/IRF-0001-exact-dual-receiver-transmit-and-optical-evidence-endpoint.md), [`DEC-0095`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0095-exact-ir-endpoint.md), [`REV-0005AZ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AZ-i6-ir-propagation.md)
+- exact Si4732 dual-input RF endpoint and corrected SOIC-16 map: [`RXF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RXF-0001-exact-si4732-dual-input-receive-frontend.md), [`DEC-0096`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0096-exact-si4732-dual-input-rf-endpoint.md), [`FND-0102`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0102-si4732-soic16-contact-map-was-shifted.md), [`REV-0005BA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BA-i6-si4732-rf-propagation.md), [`REV-0005BB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BB-si4732-soic16-pin-map-correction.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -795,13 +796,67 @@ path identities. Hardware `DEC-0050/REV-0004T` fixes RP-SMA jack/pin only for
 detachable mates are respectively RP-SMA plug/socket and standard SMA
 plug/pin. Exact qualified antenna MPN remains an upstream hardware gate.
 
-Hardware `ANT-0001/REV-0004P` further proves that the Si4732 receiver has two
-physical input domains: `FMI` for FM/SW and `AMI` for AM/LW. `DEC-0049` selects
-nine dedicated SMA, including separate `RX-FM/SW` and `RX-AM/LW`. Firmware
-must retain both logical antenna-profile identities and must not treat a generic
-`RX` connector, cable or antenna as compatible with both. The AM/LW profile
-accepts only a manifest-qualified direct loop/pod or buffered implementation;
-arbitrary long coax remains default-denied.
+## Exact Si4732 dual-input RF runtime contract
+
+Hardware `DEC-0096/RXF-0001/FND-0102` completes the earlier antenna-domain
+requirement with real base-side circuits and the corrected full SOIC-16 map.
+Exact `Si4732-A10-GSR` physical contact 6 `FMI` owns FM/SW through
+`LQW15AN56NJ00D` 56-nH matching,
+`GRM1555C1H102JA01D` 1-nF C0G coupling and its own
+`SESD0402X1UN-0020-090`. Physical contact 8 `AMI` owns AM/LW through
+`GRM155R71A474KE01D` 0.47-uF coupling and a second separately placed SESD
+body. Contact 7 is the short local RF return. No RF switch or TX path exists.
+The 56-nH/1-nF circuit is an AN383 FM starting point: the exact data short
+assigns SW to FMI, but firmware must not treat that FM network as proof of SW
+sensitivity. AN383's separate SW-on-AMI example is Si4734/35-only and is not a
+valid reason to remap Si4732 modes.
+
+Firmware exposes four mode identities over two immutable physical ports:
+
+| Mode identity | Physical port identity | Published tuning range | Required accessory profile |
+|---|---|---|---|
+| `rx_fm` | `rx_fmsw_fmi` | 64–108 MHz | qualified FM/SW whip/feed profile |
+| `rx_sw` | `rx_fmsw_fmi` | 2.3–26.1 MHz | qualified SW-capable whip/feed profile; the current 25-MHz antenna-list edge does not qualify 2.3–25 MHz |
+| `rx_am` | `rx_amlw_ami` | 520–1710 kHz | short direct ferrite-loop pod or qualified external loop/transformer pod |
+| `rx_lw` | `rx_amlw_ami` | 153–279 kHz | short direct ferrite-loop pod or qualified external loop/transformer pod |
+
+Only one of the four modes is active at a time. `rx_fmsw_fmi` and
+`rx_amlw_ami` are never collapsed to generic `RX`. The AM/LW connector is
+mechanically standard SMA but electrically `non_50_ohm_loop_pod`; arbitrary
+long coax is rejected from a qualified manifest because its capacitance changes
+the tuned input. Physical connector presence is not detectable, so firmware
+must not infer the installed antenna or pod from successful I²C tuning.
+
+The persistent profile record contains mode, physical port, antenna/pod MPN or
+prototype identity, feed/cable identity, qualified band interval, qualification
+lot, enclosure revision and HIL evidence revision. Unknown, expired or
+out-of-range profiles remain usable only as explicitly unqualified receive
+experiments in Laboratory UI; recording/scan metadata stays `unqualified` and
+must not be promoted to target sensitivity or compatibility evidence. Because
+the complete block is receive-only, profile failure never enters TX-arm logic.
+
+Admission and shutdown are ordered:
+
+1. acquire `SG-BROADCAST`, make every foreign signal group quiet and stop any
+   old receiver scan/audio capture;
+2. bind one mode to its immutable port/profile, then enable `RX_DOMAIN_EN`;
+3. wait for receiver supervisor release, probe both specimen identities
+   `0x11`/`0x63`, load only owner-authorized firmware components and configure
+   the selected band before tune/scan/audio;
+4. preserve mode, physical port and profile qualification on every result and
+   recording; RDS or optional owner-supplied SSB metadata never changes the
+   physical port identity;
+5. on close/fault, stop tune/scan/audio and I²C traffic, mute the audio path,
+   assert reset/isolation, remove receiver power, verify the qualified discharge
+   interval and release `SG-BROADCAST` only after the digital branch is quiet.
+
+The passive ESD/matching/coupling network has no runtime telemetry. Firmware
+therefore cannot claim ESD integrity, antenna presence, loop inductance,
+sensitivity or absence of desense. A band/profile becomes product-qualified
+only after exact specimen HIL covers both ports, all four ranges, overload/noise,
+pod parasitics, power cycling and every valid neighboring signal group under
+maximum scheduled digital traffic. Any failed coexistence result invalidates
+the affected profile evidence rather than silently lowering a product claim.
 
 Hardware `FND-0056` also removes a false SA518 assumption: rev 1.1 has no
 dedicated `SQ` contact. The runtime input is therefore neutral
@@ -942,9 +997,11 @@ paper level. `DEC-0092` does the same for independent S3/C5 native feeds, and
 detector. `DEC-0094` reviews the direct protected SA518 feed plus exact
 resistive AD8314 sample. `DEC-0095` reviews the exact dual-receiver IR path,
 isolated RX rail, current-limited emitter and physical optical evidence.
-Pigtail/chassis mates, thresholds, CC/voice VNA/conducted results, IR optical/
-thermal proof and fault-injection/T1 HIL remain open; only consolidated I6
-coexistence remains as the paper integration gate.
+`DEC-0096` then closes the separate protected Si4732 FMI FM/SW and non-50-Ohm
+AMI AM/LW paper circuits. Pigtail/chassis mates, antenna/pod lots, thresholds,
+CC/voice/Si4732 VNA/conducted results, IR optical/thermal proof and
+fault-injection/T1 HIL remain open; only consolidated I6 coexistence remains as
+the paper integration gate.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware

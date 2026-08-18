@@ -392,6 +392,57 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc2)
 
+    def test_exact_i6_si4732_dual_input_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "`Si4732-A10-GSR` keeps four receive modes on two immutable ports",
+                "FM/SW uses the protected FMI path",
+                "non-50-Ohm short loop-pod path",
+                "2.3–25-MHz SW region",
+                "no RF switch or transmitter",
+                "arbitrary long coax is not a qualified AM/LW accessory",
+            ),
+            "README.ru.md": (
+                "`Si4732-A10-GSR` сохраняет четыре RX-режима на двух неизменных портах",
+                "FM/SW работает через защищённый FMI",
+                "не-50-Ом порт короткого loop-пода",
+                "SW 2,3–25 МГц",
+                "нет RF switch или передатчика",
+                "произвольный длинный коаксиал",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0096/RXF-0001",
+            "physical contact 6 `FMI`",
+            "Physical contact 8 `AMI`",
+            "Contact 7 is the short local RF return",
+            "SW-on-AMI example is Si4734/35-only",
+            "No RF switch or TX path exists",
+            "`rx_fm` | `rx_fmsw_fmi` | 64–108 MHz",
+            "`rx_sw` | `rx_fmsw_fmi` | 2.3–26.1 MHz",
+            "`rx_am` | `rx_amlw_ami` | 520–1710 kHz",
+            "`rx_lw` | `rx_amlw_ami` | 153–279 kHz",
+            "electrically `non_50_ohm_loop_pod`",
+            "recording/scan metadata stays `unqualified`",
+            "profile failure never enters TX-arm logic",
+            "acquire `SG-BROADCAST`",
+            "cannot claim ESD integrity, antenna presence, loop inductance",
+            "failed coexistence result invalidates the affected profile evidence",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

@@ -155,6 +155,13 @@ flowchart TD
   receive and ordinary electret audio; codec-injected TX audio still requires
   separate direct audio arming plus the independently authorized AON-gated
   PTT. The voice module's power mode is driven low-or-released, never high.
+- The `Si4732-A10-GSR` keeps four receive modes on two immutable ports:
+  FM/SW uses the protected FMI path, while AM/LW uses a separately protected
+  non-50-Ohm short loop-pod path. Results and recordings always retain mode,
+  physical port and antenna/pod qualification; the 2.3–25-MHz SW region and
+  unknown pods remain visibly unqualified Laboratory experiments. The block
+  has no RF switch or transmitter, and arbitrary long coax is not a qualified
+  AM/LW accessory.
 - iButton/1-Wire separates ordinary use of owned devices, Lab reading and
   individually armed Controlled-Zone emulation/write; attaching the adapter
   authorizes nothing by itself.

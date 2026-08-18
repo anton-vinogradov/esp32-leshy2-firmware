@@ -89,13 +89,15 @@
   dedicated SQ, поэтому firmware использует только квалифицированную
   семантику `VOICE_ACTIVITY`. Новый hardware `PIN-0003/REV-0004V` провёл
   ревью machine-generated principle owner/net/pad atlas. Текущий бюджет:
-  S3 `33/3/0`, C5 `14/6/1`, RP `48/0/0`, slow I/O `24/0/0`; прежние значения
+  S3 `33/3/0`, C5 `14/6/1`, RP `48/0/0`, main slow I/O `23/0/1`, UI I/O
+  `7/1/0`; прежние значения
   C5/RP были stale и исправлены через `FND-0059`. SA518 UART/PTT/activity и
   recovery breakout теперь заканчиваются на exact module contacts, а Si4732
   I²C/reset/interrupt/clock/audio/FMI/AMI — на exact package contacts. UPDATE
   нельзя драйвить до specimen proof его direction/timing ambiguity.
-  `FND-0060` оставляет открытыми production display details, codec power/
-  analog routing, exact IR, STOP/supervisor, load-switch/isolation, audio/Unit
+  `FND-0060` первоначально выявил оставшиеся abstract endpoints; текущая
+  machine map уже закрыла их отдельные paper circuits до I6. Открыты production
+  display/connector lots, RF/optical/thermal/coexistence HIL, expansion
   protection и service mechanics.
   Hardware `DEC-0051` теперь публикует эту карту в target README как visible
   principle-level working design для G3, не превращая её в frozen HAL/G7.
@@ -313,7 +315,11 @@
   одновременные TSOP95238TT envelope и TSMP95000TT carrier streams с разной
   provenance, изолированную reset-off RX rail, STOP-qualified VSMY14940 TX и
   физический VEMD1060X01/TLV9061 evidence. Optical, thermal, IEC 62471 и fault
-  HIL остаются upstream; на paper-уровне активен только consolidated I6
+  HIL остаются upstream. `FND-0101/RXF-0001/DEC-0096/REV-0005BA` затем
+  закрывают пропущенные paper endpoints FMI/AMI Si4732. Runtime удерживает
+  `rx_fm`/`rx_sw` на защищённом FMI, а `rx_am`/`rx_lw` — на отдельно защищённом
+  не-50-Ом AMI loop-pod порту, хранит qualification metadata и не выводит
+  наличие антенны из I²C. На paper-уровне активен только consolidated I6
   coexistence.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
@@ -352,7 +358,7 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 и все отдельные I6 nRF/native/CC/voice/IR subblocks
+electrical scope `I2`…I5 и все отдельные I6 nRF/native/CC/voice/IR/Si4732-input subblocks
 прошли ревью, а I6 остаётся активным для consolidated coexistence;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
