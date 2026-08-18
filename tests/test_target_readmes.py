@@ -81,12 +81,16 @@ class TargetReadmeTests(unittest.TestCase):
                 "USB-C power is sink-only",
                 "15 V/2 A",
                 "never enables 20 V",
+                "hardware SafeMode",
+                "protected VBUS path and charging remain off",
                 "inactive EEPROM region",
             ),
             "README.ru.md": (
                 "USB-C только принимает питание",
                 "15 В/2 А",
                 "никогда не включает 20 В",
+                "аппаратный SafeMode",
+                "Защищённый тракт VBUS и заряд остаются выключены",
                 "неактивный регион EEPROM",
             ),
         }

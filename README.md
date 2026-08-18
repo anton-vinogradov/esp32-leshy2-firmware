@@ -141,6 +141,10 @@ flowchart TD
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
+- On raw USB power the PD controller enters hardware SafeMode and loads its
+  dedicated EEPROM without S3. The protected VBUS path and charging remain off
+  until a valid policy is present; missing or corrupt policy requires the
+  independent recovery pads rather than a permissive software fallback.
 - The charger is physically fixed to 2S/750 kHz. Reset charging is `1 A`;
   runtime may use at most `2 A` only after it applies the actual USB current
   contract, accounts for system load, verifies both cells and passes the
@@ -172,7 +176,8 @@ flowchart TD
   diagnosed without a healthy application image or peer processor.
 - The PD policy image is a versioned, reproducible, owner-signed artifact.
   Field update writes an inactive EEPROM region and keeps rollback; direct
-  factory/recovery pads can restore a blank or corrupt device without S3.
+  factory/recovery pads can restore a blank or corrupt device without S3 after
+  the current-limited raw-VBUS fixture confirms the controller bus is idle.
 - The owner retains offline/reproducible build and signing tools. Owner firmware
   remains installable through an explicit recovery workflow; irreversible
   lockdown is not the standard mode.

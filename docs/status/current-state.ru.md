@@ -196,8 +196,11 @@
   hardware ILIM 2,71-3,29 А, независимый non-ignored BQ TS и open-drain CE:
   contract-derived IINDPM записывается и проверяется до зарядки, а штатный
   charge остаётся <=2 А. `FND-0079` возвращает product USB-C/USB2 protection
-  в зависимый I4; support passives TPS25751/CAT24C512 становятся следующим
-  бумажным пререквизитом I3.
+  в зависимый I4. Hardware `FND-0080/PWR-0015/DEC-0076/REV-0005AG` затем
+  закрывает раздельный запуск через raw VBUS/VBUS_IN, аппаратный SafeMode,
+  17 exact компонентов TPS25751/CAT24, open-drain WP и полные pull-up локальной
+  и host-шин. Firmware потребляет этот порядок запуска/защиты записи, не
+  утверждая, что TPS сам проверяет подпись владельца при каждом raw-VBUS boot.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -237,10 +240,10 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager, BQ25798 passive profile, exact active downstream-rail
-topology, eFuse и converter energy/feedback/control passives внутри I3 уже
-прошли ревью; сейчас активны support passives TPS/EEPROM, mechanics,
-diagnostic thresholds/cooldown и полный
+source, battery manager, BQ25798 и TPS/EEPROM passive profiles, exact active
+downstream-rail topology, eFuse и converter energy/feedback/control passives
+внутри I3 уже прошли ревью; сейчас активны mechanics, diagnostic
+thresholds/cooldown и полный
 rail/loss/thermal/fault evidence.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,

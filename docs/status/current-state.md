@@ -193,8 +193,12 @@
   a 2.71-3.29-A hardware ILIM envelope, independent non-ignored BQ TS and
   open-drain CE sequencing: contract-derived IINDPM is written/read back
   before charge, and normal charge remains <=2 A. `FND-0079` returns product
-  USB-C/USB2 protection to dependent I4; TPS25751/CAT24C512 support passives
-  are the next I3 paper dependency.
+  USB-C/USB2 protection to dependent I4. Hardware
+  `FND-0080/PWR-0015/DEC-0076/REV-0005AG` then closes separate raw
+  VBUS/VBUS_IN startup, hardware SafeMode, 17 exact TPS25751/CAT24 support
+  parts, open-drain WP and complete local/host bus pulls. Firmware consumes the
+  startup and write-protection ordering without claiming that TPS itself
+  verifies the owner signature at every raw-VBUS boot.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -234,9 +238,9 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-with `I2` reviewed and the I3 source, battery-manager, BQ25798 passive profile,
-active rail topology, eFuse and converter energy/feedback/control passives
-reviewed; the remaining TPS/EEPROM support passives, mechanics, diagnostic
+with `I2` reviewed and the I3 source, battery-manager, BQ25798 and TPS/EEPROM
+passive profiles, active rail topology, eFuse and converter
+energy/feedback/control passives reviewed; the remaining mechanics, diagnostic
 thresholds/cooldown and complete
 rail/loss/thermal/fault evidence are
 the active I3 work. The integrated physical

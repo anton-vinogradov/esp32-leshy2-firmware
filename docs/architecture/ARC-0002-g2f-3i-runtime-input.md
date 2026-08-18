@@ -209,6 +209,18 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   `CAT24C512WI-GT3`; `BQ25798RQMR` is on the TPS-local I2C controller bus.
   S3 is a host/observer through TPS I2Ct, not the component required to make
   an ordinary dead-battery attachment negotiate safely.
+- Raw connector power reaches both TPS `VBUS` and `VBUS_IN`. Hardware straps
+  `ADCIN1=7`, `ADCIN2=0` select SafeMode and target address `0x20`: before an
+  application rail exists, the VBUS LDO powers attach detection and the
+  address-`0x50` EEPROM while PPHV, PD and charging remain disabled. The
+  startup sequence is therefore raw attach → SafeMode → EEPROM load → accepted
+  contract → PPHV/BQ SYS → `AON_SAFE_3V3` → TPS `VIN_3V3` and application
+  rails. `VIN_3V3` presence is never itself permission to enable PPHV or CE.
+- The TPS validates the programmed configuration format needed to load it; it
+  does not independently establish owner-signature authenticity at every
+  raw-VBUS boot. Authenticity is established by factory provisioning or the
+  signed S3 update transaction before a region becomes active. Firmware must
+  not describe a TPS format/CRC success as a fresh signature verification.
 - The only accepted contracts are 5-V fallback, 9 V/3 A and 15 V/2 A. Firmware
   never requests or exposes 20 V, PPS, source/power-bank or BQ OTG. Any
   unexpected role/PDO is a latched power-policy fault and charge is disabled.
@@ -236,9 +248,23 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   stable, the signed manifest targets the exact board/controller/tool version,
   and the inactive EEPROM region is writable. Readback/hash/boot validation
   occurs before retiring the previous region; interruption preserves rollback.
+- EEPROM WP is reset-high through an exact pull-up. TPS GPIO0 is an open-drain
+  sink only: firmware/configuration may release it or pull it low inside the
+  authorized signed-write window, never drive it high or leave WP writable
+  across reset/fault. TPS GPIO1 remains the separate open-drain CE sink.
+- The autonomous local SCL/SDA pair has exact 2.2-kOhm LDO_3V3 pull-ups; the
+  S3 host SCL/SDA pair has exact 2.2-kOhm 3V3_MAIN pull-ups and SYS_INT_N has
+  one 10-kOhm pull-up. Bus speed remains bounded by measured aggregate
+  capacitance/rise time; firmware may not infer 1 MHz solely from the EEPROM
+  rating or start host transactions before 3V3_MAIN is valid.
 - Factory/recovery pads remain the authority for a blank or corrupt EEPROM.
-  Firmware presents recovery instructions but cannot claim that an
-  application-only update path is independent recovery.
+  The ordinary FLxx region-update flow assumes an initialized image and cannot
+  be presented as blank-device provisioning. First image is programmed before
+  placement or by a current-limited raw-VBUS fixture that observes
+  `ReadyForPatch`, verifies I2Cc high-Z, then uses direct SDA/SCL/WP pads. It
+  never injects 3.3 V into the TPS LDO output. Firmware presents those recovery
+  instructions but cannot claim that an application-only update path is
+  independent recovery.
 - HIL covers every supported/fallback cable and source, blank/corrupt image,
   interrupted update, shared-IRQ concurrency, no-battery/deep-cell refusal,
   supplement/removal/bounce, thermal derating and proof that 20 V/source/OTG
@@ -493,15 +519,17 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, TPS25751/CAT24C512 support passives, diagnostic thresholds/cooldown,
-thermal/source-handover/fault HIL, Unit protection and service-connector
+IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
+HIL, diagnostic thresholds/cooldown, thermal/source-handover/fault HIL, Unit
+protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
 feedback parts, nine control resistors, direct AON EN strap, switches and
 external eFuse plus its eight profile passives, and all 19 pack diagnostic
 timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
-capacitor instances, ten resistors and third NTC are now reviewed inputs,
+capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
+support components and hardware SafeMode straps are now reviewed inputs,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 

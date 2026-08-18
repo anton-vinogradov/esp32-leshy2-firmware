@@ -81,7 +81,10 @@ pulls, reset-high open-drain CE and Rev-C special-pin terminations. Runtime
 therefore starts from 1-A reset charge, writes contract-derived IINDPM before
 CE, never exceeds 2-A charge and never ignores the independent BQ TS sensor.
 `FND-0079` returns product USB-C/USB2 protection to dependent hardware I4;
-TPS25751/CAT24C512 support passives remain the next I3 paper input. Hardware
+hardware `FND-0080/PWR-0015/DEC-0076/REV-0005AG` then fixes separate raw
+VBUS/VBUS_IN startup, hardware SafeMode, 17 exact TPS/EEPROM support parts,
+open-drain WP and both complete I2C pull networks. Firmware consumes that
+ordering without claiming TPS performs a fresh owner-signature check. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware
