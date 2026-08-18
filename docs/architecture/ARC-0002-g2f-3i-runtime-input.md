@@ -11,6 +11,7 @@
 - Quiet states: [`DEC-0046`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0046-unused-interface-quiet-by-default.md), [`QST-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/QST-0001-unused-interface-quiet-states.md)
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
+- exact three-nRF electrical endpoint: [`N24E-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24E-0001-exact-three-nrf-electrical-endpoint.md), [`DEC-0091`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0091-exact-three-nrf-electrical-endpoint.md), [`REV-0005AV`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AV-i6-three-nrf-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -96,6 +97,12 @@ electret paths, P00/P01/P02 controls and the exact endpoint mode table below.
 It may not claim measured gain, noise, pop/click, RF immunity, crystal trim or
 concurrent-load performance before HIL. I5 review does not freeze a HAL or
 authorize implementation; I6 RF front ends are now active upstream.
+Hardware `DEC-0091/N24E-0001` now close the first I6 paper subblock. Firmware
+may consume three switched-rail Ioff-isolated digital endpoints, exact common
+power sequencing and per-radio directional forward-power evidence. It may not
+call the Ebyte `IPX` receptacle U.FL, infer a threshold from the calculation or
+claim target coexistence before specimen and T1 HIL. I6 remains active for all
+other RF endpoints and the consolidated result.
 
 ## Candidate runtime domains
 
@@ -140,6 +147,11 @@ inputs.
   `PRX` or `PTX`; `3R`, `1T+2R`, `2T+1R` and `3T` must execute concurrently.
   A local TX must not silently put peers in standby or create unreported RX
   gaps. Physical sensitivity limits are profile evidence, not scheduler gaps.
+  Entry asserts the common STOP-qualified rail request, waits at least 100 ms
+  after rail validity for the nRF24 power-on-reset maximum, then reads and
+  validates all three identities/configurations before admitting the group.
+  Any missing/mismatched radio returns the whole group to `NONE`; peers are not
+  silently used as a degraded two-radio product.
 - RP↔S3 SPI must qualify ≥1.5 MB/s framed payload and alert-to-read ≤250 µs;
   control/safety events preempt bulk records and a stalled peer cannot retain
   TX authorization.
@@ -220,6 +232,12 @@ inputs.
   settles the endpoint while I/O remains isolated, then connects safe parked
   signals. Failure or unknown evidence leaves `NONE`; prior TX state is never
   restored.
+- For `SG-N24`, CE0/1/2 go low and CSN0/1/2 high before all three PIO/DMA
+  engines stop. Firmware waits until the three forward-power evidence bits are
+  inactive, then clears the common rail request. The AD8314 enable-hold remains
+  physical through QOD fall; software neither shortens it nor treats an early
+  detector shutdown as proof. Re-entry begins only after the measured rail
+  discharge/no-backpower interval.
 - S3 UI CPU, RP arbiter, power/fault supervision and required IPC remain system
   planes. Their peripheral clocks run only for bounded transactions, and they
   must pass active-receiver EMI HIL rather than being mislabeled powered-off.
@@ -468,9 +486,13 @@ inputs.
   quiet only after its controller and pins are parked, the rail has completed
   the measured discharge interval and back-power/current evidence passes.
 - The nRF branch is deliberately common to all three radios. Entering
-  `SG-N24` powers and settles all three, then enables their independent buses;
+  `SG-N24` powers all three plus their host/return Ioff buffers, waits at least
+  100 ms, validates all three identities and only then enables independent buses;
   it never cycles a peer rail to implement `3R`, `1T+2R`, `2T+1R` or `3T`.
-  Leaving the group parks all three interfaces before the common branch opens.
+  Leaving the group parks all three interfaces and waits for three inactive
+  forward-power bits before the common branch opens. Strong inbound RF may
+  conservatively delay shutdown as a false positive; it never permits a false
+  negative or automatic bypass.
 - Voice sequencing asserts the STOP-dominant `VOICE_DOMAIN_EN_SAFE`, waits for
   qualified `POWER_FAULT_N` collector to release, keeps PTT forced RX and
   `AUDIO_ARM=0`, then qualifies the SA518/codec path before allowing
@@ -542,6 +564,11 @@ inputs.
 - RP local I2C0 also reads TCA9534A address `0x38`: P0..P7 map exactly to
   `S3_RF`, `C5_RF`, `NRF0_RF`, `NRF1_RF`, `NRF2_RF`, `CC_RF`, `VOICE_RF` and
   `IR_OPTICAL`. Its interrupt is a test point, not a new RP GPIO dependency.
+- NRF0/1/2 evidence specifically comes from separate
+  `DC2337J5010AHF`→`AD8314ACPZ-RL7` forward samples, not command state or PA
+  current. Qualification is versioned at channels 0, 100 and 125. A profile
+  without valid threshold/temperature/lot calibration is
+  `unknown/unavailable` and cannot satisfy a proof-mandatory TX lease.
 - Firmware reports `commanded`, `device-reported`, `actual` and
   `unknown/unavailable` independently. All eight evidence lines low are
   sufficient positive observations; an impossible aggregate/mask combination,
@@ -552,7 +579,9 @@ inputs.
 
 1. every simultaneous three-nRF `3R/1T2R/2T1R/3T` role mix with independent
    channel/rate/address/session, per-source latency, overflow, loss/gap and
-   exact RF-profile evidence;
+   exact RF-profile evidence; before that matrix, prove 10-Mbit/s isolated
+   SPI, 100-ms POR, three identity reads, QOD/no-backpower and forward-power
+   thresholds at channels 0/100/125 over voltage, temperature and module lots;
 2. RP IPC stress at accepted radio load while display, storage, audio and C5
    traffic run;
 3. C5 1-bit IPC framed throughput/occupancy/control-priority/RTT, reset/link-loss
@@ -750,8 +779,10 @@ but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
-are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,
-matching, thresholds and fault-injection HIL remain open under hardware `I6`.
+are paper-reviewed inputs from `DEC-0061`. `DEC-0091` additionally reviews the
+three exact nRF directional taps, detector bodies and powered-off isolation at
+paper level. Their pigtail mate, thresholds and fault-injection/T1 HIL remain
+open, as do the RF/optical front ends for the other I6 paths.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
@@ -771,6 +802,9 @@ microSD return are now consumable. Hardware
 `FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` then closes I5 and makes the exact
 runtime contract above consumable. I6 RF endpoints are active upstream; no
 prototype or physical qualification is inferred.
+`FND-0096/N24E-0001/DEC-0091/REV-0005AV` then reviews the first I6 nRF
+electrical subblock and makes its sequence/evidence contract consumable here.
+I6 remains active; no HAL, KiCad or target implementation is authorized.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

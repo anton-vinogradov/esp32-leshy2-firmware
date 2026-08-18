@@ -291,7 +291,11 @@
   остаются upstream.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил paper electrical scope `I2`…I5 как
-  reviewed; теперь активны зависимые RF front ends I6 перед expansion internals.
+  reviewed; `FND-0096/N24E-0001/DEC-0091/REV-0005AV` дополнительно закрывают
+  первый paper subblock I6 для трёх nRF. Runtime теперь потребляет exact Ioff
+  isolation, 100-ms/three-identity admission, directional forward-power
+  evidence и упорядоченное отключение общей шины. Ebyte mate, thresholds, T1
+  coexistence и остальные RF endpoints I6 остаются открыты перед expansion internals.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -329,7 +333,7 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 прошёл ревью, а I6 стал следующим активным блоком;
+electrical scope `I2`…I5 и первый I6/nRF subblock прошли ревью, а I6 остаётся активным;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,

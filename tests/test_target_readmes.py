@@ -172,6 +172,48 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc2)
 
+    def test_exact_i6_nrf_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "Three nRF24 paths retain independent PTX/PRX",
+                "waits at least `100 ms`",
+                "validates every radio",
+                "all six digital directions",
+                "three independent forward-power detectors",
+            ),
+            "README.ru.md": (
+                "Три nRF24 сохраняют независимые PTX/PRX",
+                "не менее `100 ms`",
+                "проверяет каждый радиомодуль",
+                "оба направления всех интерфейсов",
+                "трёх независимых детекторов прямой мощности",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0091/N24E-0001",
+            "waits at least 100 ms",
+            "validates all three identities",
+            "CE0/1/2 go low and CSN0/1/2 high",
+            "DC2337J5010AHF`→`AD8314ACPZ-RL7",
+            "channels 0, 100 and 125",
+            "10-Mbit/s isolated SPI",
+            "QOD/no-backpower",
+            "Strong inbound RF may conservatively delay shutdown",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

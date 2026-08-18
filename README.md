@@ -118,6 +118,10 @@ flowchart TD
   commands and data rather than becoming remote raw GPIO.
 - Three nRF24 paths retain independent PTX/PRX in every simultaneous
   `3R/1T2R/2T1R/3T` mix without automatic peer standby.
+- Entering the nRF group powers all three isolated endpoints, waits at least
+  `100 ms` and validates every radio before use. Leaving it parks all six
+  digital directions and confirms three independent forward-power detectors
+  are inactive before the common rail discharges.
 - Only one qualified top-level signal group is active at a time; unused
   interfaces enter a verified quiet state.
 - 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,

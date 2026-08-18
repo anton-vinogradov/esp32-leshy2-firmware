@@ -203,6 +203,11 @@ remained unfrozen.
 The following `FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` pass closes I5,
 assigns P00/P01/P02, freezes safe endpoint sequencing and activates I6 while
 leaving the firmware implementation boundary unfrozen.
+`FND-0096/N24E-0001/DEC-0091/REV-0005AV` then review the first I6 subblock.
+ARC-0002 now consumes three exact Ioff-isolated nRF digital boundaries,
+100-ms/three-identity group admission, directional actual-TX evidence and
+ordered common-rail shutdown. Threshold, pigtail, T1 and all other I6 RF
+evidence stay upstream, so the implementation boundary remains unfrozen.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.
