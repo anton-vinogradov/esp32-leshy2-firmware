@@ -203,6 +203,13 @@
   on detach/PD fault/re-enumeration failure, exposes no protector bypass or
   Alt-Mode/source profile and does not claim fixture-only `FLT`. USB Full-Speed
   RC/SI, ESD, short-to-VBUS and physical placement remain upstream HIL.
+  `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then close the display paper
+  electrical endpoint. Firmware holds display/touch reset low until protected
+  logic power is stable, observes at least 120-ms/100-ms post-release waits,
+  enables PWM last and never auto-retries a latched backlight fault. The
+  `FAULT_N` point is fixture-only, so software does not fabricate a sensor.
+  Final FPC mate, standalone panel sourcing and display/touch/backlight HIL
+  remain upstream; S3 stays `32/3/1`.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper
@@ -279,8 +286,8 @@ remain references until their downstream gates.
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
 `I2` and I3 paper electrical scope reviewed and I4 now the active dependent
-paper block; its exact protected product-USB endpoint is reviewed and the
-remaining UI/display/storage endpoints are active. Specimen mechanics,
+paper block; exact protected product-USB and display paper endpoints are
+reviewed, while microSD and remaining UI endpoints are active. Specimen mechanics,
 exact-cell droop and timer/load hot HIL plus
 complete transition/rail/loss/thermal/fault evidence remain mandatory physical
 I3 gates; they no longer masquerade as unresolved paper architecture. The

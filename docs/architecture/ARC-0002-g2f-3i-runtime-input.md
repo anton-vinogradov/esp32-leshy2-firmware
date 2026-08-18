@@ -38,6 +38,7 @@
 - independent internal-rail containment: [`DEC-0081`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0081-independent-internal-rail-containment.md), [`PWR-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0020-independent-post-buck-containment.md), [`FND-0085`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0085-uncontained-internal-buck-high-side-short.md), [`REV-0005AL`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AL-internal-rail-containment-propagation.md)
 - consolidated I3 paper closure: [`DEC-0082`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0082-i3-paper-closure.md), [`PWR-0021`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0021-i3-consolidated-paper-closure.md), [`FND-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0086-i3-paper-and-hil-closure-were-conflated.md), [`REV-0005AM`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AM-i3-paper-closure-propagation.md)
 - exact protected product USB port: [`DEC-0083`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0083-exact-protected-product-usb-port.md), [`USB-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/USB-0001-exact-product-usb-c-and-protection.md), [`FND-0087`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0087-product-usb-ended-on-abstract-port.md), [`REV-0005AN`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AN-product-usb-port-propagation.md)
+- exact protected display electrical endpoint: [`DEC-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0084-exact-protected-display-electrical-endpoint.md), [`DSP-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/DSP-0006-exact-display-rail-backlight-and-mate-profile.md), [`FND-0088`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0088-display-endpoint-still-contained-abstract-circuits.md), [`REV-0005AO`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AO-display-endpoint-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -60,6 +61,12 @@ may consume a protected native S3 USB2 path, sink-only CC path, automatic
 port disconnect and the absence of Alt Mode. It may not promote unmeasured
 USB Full-Speed RC/SI, ESD/short-to-VBUS behavior or the fixture-only protector
 `FLT` signal into a production runtime claim.
+Hardware `DEC-0084/DSP-0006` close the second I4 paper endpoint. Firmware may
+consume default-low display/touch reset, common protected logic power,
+reset-dark PWM backlight and hardware latch-off with power-cycle-only
+recovery. It has no direct backlight-fault GPIO and therefore must not invent a
+runtime fault readback from the fixture-only `FAULT_N` point. The exact first
+connector candidate does not freeze a production mate or vendor init table.
 
 ## Candidate runtime domains
 
@@ -118,6 +125,14 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   bounded SD commands/data chunks and critical-UI priority. Combined HIL must
   prove shared-D1 high-Z/no-contention, first visible response ≤100 ms, storage
   ≥4.0 MB/s, 1.5 MB/s record and survival of a measured 250 ms card stall.
+- Hardware reset sequencing is independent of that scheduler. On boot, keep
+  GPIO40 low and both expander reset outputs low until `3V3_MAIN` is stable;
+  issue a pulse of at least 10 us, release display reset and wait at least
+  120 ms before Sleep Out, then release touch reset and wait at least 100 ms
+  before I2C use. Enable PWM last. On controlled shutdown, disable PWM, enter
+  Sleep In, assert both resets and only then permit main-power removal. Never
+  auto-retry a latched backlight branch; a new attempt requires a complete
+  main-power cycle and fresh display initialization.
 - Internal I²C contains only slow UI/audio/receiver/control endpoints. PTT,
   radio FIFO/IRQ/GDO/BUSY, hard STOP and timing evidence never wait for it.
   P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
@@ -611,8 +626,8 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086` list remaining electrical/HIL endpoints:
-display connector/backlight/protection/sourcing, passive codec/analog networks,
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085/0086/0088` list remaining electrical/HIL endpoints:
+display standalone sourcing/final mate and display/touch/backlight HIL, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
 source-transition, brownout, thermal/source-handover/fault HIL, Unit
@@ -641,9 +656,12 @@ Hardware `FND-0063/DSP-0005/REV-0005A` additionally instantiate exact current
 assembly candidate `HMX035CTFT-001`: S3 GPIO39 is touch IRQ, GPIO41/42 are
 QSPI D2/D3, slow P06/P07 are display/touch reset and GPIO43 remains free after
 GPIO6 is assigned to `AUDIO_ARM`.
-Firmware may implement reusable scheduler and distinct prototype driver
-profiles, but cannot freeze a production-qualified assembly, touch protocol or
-vendor init table before the sourcing and specimen proof gates.
+Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
+exact 40-contact ZIF candidate, separate reset-low pulls and the protected
+backlight circuit. Firmware may freeze the reset/off/recovery ordering and
+implement reusable scheduler plus distinct prototype driver profiles, but
+cannot freeze a production-qualified assembly, final connector, touch
+protocol or vendor init table before sourcing and specimen proof gates.
 
 Independent digital buses do not prove RF coexistence. `SG-N24` nevertheless
 requires real concurrent roles with no hidden time-sharing. What remains open

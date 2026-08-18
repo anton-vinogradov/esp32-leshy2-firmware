@@ -207,6 +207,13 @@
   session при detach/PD fault/ошибке re-enumeration, не предоставляет bypass,
   Alt Mode или source profile и не утверждает fixture-only `FLT`. USB
   Full-Speed RC/SI, ESD, short-to-VBUS и физический placement остаются upstream HIL.
+  `FND-0088/DSP-0006/DEC-0084/REV-0005AO` затем закрывают paper electrical
+  endpoint дисплея. Firmware удерживает display/touch reset low до устойчивого
+  protected logic power, соблюдает минимум 120/100 мс после release, включает
+  PWM последней и не повторяет latch-fault подсветки автоматически. Точка
+  `FAULT_N` доступна только оснастке, поэтому software не изображает из неё
+  sensor. Final FPC mate, standalone sourcing панели и display/touch/backlight
+  HIL остаются upstream; S3 остаётся `32/3/1`.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
@@ -284,8 +291,8 @@ references до своих downstream gates.
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2` и
 бумажная электрическая часть I3 прошли ревью, а I4 стал следующим активным
-бумажным блоком; его exact protected product-USB endpoint reviewed, остальные
-UI/display/storage endpoints активны. Mechanics, exact-cell droop,
+бумажным блоком; exact protected product-USB и display paper endpoints
+reviewed, microSD и остальные UI endpoints активны. Mechanics, exact-cell droop,
 timer/load hot HIL и
 полный transition/rail/loss/thermal/fault evidence остаются обязательными
 физическими I3-gates; они больше не маскируются под незакрытую

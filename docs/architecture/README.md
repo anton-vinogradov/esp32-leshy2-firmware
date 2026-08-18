@@ -100,6 +100,11 @@ exact four-line product-port protection. ARC-0002 consumes automatic
 disconnect, sink-only/no-Alt-Mode behavior and protected native S3 USB2 while
 keeping direct `FLT` fixture-only and USB Full-Speed RC/SI, ESD/short HIL
 upstream.
+`FND-0088/DSP-0006/DEC-0084/REV-0005AO` then close the display paper
+electrical endpoint. ARC-0002 consumes reset-low defaults, 120-ms display and
+100-ms touch post-release waits, backlight-last startup and no automatic retry
+after a latch fault. The first ZIF candidate remains a physical-HIL input and
+the fixture-only backlight fault point is not exposed as a firmware sensor.
 Hardware
 `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
@@ -156,8 +161,9 @@ class and two HIL controller profiles. Hardware `DSP-0005/REV-0005A` now
 instantiate exact current assembly candidate `HMX035CTFT-001`; GPIO39 is touch
 IRQ and slow P06/P07 terminate display/touch reset; later audio `DEC-0054`
 uses GPIO6 and changes the total S3 budget to `32/3/1`. ARC-0002 still freezes
-only the scheduler/pin/resource contract: production ordering/drawing/
-connector and vendor init table remain open.
+the scheduler/pin/resource and `DEC-0084` reset/backlight-fault contract:
+production ordering/drawing, final connector, specimen electrical HIL and
+vendor init table remain open.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

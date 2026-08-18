@@ -65,6 +65,11 @@ flowchart TD
   channel/frequency, recording, power and safety state.
 - Menus and critical warnings respond within `100 ms`; dirty/tiled waterfall
   updates yield to radio, audio and storage service.
+- Display and touch stay in hardware reset until their common protected logic
+  rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
+  `100 ms` before touch use, then enables the PWM backlight last. A latched
+  backlight fault is never auto-retried; loss of the screen cannot stop radio,
+  recording or the physical STOP path.
 - Any visual frame loss is reported explicitly and never implies loss of raw
   radio or audio data.
 - Commanded TX, measured current, radio-reported state and independent
