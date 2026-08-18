@@ -50,9 +50,12 @@ and preserves isolated P22/P23 STOP/evidence polarity. I4 paper electrical
 scope is reviewed. Hardware `AUDIO-0003/DEC-0090/REV-0005AU` then closes I5:
 exact ES8311/Si4732/SA518 power and interface admission, capture/playback/TX
 modes and physical acoustic endpoints are runtime inputs. Hardware
-`DEC-0091…0096` now closes every separate I6 paper RF/IR endpoint, including
-both Si4732 inputs; consolidated coexistence/no-stall evidence is the active
-upstream block.
+`DEC-0091…0096` close every separate I6 paper RF/IR endpoint, including both
+Si4732 inputs. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC` then close the
+consolidated I6 paper qualification scope: cross-group HIL cannot grant runtime
+permission, quiet contracts are independent and one matrix covers all groups,
+transitions, fixtures, actual-TX evidence and no-stall thresholds. Physical HIL
+remains explicitly open and can reopen its owner; I7 is active upstream.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
@@ -230,8 +233,9 @@ DEC-0095/REV-0005AZ` next close the exact IR paper input: simultaneous
 TSOP95238TT envelope and TSMP95000TT carrier streams remain distinct,
 VSMY14940 TX is current-limited and STOP-qualified, and shielded
 VEMD1060X01/TLV9061 optical evidence is fail-closed but never authorizing.
-Every separate I6 endpoint is now reviewed; I6 stays active only for the
-consolidated coexistence paper gate and subsequent physical HIL.
+Every separate I6 endpoint and the consolidated paper matrix are now reviewed;
+physical conducted/OTA/optical/no-stall/thermal/fault HIL stays open and may
+reopen its owning I6 subblock.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

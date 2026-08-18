@@ -491,6 +491,39 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
 
+    def test_consolidated_i6_runtime_contract_does_not_regress(self):
+        for readme_name, token in (
+            ("README.md", "never grants runtime permission"),
+            ("README.ru.md", "никогда не создаёт runtime-разрешение"),
+        ):
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            self.assertIn(token, normalized, readme_name)
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "COX-0001",
+            "Cross-group runtime is prohibited",
+            "never grants runtime permission",
+            "`RECEIVER_QUIET`",
+            "`CODEC_AUDIO_QUIET`",
+            "`VOICE_INTERFACE_QUIET`",
+            "Every installed-group transition passes through `NONE`",
+            "no nRF FIFO miss",
+            "S3↔RP alert-to-read `<=250 us`",
+            "S3↔C5 `>=1.5 MB/s`",
+            "display non-preemptible occupancy `<=1 ms`",
+            "ordinary UI response `<=100 ms`",
+            "continuous audio DMA",
+            "remain `not_executed`",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_sink_only_pd_and_recovery_behavior(self):
         required_tokens = {
             "README.md": (

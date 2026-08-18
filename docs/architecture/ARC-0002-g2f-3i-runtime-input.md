@@ -17,6 +17,7 @@
 - exact SA518 RF endpoint: [`VRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/VRF-0001-exact-sa518-broadband-rf-endpoint.md), [`DEC-0094`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0094-exact-sa518-broadband-rf-endpoint.md), [`REV-0005AY`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AY-i6-sa518-rf-propagation.md)
 - exact IR endpoint: [`IRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/IRF-0001-exact-dual-receiver-transmit-and-optical-evidence-endpoint.md), [`DEC-0095`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0095-exact-ir-endpoint.md), [`REV-0005AZ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AZ-i6-ir-propagation.md)
 - exact Si4732 dual-input RF endpoint and corrected SOIC-16 map: [`RXF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RXF-0001-exact-si4732-dual-input-receive-frontend.md), [`DEC-0096`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0096-exact-si4732-dual-input-rf-endpoint.md), [`FND-0102`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0102-si4732-soic16-contact-map-was-shifted.md), [`REV-0005BA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BA-i6-si4732-rf-propagation.md), [`REV-0005BB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BB-si4732-soic16-pin-map-correction.md)
+- consolidated I6 qualification: [`COX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/COX-0001-consolidated-i6-qualification-matrix.md), [`DEC-0097`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0097-one-group-i6-qualification-and-fixtures.md), [`FND-0103`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0103-cross-group-hil-could-reopen-forbidden-concurrency.md), [`FND-0104`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0104-monolithic-receiver-audio-quiet-contract.md), [`REV-0005BC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BC-i6-consolidated-proof-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -344,6 +345,42 @@ inputs.
   manifest member or an explicit group switch.
 - Quiet is verified from rail/current/status/actual-TX evidence where available;
   a successful driver call alone is not proof.
+
+### Consolidated I6 runtime and evidence contract
+
+- The catalog is `SG-N24`, `SG-S3-24`, `SG-C5-NATIVE`, `SG-CC`, `SG-VOICE`,
+  `SG-BROADCAST`, `SG-U214`, `SG-IR` and one exact `SG-EXT-*` manifest.
+  Cross-group runtime is prohibited. Contained cross-group injection is
+  Laboratory characterization only and never grants runtime permission,
+  regardless of a successful HIL result.
+- Allowed concurrency exists only inside the active manifest: all required
+  three-radio nRF PTX/PRX mixes, visible native S3/C5 time division and exact
+  U214 LoRa/GNSS members. UI, STOP, power/fault supervision and bounded IPC are
+  system planes; storage, audio and diagnostics are support planes only when
+  declared by that group profile.
+- Quiet control is split into independent `RECEIVER_QUIET`,
+  `CODEC_AUDIO_QUIET` and `VOICE_INTERFACE_QUIET` contracts. This lets
+  `SG-BROADCAST` keep Si4732 active and `SG-VOICE` keep SA518 interfaces active
+  without waking the other receiver/audio boundaries. Storage and service use
+  separate `STORAGE_QUIET` and `SERVICE_IPC_QUIET` contracts.
+- Every installed-group transition passes through `NONE` in this order:
+  revoke leases → prove actual TX off → stop controller/DMA → park and isolate
+  pins → remove and verify rail/discharge → self-test the new group → publish
+  visible identity → require a separate TX arm. A failed or unknown step stays
+  in `NONE`; prior TX state is never restored.
+- One timestamped evidence bundle covers the exact manifest, isolated
+  baseline, every foreign boundary quiet, maximum valid system-plane load,
+  allowed intragroup mixes, transitions, STOP/reset/brownout/stuck-line faults
+  and thermal/legal limits. Raw traces must prove: no nRF FIFO miss; CC service
+  independent of nRF/U214; no U214 UART overflow; S3↔RP alert-to-read `<=250 us`
+  and framed throughput `>=1.5 MB/s`; S3↔C5 `>=1.5 MB/s`, admitted occupancy
+  `<=70%` and control RTT `<=2 ms`; display non-preemptible occupancy `<=1 ms`;
+  ordinary UI response `<=100 ms`; continuous audio DMA; and no lost or
+  invented encoder detents.
+
+This is reviewed paper qualification input, not measurement. Conducted, OTA,
+optical, no-stall, thermal and fault HIL remain `not_executed`; a failed trace
+reopens the owning hardware subblock and cannot broaden runtime permission.
 
 ## Replaceable-cell admission input
 
@@ -1000,8 +1037,12 @@ isolated RX rail, current-limited emitter and physical optical evidence.
 `DEC-0096` then closes the separate protected Si4732 FMI FM/SW and non-50-Ohm
 AMI AM/LW paper circuits. Pigtail/chassis mates, antenna/pod lots, thresholds,
 CC/voice/Si4732 VNA/conducted results, IR optical/thermal proof and
-fault-injection/T1 HIL remain open; only consolidated I6 coexistence remains as
-the paper integration gate.
+fault-injection/T1 HIL remain open. `FND-0103/FND-0104/COX-0001/DEC-0097/
+REV-0005BC` now close the consolidated paper integration gate without claiming
+those measurements: cross-group injection cannot create runtime permission,
+quiet boundaries are independent and one trace/fixture matrix carries every
+group, transition, actual-TX channel and no-stall threshold. I6 paper scope is
+reviewed; physical HIL can reopen its owning subblock and I7 is active upstream.
 
 Hardware `DEC-0052/REV-0004X` close `FND-0061`: direct S3 QSPI GPIO41/42 and
 the time-based arbitration contract are now runtime inputs. Hardware
@@ -1019,11 +1060,12 @@ I4 electrical input: exact TCA6424A `0x22`, pack target `0x2A`, shared IRQ and
 recovery behavior, isolated P22/P23 observation polarity and the real GPIO4
 microSD return are now consumable. Hardware
 `FND-0095/AUDIO-0003/DEC-0090/REV-0005AU` then closes I5 and makes the exact
-runtime contract above consumable. I6 RF endpoints are active upstream; no
+runtime contract above consumable. I6 paper scope is reviewed upstream; no
 prototype or physical qualification is inferred.
 `FND-0096/N24E-0001/DEC-0091/REV-0005AV` then reviews the first I6 nRF
 electrical subblock and makes its sequence/evidence contract consumable here.
-I6 remains active; no HAL, KiCad or target implementation is authorized.
+The I6 endpoint remains subject to physical HIL; no HAL, KiCad or target
+implementation is authorized.
 `FND-0097/NAT-0001/DEC-0092/REV-0005AW` and
 `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` next make the separate native feeds
 and exact CC three-band state machine consumable.
@@ -1031,8 +1073,9 @@ and exact CC three-band state machine consumable.
 evidence and shutdown state machine consumable. `FND-0100/IRF-0001/DEC-0095/
 REV-0005AZ` next makes the exact IR receive/learn/TX, provenance, optical
 evidence and shutdown state machine consumable. Every separate I6 endpoint is
-now reviewed at paper level; consolidated coexistence remains active and no
-physical qualification is inferred.
+now reviewed at paper level. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC`
+close the consolidated paper qualification matrix and advance upstream work to
+I7; no physical qualification is inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

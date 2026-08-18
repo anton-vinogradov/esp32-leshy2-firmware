@@ -123,7 +123,8 @@ flowchart TD
   digital directions and confirms three independent forward-power detectors
   are inactive before the common rail discharges.
 - Only one qualified top-level signal group is active at a time; unused
-  interfaces enter a verified quiet state.
+  interfaces enter a verified quiet state. Cross-group Laboratory injection
+  may test overload and recovery, but never grants runtime permission.
 - 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
   broadcast reception, IR and external GNSS/LoRa/NFC use separate profiles,
   permissions and result evidence.

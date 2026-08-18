@@ -319,8 +319,12 @@
   закрывают пропущенные paper endpoints FMI/AMI Si4732. Runtime удерживает
   `rx_fm`/`rx_sw` на защищённом FMI, а `rx_am`/`rx_lw` — на отдельно защищённом
   не-50-Ом AMI loop-pod порту, хранит qualification metadata и не выводит
-  наличие антенны из I²C. На paper-уровне активен только consolidated I6
-  coexistence.
+  наличие антенны из I²C. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC`
+  затем закрывают consolidated I6 paper qualification scope. Межгрупповая
+  инъекция остаётся только Laboratory characterization, quiet-контракты
+  receiver/codec/voice разделены, а versioned matrix покрывает все группы,
+  допустимые intragroup mixes, transitions, fixtures и no-stall thresholds.
+  Physical HIL ещё не выполнен и может переоткрыть владельца; upstream активен I7.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -358,8 +362,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-electrical scope `I2`…I5 и все отдельные I6 nRF/native/CC/voice/IR/Si4732-input subblocks
-прошли ревью, а I6 остаётся активным для consolidated coexistence;
+scope `I2`…I6 прошёл ревью, а upstream активен I7; physical I6 evidence остаётся
+явным reopen gate;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их
 physical mechanics и HIL остаются активны. Mechanics, exact-cell droop,

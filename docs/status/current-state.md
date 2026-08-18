@@ -317,7 +317,12 @@
   missed Si4732 FMI/AMI paper endpoints. Runtime now keeps `rx_fm`/`rx_sw` on
   protected FMI and `rx_am`/`rx_lw` on the separately protected non-50-Ohm
   AMI loop-pod port, preserves qualification metadata and never infers antenna
-  presence. Only consolidated I6 coexistence remains active at paper level.
+  presence. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC` then close the
+  consolidated I6 paper qualification scope. Cross-group injection is
+  Laboratory characterization only, receiver/codec/voice quiet contracts are
+  independent and the versioned matrix covers every group, legal intragroup
+  mix, ordered transition, fixture and no-stall threshold. Physical HIL is
+  still not executed and can reopen its owner; I7 is active upstream.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -356,9 +361,8 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I5 plus every separate I6 nRF, native S3/C5, CC1101, SA518, IR
-and Si4732-input paper electrical subblock reviewed while consolidated coexistence keeps I6
-active; exact protected product-USB, display, isolated microSD, controls,
+`I2` through I6 paper scope reviewed and I7 active. Physical I6 evidence remains
+a named reopen gate; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,
 exact-cell droop and timer/load hot HIL plus
