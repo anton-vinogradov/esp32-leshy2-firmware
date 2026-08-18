@@ -133,9 +133,10 @@ flowchart TD
   recovery command, and any recovery research requires a separate isolated
   Controlled-Zone fixture. Before admission, a common-path diagnostic applies
   approximately 0.57-0.88 A for no more than 50 ms and compares both cells;
-  an independent non-retriggerable hardware timer prevents stuck firmware
-  from extending that pulse. Factory acceptance also rejects a timer pulse
-  shorter than 25 ms, preserving the filtered loaded-sample window. This
+  one non-retriggerable hardware channel prevents pulse stretching and a
+  second blocks every retry for at least 350 ms even with stuck firmware.
+  Normal software waits at least 10 seconds. Factory acceptance also rejects a
+  timer pulse shorter than 25 ms, preserving the filtered loaded-sample window. This
   screen is never presented as full-load
   qualification.
 - Supported cells are exact qualified protected button-top MPNs installed in

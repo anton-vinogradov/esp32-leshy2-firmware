@@ -180,14 +180,17 @@
   strap and all nine converter EN/PG/qualifier/fault resistors. Firmware keeps
   the existing safe-default and `EN AND NOT(PG)` semantics without a new API
   or paper-derived deadline; all timing/load-step/HIL evidence stays upstream.
-  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then close the exact diagnostic
-  frontend. Firmware emits one PA22 rising edge; the independent
-  non-retriggerable TPUL2G223 limits the 10-Ohm load to about 34.4 ms typical
-  with a 28.7-40.7-ms C0G paper window; production accepts only measured
-  25-50-ms pulses. PA25/PA26 use the internal 1.4-V reference through
+  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
+  frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
+  the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper
+  window; production accepts only measured 25-50-ms pulses. PA25/PA26 use the internal 1.4-V reference through
   exact filtered dividers; baseline and loaded samples wait `>=10 ms` for
-  settling. Droop thresholds, calibration and inter-pulse cooldown remain HIL
-  inputs, and the 0.57-0.88-A screen is never reported as full-load proof.
+  settling. `PWR-0017/FND-0082/DEC-0078/REV-0005AI` correct the TPUL WQFN map,
+  make channel 2 hold channel 1 clear for a measured 350-860 ms and split the
+  load across two parallel 20-Ohm/2-W branches. Firmware waits `>=1 ms` after
+  stable admission VDD and `>=10 s` between normal attempts. Droop thresholds
+  and calibration remain exact-cell HIL inputs, and the 0.57-0.88-A screen is
+  never reported as full-load proof.
   `PWR-0014/DEC-0075/REV-0005AF` then close the exact BQ25798 physical
   profile. Firmware consumes fixed 2S/750-kHz operation, 1-A reset charge,
   a 2.71-3.29-A hardware ILIM envelope, independent non-ignored BQ TS and
@@ -245,9 +248,9 @@ remain references until their downstream gates.
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
 with `I2` reviewed and the I3 source, battery-manager, BQ25798, TPS/EEPROM and
-polarized-holder/NTC paper profiles, active rail topology, eFuse and converter
-energy/feedback/control passives reviewed; the remaining specimen mechanics, diagnostic
-thresholds/cooldown and complete
+polarized-holder/NTC and diagnostic-lockout paper profiles, active rail
+topology, eFuse and converter energy/feedback/control passives reviewed; the
+remaining specimen mechanics, exact-cell droop and timer/load hot HIL, and complete
 rail/loss/thermal/fault evidence are
 the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,

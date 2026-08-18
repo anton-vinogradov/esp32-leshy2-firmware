@@ -79,7 +79,12 @@ exact PA25/PA26 divider/filter frontends. Its C0G timing network has a
 28.7-40.7-ms paper window and production accepts only measured 25-50-ms
 pulses. Firmware emits one PA22 edge, samples against the internal 1.4-V
 reference only after `>=10 ms` settling and cannot extend the pulse;
-production thresholds/cooldown remain HIL inputs. Hardware
+production thresholds remain exact-cell HIL inputs. Hardware
+`PWR-0017/FND-0082/DEC-0078/REV-0005AI` corrects the TPUL WQFN pin map,
+cascades channel 2 into a measured 350-860-ms hardware refractory interval
+and splits the 10-Ohm load across two 20-Ohm/2-W branches. Firmware waits
+`>=1 ms` after stable admission VDD and `>=10 s` between normal attempts; it
+cannot shorten the hardware bound or infer a missing load branch. Hardware
 `PWR-0014/DEC-0075/REV-0005AF` then fixes the BQ25798 2S/750-kHz strap,
 2.2-uH/7-A inductor, complete physical capacitor banks, BATP/TS/ILIM, local
 pulls, reset-high open-drain CE and Rev-C special-pin terminations. Runtime

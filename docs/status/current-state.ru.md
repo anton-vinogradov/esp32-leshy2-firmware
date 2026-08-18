@@ -183,14 +183,18 @@
   EN strap и все девять резисторов converter EN/PG/qualifier/fault. Firmware
   сохраняет принятые safe defaults и semantics `EN AND NOT(PG)` без нового API
   или бумажного deadline; все timing/load-step/HIL остаются upstream inputs.
-  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` затем закрывают exact diagnostic
-  frontend. Firmware выдаёт один rising edge PA22; независимый
-  non-retriggerable TPUL2G223 аппаратно ограничивает нагрузку 10 Ом примерно
-  34,4 мс nominal при бумажном C0G-диапазоне 28,7-40,7 мс; production
-  принимает только измеренные импульсы 25-50 мс. PA25/PA26 измеряются от внутреннего
+  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
+  Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
+  ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном
+  C0G-диапазоне 28,7-40,7 мс; production принимает только измеренные импульсы
+  25-50 мс. PA25/PA26 измеряются от внутреннего
   reference 1,4 В через exact filtered dividers; baseline и loaded samples ждут
-  `>=10 мс` settling. Droop thresholds, calibration и межимпульсный cooldown
-  остаются HIL inputs, а screen 0,57-0,88 А не выдаётся за full-load proof.
+  `>=10 мс` settling. `PWR-0017/FND-0082/DEC-0078/REV-0005AI` исправляют
+  WQFN-карту TPUL, заставляют канал 2 удерживать канал 1 в clear измеренные
+  350-860 мс и делят нагрузку между двумя параллельными ветвями 20 Ом/2 Вт.
+  Firmware ждёт `>=1 мс` после стабильного admission VDD и `>=10 с` между
+  штатными попытками. Droop thresholds и calibration остаются exact-cell HIL
+  inputs, а screen 0,57-0,88 А не выдаётся за full-load proof.
   `PWR-0014/DEC-0075/REV-0005AF` затем закрывают exact физический профиль
   BQ25798. Firmware потребляет фиксированные 2S/750 кГц, reset charge 1 А,
   hardware ILIM 2,71-3,29 А, независимый non-ignored BQ TS и open-drain CE:
@@ -246,11 +250,11 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
-source, battery manager, BQ25798, TPS/EEPROM и polarized-holder/NTC paper
-profiles, exact active
+source, battery manager, BQ25798, TPS/EEPROM, polarized-holder/NTC и
+diagnostic-lockout paper profiles, exact active
 downstream-rail topology, eFuse и converter energy/feedback/control passives
-внутри I3 уже прошли ревью; сейчас активны mechanics, diagnostic
-thresholds/cooldown и полный
+внутри I3 уже прошли ревью; сейчас активны mechanics, exact-cell droop,
+timer/load hot HIL и полный
 rail/loss/thermal/fault evidence.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,

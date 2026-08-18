@@ -22,6 +22,7 @@
 - hard STOP and actual-TX evidence: [`DEC-0061`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0061-aon-stop-and-per-path-tx-evidence.md), [`SAFE-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/SAFE-0002-accepted-aon-stop-and-evidence-circuit.md), [`REV-0005O`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005O-i2-safety-decision-propagation.md)
 - replaceable-cell boundary: [`DEC-0062`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0062-individually-replaceable-2s-cells.md), [`REV-0005Q`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Q-battery-format-decision-propagation.md)
 - exact holder and thermal coupling: [`DEC-0077`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0077-keystone-1048p-qualified-cell-profile.md), [`PWR-0016`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0016-keystone-1048p-holder-and-ntc-coupling.md), [`REV-0005AH`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AH-battery-holder-and-ntc-coupling.md)
+- diagnostic hardware lockout: [`DEC-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0078-hardware-diagnostic-refractory-lockout.md), [`PWR-0017`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0017-hardware-diagnostic-refractory-lockout.md), [`REV-0005AI`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AI-diagnostic-lockout-propagation.md)
 - accepted supervised 2S topology: [`DEC-0065`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0065-supervised-2s-battery-topology.md), [`PWR-0006`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0006-one-or-two-cell-topology-comparison.md), [`REV-0005T`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005T-supervised-2s-topology-decision-propagation.md)
 - accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
 - accepted deep-cell/circuit boundary: [`DEC-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0067-no-in-device-deep-cell-recovery.md), [`PWR-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0007-max17320-2s-surrounding-circuit.md), [`REV-0005X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005X-deep-cell-policy-propagation.md)
@@ -190,13 +191,16 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   injection current there, while the battery dividers can remain live during
   admission-supply loss. The corrected PA25/PA26 allocation preserves the
   `12 used / 3 service-reserved / 3 free` budget.
-- The accepted diagnostic command is edge-only. Firmware holds `PA22/A4` low,
-  writes one rising edge and returns it low; it never drives the load MOSFET
-  directly and never treats GPIO-high time as the pulse duration. Hardware
-  `TPUL2G223BQBR` is non-retriggerable and, with the exact C0G timing part,
-  produces approximately 34.4 ms typical with a conservative 28.7-40.7-ms
-  paper window. Production accepts only a measured 25-50-ms pulse. Repeated
-  writes or a stuck-high GPIO cannot extend the active interval.
+- The accepted diagnostic command is edge-only. Firmware waits at least 1 ms
+  after stable admission VDD, holds `PA22/A4` low, writes one rising edge and
+  returns it low; it never drives the load MOSFET directly and never treats
+  GPIO-high time as the pulse duration. `TPUL2G223BQBR` channel 1 is
+  non-retriggerable and produces approximately 34.4 ms typical with a
+  conservative 28.7-40.7-ms paper window. Production accepts only a measured
+  25-50-ms pulse. The falling channel-1 Q edge then starts channel 2, whose
+  complementary output asynchronously clears channel 1 for a production-
+  measured 350-860 ms. Repeated writes or a stuck-high GPIO therefore cannot
+  extend one pulse or bypass the independent refractory interval.
 - The admission ADC uses the internal 1.4-V reference. Before baseline it
   waits at least 10 ms after the last relevant source/contact edge. After the
   diagnostic trigger it waits at least 10 ms for the 10-nF divider filters,
@@ -205,11 +209,16 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   that window. A
   missing/invalid loaded sample, unexpected post-pulse droop or inconsistent
   gauge evidence blocks admission.
-- Production droop/contact thresholds, ADC acquisition/calibration and the
-  minimum inter-pulse cooldown come only from the approved-cell/contact/timer
-  HIL profile. No retry loop may issue another pulse until that cooldown
-  expires, and the short 0.57-0.88-A screen is never reported as proof of the
-  2.78-A product-load transient.
+- The exact 10-Ohm load is two parallel 20-Ohm/2-W branches. Firmware neither
+  detects nor compensates a missing branch: production continuity/calibration
+  rejects the assembly, while any runtime loaded sample outside the signed
+  exact-profile envelope fails closed.
+- Production droop/contact thresholds and ADC acquisition/calibration come
+  only from the exact approved-cell/contact/timer HIL profile. Every normal
+  retry waits at least 10 seconds; an exact-cell profile may lengthen but never
+  shorten that floor. The hardware 350-ms minimum is a separate fault bound,
+  not a normal scheduling interval, and the short 0.57-0.88-A screen is never
+  reported as proof of the 2.78-A product-load transient.
 - Runtime diagnostics name the exact protected path without controlling it:
   `CSD87313DMST` CHG/DIS state, two slot-fuse/NTC channels, the 5-mOhm shunt,
   reset-default ALRT hold and admission-supply source. Unknown or inconsistent
@@ -531,15 +540,16 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
-HIL, diagnostic thresholds/cooldown, thermal/source-handover/fault HIL, Unit
+HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
+thermal/source-handover/fault HIL, Unit
 protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
 feedback parts, nine control resistors, direct AON EN strap, switches and
-external eFuse plus its eight profile passives, and all 19 pack diagnostic
-timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
+external eFuse plus its eight profile passives, and the corrected dual-channel
+pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
 support components and hardware SafeMode straps, plus exact polarized 1048P
 holder contacts and the three-NTC physical roles, are now reviewed inputs,
