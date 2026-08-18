@@ -11,6 +11,7 @@ class TargetReadmeTests(unittest.TestCase):
             readme = (REPO_ROOT / readme_name).read_text(encoding="utf-8")
             for ledger_prefix in ("DEC-", "REV-", "FND-", "IMP-"):
                 self.assertNotIn(ledger_prefix, readme, readme_name)
+            self.assertNotIn("SN74LVC1G06", readme, readme_name)
             for stale_heading in ("## Development state", "## Состояние разработки"):
                 self.assertNotIn(stale_heading, readme, readme_name)
             self.assertIn("docs/status/current-state", readme, readme_name)
@@ -57,6 +58,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "Panasonic AEQ10410",
                 "pressing it or losing its connection stops",
                 "do not replace any of them",
+                "Sitronix ST77922",
+                "I²C address `0x38`",
+                "active-low IRQ",
+                "SN74LVC1G07DCKR",
             ),
             "README.ru.md": (
                 "направления D-pad и OK, BACK, OPT, F1, F2",
@@ -72,6 +77,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "Panasonic AEQ10410",
                 "нажатие, и потеря соединения",
                 "не заменяют эти органы управления",
+                "Sitronix ST77922",
+                "I²C-адрес `0x38`",
+                "active-low IRQ",
+                "SN74LVC1G07DCKR",
             ),
         }
         for readme_name, tokens in required_tokens.items():

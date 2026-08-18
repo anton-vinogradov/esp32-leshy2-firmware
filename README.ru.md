@@ -82,6 +82,10 @@ flowchart TD
 - Display и touch удерживаются аппаратным reset до устойчивого общего
   protected logic rail. Firmware ждёт минимум `120 мс` до display Sleep Out и
   `100 мс` до работы touch, после чего последней включает PWM-подсветку.
+  Integrated touch `Sitronix ST77922` имеет фиксированный I²C-адрес `0x38`;
+  его active-low IRQ приходит на shared GPIO37 через raw pull-up 10 кОм и
+  fixed non-inverting open-drain `SN74LVC1G07DCKR`, поэтому polarity-profile в
+  firmware отсутствует.
   Latch-fault подсветки не перезапускается автоматически; потеря экрана не
   останавливает radio, запись или физический STOP.
 - Любая потеря визуальных кадров учитывается явно и не означает потерю сырых

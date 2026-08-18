@@ -228,15 +228,19 @@
   физических controls. Отдельный TCA9534A P0…P6 даёт
   D-pad/OK/BACK/OPT/F1/F2 и нажатию энкодера interrupt-driven bounded scan 4x3,
   а P7 остаётся резервом; A/B энкодера напрямую входят в PCNT0 S3 GPIO39/GPIO47;
-  touch IRQ входит в общий GPIO37 через выбираемый по specimen polarity
-  adapter. PTT остаётся прямым RP GPIO21, а STOP и RE-ARM — асинхронным AON
+  touch IRQ входит в общий GPIO37. PTT остаётся прямым RP GPIO21, а STOP и RE-ARM — асинхронным AON
   hardware. `FND-0092/UI-0002/DEC-0087/REV-0005AR` затем выбирают exact
   low-current `Y78B23214FP` для каждой ordinary-позиции, PTT и RE-ARM, а также
   exact gold-clad `AEQ10410` COM+NC для STOP. Отдельные ESD-массивы матрицы,
   encoder/PTT и safety-пары вместе с exact pull/filter networks завершают
   каждый тракт. Runtime описан в `ARC-0003`; cap/plunger и STOP guard/harness
-  mechanics, touch polarity, SYS-I2C address scan и control/ESD/fault/
+  mechanics, SYS-I2C address scan и control/ESD/fault/
   concurrent-load HIL остаются upstream.
+  `FND-0093/DSP-0007/DEC-0088/REV-0005AS` затем фиксируют exact integrated
+  ST77922, touch-address `0x38`, active-low TP_INT, raw pull-up 10 кОм и fixed
+  non-inverting `SN74LVC1G07DCKR`. Поэтому firmware не имеет polarity-profile
+  или inverter alternative. Identity/readback, IRQ pulse/clear, reset recovery
+  и shared-source HIL остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном

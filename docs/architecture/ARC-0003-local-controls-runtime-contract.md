@@ -64,15 +64,19 @@ lost or invented detents.
 
 GPIO37 is a wired-low wake hint, not a unique source identity. On every wake
 the service loop reads all enabled sources: main TCA6424, UI TCA9534A, touch
-controller, TPS25751 and pack admission. It repeats status reads until the qualified line
+controller, TPS25751 and pack admission. Exact integrated `Sitronix ST77922`
+touch is a SYS-I2C target at 7-bit address `0x38`, no faster than 400 kHz. It
+repeats status reads until the qualified line
 release condition or a bounded fault is reached. A stuck source is named and
 isolated by its owning policy where hardware permits; it is not hidden by
 polling.
 
-The populated touch adapter determines whether raw TP_INT is inverted. The
-driver profile records that hardware population and validates idle/asserted
-levels at startup. A mismatch disables touch with an explicit fault while
-physical buttons and STOP remain usable.
+The exact assembly contract defines active-low TP_INT. Its 10-kOhm raw pull-up
+and fixed non-inverting `SN74LVC1G07DCKR` produce an open-drain contribution;
+firmware has no polarity/population profile and never supports the removed
+inverting alternative. Startup verifies expected controller readback, address,
+idle/asserted levels and reset recovery. A mismatch disables touch with an
+explicit fault while physical buttons and STOP remain usable.
 
 ## PTT, STOP and RE-ARM
 

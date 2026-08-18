@@ -223,15 +223,20 @@
   control inventory. Dedicated TCA9534A P0…P6 gives
   D-pad/OK/BACK/OPT/F1/F2 and encoder push an interrupt-driven bounded 4x3
   scan, with P7 reserved; encoder A/B use direct PCNT0 on S3 GPIO39/GPIO47; touch IRQ joins
-  shared GPIO37 through a specimen-selected polarity adapter. PTT remains
+  shared GPIO37. PTT remains
   direct RP GPIO21, while STOP and RE-ARM remain asynchronous AON hardware.
   `FND-0092/UI-0002/DEC-0087/REV-0005AR` then select exact low-current
   `Y78B23214FP` switches for every ordinary position, PTT and RE-ARM, plus an
   exact gold-clad `AEQ10410` COM+NC STOP switch. Separate matrix,
   encoder/PTT and safety ESD arrays and exact pull/filter networks terminate
   every path. Firmware runtime details are in `ARC-0003`; cap/plunger and STOP
-  guard/harness mechanics, touch polarity, SYS-I2C address scan and
+  guard/harness mechanics, SYS-I2C address scan and
   control/ESD/fault/concurrent-load HIL remain upstream.
+  `FND-0093/DSP-0007/DEC-0088/REV-0005AS` then fix exact integrated ST77922,
+  touch address `0x38`, active-low TP_INT, the 10-kOhm raw pull-up and fixed
+  non-inverting `SN74LVC1G07DCKR`. Firmware therefore has no polarity profile
+  or inverter alternative. Identity/readback, IRQ pulse/clear, reset recovery
+  and shared-source HIL remain upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper

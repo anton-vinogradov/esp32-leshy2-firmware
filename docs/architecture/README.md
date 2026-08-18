@@ -41,12 +41,13 @@ scan while P7 remains reserved; encoder A/B use direct S3 PCNT0 on GPIO39/GPIO47
 physical PTT stays direct RP GPIO21, and STOP/RE-ARM remain asynchronous AON
 controls. Exact low-current switches, separate matrix/encoder-PTT/safety ESD
 arrays and pull/filter networks now make those software boundaries physical.
-Touch IRQ joins shared GPIO37 through a specimen-selected polarity adapter and
-never falls back to polling-only operation.
+Exact integrated ST77922 touch at `0x38` joins shared GPIO37 through an
+active-low 10-kOhm-plus-fixed-1G07 path and never falls back to polling-only
+operation.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
-`48/0/0` and slow I/O `24/0/0`; exact SA518 service and Si4732 control/antenna
+`48/0/0`, main slow I/O `18/0/6` and dedicated UI I/O `7/1/0`; exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
@@ -177,7 +178,9 @@ class and two HIL controller profiles. Hardware `DSP-0005/REV-0005A` now
 instantiate exact current assembly candidate `HMX035CTFT-001`; slow P06/P07
 terminate display/touch reset. `DEC-0086` later moves touch IRQ to shared
 GPIO37 and uses GPIO39/GPIO47 for encoder PCNT0; audio `DEC-0054` retains
-GPIO6. ARC-0002 still freezes
+GPIO6. `DEC-0088/DSP-0007/REV-0005AS` then fix integrated ST77922 at `0x38`
+and active-low TP_INT through a 10-kOhm raw pull-up plus non-inverting 1G07;
+the former inverter profile is removed. ARC-0002 still freezes
 the scheduler/pin/resource and `DEC-0084` reset/backlight-fault contract:
 production ordering/drawing, final connector, specimen electrical HIL and
 vendor init table remain open.

@@ -68,6 +68,11 @@ reset-dark PWM backlight and hardware latch-off with power-cycle-only
 recovery. It has no direct backlight-fault GPIO and therefore must not invent a
 runtime fault readback from the fixture-only `FAULT_N` point. The exact first
 connector candidate does not freeze a production mate or vendor init table.
+Hardware `DEC-0088/DSP-0007` later identifies exact integrated `ST77922`,
+touch address `0x38` and active-low TP_INT. Firmware consumes one fixed
+10-kOhm-plus-`SN74LVC1G07DCKR` path to shared GPIO37; no polarity profile or
+inverting population is supported. Specimen readback/IRQ/reset proof remains
+upstream HIL.
 Hardware `DEC-0085/STO-0001` close the third I4 paper endpoint. Firmware may
 consume an always-readable active-low detect input, a fail-low/QOD switched
 card rail, Ioff host-to-card isolation and a DAT0/MISO return enabled only while
@@ -165,11 +170,12 @@ inputs.
   P27 selects the ordinary Si4732-versus-SA518 receive-audio source; it is not
   a safety-deadline line and does not assert PTT. TPS25751D is another bounded
   target on this bus. Its active-low IRQ shares GPIO37 with TCA6424 `INT`, UI
-  TCA9534A `INT_N`, pack admission and the touch polarity adapter; every wake
+  TCA9534A `INT_N`, pack admission and the fixed ST77922 touch adapter; every wake
   reads all enabled status
-  blocks and no driver assumes a unique source. The populated touch adapter is
-  non-inverting for active-low TP_INT or pin-compatible inverting for active-high
-  TP_INT after specimen HIL; firmware does not replace the IRQ with polling.
+  blocks and no driver assumes a unique source. ST77922 responds at exact
+  7-bit address `0x38`; active-low TP_INT has a 10-kOhm raw pull-up and fixed
+  non-inverting open-drain `SN74LVC1G07DCKR`. Firmware has no inverter profile
+  and does not replace the IRQ with polling.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
@@ -692,14 +698,18 @@ QSPI+touch class, with `ST77922` primary HIL and `AXS15231B` secondary HIL.
 Hardware `FND-0063/DSP-0005/REV-0005A` additionally instantiate exact current
 assembly candidate `HMX035CTFT-001`: GPIO41/42 are QSPI D2/D3 and slow P06/P07
 are display/touch reset. `DEC-0086` later moves TP_INT through an open-drain
-polarity adapter into shared GPIO37 and assigns GPIO39/GPIO47 to PCNT0 encoder
-capture; GPIO6 remains `AUDIO_ARM`.
+adapter into shared GPIO37 and assigns GPIO39/GPIO47 to PCNT0 encoder capture;
+`DEC-0088` then fixes exact integrated ST77922/address `0x38`, active-low
+polarity, 10-kOhm raw pull-up and non-inverting `SN74LVC1G07DCKR`. GPIO6
+remains `AUDIO_ARM`.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and
 implement reusable scheduler plus distinct prototype driver profiles, but
-cannot freeze a production-qualified assembly, final connector, touch
-protocol or vendor init table before sourcing and specimen proof gates.
+cannot freeze a production-qualified assembly, final connector or vendor init
+table before sourcing and specimen proof gates. Touch identity/address/
+polarity are exact paper inputs; readback, IRQ timing/clear and reset recovery
+remain HIL.
 Hardware `FND-0089/STO-0001/DEC-0085/REV-0005AP` then instantiate exact
 microSD switched power, card-side Ioff buffers, CS-gated DAT0/MISO, mandatory
 pulls, source damping, full socket-contact/detect ESD and always-readable

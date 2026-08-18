@@ -80,7 +80,10 @@ flowchart TD
   the device; RE-ARM remains a separate recessed physical control.
 - Display and touch stay in hardware reset until their common protected logic
   rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
-  `100 ms` before touch use, then enables the PWM backlight last. A latched
+  `100 ms` before touch use, then enables the PWM backlight last. Integrated
+  `Sitronix ST77922` touch is fixed at I²C address `0x38`; its active-low IRQ
+  reaches shared GPIO37 through a 10-kOhm raw pull-up and fixed non-inverting
+  open-drain `SN74LVC1G07DCKR`, so firmware has no polarity profile. A latched
   backlight fault is never auto-retried; loss of the screen cannot stop radio,
   recording or the physical STOP path.
 - Any visual frame loss is reported explicitly and never implies loss of raw
