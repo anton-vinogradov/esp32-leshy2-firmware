@@ -184,6 +184,14 @@
   charge rule reserves system load from 85% of negotiated input power and
   requests zero charge on missing/DPM/thermal/fault evidence; transition and
   efficiency HIL remain upstream.
+  `FND-0085/PWR-0020/DEC-0081/REV-0005AL` then add exact independent
+  `TPS25961DRVR` AON and two `TPS25974LRPWR` main/voice post-buck cutoffs.
+  Firmware trusts protected PG only, revokes affected leases and signal groups
+  on a latch fault, exposes no bypass/reset API and never retries a persistent
+  rail fault. Voice starts a fresh validated power session; main/AON require
+  distinct recovery: latched main requires complete source removal, while AON
+  owns bounded hardware auto-retry and cannot release main before stable
+  PG/SENSE/CT. Trip energy, load-step and hot HIL remain upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper

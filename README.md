@@ -167,6 +167,12 @@ flowchart TD
   power are separate fixed rails. Unused nRF, CC1101, storage, codec and
   receiver branches are powered down, discharged and verified quiet; software
   cannot select another rail voltage or bypass a hardware power fault.
+- Every internal converter output crosses an independent overvoltage, current
+  and short-circuit cutoff before reaching a load. Runtime trusts only
+  protected-side power-good evidence. A latched main trip needs a complete
+  source-removal cycle. The always-on cutoff may perform bounded hardware
+  recovery attempts, but firmware cannot accelerate them or release compute
+  before protected power is stably valid.
 - An admitted source starts the always-on rail directly. Its power-good and a
   3.07-V supervisor threshold must both hold before a delayed hardware POR
   enables the main 3.3-V rail; firmware cannot bypass startup or keep compute

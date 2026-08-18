@@ -187,6 +187,14 @@
   заряда резервирует системную нагрузку из 85% согласованной входной мощности
   и запрашивает нулевой заряд при missing/DPM/thermal/fault evidence;
   transition и efficiency HIL остаются upstream.
+  `FND-0085/PWR-0020/DEC-0081/REV-0005AL` затем добавляют exact независимые
+  post-buck отсечки `TPS25961DRVR` для AON и два `TPS25974LRPWR` для main/voice.
+  Firmware доверяет только protected PG, отзывает затронутые leases и signal
+  groups при latch fault, не предоставляет bypass/reset API и не повторяет
+  включение против устойчивой ошибки. Voice начинает новый проверенный power
+  session; защёлкнутая ошибка main требует полного снятия источника, а AON
+  выполняет только ограниченный hardware auto-retry и не выпускает main до
+  устойчивых PG/SENSE/CT. Trip energy, load-step и hot HIL остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном

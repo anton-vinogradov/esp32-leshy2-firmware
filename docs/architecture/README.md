@@ -83,7 +83,13 @@ SYS-to-AON, AON-PG/MR, 3.07-V SENSE/CT/POR and main-EN wiring. Firmware cannot
 bypass the delayed hardware POR. The source budget reserves the larger of
 declared or measured-plus-margin system load from 85% of negotiated input
 power and sets charge to zero on missing/DPM/thermal/fault evidence. Complete
-transition/rail/thermal/fault HIL remains upstream I3 work. Hardware
+transition/rail/thermal/fault HIL remains upstream I3 work.
+`FND-0085/PWR-0020/DEC-0081/REV-0005AL` then split AON, main and voice raw
+converter outputs from their loads with independent exact cutoffs. Firmware
+uses protected-side PG only, revokes leases on a latch fault, offers no eFuse
+bypass/reset API and requires a fresh validated power session; persistent
+main faults need complete source removal, while AON hardware owns bounded
+auto-retry and cannot release compute before stable PG/SENSE/CT. Hardware
 `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
 exact PA25/PA26 divider/filter frontends. Its C0G timing network has a

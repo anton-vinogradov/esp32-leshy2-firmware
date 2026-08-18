@@ -135,6 +135,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "3.07-V supervisor threshold",
                 "delayed hardware POR",
                 "firmware cannot bypass startup",
+                "independent overvoltage, current and short-circuit cutoff",
+                "protected-side power-good evidence",
+                "latched main trip needs a complete source-removal cycle",
+                "bounded hardware recovery attempts",
             ),
             "README.ru.md": (
                 "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
@@ -154,6 +158,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "порог supervisor 3,07 В",
                 "delayed hardware POR",
                 "firmware не может обойти стартовый порядок",
+                "независимую отсечку перенапряжения, тока и короткого замыкания",
+                "power-good защищённой стороны",
+                "ошибки main требуется полное снятие источника",
+                "ограниченные аппаратные попытки восстановления",
             ),
         }
         for readme_name, tokens in required_tokens.items():

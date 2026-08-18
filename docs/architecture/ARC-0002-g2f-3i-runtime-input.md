@@ -35,6 +35,7 @@
 - exact converter passive profile: [`DEC-0072`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0072-exact-converter-energy-feedback-passives.md), [`PWR-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0011-application-converter-passive-profile.md), [`REV-0005AC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AC-application-converter-passive-profile.md)
 - exact converter control-passive profile: [`DEC-0073`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0073-exact-converter-control-passives.md), [`PWR-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0012-exact-converter-control-passives.md), [`REV-0005AD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AD-converter-control-passive-profile.md)
 - exact source/AON/POR/main sequence: [`DEC-0080`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0080-exact-aon-pg-por-main-sequence.md), [`PWR-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0019-exact-source-sequence-and-power-reserve.md), [`FND-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0084-abstract-main-source-sequencer.md), [`REV-0005AK`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AK-source-sequence-propagation.md)
+- independent internal-rail containment: [`DEC-0081`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0081-independent-internal-rail-containment.md), [`PWR-0020`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0020-independent-post-buck-containment.md), [`FND-0085`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0085-uncontained-internal-buck-high-side-short.md), [`REV-0005AL`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AL-internal-rail-containment-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -317,10 +318,12 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 ## Fixed downstream rail runtime input
 
 - `BQ25798RQMR.SYS` feeds four electrically independent, hardware-fixed
-  outputs. `AON_SAFE_3V3` comes from `TPS629203DRLR`; `3V3_MAIN`,
-  `VVOICE_4V` and the pre-protection 5-V accessory rail each use a separate
-  `TPS564252DRLR`. Firmware has no voltage selector, feedback-network mode or
-  supported command that can turn the 4-V voice output into 5 V.
+  converters. `TPS629203DRLR` creates `AON_RAW_3V3`, and separate
+  `TPS564252DRLR` devices create `MAIN_RAW_3V3`, `VVOICE_RAW_4V` and the
+  pre-protection 5-V accessory rail. An exact independent cutoff admits each
+  internal raw rail to `AON_SAFE_3V3`, `3V3_MAIN` or protected `VVOICE_4V`.
+  Firmware has no voltage selector, feedback-network mode or command that can
+  bridge a cutoff or turn the 4-V voice output into 5 V.
 - The fixed hardware profile is exact rather than runtime-configurable:
   TPS629203 selects 3.3 V with open `FB/VSET` and a 42.2-kOhm MODE/S-CONF
   strap; the three TPS564252 dividers produce nominal 3.318/4.000/5.000 V.
@@ -328,21 +331,28 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   software-adjustable set points. Firmware exposes the rail identity and
   measured qualification result, never a voltage-setting API.
 - AON power is autonomous. `TPS629203.EN` is strapped directly to admitted
-  `SYS`, while its PG uses the exact 47-kOhm hardware pull-up and directly
-  drives `TPS3808G33.MR_N`. The supervisor also measures AON against its
-  3.07-V threshold; only valid PG plus SENSE for the exact CT delay releases
+  `SYS`; `TPS25961DRVR` independently admits the resulting raw rail. The
+  converter PG pull-up and `TPS3808G33` SENSE/POR supply exist only on
+  protected `AON_SAFE_3V3`. PG drives `MR_N`; only valid raw-converter PG plus
+  protected SENSE above 3.07 V for the exact CT delay releases
   open-drain `POR_N`, whose 10-kOhm pull-up and 100-kOhm main-EN fail-low pull
   produce about 3.0 V and enable the main converter. There is no programmable
   source sequencer. Application firmware observes the result but cannot start
-  AON, bypass POR or keep the main rail alive after AON PG/SENSE loss.
+  AON, bypass its eFuse/POR or keep the main rail alive after protected AON
+  PG/SENSE loss.
 - The amended converter-control profile has ten physical resistor positions:
   the AON PG pull-up, POR pull-up, three application EN fail-low pulls, both
   optional PG pulls, both qualifier-base resistors and the common fault pull.
   Their values do not create a firmware setting, timing constant or retry
   path: runtime consumes the safe defaults and `EN AND NOT(PG)` truth table,
   then uses measured HIL deadlines.
+- Main and voice each cross a physically separate `TPS25974LRPWR` latch-off
+  boundary with fixed OVLO, circuit-breaker, dVdt, ITIMER and PGTH parts.
+  Firmware consumes only protected-side PG as operational load-good evidence.
+  Raw main/voice converter PG is fixture-only and must never grant a rail,
+  lease, signal group or retry.
 - `3V3_MAIN` is admitted by hardware after a valid battery or USB source and
-  supplies the three compute domains. `MAIN_3V3_PG_N` loss joins
+  supplies the three compute domains. Protected `MAIN_3V3_PG_N` loss joins
   `POWER_FAULT_N`; firmware immediately revokes every lease and returns the
   logical signal group to `NONE`, but protection and reset do not wait for
   that reaction.
@@ -358,12 +368,21 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - Voice sequencing asserts the STOP-dominant `VOICE_DOMAIN_EN_SAFE`, waits for
   qualified `POWER_FAULT_N` collector to release, keeps PTT forced RX and
   `AUDIO_ARM=0`, then qualifies the SA518/codec path before allowing
-  selection. Hardware still uses raw `VOICE_4V_PG_N` locally to hold the
+  selection. Hardware uses protected `VOICE_4V_PG_N` locally to hold the
   voice domain reset/PD. During the bounded start interval the qualified
   collector is expected low because `EN=1, PG=0`; it becomes a fault only if
   it does not release by the measured deadline. Disable occurs in the
-  opposite order, and `EN=0` makes raw PG low a normal off state. A 4-V PG
+  opposite order, and `EN=0` makes protected PG low a normal off state. A 4-V PG
   timeout or fault cannot fall back to the accessory rail.
+- A main/voice protection trip is a latched hardware fault. Runtime first
+  revokes every affected lease, forces the logical signal group to `NONE`,
+  records protected PG/fault evidence and parks signal pins. Voice recovery is
+  a new validated power session through its existing STOP-dominant enable; a
+  latched main trip requires complete source removal and fresh hardware
+  admission. AON overcurrent/thermal recovery attempts are owned and bounded
+  by TPS25961 hardware; firmware cannot accelerate them, and main remains off
+  until protected PG/SENSE/CT are continuously valid. Firmware has no direct
+  eFuse reset/bypass API and never loops rail power against a persistent fault.
 - Accessory sequencing asserts the shared STOP-dominant enable of both the
   5-V converter and `TPS259470LRPWR`, waits for the enable-qualified converter
   PG collector to release and the eFuse output to complete its qualified
@@ -567,7 +586,7 @@ routing before electrical/HIL closure.
 
 ## Explicitly open
 
-Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083` list remaining electrical/HIL endpoints:
+Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083/0085` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
@@ -575,6 +594,7 @@ source-transition, brownout, thermal/source-handover/fault HIL, Unit
 protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
 feedback parts, ten control resistors, direct AON EN strap, exact AON-PG/POR/main sequence, switches and
+independent AON/main/voice post-buck cutoffs with protected PG, plus
 external eFuse plus its eight profile passives, and the corrected dual-channel
 pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM
