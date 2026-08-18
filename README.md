@@ -131,7 +131,13 @@ flowchart TD
   is required and retains independent programming and recovery. A deeply
   discharged cell is refused: the handheld has no zero-volt/prequalification
   recovery command, and any recovery research requires a separate isolated
-  Controlled-Zone fixture.
+  Controlled-Zone fixture. Before admission, a common-path diagnostic applies
+  approximately 0.57-0.88 A for no more than 50 ms and compares both cells;
+  an independent non-retriggerable hardware timer prevents stuck firmware
+  from extending that pulse. Factory acceptance also rejects a timer pulse
+  shorter than 25 ms, preserving the filtered loaded-sample window. This
+  screen is never presented as full-load
+  qualification.
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.

@@ -50,6 +50,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "cannot be overridden in software",
                 "deeply discharged cell is refused",
                 "no zero-volt/prequalification recovery command",
+                "0.57-0.88 A for no more than 50 ms",
+                "independent non-retriggerable hardware timer",
+                "rejects a timer pulse shorter than 25 ms",
+                "never presented as full-load qualification",
             ),
             "README.ru.md": (
                 "контролируемая батарея 2s",
@@ -58,6 +62,10 @@ class TargetReadmeTests(unittest.TestCase):
                 "не могут быть обойдены программно",
                 "глубоко разряженная банка отклоняется",
                 "нет команды zero-volt/ prequalification recovery",
+                "0,57-0,88 А не дольше 50 мс",
+                "независимый non-retriggerable аппаратный таймер",
+                "бракует импульс таймера короче 25 мс",
+                "не выдаётся за полную проверку под нагрузкой",
             ),
         }
         for readme_name, tokens in required_tokens.items():

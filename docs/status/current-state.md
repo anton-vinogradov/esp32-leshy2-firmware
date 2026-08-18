@@ -146,8 +146,9 @@
   A replaced cell invalidates pair SOC/SOH and starts admission/relearning.
   `DEC-0067/REV-0005X` then accept no in-device deep-cell recovery and the
   exact fully-switching surrounding path. The protected image keeps zero-volt
-  and prequal disabled; a deep cell is refused, PA24/PA25 provide midpoint/
-  stack evidence, and external recovery research belongs only to an isolated
+  and prequal disabled; a deep cell is refused. `DEC-0074/FND-0078` later
+  correct midpoint/stack evidence to PA25/PA26 because PA24 permits no
+  injection current, and external recovery research belongs only to an isolated
   Controlled-Zone fixture.
   `DEC-0068/PWR-0008/REV-0005Y` then review the exact active downstream rail
   tree: low-IQ autonomous 3.3-V AON, independent fixed 3.3-V compute, 4.0-V
@@ -179,6 +180,14 @@
   strap and all nine converter EN/PG/qualifier/fault resistors. Firmware keeps
   the existing safe-default and `EN AND NOT(PG)` semantics without a new API
   or paper-derived deadline; all timing/load-step/HIL evidence stays upstream.
+  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then close the exact diagnostic
+  frontend. Firmware emits one PA22 rising edge; the independent
+  non-retriggerable TPUL2G223 limits the 10-Ohm load to about 34.4 ms typical
+  with a 28.7-40.7-ms C0G paper window; production accepts only measured
+  25-50-ms pulses. PA25/PA26 use the internal 1.4-V reference through
+  exact filtered dividers; baseline and loaded samples wait `>=10 ms` for
+  settling. Droop thresholds, calibration and inter-pulse cooldown remain HIL
+  inputs, and the 0.57-0.88-A screen is never reported as full-load proof.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -220,7 +229,8 @@ remain references until their downstream gates.
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
 with `I2` reviewed and the I3 source, battery-manager, active rail topology,
 eFuse and converter energy/feedback/control passives reviewed; the remaining
-charger/diagnostic values and complete rail/loss/thermal/fault evidence are
+charger values, diagnostic thresholds/cooldown and complete
+rail/loss/thermal/fault evidence are
 the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn

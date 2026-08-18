@@ -31,6 +31,7 @@
 - external-eFuse passive/startup profile: [`DEC-0071`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0071-post-start-accessory-transient-profile.md), [`PWR-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0010-external-efuse-passive-profile.md), [`REV-0005AB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AB-external-efuse-passive-profile.md)
 - exact converter passive profile: [`DEC-0072`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0072-exact-converter-energy-feedback-passives.md), [`PWR-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0011-application-converter-passive-profile.md), [`REV-0005AC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AC-application-converter-passive-profile.md)
 - exact converter control-passive profile: [`DEC-0073`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0073-exact-converter-control-passives.md), [`PWR-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0012-exact-converter-control-passives.md), [`REV-0005AD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AD-converter-control-passive-profile.md)
+- exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
 
@@ -164,7 +165,7 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   identity is restored until both cells pass the hardware/firmware contract.
   The base product exposes no one-cell battery-operation mode.
 - The admission MCU owns local gauge polling, protected-NVM verification,
-  midpoint/full-stack ADC evidence on PA24/PA25, diagnostic-load sequencing
+  midpoint/full-stack ADC evidence on PA25/A2 and PA26/A1, diagnostic-load sequencing
   and the release decision. S3 consumes a
   read-only state/fault window and may request evaluation but cannot access the
   local gauge bus directly or override a refusal. The admission MCU is a
@@ -173,6 +174,30 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - The admission image runs a bounded low-clock/duty state machine from AOLDO.
   Flash programming/recovery uses isolated fixture or admitted system power;
   firmware must not assume AOLDO can supply erase/program current.
+- `PA24/A3` is not an ADC fallback: the exact MSPM0C1104 datasheet permits no
+  injection current there, while the battery dividers can remain live during
+  admission-supply loss. The corrected PA25/PA26 allocation preserves the
+  `12 used / 3 service-reserved / 3 free` budget.
+- The accepted diagnostic command is edge-only. Firmware holds `PA22/A4` low,
+  writes one rising edge and returns it low; it never drives the load MOSFET
+  directly and never treats GPIO-high time as the pulse duration. Hardware
+  `TPUL2G223BQBR` is non-retriggerable and, with the exact C0G timing part,
+  produces approximately 34.4 ms typical with a conservative 28.7-40.7-ms
+  paper window. Production accepts only a measured 25-50-ms pulse. Repeated
+  writes or a stuck-high GPIO cannot extend the active interval.
+- The admission ADC uses the internal 1.4-V reference. Before baseline it
+  waits at least 10 ms after the last relevant source/contact edge. After the
+  diagnostic trigger it waits at least 10 ms for the 10-nF divider filters,
+  then captures midpoint and stack inside the remaining hardware pulse. The
+  measured 25-ms production floor, rather than an X7R assumption, guarantees
+  that window. A
+  missing/invalid loaded sample, unexpected post-pulse droop or inconsistent
+  gauge evidence blocks admission.
+- Production droop/contact thresholds, ADC acquisition/calibration and the
+  minimum inter-pulse cooldown come only from the approved-cell/contact/timer
+  HIL profile. No retry loop may issue another pulse until that cooldown
+  expires, and the short 0.57-0.88-A screen is never reported as proof of the
+  2.78-A product-load transient.
 - Runtime diagnostics name the exact protected path without controlling it:
   `CSD87313DMST` CHG/DIS state, two slot-fuse/NTC channels, the 5-mOhm shunt,
   reset-default ALRT hold and admission-supply source. Unknown or inconsistent
@@ -459,11 +484,12 @@ routing before electrical/HIL closure.
 
 Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, charger and diagnostic-load passives,
+IR frontend/driver, charger passives, diagnostic thresholds/cooldown,
 thermal/source-handover/fault HIL, Unit protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
 feedback parts, nine control resistors, direct AON EN strap, switches and
-external eFuse plus its eight profile passives are now exact reviewed inputs,
+external eFuse plus its eight profile passives, and all 19 pack diagnostic
+timer/load/divider/filter instances are now exact reviewed inputs,
 but firmware must not infer unmeasured delays, thresholds or safe states for
 their still-open HIL boundaries.
 

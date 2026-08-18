@@ -149,8 +149,9 @@
   и запускает admission/relearning заново.
   `DEC-0067/REV-0005X` затем принимают отсутствие in-device deep-cell recovery
   и exact fully-switching surrounding path. Protected image держит zero-volt и
-  prequal выключенными; глубоко разряженная банка отклоняется, PA24/PA25 дают
-  midpoint/stack evidence, а исследование восстановления возможно только
+  prequal выключенными; глубоко разряженная банка отклоняется. `DEC-0074/
+  FND-0078` позже исправляют midpoint/stack evidence на PA25/PA26, потому что
+  PA24 не допускает injection current, а исследование восстановления возможно только
   внешней изолированной оснасткой Controlled Zone.
   `DEC-0068/PWR-0008/REV-0005Y` затем проводят ревью exact active downstream
   rail tree: автономной low-IQ AON 3,3 В, независимых фиксированных
@@ -182,6 +183,14 @@
   EN strap и все девять резисторов converter EN/PG/qualifier/fault. Firmware
   сохраняет принятые safe defaults и semantics `EN AND NOT(PG)` без нового API
   или бумажного deadline; все timing/load-step/HIL остаются upstream inputs.
+  `PWR-0013/FND-0078/DEC-0074/REV-0005AE` затем закрывают exact diagnostic
+  frontend. Firmware выдаёт один rising edge PA22; независимый
+  non-retriggerable TPUL2G223 аппаратно ограничивает нагрузку 10 Ом примерно
+  34,4 мс nominal при бумажном C0G-диапазоне 28,7-40,7 мс; production
+  принимает только измеренные импульсы 25-50 мс. PA25/PA26 измеряются от внутреннего
+  reference 1,4 В через exact filtered dividers; baseline и loaded samples ждут
+  `>=10 мс` settling. Droop thresholds, calibration и межимпульсный cooldown
+  остаются HIL inputs, а screen 0,57-0,88 А не выдаётся за full-load proof.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -223,7 +232,8 @@ references до своих downstream gates.
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
 source, battery manager, exact active downstream-rail topology, eFuse и
 converter energy/feedback/control passives внутри I3 уже прошли ревью; сейчас
-активны charger/diagnostic values и полный rail/loss/thermal/fault evidence.
+активны charger values, diagnostic thresholds/cooldown и полный
+rail/loss/thermal/fault evidence.
 Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит

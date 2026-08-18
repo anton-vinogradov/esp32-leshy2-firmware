@@ -68,7 +68,13 @@ read-only hardware facts. Hardware `PWR-0012/DEC-0073/REV-0005AD` then fixes
 the direct AON EN strap and all nine converter EN/PG/qualifier/fault
 resistors. This preserves the existing runtime truth table without adding an
 API or paper-derived timing constant; complete rail/thermal/fault HIL remains
-upstream I3 work. Hardware
+upstream I3 work. Hardware `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
+fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
+exact PA25/PA26 divider/filter frontends. Its C0G timing network has a
+28.7-40.7-ms paper window and production accepts only measured 25-50-ms
+pulses. Firmware emits one PA22 edge, samples against the internal 1.4-V
+reference only after `>=10 ms` settling and cannot extend the pulse;
+production thresholds/cooldown remain HIL inputs. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware
@@ -90,7 +96,9 @@ a fourth independently recoverable image domain; S3 sees only bounded
 read-only state/fault and cannot override refusal.
 Hardware `DEC-0067/REV-0005X` additionally disable in-product zero-volt and
 linear-prequalification recovery, accept the exact fully-switching pack path
-and consume PA24/PA25 as midpoint/full-stack evidence. Firmware refuses a
+and originally propose PA24/PA25 as midpoint/full-stack evidence. Hardware
+`FND-0078/DEC-0074` correct the live map to PA25/PA26 because PA24 permits no
+injection current. Firmware refuses a
 deep cell and exposes no recovery command; any recovery research is a separate
 isolated Controlled-Zone fixture operation.
 Hardware `DEC-0052/REV-0004X` additionally make direct QSPI on S3 GPIO41/42
