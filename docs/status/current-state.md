@@ -159,6 +159,11 @@
   `DEC-0069/REV-0005Z` then replace the early external auto-retry eFuse suffix
   with exact latch-off `TPS259470LRPWR`; runtime retry loops are forbidden and
   a new explicit action is required after physical fault removal.
+  `PWR-0009/DEC-0070/REV-0005AA` then correct optional-rail PG semantics:
+  hardware qualifies each voice/accessory PG with its safe EN, so runtime
+  accepts `EN=0, PG=0` as normal off and treats `EN=1, PG=0` as bounded pending
+  followed by a latched timeout rather than an immediate or permanent false
+  fault.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

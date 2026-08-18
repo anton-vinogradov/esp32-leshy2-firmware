@@ -27,6 +27,7 @@
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
 - fixed downstream rail tree: [`DEC-0068`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0068-separate-fixed-downstream-rails.md), [`PWR-0008`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0008-exact-downstream-rail-tree.md), [`REV-0005Y`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Y-downstream-rail-tree-propagation.md)
 - latch-off external eFuse: [`DEC-0069`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0069-latch-off-external-efuse.md), [`REV-0005Z`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Z-latch-off-efuse-propagation.md)
+- enable-qualified switched-rail PG: [`DEC-0070`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0070-enable-qualified-switched-rail-pg.md), [`PWR-0009`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0009-enable-qualified-switched-rail-pg.md), [`REV-0005AA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AA-switched-rail-pg-qualification.md)
 
 ## Boundary
 
@@ -231,19 +232,27 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   it never cycles a peer rail to implement `3R`, `1T+2R`, `2T+1R` or `3T`.
   Leaving the group parks all three interfaces before the common branch opens.
 - Voice sequencing asserts the STOP-dominant `VOICE_DOMAIN_EN_SAFE`, waits for
-  `VOICE_4V_PG_N`, keeps PTT forced RX and `AUDIO_ARM=0`, then qualifies the
-  SA518/codec path before allowing selection. Disable occurs in the opposite
-  order. A 4-V PG timeout or fault cannot fall back to the accessory rail.
+  qualified `POWER_FAULT_N` collector to release, keeps PTT forced RX and
+  `AUDIO_ARM=0`, then qualifies the SA518/codec path before allowing
+  selection. Hardware still uses raw `VOICE_4V_PG_N` locally to hold the
+  voice domain reset/PD. During the bounded start interval the qualified
+  collector is expected low because `EN=1, PG=0`; it becomes a fault only if
+  it does not release by the measured deadline. Disable occurs in the
+  opposite order, and `EN=0` makes raw PG low a normal off state. A 4-V PG
+  timeout or fault cannot fall back to the accessory rail.
 - Accessory sequencing asserts the shared STOP-dominant enable of both the
-  5-V converter and `TPS259470LRPWR`, waits for converter PG and bounded eFuse
-  inrush, and only then identifies/enables U214 signal paths. The eFuse always
-  blocks reverse current and enforces the hardware current limit. Its
-  active-low `FLT` joins `POWER_FAULT_N`; `ILM` is a protected factory/HIL test
-  point, not an invented runtime ADC channel.
+  5-V converter and `TPS259470LRPWR`, waits for the enable-qualified converter
+  PG collector to release and bounded eFuse inrush, and only then
+  identifies/enables U214 signal paths. `EN=1, PG=0` is a bounded pending
+  state; failure to release is latched, while `EN=0, PG=0` is normal quiet
+  state and must not create a fault. The eFuse always blocks reverse current
+  and enforces the hardware current limit. Its active-low `FLT` also joins
+  `POWER_FAULT_N`; `ILM` is a protected factory/HIL test point, not an
+  invented runtime ADC channel.
 - On disable or fault, accessory signals isolate first, converter/eFuse enable
   clears, and the connector is allowed to reach its measured passive-discharge
   threshold before the UI reports it safe to remove. External 5-V injection,
-  PG/FLT disagreement, timeout or unknown evidence remains a latched accessory
+  qualified-PG/FLT disagreement, timeout or unknown evidence remains a latched accessory
   fault and cannot be cleared by re-enabling in a loop. The exact `L` suffix
   also latches thermal/latched faults in hardware until EN is explicitly taken
   below shutdown or input power is cycled; the former 110-ms auto-retry suffix

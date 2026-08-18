@@ -65,6 +65,10 @@ values and complete rail/thermal/fault HIL remain upstream I3 work. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware
+`PWR-0009/DEC-0070/REV-0005AA` also qualifies optional voice/accessory PG with
+the matching safe EN. Runtime therefore treats `EN=0, PG=0` as normal off and
+`EN=1, PG=0` as bounded startup pending followed by a latched timeout, instead
+of interpreting every disabled optional rail as a fault. Hardware
 `PWR-0005/FND-0075` prove that gauge and
 pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
 the controlled-1S cross-charge, rail/current and SOC consequences as future

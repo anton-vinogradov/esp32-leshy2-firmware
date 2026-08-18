@@ -163,6 +163,11 @@
   `DEC-0069/REV-0005Z` затем заменяют ранний auto-retry suffix внешней eFuse
   на exact latch-off `TPS259470LRPWR`: runtime retry loops запрещены, после
   устранения физической причины требуется новое явное действие.
+  `PWR-0009/DEC-0070/REV-0005AA` затем исправляют semantics PG опциональных
+  шин: hardware квалифицирует каждый voice/accessory PG соответствующим safe
+  EN, поэтому runtime считает `EN=0, PG=0` штатным off, а `EN=1, PG=0` —
+  ограниченным pending с последующим latched timeout, а не немедленной или
+  постоянной ложной аварией.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion

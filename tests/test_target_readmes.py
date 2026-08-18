@@ -98,6 +98,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "cannot select another rail voltage",
                 "external-accessory power fault latches",
                 "never runs an automatic power-retry loop",
+                "power-good evidence is qualified by its hardware enable",
+                "intentionally disabled rail is normal",
+                "bounded startup window fails closed",
             ),
             "README.ru.md": (
                 "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
@@ -106,6 +109,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "не может выбрать другое напряжение",
                 "ошибка питания внешнего аксессуара защёлкивает",
                 "не запускает automatic power-retry loop",
+                "power-good голосовой шины и аксессуара аппаратно квалифицируется",
+                "намеренно выключенная шина штатна",
+                "за ограниченное стартовое окно, закрывается с ошибкой",
             ),
         }
         for readme_name, tokens in required_tokens.items():

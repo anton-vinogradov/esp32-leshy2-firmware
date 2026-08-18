@@ -139,6 +139,9 @@ flowchart TD
   power are separate fixed rails. Unused nRF, CC1101, storage, codec and
   receiver branches are powered down, discharged and verified quiet; software
   cannot select another rail voltage or bypass a hardware power fault.
+- Voice/accessory power-good evidence is qualified by its hardware enable:
+  an intentionally disabled rail is normal, while an enabled rail that does
+  not become good within its bounded startup window fails closed.
 - An external-accessory power fault latches the protected port off. Removing
   the cause and explicitly starting a new session is required; firmware never
   runs an automatic power-retry loop against a faulty accessory.
