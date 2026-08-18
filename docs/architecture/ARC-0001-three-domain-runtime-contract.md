@@ -30,7 +30,7 @@ implements them.
 |---|---|---|
 | S3 N16R2 | product state/UI, touch and slow controls, display, files/microSD, USB/web, ES8311/Si4732 audio, native 2.4 GHz Wi-Fi/BLE, U214/GNSS/U216 profiles, orchestration | UI state, filesystem ownership, audio buffers, accessory policy, global session view |
 | C5 N8R8 production rev ≥v1.2 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, two-path IR RX and IR TX, SDIO slave, native-radio lease enforcement | radio/IR timing, country/profile checks available to the target, local queues, lease expiry and safe-off |
-| RP2354B A4 | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
+| `SC1512-A4` (`RP2354B0A4`) | 3×nRF24, CC1101, analog-voice UART/control/PTT, direct physical PTT, local dead-man, packet timestamps/FIFOs, direct STOP observation, SPI slave | CE/CSN/IRQ/GDO/PTT timing, radio identity, queue admission, lease expiry and safe-off |
 
 S3 is the product orchestrator, not the sole safety authority. C5 and RP reject unsafe or stale commands independently and never require S3 to meet their peripheral deadlines.
 

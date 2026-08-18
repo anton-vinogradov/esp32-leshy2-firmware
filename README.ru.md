@@ -301,7 +301,7 @@ flowchart TD
 - Каждый программируемый домен можно независимо прошить, восстановить и
   диагностировать без исправной основной прошивки или соседнего процессора.
 - S3 использует основной USB и keyed UART0/RESET/BOOT; C5 — независимый
-  data-only USB и keyed UART0/RESET/BOOT; RP2354B — независимый data-only USB
+  data-only USB и keyed UART0/RESET/BOOT; `SC1512-A4 (RP2354B0A4)` — независимый data-only USB
   и keyed SWD/RUN/USB_BOOT. У каждого домена есть отдельные физические RESET и
   BOOT.
 - VBUS сервисных портов C5/RP не питает устройство, а D+/D− отключаются при

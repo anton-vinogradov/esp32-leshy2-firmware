@@ -50,7 +50,7 @@
   Следующий hardware pass `CTL-0001/REV-0004K` обнаружил неполный slow plane.
   Владелец делегировал перебор компоновки; hardware `DEC-0044` принял
   `IMP-0037/A`, а `NIF-0001/REV-0004L` проверили ведущий `G2F-3I`:
-  RP2354B/QFN80, пять независимых radio/accessory SPI paths, dedicated SDIO
+  `SC1512-A4`/RP2354B0A4/QFN80, пять независимых radio/accessory SPI paths, dedicated SDIO
   S3↔C5, dedicated SPI3 S3↔RP, тогдашние 23/24 slow endpoints и
   изолированный U214 I²C. Последующее audio review занимает последний контакт.
   Единственная high-rate scheduled pair — display+SD на SPI2 с bounded
@@ -375,7 +375,7 @@ placement. Владелец выбрал reopen option A в hardware `DEC-0032`.
 
 ## Отменённые target assumptions
 
-`G2F-3I` owners, RP2354B, 1-bit SDIO, SPI IPC и exact pins нельзя потреблять
+`G2F-3I` owners, `SC1512-A4`/RP2354B0A4, 1-bit SDIO, SPI IPC и exact pins нельзя потреблять
 как final firmware prerequisites до atomic package. 4-bit SDIO остаётся
 только fallback evidence; RP2354A и прежние service-component assumptions —
 references до своих downstream gates.

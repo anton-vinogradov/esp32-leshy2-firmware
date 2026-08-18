@@ -703,7 +703,7 @@ class TargetReadmeTests(unittest.TestCase):
         required_tokens = {
             "README.md": (
                 "C5 uses an independent data-only USB",
-                "RP2354B uses an independent data-only USB",
+                "`SC1512-A4 (RP2354B0A4)` uses an independent data-only USB",
                 "keyed UART0/RESET/BOOT",
                 "keyed SWD/RUN/USB_BOOT",
                 "C5/RP service VBUS never powers the product",
@@ -713,7 +713,7 @@ class TargetReadmeTests(unittest.TestCase):
             ),
             "README.ru.md": (
                 "C5 — независимый data-only USB",
-                "RP2354B — независимый data-only USB",
+                "`SC1512-A4 (RP2354B0A4)` — независимый data-only USB",
                 "keyed UART0/RESET/BOOT",
                 "keyed SWD/RUN/USB_BOOT",
                 "VBUS сервисных портов C5/RP не питает устройство",

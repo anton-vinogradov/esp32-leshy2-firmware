@@ -295,7 +295,7 @@ flowchart TD
 - Every programmable domain can be independently flashed, recovered and
   diagnosed without a healthy application image or peer processor.
 - S3 uses product USB plus keyed UART0/RESET/BOOT; C5 uses an independent
-  data-only USB plus keyed UART0/RESET/BOOT; RP2354B uses an independent
+  data-only USB plus keyed UART0/RESET/BOOT; `SC1512-A4 (RP2354B0A4)` uses an independent
   data-only USB plus keyed SWD/RUN/USB_BOOT. Every domain has separate physical
   RESET and BOOT controls.
 - C5/RP service VBUS never powers the product and their D+/D- disconnect when

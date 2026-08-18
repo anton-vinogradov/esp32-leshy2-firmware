@@ -50,7 +50,7 @@
   The next hardware pass `CTL-0001/REV-0004K` found an incomplete slow plane.
   The owner delegated layout search; hardware `DEC-0044` accepts
   `IMP-0037/A`, while `NIF-0001/REV-0004L` review the leading `G2F-3I`:
-  RP2354B/QFN80, five independent radio/accessory SPI paths, dedicated SDIO
+  `SC1512-A4`/RP2354B0A4/QFN80, five independent radio/accessory SPI paths, dedicated SDIO
   S3↔C5, dedicated SPI3 S3↔RP, the then-current 23/24 slow endpoints and
   isolated U214 I²C. The later audio review closes the last slow contact.
   The only high-rate scheduled pair is display+SD on SPI2 with bounded quanta;
@@ -374,7 +374,7 @@ placement. The owner chose reopen option A in hardware `DEC-0032`.
 
 ## Invalidated target assumptions
 
-`G2F-3I` owners, RP2354B, 1-bit SDIO, SPI IPC and exact pins cannot be consumed
+`G2F-3I` owners, `SC1512-A4`/RP2354B0A4, 1-bit SDIO, SPI IPC and exact pins cannot be consumed
 as final firmware prerequisites before the atomic package. Four-bit SDIO is
 fallback evidence only; RP2354A and former service-component assumptions
 remain references until their downstream gates.

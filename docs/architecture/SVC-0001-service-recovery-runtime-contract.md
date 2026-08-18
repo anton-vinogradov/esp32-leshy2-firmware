@@ -13,7 +13,7 @@ before the atomic architecture package.
 |---|---|---|---|
 | S3 | protected product USB Serial/JTAG | UART0 GPIO43/44, EN, GPIO0; passive ID `00` | separate RESET and BOOT |
 | C5 | independent data-only USB on GPIO13/14 | UART0 GPIO11/12, CHIP_PU, GPIO28; passive ID `01` | separate RESET and BOOT; GPIO27 remains fixed high/read-only |
-| RP2354B | independent data-only USB on package DP/DM | SWDIO, SWCLK, RUN, USB_BOOT; passive ID `10` | separate RESET and BOOT |
+| `SC1512-A4` (`RP2354B0A4`) | independent data-only USB on package DP/DM | SWDIO, SWCLK, RUN, USB_BOOT; passive ID `10` | separate RESET and BOOT |
 
 No path needs a healthy peer or application image. C5/RP USB data exists only
 while the board powers its fixed HSD1 isolation switch. Their connector VBUS

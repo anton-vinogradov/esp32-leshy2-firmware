@@ -150,7 +150,7 @@ whole-device coexistence remain upstream gates.
 |---|---|---|---|
 | S3 | product policy/UI, display, audio, microSD, native BLE, Unit profile | SPI3 to RP, 1-bit SDMMC host to C5, SPI2 display+SD scheduler, I²S0, internal I²C0, separate I²C1/UART1/GPIO Unit profile | UI feedback ≤100 ms; storage stalls never block radio leases/queues; native USB + default UART0 + EN/BOOT service |
 | C5 | 2.4/5 GHz Wi-Fi, IEEE 802.15.4, dual-path IR RX and IR TX | exclusive 1-bit SDIO slave to S3; direct IR RMT/evidence | local RF/IR queues, lease expiry and safe-off; native USB + UART0 + EN/BOOT/strap service |
-| RP2354B | 3×full-function nRF24, CC1101, voice/PTT and U214 LoRa/GNSS | four independent PIO0 compatibility-radio buses, PIO1 U214 SPI, UART1 GNSS, isolated U214 I²C, hardware SPI1 to S3 | direct IRQ/GDO/BUSY/PTT; no peer-radio bus wait; USB+SWD+RUN+BOOTSEL recovery |
+| `SC1512-A4` (`RP2354B0A4`) | 3×full-function nRF24, CC1101, voice/PTT and U214 LoRa/GNSS | four independent PIO0 compatibility-radio buses, PIO1 U214 SPI, UART1 GNSS, isolated U214 I²C, hardware SPI1 to S3 | direct IRQ/GDO/BUSY/PTT; no peer-radio bus wait; USB+SWD+RUN+BOOTSEL recovery |
 
 The exact RP map uses the real B-package PIO base rule: PIO0 and PIO1 select
 the `GPIO16..GPIO47` window, and every PIO data pin is in `GPIO30..GPIO46`.
