@@ -208,6 +208,12 @@ ARC-0002 now consumes three exact Ioff-isolated nRF digital boundaries,
 100-ms/three-identity group admission, directional actual-TX evidence and
 ordered common-rail shutdown. Threshold, pigtail, T1 and all other I6 RF
 evidence stay upstream, so the implementation boundary remains unfrozen.
+`FND-0097/NAT-0001/DEC-0092/REV-0005AW` next review independent native S3
+2.4-GHz and C5 2.4/5-GHz evidence paths after real external RF contacts.
+ARC-0002 now keeps their identities, bands, feed-loss/EIRP accounting and
+fail-closed evidence windows distinct; C5 ANT2 remains unavailable. Jumper,
+chassis connector, thresholds and whole-device coexistence stay upstream, so
+I6 and the unfrozen implementation boundary remain unchanged.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.

@@ -292,6 +292,11 @@
   100-ms/three-identity admission, directional forward-power evidence and
   ordered common-rail shutdown. Ebyte mate, thresholds, T1 coexistence and all
   other I6 RF endpoints remain open before expansion internals.
+  `FND-0097/NAT-0001/DEC-0092/REV-0005AW` then review separate native S3
+  2.4-GHz and C5 2.4/5-GHz evidence feeds. Runtime keeps ANT1-only C5 routing,
+  two evidence identities, exact-feed loss/EIRP profiles and fail-closed
+  assertion/decay windows; inbound RF may delay quiet but never authorize TX.
+  Jumper/chassis identities, thresholds and coexistence HIL remain upstream.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -330,7 +335,7 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I5 and the first I6/nRF paper electrical subblock reviewed while
+`I2` through I5 plus the I6/nRF and native S3/C5 paper electrical subblocks reviewed while
 I6 remains the active dependent paper block; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,

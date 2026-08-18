@@ -12,6 +12,7 @@
 - nRF RF acceptance: [`DEC-0047`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0047-qualified-nrf-mix-with-external-observer.md), [`N24H-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24H-0001-two-device-full-mix-fixture.md)
 - nRF module/antenna choice: [`N24M-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24M-0001-exact-module-antenna-comparison.md), [`IMP-0040`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/improvements/IMP-0040-three-nrf-module-and-antenna-baseline.md)
 - exact three-nRF electrical endpoint: [`N24E-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/N24E-0001-exact-three-nrf-electrical-endpoint.md), [`DEC-0091`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0091-exact-three-nrf-electrical-endpoint.md), [`REV-0005AV`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AV-i6-three-nrf-propagation.md)
+- exact native S3/C5 RF evidence endpoints: [`NAT-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/NAT-0001-exact-s3-c5-native-rf-evidence-endpoints.md), [`DEC-0092`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0092-exact-s3-c5-native-rf-endpoints.md), [`REV-0005AW`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AW-i6-native-rf-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -103,6 +104,13 @@ power sequencing and per-radio directional forward-power evidence. It may not
 call the Ebyte `IPX` receptacle U.FL, infer a threshold from the calculation or
 claim target coexistence before specimen and T1 HIL. I6 remains active for all
 other RF endpoints and the consolidated result.
+Hardware `DEC-0092/NAT-0001` then close the native S3/C5 paper subblock.
+Firmware may consume independent S3 2.4-GHz and C5 2.4/5-GHz actual-TX
+channels after real external module contacts, exact dual-band directional
+couplers and complete LTC5532 support. It may not enable C5 ANT2, invent a
+shared native antenna, infer detector thresholds from typical values or claim
+regional EIRP before full-feed loss and antenna qualification. Exact jumper,
+chassis connector, thresholds and coexistence remain upstream physical gates.
 
 ## Candidate runtime domains
 
@@ -160,6 +168,26 @@ inputs.
   exclusively owns the S3 SD/MMC host. Four-bit mode is not a runtime option:
   it is an upstream fallback only after failed HIL and a new service-isolation
   decision.
+- Native radio service keeps two distinct evidence identities: `s3_native_24`
+  covers only S3 channels 2412…2484 MHz; `c5_native` covers C5 channels
+  2412…2484 MHz and 5180…5885 MHz. C5 uses ANT1 only. ANT2 is not a profile,
+  antenna choice or automatic fallback and remains default-disabled/no-connect.
+- Every native TX lease names owner, band/channel, regional profile, requested
+  power, antenna/feed profile and evidence-calibration revision. The admitted
+  power/EIRP limit subtracts the measured loss of that exact
+  module→jumper→PCB mate→coupler→chassis feed; a nominal coupler insertion-loss
+  value is not a substitute for the completed feed measurement.
+- During a commanded native transmission, the matching independent evidence
+  channel must assert inside its calibrated time/power window and return quiet
+  inside the calibrated decay window after TX ends. Missing, stuck or
+  inconsistent evidence expires the lease, disables the affected TX profile
+  and reports `Unknown`; it never authorizes TX. Strong inbound RF may cause a
+  conservative false positive and delay quiet/group transition, but cannot
+  create, extend or validate a transmit lease.
+- S3 UI/display/storage and C5 IPC servicing remain bounded system planes while
+  a native group is active. Native radio queues and lease deadlines cannot wait
+  for a display refresh, microSD transaction or peer-radio operation; the
+  complete device must still pass active-receiver desense/coexistence HIL.
 - Display and microSD deliberately share SPI2. `DEC-0052` assigns direct QSPI
   D2/D3 to S3 GPIO41/42 and replaces stale `256 B` slicing with measured
   `<=1 ms` uninterrupted display occupancy. The scheduler uses separate CS,

@@ -127,6 +127,11 @@ flowchart TD
 - 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
   broadcast reception, IR and external GNSS/LoRa/NFC use separate profiles,
   permissions and result evidence.
+- Native S3 2.4-GHz and C5 2.4/5-GHz transmission use separate external feeds
+  and separate directional actual-TX observations. Each lease binds its exact
+  band/channel, regional profile, calibrated feed loss and antenna identity;
+  missing or inconsistent evidence disables that TX profile. Strong inbound
+  RF may conservatively delay a quiet-state transition but cannot authorize TX.
 - The broadcast receiver is admitted behind its own power/interface gate and
   identified at supported address `0x11` or `0x63`. Analog voice defaults to
   receive and ordinary electret audio; codec-injected TX audio still requires

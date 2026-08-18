@@ -214,6 +214,48 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc2)
 
+    def test_exact_i6_native_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "Native S3 2.4-GHz and C5 2.4/5-GHz transmission",
+                "separate directional actual-TX observations",
+                "calibrated feed loss",
+                "Strong inbound RF",
+                "cannot authorize TX",
+            ),
+            "README.ru.md": (
+                "Передача native S3 2,4 ГГц и C5 2,4/5 ГГц",
+                "разные направленные actual-TX observations",
+                "калиброванной потерей тракта",
+                "Сильный входящий RF",
+                "не может разрешить передачу",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "DEC-0092/NAT-0001",
+            "`s3_native_24`",
+            "`c5_native`",
+            "C5 uses ANT1 only",
+            "ANT2 is not a profile",
+            "module→jumper→PCB mate→coupler→chassis feed",
+            "disables the affected TX profile",
+            "cannot create, extend or validate a transmit lease",
+            "cannot wait for a display refresh",
+        ):
+            self.assertIn(token, arc2)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (
