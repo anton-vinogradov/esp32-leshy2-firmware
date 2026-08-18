@@ -60,8 +60,9 @@ now add four separate fixed rails: autonomous low-IQ `AON_SAFE_3V3`,
 `3V3_MAIN`, independent `VVOICE_4V` and reverse-blocked/protected 5-V accessory
 power. Exact TPS22919 branches gate nRF, CC1101, microSD, ES8311 and Si4732;
 the runtime contract consumes reset-off defaults, PG/fault sequencing and
-measured-discharge gates without inventing programmable rail voltages. Passive
-values and complete rail/thermal/fault HIL remain upstream I3 work. Hardware
+measured-discharge gates without inventing programmable rail voltages.
+Application-converter passive values and complete rail/thermal/fault HIL
+remain upstream I3 work. Hardware
 `DEC-0069/REV-0005Z` additionally correct the external eFuse to exact
 latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 `FLT`, and a new user action follows physical fault removal. Hardware
@@ -69,6 +70,11 @@ latch-off `TPS259470LRPWR`: firmware may not restore it in a retry loop after
 the matching safe EN. Runtime therefore treats `EN=0, PG=0` as normal off and
 `EN=1, PG=0` as bounded startup pending followed by a latched timeout, instead
 of interpreting every disabled optional rail as a fault. Hardware
+`PWR-0010/DEC-0071/REV-0005AB` then correct the eFuse transient model and close
+its eight exact passives: current limit is active immediately at startup,
+`dVdt` controls the ramp, and 2 A is only a bounded post-start excursion.
+Runtime also treats OVLO recovery as a new admission because it bypasses the
+normal ramp. Hardware
 `PWR-0005/FND-0075` prove that gauge and
 pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
 the controlled-1S cross-charge, rail/current and SOC consequences as future

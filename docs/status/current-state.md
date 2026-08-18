@@ -164,6 +164,12 @@
   accepts `EN=0, PG=0` as normal off and treats `EN=1, PG=0` as bounded pending
   followed by a latched timeout rather than an immediate or permanent false
   fault.
+  `PWR-0010/DEC-0071/REV-0005AB` then correct the external-eFuse runtime input:
+  its 1.509-A limit applies immediately at startup, the exact `dVdt` passive
+  controls ramp admission, and 2 A is only a bounded post-start excursion.
+  OVLO recovery bypasses the normal ramp and is therefore a fresh admission;
+  signals remain isolated until the rail is requalified. The exact eight-part
+  profile is consumed without inventing unmeasured thresholds or retry paths.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps

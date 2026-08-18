@@ -101,6 +101,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "power-good evidence is qualified by its hardware enable",
                 "intentionally disabled rail is normal",
                 "bounded startup window fails closed",
+                "current limit is active immediately during startup",
+                "bounded `2.0 A` post-start transient",
+                "never treating the transient timer as startup or continuous current budget",
             ),
             "README.ru.md": (
                 "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
@@ -112,6 +115,9 @@ class TargetReadmeTests(unittest.TestCase):
                 "power-good голосовой шины и аксессуара аппаратно квалифицируется",
                 "намеренно выключенная шина штатна",
                 "за ограниченное стартовое окно, закрывается с ошибкой",
+                "ограничение тока аксессуара действует немедленно при запуске",
+                "ограниченный импульс `2,0 А` только после запуска",
+                "transient timer не считается бюджетом запуска или постоянного тока",
             ),
         }
         for readme_name, tokens in required_tokens.items():

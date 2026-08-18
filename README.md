@@ -142,6 +142,10 @@ flowchart TD
 - Voice/accessory power-good evidence is qualified by its hardware enable:
   an intentionally disabled rail is normal, while an enabled rail that does
   not become good within its bounded startup window fails closed.
+- The accessory current limit is active immediately during startup; a
+  controlled voltage ramp admits the external capacitance. The port supports
+  `1.25 A` continuously and one bounded `2.0 A` post-start transient, never
+  treating the transient timer as startup or continuous current budget.
 - An external-accessory power fault latches the protected port off. Removing
   the cause and explicitly starting a new session is required; firmware never
   runs an automatic power-retry loop against a faulty accessory.

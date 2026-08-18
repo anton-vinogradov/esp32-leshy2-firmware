@@ -28,6 +28,7 @@
 - fixed downstream rail tree: [`DEC-0068`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0068-separate-fixed-downstream-rails.md), [`PWR-0008`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0008-exact-downstream-rail-tree.md), [`REV-0005Y`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Y-downstream-rail-tree-propagation.md)
 - latch-off external eFuse: [`DEC-0069`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0069-latch-off-external-efuse.md), [`REV-0005Z`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Z-latch-off-efuse-propagation.md)
 - enable-qualified switched-rail PG: [`DEC-0070`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0070-enable-qualified-switched-rail-pg.md), [`PWR-0009`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0009-enable-qualified-switched-rail-pg.md), [`REV-0005AA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AA-switched-rail-pg-qualification.md)
+- external-eFuse passive/startup profile: [`DEC-0071`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0071-post-start-accessory-transient-profile.md), [`PWR-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0010-external-efuse-passive-profile.md), [`REV-0005AB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AB-external-efuse-passive-profile.md)
 
 ## Boundary
 
@@ -242,18 +243,28 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   timeout or fault cannot fall back to the accessory rail.
 - Accessory sequencing asserts the shared STOP-dominant enable of both the
   5-V converter and `TPS259470LRPWR`, waits for the enable-qualified converter
-  PG collector to release and bounded eFuse inrush, and only then
-  identifies/enables U214 signal paths. `EN=1, PG=0` is a bounded pending
-  state; failure to release is latched, while `EN=0, PG=0` is normal quiet
-  state and must not create a fault. The eFuse always blocks reverse current
-  and enforces the hardware current limit. Its active-low `FLT` also joins
+  PG collector to release and the eFuse output to complete its qualified
+  controlled ramp, and only then identifies/enables U214 signal paths.
+  `EN=1, PG=0` is a bounded pending state; failure to release is latched, while
+  `EN=0, PG=0` is normal quiet state and must not create a fault. The nominal
+  1.509-A eFuse limit is active immediately during startup: runtime must never
+  claim that `ITIMER` defers it. The 4.7-nF `dVdt` profile admits at most 1 mF
+  effective accessory input capacitance pending HIL. The port is 1.25 A
+  continuous; 2.0 A is one bounded post-start excursion, approximately
+  86.6…404 ms on the paper limits, not a startup or continuous budget. The
+  eFuse always blocks reverse current. Its active-low `FLT` also joins
   `POWER_FAULT_N`; `ILM` is a protected factory/HIL test point, not an
   invented runtime ADC channel.
+- OVLO recovery on the selected eFuse bypasses the normal `dVdt` ramp and
+  restarts current-limited. Runtime treats that event as a new accessory
+  admission: signal paths remain isolated until rail/evidence qualification
+  completes, even if the request and enable never changed.
 - On disable or fault, accessory signals isolate first, converter/eFuse enable
   clears, and the connector is allowed to reach its measured passive-discharge
   threshold before the UI reports it safe to remove. External 5-V injection,
-  qualified-PG/FLT disagreement, timeout or unknown evidence remains a latched accessory
-  fault and cannot be cleared by re-enabling in a loop. The exact `L` suffix
+  qualified-PG/FLT disagreement, expired post-start transient, timeout or
+  unknown evidence remains a latched accessory fault and cannot be cleared by
+  re-enabling in a loop. The exact `L` suffix
   also latches thermal/latched faults in hardware until EN is explicitly taken
   below shutdown or input power is cycled; the former 110-ms auto-retry suffix
   is not a target behavior.
@@ -435,12 +446,12 @@ routing before electrical/HIL closure.
 
 Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
 display connector/backlight/protection/sourcing, passive codec/analog networks,
-IR frontend/driver, rail feedback/capacitor/discharge values, charger and
+IR frontend/driver, application-converter feedback/capacitor values, charger and
 diagnostic-load passives, thermal/source-handover/fault HIL, Unit protection
 and service-connector mechanics. The active downstream converters, switches
-and external eFuse are now exact reviewed inputs, but firmware must not infer
-unmeasured delays, thresholds or safe states for their still-open passives and
-HIL boundaries.
+and external eFuse plus its eight profile passives are now exact reviewed
+inputs, but firmware must not infer unmeasured delays, thresholds or safe
+states for their still-open HIL boundaries.
 
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
 are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,
