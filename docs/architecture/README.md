@@ -55,8 +55,14 @@ base product, with both cells required.
 the exact sink-only 30-W TPS25751DREFR/BQ25798RQMR frontend with mandatory
 CAT24C512WI-GT3 boot image and TVS2200DRVR. ARC-0002 consumes the fixed 5/9/15-V
 contracts, direct S3 USB2, shared I2C/IRQ status, charge-disable defaults and
-signed dual-region PD-image recovery; the cell manager and complete rail/HIL
-tree remain upstream I3 work. Hardware `PWR-0005/FND-0075` prove that gauge and
+signed dual-region PD-image recovery. Hardware `DEC-0068/PWR-0008/REV-0005Y`
+now add four separate fixed rails: autonomous low-IQ `AON_SAFE_3V3`,
+`3V3_MAIN`, independent `VVOICE_4V` and reverse-blocked/protected 5-V accessory
+power. Exact TPS22919 branches gate nRF, CC1101, microSD, ES8311 and Si4732;
+the runtime contract consumes reset-off defaults, PG/fault sequencing and
+measured-discharge gates without inventing programmable rail voltages. Passive
+values and complete rail/thermal/fault HIL remain upstream I3 work. Hardware
+`PWR-0005/FND-0075` prove that gauge and
 pre-closure loose-cell admission are separate jobs; `PWR-0006/FND-0076` retain
 the controlled-1S cross-charge, rail/current and SOC consequences as future
 variant evidence. Hardware `DEC-0066/REV-0005V` accept exact

@@ -152,6 +152,14 @@
   prequal выключенными; глубоко разряженная банка отклоняется, PA24/PA25 дают
   midpoint/stack evidence, а исследование восстановления возможно только
   внешней изолированной оснасткой Controlled Zone.
+  `DEC-0068/PWR-0008/REV-0005Y` затем проводят ревью exact active downstream
+  rail tree: автономной low-IQ AON 3,3 В, независимых фиксированных
+  преобразователей вычислительных 3,3 В, voice 4,0 В и защищённых accessory
+  5,0 В, пяти reset-off quiet-state load switches и внешней eFuse с reverse
+  blocking/current limit. ARC-0002 теперь потребляет fixed-voltage,
+  PG/fault, shutdown/discharge и nRF common-branch sequencing. В I3 остаются
+  exact feedback/capacitor/discharge и charger/diagnostic-load passives, а
+  также полный rail/thermal/fault HIL.
 - Следующий upstream ход: integrated mockup остаётся на паузе до закрытия
   цепочки `INT-0001`. Hardware отметил `I2` как reviewed и теперь закрывает
   `I3` power, затем UI/audio/RF/expansion
@@ -190,10 +198,10 @@ references до своих downstream gates.
 
 ## Следующее firmware-действие
 
-Target code/toolchain пока не создаются. Hardware следует `INT-0001`, начиная
-с уже reviewed `I2`, prerequisites `I3`, формата replaceable-cell и sink-only
-USB-PD frontend; сейчас активны cell manager и полный rail/loss/thermal/fault
-tree. Integrated physical mockup возобновится после joint internal review.
+Target code/toolchain пока не создаются. Hardware следует `INT-0001`: `I2`,
+source, battery manager и exact active downstream-rail topology внутри I3 уже
+прошли ревью; сейчас активны passive values и полный rail/loss/thermal/fault
+evidence. Integrated physical mockup возобновится после joint internal review.
 Затем проходят whole-device optimality,
 conceptual placement и atomic architecture. После этого firmware превратит
 `ARC-0002` input в normative image/owner/IPC/HAL/update/test contract и начнёт

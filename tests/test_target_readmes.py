@@ -89,6 +89,28 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
 
+    def test_target_readmes_keep_fixed_separate_rail_behavior(self):
+        required_tokens = {
+            "README.md": (
+                "Always-on safety, 3.3-V compute, 4.0-V voice",
+                "separate fixed rails",
+                "powered down, discharged and verified quiet",
+                "cannot select another rail voltage",
+            ),
+            "README.ru.md": (
+                "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
+                "раздельными фиксированными шинами",
+                "отключаются, разряжаются и проверяются как тихие",
+                "не может выбрать другое напряжение",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            ).lower()
+            for token in tokens:
+                self.assertIn(token.lower(), normalized, f"{readme_name}: {token}")
+
 
 if __name__ == "__main__":
     unittest.main()

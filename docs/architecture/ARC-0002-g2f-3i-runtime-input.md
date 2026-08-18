@@ -25,6 +25,7 @@
 - accepted 2S manager: [`DEC-0066`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0066-max17320-mspm0-fail-closed-manager.md), [`PWR-0005`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0005-replaceable-2s-manager-options.md), [`REV-0005V`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005V-2s-manager-decision-propagation.md)
 - accepted deep-cell/circuit boundary: [`DEC-0067`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0067-no-in-device-deep-cell-recovery.md), [`PWR-0007`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0007-max17320-2s-surrounding-circuit.md), [`REV-0005X`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005X-deep-cell-policy-propagation.md)
 - sink-only USB-PD frontend: [`DEC-0063`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0063-sink-only-30w-usb-pd-power-path.md), [`PWR-0004`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0004-accepted-usb-pd-front-end.md), [`REV-0005R`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005R-usb-pd-decision-propagation.md)
+- fixed downstream rail tree: [`DEC-0068`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0068-separate-fixed-downstream-rails.md), [`PWR-0008`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0008-exact-downstream-rail-tree.md), [`REV-0005Y`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005Y-downstream-rail-tree-propagation.md)
 
 ## Boundary
 
@@ -202,6 +203,53 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   supplement/removal/bounce, thermal derating and proof that 20 V/source/OTG
   never reaches the connector.
 
+## Fixed downstream rail runtime input
+
+- `BQ25798RQMR.SYS` feeds four electrically independent, hardware-fixed
+  outputs. `AON_SAFE_3V3` comes from `TPS629203DRLR`; `3V3_MAIN`,
+  `VVOICE_4V` and the pre-protection 5-V accessory rail each use a separate
+  `TPS564252DRLR`. Firmware has no voltage selector, feedback-network mode or
+  supported command that can turn the 4-V voice output into 5 V.
+- AON power is autonomous. Its hardware enable is pulled on from admitted
+  `SYS`; `AON_PG_N` must be valid before the STOP supervisor/sequencer may
+  release the compute domains. Application firmware observes the post-boot
+  result but is neither the source of AON availability nor an override for
+  AON collapse.
+- `3V3_MAIN` is admitted by hardware after a valid battery or USB source and
+  supplies the three compute domains. `MAIN_3V3_PG_N` loss joins
+  `POWER_FAULT_N`; firmware immediately revokes every lease and returns the
+  logical signal group to `NONE`, but protection and reset do not wait for
+  that reaction.
+- Five independent `TPS22919DCKR` branches gate the complete nRF group,
+  CC1101, microSD, ES8311 and Si4732. Every ON input has an external reset-off
+  default. QOD discharges the disabled output; firmware may call a branch
+  quiet only after its controller and pins are parked, the rail has completed
+  the measured discharge interval and back-power/current evidence passes.
+- The nRF branch is deliberately common to all three radios. Entering
+  `SG-N24` powers and settles all three, then enables their independent buses;
+  it never cycles a peer rail to implement `3R`, `1T+2R`, `2T+1R` or `3T`.
+  Leaving the group parks all three interfaces before the common branch opens.
+- Voice sequencing asserts the STOP-dominant `VOICE_DOMAIN_EN_SAFE`, waits for
+  `VOICE_4V_PG_N`, keeps PTT forced RX and `AUDIO_ARM=0`, then qualifies the
+  SA518/codec path before allowing selection. Disable occurs in the opposite
+  order. A 4-V PG timeout or fault cannot fall back to the accessory rail.
+- Accessory sequencing asserts the shared STOP-dominant enable of both the
+  5-V converter and `TPS259470ARPWR`, waits for converter PG and bounded eFuse
+  inrush, and only then identifies/enables U214 signal paths. The eFuse always
+  blocks reverse current and enforces the hardware current limit. Its
+  active-low `FLT` joins `POWER_FAULT_N`; `ILM` is a protected factory/HIL test
+  point, not an invented runtime ADC channel.
+- On disable or fault, accessory signals isolate first, converter/eFuse enable
+  clears, and the connector is allowed to reach its measured passive-discharge
+  threshold before the UI reports it safe to remove. External 5-V injection,
+  PG/FLT disagreement, timeout or unknown evidence remains a latched accessory
+  fault and cannot be cleared by re-enabling in a loop.
+- microSD is unmounted/flushed and SPI pins are parked before `SD_PWR_EN`
+  clears. ES8311 follows the stricter audio-arm sequence below. Si4732 and
+  CC1101 similarly park reset/bus pins before their independent branches open.
+  A failed settle, readback or discharge gate leaves the whole requested group
+  unavailable rather than silently weakening the quiet-state contract.
+
 ## Hard STOP and actual-TX input
 
 - The AON hardware latch, not firmware, owns the dominant stop path. STOP or an
@@ -373,11 +421,13 @@ routing before electrical/HIL closure.
 ## Explicitly open
 
 Hardware `FND-0060/0066/0067` list remaining electrical/HIL endpoints:
-display connector/backlight/protection/sourcing, exact codec power and passive
-analog networks, IR frontend/driver, power/current/thermal supervision,
-load switching/isolation, audio HIL, Unit protection and service-
-connector mechanics. Firmware must not infer drivers, levels or safe states
-for those boundaries before they close.
+display connector/backlight/protection/sourcing, passive codec/analog networks,
+IR frontend/driver, rail feedback/capacitor/discharge values, charger and
+diagnostic-load passives, thermal/source-handover/fault HIL, Unit protection
+and service-connector mechanics. The active downstream converters, switches
+and external eFuse are now exact reviewed inputs, but firmware must not infer
+unmeasured delays, thresholds or safe states for their still-open passives and
+HIL boundaries.
 
 The hard STOP latch, reset fanout, gate topology and digital evidence delivery
 are paper-reviewed inputs from `DEC-0061`; exact RF/optical detector taps,

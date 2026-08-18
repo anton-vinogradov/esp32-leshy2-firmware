@@ -135,6 +135,10 @@ flowchart TD
 - USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
   up to 30 W, reports the actual contract and load-aware charge limit, and
   never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
+- Always-on safety, 3.3-V compute, 4.0-V voice and protected 5.0-V accessory
+  power are separate fixed rails. Unused nRF, CC1101, storage, codec and
+  receiver branches are powered down, discharged and verified quiet; software
+  cannot select another rail voltage or bypass a hardware power fault.
 - Ordinary UI effects may be muted, but active TX, STOP failure, critical
   battery and other unsafe states cannot be hidden.
 

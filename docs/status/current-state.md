@@ -149,6 +149,13 @@
   and prequal disabled; a deep cell is refused, PA24/PA25 provide midpoint/
   stack evidence, and external recovery research belongs only to an isolated
   Controlled-Zone fixture.
+  `DEC-0068/PWR-0008/REV-0005Y` then review the exact active downstream rail
+  tree: low-IQ autonomous 3.3-V AON, independent fixed 3.3-V compute, 4.0-V
+  voice and protected 5.0-V accessory converters, five reset-off quiet-state
+  load switches and a reverse-blocking/current-limited external eFuse.
+  ARC-0002 now consumes their fixed-voltage, PG/fault, shutdown/discharge and
+  nRF common-branch sequencing rules. Exact feedback/capacitor/discharge and
+  charger/diagnostic-load passives plus rail/thermal/fault HIL remain in I3.
 - The integrated mockup remains paused until the `INT-0001` chain closes.
   Hardware has marked `I2` reviewed and is now closing `I3` power, then
   UI/audio/RF/expansion internals. In parallel it keeps
@@ -188,9 +195,9 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`,
-with `I2` reviewed and `I3` power prerequisites plus the replaceable-cell
-format and sink-only USB-PD frontend reviewed; the cell manager and complete
-rail/loss/thermal/fault tree are the active I3 work. The integrated physical
+with `I2` reviewed and the I3 source, battery-manager and exact active
+downstream-rail topology reviewed; passive values and the complete
+rail/loss/thermal/fault evidence are the active I3 work. The integrated physical
 mockup resumes after the joint internal review. Whole-device optimality,
 conceptual placement and atomic architecture follow. Firmware will then turn
 the `ARC-0002` input into the
