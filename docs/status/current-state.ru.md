@@ -304,13 +304,14 @@
   `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` следом закрывают exact CC1101
   endpoint. Runtime потребляет cold selection 315/433/868–915, versioned S3↔RP
   handoff, двухстороннюю изоляцию и final-line AD8314 evidence; `00` означает
-  safe isolation, а P05 остаётся единственным свободным main slow-I/O.
+  safe isolation; на этом I6-checkpoint P05 ещё оставался свободным.
   VNA/conducted tuning, thresholds, legal profiles, SMA mechanics и coexistence
   остаются upstream. `FND-0099/VRF-0001/DEC-0094/REV-0005AY` затем закрывают
   exact SA518 RF endpoint. Runtime потребляет один direct protected 50-Ом feed,
   отдельные VHF/UHF antenna-bound leases, exact resistive AD8314 evidence и
   fail-closed PTT/shutdown windows. External filter bank остаётся measured-
-  failure reopen gate, а P05 свободен. `FND-0100/IRF-0001/DEC-0095/
+  failure reopen gate; позднее `DEC-0098` назначает P05 на питание native Unit.
+  `FND-0100/IRF-0001/DEC-0095/
   REV-0005AZ` затем закрывают exact IR endpoint. Runtime потребляет
   одновременные TSOP95238TT envelope и TSMP95000TT carrier streams с разной
   provenance, изолированную reset-off RX rail, STOP-qualified VSMY14940 TX и
@@ -325,6 +326,12 @@
   receiver/codec/voice разделены, а versioned matrix покрывает все группы,
   допустимые intragroup mixes, transitions, fixtures и no-stall thresholds.
   Physical HIL ещё не выполнен и может переоткрыть владельца; upstream активен I7.
+- `FND-0105/EXP-0001/DEC-0098/REV-0005BD` закрывают paper-подблок M5 expansion
+  в I7. U214 и native Unit получили независимые reverse-blocked 5-В ветви,
+  branch READY, exact signal isolation и больше не имеют вымышленного presence
+  input. Firmware `EXT-0001` принимает state machine OFF/READY/IDENTIFY/ACTIVE/
+  fault. Connector, hot-plug, reverse-source, exact-profile и coexistence HIL
+  остаются открыты; I7 продолжается service endpoints.
   Параллельно остаются явные физические I3 HIL-gates и
   `FND-0058/FND-0060/FND-0066/FND-0067`,
   выбирает exact production parts/feeds/protection/power и переводит `N24H-0001` из `L0` в
@@ -362,7 +369,8 @@ references до своих downstream gates.
 ## Следующее firmware-действие
 
 Target code/toolchain пока не создаются. Hardware следует `INT-0001`: paper
-scope `I2`…I6 прошёл ревью, а upstream активен I7; physical I6 evidence остаётся
+scope `I2`…I6 и M5 expansion подблок I7 прошли ревью; upstream активен service
+closure I7, а physical I6/expansion evidence остаётся
 явным reopen gate;
 exact protected product-USB, display, isolated microSD, controls, touch,
 consolidated slow-I/O/shared-interface и audio/receiver contracts reviewed. Их

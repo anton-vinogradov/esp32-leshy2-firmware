@@ -56,11 +56,18 @@ consolidated I6 paper qualification scope: cross-group HIL cannot grant runtime
 permission, quiet contracts are independent and one matrix covers all groups,
 transitions, fixtures, actual-TX evidence and no-stall thresholds. Physical HIL
 remains explicitly open and can reopen its owner; I7 is active upstream.
+Hardware `FND-0105/EXP-0001/DEC-0098/REV-0005BD` now closes the I7 M5
+expansion paper subblock. [`EXT-0001`](EXT-0001-m5-expansion-runtime-state-machine.md)
+records the independent U214/native-Unit OFF-to-ACTIVE and fault-latched runtime
+contract; there is no connector presence bit or automatic power retry. Physical
+connector, hot-plug, reverse-source, profile and coexistence HIL remain open,
+and I7 continues upstream with service endpoints.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
-`48/0/0`, main slow I/O `23/0/1` and dedicated UI I/O `7/1/0`; P03/P04 are
-the powered-off CC band bits and P05 is free. Exact SA518 service and Si4732 control/antenna
+`48/0/0`, main slow I/O `24/0/0` and dedicated UI I/O `7/1/0`; P03/P04 are
+the powered-off CC band bits and P05 requests independent native-Unit power.
+Exact SA518 service and Si4732 control/antenna
 contacts are represented. This is a reviewed paper input, not final electrical
 closure: hardware `FND-0060` keeps the remaining exact peripheral, safety,
 power, isolation and service endpoints open.
@@ -228,7 +235,8 @@ whole-device coexistence remain upstream. `FND-0099/VRF-0001/DEC-0094/
 REV-0005AY` then close the SA518 RF paper input: the runtime consumes a direct
 protected 50-Ohm external feed, exact resistive AD8314 evidence, per-band/
 per-power lease binding and fail-closed PTT/shutdown windows. External filters
-remain a measured-failure reopen gate and P05 stays free. `FND-0100/IRF-0001/
+remain a measured-failure reopen gate; P05 was free at that I6 checkpoint and
+is later assigned to native-Unit power by `DEC-0098`. `FND-0100/IRF-0001/
 DEC-0095/REV-0005AZ` next close the exact IR paper input: simultaneous
 TSOP95238TT envelope and TSMP95000TT carrier streams remain distinct,
 VSMY14940 TX is current-limited and STOP-qualified, and shielded

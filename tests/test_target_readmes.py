@@ -160,9 +160,9 @@ class TargetReadmeTests(unittest.TestCase):
         )
         for token in (
             "DEC-0090/AUDIO-0003",
-            "main slow plane is `23/0/1`",
+            "main slow plane is `24/0/0`",
             "P03/P04 are CC1101 rail-off band truth bits",
-            "P05 remains free",
+            "P05 requests the independent native-Unit power branch",
             "ES8311 `0x19`",
             "both public strap outcomes `0x11` and `0x63`",
             "P00 chooses either the selected RX source or exact local electret microphone",
@@ -338,7 +338,7 @@ class TargetReadmeTests(unittest.TestCase):
             "DEC-0094/VRF-0001",
             "physical ANT contact 7",
             "exact 5.1-kOhm/52.3-Ohm attenuation",
-            "until then P05 remains free",
+            "P05 was free at that I6 checkpoint",
             "`voice_vhf` or `voice_uhf`",
             "arms the evidence hold before the protected 4-V rail",
             "`external_rf_present`",
@@ -346,6 +346,55 @@ class TargetReadmeTests(unittest.TestCase):
             "measured conducted failure reopens",
         ):
             self.assertIn(token, arc2)
+
+    def test_exact_i7_m5_expansion_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "M5 Unit and U214 Cap accessories are profile-managed and electrically independent",
+                "Neither connector has a presence pin",
+                "powers only the requested branch",
+                "requires a new explicit session",
+            ),
+            "README.ru.md": (
+                "M5 Unit и U214 Cap обслуживаются как профилированные и электрически независимые",
+                "Presence-pin нет ни у одного разъёма",
+                "включает только нужную ветвь",
+                "требует нового явного сеанса",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        ext1 = " ".join(
+            (REPO_ROOT / "docs/architecture/EXT-0001-m5-expansion-runtime-state-machine.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "P17 requests only U214",
+            "P05 requests only native Unit",
+            "There is no hardware presence bit",
+            "P26=UNIT_READY",
+            "FAULT_LATCHED",
+        ):
+            self.assertIn(token, arc2)
+        for token in (
+            "OFF -> REQUESTED -> POWER_PENDING -> READY -> IDENTIFY -> ACTIVE",
+            "No automatic power retry",
+            "U214_READY",
+            "UNIT_READY",
+            "one-top-level-signal-group rule",
+        ):
+            self.assertIn(token, ext1)
 
     def test_exact_i6_ir_runtime_contract_does_not_regress(self):
         required_tokens = {

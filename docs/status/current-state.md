@@ -302,13 +302,14 @@
   `FND-0098/CCRF-0001/DEC-0093/REV-0005AX` next review the exact CC1101
   endpoint. Runtime consumes 315/433/868–915 cold selection, a versioned S3↔RP
   handoff, dual-ended isolation and final-line AD8314 evidence; `00` is safe
-  isolation and P05 is the only free main slow-I/O contact. VNA/conducted
+  isolation. P05 was free at this I6 checkpoint. VNA/conducted
   tuning, thresholds, legal profiles, SMA mechanics and coexistence remain
   upstream. `FND-0099/VRF-0001/DEC-0094/REV-0005AY` then review the exact
   SA518 RF endpoint. Runtime consumes one direct protected 50-Ohm feed,
   separate VHF/UHF antenna-bound leases, exact resistive AD8314 evidence and
   fail-closed PTT/shutdown windows. An external filter bank remains a measured-
-  failure reopen gate and P05 stays free. `FND-0100/IRF-0001/DEC-0095/
+  failure reopen gate; `DEC-0098` later assigns P05 to native-Unit power.
+  `FND-0100/IRF-0001/DEC-0095/
   REV-0005AZ` next review the exact IR endpoint. Runtime consumes simultaneous
   TSOP95238TT envelope and TSMP95000TT carrier streams with distinct
   provenance, an isolated reset-off RX rail, STOP-qualified VSMY14940 TX and
@@ -323,6 +324,12 @@
   independent and the versioned matrix covers every group, legal intragroup
   mix, ordered transition, fixture and no-stall threshold. Physical HIL is
   still not executed and can reopen its owner; I7 is active upstream.
+- `FND-0105/EXP-0001/DEC-0098/REV-0005BD` close the I7 M5 expansion paper
+  subblock. U214 and native Unit now have independent reverse-blocked 5-V
+  branches, branch READY, exact signal isolation and no fictitious presence
+  input. Firmware `EXT-0001` consumes the OFF/READY/IDENTIFY/ACTIVE/fault state
+  machine. Connector, hot-plug, reverse-source, exact-profile and coexistence
+  HIL remain open; I7 continues with service endpoints.
   In parallel it keeps
   the explicit I3 physical HIL gates and
   `FND-0058/FND-0060/FND-0066/FND-0067` explicit and selects
@@ -361,7 +368,8 @@ remain references until their downstream gates.
 ## Next firmware action
 
 No target code or toolchain is created yet. Hardware follows `INT-0001`, with
-`I2` through I6 paper scope reviewed and I7 active. Physical I6 evidence remains
+`I2` through I6 paper scope and the I7 M5 expansion subblock are reviewed; I7
+service closure is active. Physical I6/expansion evidence remains
 a named reopen gate; exact protected product-USB, display, isolated microSD, controls,
 touch, slow-I/O/shared-interface and audio/receiver contracts are reviewed, while
 their physical mechanics and HIL remain active. Specimen mechanics,

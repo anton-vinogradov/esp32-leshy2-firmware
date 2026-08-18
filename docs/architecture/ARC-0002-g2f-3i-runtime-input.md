@@ -18,6 +18,7 @@
 - exact IR endpoint: [`IRF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/IRF-0001-exact-dual-receiver-transmit-and-optical-evidence-endpoint.md), [`DEC-0095`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0095-exact-ir-endpoint.md), [`REV-0005AZ`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AZ-i6-ir-propagation.md)
 - exact Si4732 dual-input RF endpoint and corrected SOIC-16 map: [`RXF-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/RXF-0001-exact-si4732-dual-input-receive-frontend.md), [`DEC-0096`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0096-exact-si4732-dual-input-rf-endpoint.md), [`FND-0102`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0102-si4732-soic16-contact-map-was-shifted.md), [`REV-0005BA`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BA-i6-si4732-rf-propagation.md), [`REV-0005BB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BB-si4732-soic16-pin-map-correction.md)
 - consolidated I6 qualification: [`COX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/COX-0001-consolidated-i6-qualification-matrix.md), [`DEC-0097`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0097-one-group-i6-qualification-and-fixtures.md), [`FND-0103`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0103-cross-group-hil-could-reopen-forbidden-concurrency.md), [`FND-0104`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0104-monolithic-receiver-audio-quiet-contract.md), [`REV-0005BC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BC-i6-consolidated-proof-propagation.md)
+- exact independent M5 expansion boundary: [`EXP-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/EXP-0001-exact-m5-expansion-boundary.md), [`DEC-0098`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0098-exact-independent-m5-expansion-boundary.md), [`FND-0105`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0105-no-m5-presence-contact.md), [`REV-0005BD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005BD-i7-m5-expansion-propagation.md)
 - external antenna decision: [`DEC-0048`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0048-external-sma-antenna-bank.md)
 - exact antenna count: [`DEC-0049`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0049-nine-dedicated-external-sma-paths.md)
 - profiled antenna kit: [`DEC-0055`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0055-profiled-external-antenna-kit.md)
@@ -130,7 +131,8 @@ separate AD8314 actual-TX channel sampled through exact 5.1-kOhm/52.3-Ohm
 attenuation. It may not treat inbound RF as PTT authorization, infer thresholds
 from nominal arithmetic, reuse the 7-V CC TVS profile, or invent an external
 VHF/UHF filter bank. A measured conducted failure reopens the hardware
-subblock; until then P05 remains free. Final SMA, antenna lots, evidence
+subblock; P05 was free at that I6 checkpoint and is later consumed by
+`DEC-0098` for native-Unit power. Final SMA, antenna lots, evidence
 thresholds, emissions/legal proof and coexistence remain upstream gates.
 Hardware `DEC-0095/IRF-0001` then closes the separate IR paper subblock.
 Firmware may consume exact simultaneous robust-envelope and carrier-cycle
@@ -168,10 +170,10 @@ After `DEC-0054` consumes S3 GPIO6 for `AUDIO_ARM`, only GPIO47 remained free.
 `DEC-0086` consumes GPIO39/GPIO47 as the direct PCNT0 encoder phase pair, so
 firmware cannot invent another direct S3 or RP control. Hardware derives these
 figures from the machine source: S3 is `33 used / 3 reserved / 0 free`, C5 is `14/6/1`, RP is `48/0/0`,
-and the main slow plane is `23/0/1`: P27 selects the receive source, while I5
+and the main slow plane is `24/0/0`: P27 selects the receive source, while I5
 uses P00 for RX/microphone capture, P01 for speaker enable and P02 for
-headphone absence. P03/P04 are CC1101 rail-off band truth bits and P05 remains
-free. The previously published C5/RP reserve
+headphone absence. P03/P04 are CC1101 rail-off band truth bits and P05 requests
+the independent native-Unit power branch. The previously published C5/RP reserve
 was stale and is corrected by `FND-0059`. GPIO43/44 remain permanent UART0
 service; GPIO6 `AUDIO_ARM` and GPIO39/47 encoder capture are normative machine
 inputs.
@@ -310,6 +312,39 @@ inputs.
   assert `SLOW_IO_RESET_N` directly, but product runtime does not own that pad.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
+
+### Exact M5 expansion runtime admission
+
+- U214 and native Unit are two independent power domains. P17 requests only
+  U214; P05 requests only native Unit. Either may keep the common fixed-5-V
+  converter alive, but each exposed output has its own latch-off,
+  true-reverse-blocking eFuse.
+- There is no hardware presence bit. `P26=UNIT_READY` is protected-rail
+  readiness after admission, not proof that a connector is mechanically
+  occupied. Firmware must not restore the removed `ACCESSORY_PRESENT_N`
+  abstraction or background-poll an unpowered connector.
+- State for each branch is `OFF → REQUESTED → POWER_PENDING → READY → IDENTIFY
+  → ACTIVE → QUIETING → OFF`, with `FAULT_LATCHED` reachable from every
+  powered state. Signal isolation remains disabled until branch READY and the
+  host 3.3-V domain are valid.
+- `U214_READY` enables the three Ioff SPI/UART/control buffers and permits
+  TCA4307 connection; `U214_I2C_READY` is separate stuck-bus/segment evidence.
+  Both must match the expected transition before RP starts PIO1, UART1 or I²C0.
+- `UNIT_READY` permits `TXS0102DCUR` OE. The signed profile declares I²C,
+  UART, push-pull GPIO, open-drain GPIO or candidate 1-Wire use and all required
+  pulls/timing. 1-Wire is enabled only by a passed exact accessory/cable HIL
+  profile, never from the generic GPIO capability alone.
+- Identity is profile-specific after power: exact U214 assembly/peripheral
+  readback for Cap, exact driver identity/protocol for Unit. Unknown/mismatch,
+  reverse-source/external-power, overcurrent, stuck bus, bad READY order or
+  timeout disables isolation and the branch, records evidence and requires a
+  fresh explicit user session; there is no automatic retry loop.
+- U214 downstream Port A load is part of the U214 manifest and current budget.
+  Simultaneous U214 + downstream Unit + native Unit is legal only for an exact
+  manifest that passed combined power/thermal/no-stall HIL.
+- A generic USB-host/high-throughput HAL remains absent. A concrete future
+  RF/SDR accessory may derive a new transport only after naming its bandwidth,
+  power, legal, isolation and recovery requirements.
 
 ## Signal-group and quiet-state contract
 
@@ -646,10 +681,11 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
   by TPS25961 hardware; firmware cannot accelerate them, and main remains off
   until protected PG/SENSE/CT are continuously valid. Firmware has no direct
   eFuse reset/bypass API and never loops rail power against a persistent fault.
-- Accessory sequencing asserts the shared STOP-dominant enable of both the
-  5-V converter and `TPS259470LRPWR`, waits for the enable-qualified converter
-  PG collector to release and the eFuse output to complete its qualified
-  controlled ramp, and only then identifies/enables U214 signal paths.
+- Accessory sequencing asserts one branch request. The request OR enables the
+  shared STOP-dominant 5-V converter, while the branch AND enables only that
+  branch's `TPS259470LRPWR`. Runtime waits for the enable-qualified converter
+  PG collector and exact branch supervisor READY, then enables only the
+  corresponding U214 or native-Unit signal isolation and performs identity.
   `EN=1, PG=0` is a bounded pending state; failure to release is latched, while
   `EN=0, PG=0` is normal quiet state and must not create a fault. The nominal
   1.509-A eFuse limit is active immediately during startup: runtime must never
@@ -657,7 +693,7 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
   effective accessory input capacitance pending HIL. The port is 1.25 A
   continuous; 2.0 A is one bounded post-start excursion, approximately
   86.6…404 ms on the paper limits, not a startup or continuous budget. The
-  eFuse always blocks reverse current. Its active-low `FLT` also joins
+  Each eFuse always blocks reverse current. Its active-low `FLT` also joins
   `POWER_FAULT_N`; `ILM` is a protected factory/HIL test point, not an
   invented runtime ADC channel.
 - OVLO recovery on the selected eFuse bypasses the normal `dVdt` ramp and
@@ -771,8 +807,10 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
 3. C5 1-bit IPC framed throughput/occupancy/control-priority/RTT, reset/link-loss
    visibility and TX lease expiry under Wi-Fi/802.15.4/IR load;
 4. display+SD scheduling, hot removal and injected 250 ms card stalls;
-5. U214 I²C stuck-low/hot-plug fault injection and independent Unit/internal
-   bus operation;
+5. both independent M5 branches through OFF/READY/IDENTIFY/ACTIVE/QUIETING and
+   FAULT_LATCHED; U214 I²C stuck-low plus all SPI/UART/control no-back-power,
+   native I²C/UART/GPIO and qualified 1-Wire, reverse-source/external-power,
+   unknown/mismatch/hot-plug, combined-load and independent internal-bus proof;
 6. independent programming/recovery/diagnostics for all three domains;
 7. PIO instruction placement, DMA arbitration and SRAM-bank contention under
    the same simultaneous event load; static channel counts alone are not the
@@ -1076,6 +1114,10 @@ evidence and shutdown state machine consumable. Every separate I6 endpoint is
 now reviewed at paper level. `FND-0103/FND-0104/COX-0001/DEC-0097/REV-0005BC`
 close the consolidated paper qualification matrix and advance upstream work to
 I7; no physical qualification is inferred.
+Hardware `FND-0105/EXP-0001/DEC-0098/REV-0005BD` then closes the M5 expansion
+paper subblock consumed above: separate U214/native-Unit power and readiness,
+exact signal isolation, removal of fictitious presence and explicit connector/
+hot-plug/profile HIL. I7 continues upstream with service endpoints.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

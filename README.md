@@ -166,9 +166,15 @@ flowchart TD
 - iButton/1-Wire separates ordinary use of owned devices, Lab reading and
   individually armed Controlled-Zone emulation/write; attaching the adapter
   authorizes nothing by itself.
-- M5 Unit and U214 Cap accessories are profile-managed. If an external raw-SDR
-  or RF-analysis module needs high-throughput transport, its profile defines
-  that transport rather than relabelling a low-rate command link.
+- M5 Unit and U214 Cap accessories are profile-managed and electrically
+  independent. Neither connector has a presence pin: both stay unpowered and
+  high-Z until an exact signed manifest is selected. Runtime powers only the
+  requested branch, waits for protected-rail READY, then enables signal
+  isolation and verifies profile-specific identity/readback. Mismatch, external
+  power, backfeed, overcurrent or stuck-bus evidence latches that branch off and
+  requires a new explicit session. If an external raw-SDR or RF-analysis module
+  needs high-throughput transport, its concrete profile defines that transport
+  rather than relabelling a low-rate command link.
 - Changing an antenna, regional profile, frequency profile or accessory clears
   TX arm. Unknown or incompatible identity denies transmission.
 
