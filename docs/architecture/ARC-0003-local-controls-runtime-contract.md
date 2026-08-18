@@ -4,6 +4,7 @@
 - Hardware inventory/pin input: [`DEC-0086`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0086-complete-local-controls-and-direct-encoder.md)
 - Hardware electrical input: [`DEC-0087`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0087-exact-control-switch-and-protection-endpoint.md)
 - Exact hardware topology: [`UI-0002`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/UI-0002-exact-switch-and-control-protection.md)
+- Consolidated I4 input: [`IOX-0001`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/IOX-0001-consolidated-i4-electrical-closure.md)
 
 ## Stable logical controls
 
@@ -22,7 +23,8 @@ physical source identity and never synthesize PTT, STOP or RE-ARM.
 ## 4×3 matrix service
 
 Dedicated TCA9534A at candidate address `0x3F` uses P0…P3 as rows and P4…P6 as
-columns; P7 is reserved. Exact pull-downs keep every row low during reset, and
+columns; P7 is a protected fixture/growth test pad, not a missing product
+control. Exact pull-downs keep every row low during reset, and
 firmware holds every row low in idle, so any press pulls one column low and
 asserts `INT_N`. Before changing P0…P3 from reset inputs to outputs, firmware
 must first write their output latches low; it must not expose the reset-default
@@ -70,6 +72,19 @@ repeats status reads until the qualified line
 release condition or a bounded fault is reached. A stuck source is named and
 isolated by its owning policy where hardware permits; it is not hidden by
 polling.
+
+The main `TCA6424ARGJR` responds at exact 7-bit address `0x22`; pack admission
+responds at fixed firmware target `0x2A`. Startup verifies the expander
+identity/default-input state. A stuck bus receives bounded clock/STOP recovery;
+an unrecoverable main expander enters explicit safe/degraded service and asks
+the power manager for a full `3V3_MAIN` cycle. Runtime never pretends that the
+fixture-only `SLOW_IO_RESET_N` pad is an MCU output.
+
+P22 observes the AON STOP latch as low=RUN/high=latched STOP. P23 observes S3
+RF evidence as active low. Separate open-drain domain buffers preserve those
+polarities, so no compatibility profile is needed. Both are diagnostics only:
+writing an expander register cannot clear STOP, arm TX or replace the physical
+evidence path.
 
 The exact assembly contract defines active-low TP_INT. Its 10-kOhm raw pull-up
 and fixed non-inverting `SN74LVC1G07DCKR` produce an open-drain contribution;

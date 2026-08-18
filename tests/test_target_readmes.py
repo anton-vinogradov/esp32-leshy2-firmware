@@ -90,6 +90,39 @@ class TargetReadmeTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token, normalized, f"{readme_name}: {token}")
 
+    def test_consolidated_i4_runtime_contract_does_not_regress(self):
+        for readme_name in ("README.md", "README.ru.md"):
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in (
+                "TCA6424ARGJR",
+                "`0x22`",
+                "`0x2A`",
+                "safe/degraded",
+                "STOP/evidence",
+            ):
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join((REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md").read_text(encoding="utf-8").split())
+        arc3 = " ".join((REPO_ROOT / "docs/architecture/ARC-0003-local-controls-runtime-contract.md").read_text(encoding="utf-8").split())
+        for token in (
+            "DEC-0089/IOX-0001",
+            "TCA6424A address `0x22`",
+            "pack target address `0x2A`",
+            "low in RUN/high when latched",
+            "full `3V3_MAIN` cycle",
+        ):
+            self.assertIn(token, arc2)
+        for token in (
+            "main `TCA6424ARGJR` responds at exact 7-bit address `0x22`",
+            "pack admission responds at fixed firmware target `0x2A`",
+            "P22 observes the AON STOP latch as low=RUN/high=latched STOP",
+            "P23 observes S3 RF evidence as active low",
+            "fixture-only `SLOW_IO_RESET_N`",
+        ):
+            self.assertIn(token, arc3)
+
     def test_target_readmes_keep_replaceable_cell_fail_closed_behavior(self):
         required_tokens = {
             "README.md": (

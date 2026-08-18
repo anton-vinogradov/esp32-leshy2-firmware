@@ -78,6 +78,11 @@ flowchart TD
   filtered direct RP GPIO21 input. STOP uses an independent normally-closed
   `Panasonic AEQ10410` AON loop, so pressing it or losing its connection stops
   the device; RE-ARM remains a separate recessed physical control.
+- Main `TCA6424ARGJR` slow I/O is fixed at I²C address `0x22`; pack admission
+  uses `0x2A`. Shared-IRQ service discovers every asserting source, and an
+  unrecoverable expander fault enters safe/degraded operation before a complete
+  main-rail reset. Isolated STOP/evidence observations preserve their polarity
+  without making firmware part of the hard-STOP path.
 - Display and touch stay in hardware reset until their common protected logic
   rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
   `100 ms` before touch use, then enables the PWM backlight last. Integrated

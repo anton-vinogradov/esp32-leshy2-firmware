@@ -80,6 +80,14 @@ card rail, Ioff host-to-card isolation and a DAT0/MISO return enabled only while
 every card-power cycle and distinguish clean unmount from unexpected removal.
 No unmeasured media, throughput, corruption-window or fault behavior becomes a
 production claim.
+Hardware `DEC-0089/IOX-0001` then close the consolidated I4 paper electrical
+block. Firmware consumes exact main TCA6424A address `0x22`, fixed pack target
+address `0x2A`, shared open-drain interrupt discovery, fixture RESET_N and
+full `3V3_MAIN` cycle recovery. P22 STOP observation remains low in RUN/high
+when latched; P23 S3 evidence remains active low. Their new AON open-drain
+isolation changes no logical polarity and grants no control over STOP or TX.
+Physical, signal-integrity and no-back-power behavior remains upstream HIL;
+I4 review does not freeze a HAL or authorize implementation.
 
 ## Candidate runtime domains
 
@@ -158,7 +166,10 @@ inputs.
   Sleep In, assert both resets and only then permit main-power removal. Never
   auto-retry a latched backlight branch; a new attempt requires a complete
   main-power cycle and fresh display initialization.
-- Internal I²C contains only slow UI/audio/receiver/control endpoints. The
+- Internal I²C contains only slow UI/audio/receiver/control endpoints. Exact
+  currently closed addresses are TPS25751D `0x20`, main TCA6424A `0x22`, pack
+  admission `0x2A` and ST77922 `0x38`; UI TCA9534A remains candidate `0x3F`
+  until assembled HIL, while ES8311/Si4732 endpoint closure belongs to I5. The
   dedicated TCA9534A at candidate address `0x3F` holds P0…P3 low in idle, so
   any D-pad/OK, BACK, OPT, F1, F2 or encoder-push change starts a bounded 4×3
   scan through P4…P6; P7 is reserved. Encoder A/B edges never use that bus:
@@ -176,6 +187,11 @@ inputs.
   7-bit address `0x38`; active-low TP_INT has a 10-kOhm raw pull-up and fixed
   non-inverting open-drain `SN74LVC1G07DCKR`. Firmware has no inverter profile
   and does not replace the IRQ with polling.
+  TCA6424A startup verifies address/identity and all-input defaults. Recovery
+  first performs bounded bus clocking plus STOP; if the expander remains
+  unavailable, firmware enters safe/degraded operation and requests a complete
+  `3V3_MAIN` cycle rather than endlessly retrying. Fixture diagnostics may
+  assert `SLOW_IO_RESET_N` directly, but product runtime does not own that pad.
 - U214 external I²C is a separate RP branch behind TCA4307; stuck-low/hot-plug
   cannot stall the internal S3 control bus or Unit profile.
 
@@ -702,6 +718,11 @@ adapter into shared GPIO37 and assigns GPIO39/GPIO47 to PCNT0 encoder capture;
 `DEC-0088` then fixes exact integrated ST77922/address `0x38`, active-low
 polarity, 10-kOhm raw pull-up and non-inverting `SN74LVC1G07DCKR`. GPIO6
 remains `AUDIO_ARM`.
+Hardware `FND-0094/IOX-0001/DEC-0089/REV-0005AT` then closes the consolidated
+I4 electrical input: exact TCA6424A `0x22`, pack target `0x2A`, shared IRQ and
+recovery behavior, isolated P22/P23 observation polarity and the real GPIO4
+microSD return are now consumable. I5 becomes the next active upstream block;
+no prototype or physical qualification is inferred.
 Hardware `FND-0088/DSP-0006/DEC-0084/REV-0005AO` then instantiate the first
 exact 40-contact ZIF candidate, separate reset-low pulls and the protected
 backlight circuit. Firmware may freeze the reset/off/recovery ordering and

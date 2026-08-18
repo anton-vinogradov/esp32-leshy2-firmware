@@ -44,6 +44,10 @@ arrays and pull/filter networks now make those software boundaries physical.
 Exact integrated ST77922 touch at `0x38` joins shared GPIO37 through an
 active-low 10-kOhm-plus-fixed-1G07 path and never falls back to polling-only
 operation.
+The consolidated I4 input fixes main `TCA6424ARGJR` at `0x22` and pack
+admission at `0x2A`, defines bounded bus recovery plus full-main-rail reset,
+and preserves isolated P22/P23 STOP/evidence polarity. I4 paper electrical
+scope is reviewed; I5 audio/Si4732 is the next upstream block.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP
@@ -188,6 +192,10 @@ Hardware `STO-0001/DEC-0085/REV-0005AP` also close the paper storage endpoint
 without a GPIO change. ARC-0002 freezes card-power/session sequencing and
 clean-versus-unexpected-removal semantics, while socket access, media set,
 throughput, hot-removal and corruption evidence remain open.
+Hardware `FND-0094/IOX-0001/DEC-0089/REV-0005AT` then completes the I4
+dependency audit: exact slow-I/O/pack addresses, recovery, shared IRQ,
+cross-domain observation polarity and real microSD GPIO4 are runtime inputs.
+I5 is active; the firmware implementation boundary remains unfrozen.
 Hardware `AUDIO-0001/REV-0005B` additionally instantiate exact `ES8311`
 QFN-20 digital contacts: address `0x19`, no separate MCLK GPIO and external
 P10 `CODEC_PWR_EN` instead of the former fictional codec reset/enable.
