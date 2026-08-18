@@ -179,10 +179,14 @@
   конфигурации и feedback преобразователей. Firmware потребляет фиксированные
   nominal rail identities 3,318/4,000/5,000 В и результаты квалификации, но не
   предоставляет API настройки напряжения и не выдаёт бумажные границы за
-  измеренные пороги. `PWR-0012/DEC-0073/REV-0005AD` затем закрывают direct AON
-  EN strap и все девять резисторов converter EN/PG/qualifier/fault. Firmware
-  сохраняет принятые safe defaults и semantics `EN AND NOT(PG)` без нового API
-  или бумажного deadline; все timing/load-step/HIL остаются upstream inputs.
+  измеренные пороги. `PWR-0012/DEC-0073/REV-0005AD` сначала закрывают direct
+  AON EN strap и девять резисторов converter EN/PG/qualifier/fault.
+  `FND-0084/PWR-0019/DEC-0080/REV-0005AK` дополняют профиль до десяти позиций
+  и заменяют abstract sequencer точной цепью AON-PG/MR, SENSE 3,07 В/CT/POR и
+  main EN. Firmware не может обойти delayed hardware POR. Исходное правило
+  заряда резервирует системную нагрузку из 85% согласованной входной мощности
+  и запрашивает нулевой заряд при missing/DPM/thermal/fault evidence;
+  transition и efficiency HIL остаются upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` задают exact diagnostic frontend.
   Firmware выдаёт один rising edge PA22; канал 1 TPUL2G223 аппаратно
   ограничивает нагрузку 10 Ом примерно 34,4 мс nominal при бумажном

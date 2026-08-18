@@ -158,10 +158,19 @@ flowchart TD
   runtime may use at most `2 A` only after it applies the actual USB current
   contract, accounts for system load, verifies both cells and passes the
   charger's independent battery-temperature gate.
+- System operation always has priority over charging. The initial admission
+  budget treats only 85% of the negotiated input power as usable, reserves the
+  larger of the declared scenario load or measured load plus margin, and gives
+  only the remainder to the battery. Missing power evidence, input-current
+  limiting, a thermal condition or a power fault reduces charge to zero.
 - Always-on safety, 3.3-V compute, 4.0-V voice and protected 5.0-V accessory
   power are separate fixed rails. Unused nRF, CC1101, storage, codec and
   receiver branches are powered down, discharged and verified quiet; software
   cannot select another rail voltage or bypass a hardware power fault.
+- An admitted source starts the always-on rail directly. Its power-good and a
+  3.07-V supervisor threshold must both hold before a delayed hardware POR
+  enables the main 3.3-V rail; firmware cannot bypass startup or keep compute
+  alive through an always-on brownout.
 - Voice/accessory power-good evidence is qualified by its hardware enable:
   an intentionally disabled rail is normal, while an enabled rail that does
   not become good within its bounded startup window fails closed.

@@ -176,10 +176,14 @@
   configuration and feedback parts. Firmware consumes fixed nominal
   3.318/4.000/5.000-V rail identities and qualification results but exposes no
   voltage-setting API and does not reinterpret their paper limits as measured
-  thresholds. `PWR-0012/DEC-0073/REV-0005AD` then close the direct AON EN
-  strap and all nine converter EN/PG/qualifier/fault resistors. Firmware keeps
-  the existing safe-default and `EN AND NOT(PG)` semantics without a new API
-  or paper-derived deadline; all timing/load-step/HIL evidence stays upstream.
+  thresholds. `PWR-0012/DEC-0073/REV-0005AD` first close the direct AON EN
+  strap and nine converter EN/PG/qualifier/fault resistors.
+  `FND-0084/PWR-0019/DEC-0080/REV-0005AK` amend this to ten positions and
+  replace the abstract sequencer with exact AON-PG/MR, 3.07-V SENSE/CT/POR and
+  main-EN wiring. Firmware cannot bypass delayed hardware POR. Its initial
+  charge rule reserves system load from 85% of negotiated input power and
+  requests zero charge on missing/DPM/thermal/fault evidence; transition and
+  efficiency HIL remain upstream.
   `PWR-0013/FND-0078/DEC-0074/REV-0005AE` establish the exact diagnostic
   frontend. Firmware emits one PA22 rising edge; TPUL2G223 channel 1 limits
   the 10-Ohm load to about 34.4 ms typical with a 28.7-40.7-ms C0G paper

@@ -75,11 +75,16 @@ measured-discharge gates without inventing programmable rail voltages.
 Hardware `PWR-0011/DEC-0072/REV-0005AC` now also fixes the 24 converter
 energy/configuration/feedback parts. Firmware gains no voltage-setting API:
 the nominal 3.318/4.000/5.000-V outputs and their qualification evidence are
-read-only hardware facts. Hardware `PWR-0012/DEC-0073/REV-0005AD` then fixes
-the direct AON EN strap and all nine converter EN/PG/qualifier/fault
-resistors. This preserves the existing runtime truth table without adding an
-API or paper-derived timing constant; complete rail/thermal/fault HIL remains
-upstream I3 work. Hardware `PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
+read-only hardware facts. Hardware `PWR-0012/DEC-0073/REV-0005AD` first fixes
+the direct AON EN strap and nine converter EN/PG/qualifier/fault resistors.
+`FND-0084/PWR-0019/DEC-0080/REV-0005AK` then amend that profile to ten
+positions and replace the hidden sequencer placeholder with direct
+SYS-to-AON, AON-PG/MR, 3.07-V SENSE/CT/POR and main-EN wiring. Firmware cannot
+bypass the delayed hardware POR. The source budget reserves the larger of
+declared or measured-plus-margin system load from 85% of negotiated input
+power and sets charge to zero on missing/DPM/thermal/fault evidence. Complete
+transition/rail/thermal/fault HIL remains upstream I3 work. Hardware
+`PWR-0013/FND-0078/DEC-0074/REV-0005AE` then
 fixes the 10-Ohm pre-admission load, independent non-retriggerable timer and
 exact PA25/PA26 divider/filter frontends. Its C0G timing network has a
 28.7-40.7-ms paper window and production accepts only measured 25-50-ms

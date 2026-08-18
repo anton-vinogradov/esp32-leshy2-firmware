@@ -34,6 +34,7 @@
 - external-eFuse passive/startup profile: [`DEC-0071`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0071-post-start-accessory-transient-profile.md), [`PWR-0010`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0010-external-efuse-passive-profile.md), [`REV-0005AB`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AB-external-efuse-passive-profile.md)
 - exact converter passive profile: [`DEC-0072`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0072-exact-converter-energy-feedback-passives.md), [`PWR-0011`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0011-application-converter-passive-profile.md), [`REV-0005AC`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AC-application-converter-passive-profile.md)
 - exact converter control-passive profile: [`DEC-0073`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0073-exact-converter-control-passives.md), [`PWR-0012`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0012-exact-converter-control-passives.md), [`REV-0005AD`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AD-converter-control-passive-profile.md)
+- exact source/AON/POR/main sequence: [`DEC-0080`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0080-exact-aon-pg-por-main-sequence.md), [`PWR-0019`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0019-exact-source-sequence-and-power-reserve.md), [`FND-0084`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0084-abstract-main-source-sequencer.md), [`REV-0005AK`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AK-source-sequence-propagation.md)
 - exact bounded pack diagnostic: [`DEC-0074`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/decisions/DEC-0074-bounded-pack-diagnostic-pulse.md), [`PWR-0013`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/architecture/PWR-0013-exact-pack-diagnostic-frontends.md), [`FND-0078`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/findings/FND-0078-mspm0-pa24-forbids-injection-current.md), [`REV-0005AE`](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/review/reviews/REV-0005AE-pack-diagnostic-profile.md)
 
 ## Boundary
@@ -267,6 +268,13 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
 - The first charge-current ceiling is 2 A and is further reduced or paused by
   system load, connector/charger/cell temperature, weak-source behavior and
   cell-manager decisions. The 5-A IC capability is not a runtime default.
+- The initial paper admission rule treats only `0.85 × negotiated input power`
+  as usable. It first reserves `max(declared scenario load, measured SYS load
+  + measurement margin)` and derives charge current from the non-negative
+  remainder divided by pack voltage, still capped at 2 A. Missing measurements,
+  DPM/current limiting, thermal derating or any power fault makes the requested
+  charge current zero. This conservative rule is an admission floor pending
+  measured efficiency maps, not a claim that conversion efficiency is 85%.
 - Hardware fixes BQ25798 to 2S/750 kHz with an exact 2.2-uH/7-A inductor.
   POR or charger-watchdog reset restores 1-A charge, 7.0-V VSYSMIN and 8.4-V
   VREG; firmware has no frequency/cell-count profile selector.
@@ -320,15 +328,19 @@ permanent UART0 service and GPIO47 is the sole free direct S3 contact; GPIO6
   software-adjustable set points. Firmware exposes the rail identity and
   measured qualification result, never a voltage-setting API.
 - AON power is autonomous. `TPS629203.EN` is strapped directly to admitted
-  `SYS`, while its PG uses the exact 47-kOhm hardware pull-up. `AON_PG_N` must
-  be valid before the STOP supervisor/sequencer may release the compute
-  domains. Application firmware observes the post-boot result but is neither
-  the source of AON availability nor an override for AON collapse.
-- The three application-converter EN fail-low pulls, both optional PG pulls,
-  both qualifier-base resistors and the common fault pull are exact hardware
-  instances. Their values do not create a firmware setting, timing constant
-  or retry path: runtime consumes only the existing safe defaults and
-  `EN AND NOT(PG)` truth table, then uses measured HIL deadlines.
+  `SYS`, while its PG uses the exact 47-kOhm hardware pull-up and directly
+  drives `TPS3808G33.MR_N`. The supervisor also measures AON against its
+  3.07-V threshold; only valid PG plus SENSE for the exact CT delay releases
+  open-drain `POR_N`, whose 10-kOhm pull-up and 100-kOhm main-EN fail-low pull
+  produce about 3.0 V and enable the main converter. There is no programmable
+  source sequencer. Application firmware observes the result but cannot start
+  AON, bypass POR or keep the main rail alive after AON PG/SENSE loss.
+- The amended converter-control profile has ten physical resistor positions:
+  the AON PG pull-up, POR pull-up, three application EN fail-low pulls, both
+  optional PG pulls, both qualifier-base resistors and the common fault pull.
+  Their values do not create a firmware setting, timing constant or retry
+  path: runtime consumes the safe defaults and `EN AND NOT(PG)` truth table,
+  then uses measured HIL deadlines.
 - `3V3_MAIN` is admitted by hardware after a valid battery or USB source and
   supplies the three compute domains. `MAIN_3V3_PG_N` loss joins
   `POWER_FAULT_N`; firmware immediately revokes every lease and returns the
@@ -559,10 +571,10 @@ Hardware `FND-0060/0066/0067/0079/0080/0081/0082/0083` list remaining electrical
 display connector/backlight/protection/sourcing, passive codec/analog networks,
 IR frontend/driver, TPS25751 raw-VBUS/SafeMode/CC-capacitance and bus-rise-time
 HIL, exact-cell diagnostic thresholds and timer/load hot HIL,
-thermal/source-handover/fault HIL, Unit
+source-transition, brownout, thermal/source-handover/fault HIL, Unit
 protection and service-connector
 mechanics. The active downstream converters, their 24 energy/configuration/
-feedback parts, nine control resistors, direct AON EN strap, switches and
+feedback parts, ten control resistors, direct AON EN strap, exact AON-PG/POR/main sequence, switches and
 external eFuse plus its eight profile passives, and the corrected dual-channel
 pack diagnostic timer/load/divider/filter instances, plus the exact BQ25798 inductor, 19
 capacitor instances, ten resistors and third NTC, plus the 17 exact TPS/EEPROM

@@ -130,6 +130,11 @@ class TargetReadmeTests(unittest.TestCase):
                 "current limit is active immediately during startup",
                 "bounded `2.0 A` post-start transient",
                 "never treating the transient timer as startup or continuous current budget",
+                "only 85% of the negotiated input power as usable",
+                "Missing power evidence, input-current limiting",
+                "3.07-V supervisor threshold",
+                "delayed hardware POR",
+                "firmware cannot bypass startup",
             ),
             "README.ru.md": (
                 "Always-on безопасность, вычислительные 3,3 В, голосовые 4,0 В",
@@ -144,6 +149,11 @@ class TargetReadmeTests(unittest.TestCase):
                 "ограничение тока аксессуара действует немедленно при запуске",
                 "ограниченный импульс `2,0 А` только после запуска",
                 "transient timer не считается бюджетом запуска или постоянного тока",
+                "доступными только 85% согласованной входной мощности",
+                "При отсутствии достоверных данных о мощности",
+                "порог supervisor 3,07 В",
+                "delayed hardware POR",
+                "firmware не может обойти стартовый порядок",
             ),
         }
         for readme_name, tokens in required_tokens.items():
