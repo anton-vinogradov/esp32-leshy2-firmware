@@ -443,6 +443,15 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
   identities and roles: `MAX17320G20+T` is the local gauge/protector and
   `MSPM0C1104SDGS20R` is the admission owner. Register policy and image format
   remain implementation outputs, not permission to change those roles.
+- Hardware `PWR-0022/DEC-0100/REV-0005BF` closes the exact support interface.
+  MAX17320 `PFAIL` is push-pull and reaches MSPM0 PA16 only through an NMOS
+  level translator plus an admission-VDD pull-up. Firmware therefore reads
+  `PACK_PFAIL_N=0` as asserted power-fail and never configures PA16 as a
+  direct gauge-domain connection. PA23 is a standard push-pull output driving
+  only the gate of the second NMOS: `PA23=1` asserts its passive drain on
+  shared `SYS_INT_N`, while reset/pulldown releases the interrupt. S3 services
+  the shared IRQ by reading the admission status window; it does not infer the
+  source from the wire level alone.
 - Hardware owns reverse-insertion prevention, observation before admission and
   the charge/discharge FET boundary. Firmware may request admission but cannot
   force a refused pair on or use balancing to mask an unsafe mismatch.
@@ -485,6 +494,10 @@ reopens the owning hardware subblock and cannot broaden runtime permission.
 - The admission image runs a bounded low-clock/duty state machine from AOLDO.
   Flash programming/recovery uses isolated fixture or admitted system power;
   firmware must not assume AOLDO can supply erase/program current.
+- The private MAX17320 SCL/SDA pull-ups are referenced to admission VDD. Bus
+  transactions are forbidden until that rail and NRST have been stable; a
+  reset, brownout or translated `PACK_PFAIL_N=0` aborts the transaction,
+  withdraws admission and publishes a latched reason before any later retry.
 - `PA24/A3` is not an ADC fallback: the exact MSPM0C1104 datasheet permits no
   injection current there, while the battery dividers can remain live during
   admission-supply loss. The corrected PA25/PA26 allocation preserves the

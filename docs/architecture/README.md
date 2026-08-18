@@ -67,6 +67,10 @@ remaining I7 service/recovery paper circuit. [`SVC-0001`](SVC-0001-service-recov
 records attach-as-diagnostic behavior, fixture ID/VTREF ordering, independent
 USB/UART/SWD recovery and mandatory TX-off restart. I1…I7 are reviewed; I8
 consolidated BOM/lifecycle/cost evidence is active upstream.
+Hardware `FND-0109/PWR-0022/DEC-0100/REV-0005BF` subsequently repairs the
+MAX17320/MSPM0 support residue found during that inventory pass. ARC-0002 now
+consumes translated active-low PFAIL, PA23-to-NMOS passive-drain shared IRQ and
+admission-rail/reset sequencing; no runtime capability or GPIO budget changes.
 
 Hardware `PIN-0003/REV-0004V` now review the machine-generated principled
 owner/net/pad atlas. Current direct budgets are S3 `33/3/0`, C5 `14/6/1`, RP

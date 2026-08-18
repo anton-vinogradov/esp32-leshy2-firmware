@@ -149,6 +149,10 @@
   восстанавливаемым firmware-image domain; S3 видит bounded read-only state и
   не может подключить отклонённую пару. Замена ячейки сбрасывает SOC/SOH пары
   и запускает admission/relearning заново.
+  Hardware `PWR-0022/DEC-0100/REV-0005BF` позднее закрывают exact interface:
+  транслированный active-low PFAIL входит в PA16, а PA23 утверждает общий IRQ
+  только через reset-released passive-drain NMOS. ARC-0002 фиксирует полярности
+  и abort behavior без изменения capability.
   `DEC-0067/REV-0005X` затем принимают отсутствие in-device deep-cell recovery
   и exact fully-switching surrounding path. Protected image держит zero-volt и
   prequal выключенными; глубоко разряженная банка отклоняется. `DEC-0074/

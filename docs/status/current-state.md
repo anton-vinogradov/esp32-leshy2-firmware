@@ -145,6 +145,10 @@
   `MAX17320G20+T` as gauge/protector and `MSPM0C1104SDGS20R` as local admission
   owner. The latter becomes a fourth independently recoverable firmware image
   domain; S3 sees bounded read-only state and cannot release a refused pair.
+  Hardware `PWR-0022/DEC-0100/REV-0005BF` later closes their exact interface:
+  translated active-low PFAIL enters PA16, while PA23 asserts the shared IRQ
+  only through a reset-released passive-drain NMOS. ARC-0002 records those
+  polarities and abort behavior without changing product capability.
   A replaced cell invalidates pair SOC/SOH and starts admission/relearning.
   `DEC-0067/REV-0005X` then accept no in-device deep-cell recovery and the
   exact fully-switching surrounding path. The protected image keeps zero-volt

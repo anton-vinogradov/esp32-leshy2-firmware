@@ -123,6 +123,42 @@ class TargetReadmeTests(unittest.TestCase):
         ):
             self.assertIn(token, arc3)
 
+    def test_exact_pack_status_translation_runtime_contract_does_not_regress(self):
+        required_tokens = {
+            "README.md": (
+                "translated power-fail input is active-low and voltage-safe",
+                "shared system interrupt only through a passive-drain transistor",
+                "reset or loss of the admission rail cannot drive the shared line high",
+            ),
+            "README.ru.md": (
+                "транслированный power-fail input является active-low",
+                "общий системный interrupt только через passive-drain транзистор",
+                "потеря питания admission не могут активно поднять общую линию",
+            ),
+        }
+        for readme_name, tokens in required_tokens.items():
+            normalized = " ".join(
+                (REPO_ROOT / readme_name).read_text(encoding="utf-8").split()
+            )
+            for token in tokens:
+                self.assertIn(token, normalized, f"{readme_name}: {token}")
+
+        arc2 = " ".join(
+            (REPO_ROOT / "docs/architecture/ARC-0002-g2f-3i-runtime-input.md")
+            .read_text(encoding="utf-8")
+            .split()
+        )
+        for token in (
+            "PWR-0022/DEC-0100/REV-0005BF",
+            "`PACK_PFAIL_N=0` as asserted power-fail",
+            "PA23 is a standard push-pull output driving only the gate",
+            "`PA23=1` asserts its passive drain on shared `SYS_INT_N`",
+            "reading the admission status window",
+            "transactions are forbidden until that rail and NRST have been stable",
+            "translated `PACK_PFAIL_N=0` aborts the transaction",
+        ):
+            self.assertIn(token, arc2)
+
     def test_exact_i5_audio_runtime_contract_does_not_regress(self):
         required_tokens = {
             "README.md": (

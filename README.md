@@ -213,7 +213,10 @@ flowchart TD
   cell, contact fault or incomplete battery identity blocks battery operation
   and charging and cannot be overridden in software. A dedicated fail-closed
   admission controller makes that decision before the application processor
-  is required and retains independent programming and recovery. A deeply
+  is required and retains independent programming and recovery. Its translated
+  power-fail input is active-low and voltage-safe; its standard GPIO asserts
+  the shared system interrupt only through a passive-drain transistor, so
+  reset or loss of the admission rail cannot drive the shared line high. A deeply
   discharged cell is refused: the handheld has no zero-volt/prequalification
   recovery command, and any recovery research requires a separate isolated
   Controlled-Zone fixture. Before admission, a common-path diagnostic applies
