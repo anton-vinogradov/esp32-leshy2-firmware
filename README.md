@@ -1,331 +1,68 @@
-# Leshy2 Firmware
+# Leshy2 firmware
 
-> **Target firmware site.** This page describes the finished Leshy2 behavior:
-> its interface, radio services, safety, data, updates and recovery. Engineering
-> history and open validation work live in separate documents.
+[Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-- [Русская версия](README.ru.md)
-- [Hardware target product](https://github.com/anton-vinogradov/esp32-leshy2)
-- [Current engineering state](docs/status/current-state.md)
-- [Engineering decisions and evidence](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
+The firmware turns Leshy2 radio paths into one field instrument: it renders the
+menu and waterfall, controls receive and transmit, records data, manages
+expansion and preserves a safe state through faults. This documentation
+describes the resulting product and its implementation.
 
-## Finished-software intent
+## User capabilities
 
-The firmware turns Leshy2 into an autonomous all-in-one instrument for
-communication, observation, diagnostics and authorized research into wireless
-and contact systems. Every core workflow is available on the device: a phone or
-computer may assist with text entry and export, but never becomes the required
-control surface.
-
-Hardware reachability does not imply permission to transmit. Firmware always
-binds an action to a region, antenna, power, target, duration, functional level
-and the current physical STOP state.
+- Fast navigation through D-pad, `OK`, `BACK`, `OPT`, `F1`, `F2`, encoder,
+  touch, `PTT`, `STOP` and `RE-ARM`.
+- A continuously scrolling spectrum waterfall and path indicators, updating
+  only the changed display regions.
+- Receive profiles, scanning, supported-protocol decoding and recording of RF
+  events, audio and metadata to microSD.
+- Full mixed operation of three nRF24 radios: `3R`, `1T2R`, `2T1R` and `3T`
+  without software disabling a neighboring receiver.
+- 2.4/5-GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, Sub-GHz, broadcast RX,
+  VHF/UHF voice, IR and attached LoRa/GNSS modules.
+- Import, export and backup of owner profiles; a locally paired phone may supply
+  occasional long-form text.
 
 ## Three functional levels
 
-1. **Main** — everyday tools, reception, diagnostics, navigation, maintenance
-   and legitimate communications.
-2. **Lab** — passive, defensive and bounded security-research tools.
-3. **Lab → Controlled Zone** — dangerous active/disruptive tools. Every entry
-   requires a fresh non-suppressible warning; every action separately checks
-   authorized target and/or isolated/conducted environment requirements.
+1. **Normal mode** — ordinary receive, diagnostics, maintenance and lawful
+   communications.
+2. **Laboratory** — passive, defensive and constrained research tools.
+3. **Laboratory → Controlled Zone** — potentially dangerous active functions.
+   Every entry shows a fresh mandatory banner; each action requires separate
+   arming and an authorized target or isolated environment.
 
-Leaving the level, lock, timeout, reset, watchdog, update, STOP or loss of a
-required accessory invalidates every affected arm and lease. Initial setup also
-requires explicit acceptance of the non-aggression pledge.
+Firmware cannot override hardware `STOP`, derive permission from detected
+transmission or restore old arming after reset, recovery, profile change or a
+fault.
 
-## How the finished software works
+## Four-domain runtime
 
 ```mermaid
-flowchart TD
-    boot["Power / reset / update<br/>all TX disabled"]
-    pledge["Initial setup<br/>non-aggression pledge"]
-    main["Main<br/>ordinary tools and communication"]
-    lab["Lab<br/>passive and defensive tools"]
-    warning["Controlled Zone<br/>fresh warning on every entry"]
-    checks["Check target, environment, region,<br/>antenna, power and duration"]
-    armed["Arm this action<br/>preview + dead-man + lease"]
-    run["Execute<br/>visible progress and actual-TX state"]
-    safe["SAFE / DISARMED<br/>transmission stopped"]
-
-    boot --> pledge --> main
-    main --> lab --> warning --> checks --> armed --> run
-    run -->|"release / timeout / exit"| safe
-    main -->|"STOP / fault"| safe
-    lab -->|"STOP / fault"| safe
-    warning -->|"cancel / STOP"| safe
-    armed -->|"cancel / STOP"| safe
-    run -->|"STOP / reset / brownout"| safe
-    safe -->|"new safe session"| main
+flowchart TB
+  S3["S3 image<br/>application, UI, display, storage, audio"]
+  C5["C5 image<br/>native 2.4/5 GHz, 802.15.4, IR"]
+  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, U214"]
+  MSP["MSPM0 image<br/>local battery-pack admission"]
+  S3 <-->|"versioned SDIO messages"| C5
+  S3 <-->|"versioned SPI messages + alert"| RP
+  S3 -->|"bounded commands"| MSP
+  MSP -->|"read-only state/fault"| S3
 ```
 
-## User interface
+Hard real-time reactions execute at the physical path owner. Inter-processor
+messages are typed and versioned; link loss revokes the lease and moves the
+dependent function to a safe state. Display, storage and radio avoid long
+cross-subsystem blocking operations.
 
-- The home screen shows the active signal group, profile, antenna,
-  channel/frequency, recording, power and safety state.
-- Menus and critical warnings respond within `100 ms`; dirty/tiled waterfall
-  updates yield to radio, audio and storage service.
-- The complete local set is D-pad directions plus OK, BACK, OPT, F1, F2,
-  rotary encoder with push, dedicated hold-to-talk PTT, hardware STOP and
-  recessed RE-ARM. Touch and phone text input do not replace any of them.
-- D-pad/OK/BACK/OPT/F1/F2 and encoder push use a dedicated `TCA9534APWR`
-  (`P0…P6`, candidate address `0x3F`) for an interrupt-started 4×3 scan; `P7`
-  remains reserved for local control growth. Every ordinary position, including
-  F1 and F2, is its own `C&K Y78B23214FP` low-current switch, and all eight
-  expander lines have dedicated keypad/GPIO ESD protection.
-  Encoder phases are captured independently by S3 PCNT0 on GPIO39/GPIO47, so
-  display, storage and I²C work cannot lose quadrature edges. PTT is a separate
-  filtered direct RP GPIO21 input. STOP uses an independent normally-closed
-  `Panasonic AEQ10410` AON loop, so pressing it or losing its connection stops
-  the device; RE-ARM remains a separate recessed physical control.
-- Main `TCA6424ARGJR` slow I/O is fixed at I²C address `0x22`; pack admission
-  uses `0x2A`. Shared-IRQ service discovers every asserting source, and an
-  unrecoverable expander fault enters safe/degraded operation before a complete
-  main-rail reset. Isolated STOP/evidence observations preserve their polarity
-  without making firmware part of the hard-STOP path.
-- C5 GPIO23/GPIO24 and RP GPIO22 consume active-low RF/IR/ANY-TX evidence
-  through one AON-powered `SN74LVC3G07DCUR` and separate main-domain pull-ups.
-  Firmware has no polarity/population mode: first resistor populations are
-  hardware defaults, while measured per-path calibration still enables each
-  proof-mandatory TX profile.
-- Display and touch stay in hardware reset until their common protected logic
-  rail is stable. Firmware waits at least `120 ms` before display Sleep Out and
-  `100 ms` before touch use, then enables the PWM backlight last. Integrated
-  `Sitronix ST77922` touch is fixed at I²C address `0x38`; its active-low IRQ
-  reaches shared GPIO37 through a 10-kOhm raw pull-up and fixed non-inverting
-  open-drain `SN74LVC1G07DCKR`, so firmware has no polarity profile. A latched
-  backlight fault is never auto-retried; loss of the screen cannot stop radio,
-  recording or the physical STOP path.
-- Any visual frame loss is reported explicitly and never implies loss of raw
-  radio or audio data.
-- Receive audio keeps a hardware bypass and remains usable while the codec is
-  off or recovering. Recording independently selects the active receiver or
-  the local microphone; microphone analysis and host-side VOX never imply PTT.
-- Codec playback is enabled only after physical power/readiness, I²C readback
-  at `0x19` and stable I²S. Headphone insertion immediately disables the
-  reset-off speaker path; any audio/bus/DMA/brownout fault disarms codec
-  playback and TX injection before shutdown.
-- A microSD session starts only after stable insertion, isolated-rail power-up
-  and card entry into SPI mode while display CS remains high. Safe removal
-  blocks new writers and drains committed data before power-off. Unexpected
-  removal is reported as possible loss of the unwritten tail and enters checked
-  recovery; it is never presented as a clean recording.
-- Commanded TX, measured current, radio-reported state and independent
-  actual-TX evidence are displayed separately. `Unknown` remains visible.
-- Long-form text may come from a locally paired phone. Preview and consequences
-  remain on Leshy2; the phone cannot accept the pledge, enter Controlled Zone
-  or authorize TX and destructive actions.
+## Update and owner control
 
-## Radio services
+Images are signed, target-bound and installed with rollback. Signatures protect
+against package substitution without closing the device: owners can build from
+source, use their own keys and recover each controller through an independent
+physical interface. Irreversible lockdown is not enabled by default.
 
-- Every physical radio owner locally enforces timing, queues, timestamps,
-  timeouts, TX leases and safe-off. Inter-processor communication carries
-  commands and data rather than becoming remote raw GPIO.
-- Three nRF24 paths retain independent PTX/PRX in every simultaneous
-  `3R/1T2R/2T1R/3T` mix without automatic peer standby.
-- Entering the nRF group powers all three isolated endpoints, waits at least
-  `100 ms` and validates every radio before use. Leaving it parks all six
-  digital directions and confirms three independent forward-power detectors
-  are inactive before the common rail discharges.
-- Only one qualified top-level signal group is active at a time; unused
-  interfaces enter a verified quiet state. Cross-group Laboratory injection
-  may test overload and recovery, but never grants runtime permission.
-- 2.4/5 GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, packet Sub-GHz, analog voice,
-  broadcast reception, IR and external GNSS/LoRa/NFC use separate profiles,
-  permissions and result evidence.
-- Native S3 2.4-GHz and C5 2.4/5-GHz transmission use separate external feeds
-  and separate directional actual-TX observations. Each lease binds its exact
-  band/channel, regional profile, calibrated feed loss and antenna identity;
-  missing or inconsistent evidence disables that TX profile. Strong inbound
-  RF may conservatively delay a quiet-state transition but cannot authorize TX.
-- CC1101 exposes separate 315-MHz, 433-MHz and combined 868/915-MHz hardware
-  endpoints. Two `BGS13SN8E6327XTSA1` switches isolate every unselected branch
-  at both ends; code `00` is safe isolation. A band changes only with CC power
-  off, then identity and the complete register profile are read back before RX
-  or TX. Final-line `AD8314ACPZ-RL7` evidence must match a live lease; inbound
-  RF may delay quiet but never grants transmission.
-- SA518 voice exposes separate VHF and UHF profiles over one direct protected
-  50-Ohm external feed. Every TX lease binds channel, H/L power, region and the
-  separately labelled antenna. Final-line `AD8314ACPZ-RL7` evidence must assert
-  during PTT and decay during shutdown; missing evidence revokes PTT, while
-  strong inbound RF may only report external RF and delay quiet. It never
-  creates or extends a lease.
-- IR learning captures the robust active-low 38-kHz envelope from
-  `TSOP95238TT` and the measured 30–60-kHz carrier cycles from `TSMP95000TT`
-  simultaneously, while keeping their provenance separate. A current-limited
-  `VSMY14940` emitter is dark by reset and hard STOP; a shielded
-  `VEMD1060X01` plus `TLV9061IDBVR` observes real emitted light. Missing light
-  revokes TX, while ambient light can only delay quiet and never authorizes it.
-- The broadcast receiver is admitted behind its own power/interface gate and
-  identified at supported address `0x11` or `0x63`. Analog voice defaults to
-  receive and ordinary electret audio; codec-injected TX audio still requires
-  separate direct audio arming plus the independently authorized AON-gated
-  PTT. The voice module's power mode is driven low-or-released, never high.
-- The `Si4732-A10-GSR` keeps four receive modes on two immutable ports:
-  FM/SW uses the protected FMI path, while AM/LW uses a separately protected
-  non-50-Ohm short loop-pod path. Results and recordings always retain mode,
-  physical port and antenna/pod qualification; the 2.3–25-MHz SW region and
-  unknown pods remain visibly unqualified Laboratory experiments. The block
-  has no RF switch or transmitter, and arbitrary long coax is not a qualified
-  AM/LW accessory.
-- iButton/1-Wire separates ordinary use of owned devices, Lab reading and
-  individually armed Controlled-Zone emulation/write; attaching the adapter
-  authorizes nothing by itself.
-- M5 Unit and U214 Cap accessories are profile-managed and electrically
-  independent. Neither connector has a presence pin: both stay unpowered and
-  high-Z until an exact signed manifest is selected. Runtime powers only the
-  requested branch, waits for protected-rail READY, then enables signal
-  isolation and verifies profile-specific identity/readback. Mismatch, external
-  power, backfeed, overcurrent or stuck-bus evidence latches that branch off and
-  requires a new explicit session. If an external raw-SDR or RF-analysis module
-  needs high-throughput transport, its concrete profile defines that transport
-  rather than relabelling a low-rate command link.
-- Changing an antenna, regional profile, frequency profile or accessory clears
-  TX arm. Unknown or incompatible identity denies transmission.
+## Documentation
 
-## Data and privacy
-
-- Every record carries time, source, profile, frequency/channel, antenna,
-  quality, gaps and applicable calibration metadata.
-- Raw capture stays separate from decoded and derived results; reprocessing
-  never rewrites the original.
-- Imported files, scripts and captures remain inert until a tool is explicitly
-  selected, checked and armed.
-- Secrets, credential data and third-party recordings have explicit storage
-  scope, lifetime, export policy and secure-deletion behavior.
-- Missing GNSS, IMU or accessory metadata is marked unavailable and never
-  replaced by an inference.
-- A qualified external IMU may record raw acceleration/gyro, pitch/roll and
-  short-term relative rotation. Without an indexed mount it is never described
-  as absolute heading or RF bearing.
-
-## STOP and safe state
-
-- Every transmitter starts disabled after power, reset, brownout, watchdog or
-  update. Previous target, power, payload, session and lease are not restored.
-- Physical STOP dominates UI, IPC, storage and a hung compute domain. Releasing
-  STOP does not re-arm the device; a separate fresh physical RE-ARM starts a
-  new TX-off boot of every compute domain.
-- Eight source-specific hardware observations cover the two native radios,
-  three nRF paths, packet Sub-GHz, analog voice and optical IR. A separate
-  wired aggregate and red indicator do not depend on firmware; missing or
-  inconsistent evidence is shown as `Unknown`, never silently treated as safe.
-- Leaving a tool or level, lock, timeout, link loss, accessory removal and
-  profile error immediately invalidate affected TX permissions.
-- The supervised 2S battery reports its two replaceable exact
-  `XTAR 18650 4000mAh` protected button-top cells separately and as one
-  required pair (`28.8 Wh` nominal). An unsafe combination, either removed
-  cell, contact fault or incomplete battery identity blocks battery operation
-  and charging and cannot be overridden in software. A dedicated fail-closed
-  admission controller makes that decision before the application processor
-  is required and retains independent programming and recovery. Its translated
-  power-fail input is active-low and voltage-safe; its standard GPIO asserts
-  the shared system interrupt only through a passive-drain transistor, so
-  reset or loss of the admission rail cannot drive the shared line high. A deeply
-  discharged cell is refused: the handheld has no zero-volt/prequalification
-  recovery command, and any recovery research requires a separate isolated
-  Controlled-Zone fixture. Before admission, a common-path diagnostic applies
-  approximately 0.57-0.88 A for no more than 50 ms and compares both cells;
-  one non-retriggerable hardware channel prevents pulse stretching and a
-  second blocks every retry for at least 350 ms even with stuck firmware.
-  Normal software waits at least 10 seconds. Factory acceptance also rejects a
-  timer pulse shorter than 25 ms, preserving the filtered loaded-sample window. This
-  screen is never presented as full-load
-  qualification.
-- Supported cells are exact `XTAR 18650 4000mAh` protected button-top devices
-  installed in the polarized `Keystone 1048P`; raw flat-top cells are
-  unsupported, as are USB-equipped variants. Normal charge never exceeds 2 A and is blocked
-  outside the conservative allowed temperature window, initially `0…45 °C`. Two cell
-  temperature channels and the charger's independent temperature channel must
-  all be valid. Software cannot infer cell authenticity from two contacts or
-  replace a lifted temperature sensor with an estimate.
-- USB-C power is sink-only: firmware accepts 5-V fallback, 9 V/3 A or 15 V/2 A
-  up to 30 W, reports the actual contract and load-aware charge limit, and
-  never enables 20 V, PPS, source, power-bank or charger-OTG behavior.
-- Native S3 USB2 Full-Speed data (12 Mbit/s) and both Type-C configuration
-  lines have automatic hardware short-to-VBUS/ESD protection. A port fault
-  closes the USB session and waits for safe physical recovery and
-  re-enumeration; Alt Mode is not supported.
-- On raw USB power the PD controller enters hardware SafeMode and loads its
-  dedicated EEPROM without S3. The protected VBUS path and charging remain off
-  until a valid policy is present; missing or corrupt policy requires the
-  independent recovery pads rather than a permissive software fallback.
-- The charger is physically fixed to 2S/750 kHz. Reset charging is `1 A`;
-  runtime may use at most `2 A` only after it applies the actual USB current
-  contract, accounts for system load, verifies both cells and passes the
-  charger's independent battery-temperature gate.
-- System operation always has priority over charging. The initial admission
-  budget treats only 85% of the negotiated input power as usable, reserves the
-  larger of the declared scenario load or measured load plus margin, and gives
-  only the remainder to the battery. Missing power evidence, input-current
-  limiting, a thermal condition or a power fault reduces charge to zero.
-- Always-on safety, 3.3-V compute, 4.0-V voice and protected 5.0-V accessory
-  power are separate fixed rails. Unused nRF, CC1101, storage, codec and
-  receiver branches are powered down, discharged and verified quiet; software
-  cannot select another rail voltage or bypass a hardware power fault.
-- Every internal converter output crosses an independent overvoltage, current
-  and short-circuit cutoff before reaching a load. Runtime trusts only
-  protected-side power-good evidence. A latched main trip needs a complete
-  source-removal cycle. The always-on cutoff may perform bounded hardware
-  recovery attempts, but firmware cannot accelerate them or release compute
-  before protected power is stably valid.
-- An admitted source starts the always-on rail directly. Its power-good and a
-  3.07-V supervisor threshold must both hold before a delayed hardware POR
-  enables the main 3.3-V rail; firmware cannot bypass startup or keep compute
-  alive through an always-on brownout.
-- Voice/accessory power-good evidence is qualified by its hardware enable:
-  an intentionally disabled rail is normal, while an enabled rail that does
-  not become good within its bounded startup window fails closed.
-- The accessory current limit is active immediately during startup; a
-  controlled voltage ramp admits the external capacitance. The port supports
-  `1.25 A` continuously and one bounded `2.0 A` post-start transient, never
-  treating the transient timer as startup or continuous current budget.
-- An external-accessory power fault latches the protected port off. Removing
-  the cause and explicitly starting a new session is required; firmware never
-  runs an automatic power-retry loop against a faulty accessory.
-- Ordinary UI effects may be muted, but active TX, STOP failure, critical
-  battery and other unsafe states cannot be hidden.
-
-## Updates and recovery
-
-- Every installable image has a signed manifest with hardware/profile identity,
-  protocol range, hash, rollback index and migration rules.
-- Normal update validates target and signature before activation, supports A/B
-  rollback and never arms TX after restart.
-- Every programmable domain can be independently flashed, recovered and
-  diagnosed without a healthy application image or peer processor.
-- S3 uses product USB plus keyed UART0/RESET/BOOT; C5 uses an independent
-  data-only USB plus keyed UART0/RESET/BOOT; `SC1512-A4 (RP2354B0A4)` uses an independent
-  data-only USB plus keyed SWD/RUN/USB_BOOT. Every domain has separate physical
-  RESET and BOOT controls.
-- C5/RP service VBUS never powers the product and their D+/D- disconnect when
-  the board is off. Service attach is diagnostic only: it never arms TX or
-  authorizes Laboratory/Controlled-Zone work. Invalid fixture identity fails
-  high-Z, and every recovery restart creates a fresh TX-off session.
-- The PD policy image is a versioned, reproducible, owner-signed artifact.
-  Field update writes an inactive EEPROM region and keeps rollback; direct
-  factory/recovery pads can restore a blank or corrupt device without S3 after
-  the current-limited raw-VBUS fixture confirms the controller bus is idle.
-- The owner retains offline/reproducible build and signing tools. Owner firmware
-  remains installable through an explicit recovery workflow; irreversible
-  lockdown is not the standard mode.
-
-## Software boundary
-
-Firmware does not promise 6 GHz/Wi-Fi 6E, generic USB host, personal FIDO/U2F,
-an integrated keyboard or onboard-IMU functions. BadUSB/DuckyScript is only an
-optional Controlled-Zone tool over the existing USB device path; it never
-autoruns and cannot block delivery of the radio/key product core.
-
-## Architecture contract
-
-The finished device may use multiple signed images. Event types, manifests,
-package formats and test vectors are shared, while physical radio ownership,
-local deadlines and independent recovery paths remain explicit.
-
-## Project documentation
-
-- [Current firmware engineering state](docs/status/current-state.md)
-- [Firmware architecture inputs](docs/architecture/README.md)
-- [Hardware target product](https://github.com/anton-vinogradov/esp32-leshy2)
-- [Complete requirements, decisions and evidence ledger](https://github.com/anton-vinogradov/esp32-leshy2/tree/main/docs/review)
+- [Firmware architecture and subsystem behavior](docs/architecture.md)
+- [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)
+- [Safety model](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/safety.md)
