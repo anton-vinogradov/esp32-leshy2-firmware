@@ -27,12 +27,12 @@ class ProductSiteTests(unittest.TestCase):
         required = {
             "README.md": (
                 "three nRF24", "`3R`", "`1T2R`", "`2T1R`", "`3T`",
-                "spectrum waterfall", "Controlled Zone", "hardware `STOP`",
+                "spectrum waterfall", "Controlled Zone", "hardware `FAULT_KILL`",
                 "signed", "owner",
             ),
             "README.ru.md": (
                 "трёх nRF24", "`3R`", "`1T2R`", "`2T1R`", "`3T`",
-                "спектральный водопад", "Контролируемая зона", "аппаратный `STOP`",
+                "спектральный водопад", "Контролируемая зона", "аппаратный `FAULT_KILL`",
                 "подписаны", "владелец",
             ),
         }
@@ -43,7 +43,7 @@ class ProductSiteTests(unittest.TestCase):
             for forbidden in ("DEC-", "FND-", "REV-", "IMP-", "docs/status", "tree/main/docs/review"):
                 self.assertNotIn(forbidden, page, name)
 
-    def test_runtime_architecture_has_four_physical_owners(self):
+    def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")
             for token in (
@@ -51,6 +51,7 @@ class ProductSiteTests(unittest.TestCase):
                 "ESP32-C5-WROOM-1U-N8R8",
                 "SC1512-A4",
                 "MSPM0C1104SDGS20R",
+                "TPS3435CAKAGDDFR",
                 "1-bit SDIO",
                 "SPI3",
             ):
@@ -85,7 +86,23 @@ class ProductSiteTests(unittest.TestCase):
                 self.assertIn(token, page, f"{name}: {token}")
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")
-            for token in ("U214", "M5 Unit", "audio", "PTT", "RE-ARM", "microSD"):
+            for token in ("U214", "M5 Unit", "audio", "PTT", "RUN/KILL", "microSD"):
+                self.assertIn(token, page, f"{name}: {token}")
+
+    def test_unattended_fault_contract_is_public(self):
+        expected = {
+            "docs/architecture.md": (
+                "1.6-second timeout watchdog", "three NTC channels", "fault-viewer",
+                "KILL`→`RUN", "automatic restart is never permitted",
+            ),
+            "docs/architecture.ru.md": (
+                "timeout-watchdog", "три NTC", "fault viewer",
+                "KILL`→`RUN", "автоматический restart запрещён",
+            ),
+        }
+        for name, tokens in expected.items():
+            page = " ".join(self.read(name).split())
+            for token in tokens:
                 self.assertIn(token, page, f"{name}: {token}")
 
     def test_update_model_preserves_owner_control(self):
@@ -105,7 +122,7 @@ class ProductSiteTests(unittest.TestCase):
             diagram = diagrams[0]
             self.assertIn("flowchart TB", diagram, name)
             self.assertLess(len(diagram), 2000, name)
-            for node in ("S3[", "C5[", "RP[", "MSP["):
+            for node in ("S3[", "C5[", "RP[", "PACK[", "SAFE[", "WDG["):
                 self.assertEqual(1, diagram.count(node), f"{name}: {node}")
 
     def test_cross_repository_links_point_to_product_pages(self):

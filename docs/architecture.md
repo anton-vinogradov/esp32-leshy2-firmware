@@ -10,11 +10,15 @@
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2.4/5 GHz, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
 | RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1104SDGS20R` | Two-cell admission and local fail-closed power state | Keyed fixture interface and reset |
+| Safety | second `MSPM0C1104SDGS20R` | Heartbeats, TX leases, three thermal zones, physical TX evidence and retained fault record | Isolated SWD/UART/reset fixture path |
 
 S3 coordinates the user scenario but does not replace local owners. C5 and RP
 meet radio deadlines locally, revoke TX when a lease disappears and report
 actual path state. The pack controller exposes only bounded read-only state and
 fault information to S3; S3 cannot command it to accept an unsafe cell pair.
+The safety controller is independent of the pack controller, owns the private
+TX-evidence bus and is the only device allowed to service the external
+`TPS3435CAKAGDDFR` 1.6-second timeout watchdog.
 
 ## Inter-processor messages
 
@@ -51,8 +55,9 @@ They do not hold CPU or bus resources long enough to miss a radio deadline.
   storage activity.
 - The encoder uses hardware PCNT; the key matrix is interrupt-driven rather
   than continuously polled.
-- `PTT` is a separate held voice-TX request. `STOP` is asynchronous and always
-  dominates. `RE-ARM` never repeats an old command.
+- `PTT` is a separate held voice-TX request. The maintained `RUN/KILL` switch
+  is asynchronous and always dominates. Only a physical `KILL`→`RUN` edge can
+  clear a releasable fault; software cannot repeat or synthesize it.
 
 ## Radio and IR
 
@@ -65,7 +70,7 @@ The three nRF24 radios have independent queues, SPI resources, IRQs and
 evidence. Their group scheduler coordinates them without turning mixed mode
 into a sequential simulation. The IR service concurrently receives a
 demodulated 38-kHz stream and measures a 30–60-kHz carrier; transmit requires
-hardware STOP qualification and optical evidence.
+hardware `RUN_PERMIT` qualification and optical evidence.
 
 ## Storage, audio and expansion
 
@@ -85,6 +90,25 @@ hardware STOP qualification and optical evidence.
 A potentially dangerous function requires the appropriate UI level, an
 authorized target/profile, preview, separate arming and a time-bounded lease.
 Evidence confirms execution but never creates permission.
+
+### Unattended safety and fault display
+
+- S3 publishes a bounded heartbeat and one short-lived lease naming the active
+  signal group. The safety controller independently compares that lease with
+  `ANY_TX_AON_N` and the eight per-path evidence bits.
+- The safety controller services the TPS3435 deadline only while its own loop,
+  the S3 heartbeat, the active lease, power-fault input and three NTC channels
+  are healthy. TPS3435 timeout or any controller fault asynchronously latches
+  `FAULT_KILL`.
+- The retained record contains primary source, affected zone or signal group,
+  measured value, limit, evidence mask, rail state and monotonic event ID.
+- C5 and RP remain reset after a fault. S3 may enter a signed, read-only
+  fault-viewer image only while the UI/display thermal zone and main rail are
+  safe. The screen states the cause, what was disabled and that the operator
+  must move `RUN` to `KILL` before attempting restart.
+- UI/display overtemperature or unsafe display power turns the screen off. The
+  AON amber `FAULT` LED and retained record remain; automatic restart is never
+  permitted.
 
 An update package contains signed target-bound images, a shared manifest and
 compatible protocol versions. It writes inactive slots and commits only after
