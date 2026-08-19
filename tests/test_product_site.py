@@ -1,4 +1,6 @@
 import csv
+import importlib.util
+import json
 import re
 import unittest
 from pathlib import Path
@@ -181,6 +183,27 @@ class ProductSiteTests(unittest.TestCase):
             )
         self.assertEqual(0x1000000, ordered[-1]["offset"] + ordered[-1]["size"])
         self.assertEqual("encrypted", rows["nvs_keys"]["flags"])
+
+    def test_s3_image_size_checker_preserves_rollback_margin(self):
+        limits = json.loads(self.read("config/s3_image_limits.json"))
+        self.assertEqual(0x700000, limits["slot_bytes"])
+        self.assertEqual(0x600000, limits["warning_bytes"])
+        self.assertEqual(0x6C0000, limits["maximum_image_bytes"])
+        self.assertEqual(
+            limits["required_slot_margin_bytes"],
+            limits["slot_bytes"] - limits["maximum_image_bytes"],
+        )
+
+        checker_path = REPO_ROOT / "tools/check_s3_image_size.py"
+        spec = importlib.util.spec_from_file_location("check_s3_image_size", checker_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        checker = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(checker)
+        self.assertEqual("ok", checker.classify(0x600000, limits))
+        self.assertEqual("warning", checker.classify(0x600001, limits))
+        self.assertEqual("warning", checker.classify(0x6C0000, limits))
+        self.assertEqual("reject", checker.classify(0x6C0001, limits))
 
     def test_mermaid_diagram_is_bounded_and_has_no_combined_physical_owner(self):
         for name in ("README.md", "README.ru.md"):

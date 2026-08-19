@@ -19,6 +19,11 @@ known-good image. CI warns above 6 MiB and rejects an application image above
 `0x6C0000` (6.75 MiB), retaining 256 KiB of per-slot margin for image growth,
 alignment and signing metadata.
 
+CI does not duplicate these limits by hand:
+[`config/s3_image_limits.json`](../config/s3_image_limits.json) is consumed by
+[`tools/check_s3_image_size.py`](../tools/check_s3_image_size.py). A new feature
+cannot silently shrink the second OTA slot.
+
 | Partition | Offset | Size | Purpose |
 |---|---:|---:|---|
 | bootloader + table | `0x000000` | through `0x009000` | ROM-loaded signed boot path and partition table |
@@ -42,6 +47,21 @@ owner/release key, booted as pending and committed only after bounded health
 checks. Failure, watchdog reset or incompatible inter-domain protocol rolls
 back. Native USB, UART0 and the keyed service header remain independent of both
 OTA slots.
+
+## Why the executable image is bounded
+
+S3 does not contain the firmware for the three nRF24 radios, CC1101, SA518,
+U214 or IR: those real-time radio functions execute on RP and C5. The S3 image
+contains the application, UI, display/storage/audio, BLE/Wi-Fi and inter-domain
+protocols. Fonts beyond the minimal fault viewer, recordings, maps,
+dictionaries, captures and replaceable UI packs are versioned microSD data,
+not executable code.
+
+The 6-MiB threshold is therefore an early measurement gate, not a guessed final
+size. At that point CI retains a map/size report and first requires removal of
+accidentally linked assets and duplicate libraries. Only measured production
+code that remains too large after that work can reopen the flash layout for a
+separate architecture review; rollback capacity is never taken silently.
 
 ## Runtime RAM
 

@@ -1,0 +1,7 @@
+{
+  "slot_bytes": 7340032,
+  "warning_bytes": 6291456,
+  "maximum_image_bytes": 7077888,
+  "required_slot_margin_bytes": 262144,
+  "policy": "keep both OTA slots; move replaceable data to microSD before consuming rollback capacity"
+}
