@@ -80,5 +80,6 @@ radio не блокируют друг друга длинными общими 
 ## Документация
 
 - [Архитектура прошивки и поведение подсистем](docs/architecture.ru.md)
+- [Разметка flash, PSRAM и rollback](docs/memory.ru.md)
 - [Аппаратная архитектура](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)
 - [Модель безопасности](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/safety.ru.md)

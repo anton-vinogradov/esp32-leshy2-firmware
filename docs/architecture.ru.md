@@ -6,7 +6,7 @@
 
 | Image | Физический владелец | Локальные задачи | Независимое восстановление |
 |---|---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R2` | Приложение, меню, display, microSD, audio, BLE/Wi‑Fi | Product USB, UART0, RESET, BOOT |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | Приложение, меню, display, microSD, audio, BLE/Wi‑Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2,4/5 ГГц, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
 | RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1104SDGS20R` | Допуск двух ячеек и локальный fail-closed power state | Keyed fixture interface и reset |
@@ -118,3 +118,6 @@ Update package содержит подписанные target-bound images, об
 Ключи владельца поддерживаются наравне с ключами готовой сборки. Проверка
 подписи защищает целостность и автора образа, а не запрещает модификацию
 открытого исходного кода.
+
+Точная dual-slot разметка flash 16 МБ и использование PSRAM с ECC приведены в
+[контракте памяти](memory.ru.md).

@@ -6,7 +6,7 @@
 
 | Image | Physical owner | Local responsibilities | Independent recovery |
 |---|---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R2` | Application, menu, display, microSD, audio, BLE/Wi-Fi | Product USB, UART0, RESET, BOOT |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | Application, menu, display, microSD, audio, BLE/Wi-Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2.4/5 GHz, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
 | RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1104SDGS20R` | Two-cell admission and local fail-closed power state | Keyed fixture interface and reset |
@@ -118,3 +118,6 @@ domain always ends TX-off.
 Owner keys are supported alongside release keys. Signature verification
 protects image integrity and authorship without preventing modification of the
 open source.
+
+The exact 16-MB dual-slot flash and ECC-protected PSRAM allocation is documented
+in the [memory contract](memory.md).

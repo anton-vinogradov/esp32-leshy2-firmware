@@ -1,3 +1,4 @@
+import csv
 import re
 import unittest
 from pathlib import Path
@@ -16,6 +17,8 @@ class ProductSiteTests(unittest.TestCase):
             "README.ru.md",
             "docs/architecture.md",
             "docs/architecture.ru.md",
+            "docs/memory.md",
+            "docs/memory.ru.md",
         }
         public_markdown = {
             str(path.relative_to(REPO_ROOT))
@@ -47,7 +50,7 @@ class ProductSiteTests(unittest.TestCase):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")
             for token in (
-                "ESP32-S3-WROOM-1U-N16R2",
+                "ESP32-S3-WROOM-1U-N16R8",
                 "ESP32-C5-WROOM-1U-N8R8",
                 "SC1512-A4",
                 "MSPM0C1104SDGS20R",
@@ -115,6 +118,70 @@ class ProductSiteTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token, page, f"{name}: {token}")
 
+    def test_large_s3_image_keeps_dual_slot_rollback(self):
+        for name in ("docs/memory.md", "docs/memory.ru.md"):
+            page = self.read(name)
+            for token in (
+                "ESP32-S3-WROOM-1U-N16R8", "0x700000", "ota_0", "ota_1",
+                "0x6C0000", "ECC", "microSD", "rollback",
+            ):
+                self.assertIn(token, page, f"{name}: {token}")
+            self.assertRegex(page, r"7[.,]5")
+
+    def test_s3_production_defaults_make_ecc_non_optional(self):
+        defaults = {
+            line.strip()
+            for line in self.read("config/sdkconfig.defaults.esp32s3").splitlines()
+            if line.strip() and not line.startswith("#")
+        }
+        for required in (
+            "CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y",
+            "CONFIG_PARTITION_TABLE_CUSTOM=y",
+            'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="config/partitions_16m.csv"',
+            "CONFIG_SPIRAM=y",
+            "CONFIG_SPIRAM_MODE_OCT=y",
+            "CONFIG_SPIRAM_SPEED_80M=y",
+            "CONFIG_SPIRAM_BOOT_INIT=y",
+            "CONFIG_SPIRAM_ECC_ENABLE=y",
+        ):
+            self.assertIn(required, defaults)
+
+        for name in ("docs/memory.md", "docs/memory.ru.md"):
+            page = self.read(name)
+            for token in ("CONFIG_SPIRAM_ECC_ENABLE=y", "0x780000", "self-test"):
+                self.assertIn(token, page, f"{name}: {token}")
+
+    def test_16m_partition_source_has_two_seven_mib_ota_slots(self):
+        table_path = REPO_ROOT / "config/partitions_16m.csv"
+        with table_path.open(encoding="utf-8", newline="") as source:
+            rows = {
+                row[0].strip(): {
+                    "type": row[1].strip(),
+                    "subtype": row[2].strip(),
+                    "offset": int(row[3].strip(), 0),
+                    "size": int(row[4].strip(), 0),
+                    "flags": row[5].strip() if len(row) > 5 else "",
+                }
+                for row in csv.reader(
+                    line for line in source if not line.lstrip().startswith("#")
+                )
+                if row
+            }
+
+        for slot, offset in (("ota_0", 0x030000), ("ota_1", 0x730000)):
+            self.assertEqual("app", rows[slot]["type"])
+            self.assertEqual(slot, rows[slot]["subtype"])
+            self.assertEqual(offset, rows[slot]["offset"])
+            self.assertEqual(0x700000, rows[slot]["size"])
+
+        ordered = sorted(rows.values(), key=lambda row: row["offset"])
+        for previous, current in zip(ordered, ordered[1:]):
+            self.assertLessEqual(
+                previous["offset"] + previous["size"], current["offset"]
+            )
+        self.assertEqual(0x1000000, ordered[-1]["offset"] + ordered[-1]["size"])
+        self.assertEqual("encrypted", rows["nvs_keys"]["flags"])
+
     def test_mermaid_diagram_is_bounded_and_has_no_combined_physical_owner(self):
         for name in ("README.md", "README.ru.md"):
             diagrams = re.findall(r"```mermaid\n(.*?)```", self.read(name), re.DOTALL)
@@ -126,13 +193,13 @@ class ProductSiteTests(unittest.TestCase):
                 self.assertEqual(1, diagram.count(node), f"{name}: {node}")
 
     def test_cross_repository_links_point_to_product_pages(self):
-        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md"):
+        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/memory.md", "docs/memory.ru.md"):
             page = self.read(name)
             self.assertIn("github.com/anton-vinogradov/esp32-leshy2", page, name)
             self.assertNotIn("/docs/review", page, name)
 
     def test_all_local_public_links_exist(self):
-        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md"):
+        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/memory.md", "docs/memory.ru.md"):
             page_path = REPO_ROOT / name
             page = page_path.read_text(encoding="utf-8")
             for target in re.findall(r"!?\[[^]]*\]\(([^)]+)\)", page):

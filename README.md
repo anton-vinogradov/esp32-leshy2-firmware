@@ -77,5 +77,6 @@ physical interface. Irreversible lockdown is not enabled by default.
 ## Documentation
 
 - [Firmware architecture and subsystem behavior](docs/architecture.md)
+- [Flash, PSRAM and rollback layout](docs/memory.md)
 - [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)
 - [Safety model](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/safety.md)
