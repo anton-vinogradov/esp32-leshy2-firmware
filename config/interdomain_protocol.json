@@ -1,0 +1,229 @@
+{
+  "schema": 1,
+  "review_status": "paper_reviewed",
+  "sources": [
+    {
+      "id": "ESP32_C5_SDIO_DRIVER",
+      "document": "Espressif ESP32-C5 SDIO Card Slave Driver",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/latest/esp32c5/api-reference/peripherals/sdio_slave.html",
+      "supports": "1-bit mode, DAT1 interrupt, FIFO/register services and DMA"
+    },
+    {
+      "id": "ESP32_C5_SDIO_SILICON",
+      "document": "Espressif ESP32-C5 Schematic Checklist",
+      "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c5/schematic-checklist.html",
+      "supports": "fixed SDIO contacts and revision v1.0-or-later requirement"
+    },
+    {
+      "id": "RP2350_SPI_DMA",
+      "document": "Raspberry Pi Pico SDK hardware SPI and DMA APIs",
+      "url": "https://www.raspberrypi.com/documentation/pico-sdk/hardware.html",
+      "supports": "SPI1 slave mode and separate SPI1 TX/RX DMA request lines"
+    },
+    {
+      "id": "M5_U214_PINMAP",
+      "document": "M5Stack Cap LoRa-1262 U214 product pin map",
+      "url": "https://docs.m5stack.com/en/cap/Cap_LoRa-1262",
+      "supports": "the stock Cap-Bus exposes SPI, BUSY, IRQ, RESET, UART, I2C and power but no independent actual-RF evidence output"
+    }
+  ],
+  "protocol": {
+    "name": "L2IP",
+    "major": 1,
+    "minor": 0,
+    "byte_order": "little-endian",
+    "magic_ascii": "LSH2",
+    "magic_u32_le": "0x3248534C",
+    "integrity": "CRC-32C Castagnoli over each header and its declared payload",
+    "rule": "a successful transport transfer proves delivery only; a state-changing request succeeds only after a typed result reports the reached owner state"
+  },
+  "domains": [
+    {"id": 1, "name": "S3", "role": "application and update coordinator"},
+    {"id": 2, "name": "C5", "role": "native 2.4/5-GHz, IEEE 802.15.4 and IR owner"},
+    {"id": 3, "name": "RP", "role": "nRF24, Sub-GHz, voice and U214 owner"},
+    {"id": 4, "name": "PACK", "role": "local battery-pack admission owner"},
+    {"id": 5, "name": "SAFETY", "role": "AON heartbeat, lease, evidence and thermal owner"}
+  ],
+  "high_speed_header": {
+    "bytes": 32,
+    "fields": [
+      {"name": "magic", "offset": 0, "bytes": 4, "type": "u32"},
+      {"name": "major", "offset": 4, "bytes": 1, "type": "u8"},
+      {"name": "minor", "offset": 5, "bytes": 1, "type": "u8"},
+      {"name": "header_bytes", "offset": 6, "bytes": 1, "type": "u8"},
+      {"name": "flags", "offset": 7, "bytes": 1, "type": "u8"},
+      {"name": "message_type", "offset": 8, "bytes": 2, "type": "u16"},
+      {"name": "source", "offset": 10, "bytes": 1, "type": "u8"},
+      {"name": "target", "offset": 11, "bytes": 1, "type": "u8"},
+      {"name": "message_id", "offset": 12, "bytes": 4, "type": "u32"},
+      {"name": "correlation_id", "offset": 16, "bytes": 4, "type": "u32"},
+      {"name": "payload_bytes", "offset": 20, "bytes": 2, "type": "u16"},
+      {"name": "deadline_ms", "offset": 22, "bytes": 2, "type": "u16"},
+      {"name": "payload_crc32c", "offset": 24, "bytes": 4, "type": "u32"},
+      {"name": "header_crc32c", "offset": 28, "bytes": 4, "type": "u32"}
+    ],
+    "flags": {
+      "0": "RESULT_REQUIRED",
+      "1": "IS_RESULT",
+      "2": "URGENT",
+      "3": "MORE_FRAGMENTS",
+      "4": "RETRY",
+      "5-7": "reserved_zero"
+    },
+    "deadline_rule": "commands use 1..60000 ms measured from complete receipt; zero is legal only for messages that cannot create or extend a side effect",
+    "duplicate_rule": "message_id is monotonic per boot and direction; a duplicate request returns the cached typed result and never repeats a non-idempotent transition",
+    "boot_rule": "HELLO carries a fresh boot_id, so message_id reuse after reset cannot be mistaken for a duplicate from the previous boot"
+  },
+  "transports": [
+    {
+      "id": "S3_C5",
+      "peers": ["S3", "C5"],
+      "physical": "ESP32-C5 revision v1.0-or-later 1-bit SDIO, DAT1 interrupt, 20 MHz first target",
+      "binding": "Espressif ESP Serial Slave Link FIFO/register/interrupt transport",
+      "maximum_transfer_bytes": 512,
+      "maximum_payload_bytes": 480,
+      "raw_bytes_per_second": 2500000,
+      "qualified_payload_bytes_per_second_min": 1500000,
+      "admitted_occupancy_percent_max": 70,
+      "control_round_trip_ms_max": 2,
+      "qualification": "silicon identity, external pull-ups, framed throughput, priority, reset recovery and simultaneous Wi-Fi/802.15.4 load HIL"
+    },
+    {
+      "id": "S3_RP",
+      "peers": ["S3", "RP"],
+      "physical": "dedicated 20-MHz full-duplex SPI1 slave plus active-low RP alert",
+      "binding": "512-byte DMA cell; S3 clocks a zero-side-effect NOP cell when it needs only the RP upstream cell",
+      "maximum_transfer_bytes": 512,
+      "maximum_payload_bytes": 480,
+      "raw_bytes_per_second": 2500000,
+      "qualified_payload_bytes_per_second_min": 1500000,
+      "alert_to_read_us_max": 250,
+      "control_round_trip_ms_max": 2,
+      "qualification": "SPI1 slave DMA framing, CS abort, alert race, priority and aggregate-radio stress HIL"
+    },
+    {
+      "id": "S3_PACK",
+      "peers": ["S3", "PACK"],
+      "physical": "400-kHz SYS_I2C target at fixed 7-bit address 0x2A",
+      "binding": "compact command/status mailbox plus a CRC-protected update window",
+      "normal_policy": "status is read-only to S3; no application command can admit cells or release the protected pack hold"
+    },
+    {
+      "id": "S3_SAFETY",
+      "peers": ["S3", "SAFETY"],
+      "physical": "400-kHz SYS_I2C target at fixed 7-bit address 0x2B",
+      "binding": "compact command/status mailbox plus a CRC-protected update window",
+      "normal_policy": "S3 may publish a session heartbeat and request one bounded group lease; status and fault records remain read-only"
+    }
+  ],
+  "scheduling": {
+    "priorities": [
+      {"id": 0, "name": "safety", "examples": ["LEASE_REVOKE", "FAULT", "QUIET_REQUEST"], "may_drop": false, "reserved_frames_each_direction": 4},
+      {"id": 1, "name": "control", "examples": ["STATE_REQUEST", "STATE_RESULT", "PING", "PONG"], "may_drop": false, "reserved_frames_each_direction": 8},
+      {"id": 2, "name": "interactive", "examples": ["STATUS", "STREAM_OPEN_RESULT"], "may_drop": false, "reserved_frames_each_direction": 8},
+      {"id": 3, "name": "telemetry", "examples": ["STREAM_DATA"], "may_drop": true, "loss_rule": "sequence gap and dropped count are reported; newest waterfall data wins"},
+      {"id": 4, "name": "bulk", "examples": ["UPDATE_CHUNK", "recording transfer"], "may_drop": false, "flow_control": "receiver credits; zero credit stops bulk without occupying a control queue"}
+    ],
+    "non_interference": "bulk and telemetry are fragmented before admission; safety and control queues are never borrowed, and every owner enforces its own TX lease even if the transport stops"
+  },
+  "stream_fragment": {
+    "metadata_bytes": 16,
+    "maximum_data_bytes": 464,
+    "fields": ["stream_id:u32", "offset:u32", "data_bytes:u16", "stream_flags:u16", "sample_or_record_sequence:u32"],
+    "rule": "a fragment is independently checksummed by the common envelope; loss never shifts the boundary of a later fragment"
+  },
+  "messages": [
+    {"id": 0, "name": "NOP", "priority": 1, "side_effect": false},
+    {"id": 1, "name": "HELLO", "priority": 1, "side_effect": false},
+    {"id": 2, "name": "HELLO_ACK", "priority": 1, "side_effect": false, "result_for": "HELLO"},
+    {"id": 3, "name": "PING", "priority": 1, "side_effect": false},
+    {"id": 4, "name": "PONG", "priority": 1, "side_effect": false, "result_for": "PING"},
+    {"id": 5, "name": "BUILD_INFO_GET", "priority": 1, "side_effect": false},
+    {"id": 6, "name": "BUILD_INFO", "priority": 1, "side_effect": false, "result_for": "BUILD_INFO_GET"},
+    {"id": 7, "name": "STATUS_GET", "priority": 2, "side_effect": false},
+    {"id": 8, "name": "STATUS", "priority": 2, "side_effect": false, "result_for": "STATUS_GET"},
+    {"id": 9, "name": "STATE_REQUEST", "priority": 1, "side_effect": true},
+    {"id": 10, "name": "STATE_RESULT", "priority": 1, "side_effect": false, "result_for": "STATE_REQUEST", "proof": "owner state, operation_id and local timestamp"},
+    {"id": 11, "name": "QUIET_REQUEST", "priority": 0, "side_effect": true},
+    {"id": 12, "name": "QUIET_PROOF", "priority": 0, "side_effect": false, "result_for": "QUIET_REQUEST", "proof": "TX request off, interface parked, switched rail state and local evidence state"},
+    {"id": 13, "name": "LEASE_SET", "priority": 0, "side_effect": true},
+    {"id": 14, "name": "LEASE_RESULT", "priority": 0, "side_effect": false, "result_for": "LEASE_SET", "proof": "accepted lease_id, group, evidence mask and local expiry"},
+    {"id": 15, "name": "LEASE_REVOKE", "priority": 0, "side_effect": true},
+    {"id": 16, "name": "FAULT", "priority": 0, "side_effect": false},
+    {"id": 17, "name": "STREAM_OPEN", "priority": 2, "side_effect": true},
+    {"id": 18, "name": "STREAM_OPEN_RESULT", "priority": 2, "side_effect": false, "result_for": "STREAM_OPEN"},
+    {"id": 19, "name": "STREAM_DATA", "priority": 3, "side_effect": false},
+    {"id": 20, "name": "STREAM_CLOSE", "priority": 2, "side_effect": true},
+    {"id": 21, "name": "STREAM_CLOSE_RESULT", "priority": 2, "side_effect": false, "result_for": "STREAM_CLOSE"},
+    {"id": 22, "name": "CREDIT", "priority": 1, "side_effect": false},
+    {"id": 23, "name": "UPDATE_BEGIN", "priority": 4, "side_effect": true},
+    {"id": 24, "name": "UPDATE_BEGIN_RESULT", "priority": 1, "side_effect": false, "result_for": "UPDATE_BEGIN"},
+    {"id": 25, "name": "UPDATE_CHUNK", "priority": 4, "side_effect": true},
+    {"id": 26, "name": "UPDATE_CHUNK_RESULT", "priority": 1, "side_effect": false, "result_for": "UPDATE_CHUNK"},
+    {"id": 27, "name": "UPDATE_VERIFY", "priority": 1, "side_effect": true},
+    {"id": 28, "name": "UPDATE_VERIFY_RESULT", "priority": 1, "side_effect": false, "result_for": "UPDATE_VERIFY"},
+    {"id": 29, "name": "UPDATE_ACTIVATE_PENDING", "priority": 1, "side_effect": true},
+    {"id": 30, "name": "BOOT_REPORT", "priority": 1, "side_effect": false, "proof": "build_id, protocol range, capability hash, self-test result and pending/confirmed state"},
+    {"id": 31, "name": "UPDATE_COMMIT", "priority": 1, "side_effect": true},
+    {"id": 32, "name": "UPDATE_ROLLBACK", "priority": 0, "side_effect": true}
+  ],
+  "i2c_mailbox": {
+    "command_bytes": 32,
+    "command_fields": [
+      "major:u8", "command:u8", "flags:u8", "payload_bytes:u8",
+      "sequence:u32", "session_id:u32", "payload:16", "crc32c:u32"
+    ],
+    "status_bytes": 64,
+    "status_fields": [
+      "major:u8", "state:u8", "fault:u16", "ack_sequence:u32",
+      "boot_id:u32", "flags:u32", "build_id:16", "event_id:u32",
+      "monotonic_ms:u32", "domain_data:20", "crc32c:u32"
+    ],
+    "update_window_bytes": 128,
+    "update_data_bytes": 108,
+    "update_rule": "UPDATE_BEGIN carries target, length and SHA-256 metadata; every offset-addressed data window is acknowledged only after flash read-back; normal update is legal only in physical KILL",
+    "pack_domain_data": ["cell0_mV", "cell1_mV", "pack_temperature_dC", "stack_mV", "protection_and_admission_flags"],
+    "safety_domain_data": ["power_temperature_dC", "rf_temperature_dC", "ui_temperature_dC", "lease_and_evidence_mask", "rail_and_fault_flags"]
+  },
+  "safety_timing": {
+    "s3_session_open_ms_max_after_run": 100,
+    "heartbeat_period_ms": 50,
+    "heartbeat_gap_ms_max": 200,
+    "heartbeat_sequence_must_advance": true,
+    "tx_lease_lifetime_ms_max": 100,
+    "tx_lease_renew_period_ms_max": 40,
+    "owner_local_tx_lease_lifetime_ms_max": 100,
+    "unexpected_evidence_fault_ms_max": 10,
+    "post_revoke_evidence_clear_grace_ms": 20,
+    "safety_loop_period_ms_max": 5,
+    "external_watchdog_timeout_ms": 1600,
+    "external_watchdog_service_period_ms_max": 400,
+    "rule": "the safety controller services TPS3435 only while its loop, S3 session, thermal inputs, power fault input, active lease and physical evidence are mutually consistent"
+  },
+  "signal_groups": [
+    {"id": 0, "name": "NONE", "owner": "S3", "evidence_bits": [], "tx_policy": "off"},
+    {"id": 1, "name": "S3_RF", "owner": "S3", "evidence_bits": [0], "tx_policy": "lease_required"},
+    {"id": 2, "name": "C5_RF", "owner": "C5", "evidence_bits": [1], "tx_policy": "lease_required"},
+    {"id": 3, "name": "NRF24", "owner": "RP", "evidence_bits": [2, 3, 4], "tx_policy": "one group lease permits any qualified simultaneous 3R/1T2R/2T1R/3T mix"},
+    {"id": 4, "name": "CC1101", "owner": "RP", "evidence_bits": [5], "tx_policy": "lease_required"},
+    {"id": 5, "name": "VOICE", "owner": "RP", "evidence_bits": [6], "tx_policy": "lease plus physical PTT required"},
+    {"id": 6, "name": "IR", "owner": "C5", "evidence_bits": [7], "tx_policy": "lease_required"},
+    {"id": 7, "name": "U214", "owner": "RP", "evidence_bits": [], "tx_policy": "receive and GNSS allowed; transmit blocked until an explicit independent evidence contract is accepted"},
+    {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"}
+  ],
+  "compatibility": {
+    "major": "exact match",
+    "minor": "additive only; both peers must advertise the message and payload-schema hash before use",
+    "hello_required_fields": ["boot_id", "build_id", "hardware_revision", "protocol_min", "protocol_max", "capability_hash", "maximum_transfer_bytes"],
+    "bundle_rule": "the signed manifest fixes the compatible protocol range and capability hash for every connected domain; S3 commits last",
+    "failure": "unknown mandatory message, schema mismatch, corrupt frame, expired deadline, reset or lost link revokes the local TX lease and leaves the owner quiet"
+  },
+  "qualification": [
+    "golden vectors for every header and mailbox CRC plus cross-endian host tests",
+    "duplicate, wrap, reset, partial-cell, CS-abort, corrupt-length and stale-deadline injection",
+    "telemetry and update saturation while control RTT and RP alert latency remain within contract",
+    "loss of every link during every state transition proves local lease expiry and typed quiet state",
+    "all-in-one incompatible-version and mixed-build rollback across all five domains",
+    "thermal, evidence, I2C-stuck and watchdog fault injection with a retained first-cause record"
+  ]
+}

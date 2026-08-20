@@ -23,13 +23,44 @@ TX-evidence и единолично обслуживает внешний timeou
 
 ## Межпроцессорные сообщения
 
-- S3↔C5 использует отдельный 1-bit SDIO для данных и событий.
-- S3↔RP использует dedicated SPI3 и отдельный alert.
-- Все сообщения имеют тип, версию, длину, sequence, deadline и целевой owner.
-- Команда подтверждается не постановкой в очередь, а переходом локального
-  автомата и соответствующим evidence.
-- Несовместимая версия, повреждённый frame, timeout или reset peer закрывают
-  активную lease и оставляют TX выключенным.
+`L2IP v1` задаёт единый типизированный прикладной контракт для двух быстрых
+каналов. 32-байтный заголовок содержит source, target, ID сообщения и ответа,
+версию протокола, длину payload, deadline от момента полного приёма и отдельные
+CRC-32C заголовка и payload. Повтор state-changing запроса безопасен. Успех —
+это типизированный результат с достигнутым локальным состоянием, а не удачная
+транзакция шины или постановка команды в очередь.
+
+| Канал | Физический транспорт | Единица передачи | Обязательный результат |
+|---|---|---|---|
+| S3↔C5 | отдельный 1-bit SDIO на 20 МГц | пакет до 512 байт | ≥1,5 МБ/с payload, control RTT ≤2 мс, занятость ≤70% |
+| S3↔RP | отдельный 20-МГц SPI3 + `RP_ALERT_N` | один full-duplex 512-байтный DMA-cell | ≥1,5 МБ/с payload, alert-to-read ≤250 мкс и control RTT ≤2 мс |
+| S3↔Pack | target `SYS_I2C` `0x2A` | команда 32 байта, read-only status 64 байта | S3 не управляет допуском ячеек; update-запись только в физическом KILL |
+| S3↔Safety | target `SYS_I2C` `0x2B` | команда 32 байта, read-only status 64 байта | записываются только heartbeat сессии, одна ограниченная lease группы и KILL-only update |
+
+Канал C5 использует штатный Espressif FIFO/register/interrupt transport. В
+реальном модуле должен быть **ESP32-C5 revision v1.0 или новее**: Espressif
+прямо указывает, что SDIO не поддерживается revision v0.1. Четыре выбранные
+линии сохраняют GPIO13/14 для native recovery USB. Канал RP использует SPI1
+slave DMA RP2354B; когда нужны только исходящие данные RP, S3 тактирует
+не имеющий side effect `NOP`.
+[SDIO slave Espressif](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c5/api-reference/peripherals/sdio_slave.html) ·
+[требование к C5](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c5/schematic-checklist.html) ·
+[SPI/DMA API RP](https://www.raspberrypi.com/documentation/pico-sdk/hardware.html)
+
+Очереди safety, control, interactive, telemetry и bulk имеют убывающий
+приоритет. Bulk идёт по credit и не занимает safety/control buffers; устаревшие
+данные водопада можно отбросить с явным пропуском sequence. Reset канала,
+повреждённый frame, несовместимая schema или истёкший deadline снимают локальную
+TX lease. Поэтому C5 и RP выключают передачу сами, даже если S3 уже не может
+послать stop.
+
+S3 публикует safety heartbeat каждые 50 мс; разрыв 200 мс становится fault.
+TX lease живёт не более 100 мс и обновляется не реже чем каждые 40 мс. Цикл
+safety занимает до 5 мс, а неожиданное физическое evidence становится fault не
+позднее 10 мс. Независимый watchdog на 1,6 с обслуживается только исправным
+safety-циклом. Точные layout, ID сообщений, поля mailbox, update-команды и
+набор проверок находятся в машинном контракте
+[`config/interdomain_protocol.json`](../config/interdomain_protocol.json).
 
 ## Планировщик и тихие состояния
 
@@ -82,6 +113,10 @@ group scheduler синхронизирует их, не превращая mixed
 - U214 и M5 Unit имеют независимые состояния `OFF → STARTING → IDENTIFY →
   ACTIVE → STOPPING` и latch-off fault. Неизвестный module profile не получает
   питание или опасные команды автоматически.
+- Встроенные TX-тракты S3, C5, nRF24, CC1101, voice и IR имеют физическое
+  evidence. Штатный U214 и универсальный Unit-разъём не выводят независимое
+  actual-RF evidence: приём/GNSS работают, но TX остаётся заблокированным до
+  выбора проверяемого expansion-evidence контракта.
 - Телефон используется только как локальный text input и обмен данными; он не
   подтверждает Controlled-Zone действия.
 

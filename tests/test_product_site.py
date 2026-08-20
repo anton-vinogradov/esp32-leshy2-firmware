@@ -312,6 +312,118 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("physical RUN is in KILL", policy["preconditions"])
         self.assertIn("all TX evidence is quiet", policy["preconditions"])
 
+    def test_interdomain_header_and_transports_are_exact(self):
+        contract = json.loads(self.read("config/interdomain_protocol.json"))
+        self.assertEqual("paper_reviewed", contract["review_status"])
+        self.assertEqual("L2IP", contract["protocol"]["name"])
+        self.assertEqual("0x3248534C", contract["protocol"]["magic_u32_le"])
+        sources = {item["id"]: item for item in contract["sources"]}
+        self.assertEqual(
+            {"ESP32_C5_SDIO_DRIVER", "ESP32_C5_SDIO_SILICON", "RP2350_SPI_DMA", "M5_U214_PINMAP"},
+            set(sources),
+        )
+        for source in sources.values():
+            self.assertTrue(source["url"].startswith("https://"))
+
+        header = contract["high_speed_header"]
+        self.assertEqual(32, header["bytes"])
+        cursor = 0
+        for field in header["fields"]:
+            self.assertEqual(cursor, field["offset"], field["name"])
+            cursor += field["bytes"]
+        self.assertEqual(header["bytes"], cursor)
+
+        transports = {item["id"]: item for item in contract["transports"]}
+        self.assertEqual({"S3_C5", "S3_RP", "S3_PACK", "S3_SAFETY"}, set(transports))
+        for link in ("S3_C5", "S3_RP"):
+            self.assertEqual(512, transports[link]["maximum_transfer_bytes"])
+            self.assertEqual(480, transports[link]["maximum_payload_bytes"])
+            self.assertGreaterEqual(
+                transports[link]["qualified_payload_bytes_per_second_min"],
+                1_500_000,
+            )
+        self.assertIn("revision v1.0-or-later", transports["S3_C5"]["physical"])
+        self.assertIn("0x2A", transports["S3_PACK"]["physical"])
+        self.assertIn("0x2B", transports["S3_SAFETY"]["physical"])
+
+    def test_interdomain_message_registry_is_unambiguous_and_proven(self):
+        contract = json.loads(self.read("config/interdomain_protocol.json"))
+        messages = contract["messages"]
+        self.assertEqual(len(messages), len({item["id"] for item in messages}))
+        self.assertEqual(len(messages), len({item["name"] for item in messages}))
+        names = {item["name"] for item in messages}
+        for item in messages:
+            if "result_for" in item:
+                self.assertIn(item["result_for"], names)
+        for required in (
+            "STATE_REQUEST", "STATE_RESULT", "QUIET_REQUEST", "QUIET_PROOF",
+            "LEASE_SET", "LEASE_REVOKE", "STREAM_DATA", "CREDIT",
+            "UPDATE_BEGIN", "UPDATE_CHUNK", "UPDATE_VERIFY",
+            "UPDATE_ACTIVATE_PENDING", "BOOT_REPORT", "UPDATE_COMMIT",
+            "UPDATE_ROLLBACK",
+        ):
+            self.assertIn(required, names)
+
+        priorities = {item["id"]: item for item in contract["scheduling"]["priorities"]}
+        self.assertFalse(priorities[0]["may_drop"])
+        self.assertFalse(priorities[1]["may_drop"])
+        self.assertTrue(priorities[3]["may_drop"])
+        self.assertEqual("receiver credits; zero credit stops bulk without occupying a control queue", priorities[4]["flow_control"])
+
+    def test_safety_mailbox_timing_closes_before_the_external_watchdog(self):
+        contract = json.loads(self.read("config/interdomain_protocol.json"))
+        mailbox = contract["i2c_mailbox"]
+        self.assertEqual(32, mailbox["command_bytes"])
+        self.assertEqual(64, mailbox["status_bytes"])
+        self.assertEqual(128, mailbox["update_window_bytes"])
+        self.assertEqual(108, mailbox["update_data_bytes"])
+
+        timing = contract["safety_timing"]
+        self.assertLess(timing["heartbeat_period_ms"], timing["heartbeat_gap_ms_max"])
+        self.assertLessEqual(
+            timing["tx_lease_renew_period_ms_max"],
+            timing["tx_lease_lifetime_ms_max"],
+        )
+        self.assertLess(
+            timing["heartbeat_gap_ms_max"],
+            timing["external_watchdog_timeout_ms"],
+        )
+        self.assertLess(
+            timing["external_watchdog_service_period_ms_max"],
+            timing["external_watchdog_timeout_ms"],
+        )
+        self.assertTrue(timing["heartbeat_sequence_must_advance"])
+
+    def test_every_enabled_tx_group_has_independent_evidence(self):
+        contract = json.loads(self.read("config/interdomain_protocol.json"))
+        groups = {item["name"]: item for item in contract["signal_groups"]}
+        for name in ("S3_RF", "C5_RF", "NRF24", "CC1101", "VOICE", "IR"):
+            self.assertTrue(groups[name]["evidence_bits"], name)
+            self.assertNotIn("blocked", groups[name]["tx_policy"])
+        self.assertEqual([2, 3, 4], groups["NRF24"]["evidence_bits"])
+        for name in ("U214", "M5_UNIT"):
+            self.assertEqual([], groups[name]["evidence_bits"])
+            self.assertTrue(
+                "blocked" in groups[name]["tx_policy"]
+                or "requires" in groups[name]["tx_policy"]
+            )
+
+    def test_public_architecture_explains_the_wire_contract(self):
+        expected = {
+            "docs/architecture.md": (
+                "L2IP v1", "32-byte header", "512-byte", "0x2A", "0x2B",
+                "50 ms", "100 ms", "ESP32-C5 revision v1.0",
+            ),
+            "docs/architecture.ru.md": (
+                "L2IP v1", "32-байтный заголовок", "512-байт", "0x2A", "0x2B",
+                "50 мс", "100 мс", "ESP32-C5 revision v1.0",
+            ),
+        }
+        for name, tokens in expected.items():
+            page = self.read(name)
+            for token in tokens:
+                self.assertIn(token, page, f"{name}: {token}")
+
     def test_generic_image_checker_covers_every_physical_target(self):
         checker_path = REPO_ROOT / "tools/check_image_size.py"
         spec = importlib.util.spec_from_file_location("check_image_size", checker_path)

@@ -22,14 +22,43 @@ TX-evidence bus and is the only device allowed to service the external
 
 ## Inter-processor messages
 
-- S3↔C5 uses dedicated 1-bit SDIO for data and events.
-- S3↔RP uses dedicated SPI3 plus a separate alert.
-- Every message carries a type, version, length, sequence, deadline and target
-  owner.
-- Completion means a verified local state-machine transition and matching
-  evidence, not merely queue insertion.
-- An incompatible version, corrupt frame, timeout or peer reset closes the
-  active lease and leaves TX off.
+`L2IP v1` gives the two high-rate links one typed application contract. Its
+32-byte header carries source, target, message and correlation IDs, protocol
+version, payload length, receipt-relative deadline and separate CRC-32C values
+for header and payload. State-changing requests are duplicate-safe. Completion
+means a typed result proving the reached local state, never just a successful
+bus transfer or queue insertion.
+
+| Link | Physical transport | Wire unit | Required behaviour |
+|---|---|---|---|
+| S3↔C5 | dedicated 1-bit SDIO at 20 MHz | up to one 512-byte packet | ≥1.5 MB/s payload, ≤2 ms control RTT, ≤70% admitted occupancy |
+| S3↔RP | dedicated 20-MHz SPI3 plus `RP_ALERT_N` | one full-duplex 512-byte DMA cell | ≥1.5 MB/s payload, ≤250 µs alert-to-read and ≤2 ms control RTT |
+| S3↔Pack | `SYS_I2C` target `0x2A` | 32-byte command, 64-byte read-only status | S3 cannot command battery admission; update writes require physical KILL |
+| S3↔Safety | `SYS_I2C` target `0x2B` | 32-byte command, 64-byte read-only status | only session heartbeat, one bounded group lease and KILL-only update are writable |
+
+The C5 link uses Espressif's FIFO/register/interrupt slave transport. The exact
+module lot must contain **ESP32-C5 revision v1.0 or later**: Espressif documents
+SDIO as unsupported on revision v0.1. The selected four wires keep GPIO13/14
+available for native recovery USB. The RP link uses the RP2354B SPI1 slave DMA;
+S3 clocks a side-effect-free `NOP` whenever only upstream data is pending.
+[Espressif SDIO slave](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c5/api-reference/peripherals/sdio_slave.html) ·
+[C5 hardware requirement](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c5/schematic-checklist.html) ·
+[RP SPI/DMA API](https://www.raspberrypi.com/documentation/pico-sdk/hardware.html)
+
+Safety, control, interactive, telemetry and bulk queues have decreasing
+priority. Bulk is credit-controlled and cannot borrow safety/control buffers;
+stale waterfall telemetry may be dropped with an explicit sequence gap. A
+link reset, corrupt frame, incompatible schema or expired deadline revokes the
+local TX lease. C5 and RP therefore stop locally even if S3 can no longer send
+a stop command.
+
+S3 publishes a safety heartbeat every 50 ms; a 200-ms gap is a fault. A TX
+lease lasts at most 100 ms and is renewed no slower than every 40 ms. The
+safety loop runs within 5 ms and unexpected physical evidence is faulted
+within 10 ms. Only a healthy safety loop services the independent 1.6-second
+watchdog. Exact layouts, message IDs, mailbox fields, update messages and test
+vectors are machine-readable in
+[`config/interdomain_protocol.json`](../config/interdomain_protocol.json).
 
 ## Scheduling and quiet states
 
@@ -82,6 +111,10 @@ hardware `RUN_PERMIT` qualification and optical evidence.
 - U214 and M5 Unit use independent `OFF → STARTING → IDENTIFY → ACTIVE →
   STOPPING` states and a latch-off fault. An unknown module profile never gains
   power or dangerous commands automatically.
+- The built-in S3, C5, nRF24, CC1101, voice and IR transmit paths have physical
+  evidence. The stock U214 and generic Unit connectors expose no independent
+  actual-RF evidence; their receive/GNSS functions work, but transmit remains
+  blocked until a qualified expansion-evidence contract is selected.
 - A phone acts only as local text input and data exchange; it cannot confirm a
   Controlled-Zone action.
 
