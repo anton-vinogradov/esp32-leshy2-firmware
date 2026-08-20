@@ -1,0 +1,36 @@
+{
+  "target": "Texas Instruments MSPM0C1106SDGS20R",
+  "flash_bytes": 65536,
+  "sram_bytes": 8192,
+  "slot_bytes": 22528,
+  "warning_bytes": 20480,
+  "maximum_image_bytes": 22528,
+  "required_slot_margin_bytes": 0,
+  "regions": [
+    {
+      "name": "protected_boot_manager",
+      "offset": 0,
+      "size": 16384,
+      "purpose": "ROM-invoked flash BSL, target/signature verification and fail-closed slot selection"
+    },
+    {
+      "name": "application_a",
+      "offset": 16384,
+      "size": 22528,
+      "purpose": "running or last-known-good controller image including its manifest and signature"
+    },
+    {
+      "name": "application_b",
+      "offset": 38912,
+      "size": 22528,
+      "purpose": "inactive/pending controller image including its manifest and signature"
+    },
+    {
+      "name": "boot_state",
+      "offset": 61440,
+      "size": 4096,
+      "purpose": "duplicated version, compatibility, pending/confirmed state and bounded fault metadata"
+    }
+  ],
+  "policy": "two identical maps are built independently for pack and safety controllers; warn above 20 KiB and reject a packaged slot image above 22 KiB"
+}

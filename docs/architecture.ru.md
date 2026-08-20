@@ -9,8 +9,8 @@
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Приложение, меню, display, microSD, audio, BLE/Wi‑Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2,4/5 ГГц, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
 | RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
-| Pack | `MSPM0C1104SDGS20R` | Допуск двух ячеек и локальный fail-closed power state | Keyed fixture interface и reset |
-| Safety | второй `MSPM0C1104SDGS20R` | Heartbeat, TX lease, три температурные зоны, физическое TX evidence и сохранённый fault record | Изолированный fixture-путь SWD/UART/reset |
+| Pack | `MSPM0C1106SDGS20R` | Допуск двух ячеек и локальный fail-closed power state | NRST, SWD, UART1 и изолированное fixture-питание |
+| Safety | второй `MSPM0C1106SDGS20R` | Heartbeat, TX lease, три температурные зоны, физическое TX evidence и сохранённый fault record | NRST, SWD, UART1 и изолированное fixture-питание |
 
 S3 координирует пользовательский сценарий, но не подменяет локальных
 владельцев. C5 и RP самостоятельно соблюдают радио-deadline, снимают TX при
@@ -110,14 +110,23 @@ lease. Evidence подтверждает исполнение, но никогд
 - Перегрев UI/display или опасное питание экрана выключают дисплей. Остаются
   AON-светодиод `FAULT` и сохранённая запись; автоматический restart запрещён.
 
-Update package содержит подписанные target-bound images, общий manifest и
-совместимые версии протоколов. Запись идёт в inactive slot; boot health
-подтверждается до commit, иначе выполняется rollback. Recovery каждого домена
-независим и всегда заканчивается состоянием TX-off.
+Пользователь устанавливает один bundle, а не пять несвязанных файлов. Его
+подписанный manifest привязывает каждый образ к продукту, диапазону аппаратных
+ревизий, физическому target, build ID и совместимому диапазону междоменных
+протоколов. Updater принимает release root или локально добавленный owner root.
 
-Ключи владельца поддерживаются наравне с ключами готовой сборки. Проверка
-подписи защищает целостность и автора образа, а не запрещает модификацию
-открытого исходного кода.
+Установка требует физического `RUN=KILL`, отсутствия TX evidence и стабильного
+допущенного питания. До активации любого target все inactive images записываются
+и проверяются чтением. Затем Pack, Safety, C5 и RP выполняют локальный pending
+boot и self-test под управлением старого S3; S3 активируется последним. Ошибка
+target возвращает его local last-known-good image, а неудача bundle возвращает
+уже обновлённые домены к совместимому предыдущему комплекту.
 
-Точная dual-slot разметка flash 16 МБ и использование PSRAM с ECC приведены в
-[контракте памяти](memory.ru.md).
+Механизм намеренно остаётся открытым. Необратимые secure-boot, anti-rollback и
+debug lock по умолчанию не включаются. Подпись отвергает подмену штатного update
+package, но не отнимает у владельца физическое восстановление. Через
+USB/UART/SWD можно заменить все образы и ключи, но нельзя обойти `RUN/KILL`,
+независимый watchdog или `FAULT_KILL`.
+
+Точные контракты flash, RAM, slot, update и recovery для всех пяти образов
+приведены в [контракте памяти](memory.ru.md).

@@ -1,0 +1,8 @@
+{
+  "target": "SC1512-A4 (RP2354B, 2-MiB stacked flash)",
+  "slot_bytes": 917504,
+  "warning_bytes": 786432,
+  "maximum_image_bytes": 884736,
+  "required_slot_margin_bytes": 32768,
+  "policy": "retain the native RP2350 A/B pair and TBYB rollback; replaceable captures and protocol data stay off-image"
+}

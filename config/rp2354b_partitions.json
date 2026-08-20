@@ -1,0 +1,91 @@
+{
+  "version": [1, 0],
+  "unpartitioned": {
+    "families": ["absolute"],
+    "permissions": {
+      "secure": "rw",
+      "nonsecure": "rw",
+      "bootloader": "rw"
+    }
+  },
+  "partitions": [
+    {
+      "name": "Leshy2 RP image A",
+      "id": 0,
+      "start": 8192,
+      "size": "896K",
+      "families": ["rp2350-arm-s"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      }
+    },
+    {
+      "name": "Leshy2 RP image B",
+      "id": 1,
+      "size": "896K",
+      "families": ["rp2350-arm-s"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      },
+      "link": ["a", 0]
+    },
+    {
+      "name": "Leshy2 RP data A",
+      "id": 2,
+      "size": "64K",
+      "families": ["0x4c325250"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      },
+      "link": ["owner", 0],
+      "ignored_during_arm_boot": true,
+      "ignored_during_riscv_boot": true
+    },
+    {
+      "name": "Leshy2 RP data B",
+      "id": 3,
+      "size": "64K",
+      "families": ["0x4c325250"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      },
+      "link": ["a", 2],
+      "ignored_during_arm_boot": true,
+      "ignored_during_riscv_boot": true
+    },
+    {
+      "name": "Leshy2 RP fault log",
+      "id": 4,
+      "size": "96K",
+      "families": ["0x4c32464c"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      },
+      "ignored_during_arm_boot": true,
+      "ignored_during_riscv_boot": true
+    },
+    {
+      "name": "Leshy2 RP service reserve",
+      "id": 5,
+      "size": "24K",
+      "families": ["0x4c325256"],
+      "permissions": {
+        "secure": "rw",
+        "nonsecure": "rw",
+        "bootloader": "rw"
+      },
+      "ignored_during_arm_boot": true,
+      "ignored_during_riscv_boot": true
+    }
+  ]
+}

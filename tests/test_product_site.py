@@ -55,7 +55,7 @@ class ProductSiteTests(unittest.TestCase):
                 "ESP32-S3-WROOM-1U-N16R8",
                 "ESP32-C5-WROOM-1U-N8R8",
                 "SC1512-A4",
-                "MSPM0C1104SDGS20R",
+                "MSPM0C1106SDGS20R",
                 "TPS3435CAKAGDDFR",
                 "1-bit SDIO",
                 "SPI3",
@@ -112,8 +112,14 @@ class ProductSiteTests(unittest.TestCase):
 
     def test_update_model_preserves_owner_control(self):
         expected = {
-            "docs/architecture.md": ("signed target-bound images", "inactive slots", "rolls back", "Owner keys"),
-            "docs/architecture.ru.md": ("подписанные target-bound images", "inactive slot", "rollback", "Ключи владельца"),
+            "docs/architecture.md": (
+                "signed manifest", "inactive images", "last-known-good image",
+                "locally enrolled owner root", "not enabled by default",
+            ),
+            "docs/architecture.ru.md": (
+                "подписанный manifest", "inactive images", "предыдущему комплекту",
+                "локально добавленный owner root", "по умолчанию не включаются",
+            ),
         }
         for name, tokens in expected.items():
             page = self.read(name)
@@ -140,6 +146,7 @@ class ProductSiteTests(unittest.TestCase):
             "CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y",
             "CONFIG_PARTITION_TABLE_CUSTOM=y",
             'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="config/partitions_16m.csv"',
+            "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
             "CONFIG_SPIRAM=y",
             "CONFIG_SPIRAM_MODE_OCT=y",
             "CONFIG_SPIRAM_SPEED_80M=y",
@@ -183,6 +190,145 @@ class ProductSiteTests(unittest.TestCase):
             )
         self.assertEqual(0x1000000, ordered[-1]["offset"] + ordered[-1]["size"])
         self.assertEqual("encrypted", rows["nvs_keys"]["flags"])
+
+    def test_c5_memory_inputs_keep_two_3_5_mib_ota_slots(self):
+        defaults = {
+            line.strip()
+            for line in self.read("config/sdkconfig.defaults.esp32c5").splitlines()
+            if line.strip() and not line.startswith("#")
+        }
+        for required in (
+            "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+            "CONFIG_PARTITION_TABLE_CUSTOM=y",
+            'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="config/partitions_8m_c5.csv"',
+            "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
+            "CONFIG_SPIRAM=y",
+            "CONFIG_SPIRAM_BOOT_INIT=y",
+        ):
+            self.assertIn(required, defaults)
+
+        with (REPO_ROOT / "config/partitions_8m_c5.csv").open(
+            encoding="utf-8", newline=""
+        ) as source:
+            rows = {
+                row[0].strip(): {
+                    "offset": int(row[3].strip(), 0),
+                    "size": int(row[4].strip(), 0),
+                }
+                for row in csv.reader(
+                    line for line in source if not line.lstrip().startswith("#")
+                )
+                if row
+            }
+        for slot, offset in (("ota_0", 0x030000), ("ota_1", 0x3B0000)):
+            self.assertEqual(offset, rows[slot]["offset"])
+            self.assertEqual(0x380000, rows[slot]["size"])
+        ordered = sorted(rows.values(), key=lambda row: row["offset"])
+        for previous, current in zip(ordered, ordered[1:]):
+            self.assertLessEqual(
+                previous["offset"] + previous["size"], current["offset"]
+            )
+        self.assertEqual(0x800000, ordered[-1]["offset"] + ordered[-1]["size"])
+
+        limits = json.loads(self.read("config/c5_image_limits.json"))
+        self.assertEqual(0x380000, limits["slot_bytes"])
+        self.assertEqual(0x300000, limits["warning_bytes"])
+        self.assertEqual(0x360000, limits["maximum_image_bytes"])
+        self.assertEqual(0x20000, limits["required_slot_margin_bytes"])
+
+    def test_rp2354b_native_ab_tbyb_geometry_is_machine_readable(self):
+        table = json.loads(self.read("config/rp2354b_partitions.json"))
+        self.assertEqual([1, 0], table["version"])
+        parts = table["partitions"]
+        self.assertEqual(6, len(parts))
+        self.assertEqual(0x2000, parts[0]["start"])
+        self.assertEqual(["a", 0], parts[1]["link"])
+        self.assertEqual(["owner", 0], parts[2]["link"])
+        self.assertEqual(["a", 2], parts[3]["link"])
+        self.assertEqual(["0x4c325250"], parts[2]["families"])
+        self.assertEqual(parts[2]["families"], parts[3]["families"])
+
+        def kib(value: str) -> int:
+            self.assertTrue(value.endswith("K"))
+            return int(value[:-1])
+
+        self.assertEqual(2040, sum(kib(part["size"]) for part in parts))
+        self.assertEqual(896, kib(parts[0]["size"]))
+        self.assertEqual(896, kib(parts[1]["size"]))
+        self.assertEqual(["0x4c32464c"], parts[4]["families"])
+        self.assertEqual(["0x4c325256"], parts[5]["families"])
+        limits = json.loads(self.read("config/rp2354b_image_limits.json"))
+        self.assertEqual(0xE0000, limits["slot_bytes"])
+        self.assertEqual(0xC0000, limits["warning_bytes"])
+        self.assertEqual(0xD8000, limits["maximum_image_bytes"])
+        self.assertEqual(0x8000, limits["required_slot_margin_bytes"])
+
+        for name in ("docs/memory.md", "docs/memory.ru.md"):
+            page = self.read(name)
+            for token in (
+                "IMAGE_DEF", "TBYB",
+                "16.7" if name == "docs/memory.md" else "16,7",
+                "explicit_buy()",
+            ):
+                self.assertIn(token, page, f"{name}: {token}")
+
+    def test_two_c1106_images_have_exact_independent_ab_maps(self):
+        memory = json.loads(self.read("config/mspm0c1106_memory.json"))
+        self.assertEqual(0x10000, memory["flash_bytes"])
+        self.assertEqual(0x2000, memory["sram_bytes"])
+        self.assertEqual(0x5800, memory["slot_bytes"])
+        self.assertEqual(0x5000, memory["warning_bytes"])
+        self.assertEqual(0x5800, memory["maximum_image_bytes"])
+        regions = memory["regions"]
+        self.assertEqual(0, regions[0]["offset"])
+        for previous, current in zip(regions, regions[1:]):
+            self.assertEqual(previous["offset"] + previous["size"], current["offset"])
+        self.assertEqual(0x10000, regions[-1]["offset"] + regions[-1]["size"])
+
+        for name in ("docs/memory.md", "docs/memory.ru.md"):
+            page = self.read(name)
+            for token in (
+                "MSPM0C1106SDGS20R", "0x4000", "0x5800", "0x9800", "0xF000",
+                "UART1", "SWDIO/SWCLK",
+            ):
+                self.assertIn(token, page, f"{name}: {token}")
+
+    def test_all_in_one_update_policy_is_open_and_fail_closed(self):
+        policy = json.loads(self.read("config/update_policy.json"))
+        self.assertIn("one Leshy2 bundle", policy["package"])
+        self.assertEqual(
+            {"release", "locally_enrolled_owner"},
+            set(policy["signature_contract"]["accepted_roots"]),
+        )
+        self.assertIn("ECDSA P-256", policy["signature_contract"]["algorithm"])
+        self.assertEqual(12000, policy["global_activation_deadline_ms"])
+        self.assertIn("16.7-second", policy["deadline_basis"])
+        self.assertFalse(
+            policy["open_recovery"]["irreversible_secure_boot_or_debug_lock_default"]
+        )
+        self.assertTrue(
+            policy["open_recovery"]["physical_owner_recovery_may_replace_keys_and_all_images"]
+        )
+        self.assertIn("physical RUN is in KILL", policy["preconditions"])
+        self.assertIn("all TX evidence is quiet", policy["preconditions"])
+
+    def test_generic_image_checker_covers_every_physical_target(self):
+        checker_path = REPO_ROOT / "tools/check_image_size.py"
+        spec = importlib.util.spec_from_file_location("check_image_size", checker_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        checker = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(checker)
+        self.assertEqual({"s3", "c5", "rp2354b", "pack", "safety"}, set(checker.TARGET_LIMITS))
+        for target in checker.TARGET_LIMITS:
+            limits = checker.load_limits(target)
+            self.assertEqual("ok", checker.classify(int(limits["warning_bytes"]), limits))
+            self.assertEqual(
+                "warning", checker.classify(int(limits["warning_bytes"]) + 1, limits)
+            )
+            self.assertEqual(
+                "reject", checker.classify(int(limits["maximum_image_bytes"]) + 1, limits)
+            )
 
     def test_s3_image_size_checker_preserves_rollback_margin(self):
         limits = json.loads(self.read("config/s3_image_limits.json"))

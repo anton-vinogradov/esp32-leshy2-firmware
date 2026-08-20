@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "package": "one Leshy2 bundle with target-bound S3, C5, RP2354B, pack-MSPM0 and safety-MSPM0 images plus one compatibility manifest",
+  "manifest_required_fields": [
+    "product_id",
+    "hardware_revision_range",
+    "target_id",
+    "image_length",
+    "image_sha256",
+    "build_id",
+    "protocol_compatibility",
+    "minimum_power_policy",
+    "signing_key_id"
+  ],
+  "signature_contract": {
+    "algorithm": "ECDSA P-256 over SHA-256",
+    "accepted_roots": ["release", "locally_enrolled_owner"],
+    "status": "algorithm and exact C1106 verifier remain build-size and fault-injection closure gates"
+  },
+  "preconditions": [
+    "physical RUN is in KILL",
+    "all TX evidence is quiet",
+    "qualified USB power is stable and battery policy permits flash writes",
+    "every target and cross-domain protocol range matches the connected hardware"
+  ],
+  "activation_order": [
+    "stage and read-back verify every inactive image before activating any of them",
+    "activate and self-test pack MSPM0, safety MSPM0, C5 and RP2354B while S3 remains the known-good coordinator",
+    "activate S3 last",
+    "commit the bundle only after every domain reports its own build ID and health result"
+  ],
+  "global_activation_deadline_ms": 12000,
+  "deadline_basis": "complete identification, self-test and commit must fit below the fixed 16.7-second RP2350 TBYB watchdog window",
+  "failure_policy": "a failed target returns to its local last-known-good image; the known-good S3 coordinator then returns any already advanced peer to the bundle's compatible previous image",
+  "open_recovery": {
+    "irreversible_secure_boot_or_debug_lock_default": false,
+    "downgrade_counter_is_reversible_flash_state": true,
+    "physical_owner_recovery_may_replace_keys_and_all_images": true,
+    "recovery_must_leave_run_kill_watchdog_and_fault_kill_effective": true
+  }
+}

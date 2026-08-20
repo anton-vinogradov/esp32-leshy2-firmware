@@ -9,8 +9,8 @@
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Application, menu, display, microSD, audio, BLE/Wi-Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2.4/5 GHz, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
 | RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
-| Pack | `MSPM0C1104SDGS20R` | Two-cell admission and local fail-closed power state | Keyed fixture interface and reset |
-| Safety | second `MSPM0C1104SDGS20R` | Heartbeats, TX leases, three thermal zones, physical TX evidence and retained fault record | Isolated SWD/UART/reset fixture path |
+| Pack | `MSPM0C1106SDGS20R` | Two-cell admission and local fail-closed power state | NRST, SWD, UART1 and isolated fixture power |
+| Safety | second `MSPM0C1106SDGS20R` | Heartbeats, TX leases, three thermal zones, physical TX evidence and retained fault record | NRST, SWD, UART1 and isolated fixture power |
 
 S3 coordinates the user scenario but does not replace local owners. C5 and RP
 meet radio deadlines locally, revoke TX when a lease disappears and report
@@ -110,14 +110,23 @@ Evidence confirms execution but never creates permission.
   AON amber `FAULT` LED and retained record remain; automatic restart is never
   permitted.
 
-An update package contains signed target-bound images, a shared manifest and
-compatible protocol versions. It writes inactive slots and commits only after
-boot health succeeds; otherwise it rolls back. Independent recovery for every
-domain always ends TX-off.
+The user installs one bundle, not five unrelated files. Its signed manifest
+binds every image to the product, hardware range, physical target, build ID and
+compatible inter-domain protocol range. The updater accepts either a release
+root or a locally enrolled owner root.
 
-Owner keys are supported alongside release keys. Signature verification
-protects image integrity and authorship without preventing modification of the
-open source.
+Installation requires physical `RUN=KILL`, quiet TX evidence and qualified
+stable power. All inactive images are written and read back before any target
+is activated. Pack, Safety, C5 and RP then perform their local pending boot and
+self-test while the old S3 remains coordinator; S3 activates last. A target
+failure restores its local last-known-good image, and a failed bundle returns
+already advanced peers to the compatible previous set.
 
-The exact 16-MB dual-slot flash and ECC-protected PSRAM allocation is documented
-in the [memory contract](memory.md).
+The mechanism is deliberately open. Irreversible secure-boot, anti-rollback
+and debug locks are not enabled by default. Signatures reject substituted
+normal update packages; they do not take physical recovery away from the
+owner. USB/UART/SWD recovery may replace all images and keys, but cannot bypass
+`RUN/KILL`, the independent watchdog or `FAULT_KILL`.
+
+The exact flash, RAM, slot, update and recovery contracts for all five images
+are documented in the [memory contract](memory.md).
