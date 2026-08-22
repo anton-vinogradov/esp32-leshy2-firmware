@@ -53,8 +53,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/roadmap.md", self.read("README.md"))
         self.assertIn("docs/roadmap.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F2", "hardware R2"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F2", "hardware R2"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F2", "hardware H2"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F2", "hardware H2"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -69,17 +69,17 @@ class ProductSiteTests(unittest.TestCase):
                 "Current boundary: F2",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
-                "hardware R2",
-                "hardware R9",
-                "hardware R10",
+                "hardware H2",
+                "hardware H7",
+                "hardware H8",
             ),
             "docs/roadmap.ru.md": (
                 "Текущая граница: F2",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
-                "hardware R2",
-                "hardware R9",
-                "hardware R10",
+                "hardware H2",
+                "hardware H7",
+                "hardware H8",
             ),
         }
         for name, tokens in required.items():

@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F2 — target projects and reproducible builds.** F0
 > and F1 are reviewed. Target/BSP implementation depends on the current
-> production ECAD schematic at hardware R2, which does not yet exist. No target
+> production ECAD schematic at hardware H2, which does not yet exist. No target
 > image or target emulator has run.
 
 Status last reconciled: **23 August 2026**. This is the firmware repository's
@@ -24,7 +24,7 @@ duplicated or given a second status here.
 | C5, RP2354B and MSPM0 platform/dev-board tests | 🔒 Waiting for target BSP and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
-| HIL and release | 🔒 Waiting for hardware prototype R9 |
+| HIL and release | 🔒 Waiting for hardware prototype H7 |
 
 The host model verifies portable logic. It is not instruction-set, peripheral
 or board emulation and is never presented as finished firmware.
@@ -33,9 +33,9 @@ or board emulation and is never presented as finished firmware.
 
 ```mermaid
 flowchart TD
-  H2["hardware R2<br/>production ECAD"]
-  H9["hardware R9<br/>prototype"]
-  H10["hardware R10<br/>physical qualification"]
+  H2["hardware H2<br/>production ECAD"]
+  H7["hardware H7<br/>prototype"]
+  H8["hardware H8<br/>physical qualification"]
   F0["✅ F0<br/>contracts"]
   F1["✅ F1<br/>portable cores"]
   F2["▶️ F2<br/>target projects"]
@@ -53,8 +53,8 @@ flowchart TD
   F1 --> F9
   F3 --> F9 --> F10
   H2 --> F2
-  H9 --> F10
-  H10 --> F11
+  H7 --> F10
+  H8 --> F11
 ```
 
 ## Complete firmware path
@@ -63,7 +63,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Product contracts** | ✅ Reviewed | Five domains, owners, L2IP, memory/partition, safety, update and HW↔FW boundary | Both repositories agree; no target, transport, recovery path or required state is unknown |
 | **F1. Portable cores** | ✅ Reviewed | C safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues and five-domain fault model | 24 scenarios pass normal and ASan/UBSan builds; heartbeat, lease-boundary, late-update and invalid-enum defects remain covered by regression tests |
-| **F2. Target projects and build system** | ▶️ Current boundary; depends on hardware R2 | Five minimal production-SDK projects: ESP-IDF S3/C5, Pico SDK RP2354B and TI MSPM0 SDK ×2 | Projects configure reproducibly; pin/BSP source is generated from the accepted HW contract; CI builds debug/release; no temporary pin assignment exists |
+| **F2. Target projects and build system** | ▶️ Current boundary; depends on hardware H2 | Five minimal production-SDK projects: ESP-IDF S3/C5, Pico SDK RP2354B and TI MSPM0 SDK ×2 | Projects configure reproducibly; pin/BSP source is generated from the accepted HW contract; CI builds debug/release; no temporary pin assignment exists |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2 | Bootable skeleton images, map/size gates and maximum available virtual evidence | S3 boot/self-test/fault/update-failure runs in official QEMU; five ELF/bin images fit flash/RAM/rollback; shared code runs on host; non-emulated peripherals enter the dev-board matrix |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3 | Real SDIO S3↔C5, SPI+alert S3↔RP, Pack/Safety I²C mailboxes, typed results, credits and queues | CRC/replay/deadline/duplicate/reset recovery work end-to-end; waterfall/bulk saturation cannot delay safety/control; link loss closes local side effects |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; reset/off/no-back-power/quiet transitions are explicit; unmodeled peripherals have dev-board tests |
@@ -71,8 +71,8 @@ flowchart TD
 | **F7. Radio, IR and expansion features** | ⏳ Waiting for F5/F6 | Normal receive/scan/record, full `3R/1T2R/2T1R/3T`, Wi-Fi/BLE/802.15.4, Sub-GHz, voice, IR and expansion profiles | One signal group is active; three nRF radios remain full-function concurrently; inactive interfaces are quiet; permission, region and antenna profile precede TX |
 | **F8. Three functional levels and safety UX** | ⏳ Waiting for F7 | Normal, Laboratory and Laboratory → Controlled Zone behavior | Every Controlled Zone entry shows a fresh banner; action requires preview, separate arm, authorized target/isolated environment and bounded lease; setup requires non-aggression agreement acceptance |
 | **F9. Signed bundle, update and recovery** | ⏳ Waiting for F1/F3 | One owner/release-signed five-target bundle with local owner roots, readback, ordered activation and rollback | Substituted/incompatible bundles fail; Pack→Safety→C5→RP→S3 self-test; failure restores a compatible set; USB/UART/SWD recovery remains owner-accessible |
-| **F10. HIL and system qualification** | 🔒 Waiting for F4–F9 and hardware R9 | Automated prototype tests, fault injection and RF/power/thermal/endurance evidence | Real transports/peripherals, 3×nRF concurrency, quiet state, watchdog, thermal, brownout, interrupted update, 24–48-hour run and safe recovery pass |
-| **F11. Firmware release** | 🔒 Waiting for F10 and hardware R10 | Reproducible images, installer, release notes, recovery kit and compatible tag | Zero blocker; target binaries are reproducible and signed; SBOM/licenses/tests are published; site matches implementation; firmware tag matches hardware release |
+| **F10. HIL and system qualification** | 🔒 Waiting for F4–F9 and hardware H7 | Automated prototype tests, fault injection and RF/power/thermal/endurance evidence | Real transports/peripherals, 3×nRF concurrency, quiet state, watchdog, thermal, brownout, interrupted update, 24–48-hour run and safe recovery pass |
+| **F11. Firmware release** | 🔒 Waiting for F10 and hardware H8 | Reproducible images, installer, release notes, recovery kit and compatible tag | Zero blocker; target binaries are reproducible and signed; SBOM/licenses/tests are published; site matches implementation; firmware tag matches hardware release |
 
 ## Advancement rules
 
@@ -88,6 +88,6 @@ flowchart TD
 
 ## Next action
 
-The current boundary is F2. Before hardware R2, only reproducible project/CI
+The current boundary is F2. Before hardware H2, only reproducible project/CI
 structure may be prepared without invented pin/BSP details. Target BSP freeze
 and real emulator execution start after the accepted production schematic.

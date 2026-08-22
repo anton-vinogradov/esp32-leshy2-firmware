@@ -3,7 +3,7 @@
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
 > **Firmware status: F2 — target projects and reproducible builds.** F0/F1
-> are reviewed; target/BSP work waits at the hardware R2 boundary. Follow the
+> are reviewed; target/BSP work waits at the hardware H2 boundary. Follow the
 > [firmware roadmap](docs/roadmap.md).
 
 ## Firmware roadmap and current position
@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
 | F1 · Portable cores | ✅ Reviewed | 24 deterministic host scenarios plus clean ASan/UBSan |
-| **F2 · Target projects and build system** | **▶️ Current boundary; depends on hardware R2** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
+| **F2 · Target projects and build system** | **▶️ Current boundary; depends on hardware H2** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
 | F3 · Boot, memory and emulation | ⏳ Waiting for F2 | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
 | F4 · IPC and scheduling | ⏳ Waiting for F3 | real transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current schematic | all device, control, sensor and power-state drivers |
@@ -25,12 +25,12 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F7 · Radio, IR and expansion | ⏳ Waiting for F5/F6 | receive/TX profiles, full 3×nRF24 operation and quiet inactive paths |
 | F8 · Functional levels and safety UX | ⏳ Waiting for F7 | Normal, Laboratory and Controlled Zone workflows |
 | F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled five-target bundle, rollback and physical recovery |
-| F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware R9 | prototype fault, RF, power, thermal and endurance evidence |
-| F11 · Firmware release | 🔒 Waiting for F10 and hardware R10 | reproducible signed images, installer, recovery kit and release tag |
+| F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
+| F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
 **Firmware is at F2.** Portable logic has evidence, but target projects,
 target builds and target-emulator runs do not yet exist. Actual pin/BSP freeze
-waits for the production ECAD contract at hardware R2.
+waits for the production ECAD contract at hardware H2.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
