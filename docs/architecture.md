@@ -112,9 +112,11 @@ hardware `RUN_PERMIT` qualification and optical evidence.
   STOPPING` states and a latch-off fault. An unknown module profile never gains
   power or dangerous commands automatically.
 - The built-in S3, C5, nRF24, CC1101, voice and IR transmit paths have physical
-  evidence. The stock U214 and generic Unit connectors expose no independent
-  actual-RF evidence; their receive/GNSS functions work, but transmit remains
-  blocked until a qualified expansion-evidence contract is selected.
+  evidence. The stock U214 remains receive/GNSS-only because contact 5 is
+  `5V_OUT`, not RF proof. A signed evidence-aware LoRa Cap may use the same
+  contact as open-drain `EXT_TX_EVIDENCE_N`; its TX lease exists only after the
+  final external RF feed and bit 8 have passed qualification. Generic M5 Unit
+  TX still requires its own physical evidence profile.
 - A phone acts only as local text input and data exchange; it cannot confirm a
   Controlled-Zone action.
 
@@ -128,7 +130,8 @@ Evidence confirms execution but never creates permission.
 
 - S3 publishes a bounded heartbeat and one short-lived lease naming the active
   signal group. The safety controller independently compares that lease with
-  `ANY_TX_AON_N` and the eight per-path evidence bits.
+  `ANY_TX_AON_N` and nine used bits of the 16-bit `TCA9535PWR` evidence register
+  at private address `0x20`.
 - The safety controller services the TPS3435 deadline only while its own loop,
   the S3 heartbeat, the active lease, power-fault input and three NTC channels
   are healthy. TPS3435 timeout or any controller fault asynchronously latches

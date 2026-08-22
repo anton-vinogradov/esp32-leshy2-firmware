@@ -24,7 +24,19 @@
       "id": "M5_U214_PINMAP",
       "document": "M5Stack Cap LoRa-1262 U214 product pin map",
       "url": "https://docs.m5stack.com/en/cap/Cap_LoRa-1262",
-      "supports": "the stock Cap-Bus exposes SPI, BUSY, IRQ, RESET, UART, I2C and power but no independent actual-RF evidence output"
+      "supports": "the stock Cap-Bus exposes SPI, BUSY, IRQ, RESET, UART, I2C and power; contact 5 is 5V_OUT high and not independent actual-RF evidence"
+    },
+    {
+      "id": "TCA9535_EVIDENCE_MASK",
+      "document": "Texas Instruments TCA9535 16-bit I2C I/O expander datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tca9535.pdf",
+      "supports": "16 input bits, 5-V-tolerant I/O, 400-kHz bus, address 0x20 with A2/A1/A0 low and required pulls on unused inputs"
+    },
+    {
+      "id": "SN74LVC1G07_EXT_EVIDENCE",
+      "document": "Texas Instruments SN74LVC1G07 open-drain buffer datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g07.pdf",
+      "supports": "5-V-tolerant non-inverting input boundary and open-drain 3.3-V AON evidence output"
     }
   ],
   "protocol": {
@@ -183,7 +195,7 @@
     "update_data_bytes": 108,
     "update_rule": "UPDATE_BEGIN carries target, length and SHA-256 metadata; every offset-addressed data window is acknowledged only after flash read-back; normal update is legal only in physical KILL",
     "pack_domain_data": ["cell0_mV", "cell1_mV", "pack_temperature_dC", "stack_mV", "protection_and_admission_flags"],
-    "safety_domain_data": ["power_temperature_dC", "rf_temperature_dC", "ui_temperature_dC", "lease_and_evidence_mask", "rail_and_fault_flags"]
+    "safety_domain_data": ["power_temperature_dC", "rf_temperature_dC", "ui_temperature_dC", "lease_and_evidence_mask_u16", "rail_and_fault_flags"]
   },
   "safety_timing": {
     "s3_session_open_ms_max_after_run": 100,
@@ -200,6 +212,17 @@
     "external_watchdog_service_period_ms_max": 400,
     "rule": "the safety controller services TPS3435 only while its loop, S3 session, thermal inputs, power fault input, active lease and physical evidence are mutually consistent"
   },
+  "evidence_register": {
+    "device": "TCA9535PWR",
+    "i2c_7bit_address": "0x20",
+    "width_bits": 16,
+    "polarity": "active_low",
+    "used_bits": 9,
+    "bit_names": ["S3_RF", "C5_RF", "NRF0_RF", "NRF1_RF", "NRF2_RF", "CC_RF", "VOICE_RF", "IR_OPTICAL", "LORA_EXT_RF"],
+    "unused_bits": [9, 10, 11, 12, 13, 14, 15],
+    "read_rule": "read both input-port bytes; ANY_TX_AON_N is the direct fail-safe aggregate, so a changing two-byte localization read may delay diagnosis but can never authorize TX",
+    "external_bit_rule": "bit 8 comes from the 5-V-tolerant contact-5 boundary; stock U214 5V_OUT is inactive high, while only a signed and qualified evidence-aware Cap may assert open-drain low from measured final-feed RF"
+  },
   "signal_groups": [
     {"id": 0, "name": "NONE", "owner": "S3", "evidence_bits": [], "tx_policy": "off"},
     {"id": 1, "name": "S3_RF", "owner": "S3", "evidence_bits": [0], "tx_policy": "lease_required"},
@@ -208,7 +231,7 @@
     {"id": 4, "name": "CC1101", "owner": "RP", "evidence_bits": [5], "tx_policy": "lease_required"},
     {"id": 5, "name": "VOICE", "owner": "RP", "evidence_bits": [6], "tx_policy": "lease plus physical PTT required"},
     {"id": 6, "name": "IR", "owner": "C5", "evidence_bits": [7], "tx_policy": "lease_required"},
-    {"id": 7, "name": "U214", "owner": "RP", "evidence_bits": [], "tx_policy": "receive and GNSS allowed; transmit blocked until an explicit independent evidence contract is accepted"},
+    {"id": 7, "name": "U214", "owner": "RP", "evidence_bits": [8], "tx_policy": "stock U214 receive and GNSS only; a transmit lease is available only to a signed evidence-aware LoRa Cap profile with qualified physical bit 8"},
     {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"}
   ],
   "compatibility": {

@@ -114,9 +114,11 @@ group scheduler синхронизирует их, не превращая mixed
   ACTIVE → STOPPING` и latch-off fault. Неизвестный module profile не получает
   питание или опасные команды автоматически.
 - Встроенные TX-тракты S3, C5, nRF24, CC1101, voice и IR имеют физическое
-  evidence. Штатный U214 и универсальный Unit-разъём не выводят независимое
-  actual-RF evidence: приём/GNSS работают, но TX остаётся заблокированным до
-  выбора проверяемого expansion-evidence контракта.
+  evidence. Штатный U214 остаётся только RX/GNSS: контакт 5 у него — `5V_OUT`,
+  а не доказательство RF. Подписанный evidence-aware LoRa Cap может использовать
+  тот же контакт как open-drain `EXT_TX_EVIDENCE_N`; его TX lease появляется
+  только после квалификации конечного внешнего RF-тракта и бита 8. Для TX через
+  универсальный M5 Unit по-прежнему нужен собственный профиль physical evidence.
 - Телефон используется только как локальный text input и обмен данными; он не
   подтверждает Controlled-Zone действия.
 
@@ -130,7 +132,8 @@ lease. Evidence подтверждает исполнение, но никогд
 
 - S3 публикует ограниченный heartbeat и одну короткую lease с именем активной
   сигнальной группы. Safety controller независимо сопоставляет её с
-  `ANY_TX_AON_N` и восемью per-path evidence bits.
+  `ANY_TX_AON_N` и девятью используемыми битами 16-битного регистра
+  `TCA9535PWR` на приватном адресе `0x20`.
 - Safety controller обслуживает deadline TPS3435 только пока исправны его
   собственный цикл, heartbeat S3, активная lease, power-fault input и три NTC.
   Timeout TPS3435 или любая авария controller асинхронно защёлкивают

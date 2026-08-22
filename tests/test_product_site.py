@@ -319,7 +319,14 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("0x3248534C", contract["protocol"]["magic_u32_le"])
         sources = {item["id"]: item for item in contract["sources"]}
         self.assertEqual(
-            {"ESP32_C5_SDIO_DRIVER", "ESP32_C5_SDIO_SILICON", "RP2350_SPI_DMA", "M5_U214_PINMAP"},
+            {
+                "ESP32_C5_SDIO_DRIVER",
+                "ESP32_C5_SDIO_SILICON",
+                "RP2350_SPI_DMA",
+                "M5_U214_PINMAP",
+                "TCA9535_EVIDENCE_MASK",
+                "SN74LVC1G07_EXT_EVIDENCE",
+            },
             set(sources),
         )
         for source in sources.values():
@@ -397,16 +404,18 @@ class ProductSiteTests(unittest.TestCase):
     def test_every_enabled_tx_group_has_independent_evidence(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))
         groups = {item["name"]: item for item in contract["signal_groups"]}
-        for name in ("S3_RF", "C5_RF", "NRF24", "CC1101", "VOICE", "IR"):
+        for name in ("S3_RF", "C5_RF", "NRF24", "CC1101", "VOICE", "IR", "U214"):
             self.assertTrue(groups[name]["evidence_bits"], name)
-            self.assertNotIn("blocked", groups[name]["tx_policy"])
         self.assertEqual([2, 3, 4], groups["NRF24"]["evidence_bits"])
-        for name in ("U214", "M5_UNIT"):
-            self.assertEqual([], groups[name]["evidence_bits"])
-            self.assertTrue(
-                "blocked" in groups[name]["tx_policy"]
-                or "requires" in groups[name]["tx_policy"]
-            )
+        self.assertEqual([8], groups["U214"]["evidence_bits"])
+        self.assertIn("stock U214 receive and GNSS only", groups["U214"]["tx_policy"])
+        self.assertEqual([], groups["M5_UNIT"]["evidence_bits"])
+        self.assertIn("requires", groups["M5_UNIT"]["tx_policy"])
+        evidence = contract["evidence_register"]
+        self.assertEqual("TCA9535PWR", evidence["device"])
+        self.assertEqual("0x20", evidence["i2c_7bit_address"])
+        self.assertEqual(16, evidence["width_bits"])
+        self.assertEqual(9, evidence["used_bits"])
 
     def test_public_architecture_explains_the_wire_contract(self):
         expected = {
