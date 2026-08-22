@@ -32,6 +32,33 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 target builds and target-emulator runs do not yet exist. Actual pin/BSP freeze
 waits for the production ECAD contract at hardware H2.
 
+### Current phase F2 — detailed position
+
+<!-- current-substep: F2.0.1 -->
+
+**Exact marker: `F2.0.1`** — verify and pin the supported production SDK and
+toolchain version for each of the five targets. Archived choices are inputs,
+not current evidence.
+
+- `F2.0` — freeze the target/toolchain matrix.
+  - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
+    contracts.
+  - ▶️ **`F2.0.1` — current:** verify exact SDK/toolchain versions, official
+    support, lifecycle, license and build-host requirements.
+  - ⏳ `F2.0.2` — create reproducible environment manifests and dependency
+    locks.
+  - ⏳ `F2.0.3` — define one local/CI build matrix and canonical commands.
+- ⏳ `F2.1` — create the shared source/component tree without target pins.
+- ⏳ `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
+- 🔒 `F2.3` — consume the generated pin/BSP contract; waits for hardware H2.
+- ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
+- ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
+
+`F2.0.1` exits only when every target names a currently supported exact
+toolchain source/version and its constraints. When any substep closes, this
+marker and both roadmap pages are updated in the same commit before work
+advances.
+
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
 expansion and preserves a safe state through faults. This documentation

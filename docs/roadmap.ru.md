@@ -29,6 +29,40 @@ firmware-репозитория. Пересечения с железом ука
 Host-модель проверяет переносимую логику, но не заменяет instruction-set,
 peripheral или board emulation и никогда не показывается как готовая прошивка.
 
+## Детальный состав текущей F2
+
+<!-- current-substep: F2.0.1 -->
+
+**Точный маркер: `F2.0.1`** — проверить и зафиксировать поддерживаемую
+production-версию SDK и toolchain для каждого из пяти target. Варианты из
+архивных документов остаются лишь кандидатами до проверки по актуальным
+первоисточникам.
+
+- `F2.0` — target/toolchain matrix.
+  - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
+    contracts.
+  - ▶️ **`F2.0.1` — сейчас:** проверить точные SDK/toolchain versions,
+    first-party support status, lifecycle, license и требования к build host
+    для S3, C5, RP2354B и обоих MSPM0 images.
+  - ⏳ `F2.0.2` — создать воспроизводимые environment manifests, checksums и
+    dependency locks без молчаливо плавающих версий.
+  - ⏳ `F2.0.3` — определить единую local/CI matrix и канонические команды
+    configure, build, clean и получения artifacts.
+- ⏳ `F2.1` — общее дерево source/components, warning policy и границы
+  generated files без выдуманных target pins.
+- ⏳ `F2.2` — минимальные production-SDK projects для S3, C5, RP, Pack и
+  Safety.
+- 🔒 `F2.3` — импорт генерируемого pin/BSP contract; заблокирован до hardware
+  H2.
+- ⏳ `F2.4` — воспроизводимые debug/release builds, map files и image-size
+  gates для всех пяти target.
+- ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
+
+`F2.0.1` завершается, когда для каждого target названы актуальный first-party
+source, точная поддерживаемая version toolchain, host requirements, license и
+известные platform limits. Закрытие любой подзадачи требует в том же commit
+изменить точный маркер на стартовой странице и в роадмапе до перехода дальше.
+
 ## Зависимости
 
 ```mermaid

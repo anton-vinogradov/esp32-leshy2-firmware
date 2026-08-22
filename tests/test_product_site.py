@@ -89,6 +89,24 @@ class ProductSiteTests(unittest.TestCase):
             for stage in range(12):
                 self.assertIn(f"F{stage}.", page, f"{name}: missing F{stage}")
 
+    def test_current_firmware_substep_is_visible_and_synchronized(self):
+        pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
+        markers = {}
+        for name in pages:
+            page = self.read(name)
+            found = re.findall(r"<!-- current-substep: (F\d+(?:\.\d+)+) -->", page)
+            self.assertEqual(1, len(found), name)
+            markers[name] = found[0]
+            self.assertIn(f"`{found[0]}`", page, name)
+            self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
+            self.assertIn("commit", page, name)
+
+        self.assertEqual({"F2.0.1"}, set(markers.values()))
+        for name in ("README.md", "README.ru.md"):
+            page = self.read(name)
+            for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.3", "F2.5"):
+                self.assertIn(f"`{substep}`", page, f"{name}: {substep}")
+
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")

@@ -29,6 +29,37 @@ duplicated or given a second status here.
 The host model verifies portable logic. It is not instruction-set, peripheral
 or board emulation and is never presented as finished firmware.
 
+## Current F2 breakdown
+
+<!-- current-substep: F2.0.1 -->
+
+**Exact marker: `F2.0.1`** — verify and pin the supported production SDK and
+toolchain version for each of the five targets. Choices recovered from archived
+documents are candidates only until checked against current primary sources.
+
+- `F2.0` — target/toolchain matrix.
+  - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
+    contracts are registered.
+  - ▶️ **`F2.0.1` — current:** verify exact SDK/toolchain versions, first-party
+    support status, lifecycle, license and build-host requirements for S3, C5,
+    RP2354B and both MSPM0 images.
+  - ⏳ `F2.0.2` — create reproducible environment manifests, checksums and
+    dependency locks without silently floating versions.
+  - ⏳ `F2.0.3` — define the single local/CI matrix and canonical configure,
+    build, clean and artifact commands.
+- ⏳ `F2.1` — shared source/component tree, warning policy and generated-file
+  boundaries without inventing target pins.
+- ⏳ `F2.2` — minimal production-SDK projects for S3, C5, RP, Pack and Safety.
+- 🔒 `F2.3` — generated pin/BSP contract import, blocked until hardware H2.
+- ⏳ `F2.4` — reproducible debug/release builds, map files and image-size gates
+  for all five targets.
+- ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
+
+`F2.0.1` exits when every target names a current first-party source, exact
+supported toolchain version, host requirements, license and known platform
+limits. Closing any substep requires changing the exact marker on both landing
+and roadmap pages in the same commit before advancing work.
+
 ## Dependencies
 
 ```mermaid
