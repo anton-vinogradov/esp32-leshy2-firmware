@@ -67,12 +67,13 @@ static void test_full_nrf_mix_and_foreign_evidence(void)
                   "Unexpected physical transmission detected") == 0);
 }
 
-static void test_duplicate_heartbeat_does_not_extend_session(void)
+static void test_duplicate_or_stale_heartbeat_does_not_extend_session(void)
 {
     l2_safety_t state = running_state();
     assert(!l2_safety_grant_lease(&state, L2_GROUP_BROADCAST_RX, 100, 0));
     tick_to(&state, 95);
     assert(!l2_safety_heartbeat(&state, 1, 95));
+    assert(!l2_safety_heartbeat(&state, 0, 95));
     tick_to(&state, 205);
     assert(state.fault_kill_asserted);
     assert(state.first_fault == L2_FAULT_HEARTBEAT_LOST);
@@ -83,7 +84,7 @@ static void test_lease_expiry_is_fail_closed(void)
     l2_safety_t state = running_state();
     assert(!l2_safety_grant_lease(&state, L2_GROUP_VOICE, 101, 0));
     assert(l2_safety_grant_lease(&state, L2_GROUP_VOICE, 100, 0));
-    tick_to(&state, 105);
+    tick_to(&state, 100);
     assert(state.fault_kill_asserted);
     assert(state.first_fault == L2_FAULT_LEASE_EXPIRED);
     assert(state.active_group == L2_GROUP_NONE);
@@ -96,9 +97,9 @@ static void test_revoke_grace_and_stuck_rf(void)
     assert(l2_safety_grant_lease(&state, L2_GROUP_C5_RF, 100, 0));
     l2_safety_set_evidence(&state, 0x0002);
     l2_safety_revoke_lease(&state, 5);
-    tick_to(&state, 25);
+    tick_to(&state, 20);
     assert(!state.fault_kill_asserted);
-    tick_to(&state, 30);
+    tick_to(&state, 25);
     assert(state.fault_kill_asserted);
     assert(state.first_fault == L2_FAULT_POST_REVOKE_EVIDENCE);
 }
@@ -137,7 +138,7 @@ int main(void)
 {
     test_reset_and_physical_rearm();
     test_full_nrf_mix_and_foreign_evidence();
-    test_duplicate_heartbeat_does_not_extend_session();
+    test_duplicate_or_stale_heartbeat_does_not_extend_session();
     test_lease_expiry_is_fail_closed();
     test_revoke_grace_and_stuck_rf();
     test_thermal_fault_is_retained_for_viewer();

@@ -22,17 +22,21 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertIn("host safety core: 8 scenarios passed", result.stdout)
         self.assertIn("host L2IP core: 4 scenarios passed", result.stdout)
-        self.assertIn("host update core: 4 scenarios passed", result.stdout)
+        self.assertIn("host update core: 5 scenarios passed", result.stdout)
+        self.assertIn("host five-domain model: 7 scenarios passed", result.stdout)
 
     def test_preorder_contract_does_not_overstate_firmware_or_emulation(self):
         contract_path = REPO_ROOT / "config/preorder_verification_contract.json"
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
         self.assertEqual("LESHY2-PREORDER-1", contract["contract_id"])
-        self.assertIn("portable C safety core", contract["current_truth"]["executable_firmware"])
+        self.assertIn(
+            "reviewed portable C safety, L2IP, update",
+            contract["current_truth"]["executable_firmware"],
+        )
         self.assertIn("not run", contract["current_truth"]["instruction_emulation"])
         gates = {gate["id"]: gate["status"] for gate in contract["gates"]}
         self.assertEqual(
-            "in_progress_safety_core_host_scenarios_passed",
+            "reviewed",
             gates["P4_EXECUTABLE_FIRMWARE_MODEL"],
         )
         self.assertEqual("not_started", gates["P5_TARGET_BUILDS_EMULATION"])

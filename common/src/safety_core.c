@@ -82,8 +82,11 @@ bool l2_safety_heartbeat(l2_safety_t *state, uint32_t sequence, uint32_t now_ms)
     if (!state->run_requested || state->fault_kill_asserted) {
         return false;
     }
-    if (state->session_open && sequence == state->last_heartbeat_sequence) {
-        return false;
+    if (state->session_open) {
+        const uint32_t advance = sequence - state->last_heartbeat_sequence;
+        if (advance == 0 || advance >= UINT32_C(0x80000000)) {
+            return false;
+        }
     }
     state->session_open = true;
     state->last_heartbeat_sequence = sequence;
@@ -193,7 +196,7 @@ void l2_safety_tick(l2_safety_t *state, uint32_t now_ms)
         latch_fault(state, L2_FAULT_HEARTBEAT_LOST);
         return;
     }
-    if (state->lease_active && now_ms > state->lease_expiry_ms) {
+    if (state->lease_active && now_ms >= state->lease_expiry_ms) {
         latch_fault(state, L2_FAULT_LEASE_EXPIRED);
         return;
     }
@@ -201,7 +204,7 @@ void l2_safety_tick(l2_safety_t *state, uint32_t now_ms)
     if (state->evidence_grace_active) {
         if (state->observed_evidence_mask == 0) {
             state->evidence_grace_active = false;
-        } else if (now_ms > state->evidence_grace_expiry_ms) {
+        } else if (now_ms >= state->evidence_grace_expiry_ms) {
             latch_fault(state, L2_FAULT_POST_REVOKE_EVIDENCE);
             return;
         }

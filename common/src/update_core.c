@@ -10,6 +10,11 @@ static const l2_update_domain_t activation_order[L2_UPDATE_DOMAIN_COUNT] = {
     L2_UPDATE_S3,
 };
 
+static bool domain_valid(l2_update_domain_t domain)
+{
+    return domain >= L2_UPDATE_PACK && domain < L2_UPDATE_DOMAIN_COUNT;
+}
+
 void l2_update_init(l2_update_t *state, uint32_t initial_build)
 {
     *state = (l2_update_t){0};
@@ -54,11 +59,11 @@ bool l2_update_stage(
     bool readback_matches
 )
 {
-    if (state->phase != L2_UPDATE_STAGING || domain >= L2_UPDATE_DOMAIN_COUNT ||
-        build_id == 0 || !readback_matches) {
-        if (!readback_matches) {
-            l2_update_rollback(state, L2_UPDATE_FAULT_VERIFY);
-        }
+    if (state->phase != L2_UPDATE_STAGING || !domain_valid(domain) || build_id == 0) {
+        return false;
+    }
+    if (!readback_matches) {
+        l2_update_rollback(state, L2_UPDATE_FAULT_VERIFY);
         return false;
     }
     state->pending_build[domain] = build_id;
@@ -85,12 +90,12 @@ bool l2_update_verify_bundle(l2_update_t *state)
 bool l2_update_activate(l2_update_t *state, l2_update_domain_t domain, uint32_t now_ms)
 {
     l2_update_check_deadline(state, now_ms);
-    if ((state->phase != L2_UPDATE_VERIFIED && state->phase != L2_UPDATE_ACTIVATING) ||
-        state->next_activation >= L2_UPDATE_DOMAIN_COUNT ||
+    if (state->phase != L2_UPDATE_VERIFIED && state->phase != L2_UPDATE_ACTIVATING) {
+        return false;
+    }
+    if (!domain_valid(domain) || state->next_activation >= L2_UPDATE_DOMAIN_COUNT ||
         activation_order[state->next_activation] != domain) {
-        if (state->phase != L2_UPDATE_ROLLED_BACK) {
-            l2_update_rollback(state, L2_UPDATE_FAULT_ACTIVATION_ORDER);
-        }
+        l2_update_rollback(state, L2_UPDATE_FAULT_ACTIVATION_ORDER);
         return false;
     }
     state->active_build[domain] = state->pending_build[domain];
@@ -102,7 +107,7 @@ bool l2_update_activate(l2_update_t *state, l2_update_domain_t domain, uint32_t 
 
 bool l2_update_report_self_test(l2_update_t *state, l2_update_domain_t domain, bool passed)
 {
-    if (state->phase != L2_UPDATE_ACTIVATING || domain >= L2_UPDATE_DOMAIN_COUNT ||
+    if (state->phase != L2_UPDATE_ACTIVATING || !domain_valid(domain) ||
         !state->activated[domain]) {
         return false;
     }

@@ -73,12 +73,33 @@ static void test_mid_bundle_self_test_and_deadline_restore_previous_bundle(void)
     assert(state.first_fault == L2_UPDATE_FAULT_DEADLINE);
 }
 
+static void test_invalid_or_late_commands_cannot_mutate_committed_state(void)
+{
+    l2_update_t state;
+    l2_update_init(&state, 40);
+    assert(l2_update_begin(&state, true, true, true, true, 0));
+    stage_complete_bundle(&state, 41);
+    for (int domain = 0; domain < L2_UPDATE_DOMAIN_COUNT; ++domain) {
+        assert(l2_update_activate(&state, (l2_update_domain_t)domain, 1 + (uint32_t)domain));
+        assert(l2_update_report_self_test(&state, (l2_update_domain_t)domain, true));
+    }
+    assert(l2_update_commit(&state, 10));
+    assert(!l2_update_stage(&state, L2_UPDATE_PACK, 42, false));
+    assert(!l2_update_activate(&state, L2_UPDATE_PACK, 11));
+    assert(!l2_update_stage(&state, (l2_update_domain_t)-1, 42, true));
+    assert(state.phase == L2_UPDATE_COMMITTED);
+    for (int domain = 0; domain < L2_UPDATE_DOMAIN_COUNT; ++domain) {
+        assert(state.active_build[domain] == 41);
+    }
+}
+
 int main(void)
 {
     test_preconditions_are_fail_closed();
     test_s3_is_activated_last_and_commit_succeeds();
     test_wrong_order_rolls_every_domain_back();
     test_mid_bundle_self_test_and_deadline_restore_previous_bundle();
-    puts("host update core: 4 scenarios passed");
+    test_invalid_or_late_commands_cannot_mutate_committed_state();
+    puts("host update core: 5 scenarios passed");
     return 0;
 }
