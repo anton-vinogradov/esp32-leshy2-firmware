@@ -326,6 +326,7 @@ class ProductSiteTests(unittest.TestCase):
                 "M5_U214_PINMAP",
                 "TCA9535_EVIDENCE_MASK",
                 "SN74LVC1G07_EXT_EVIDENCE",
+                "LESHY_LORA_CAP_01",
             },
             set(sources),
         )
@@ -404,11 +405,13 @@ class ProductSiteTests(unittest.TestCase):
     def test_every_enabled_tx_group_has_independent_evidence(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))
         groups = {item["name"]: item for item in contract["signal_groups"]}
-        for name in ("S3_RF", "C5_RF", "NRF24", "CC1101", "VOICE", "IR", "U214"):
+        for name in ("S3_RF", "C5_RF", "NRF24", "CC1101", "VOICE", "IR", "LORA_CAP"):
             self.assertTrue(groups[name]["evidence_bits"], name)
         self.assertEqual([2, 3, 4], groups["NRF24"]["evidence_bits"])
-        self.assertEqual([8], groups["U214"]["evidence_bits"])
-        self.assertIn("stock U214 receive and GNSS only", groups["U214"]["tx_policy"])
+        self.assertEqual(7, groups["LORA_CAP"]["id"])
+        self.assertEqual([8], groups["LORA_CAP"]["evidence_bits"])
+        self.assertIn("stock U214 receive and GNSS only", groups["LORA_CAP"]["tx_policy"])
+        self.assertIn("LESHY2-LORA-CAP-01-EU868", groups["LORA_CAP"]["tx_policy"])
         self.assertEqual([], groups["M5_UNIT"]["evidence_bits"])
         self.assertIn("requires", groups["M5_UNIT"]["tx_policy"])
         evidence = contract["evidence_register"]
@@ -416,6 +419,34 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("0x20", evidence["i2c_7bit_address"])
         self.assertEqual(16, evidence["width_bits"])
         self.assertEqual(9, evidence["used_bits"])
+
+    def test_exact_lora_cap_profiles_preserve_regional_and_evidence_bounds(self):
+        contract = json.loads(self.read("config/interdomain_protocol.json"))
+        cap = contract["lora_cap_profiles"]
+        self.assertEqual("24AA02UIDT-I/OT", cap["identity_device"])
+        self.assertFalse(cap["identity_is_authorization"])
+        self.assertEqual(
+            {"minimum": 10, "nominal": 14.6, "maximum": 18},
+            cap["evidence_pulse_ms"],
+        )
+        profiles = {row["assembly"]: row for row in cap["profiles"]}
+        self.assertEqual(
+            {
+                "LESHY2-LORA-CAP-01-EU868",
+                "LESHY2-LORA-CAP-01-US915",
+            },
+            set(profiles),
+        )
+        self.assertEqual([848, 888], profiles["LESHY2-LORA-CAP-01-EU868"]["allowed_frequency_mhz"])
+        self.assertEqual([900, 940], profiles["LESHY2-LORA-CAP-01-US915"]["allowed_frequency_mhz"])
+        for profile in profiles.values():
+            for gate in (
+                "signed exact profile",
+                "qualified UID binding",
+                "active LORA_CAP lease",
+                "live evidence bit 8",
+            ):
+                self.assertIn(gate, profile["tx_requires"])
 
     def test_public_architecture_explains_the_wire_contract(self):
         expected = {

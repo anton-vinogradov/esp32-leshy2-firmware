@@ -8,7 +8,7 @@
 |---|---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Application, menu, display, microSD, audio, BLE/Wi-Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2.4/5 GHz, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
-| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
+| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1106SDGS20R` | Two-cell admission and local fail-closed power state | NRST, SWD, UART1 and isolated fixture power |
 | Safety | second `MSPM0C1106SDGS20R` | Heartbeats, TX leases, three thermal zones, physical TX evidence and retained fault record | NRST, SWD, UART1 and isolated fixture power |
 
@@ -108,15 +108,18 @@ hardware `RUN_PERMIT` qualification and optical evidence.
 - The audio graph explicitly selects microphone or radio RX for capture and
   speaker or headphones for playback. SA518 PTT is never inferred from audio
   samples.
-- U214 and M5 Unit use independent `OFF → STARTING → IDENTIFY → ACTIVE →
+- The Cap Bus and M5 Unit use independent `OFF → STARTING → IDENTIFY → ACTIVE →
   STOPPING` states and a latch-off fault. An unknown module profile never gains
   power or dangerous commands automatically.
 - The built-in S3, C5, nRF24, CC1101, voice and IR transmit paths have physical
   evidence. The stock U214 remains receive/GNSS-only because contact 5 is
-  `5V_OUT`, not RF proof. A signed evidence-aware LoRa Cap may use the same
-  contact as open-drain `EXT_TX_EVIDENCE_N`; its TX lease exists only after the
-  final external RF feed and bit 8 have passed qualification. Generic M5 Unit
-  TX still requires its own physical evidence profile.
+  `5V_OUT`, not RF proof. Exact signed `LESHY2-LORA-CAP-01-EU868` and
+  `LESHY2-LORA-CAP-01-US915` profiles use `NiceRF LoRa1262-868/915`, a
+  `24AA02UIDT-I/OT` identity anchor and the same contact as open-drain
+  `EXT_TX_EVIDENCE_N`. Their TX lease exists only after the regional frequency
+  profile, UID binding, final external RF feed and 10–18-ms bit-8 pulse have
+  passed qualification. Identity never substitutes for authorization or live
+  evidence. Generic M5 Unit TX still requires its own physical evidence profile.
 - A phone acts only as local text input and data exchange; it cannot confirm a
   Controlled-Zone action.
 

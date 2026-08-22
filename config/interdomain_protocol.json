@@ -37,6 +37,12 @@
       "document": "Texas Instruments SN74LVC1G07 open-drain buffer datasheet",
       "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g07.pdf",
       "supports": "5-V-tolerant non-inverting input boundary and open-drain 3.3-V AON evidence output"
+    },
+    {
+      "id": "LESHY_LORA_CAP_01",
+      "document": "LESHY2-LORA-CAP-01 machine-readable hardware contract",
+      "url": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/hardware/accessories/leshy2-lora-cap-01.json",
+      "supports": "exact EU868/US915 assemblies, Cap-Bus pin map, 24AA02UID identity, final-feed RF evidence and 10-18-ms active-low pulse contract"
     }
   ],
   "protocol": {
@@ -52,7 +58,7 @@
   "domains": [
     {"id": 1, "name": "S3", "role": "application and update coordinator"},
     {"id": 2, "name": "C5", "role": "native 2.4/5-GHz, IEEE 802.15.4 and IR owner"},
-    {"id": 3, "name": "RP", "role": "nRF24, Sub-GHz, voice and U214 owner"},
+    {"id": 3, "name": "RP", "role": "nRF24, Sub-GHz, voice and Cap-Bus owner"},
     {"id": 4, "name": "PACK", "role": "local battery-pack admission owner"},
     {"id": 5, "name": "SAFETY", "role": "AON heartbeat, lease, evidence and thermal owner"}
   ],
@@ -231,9 +237,31 @@
     {"id": 4, "name": "CC1101", "owner": "RP", "evidence_bits": [5], "tx_policy": "lease_required"},
     {"id": 5, "name": "VOICE", "owner": "RP", "evidence_bits": [6], "tx_policy": "lease plus physical PTT required"},
     {"id": 6, "name": "IR", "owner": "C5", "evidence_bits": [7], "tx_policy": "lease_required"},
-    {"id": 7, "name": "U214", "owner": "RP", "evidence_bits": [8], "tx_policy": "stock U214 receive and GNSS only; a transmit lease is available only to a signed evidence-aware LoRa Cap profile with qualified physical bit 8"},
+    {"id": 7, "name": "LORA_CAP", "owner": "RP", "evidence_bits": [8], "tx_policy": "stock U214 receive and GNSS only; TX is available only to the exact signed LESHY2-LORA-CAP-01-EU868 or LESHY2-LORA-CAP-01-US915 profile with qualified final-feed physical bit 8"},
     {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"}
   ],
+  "lora_cap_profiles": {
+    "identity_device": "24AA02UIDT-I/OT",
+    "identity_bus": "Cap-Bus I2C contacts 3/4 at 3.3 V",
+    "identity_is_authorization": false,
+    "evidence_input": "active-low bit 8 from Cap-Bus contact 5",
+    "evidence_pulse_ms": {"minimum": 10, "nominal": 14.6, "maximum": 18},
+    "profiles": [
+      {
+        "assembly": "LESHY2-LORA-CAP-01-EU868",
+        "module": "NiceRF LoRa1262-868",
+        "allowed_frequency_mhz": [848, 888],
+        "tx_requires": ["signed exact profile", "qualified UID binding", "active LORA_CAP lease", "live evidence bit 8"]
+      },
+      {
+        "assembly": "LESHY2-LORA-CAP-01-US915",
+        "module": "NiceRF LoRa1262-915",
+        "allowed_frequency_mhz": [900, 940],
+        "tx_requires": ["signed exact profile", "qualified UID binding", "active LORA_CAP lease", "live evidence bit 8"]
+      }
+    ],
+    "stock_u214": "receive and GNSS only; contact 5 is 5V_OUT and can never satisfy evidence"
+  },
   "compatibility": {
     "major": "exact match",
     "minor": "additive only; both peers must advertise the message and payload-schema hash before use",

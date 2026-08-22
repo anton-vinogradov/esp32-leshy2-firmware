@@ -19,7 +19,8 @@
 - Полный смешанный режим трёх nRF24: `3R`, `1T2R`, `2T1R` и `3T` без
   программного отключения соседнего приёмника.
 - Wi‑Fi 2,4/5 ГГц, BLE, ESP‑NOW, IEEE 802.15.4, Sub‑GHz, broadcast RX,
-  VHF/UHF voice, IR и подключаемые LoRa/GNSS-модули.
+  VHF/UHF voice, IR, штатный U214 LoRa RX/GNSS и точные evidence-qualified
+  RX/TX-профили `LESHY2-LORA-CAP-01-EU868/US915`.
 - Импорт, экспорт и резервное копирование профилей владельца; длинный текст
   при необходимости вводится с локально сопряжённого телефона.
 
@@ -44,7 +45,7 @@ recovery, смены профиля либо ошибки. После защёл
 flowchart TB
   S3["S3 image<br/>приложение, UI, display, storage, audio"]
   C5["C5 image<br/>native 2,4/5 ГГц, 802.15.4, IR"]
-  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, U214"]
+  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>локальный допуск батарейного pack"]
   SAFE["safety MSPM0 image<br/>watchdog, температурные зоны и TX lease"]
   WDG["TPS3435<br/>независимый timeout 1,6 с"]

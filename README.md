@@ -19,7 +19,8 @@ describes the resulting product and its implementation.
 - Full mixed operation of three nRF24 radios: `3R`, `1T2R`, `2T1R` and `3T`
   without software disabling a neighboring receiver.
 - 2.4/5-GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, Sub-GHz, broadcast RX,
-  VHF/UHF voice, IR and attached LoRa/GNSS modules.
+  VHF/UHF voice, IR, stock U214 LoRa RX/GNSS and exact evidence-qualified
+  `LESHY2-LORA-CAP-01-EU868/US915` RX/TX profiles.
 - Import, export and backup of owner profiles; a locally paired phone may supply
   occasional long-form text.
 
@@ -42,7 +43,7 @@ fault. A latched fault requires a physical `KILL`→`RUN` cycle.
 flowchart TB
   S3["S3 image<br/>application, UI, display, storage, audio"]
   C5["C5 image<br/>native 2.4/5 GHz, 802.15.4, IR"]
-  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, U214"]
+  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>local battery-pack admission"]
   SAFE["safety MSPM0 image<br/>watchdog, thermal zones and TX leases"]
   WDG["TPS3435<br/>independent 1.6 s timeout"]

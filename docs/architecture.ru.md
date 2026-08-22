@@ -8,7 +8,7 @@
 |---|---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Приложение, меню, display, microSD, audio, BLE/Wi‑Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2,4/5 ГГц, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
-| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, U214 | Data-only USB, SWD, RUN, USB_BOOT |
+| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1106SDGS20R` | Допуск двух ячеек и локальный fail-closed power state | NRST, SWD, UART1 и изолированное fixture-питание |
 | Safety | второй `MSPM0C1106SDGS20R` | Heartbeat, TX lease, три температурные зоны, физическое TX evidence и сохранённый fault record | NRST, SWD, UART1 и изолированное fixture-питание |
 
@@ -110,15 +110,19 @@ group scheduler синхронизирует их, не превращая mixed
   unmount; неожиданное извлечение отмечает оборванный хвост как неполный.
 - Audio graph явно выбирает microphone или radio RX для capture и speaker или
   headphones для playback. SA518 PTT не выводится из наличия audio samples.
-- U214 и M5 Unit имеют независимые состояния `OFF → STARTING → IDENTIFY →
+- Cap Bus и M5 Unit имеют независимые состояния `OFF → STARTING → IDENTIFY →
   ACTIVE → STOPPING` и latch-off fault. Неизвестный module profile не получает
   питание или опасные команды автоматически.
 - Встроенные TX-тракты S3, C5, nRF24, CC1101, voice и IR имеют физическое
   evidence. Штатный U214 остаётся только RX/GNSS: контакт 5 у него — `5V_OUT`,
-  а не доказательство RF. Подписанный evidence-aware LoRa Cap может использовать
-  тот же контакт как open-drain `EXT_TX_EVIDENCE_N`; его TX lease появляется
-  только после квалификации конечного внешнего RF-тракта и бита 8. Для TX через
-  универсальный M5 Unit по-прежнему нужен собственный профиль physical evidence.
+  а не доказательство RF. Точные подписанные профили
+  `LESHY2-LORA-CAP-01-EU868` и `LESHY2-LORA-CAP-01-US915` используют
+  `NiceRF LoRa1262-868/915`, якорь идентичности `24AA02UIDT-I/OT` и тот же
+  контакт как open-drain `EXT_TX_EVIDENCE_N`. Их TX lease появляется только
+  после квалификации регионального диапазона, привязки UID, конечного внешнего
+  RF-тракта и 10–18-мс импульса бита 8. Идентичность не заменяет разрешение или
+  live evidence. Для TX через универсальный M5 Unit по-прежнему нужен
+  собственный профиль physical evidence.
 - Телефон используется только как локальный text input и обмен данными; он не
   подтверждает Controlled-Zone действия.
 
