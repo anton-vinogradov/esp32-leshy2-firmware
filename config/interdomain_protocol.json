@@ -53,6 +53,7 @@
     "magic_ascii": "LSH2",
     "magic_u32_le": "0x3248534C",
     "integrity": "CRC-32C Castagnoli over each header and its declared payload",
+    "crc_canonicalization": "payload_crc32c covers exactly payload_bytes; header_crc32c covers header bytes 0 through 27 and excludes the final header_crc32c field; empty payload CRC-32C is zero",
     "rule": "a successful transport transfer proves delivery only; a state-changing request succeeds only after a typed result reports the reached owner state"
   },
   "domains": [
