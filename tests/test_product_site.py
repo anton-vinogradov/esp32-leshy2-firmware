@@ -48,6 +48,9 @@ class ProductSiteTests(unittest.TestCase):
             for forbidden in ("DEC-", "FND-", "REV-", "IMP-", "docs/status", "tree/main/docs/review"):
                 self.assertNotIn(forbidden, page, name)
 
+        self.assertIn("docs/roadmap.md", self.read("README.md"))
+        self.assertIn("docs/roadmap.ru.md", self.read("README.ru.md"))
+
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")

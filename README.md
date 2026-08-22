@@ -2,6 +2,10 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
+> **Project status: R1 — product and mechanical design.** Current position,
+> dependencies and the complete route to release are tracked in the canonical
+> [product roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md).
+
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
 expansion and preserves a safe state through faults. This documentation
@@ -77,6 +81,7 @@ physical interface. Irreversible lockdown is not enabled by default.
 
 ## Documentation
 
+- [Roadmap and current project position](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 - [Firmware architecture and subsystem behavior](docs/architecture.md)
 - [Flash, PSRAM and rollback layout](docs/memory.md)
 - [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)

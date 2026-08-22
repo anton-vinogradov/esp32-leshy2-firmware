@@ -2,6 +2,10 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
+> **Статус проекта: R1 — дизайн и механика устройства.** Текущая позиция,
+> зависимости и полный путь до release поддерживаются в каноническом
+> [роадмапе продукта](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md).
+
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает
 расширения и сохраняет безопасное состояние при сбоях. Здесь описаны
@@ -80,6 +84,7 @@ radio не блокируют друг друга длинными общими 
 
 ## Документация
 
+- [Роадмап и текущая позиция проекта](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 - [Архитектура прошивки и поведение подсистем](docs/architecture.ru.md)
 - [Разметка flash, PSRAM и rollback](docs/memory.ru.md)
 - [Аппаратная архитектура](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)
