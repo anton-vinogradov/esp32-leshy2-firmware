@@ -238,7 +238,8 @@
     {"id": 5, "name": "VOICE", "owner": "RP", "evidence_bits": [6], "tx_policy": "lease plus physical PTT required"},
     {"id": 6, "name": "IR", "owner": "C5", "evidence_bits": [7], "tx_policy": "lease_required"},
     {"id": 7, "name": "LORA_CAP", "owner": "RP", "evidence_bits": [8], "tx_policy": "stock U214 receive and GNSS only; TX is available only to the exact signed LESHY2-LORA-CAP-01-EU868 or LESHY2-LORA-CAP-01-US915 profile with qualified final-feed physical bit 8"},
-    {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"}
+    {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"},
+    {"id": 9, "name": "BROADCAST_RX", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only Si4732 FM/AM/SW/LW plus the selected audio path; this is an exclusive top-level signal group even though it needs no TX lease"}
   ],
   "lora_cap_profiles": {
     "identity_device": "24AA02UIDT-I/OT",

@@ -67,6 +67,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/architecture.md": (
                 "One top-level signal group is active at a time",
                 "all three radios operate concurrently",
+                "`BROADCAST_RX`",
+                "`NONE` means every signal interface is quiet",
                 "quiet state",
                 "bounded quanta",
                 "100 ms",
@@ -74,6 +76,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/architecture.ru.md": (
                 "активна одна верхнеуровневая сигнальная группа",
                 "три радио одновременно работают",
+                "`BROADCAST_RX`",
+                "`NONE` означает, что все сигнальные интерфейсы",
                 "quiet-state",
                 "ограниченные кванты",
                 "100 мс",
@@ -354,6 +358,68 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("0x2A", transports["S3_PACK"]["physical"])
         self.assertIn("0x2B", transports["S3_SAFETY"]["physical"])
 
+    def test_hardware_integration_contract_matches_firmware(self):
+        boundary = json.loads(self.read("config/hardware_integration_contract.json"))
+        protocol = json.loads(self.read("config/interdomain_protocol.json"))
+        self.assertEqual("LESHY2-HWFW-1", boundary["contract_id"])
+        self.assertEqual("pre_schematic_reviewed", boundary["review_status"])
+        self.assertEqual(
+            boundary["protocol"],
+            {
+                "name": protocol["protocol"]["name"],
+                "major": protocol["protocol"]["major"],
+                "minor": protocol["protocol"]["minor"],
+            },
+        )
+
+        transports = {row["id"]: row for row in protocol["transports"]}
+        for row in boundary["transports"]:
+            firmware = transports[row["id"]]
+            for key in (
+                "raw_bytes_per_second",
+                "qualified_payload_bytes_per_second_min",
+                "control_round_trip_ms_max",
+                "alert_to_read_us_max",
+            ):
+                if key in row:
+                    self.assertEqual(row[key], firmware[key], (row["id"], key))
+            endpoints = [endpoint for pair in row["pins"].values() for endpoint in pair]
+            self.assertEqual(len(endpoints), len(set(endpoints)), row["id"])
+
+        groups = {row["name"]: row for row in protocol["signal_groups"]}
+        for row in boundary["signal_groups"]:
+            self.assertEqual(row["owner"], groups[row["firmware"]]["owner"])
+            self.assertEqual(
+                row["tx_evidence_bits"], groups[row["firmware"]]["evidence_bits"]
+            )
+
+        timing_keys = {
+            "heartbeat_period": "heartbeat_period_ms",
+            "heartbeat_gap_max": "heartbeat_gap_ms_max",
+            "tx_lease_lifetime_max": "tx_lease_lifetime_ms_max",
+            "tx_lease_renew_period_max": "tx_lease_renew_period_ms_max",
+            "unexpected_evidence_fault_max": "unexpected_evidence_fault_ms_max",
+            "post_revoke_evidence_clear_grace": "post_revoke_evidence_clear_grace_ms",
+            "safety_loop_period_max": "safety_loop_period_ms_max",
+            "external_watchdog_timeout": "external_watchdog_timeout_ms",
+            "external_watchdog_service_period_max": "external_watchdog_service_period_ms_max",
+        }
+        for boundary_key, firmware_key in timing_keys.items():
+            self.assertEqual(
+                boundary["safety_timing_ms"][boundary_key],
+                protocol["safety_timing"][firmware_key],
+            )
+
+        profiles = {
+            row["assembly"]: row for row in protocol["lora_cap_profiles"]["profiles"]
+        }
+        for row in boundary["lora_cap_profiles"]:
+            self.assertEqual(row["module"], profiles[row["assembly"]]["module"])
+            self.assertEqual(
+                row["allowed_frequency_mhz"],
+                profiles[row["assembly"]]["allowed_frequency_mhz"],
+            )
+
     def test_interdomain_message_registry_is_unambiguous_and_proven(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))
         messages = contract["messages"]
@@ -414,6 +480,9 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("LESHY2-LORA-CAP-01-EU868", groups["LORA_CAP"]["tx_policy"])
         self.assertEqual([], groups["M5_UNIT"]["evidence_bits"])
         self.assertIn("requires", groups["M5_UNIT"]["tx_policy"])
+        self.assertEqual(9, groups["BROADCAST_RX"]["id"])
+        self.assertEqual([], groups["BROADCAST_RX"]["evidence_bits"])
+        self.assertIn("receive-only Si4732", groups["BROADCAST_RX"]["tx_policy"])
         evidence = contract["evidence_register"]
         self.assertEqual("TCA9535PWR", evidence["device"])
         self.assertEqual("0x20", evidence["i2c_7bit_address"])

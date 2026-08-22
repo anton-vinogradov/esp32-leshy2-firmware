@@ -59,11 +59,17 @@ within 10 ms. Only a healthy safety loop services the independent 1.6-second
 watchdog. Exact layouts, message IDs, mailbox fields, update messages and test
 vectors are machine-readable in
 [`config/interdomain_protocol.json`](../config/interdomain_protocol.json).
+The cross-repository controller, transport, pin, signal-group, safety-timing
+and LoRa-profile boundary is frozen in
+[`config/hardware_integration_contract.json`](../config/hardware_integration_contract.json).
 
 ## Scheduling and quiet states
 
 One top-level signal group is active at a time. The nRF24 group itself is the
 exception: all three radios operate concurrently in every required RX/TX mix.
+Broadcast reception is represented explicitly as the receive-only
+`BROADCAST_RX` group; it never hides under `NONE` merely because it has no TX
+evidence bit. `NONE` means every signal interface is quiet.
 A group transition is transactional:
 
 1. stop accepting new work and finish the bounded current transfer;
