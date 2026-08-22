@@ -21,6 +21,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/architecture.ru.md",
             "docs/memory.md",
             "docs/memory.ru.md",
+            "docs/roadmap.md",
+            "docs/roadmap.ru.md",
         }
         public_markdown = {
             str(path.relative_to(REPO_ROOT))
@@ -50,6 +52,42 @@ class ProductSiteTests(unittest.TestCase):
 
         self.assertIn("docs/roadmap.md", self.read("README.md"))
         self.assertIn("docs/roadmap.ru.md", self.read("README.ru.md"))
+        landing_pages = {
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F2", "hardware R2"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F2", "hardware R2"),
+        }
+        for name, tokens in landing_pages.items():
+            page = self.read(name)
+            for token in tokens:
+                self.assertIn(token, page, f"{name}: {token}")
+            for stage in range(12):
+                self.assertIn(f"F{stage} ·", page, f"{name}: missing F{stage}")
+
+    def test_firmware_roadmap_is_complete_and_honest(self):
+        required = {
+            "docs/roadmap.md": (
+                "Current boundary: F2",
+                "24 deterministic C scenarios",
+                "not instruction-set, peripheral",
+                "hardware R2",
+                "hardware R9",
+                "hardware R10",
+            ),
+            "docs/roadmap.ru.md": (
+                "Текущая граница: F2",
+                "24 детерминированных C-сценария",
+                "не заменяет instruction-set",
+                "hardware R2",
+                "hardware R9",
+                "hardware R10",
+            ),
+        }
+        for name, tokens in required.items():
+            page = self.read(name)
+            for token in tokens:
+                self.assertIn(token, page, f"{name}: {token}")
+            for stage in range(12):
+                self.assertIn(f"F{stage}.", page, f"{name}: missing F{stage}")
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

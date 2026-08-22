@@ -2,9 +2,35 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус проекта: R1 — дизайн и механика устройства.** Текущая позиция,
-> зависимости и полный путь до release поддерживаются в каноническом
-> [роадмапе продукта](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md).
+> **Статус прошивки: F2 — target-проекты и воспроизводимая сборка.** F0/F1
+> прошли ревью; target/BSP-работы ожидают аппаратную границу R2. Подробности —
+> в [роадмапе прошивки](docs/roadmap.ru.md).
+
+## Роадмап прошивки и текущая позиция
+
+Этот блок остаётся на стартовой странице прошивки до firmware release.
+Подробные критерии выхода и явные пересечения с отдельным
+[аппаратным роадмапом](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
+находятся в [роадмапе прошивки](docs/roadmap.ru.md).
+
+| Этап | Статус | Результат |
+|---|---|---|
+| F0 · Контракты продукта | ✅ Проведено ревью | пять доменов, владельцы, L2IP, memory, safety, update и HW↔FW boundary |
+| F1 · Portable cores | ✅ Проведено ревью | 24 детерминированных host-сценария и чистые ASan/UBSan |
+| **F2 · Target-проекты и build system** | **▶️ Текущая граница; зависит от hardware R2** | воспроизводимые проекты ESP-IDF, Pico SDK и TI SDK для пяти target |
+| F3 · Boot, память и эмуляция | ⏳ Ожидает F2 | загружаемые skeletons, size gates, S3 QEMU и dev-board matrix |
+| F4 · IPC и scheduling | ⏳ Ожидает F3 | реальные transports, typed messages, credits и priority isolation |
+| F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему | все драйверы устройств, органов управления, датчиков и power states |
+| F6 · UI, display, storage и audio | ⏳ Ожидает F5 | отзывчивые menu/waterfall, recording, audio и fault viewer |
+| F7 · Radio, IR и expansion | ⏳ Ожидает F5/F6 | receive/TX profiles, полноценные 3×nRF24 и тихие неактивные тракты |
+| F8 · Уровни функций и safety UX | ⏳ Ожидает F7 | Основной режим, Лаборатория и Контролируемая зона |
+| F9 · Signed update и recovery | ⏳ Ожидает F1/F3 | управляемый владельцем bundle для пяти target, rollback и физический recovery |
+| F10 · HIL и системная квалификация | 🔒 Ожидает F4–F9 и hardware R9 | prototype fault, RF, power, thermal и endurance evidence |
+| F11 · Firmware release | 🔒 Ожидает F10 и hardware R10 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
+
+**Прошивка находится на F2.** У portable-логики есть evidence, но target-
+проектов, target-сборок и target-emulator runs ещё нет. Реальная фиксация
+pin/BSP ожидает production ECAD-контракт этапа hardware R2.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает
@@ -84,7 +110,7 @@ radio не блокируют друг друга длинными общими 
 
 ## Документация
 
-- [Роадмап и текущая позиция проекта](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
+- [Роадмап прошивки и текущая позиция](docs/roadmap.ru.md)
 - [Архитектура прошивки и поведение подсистем](docs/architecture.ru.md)
 - [Разметка flash, PSRAM и rollback](docs/memory.ru.md)
 - [Аппаратная архитектура](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)

@@ -2,9 +2,35 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Project status: R1 — product and mechanical design.** Current position,
-> dependencies and the complete route to release are tracked in the canonical
-> [product roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md).
+> **Firmware status: F2 — target projects and reproducible builds.** F0/F1
+> are reviewed; target/BSP work waits at the hardware R2 boundary. Follow the
+> [firmware roadmap](docs/roadmap.md).
+
+## Firmware roadmap and current position
+
+This block stays on the firmware landing page through firmware release.
+Detailed exit criteria and the explicit intersections with the separate
+[hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
+are kept in the [firmware roadmap](docs/roadmap.md).
+
+| Stage | Status | Result |
+|---|---|---|
+| F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
+| F1 · Portable cores | ✅ Reviewed | 24 deterministic host scenarios plus clean ASan/UBSan |
+| **F2 · Target projects and build system** | **▶️ Current boundary; depends on hardware R2** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
+| F3 · Boot, memory and emulation | ⏳ Waiting for F2 | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
+| F4 · IPC and scheduling | ⏳ Waiting for F3 | real transports, typed messages, credits and priority isolation |
+| F5 · BSP and drivers | ⏳ Waiting for F4 and current schematic | all device, control, sensor and power-state drivers |
+| F6 · UI, display, storage and audio | ⏳ Waiting for F5 | responsive menu/waterfall, recording, audio and fault viewer |
+| F7 · Radio, IR and expansion | ⏳ Waiting for F5/F6 | receive/TX profiles, full 3×nRF24 operation and quiet inactive paths |
+| F8 · Functional levels and safety UX | ⏳ Waiting for F7 | Normal, Laboratory and Controlled Zone workflows |
+| F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled five-target bundle, rollback and physical recovery |
+| F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware R9 | prototype fault, RF, power, thermal and endurance evidence |
+| F11 · Firmware release | 🔒 Waiting for F10 and hardware R10 | reproducible signed images, installer, recovery kit and release tag |
+
+**Firmware is at F2.** Portable logic has evidence, but target projects,
+target builds and target-emulator runs do not yet exist. Actual pin/BSP freeze
+waits for the production ECAD contract at hardware R2.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
@@ -81,7 +107,7 @@ physical interface. Irreversible lockdown is not enabled by default.
 
 ## Documentation
 
-- [Roadmap and current project position](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
+- [Firmware roadmap and current position](docs/roadmap.md)
 - [Firmware architecture and subsystem behavior](docs/architecture.md)
 - [Flash, PSRAM and rollback layout](docs/memory.md)
 - [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)
