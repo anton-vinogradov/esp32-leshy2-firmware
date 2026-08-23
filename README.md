@@ -73,6 +73,9 @@ describes the resulting product and its implementation.
   only the changed display regions.
 - Receive profiles, scanning, supported-protocol decoding and recording of RF
   events, audio and metadata to microSD.
+- Stereo playback and external-microphone capture through a CTIA headset, with
+  continuous insertion detection and an internal-microphone option for
+  ordinary TRS headphones.
 - Full mixed operation of three nRF24 radios: `3R`, `1T2R`, `2T1R` and `3T`
   without software disabling a neighboring receiver.
 - 2.4/5-GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, Sub-GHz, broadcast RX,

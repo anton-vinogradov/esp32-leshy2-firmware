@@ -150,11 +150,11 @@ class ProductSiteTests(unittest.TestCase):
     def test_ui_controls_storage_audio_and_expansion_are_public(self):
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
-            for token in ("D-pad", "`OK`", "`BACK`", "`OPT`", "`F1`", "`F2`", "microSD"):
+            for token in ("D-pad", "`OK`", "`BACK`", "`OPT`", "`F1`", "`F2`", "microSD", "CTIA", "TRS"):
                 self.assertIn(token, page, f"{name}: {token}")
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
             page = self.read(name).replace("‑", "-")
-            for token in ("U214", "M5 Unit", "audio", "PTT", "RUN/KILL", "microSD"):
+            for token in ("U214", "M5 Unit", "audio", "PTT", "RUN/KILL", "microSD", "SJ-43504-SMT-TR", "TCA9534APWR", "0x39", "slow_io.P02"):
                 self.assertIn(token, page, f"{name}: {token}")
 
     def test_unattended_fault_contract_is_public(self):
@@ -451,6 +451,22 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(
                 row["tx_evidence_bits"], groups[row["firmware"]]["evidence_bits"]
             )
+
+        headset = boundary["audio_headset"]
+        self.assertEqual("Same Sky SJ-43504-SMT-TR", headset["jack"]["mpn"])
+        self.assertEqual("CTIA/AHJ", headset["jack"]["wiring"])
+        self.assertEqual("slow_io.P02", headset["detect"]["endpoint"])
+        self.assertEqual("input_only", headset["detect"]["direction"])
+        self.assertIn("never configures P02 as an output", headset["detect"]["rule"])
+        self.assertEqual("TCA9534APWR", headset["microphone_select"]["controller"])
+        self.assertEqual("0x39", headset["microphone_select"]["i2c_address_7bit"])
+        self.assertEqual(7, len(headset["microphone_select"]["reserve_endpoints"]))
+        states = {row["state"]: row for row in headset["state_policy"]}
+        self.assertEqual(
+            {"ABSENT", "INSERTED_HEADSET", "INSERTED_INTERNAL_MIC", "UNKNOWN_OR_IO_FAULT"},
+            set(states),
+        )
+        self.assertEqual("forced_off", states["UNKNOWN_OR_IO_FAULT"]["speaker"])
 
         timing_keys = {
             "heartbeat_period": "heartbeat_period_ms",

@@ -82,6 +82,57 @@
     "external_watchdog_timeout": 1600,
     "external_watchdog_service_period_max": 400
   },
+  "audio_headset": {
+    "owner": "S3",
+    "jack": {
+      "instance": "headphone_jack",
+      "mpn": "Same Sky SJ-43504-SMT-TR",
+      "wiring": "CTIA/AHJ",
+      "contacts": {
+        "TIP": "left headphone",
+        "RING1": "right headphone",
+        "RING2": "audio ground",
+        "SLEEVE": "biased headset microphone"
+      }
+    },
+    "detect": {
+      "endpoint": "slow_io.P02",
+      "net": "HEADSET_ABSENT",
+      "direction": "input_only",
+      "levels": {"high": "absent", "low": "inserted_or_open_wire"},
+      "protection": "10-kOhm series plus 100-kOhm pull-down",
+      "rule": "firmware never configures P02 as an output"
+    },
+    "microphone_select": {
+      "controller": "TCA9534APWR",
+      "i2c_address_7bit": "0x39",
+      "endpoint": "headset_control_io.P0",
+      "net": "HEADSET_INTERNAL_MIC_SEL",
+      "levels": {"high_or_input": "internal microphone", "low": "headset microphone"},
+      "reset_default": "P0 input plus 100-kOhm pull-up selects internal microphone",
+      "reserve_endpoints": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+      "reserve_default": "inputs with individual 100-kOhm pull-downs and shared interrupt capability"
+    },
+    "state_policy": [
+      {"state": "ABSENT", "detect": "high_stable", "microphone": "internal", "speaker": "policy_controlled"},
+      {"state": "INSERTED_HEADSET", "detect": "low_stable", "microphone": "headset", "speaker": "forced_off"},
+      {"state": "INSERTED_INTERNAL_MIC", "detect": "low_stable", "microphone": "internal", "speaker": "forced_off"},
+      {"state": "UNKNOWN_OR_IO_FAULT", "detect": "ambiguous_or_unreadable", "microphone": "internal_reset_default", "speaker": "forced_off"}
+    ],
+    "transition_rules": [
+      "a raw low immediately disables the loudspeaker before debounce or microphone-source change",
+      "stable insertion defaults to headset microphone; an explicit user choice may retain the internal microphone for a TRS plug",
+      "removal restores P0 to input/internal default before loudspeaker policy may enable playback",
+      "detect, selector and I2C readback disagreement is an audio fault and never enables the loudspeaker",
+      "SA518 PTT remains independent of audio samples and microphone choice"
+    ],
+    "qualification": [
+      "CTIA headset and TRS headphone insertion/removal including contact chatter",
+      "reset, I2C loss, stuck detect, selector readback mismatch and rapid unplug/replug",
+      "pop/click, bias, gain, ESD, RF immunity and simultaneous capture/playback",
+      "all seven reserve pins remain quiet and do not create interrupt storms"
+    ]
+  },
   "lora_cap_profiles": [
     {"assembly": "LESHY2-LORA-CAP-01-EU868", "module": "NiceRF LoRa1262-868", "allowed_frequency_mhz": [848, 888]},
     {"assembly": "LESHY2-LORA-CAP-01-US915", "module": "NiceRF LoRa1262-915", "allowed_frequency_mhz": [900, 940]}

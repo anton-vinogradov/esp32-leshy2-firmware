@@ -112,8 +112,18 @@ hardware `RUN_PERMIT` qualification and optical evidence.
 - microSD power exists only for an active session. Clean eject drains writes
   and unmounts first; unexpected removal marks the missing tail as incomplete.
 - The audio graph explicitly selects microphone or radio RX for capture and
-  speaker or headphones for playback. SA518 PTT is never inferred from audio
-  samples.
+  speaker or a CTIA headset for playback. The `SJ-43504-SMT-TR` tip switch
+  reaches detect-only `slow_io.P02`: high means absent, while low or an
+  unreadable state immediately silences the speaker. Firmware never drives
+  this line.
+- Dedicated `TCA9534APWR` P0 at collision-free I²C address `0x39` selects the
+  headset microphone low or the internal microphone high. Its input/reset
+  state is physically pulled to the internal microphone. Stable insertion
+  defaults to the headset microphone; a user may retain the internal
+  microphone for an ordinary TRS headphone plug. Removal restores the reset
+  default before speaker playback can resume. P1–P7 are pulled, interrupt-
+  capable local reserves rather than floating pins.
+- SA518 PTT is never inferred from audio samples or microphone choice.
 - The Cap Bus and M5 Unit use independent `OFF → STARTING → IDENTIFY → ACTIVE →
   STOPPING` states and a latch-off fault. An unknown module profile never gains
   power or dangerous commands automatically.
