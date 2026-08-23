@@ -419,9 +419,27 @@ class ProductSiteTests(unittest.TestCase):
 
     def test_hardware_integration_contract_matches_firmware(self):
         boundary = json.loads(self.read("config/hardware_integration_contract.json"))
+        bsp = json.loads(self.read("config/hardware_bsp_contract.json"))
         protocol = json.loads(self.read("config/interdomain_protocol.json"))
         self.assertEqual("LESHY2-HWFW-1", boundary["contract_id"])
-        self.assertEqual("pre_schematic_reviewed", boundary["review_status"])
+        self.assertEqual(2, boundary["schema"])
+        self.assertEqual("h2_0_3_reviewed", boundary["review_status"])
+        self.assertEqual("LESHY2-H2-HWFW-1", bsp["export_id"])
+        self.assertEqual("reviewed_hwfw_export", bsp["status"])
+        self.assertEqual(boundary, bsp["integration_contract"])
+        self.assertFalse(bsp["bsp"]["temporary_pin_assignments_allowed"])
+        self.assertEqual(123, bsp["bsp"]["total_allocated_contacts"])
+        self.assertEqual(
+            {"S3": 33, "C5": 14, "RP": 48, "PACK": 13, "SAFETY": 15},
+            {
+                domain["domain"]: domain["allocated_contact_count"]
+                for domain in bsp["bsp"]["domains"]
+            },
+        )
+        service = boundary["physical_service"]
+        self.assertEqual(3, len(service["external_usb"]))
+        self.assertEqual(6, len(service["external_side_controls"]))
+        self.assertEqual(3, len(service["internal_fallback_headers"]))
         self.assertEqual(
             boundary["protocol"],
             {
