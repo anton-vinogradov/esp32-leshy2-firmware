@@ -428,9 +428,9 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed_hwfw_export", bsp["status"])
         self.assertEqual(boundary, bsp["integration_contract"])
         self.assertFalse(bsp["bsp"]["temporary_pin_assignments_allowed"])
-        self.assertEqual(123, bsp["bsp"]["total_allocated_contacts"])
+        self.assertEqual(125, bsp["bsp"]["total_allocated_contacts"])
         self.assertEqual(
-            {"S3": 33, "C5": 14, "RP": 48, "PACK": 13, "SAFETY": 15},
+            {"S3": 33, "C5": 14, "RP": 48, "PACK": 13, "SAFETY": 17},
             {
                 domain["domain"]: domain["allocated_contact_count"]
                 for domain in bsp["bsp"]["domains"]

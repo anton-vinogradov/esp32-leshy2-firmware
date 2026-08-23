@@ -43,7 +43,7 @@ def validate(data: dict) -> None:
         for domain in domains
         for pin in domain["pins"]
     ]
-    if len(contacts) != len(set(contacts)) or len(contacts) != 123:
+    if len(contacts) != len(set(contacts)) or len(contacts) != 125:
         raise ValueError("programmable-contact ledger is incomplete or duplicated")
 
     service = integration.get("physical_service", {})
