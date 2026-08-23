@@ -7,7 +7,10 @@ HOST_L2IP_TEST := $(HOST_BUILD)/test_l2ip
 HOST_UPDATE_TEST := $(HOST_BUILD)/test_update_core
 HOST_SYSTEM_TEST := $(HOST_BUILD)/test_system_model
 
-.PHONY: host-test clean
+.PHONY: test host-test clean
+
+test: host-test
+	python3 -m unittest discover -s tests
 
 host-test: $(HOST_SAFETY_TEST) $(HOST_L2IP_TEST) $(HOST_UPDATE_TEST) $(HOST_SYSTEM_TEST)
 	./$(HOST_SAFETY_TEST)
