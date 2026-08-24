@@ -292,6 +292,27 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertTrue(contract["claims"]["one_generated_domain_per_project"])
         self.assertFalse(contract["claims"]["target_builds_run"])
 
+    def test_f2_3_generated_bsp_boundary_passes_as_one_review(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f2_3.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("F2.3 integrated review OK", result.stdout)
+        review = json.loads(
+            (REPO_ROOT / "config/f2_3_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.3.3", review["stage"])
+        self.assertEqual("reviewed", review["status"])
+        self.assertEqual(125, review["evidence"]["allocated_contacts"])
+        self.assertEqual(11, review["evidence"]["generated_files"])
+        self.assertEqual(5, review["evidence"]["target_consumers"])
+        self.assertTrue(review["claims"]["generated_outputs_are_byte_reproducible"])
+        self.assertFalse(review["claims"]["target_builds_run"])
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

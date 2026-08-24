@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "stage": "F2.3.3",
+  "status": "reviewed",
+  "scope": "integrated H2 import, deterministic generated BSP and five-target consumption boundary",
+  "prerequisites": [
+    {
+      "stage": "F2.2.5",
+      "artifact": "config/f2_2_review.json",
+      "checker": "tools/review_f2_2.py"
+    },
+    {
+      "stage": "F2.3.0",
+      "artifact": "config/bsp_generation_input.json",
+      "checker": "tools/validate_bsp_generation_input.py"
+    },
+    {
+      "stage": "F2.3.1",
+      "artifact": "generated/source_manifest.json",
+      "checker": "tools/generate_hardware_bsp.py --check"
+    },
+    {
+      "stage": "F2.3.2",
+      "artifact": "config/bsp_target_consumption.json",
+      "checker": "tools/check_bsp_target_consumption.py"
+    }
+  ],
+  "evidence": {
+    "hardware_domains": 5,
+    "allocated_contacts": 125,
+    "unique_nets": 112,
+    "transports": 4,
+    "signal_groups": 10,
+    "generated_files": 11,
+    "generated_bytes": 80864,
+    "target_consumers": 5,
+    "strict_c17_table_compilations": 5
+  },
+  "claims": {
+    "hardware_export_matches_sibling_repository": true,
+    "generated_outputs_are_byte_reproducible": true,
+    "all_generated_tables_compile_as_strict_c17": true,
+    "one_owner_per_generated_domain": true,
+    "temporary_or_hand_authored_pins": false,
+    "target_configure_run": false,
+    "target_builds_run": false,
+    "target_emulators_run": false
+  },
+  "runner": "tools/review_f2_3.py"
+}

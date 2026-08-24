@@ -28,17 +28,17 @@
 | F10 · HIL и системная квалификация | 🔒 Ожидает F4–F9 и hardware H7 | prototype fault, RF, power, thermal и endurance evidence |
 | F11 · Firmware release | 🔒 Ожидает F10 и hardware H8 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
 
-**Прошивка находится на F2.** Portable-логика и структуры всех пяти target-
-проектов имеют evidence, но target configure/build и target-emulator runs ещё
-не выполнялись. Принятый hardware H2 pin/BSP-контракт уже доступен; F2 остаётся
-текущей из-за незавершённой работы над target/toolchain.
+**Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
+проектов и generated BSP из hardware H2 имеют evidence, но target configure/build и
+target-emulator runs ещё не выполнялись. F2 остаётся текущей из-за ожидающих
+target builds.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.3.3 -->
+<!-- current-substep: F2.4.0 -->
 
-**Точный маркер: `F2.3.3`** — вместе проверить H2 import, детерминированную
-генерацию и one-owner consumption как полную границу F2.3.
+**Точный маркер: `F2.4.0`** — доказать локальную доступность каждого точного
+locked SDK, compiler, host tool и Python 3.12 environment для пяти builds.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -77,13 +77,21 @@
     проходят строгий C17 syntax-check и побайтно воспроизводятся по manifest.
   - ✅ `F2.3.2` — каждый target потребляет ровно свою domain table и include
     path; чужих таблиц, BSP-копий и ручных pins не найдено.
-  - ▶️ **`F2.3.3` — сейчас:** проверить всю generated-BSP boundary.
-- ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
+  - ✅ `F2.3.3` — sibling H2, детерминированная генерация, строгие C17 tables и
+    one-owner consumption прошли единое ревью.
+- `F2.4` — пройти debug/release builds, map files и image-size gates.
+  - ▶️ **`F2.4.0` — сейчас:** пройти locked-toolchain preflight пяти targets.
+  - ⏳ `F2.4.1` — configure/build/verify S3 debug и release.
+  - ⏳ `F2.4.2` — configure/build/verify C5 debug и release.
+  - ⏳ `F2.4.3` — configure/build/verify RP debug и release.
+  - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
+  - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
+  - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.3.3` завершается, когда единое ревью повторно проверяет sibling H2 export,
-неизменяемый input, побайтно воспроизводимые outputs, строгие C17 tables,
-ownership и пять consumers при нулевых configure/build claims. После
+`F2.4.0` завершается, когда preflight проверяет точные locked versions и paths
+для обоих host profiles без скачивания во время configure/build и фиксирует,
+какие пять targets могут собираться локально. После
 закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
 страницы роадмапа обновляются тем же commit до перехода дальше.
 

@@ -18,7 +18,7 @@ firmware-репозитория. Пересечения с железом ука
 |---|---|
 | Контракты пяти доменов, memory/rollback и HW↔FW boundary | ✅ Проведено ревью на уровне архитектуры и конфигураций |
 | Portable safety, L2IP, update и five-domain model | ✅ Проведено ревью: 24 детерминированных C-сценария; ASan/UBSan чистые |
-| Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур прошли ревью на F2.2.0–F2.2.4; configure/build не заявлены |
+| Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур и generated H2 domain tables прошли ревью; configure/build не заявлены |
 | Target-сборки и map-файлы | ⏳ Не выполнялись |
 | ESP32-S3 QEMU | ⏳ Не запускался |
 | C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Ожидают target BSP и hardware |
@@ -31,10 +31,10 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.3.3 -->
+<!-- current-substep: F2.4.0 -->
 
-**Точный маркер: `F2.3.3`** — вместе проверить H2 import, детерминированную
-генерацию и one-owner consumption как полную границу F2.3.
+**Точный маркер: `F2.4.0`** — доказать локальную доступность каждого точного
+locked SDK, compiler, host tool и Python 3.12 environment для пяти builds.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -76,14 +76,21 @@ peripheral или board emulation и никогда не показываетс�
     проходят строгий C17 syntax-check и побайтно воспроизводятся по manifest.
   - ✅ `F2.3.2` — каждый target потребляет ровно свою domain table и include
     path; чужих таблиц, BSP-копий и ручных pins не найдено.
-  - ▶️ **`F2.3.3` — сейчас:** проверить всю generated-BSP boundary.
-- ⏳ `F2.4` — воспроизводимые debug/release builds, map files и image-size
-  gates для всех пяти target.
+  - ✅ `F2.3.3` — sibling H2, детерминированная генерация, строгие C17 tables и
+    one-owner consumption прошли единое ревью.
+- `F2.4` — воспроизводимые debug/release builds, map files и image-size gates.
+  - ▶️ **`F2.4.0` — сейчас:** пройти locked-toolchain preflight пяти targets.
+  - ⏳ `F2.4.1` — configure/build/verify S3 debug и release.
+  - ⏳ `F2.4.2` — configure/build/verify C5 debug и release.
+  - ⏳ `F2.4.3` — configure/build/verify RP debug и release.
+  - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
+  - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
+  - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.3.3` завершается, когда единое ревью повторно проверяет sibling H2 export,
-неизменяемый input, побайтно воспроизводимые outputs, строгие C17 tables,
-ownership и пять consumers при нулевых configure/build claims. Закрытие
+`F2.4.0` завершается, когда preflight проверяет точные locked versions и paths
+для обоих host profiles без скачивания во время configure/build и фиксирует,
+какие пять targets могут собираться локально. Закрытие
 любой подзадачи обновляет её артефакт, публичный результат, обе стартовые
 страницы и оба роадмапа тем же commit до перехода дальше.
 

@@ -28,17 +28,16 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
-**Firmware is at F2.** Portable logic and all five target-project structures have
-evidence, but no target configure/build or target-emulator run has occurred. The
-accepted hardware H2 pin/BSP contract is available; F2 remains current because
-target/toolchain work has not been completed.
+**Firmware is at F2.** Portable logic, all five target-project structures and the
+generated H2 BSP have evidence, but no target configure/build or target-emulator
+run has occurred. F2 remains current because target builds are still pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.3.3 -->
+<!-- current-substep: F2.4.0 -->
 
-**Exact marker: `F2.3.3`** — review H2 import, deterministic generation and
-one-owner consumption together as the complete F2.3 boundary.
+**Exact marker: `F2.4.0`** — prove that every exact locked SDK, compiler, host
+tool and Python 3.12 environment needed by the five builds is locally available.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -77,13 +76,21 @@ one-owner consumption together as the complete F2.3 boundary.
     strict C17 syntax checks and reproduce byte-for-byte with a hashed manifest.
   - ✅ `F2.3.2` — every target consumes exactly its domain table and include
     path; no foreign table, copied BSP file or hand-authored pin was found.
-  - ▶️ **`F2.3.3` — current:** review the complete generated-BSP boundary.
-- ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
+  - ✅ `F2.3.3` — sibling H2, deterministic generation, strict C17 tables and
+    one-owner consumption passed one integrated review.
+- `F2.4` — pass debug/release builds, map files and image-size gates.
+  - ▶️ **`F2.4.0` — current:** pass locked-toolchain preflight for five targets.
+  - ⏳ `F2.4.1` — configure/build/verify S3 debug and release.
+  - ⏳ `F2.4.2` — configure/build/verify C5 debug and release.
+  - ⏳ `F2.4.3` — configure/build/verify RP debug and release.
+  - ⏳ `F2.4.4` — configure/build/verify Pack debug and release.
+  - ⏳ `F2.4.5` — configure/build/verify Safety debug and release.
+  - ⏳ `F2.4.6` — review all 26 artifacts, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.3.3` exits when one integrated review rechecks the sibling H2 export,
-immutable input, byte-reproducible outputs, strict C17 tables, ownership and all
-five consumers while preserving zero configure/build claims. When
+`F2.4.0` exits when preflight verifies exact locked versions and paths for both
+host profiles without downloading during configure/build, and records which
+five targets can be built locally. When
 any substep closes, its artifact, this marker, the result page and both roadmap
 pages are updated in the same commit before work advances.
 
