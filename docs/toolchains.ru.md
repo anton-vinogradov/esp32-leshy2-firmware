@@ -27,7 +27,9 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.3.1 | Проведено ревью | 11 детерминированных C/header outputs в [`generated/source_manifest.json`](../generated/source_manifest.json); записывает/проверяет [`tools/generate_hardware_bsp.py`](../tools/generate_hardware_bsp.py) |
 | F2.3.2 | Проведено ревью | one-owner mapping в [`config/bsp_target_consumption.json`](../config/bsp_target_consumption.json); проверяет [`tools/check_bsp_target_consumption.py`](../tools/check_bsp_target_consumption.py) |
 | F2.3.3 | Проведено ревью | сводный H2/BSP evidence в [`config/f2_3_review.json`](../config/f2_3_review.json); исполняет [`tools/review_f2_3.py`](../tools/review_f2_3.py) |
-| **F2.4.0** | **Сейчас** | точный local locked-toolchain preflight пяти targets |
+| F2.4.0.1 | Проверено локально | точные source revisions ESP-IDF `7101770d`, Pico SDK `98a542c1` и TI MSPM0 SDK `20807db7` |
+| F2.4.0.2 | Проверено локально | точные ESP S3/C5 compiler, debugger, ULP, OpenOCD и ROM packages установлены ESP-IDF tool manager |
+| **F2.4.0.3** | **Сейчас** | locked Python 3.12 environment и точные CMake/Ninja host tools |
 
 Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
 только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.
@@ -63,8 +65,10 @@ SHA-256 26 архивов для host, обе SDK revisions и ESP-IDF Python en
 Текущая F2.0.3 определяет единые local/CI-команды, а фактические debug/release
 builds относятся к F2.4.
 
-TI SDK требует export approval при скачивании. Это ограничение записано заранее
-и не обходится; оно не является разрешением на загрузку или установку.
+Канонический TI archive endpoint на macOS требует export-session cookie.
+Поэтому local preflight использует тот же точный release из официального
+публичного Git-репозитория TI: tag `mspm0_sdk_2_11_00_07`, commit `20807db7`;
+архивы compiler и SysConfig остаются hash-locked загрузками производителя.
 
 ## Канонические команды
 

@@ -2,6 +2,7 @@
 /build/
 /.pio/
 /managed_components/
+/.toolchains/
 sdkconfig
 sdkconfig.old
 sdkconfig.defaults.*

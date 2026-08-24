@@ -34,10 +34,11 @@ run has occurred. F2 remains current because target builds are still pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.4.0 -->
+<!-- current-substep: F2.4.0.3 -->
 
-**Exact marker: `F2.4.0`** — prove that every exact locked SDK, compiler, host
-tool and Python 3.12 environment needed by the five builds is locally available.
+**Exact marker: `F2.4.0.3` (3 of 6)** — create and verify the locked Python 3.12
+and host-tool environment. Exact SDK sources and both ESP target toolchains are
+already present locally; no target configure/build has run.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -79,7 +80,18 @@ tool and Python 3.12 environment needed by the five builds is locally available.
   - ✅ `F2.3.3` — sibling H2, deterministic generation, strict C17 tables and
     one-owner consumption passed one integrated review.
 - `F2.4` — pass debug/release builds, map files and image-size gates.
-  - ▶️ **`F2.4.0` — current:** pass locked-toolchain preflight for five targets.
+  - ▶️ `F2.4.0` — locked-toolchain preflight for five targets.
+    - ✅ `F2.4.0.1` — exact ESP-IDF `v6.0.2`, Pico SDK `2.3.0` and TI MSPM0
+      SDK `2.11.00.07` sources and revisions verified locally.
+    - ✅ `F2.4.0.2` — exact S3/C5 compilers, debuggers, ULP tools, OpenOCD and
+      ROM ELFs installed and recognized by the ESP-IDF tool manager.
+    - ▶️ **`F2.4.0.3` — current:** create the locked Python 3.12 environment and
+      make exact CMake/Ninja host tools available.
+    - ⏳ `F2.4.0.4` — install and verify Arm GNU `15.2.Rel1` for RP2354B.
+    - ⏳ `F2.4.0.5` — install and verify TI Arm Clang `4.0.5.LTS` and SysConfig
+      `1.28.0.4712` for Pack/Safety.
+    - ⏳ `F2.4.0.6` — run the offline fail-closed preflight for all five targets
+      and publish its machine-readable evidence.
   - ⏳ `F2.4.1` — configure/build/verify S3 debug and release.
   - ⏳ `F2.4.2` — configure/build/verify C5 debug and release.
   - ⏳ `F2.4.3` — configure/build/verify RP debug and release.

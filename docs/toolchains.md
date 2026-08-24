@@ -26,7 +26,9 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.3.1 | Reviewed | 11 deterministic C/header outputs in [`generated/source_manifest.json`](../generated/source_manifest.json); writes/checks with [`tools/generate_hardware_bsp.py`](../tools/generate_hardware_bsp.py) |
 | F2.3.2 | Reviewed | one-owner mapping in [`config/bsp_target_consumption.json`](../config/bsp_target_consumption.json); checked by [`tools/check_bsp_target_consumption.py`](../tools/check_bsp_target_consumption.py) |
 | F2.3.3 | Reviewed | integrated H2/BSP evidence in [`config/f2_3_review.json`](../config/f2_3_review.json); executed by [`tools/review_f2_3.py`](../tools/review_f2_3.py) |
-| **F2.4.0** | **Current** | exact local locked-toolchain preflight for five targets |
+| F2.4.0.1 | Checked locally | exact ESP-IDF `7101770d`, Pico SDK `98a542c1` and TI MSPM0 SDK `20807db7` source revisions |
+| F2.4.0.2 | Checked locally | exact ESP S3/C5 compiler, debugger, ULP, OpenOCD and ROM packages installed by the ESP-IDF tool manager |
+| **F2.4.0.3** | **Current** | locked Python 3.12 environment and exact CMake/Ninja host tools |
 
 No row in this table claims a target build. Those results appear only after
 F2.4 executes both configurations for all five projects.
@@ -62,8 +64,10 @@ environment in [`environment/toolchains.lock.json`](../environment/toolchains.lo
 Current F2.0.3 defines common local/CI commands; actual debug/release builds
 belong to F2.4.
 
-The TI SDK download requires export approval. The constraint is recorded and
-will not be bypassed; this page does not authorize a download or installation.
+The canonical TI archive endpoint requires an export-session cookie on macOS.
+Local preflight therefore uses the same exact release from TI's official public
+Git repository, tag `mspm0_sdk_2_11_00_07`, commit `20807db7`; compiler and
+SysConfig archives remain hash-locked vendor downloads.
 
 ## Canonical commands
 
