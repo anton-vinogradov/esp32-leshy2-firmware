@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "stage": "F2.1.0",
+  "status": "reviewed",
+  "principles": {
+    "one_owner_per_path": true,
+    "portable_code_has_target_pins": false,
+    "generated_files_are_hand_edited": false,
+    "build_outputs_are_source_inputs": false
+  },
+  "areas": [
+    {
+      "path": "common/include/leshy2/**",
+      "owner": "portable_core",
+      "content": "public target-neutral C interfaces",
+      "hand_maintained": true,
+      "generated": false,
+      "allowed_dependencies": ["ISO C headers", "leshy2 portable headers"]
+    },
+    {
+      "path": "common/src/**",
+      "owner": "portable_core",
+      "content": "target-neutral C implementation",
+      "hand_maintained": true,
+      "generated": false,
+      "allowed_dependencies": ["ISO C headers", "leshy2 portable headers"]
+    },
+    {
+      "path": "host/tests/**",
+      "owner": "portable_host_tests",
+      "content": "host execution evidence for portable cores",
+      "hand_maintained": true,
+      "generated": false,
+      "allowed_dependencies": ["ISO C headers", "leshy2 portable headers"]
+    },
+    {
+      "path": "targets/{s3,c5,rp,pack,safety}/**",
+      "owner": "target_project",
+      "content": "SDK adapters, startup, linker inputs and target-local entry points",
+      "hand_maintained": true,
+      "generated": false,
+      "pins_allowed_only_from": "generated/hardware/**"
+    },
+    {
+      "path": "generated/hardware/**",
+      "owner": "hardware_contract_generator",
+      "content": "target headers and tables derived from the reviewed hardware export",
+      "hand_maintained": false,
+      "generated": true,
+      "producer": "tools/generate_hardware_bsp.py",
+      "manifest": "generated/source_manifest.json"
+    },
+    {
+      "path": "config/hardware_bsp_contract.json",
+      "owner": "hardware_contract_importer",
+      "content": "canonical imported hardware/BSP contract",
+      "hand_maintained": false,
+      "generated": true,
+      "producer": "tools/import_hardware_contract.py"
+    },
+    {
+      "path": "config/hardware_integration_contract.json",
+      "owner": "hardware_contract_importer",
+      "content": "firmware integration view of the hardware contract",
+      "hand_maintained": false,
+      "generated": true,
+      "producer": "tools/import_hardware_contract.py"
+    },
+    {
+      "path": "config/**",
+      "owner": "firmware_configuration",
+      "content": "reviewed machine-readable product and build contracts excluding the two importer-owned paths",
+      "hand_maintained": true,
+      "generated": false
+    },
+    {
+      "path": "environment/**",
+      "owner": "build_environment",
+      "content": "immutable SDK, compiler, host-tool and Python locks",
+      "hand_maintained": false,
+      "generated": true,
+      "producer": "reviewed F2 environment-lock workflow"
+    },
+    {
+      "path": "build/**",
+      "owner": "build_system",
+      "content": "disposable target outputs",
+      "hand_maintained": false,
+      "generated": true,
+      "committed": false
+    }
+  ],
+  "portable_forbidden_include_prefixes": [
+    "driverlib/",
+    "esp_",
+    "freertos/",
+    "hardware/",
+    "pico/",
+    "ti/"
+  ],
+  "expected_portable_files": [
+    "common/include/leshy2/l2ip.h",
+    "common/include/leshy2/safety_core.h",
+    "common/include/leshy2/system_model.h",
+    "common/include/leshy2/update_core.h",
+    "common/src/l2ip.c",
+    "common/src/safety_core.c",
+    "common/src/system_model.c",
+    "common/src/update_core.c"
+  ]
+}

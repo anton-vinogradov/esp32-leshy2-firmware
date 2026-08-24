@@ -35,11 +35,10 @@ work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.1.0 -->
+<!-- current-substep: F2.2.4 -->
 
-**Exact marker: `F2.1.0`** — establish the shared source/component tree and
-explicit ownership boundaries between portable, generated and target-local
-code without inventing target pins.
+**Exact marker: `F2.2.4`** — create and structurally validate the minimal TI
+MSPM0 SDK project for the independent safety/watchdog domain.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -50,21 +49,35 @@ code without inventing target pins.
   - ✅ `F2.0.2` — immutable SDK revisions, 26 verified archive records and the
     hash-locked ESP-IDF Python environment passed review.
   - ✅ `F2.0.3` — one local/CI matrix, shell-free dispatcher, fail-closed
-    preflight and 20 named target artifacts passed review.
+    preflight and 26 named target artifacts passed review.
 - `F2.1` — create the shared source/component tree without target pins.
-  - ▶️ **`F2.1.0` — current:** establish directories, ownership and the
-    generated-source boundary.
-  - ⏳ `F2.1.1` — freeze language standards, warning policy and link rules.
-  - ⏳ `F2.1.2` — prove shared code remains target-neutral and advance to F2.2.
-- ⏳ `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
+  - ✅ `F2.1.0` — directories, single ownership, target-neutral portable code
+    and the empty-until-F2.3 generated-source boundary passed review.
+  - ✅ `F2.1.1` — strict C17/C++17, warnings-as-errors for project code,
+    debug/release optimization and map-producing link policy passed review.
+  - ✅ `F2.1.2` — the integrated environment, source, build-policy, H2-contract
+    and 24-scenario host review passed together.
+- `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
+  - ✅ `F2.2.0` — the S3 ESP-IDF project, portable component, production
+    memory defaults and debug/release inputs passed structural review.
+  - ✅ `F2.2.1` — the C5 ESP-IDF project, portable component, production
+    memory defaults and debug/release inputs passed structural review.
+  - ✅ `F2.2.2` — the exact RP2354B Arm-secure project, 2-MiB custom board,
+    partition input and debug/release policy passed structural review.
+  - ✅ `F2.2.3` — the exact Pack MSPM0C1106 project, separate boot/application
+    images, memory boundaries and debug/release policy passed structural review.
+  - ▶️ **`F2.2.4` — current:** create the Safety MSPM0 SDK project.
+  - ⏳ `F2.2.5` — review all five project boundaries together.
 - ⏳ `F2.3` — consume the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.1.0` exits only when every source location has one owner and generated
-hardware inputs cannot be confused with hand-maintained code. When any substep
-closes, this marker and both roadmap pages are updated in the same commit before
-work advances.
+`F2.2.4` exits when the Safety project fixes the exact MSPM0C1106 device,
+startup, linker, SysConfig and separate boot/application images while preserving
+an independent fail-closed watchdog domain. It must not claim configure/build
+execution before F2.4. When
+any substep closes, its artifact, this marker, the result page and both roadmap
+pages are updated in the same commit before work advances.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages

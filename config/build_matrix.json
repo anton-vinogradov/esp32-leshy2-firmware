@@ -2,6 +2,7 @@
   "schema_version": 1,
   "stage": "F2.0.3",
   "status": "reviewed",
+  "build_policy": "config/build_policy.json",
   "build_root": "build/targets",
   "configurations": {
     "debug": {"cmake_build_type": "Debug"},
@@ -69,7 +70,7 @@
         "build": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "all"],
         "clean": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "clean"]
       },
-      "artifacts": ["leshy2_pack.out", "leshy2_pack.bin", "leshy2_pack.map"],
+      "artifacts": ["leshy2_pack_boot.out", "leshy2_pack_boot.bin", "leshy2_pack_boot.map", "leshy2_pack.out", "leshy2_pack.bin", "leshy2_pack.map"],
       "size_gate": {"target": "pack", "image": "leshy2_pack.bin"}
     },
     {
@@ -83,7 +84,7 @@
         "build": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "all"],
         "clean": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "clean"]
       },
-      "artifacts": ["leshy2_safety.out", "leshy2_safety.bin", "leshy2_safety.map"],
+      "artifacts": ["leshy2_safety_boot.out", "leshy2_safety_boot.bin", "leshy2_safety_boot.map", "leshy2_safety.out", "leshy2_safety.bin", "leshy2_safety.map"],
       "size_gate": {"target": "safety", "image": "leshy2_safety.bin"}
     }
   ]

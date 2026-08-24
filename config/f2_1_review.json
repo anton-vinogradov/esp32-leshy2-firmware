@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "stage": "F2.1.2",
+  "status": "reviewed",
+  "scope": "integrated target-neutral source and build-policy boundary",
+  "prerequisites": [
+    {
+      "stage": "F2.0.2",
+      "artifact": "environment/toolchains.lock.json",
+      "checker": "tools/verify_environment_lock.py"
+    },
+    {
+      "stage": "F2.0.3",
+      "artifact": "config/build_matrix.json",
+      "checker": "tools/build_targets.py verify-matrix"
+    },
+    {
+      "stage": "F2.1.0",
+      "artifact": "config/source_layout.json",
+      "checker": "tools/check_source_layout.py"
+    },
+    {
+      "stage": "F2.1.1",
+      "artifact": "config/build_policy.json",
+      "checker": "tools/check_build_policy.py"
+    },
+    {
+      "stage": "H2.0.3",
+      "artifact": "config/hardware_bsp_contract.json",
+      "checker": "tools/import_hardware_contract.py --check"
+    }
+  ],
+  "evidence": {
+    "portable_files": 8,
+    "host_scenarios": 24,
+    "target_identities": 5,
+    "sdk_families": 3,
+    "hardware_programmable_contacts": 125
+  },
+  "claims": {
+    "portable_code_is_target_neutral": true,
+    "generated_hardware_boundary_is_empty_until_f2_3": true,
+    "all_prerequisites_pass_together": true,
+    "target_projects_created": false,
+    "target_builds_run": false,
+    "target_emulators_run": false
+  },
+  "runner": "tools/review_f2_1.py"
+}

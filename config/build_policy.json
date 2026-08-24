@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "stage": "F2.1.1",
+  "status": "reviewed",
+  "scope": {
+    "strict_warnings_apply_to": ["common/**", "targets/**", "generated/hardware/**"],
+    "sdk_headers_are_system_headers": true,
+    "third_party_warnings_promoted_to_errors": false
+  },
+  "language": {
+    "c": "C17",
+    "c_extensions": false,
+    "cxx": "C++17",
+    "cxx_extensions": false,
+    "exceptions": false,
+    "rtti": false
+  },
+  "warnings": {
+    "required": [
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wformat=2",
+      "-Wshadow",
+      "-Wundef"
+    ],
+    "portable_additional": [
+      "-Wconversion",
+      "-Wdouble-promotion",
+      "-Wmissing-prototypes",
+      "-Wpedantic",
+      "-Wstrict-prototypes"
+    ],
+    "forbidden": ["-w", "-Wno-error"]
+  },
+  "configurations": {
+    "debug": {
+      "optimization": "-Og",
+      "debug_information": "-g3",
+      "assertions": true,
+      "lto": false
+    },
+    "release": {
+      "optimization": "-Os",
+      "debug_information": "-g1",
+      "assertions": false,
+      "defines": ["NDEBUG=1"],
+      "lto": false,
+      "lto_deferred_until": "F2.4 measured size/timing comparison"
+    }
+  },
+  "code_generation": {
+    "function_sections": true,
+    "data_sections": true,
+    "stack_usage_files": true,
+    "forbidden": [
+      "-ffast-math",
+      "-fno-stack-protector",
+      "-funsafe-math-optimizations",
+      "-Ofast"
+    ]
+  },
+  "link": {
+    "map_file": "required",
+    "cross_reference": "required where supported",
+    "garbage_collect_sections": true,
+    "fatal_warnings": true,
+    "undefined_symbols": "error",
+    "memory_regions": "target linker inputs only; never inferred by common code"
+  },
+  "reproducibility": {
+    "source_date_epoch": "required",
+    "source_date_epoch_source": "git commit timestamp",
+    "absolute_source_paths_in_artifacts": false,
+    "prefix_maps": ["-ffile-prefix-map", "-fdebug-prefix-map"],
+    "build_root": "build/targets/{target}/{configuration}",
+    "network_during_configure_or_build": false
+  },
+  "families": {
+    "esp_idf": {
+      "project_source_flags": "CMake target_compile_options on Leshy2 components only",
+      "sdk_warnings": "unchanged upstream policy",
+      "map_source": "ESP-IDF linker output"
+    },
+    "pico_sdk": {
+      "project_source_flags": "CMake target_compile_options on Leshy2 targets only",
+      "sdk_warnings": "unchanged upstream policy",
+      "map_source": "-Wl,-Map=<artifact>"
+    },
+    "ti_mspm0_sdk": {
+      "project_source_flags": "project Makefile source groups only",
+      "sdk_warnings": "unchanged upstream policy",
+      "map_source": "TI linker --map_file=<artifact>",
+      "diagnostic_equivalence": "F2.2 translates unsupported GNU spellings to TI Arm Clang equivalents without weakening required categories"
+    }
+  }
+}

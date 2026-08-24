@@ -10,13 +10,25 @@ TARGET ?= all
 CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 
-.PHONY: test host-test matrix-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test matrix-check source-layout-check build-policy-check f2-1-review target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: host-test matrix-check
+test: f2-1-review target-projects-check
 	python3 -m unittest discover -s tests
 
 matrix-check:
 	python3 tools/build_targets.py verify-matrix
+
+source-layout-check:
+	python3 tools/check_source_layout.py
+
+build-policy-check:
+	python3 tools/check_build_policy.py
+
+f2-1-review:
+	python3 tools/review_f2_1.py
+
+target-projects-check:
+	python3 tools/check_target_projects.py
 
 targets-list:
 	python3 tools/build_targets.py list

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "stage": "F2.1.0",
+  "status": "boundary_only",
+  "producer": "tools/generate_hardware_bsp.py",
+  "source_contract": "config/hardware_bsp_contract.json",
+  "files": [],
+  "note": "No target pin source is generated before F2.3; an empty manifest makes the ownership boundary explicit."
+}

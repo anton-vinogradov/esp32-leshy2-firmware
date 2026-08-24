@@ -43,7 +43,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertFalse(matrix["policy"]["shell_execution"])
         self.assertFalse(matrix["policy"]["network_during_configure_or_build"])
-        self.assertEqual(20, sum(len(target["artifacts"]) for target in matrix["targets"]))
+        self.assertEqual(26, sum(len(target["artifacts"]) for target in matrix["targets"]))
 
         dry_run = subprocess.run(
             [
@@ -64,6 +64,119 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         for target in ("s3", "c5", "rp", "pack", "safety"):
             self.assertIn(f"{target}:debug:configure", dry_run.stdout)
+
+    def test_source_ownership_boundaries_are_enforced(self):
+        result = subprocess.run(
+            ["python3", "tools/check_source_layout.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("source layout OK: 8 portable files", result.stdout)
+
+        layout = json.loads(
+            (REPO_ROOT / "config/source_layout.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.1.0", layout["stage"])
+        self.assertEqual("reviewed", layout["status"])
+        self.assertFalse(layout["principles"]["portable_code_has_target_pins"])
+        self.assertFalse(layout["principles"]["generated_files_are_hand_edited"])
+        manifest = json.loads(
+            (REPO_ROOT / "generated/source_manifest.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("boundary_only", manifest["status"])
+        self.assertEqual([], manifest["files"])
+
+    def test_build_policy_is_strict_across_sdk_families(self):
+        result = subprocess.run(
+            ["python3", "tools/check_build_policy.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("build policy OK: C17/C++17", result.stdout)
+
+        policy = json.loads(
+            (REPO_ROOT / "config/build_policy.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.1.1", policy["stage"])
+        self.assertEqual("reviewed", policy["status"])
+        self.assertEqual("-Og", policy["configurations"]["debug"]["optimization"])
+        self.assertEqual("-Os", policy["configurations"]["release"]["optimization"])
+        self.assertFalse(policy["configurations"]["release"]["lto"])
+        self.assertEqual("required", policy["link"]["map_file"])
+        self.assertEqual(
+            {"esp_idf", "pico_sdk", "ti_mspm0_sdk"}, set(policy["families"])
+        )
+
+    def test_f2_1_boundary_passes_as_one_review(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f2_1.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("F2.1 integrated review OK", result.stdout)
+
+        review = json.loads(
+            (REPO_ROOT / "config/f2_1_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.1.2", review["stage"])
+        self.assertEqual("reviewed", review["status"])
+        self.assertEqual(24, review["evidence"]["host_scenarios"])
+        self.assertFalse(review["claims"]["target_projects_created"])
+        self.assertFalse(review["claims"]["target_builds_run"])
+
+    def test_s3_target_project_has_reviewed_structure_without_pin_claims(self):
+        result = subprocess.run(
+            ["python3", "tools/check_target_projects.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("S3/C5/RP/Pack structures reviewed", result.stdout)
+
+        registry = json.loads(
+            (REPO_ROOT / "config/target_projects.json").read_text(encoding="utf-8")
+        )
+        s3 = registry["projects"]["s3"]
+        self.assertEqual("F2.2.0", s3["substep"])
+        self.assertEqual("reviewed_structure", s3["status"])
+        self.assertFalse(s3["pins_consumed"])
+        self.assertFalse(s3["configure_run"])
+        self.assertFalse(s3["build_run"])
+        c5 = registry["projects"]["c5"]
+        self.assertEqual("F2.2.1", c5["substep"])
+        self.assertEqual("reviewed_structure", c5["status"])
+        self.assertFalse(c5["pins_consumed"])
+        self.assertFalse(c5["configure_run"])
+        self.assertFalse(c5["build_run"])
+        rp = registry["projects"]["rp"]
+        self.assertEqual("F2.2.2", rp["substep"])
+        self.assertEqual("reviewed_structure", rp["status"])
+        self.assertEqual("rp2350-arm-s", rp["sdk_target"])
+        self.assertEqual(2097152, rp["flash_bytes"])
+        self.assertFalse(rp["pins_consumed"])
+        self.assertFalse(rp["configure_run"])
+        self.assertFalse(rp["build_run"])
+        pack = registry["projects"]["pack"]
+        self.assertEqual("F2.2.3", pack["substep"])
+        self.assertEqual("reviewed_structure", pack["status"])
+        self.assertEqual("MSPM0C1106SDGS20R", pack["device"])
+        self.assertEqual("VSSOP-20(DGS20)", pack["package"])
+        self.assertEqual({"origin": 0, "bytes": 16384}, pack["boot_flash"])
+        self.assertEqual({"origin": 16384, "bytes": 22528}, pack["application_flash"])
+        self.assertFalse(pack["pins_consumed"])
+        self.assertFalse(pack["configure_run"])
+        self.assertFalse(pack["build_run"])
 
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))

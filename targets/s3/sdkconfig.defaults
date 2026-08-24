@@ -1,0 +1,12 @@
+# S3 production identity and memory contract. The partition path is relative to
+# this ESP-IDF project; config/sdkconfig.defaults.esp32s3 remains the canonical
+# product-level source checked by the public memory contract.
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="../../config/partitions_16m.csv"
+CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_BOOT_INIT=y
+CONFIG_SPIRAM_ECC_ENABLE=y

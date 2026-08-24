@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "stage": "F2.2",
+  "status": "in_progress",
+  "projects": {
+    "s3": {
+      "substep": "F2.2.0",
+      "status": "reviewed_structure",
+      "family": "esp_idf",
+      "sdk_target": "esp32s3",
+      "project_name": "leshy2_s3",
+      "entry_component": "main",
+      "portable_component": "leshy2_portable",
+      "pins_consumed": false,
+      "configure_run": false,
+      "build_run": false,
+      "files": [
+        "targets/s3/CMakeLists.txt",
+        "targets/s3/sdkconfig.defaults",
+        "targets/s3/sdkconfig.debug",
+        "targets/s3/sdkconfig.release",
+        "targets/s3/main/CMakeLists.txt",
+        "targets/s3/main/app_main.c",
+        "targets/s3/components/leshy2_portable/CMakeLists.txt"
+      ]
+    },
+    "c5": {
+      "substep": "F2.2.1",
+      "status": "reviewed_structure",
+      "family": "esp_idf",
+      "sdk_target": "esp32c5",
+      "project_name": "leshy2_c5",
+      "entry_component": "main",
+      "portable_component": "leshy2_portable",
+      "pins_consumed": false,
+      "configure_run": false,
+      "build_run": false,
+      "files": [
+        "targets/c5/CMakeLists.txt",
+        "targets/c5/sdkconfig.defaults",
+        "targets/c5/sdkconfig.debug",
+        "targets/c5/sdkconfig.release",
+        "targets/c5/main/CMakeLists.txt",
+        "targets/c5/main/app_main.c",
+        "targets/c5/components/leshy2_portable/CMakeLists.txt"
+      ]
+    },
+    "rp": {
+      "substep": "F2.2.2",
+      "status": "reviewed_structure",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "device": "SC1512-A4 (RP2354B)",
+      "project_name": "leshy2_rp",
+      "board": "leshy2_rp2354b",
+      "flash_bytes": 2097152,
+      "partition_source": "config/rp2354b_partitions.json",
+      "pins_consumed": false,
+      "configure_run": false,
+      "build_run": false,
+      "files": [
+        "targets/rp/CMakeLists.txt",
+        "targets/rp/boards/leshy2_rp2354b.h",
+        "targets/rp/main.c"
+      ]
+    },
+    "pack": {
+      "substep": "F2.2.3",
+      "status": "reviewed_structure",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "device": "MSPM0C1106SDGS20R",
+      "package": "VSSOP-20(DGS20)",
+      "project_name": "leshy2_pack",
+      "boot_image": "leshy2_pack_boot",
+      "application_image": "leshy2_pack",
+      "boot_flash": {"origin": 0, "bytes": 16384},
+      "application_flash": {"origin": 16384, "bytes": 22528},
+      "sram": {"origin": 536870912, "bytes": 8192},
+      "pins_consumed": false,
+      "configure_run": false,
+      "build_run": false,
+      "files": [
+        "targets/pack/Makefile",
+        "targets/pack/boot_main.c",
+        "targets/pack/boot_manager.cmd",
+        "targets/pack/main.c",
+        "targets/pack/pack.syscfg",
+        "targets/pack/slot_a.cmd"
+      ]
+    },
+    "safety": {"substep": "F2.2.4", "status": "pending"}
+  },
+  "integrated_review": {"substep": "F2.2.5", "status": "pending"}
+}

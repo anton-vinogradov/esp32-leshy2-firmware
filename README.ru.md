@@ -35,11 +35,10 @@ pin/BSP-контракт уже доступен; F2 остаётся текущ
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.1.0 -->
+<!-- current-substep: F2.2.4 -->
 
-**Точный маркер: `F2.1.0`** — сформировать общее дерево source/components и
-явные границы владения portable, generated и target-local кодом без
-придумывания target pins.
+**Точный маркер: `F2.2.4`** — создать и структурно проверить минимальный TI
+MSPM0 SDK project независимого safety/watchdog domain.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -50,21 +49,35 @@ pin/BSP-контракт уже доступен; F2 остаётся текущ
   - ✅ `F2.0.2` — неизменяемые SDK revisions, 26 проверяемых записей архивов и
     ESP-IDF Python environment с hash-lock прошли ревью.
   - ✅ `F2.0.3` — единая local/CI matrix, shell-free dispatcher, fail-closed
-    preflight и 20 названных target artifacts прошли ревью.
+    preflight и 26 названных target artifacts прошли ревью.
 - `F2.1` — создать общее дерево source/components без target pins.
-  - ▶️ **`F2.1.0` — сейчас:** определить каталоги, владельцев и границу
-    generated sources.
-  - ⏳ `F2.1.1` — зафиксировать language standards, warning policy и link rules.
-  - ⏳ `F2.1.2` — доказать target-neutral состояние shared code и перейти F2.2.
-- ⏳ `F2.2` — создать минимальные SDK-проекты S3, C5, RP, Pack и Safety.
+  - ✅ `F2.1.0` — каталоги, единоличное владение, target-neutral portable code
+    и пустая до F2.3 граница generated sources прошли ревью.
+  - ✅ `F2.1.1` — строгие C17/C++17, warnings-as-errors для project code,
+    debug/release optimization и link policy с map-файлом прошли ревью.
+  - ✅ `F2.1.2` — единым прогоном прошли environment, source, build-policy,
+    H2-contract и 24 host-сценария.
+- `F2.2` — создать минимальные SDK-проекты S3, C5, RP, Pack и Safety.
+  - ✅ `F2.2.0` — S3 ESP-IDF project, portable component, production memory
+    defaults и debug/release inputs прошли структурное ревью.
+  - ✅ `F2.2.1` — C5 ESP-IDF project, portable component, production memory
+    defaults и debug/release inputs прошли структурное ревью.
+  - ✅ `F2.2.2` — точный RP2354B Arm-secure project, custom board на 2 МиБ,
+    partition input и debug/release policy прошли структурное ревью.
+  - ✅ `F2.2.3` — точный Pack MSPM0C1106 project, раздельные boot/application
+    images, memory boundaries и debug/release policy прошли структурное ревью.
+  - ▶️ **`F2.2.4` — сейчас:** создать Safety MSPM0 SDK project.
+  - ⏳ `F2.2.5` — провести сводное ревью пяти project boundaries.
 - ⏳ `F2.3` — подключить принятый генерируемый pin/BSP contract после F2.0–F2.2.
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.1.0` завершается, когда каждое место для исходников имеет одного владельца,
-а generated hardware inputs нельзя перепутать с ручным кодом. После закрытия
-любой подзадачи этот маркер и обе страницы роадмапа обновляются тем же commit до
-перехода дальше.
+`F2.2.4` завершается, когда Safety project фиксирует точный MSPM0C1106 device,
+startup, linker, SysConfig и раздельные boot/application images, сохраняя
+независимый fail-closed watchdog domain. До F2.4 это не считается запуском
+configure/build. После
+закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
+страницы роадмапа обновляются тем же commit до перехода дальше.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает

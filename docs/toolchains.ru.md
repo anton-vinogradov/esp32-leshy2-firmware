@@ -1,11 +1,32 @@
-# Среда сборки пяти прошивок
+# Система сборки пяти прошивок
 
 [English](toolchains.md) · [На главную](../README.ru.md) ·
 [Роадмап](roadmap.ru.md)
 
-Эта страница показывает принятый результат F2.0.1: из каких официальных SDK
-собираются пять образов Leshy2. Точные записи для автоматической проверки
-находятся в [`config/toolchain_matrix.json`](../config/toolchain_matrix.json).
+Эта страница собирает принятые результаты текущей фазы F2: официальные
+toolchains, неизменяемые environment locks, общие команды и владение исходниками.
+
+## Результаты F2, прошедшие ревью
+
+| Подэтап | Статус | Результат |
+|---|---|---|
+| F2.0.0 | Проведено ревью | пять физических target и их memory/rollback contracts |
+| F2.0.1 | Проведено ревью | точная матрица SDK, compiler, support, lifecycle и licenses в [`config/toolchain_matrix.json`](../config/toolchain_matrix.json) |
+| F2.0.2 | Проведено ревью | два host-профиля, 26 hash архивов и Python dependency lock в [`environment/toolchains.lock.json`](../environment/toolchains.lock.json); проверяет [`tools/verify_environment_lock.py`](../tools/verify_environment_lock.py) |
+| F2.0.3 | Проведено ревью | контракт команд и artifacts 5 targets × 2 configurations в [`config/build_matrix.json`](../config/build_matrix.json); исполняет [`tools/build_targets.py`](../tools/build_targets.py) |
+| F2.1.0 | Проведено ревью | владение portable/generated/target-local исходниками в [`config/source_layout.json`](../config/source_layout.json); проверяет [`tools/check_source_layout.py`](../tools/check_source_layout.py) |
+| F2.1.1 | Проведено ревью | language, warning, optimization и link rules в [`config/build_policy.json`](../config/build_policy.json); проверяет [`tools/check_build_policy.py`](../tools/check_build_policy.py) |
+| F2.1.2 | Проведено ревью | сводный evidence в [`config/f2_1_review.json`](../config/f2_1_review.json); исполняет [`tools/review_f2_1.py`](../tools/review_f2_1.py) |
+| F2.2.0 | Проведено ревью | минимальный offline S3 ESP-IDF project и строгие project components в [`config/target_projects.json`](../config/target_projects.json); проверяет [`tools/check_target_projects.py`](../tools/check_target_projects.py) |
+| F2.2.1 | Проведено ревью | минимальный offline C5 ESP-IDF project, dual-OTA inputs и строгие components в [`config/target_projects.json`](../config/target_projects.json) |
+| F2.2.2 | Проведено ревью | точный RP2354B Arm-secure project, custom board на 2 МиБ и partition input в [`config/target_projects.json`](../config/target_projects.json) |
+| F2.2.3 | Проведено ревью | точный Pack MSPM0C1106 project, раздельные boot/application images и memory boundaries в [`config/target_projects.json`](../config/target_projects.json) |
+| **F2.2.4** | **Сейчас** | минимальный Safety MSPM0 SDK project и fail-closed device boundary |
+
+Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
+только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.
+
+## Матрица SDK и компиляторов
 
 | Образы | Production SDK | Компилятор | Аппаратная поддержка |
 |---|---|---|---|

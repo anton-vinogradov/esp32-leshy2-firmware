@@ -1,10 +1,31 @@
-# Build environment for five firmware images
+# Build system for five firmware images
 
 [Русский](toolchains.ru.md) · [Home](../README.md) · [Roadmap](roadmap.md)
 
-This page presents the accepted F2.0.1 result: the first-party SDK family used
-to build each of the five Leshy2 images. Exact machine-checkable records live in
-[`config/toolchain_matrix.json`](../config/toolchain_matrix.json).
+This page collects the accepted results of the current F2 phase: first-party
+toolchains, immutable environment locks, common commands and source ownership.
+
+## Reviewed F2 results
+
+| Step | Status | Result |
+|---|---|---|
+| F2.0.0 | Reviewed | five physical targets and their memory/rollback contracts |
+| F2.0.1 | Reviewed | exact SDK, compiler, support, lifecycle and license matrix in [`config/toolchain_matrix.json`](../config/toolchain_matrix.json) |
+| F2.0.2 | Reviewed | two host profiles, 26 archive hashes and Python dependency lock in [`environment/toolchains.lock.json`](../environment/toolchains.lock.json); checked by [`tools/verify_environment_lock.py`](../tools/verify_environment_lock.py) |
+| F2.0.3 | Reviewed | 5-target × 2-configuration command and artifact contract in [`config/build_matrix.json`](../config/build_matrix.json); dispatched by [`tools/build_targets.py`](../tools/build_targets.py) |
+| F2.1.0 | Reviewed | portable/generated/target-local ownership in [`config/source_layout.json`](../config/source_layout.json); checked by [`tools/check_source_layout.py`](../tools/check_source_layout.py) |
+| F2.1.1 | Reviewed | language, warning, optimization and link rules in [`config/build_policy.json`](../config/build_policy.json); checked by [`tools/check_build_policy.py`](../tools/check_build_policy.py) |
+| F2.1.2 | Reviewed | integrated boundary evidence in [`config/f2_1_review.json`](../config/f2_1_review.json); executed by [`tools/review_f2_1.py`](../tools/review_f2_1.py) |
+| F2.2.0 | Reviewed | minimal offline S3 ESP-IDF project and strict project components in [`config/target_projects.json`](../config/target_projects.json); checked by [`tools/check_target_projects.py`](../tools/check_target_projects.py) |
+| F2.2.1 | Reviewed | minimal offline C5 ESP-IDF project, dual-OTA inputs and strict components in [`config/target_projects.json`](../config/target_projects.json) |
+| F2.2.2 | Reviewed | exact RP2354B Arm-secure project, 2-MiB custom board and partition input in [`config/target_projects.json`](../config/target_projects.json) |
+| F2.2.3 | Reviewed | exact Pack MSPM0C1106 project, separate boot/application images and memory boundaries in [`config/target_projects.json`](../config/target_projects.json) |
+| **F2.2.4** | **Current** | minimal Safety MSPM0 SDK project and fail-closed device boundary |
+
+No row in this table claims a target build. Those results appear only after
+F2.4 executes both configurations for all five projects.
+
+## SDK and compiler matrix
 
 | Images | Production SDK | Compiler | Hardware support |
 |---|---|---|---|

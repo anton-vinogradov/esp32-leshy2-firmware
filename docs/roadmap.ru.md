@@ -31,11 +31,10 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.1.0 -->
+<!-- current-substep: F2.2.4 -->
 
-**Точный маркер: `F2.1.0`** — сформировать общее дерево source/components и
-явные границы владения portable, generated и target-local кодом без
-придумывания target pins.
+**Точный маркер: `F2.2.4`** — создать и структурно проверить минимальный Safety
+MSPM0 SDK project без выдуманных target pins.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -46,25 +45,39 @@ peripheral или board emulation и никогда не показываетс�
   - ✅ `F2.0.2` — неизменяемые SDK revisions, 26 записей URL/SHA-256 архивов
     для канонических local/CI hosts и ESP-IDF Python environment с hash-lock
     прошли ревью.
-  - ✅ `F2.0.3` — единая local/CI matrix, shell-free dispatcher, fail-closed
-    preflight и 20 названных target artifacts прошли ревью.
+  - ✅ `F2.0.3` — единая [local/CI matrix и shell-free dispatcher](toolchains.ru.md),
+    fail-closed preflight и 26 названных target artifacts прошли ревью.
 - `F2.1` — общее дерево source/components, warning policy и границы generated
   files без выдуманных target pins.
-  - ▶️ **`F2.1.0` — сейчас:** определить каталоги, владельцев и границу
-    generated sources.
-  - ⏳ `F2.1.1` — зафиксировать language standards, warning policy и link rules.
-  - ⏳ `F2.1.2` — доказать target-neutral состояние shared code и перейти F2.2.
-- ⏳ `F2.2` — минимальные production-SDK projects для S3, C5, RP, Pack и
-  Safety.
+  - ✅ `F2.1.0` — [каталоги и единоличное владение](toolchains.ru.md),
+    target-neutral portable code и пустая до F2.3 граница generated sources
+    прошли ревью.
+  - ✅ `F2.1.1` — строгие C17/C++17, warnings-as-errors для project code,
+    debug/release optimization и link policy с map-файлом прошли ревью.
+  - ✅ `F2.1.2` — единым прогоном прошли environment, source, build-policy,
+    H2-contract и 24 host-сценария.
+- `F2.2` — минимальные production-SDK projects для всех пяти образов.
+  - ✅ `F2.2.0` — S3 ESP-IDF project, portable component, production memory
+    defaults и debug/release inputs прошли структурное ревью.
+  - ✅ `F2.2.1` — C5 ESP-IDF project, portable component, production memory
+    defaults и debug/release inputs прошли структурное ревью.
+  - ✅ `F2.2.2` — точный RP2354B Arm-secure project, custom board на 2 МиБ,
+    partition input и debug/release policy прошли структурное ревью.
+  - ✅ `F2.2.3` — Pack MSPM0C1106 project, раздельные boot/application images,
+    memory boundaries и debug/release policy прошли структурное ревью.
+  - ▶️ **`F2.2.4` — сейчас:** Safety MSPM0 SDK project и device boundary.
+  - ⏳ `F2.2.5` — сводное ревью пяти project boundaries.
 - ⏳ `F2.3` — импорт принятого генерируемого pin/BSP contract после F2.0–F2.2.
 - ⏳ `F2.4` — воспроизводимые debug/release builds, map files и image-size
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.1.0` завершается, когда каждое место для исходников имеет одного владельца,
-а generated hardware inputs нельзя перепутать с ручным кодом. Закрытие любой
-подзадачи требует в том же commit изменить точный маркер на стартовой странице
-и в роадмапе до перехода дальше.
+`F2.2.4` завершается, когда Safety project фиксирует точный MSPM0C1106 device,
+startup, linker, SysConfig и раздельные boot/application images, сохраняя
+независимый fail-closed watchdog domain. До F2.4 это не считается запуском
+configure/build. Закрытие
+любой подзадачи обновляет её артефакт, публичный результат, обе стартовые
+страницы и оба роадмапа тем же commit до перехода дальше.
 
 ## Зависимости
 
