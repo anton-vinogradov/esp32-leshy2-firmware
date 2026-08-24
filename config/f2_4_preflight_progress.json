@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.0.4",
+  "current_substep": "F2.4.0.5",
   "target_execution": {
     "configure_runs": 0,
     "build_runs": 0,
@@ -43,11 +43,14 @@
       "python_lock_mode": "--require-hashes"
     },
     "F2.4.0.4": {
-      "status": "in_progress",
-      "result": "Arm GNU 15.2.Rel1 installation and verification for RP2354B"
+      "status": "reviewed",
+      "result": "Arm GNU 15.2.Rel1 is hash-verified, installed and executable for RP2354B",
+      "version": "arm-none-eabi-gcc 15.2.1 20251203",
+      "archive_sha256": "1938a84b7105c192e3fb4fa5e893ba25f425f7ddab40515ae608cd40f68669a8",
+      "binary_architecture": "Mach-O arm64"
     },
     "F2.4.0.5": {
-      "status": "pending",
+      "status": "in_progress",
       "result": "TI Arm Clang and SysConfig installation and verification"
     },
     "F2.4.0.6": {

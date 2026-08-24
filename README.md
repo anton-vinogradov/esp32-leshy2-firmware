@@ -34,11 +34,11 @@ run has occurred. F2 remains current because target builds are still pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.4.0.4 -->
+<!-- current-substep: F2.4.0.5 -->
 
-**Exact marker: `F2.4.0.4` (4 of 6)** — install and verify Arm GNU `15.2.Rel1`
-for RP2354B. SDK sources, both ESP target toolchains and the hash-locked Python
-3.12/CMake/Ninja environment have passed review; no target configure/build has run.
+**Exact marker: `F2.4.0.5` (5 of 6)** — install and verify TI Arm Clang
+`4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety. SDK sources, ESP and RP
+toolchains and the host environment have passed review; no target build has run.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -87,8 +87,8 @@ for RP2354B. SDK sources, both ESP target toolchains and the hash-locked Python
       ROM ELFs installed, recognized and passed review.
     - ✅ `F2.4.0.3` — hash-locked Python 3.12 environment and exact CMake/Ninja
       passed review; evidence is in [`config/f2_4_preflight_progress.json`](config/f2_4_preflight_progress.json).
-    - ▶️ **`F2.4.0.4` — current:** install and verify Arm GNU `15.2.Rel1` for RP2354B.
-    - ⏳ `F2.4.0.5` — install and verify TI Arm Clang `4.0.5.LTS` and SysConfig
+    - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` passed review for RP2354B.
+    - ▶️ **`F2.4.0.5` — current:** install and verify TI Arm Clang `4.0.5.LTS` and SysConfig
       `1.28.0.4712` for Pack/Safety.
     - ⏳ `F2.4.0.6` — run the offline fail-closed preflight for all five targets
       and publish its machine-readable evidence.
