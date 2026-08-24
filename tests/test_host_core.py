@@ -127,6 +127,37 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(0, plan["execution_counts"]["target_emulator_runs"])
         self.assertEqual(4, len(plan["observation"]["ordered_success_markers"]))
 
+    def test_f3_0_acceptance_runner_preserves_execution_boundaries(self):
+        result = subprocess.run(
+            ["python3", "tools/run_f3_acceptance.py", "--check-plan"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("5 targets", result.stdout)
+        matrix = json.loads(
+            (REPO_ROOT / "config/f3_acceptance_matrix.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        targets = {target["id"]: target for target in matrix["targets"]}
+        self.assertTrue(targets["s3"]["target_boot_claim_allowed_after_pass"])
+        for target in ("c5", "rp", "pack", "safety"):
+            self.assertFalse(targets[target]["target_boot_claim_allowed_after_pass"])
+        dry_run = subprocess.run(
+            ["python3", "tools/run_f3_acceptance.py", "--dry-run", "--config", "debug"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("idf.py", dry_run.stdout)
+        self.assertIn("qemu", dry_run.stdout)
+        self.assertEqual(0, matrix["execution_counts"]["target_emulator_runs"])
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],

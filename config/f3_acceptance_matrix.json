@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "stage": "F3.0.2",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-25",
+  "policy": {
+    "one_runner_for_all_f3_evidence": true,
+    "only_exact_virtual_soc_may_claim_target_boot": true,
+    "portable_and_static_evidence_remain_labeled": true,
+    "physical_closure_remains_deferred": true,
+    "no_purchase_authorized": true
+  },
+  "runner": {
+    "path": "tools/run_f3_acceptance.py",
+    "plan_check": ["{python}", "tools/run_f3_acceptance.py", "--check-plan"],
+    "s3_run": [
+      "{locked_python}",
+      "tools/run_f3_acceptance.py",
+      "--run-s3",
+      "--config",
+      "{configuration}",
+      "--write"
+    ],
+    "s3_evidence_check": [
+      "{python}",
+      "tools/run_f3_acceptance.py",
+      "--check-s3-evidence",
+      "--config",
+      "{configuration}"
+    ]
+  },
+  "targets": [
+    {
+      "id": "s3",
+      "production_target": "ESP32-S3-WROOM-1U-N16R8",
+      "f3_execution_class": "exact_target_qemu",
+      "automated_evidence": ["debug target boot", "release target boot", "ordered UART boot markers"],
+      "target_boot_claim_allowed_after_pass": true,
+      "next_runtime_gate": "F3.1",
+      "physical_gate": "H7/H8 external-peripheral and electrical HIL"
+    },
+    {
+      "id": "c5",
+      "production_target": "ESP32-C5-WROOM-1U-N8R8",
+      "f3_execution_class": "portable_plus_static",
+      "automated_evidence": ["portable contract model", "debug/release artifact verification"],
+      "target_boot_claim_allowed_after_pass": false,
+      "next_runtime_gate": "ESP32-C5-DevKitC-1-N8R8, then H7/H8",
+      "physical_gate": "Wi-Fi/BLE/802.15.4/IR/SDIO HIL"
+    },
+    {
+      "id": "rp",
+      "production_target": "SC1512-A4 / RP2354B Arm Secure",
+      "f3_execution_class": "portable_plus_static",
+      "automated_evidence": ["portable contract model", "debug/release artifact verification"],
+      "target_boot_claim_allowed_after_pass": false,
+      "next_runtime_gate": "RP2354B carrier or Leshy2 through SWD/UART",
+      "physical_gate": "PIO/DMA/radio/Cap-Bus HIL"
+    },
+    {
+      "id": "pack",
+      "production_target": "MSPM0C1106SDGS20R pack controller",
+      "f3_execution_class": "portable_safety_plus_static",
+      "automated_evidence": ["portable safety/fault model", "debug/release artifact verification"],
+      "target_boot_claim_allowed_after_pass": false,
+      "next_runtime_gate": "LP-MSPM0C1106, then H7/H8",
+      "physical_gate": "ADC/I2C/flash activation/pack-admission timing HIL"
+    },
+    {
+      "id": "safety",
+      "production_target": "MSPM0C1106SDGS20R safety controller",
+      "f3_execution_class": "portable_safety_plus_static",
+      "automated_evidence": ["portable safety/fault model", "debug/release artifact verification"],
+      "target_boot_claim_allowed_after_pass": false,
+      "next_runtime_gate": "LP-MSPM0C1106, then H7/H8",
+      "physical_gate": "watchdog/thermal/FAULT_KILL/TX-lease timing HIL"
+    }
+  ],
+  "execution_counts": {
+    "target_emulator_runs": 0,
+    "hardware_runs": 0
+  },
+  "next": "F3.1"
+}

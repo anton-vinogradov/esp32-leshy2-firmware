@@ -150,7 +150,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F3.0.2"}, set(markers.values()))
+        self.assertEqual({"F3.1"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F3", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -250,6 +250,8 @@ class ProductSiteTests(unittest.TestCase):
                 "tools/check_f3_execution_capability.py",
                 "config/f3_runtime_plan.json",
                 "tools/check_f3_runtime_plan.py",
+                "config/f3_acceptance_matrix.json",
+                "tools/run_f3_acceptance.py",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for token in ("ESP32-S3", "ESP32-C5", "RP2354B", "MSPM0C1106"):
@@ -276,7 +278,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F3.0.2", progress["current_substep"])
+        self.assertEqual("F3.1", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])

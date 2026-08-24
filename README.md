@@ -38,12 +38,12 @@ instruction/peripheral execution remain unproven and now enter F3.
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.0.2 -->
+<!-- current-substep: F3.1 -->
 
-**Exact marker: `F3.0.2`** — publish the exact emulator/dev-board matrix and
-integrated F3 acceptance runner. Two deterministic S3 recipes are fixed, but no
-emulator or hardware run is claimed. This marker and its evidence move together
-in each commit.
+**Exact marker: `F3.1`** — boot both S3 debug and release target binaries in the
+exact Espressif QEMU path and record fail-closed machine evidence. No emulator
+or hardware run is claimed yet. This marker and its evidence move together in
+each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -121,9 +121,10 @@ in each commit.
   - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, four
     ordered boot markers, a 30-second timeout and fail-closed result contract
     passed review; [machine plan](config/f3_runtime_plan.json).
-  - ▶️ **`F3.0.2` — current:** publish the exact emulator/dev-board matrix and
-    integrated F3 acceptance runner.
-- `F3.1` — boot the S3 image in the official ESP-IDF QEMU path.
+  - ✅ `F3.0.2` — the five-target evidence matrix and one fail-closed runner
+    passed review without executing a target; [machine matrix](config/f3_acceptance_matrix.json).
+- ▶️ **`F3.1` — current:** boot the S3 debug and release images in the official
+  ESP-IDF QEMU path and record exact evidence.
 - `F3.2` — execute self-test, retained-fault and failed-update scenarios on
   the strongest faithful virtual paths.
 - `F3.3` — prove image, RAM, partition and rollback boundaries from target

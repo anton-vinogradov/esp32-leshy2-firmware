@@ -153,3 +153,9 @@ timeout and the fail-closed result schema in
 [`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). This is a
 reviewed execution plan, not an emulator-run claim; it is checked by
 [`tools/check_f3_runtime_plan.py`](../tools/check_f3_runtime_plan.py).
+
+F3.0.2 maps all five images to the strongest honest evidence class in
+[`config/f3_acceptance_matrix.json`](../config/f3_acceptance_matrix.json).
+[`tools/run_f3_acceptance.py`](../tools/run_f3_acceptance.py) is the single
+fail-closed plan, execution and evidence checker; only its exact S3 QEMU path
+may produce a target-boot claim.

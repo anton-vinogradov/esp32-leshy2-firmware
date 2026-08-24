@@ -156,3 +156,9 @@ archives для двух поддержанных hosts, четыре после
 [`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). Это прошедший
 ревью план исполнения, а не заявление о состоявшемся emulator run; его
 проверяет [`tools/check_f3_runtime_plan.py`](../tools/check_f3_runtime_plan.py).
+
+F3.0.2 сопоставляет все пять images с самым сильным честным классом evidence в
+[`config/f3_acceptance_matrix.json`](../config/f3_acceptance_matrix.json).
+[`tools/run_f3_acceptance.py`](../tools/run_f3_acceptance.py) — единая
+fail-closed проверка плана, исполнения и evidence; только её точный S3 QEMU
+path может создать claim о target boot.
