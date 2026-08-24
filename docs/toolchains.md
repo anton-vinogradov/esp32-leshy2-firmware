@@ -116,3 +116,33 @@ BSD-3-Clause with a per-component manifest. Toolchains carry their own and
 third-party notices. Exact texts and redistribution obligations enter the SBOM
 before F11 release; this review establishes a viable open-development path but
 does not replace the release license audit.
+
+## Runtime execution coverage
+
+F3 distinguishes a real target-binary boot from a portable host model. A host
+recompile or a generic CPU emulator is useful evidence, but it is not evidence
+that the production SoC booted.
+
+| Image | Strongest accepted F3 path | What it may prove | Physical closure |
+|---|---|---|---|
+| S3 | exact Espressif `qemu-system-xtensa -M esp32s3` | boot chain, `app_main`, UART log and CPU/memory control flow | display, touch, storage, audio, radio and GPIO timing at H7/H8 |
+| C5 | portable contract/fault model plus static target artifacts | software contracts, image and partition bounds | exact C5 dev board, then Leshy2 H7/H8 |
+| RP | portable contract/fault model plus static target artifacts | software contracts, image and partition bounds | RP2354B carrier or Leshy2 through SWD/UART |
+| Pack | portable safety/fault model plus static target artifacts | safety state machine and image boundaries | `LP-MSPM0C1106`, then Leshy2 H7/H8 |
+| Safety | portable safety/fault model plus static target artifacts | safety state machine and image boundaries | `LP-MSPM0C1106`, then Leshy2 H7/H8 |
+
+The locked ESP-IDF registry exposes QEMU targets for ESP32, ESP32-C3 and
+ESP32-S3, but not ESP32-C5. Pico SDK's `host` platform explicitly defines a
+no-hardware build. No accepted exact virtual SoC was found for RP2354B or
+MSPM0C1106. Therefore only S3 has a target-emulator path; none has been run yet,
+and no development-board purchase is authorized by F3.0.0.
+
+The exact evidence boundary is machine-readable in
+[`config/f3_execution_capability_matrix.json`](../config/f3_execution_capability_matrix.json)
+and fail-closed checked by
+[`tools/check_f3_execution_capability.py`](../tools/check_f3_execution_capability.py).
+Primary references are Espressif's [ESP32-S3 QEMU guide](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/tools/qemu.html)
+and [QEMU feature matrix](https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/README.md),
+the [ESP32-C5-DevKitC-1 guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html),
+Raspberry Pi's [Debug Probe documentation](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html)
+and TI's [`LP-MSPM0C1106` page](https://www.ti.com/tool/LP-MSPM0C1106).

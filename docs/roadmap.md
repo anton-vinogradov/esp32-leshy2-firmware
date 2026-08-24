@@ -30,12 +30,12 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F3 breakdown
 
-<!-- current-substep: F3.0.0 -->
+<!-- current-substep: F3.0.1 -->
 
-**Exact marker: `F3.0.0`** — inventory exact executable/emulator coverage and
-honest dev-board gates for all five targets before the first runtime claim. No
-emulator or hardware run is claimed. The marker and evidence update together
-in every commit.
+**Exact marker: `F3.0.1`** — define deterministic run recipes, boot markers,
+timeouts and fail-closed records for the one accepted exact virtual target
+path. No emulator or hardware run is claimed. The marker and evidence update
+together in every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -109,10 +109,11 @@ in every commit.
   [F2 result](f2-target-build-system-report.md) and
   [machine evidence](../config/f2_5_reproducibility_review.json).
 - `F3.0` — runtime-evidence contract.
-  - ▶️ **`F3.0.0` — current:** inventory official emulator/simulator support,
-    instruction coverage, boot observability and unavoidable dev-board gates
-    for S3, C5, RP2354B, Pack and Safety.
-  - `F3.0.1` — define deterministic run recipes, boot markers, timeouts and
+  - ✅ `F3.0.0` — official emulator/simulator support, instruction coverage,
+    boot observability and unavoidable dev-board gates for all five targets
+    passed review: exact vendor QEMU exists only for S3;
+    [machine matrix](../config/f3_execution_capability_matrix.json).
+  - ▶️ **`F3.0.1` — current:** define deterministic run recipes, boot markers, timeouts and
     fail-closed evidence records for every supported virtual path.
   - `F3.0.2` — publish the emulator/dev-board matrix and integrated F3 runner.
 - `F3.1` — boot the S3 skeleton through the official ESP-IDF QEMU path.

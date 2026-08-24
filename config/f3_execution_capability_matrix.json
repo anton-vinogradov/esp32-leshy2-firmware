@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "stage": "F3.0.0",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-25",
+  "policy": {
+    "exact_target_binary_requires_matching_soc_model": true,
+    "generic_cpu_emulation_may_not_be_called_target_boot": true,
+    "host_recompile_may_not_be_called_target_boot": true,
+    "unmodeled_peripheral_claims_are_forbidden": true,
+    "no_purchase_authorized": true
+  },
+  "locked_source_evidence": {
+    "esp_idf_revision": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+    "esp_idf_qemu_registry": {
+      "path": ".toolchains/src/esp-idf/tools/idf_py_actions/qemu_ext.py",
+      "sha256": "82cd560aec649ba7660d9562ee4f8821c7325e3a7292e28bc3856ce83cfbf5c1",
+      "targets": ["esp32", "esp32c3", "esp32s3"]
+    },
+    "esp_idf_tool_manifest": {
+      "path": ".toolchains/src/esp-idf/tools/tools.json",
+      "sha256": "b403c25dc0c841dece4ac45abfa0a131f55ccae72db6be86ee36e3e69557f0e4",
+      "qemu_xtensa_version": "esp_develop_9.2.2_20250817",
+      "qemu_xtensa_macos_arm64_sha256": "aa92e337461d482f5d9f31cd8efc0bd67b3de8fcfcfb567289cb43a59c184651",
+      "qemu_xtensa_installed": false
+    },
+    "pico_sdk_revision": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+    "pico_host_platform": {
+      "platform_path": ".toolchains/src/pico-sdk/cmake/pico_pre_load_platform.cmake",
+      "platform_sha256": "104d5ab49ec31937e6f05bbd692551991ea751acfa182c68eb955ae9eb6062c5",
+      "boundary_path": ".toolchains/src/pico-sdk/src/cmake/on_device.cmake",
+      "boundary_sha256": "068e79d5fac15e092a9ac4fa90f3055856b42e4e367833605c9f7aabe1f589d4",
+      "pico_no_hardware": true
+    },
+    "mspm0_sdk_revision": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32"
+  },
+  "official_sources": [
+    {
+      "id": "ESP-QEMU-S3",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/tools/qemu.html",
+      "supports": "ESP32-S3 CPU, memory and selected peripheral execution through idf.py qemu"
+    },
+    {
+      "id": "ESP-QEMU-FEATURES",
+      "url": "https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/README.md",
+      "supports": "published ESP32, ESP32-S3 and ESP32-C3 QEMU feature matrix"
+    },
+    {
+      "id": "ESP-C5-DEVKIT",
+      "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html",
+      "supports": "ESP32-C5-WROOM-1(U) target flashing, UART and JTAG debugging"
+    },
+    {
+      "id": "RP-DEBUG-PROBE",
+      "url": "https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html",
+      "supports": "Pico-series SWD, UART, OpenOCD and GDB hardware execution"
+    },
+    {
+      "id": "TI-LP-MSPM0C1106",
+      "url": "https://www.ti.com/tool/LP-MSPM0C1106",
+      "supports": "exact MSPM0C1106 LaunchPad with XDS110, UART and EnergyTrace"
+    }
+  ],
+  "targets": [
+    {
+      "id": "s3",
+      "production_target": "ESP32-S3-WROOM-1U-N16R8",
+      "target_binary_execution": "official_vendor_qemu",
+      "runner": "qemu-system-xtensa -M esp32s3",
+      "accepted_f3_claims": ["boot_chain", "app_main_reached", "uart_log", "cpu_memory_control_flow"],
+      "forbidden_claims": ["production_display", "touch", "microSD", "audio", "radio", "external_gpio_timing"],
+      "f3_path": "install hash-locked QEMU, run deterministic boot and injected software-fault scenarios",
+      "physical_gate": "H7/H8 for every external peripheral and electrical behavior"
+    },
+    {
+      "id": "c5",
+      "production_target": "ESP32-C5-WROOM-1U-N8R8",
+      "target_binary_execution": "no_accepted_exact_virtual_soc",
+      "runner": null,
+      "accepted_f3_claims": ["portable_contract_model", "static_image_and_partition_checks"],
+      "forbidden_claims": ["target_boot", "wifi_2_4_5ghz", "ble", "802_15_4", "ir", "sdio"],
+      "f3_path": "host contract/fault model plus static target evidence",
+      "physical_gate": "ESP32-C5-DevKitC-1-N8R8 platform run, then Leshy2 H7/H8"
+    },
+    {
+      "id": "rp",
+      "production_target": "SC1512-A4 / RP2354B Arm Secure",
+      "target_binary_execution": "no_accepted_exact_virtual_soc",
+      "runner": null,
+      "accepted_f3_claims": ["portable_contract_model", "static_image_and_partition_checks"],
+      "forbidden_claims": ["target_boot", "secure_bootrom", "pio", "dma", "nrf24", "subghz", "voice", "cap_bus"],
+      "f3_path": "host contract/fault model plus static target evidence; Pico host is explicitly no-hardware",
+      "physical_gate": "SC1512-A4/RP2354B target carrier or Leshy2 H7/H8 through SWD/UART"
+    },
+    {
+      "id": "pack",
+      "production_target": "MSPM0C1106SDGS20R pack controller",
+      "target_binary_execution": "no_accepted_exact_virtual_soc",
+      "runner": null,
+      "accepted_f3_claims": ["portable_safety_model", "static_image_and_partition_checks"],
+      "forbidden_claims": ["target_boot", "adc", "i2c", "flash_activation", "pack_admission_timing"],
+      "f3_path": "host safety/fault model plus static target evidence",
+      "physical_gate": "LP-MSPM0C1106 platform run, then Leshy2 H7/H8"
+    },
+    {
+      "id": "safety",
+      "production_target": "MSPM0C1106SDGS20R safety controller",
+      "target_binary_execution": "no_accepted_exact_virtual_soc",
+      "runner": null,
+      "accepted_f3_claims": ["portable_safety_model", "static_image_and_partition_checks"],
+      "forbidden_claims": ["target_boot", "watchdog", "thermal_adc", "fault_kill", "tx_lease_timing"],
+      "f3_path": "host safety/fault model plus static target evidence",
+      "physical_gate": "LP-MSPM0C1106 platform run, then Leshy2 H7/H8"
+    }
+  ],
+  "execution_counts": {
+    "target_binary_emulator_paths": 1,
+    "portable_host_paths": 5,
+    "target_emulator_runs": 0,
+    "hardware_runs": 0
+  },
+  "next": "F3.0.1"
+}

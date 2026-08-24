@@ -30,12 +30,12 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F3
 
-<!-- current-substep: F3.0.0 -->
+<!-- current-substep: F3.0.1 -->
 
-**Точный маркер: `F3.0.0`** — инвентаризация точного executable/emulator
-coverage и честных dev-board gates для всех пяти targets до первого runtime
-claim. Emulator и hardware runs пока не заявлены. Маркер и evidence меняются
-вместе в каждом commit.
+**Точный маркер: `F3.0.1`** — определить детерминированные run recipes, boot
+markers, timeouts и fail-closed records для единственного принятого точного
+virtual target path. Emulator и hardware runs пока не заявлены. Маркер и
+evidence меняются вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -109,10 +109,11 @@ claim. Emulator и hardware runs пока не заявлены. Маркер и
   См. [итог F2](f2-target-build-system-report.ru.md) и
   [машинный evidence](../config/f2_5_reproducibility_review.json).
 - `F3.0` — контракт runtime evidence.
-  - ▶️ **`F3.0.0` — сейчас:** инвентаризировать официальную поддержку
-    emulator/simulator, instruction coverage, наблюдаемость boot и неизбежные
-    dev-board gates для S3, C5, RP2354B, Pack и Safety.
-  - `F3.0.1` — определить детерминированные run recipes, boot markers,
+  - ✅ `F3.0.0` — официальная поддержка emulator/simulator, instruction
+    coverage, наблюдаемость boot и неизбежные dev-board gates всех пяти targets
+    прошли ревью: точный vendor QEMU есть только для S3;
+    [машинная матрица](../config/f3_execution_capability_matrix.json).
+  - ▶️ **`F3.0.1` — сейчас:** определить детерминированные run recipes, boot markers,
     timeouts и fail-closed records для каждого поддержанного virtual path.
   - `F3.0.2` — опубликовать emulator/dev-board matrix и сводный F3 runner.
 - `F3.1` — загрузить S3 skeleton через официальный ESP-IDF QEMU path.

@@ -119,3 +119,33 @@ TI MSPM0 SDK — BSD-3-Clause с отдельным manifest компонент�
 redistribution obligations попадут в SBOM; текущая проверка подтверждает, что
 выбранные инструменты допустимы для открытой разработки, но не заменяет release
 license audit.
+
+## Покрытие исполнения
+
+F3 различает настоящую загрузку target binary и переносимую host-модель.
+Пересборка под host или generic CPU emulator дают полезные доказательства, но
+не доказывают загрузку production SoC.
+
+| Образ | Самый сильный принятый путь F3 | Что он может доказать | Физическое закрытие |
+|---|---|---|---|
+| S3 | точный Espressif `qemu-system-xtensa -M esp32s3` | boot chain, вход в `app_main`, UART log и CPU/memory control flow | дисплей, touch, storage, audio, radio и GPIO timing на H7/H8 |
+| C5 | переносимая contract/fault-модель плюс статические target artifacts | программные контракты, границы image и partitions | точная C5 dev board, затем Leshy2 H7/H8 |
+| RP | переносимая contract/fault-модель плюс статические target artifacts | программные контракты, границы image и partitions | RP2354B carrier или Leshy2 через SWD/UART |
+| Pack | переносимая safety/fault-модель плюс статические target artifacts | safety state machine и границы image | `LP-MSPM0C1106`, затем Leshy2 H7/H8 |
+| Safety | переносимая safety/fault-модель плюс статические target artifacts | safety state machine и границы image | `LP-MSPM0C1106`, затем Leshy2 H7/H8 |
+
+Зафиксированный ESP-IDF публикует QEMU targets для ESP32, ESP32-C3 и
+ESP32-S3, но не ESP32-C5. Host-платформа Pico SDK прямо задаёт no-hardware
+build. Принятой точной virtual SoC для RP2354B или MSPM0C1106 не найдено.
+Поэтому target-emulator path есть только у S3; пока не выполнен ни один запуск,
+а F3.0.0 не разрешает покупку отладочных плат.
+
+Точная граница доказательств записана в
+[`config/f3_execution_capability_matrix.json`](../config/f3_execution_capability_matrix.json)
+и fail-closed проверяется
+[`tools/check_f3_execution_capability.py`](../tools/check_f3_execution_capability.py).
+Первоисточники: Espressif [ESP32-S3 QEMU guide](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-guides/tools/qemu.html)
+и [QEMU feature matrix](https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/README.md),
+[ESP32-C5-DevKitC-1 guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html),
+Raspberry Pi [Debug Probe documentation](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html)
+и TI [`LP-MSPM0C1106`](https://www.ti.com/tool/LP-MSPM0C1106).

@@ -38,12 +38,12 @@ instruction/peripheral execution remain unproven and now enter F3.
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.0.0 -->
+<!-- current-substep: F3.0.1 -->
 
-**Exact marker: `F3.0.0`** — inventory the exact executable/emulator coverage
-available for each target and define the evidence boundary before the first
-runtime run. No emulator or hardware run is claimed. This marker and its
-evidence move together in each commit.
+**Exact marker: `F3.0.1`** — define deterministic run recipes, boot markers,
+timeouts and fail-closed records for the one accepted exact virtual target
+path. No emulator or hardware run is claimed. This marker and its evidence
+move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -114,10 +114,11 @@ evidence move together in each commit.
   See the [F2 result report](docs/f2-target-build-system-report.md) and
   [machine evidence](config/f2_5_reproducibility_review.json).
 - `F3.0` — freeze the runtime-evidence plan before claiming a boot.
-  - ▶️ **`F3.0.0` — current:** inventory official emulator/simulator support,
-    instruction coverage, boot observability and unavoidable dev-board gates
-    for S3, C5, RP2354B, Pack and Safety.
-  - `F3.0.1` — define deterministic run recipes, boot markers, timeouts and
+  - ✅ `F3.0.0` — official emulator/simulator support, instruction coverage,
+    boot observability and unavoidable dev-board gates
+    for all five targets passed review: exact vendor QEMU exists only for S3;
+    [machine matrix](config/f3_execution_capability_matrix.json).
+  - ▶️ **`F3.0.1` — current:** define deterministic run recipes, boot markers, timeouts and
     fail-closed result records for every supported virtual path.
   - `F3.0.2` — publish the exact emulator/dev-board matrix and integrated F3
     acceptance runner.

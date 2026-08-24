@@ -84,6 +84,30 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(0, review["absolute_workspace_path_leaks"])
         self.assertFalse(review["claims"]["runtime_boot_proven"])
 
+    def test_f3_0_execution_capability_is_explicit_and_fail_closed(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f3_execution_capability.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("1 exact vendor QEMU path", result.stdout)
+        matrix = json.loads(
+            (REPO_ROOT / "config/f3_execution_capability_matrix.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        targets = {target["id"]: target for target in matrix["targets"]}
+        self.assertEqual("official_vendor_qemu", targets["s3"]["target_binary_execution"])
+        for target in ("c5", "rp", "pack", "safety"):
+            self.assertEqual(
+                "no_accepted_exact_virtual_soc",
+                targets[target]["target_binary_execution"],
+            )
+            self.assertTrue(targets[target]["physical_gate"])
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],
