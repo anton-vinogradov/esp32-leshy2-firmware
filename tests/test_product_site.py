@@ -23,6 +23,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/memory.ru.md",
             "docs/roadmap.md",
             "docs/roadmap.ru.md",
+            "docs/toolchains.md",
+            "docs/toolchains.ru.md",
         }
         public_markdown = {
             str(path.relative_to(REPO_ROOT))
@@ -101,11 +103,66 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.0.1"}, set(markers.values()))
+        self.assertEqual({"F2.0.2"}, set(markers.values()))
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        self.assertEqual("F2", state["phase"])
+        self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
+        self.assertIn("F2.0.1", state["reviewed"])
+        self.assertFalse(state["claims"]["target_builds_run"])
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
             for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.3", "F2.5"):
                 self.assertIn(f"`{substep}`", page, f"{name}: {substep}")
+
+    def test_five_target_toolchain_matrix_is_exact_and_honest(self):
+        matrix = json.loads(self.read("config/toolchain_matrix.json"))
+        self.assertEqual("F2.0.1", matrix["stage"])
+        self.assertEqual("reviewed", matrix["status"])
+        self.assertEqual(5, len(matrix["targets"]))
+        self.assertEqual(
+            {"s3", "c5", "rp", "pack", "safety"},
+            {target["domain"] for target in matrix["targets"]},
+        )
+
+        families = matrix["families"]
+        self.assertEqual("v6.0.2", families["esp_idf"]["sdk"]["version"])
+        self.assertEqual(
+            "15.2.0_20251204",
+            families["esp_idf"]["targets"]["s3"]["compiler_version"],
+        )
+        self.assertEqual(
+            "15.2.0_20251204",
+            families["esp_idf"]["targets"]["c5"]["compiler_version"],
+        )
+        self.assertEqual("2.3.0", families["pico_sdk"]["sdk"]["version"])
+        self.assertEqual("rp2350-arm-s", families["pico_sdk"]["target"]["platform"])
+        self.assertEqual(
+            "15.2.Rel1", families["pico_sdk"]["target"]["compiler_version"]
+        )
+        self.assertEqual(
+            "2.11.00.07", families["ti_mspm0_sdk"]["sdk"]["version"]
+        )
+        self.assertEqual(
+            "4.0.0.LTS", families["ti_mspm0_sdk"]["compiler"]["version"]
+        )
+        self.assertEqual("1.28.x", families["ti_mspm0_sdk"]["host"]["sysconfig"])
+        self.assertIn(
+            "target configure or build", matrix["evidence_scope"]["not_yet_verified"]
+        )
+
+        for name in ("docs/toolchains.md", "docs/toolchains.ru.md"):
+            page = self.read(name)
+            for token in (
+                "v6.0.2",
+                "15.2.0_20251204",
+                "2.3.0",
+                "rp2350-arm-s",
+                "15.2.Rel1",
+                "2.11.00.07",
+                "4.0.0.LTS",
+                "F2.0.2",
+            ):
+                self.assertIn(token, page, f"{name}: {token}")
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

@@ -35,19 +35,20 @@ work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.0.1 -->
+<!-- current-substep: F2.0.2 -->
 
-**Exact marker: `F2.0.1`** — verify and pin the supported production SDK and
-toolchain version for each of the five targets. Archived choices are inputs,
-not current evidence.
+**Exact marker: `F2.0.2`** — turn the reviewed SDK/toolchain matrix into
+reproducible environment manifests with immutable revisions, archive checksums
+and dependency locks.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
     contracts.
-  - ▶️ **`F2.0.1` — current:** verify exact SDK/toolchain versions, official
-    support, lifecycle, license and build-host requirements.
-  - ⏳ `F2.0.2` — create reproducible environment manifests and dependency
-    locks.
+  - ✅ `F2.0.1` — reviewed exact SDK/toolchain versions, official support,
+    lifecycle, license and build-host requirements; see the
+    [five-image build environment](docs/toolchains.md).
+  - ▶️ **`F2.0.2` — current:** create reproducible environment manifests,
+    archive checksums and dependency locks.
   - ⏳ `F2.0.3` — define one local/CI build matrix and canonical commands.
 - ⏳ `F2.1` — create the shared source/component tree without target pins.
 - ⏳ `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
@@ -55,10 +56,10 @@ not current evidence.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.0.1` exits only when every target names a currently supported exact
-toolchain source/version and its constraints. When any substep closes, this
-marker and both roadmap pages are updated in the same commit before work
-advances.
+`F2.0.2` exits only when a clean host can resolve every dependency from an
+immutable identifier and verify every downloaded archive before installation.
+When any substep closes, this marker and both roadmap pages are updated in the
+same commit before work advances.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
@@ -147,6 +148,7 @@ physical interface. Irreversible lockdown is not enabled by default.
 ## Documentation
 
 - [Firmware roadmap and current position](docs/roadmap.md)
+- [Build environment for all five images](docs/toolchains.md)
 - [Firmware architecture and subsystem behavior](docs/architecture.md)
 - [Flash, PSRAM and rollback layout](docs/memory.md)
 - [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)

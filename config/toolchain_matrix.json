@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "stage": "F2.0.1",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-24",
+  "evidence_scope": {
+    "verified": [
+      "first-party target support",
+      "exact production SDK release",
+      "exact compiler family and version",
+      "host requirements",
+      "upstream license family",
+      "silicon lifecycle status"
+    ],
+    "not_yet_verified": [
+      "download artifact checksums",
+      "clean-room installation",
+      "target configure or build",
+      "emulator or physical boot"
+    ]
+  },
+  "families": {
+    "esp_idf": {
+      "sdk": {
+        "name": "ESP-IDF",
+        "version": "v6.0.2",
+        "status": "latest stable",
+        "source": "https://github.com/espressif/esp-idf/tree/v6.0.2",
+        "license": "Apache-2.0",
+        "license_source": "https://github.com/espressif/esp-idf/blob/v6.0.2/LICENSE"
+      },
+      "host": {
+        "operating_systems": ["Linux", "macOS", "Windows"],
+        "python": ">=3.10",
+        "cmake": ">=3.22",
+        "ninja_pinned_candidate": "1.12.1",
+        "installation": "ESP-IDF Installation Manager or the release-pinned first-party install scripts"
+      },
+      "targets": {
+        "s3": {
+          "idf_target": "esp32s3",
+          "compiler": "xtensa-esp-elf",
+          "compiler_version": "15.2.0_20251204",
+          "module": "ESP32-S3-WROOM-1U-N16R8",
+          "supported_until_at_least": "2033-01-01"
+        },
+        "c5": {
+          "idf_target": "esp32c5",
+          "compiler": "riscv32-esp-elf",
+          "compiler_version": "15.2.0_20251204",
+          "module": "ESP32-C5-WROOM-1U-N8R8",
+          "supported_until_at_least": "2037-01-01"
+        }
+      },
+      "lifecycle_source": "https://www.espressif.com/en/products/longevity-commitment"
+    },
+    "pico_sdk": {
+      "sdk": {
+        "name": "Raspberry Pi Pico SDK",
+        "version": "2.3.0",
+        "status": "latest stable",
+        "source": "https://github.com/raspberrypi/pico-sdk/tree/2.3.0",
+        "license": "BSD-3-Clause",
+        "license_source": "https://github.com/raspberrypi/pico-sdk/blob/2.3.0/LICENSE.TXT"
+      },
+      "host": {
+        "operating_systems": ["Linux x86_64/arm64", "macOS 14+", "Windows 10/11"],
+        "python": ">=3.10",
+        "git": ">=2.28",
+        "cmake": ">=3.13",
+        "generator": "Ninja"
+      },
+      "target": {
+        "domain": "rp",
+        "platform": "rp2350-arm-s",
+        "architecture": "Arm Cortex-M33 secure",
+        "compiler": "Arm GNU Toolchain",
+        "compiler_version": "15.2.Rel1",
+        "compiler_license": "mixed open source; GCC GPL-3.0-or-later with GCC Runtime Library Exception and component notices",
+        "device": "RP2354B",
+        "mpn": "SC1512-A4",
+        "supported_until_at_least": "2045-01-01"
+      },
+      "toolchain_source": "https://github.com/raspberrypi/pico-vscode/blob/main/data/0.18.0/supportedToolchains.ini",
+      "lifecycle_source": "https://www.raspberrypi.com/products/rp2350/"
+    },
+    "ti_mspm0_sdk": {
+      "sdk": {
+        "name": "TI MSPM0 SDK",
+        "version": "2.11.00.07",
+        "status": "latest production release",
+        "source": "https://www.ti.com/tool/MSPM0-SDK",
+        "license": "BSD-3-Clause core with per-component manifest",
+        "license_source": "https://software-dl.ti.com/msp430/esd/MSPM0-SDK/2_11_00_07/manifest_mspm0_sdk_2_11_00_07.html"
+      },
+      "host": {
+        "validated_operating_systems": ["Ubuntu 18.04", "macOS Monterey", "Windows 10"],
+        "sysconfig": "1.28.x",
+        "download_constraint": "TI export approval required"
+      },
+      "compiler": {
+        "name": "TI Arm Clang",
+        "version": "4.0.0.LTS",
+        "selection_reason": "newest compiler explicitly validated by MSPM0 SDK 2.11.00.07",
+        "license": "TI compiler license with LLVM/Apache-2.0 WITH LLVM-exception and component notices",
+        "source": "https://software-dl.ti.com/codegen/docs/tiarmclang/rel4_0_0_LTS/"
+      },
+      "targets": [
+        {
+          "domain": "pack",
+          "device": "MSPM0C1106",
+          "mpn": "MSPM0C1106SDGS20R"
+        },
+        {
+          "domain": "safety",
+          "device": "MSPM0C1106",
+          "mpn": "MSPM0C1106SDGS20R"
+        }
+      ],
+      "device_status": "ACTIVE / production",
+      "device_source": "https://www.ti.com/product/MSPM0C1106/part-details/MSPM0C1106SDGS20R"
+    }
+  },
+  "targets": [
+    {"domain": "s3", "family": "esp_idf", "sdk_target": "esp32s3"},
+    {"domain": "c5", "family": "esp_idf", "sdk_target": "esp32c5"},
+    {"domain": "rp", "family": "pico_sdk", "sdk_target": "rp2350-arm-s"},
+    {"domain": "pack", "family": "ti_mspm0_sdk", "sdk_target": "MSPM0C1106"},
+    {"domain": "safety", "family": "ti_mspm0_sdk", "sdk_target": "MSPM0C1106"}
+  ]
+}

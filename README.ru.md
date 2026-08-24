@@ -35,19 +35,20 @@ pin/BSP-контракт уже доступен; F2 остаётся текущ
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.0.1 -->
+<!-- current-substep: F2.0.2 -->
 
-**Точный маркер: `F2.0.1`** — проверить и зафиксировать поддерживаемую
-production-версию SDK и toolchain для каждого из пяти target. Выборы из
-архивных документов служат входами, а не актуальным evidence.
+**Точный маркер: `F2.0.2`** — превратить прошедшую ревью SDK/toolchain matrix
+в воспроизводимые environment manifests с неизменяемыми revisions, checksums
+архивов и dependency locks.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
     contracts.
-  - ▶️ **`F2.0.1` — сейчас:** проверить точные SDK/toolchain versions,
-    официальную поддержку, lifecycle, license и требования к build host.
-  - ⏳ `F2.0.2` — создать воспроизводимые environment manifests и dependency
-    locks.
+  - ✅ `F2.0.1` — проведено ревью точных SDK/toolchain versions, официальной
+    поддержки, lifecycle, license и требований к build host; результат — на
+    странице [среды сборки пяти образов](docs/toolchains.ru.md).
+  - ▶️ **`F2.0.2` — сейчас:** создать воспроизводимые environment manifests,
+    checksums архивов и dependency locks.
   - ⏳ `F2.0.3` — определить единую local/CI build matrix и канонические
     команды.
 - ⏳ `F2.1` — создать общее дерево source/components без target pins.
@@ -56,10 +57,10 @@ production-версию SDK и toolchain для каждого из пяти tar
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.0.1` завершается, когда для каждого target назван актуально поддерживаемый
-точный источник и version toolchain с его ограничениями. После закрытия любой
-подзадачи этот маркер и обе страницы роадмапа обновляются тем же commit до
-перехода дальше.
+`F2.0.2` завершается, когда чистый host может разрешить каждую зависимость по
+неизменяемому идентификатору и проверить любой скачанный архив до установки.
+После закрытия любой подзадачи этот маркер и обе страницы роадмапа обновляются
+тем же commit до перехода дальше.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает
@@ -153,6 +154,7 @@ power fault или контроль TX leases.
 ## Документация
 
 - [Роадмап прошивки и текущая позиция](docs/roadmap.ru.md)
+- [Среда сборки всех пяти образов](docs/toolchains.ru.md)
 - [Архитектура прошивки и поведение подсистем](docs/architecture.ru.md)
 - [Разметка flash, PSRAM и rollback](docs/memory.ru.md)
 - [Аппаратная архитектура](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)

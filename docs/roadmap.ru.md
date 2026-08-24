@@ -31,21 +31,21 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.0.1 -->
+<!-- current-substep: F2.0.2 -->
 
-**Точный маркер: `F2.0.1`** — проверить и зафиксировать поддерживаемую
-production-версию SDK и toolchain для каждого из пяти target. Варианты из
-архивных документов остаются лишь кандидатами до проверки по актуальным
-первоисточникам.
+**Точный маркер: `F2.0.2`** — превратить прошедшую ревью
+[SDK/toolchain matrix пяти образов](toolchains.ru.md) в воспроизводимые
+environment manifests с неизменяемыми revisions, checksums архивов и
+dependency locks.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
     contracts.
-  - ▶️ **`F2.0.1` — сейчас:** проверить точные SDK/toolchain versions,
-    first-party support status, lifecycle, license и требования к build host
-    для S3, C5, RP2354B и обоих MSPM0 images.
-  - ⏳ `F2.0.2` — создать воспроизводимые environment manifests, checksums и
-    dependency locks без молчаливо плавающих версий.
+  - ✅ `F2.0.1` — точные SDK/toolchain versions, first-party support status,
+    lifecycle, license и требования к build host для S3, C5, RP2354B и обоих
+    MSPM0 images прошли ревью.
+  - ▶️ **`F2.0.2` — сейчас:** создать воспроизводимые environment manifests,
+    checksums и dependency locks без молчаливо плавающих версий.
   - ⏳ `F2.0.3` — определить единую local/CI matrix и канонические команды
     configure, build, clean и получения artifacts.
 - ⏳ `F2.1` — общее дерево source/components, warning policy и границы
@@ -57,10 +57,11 @@ production-версию SDK и toolchain для каждого из пяти tar
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.0.1` завершается, когда для каждого target названы актуальный first-party
-source, точная поддерживаемая version toolchain, host requirements, license и
-известные platform limits. Закрытие любой подзадачи требует в том же commit
-изменить точный маркер на стартовой странице и в роадмапе до перехода дальше.
+`F2.0.2` завершается, когда чистый host может разрешить каждый SDK, compiler и
+вспомогательную зависимость по неизменяемому идентификатору и проверить
+скачанные архивы до установки. Закрытие любой подзадачи требует в том же
+commit изменить точный маркер на стартовой странице и в роадмапе до перехода
+дальше.
 
 ## Зависимости
 

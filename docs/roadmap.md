@@ -30,20 +30,20 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.0.1 -->
+<!-- current-substep: F2.0.2 -->
 
-**Exact marker: `F2.0.1`** — verify and pin the supported production SDK and
-toolchain version for each of the five targets. Choices recovered from archived
-documents are candidates only until checked against current primary sources.
+**Exact marker: `F2.0.2`** — convert the reviewed
+[five-image SDK/toolchain matrix](toolchains.md) into reproducible environment
+manifests with immutable revisions, archive checksums and dependency locks.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
     contracts are registered.
-  - ▶️ **`F2.0.1` — current:** verify exact SDK/toolchain versions, first-party
-    support status, lifecycle, license and build-host requirements for S3, C5,
-    RP2354B and both MSPM0 images.
-  - ⏳ `F2.0.2` — create reproducible environment manifests, checksums and
-    dependency locks without silently floating versions.
+  - ✅ `F2.0.1` — exact SDK/toolchain versions, first-party support status,
+    lifecycle, license and build-host requirements for S3, C5, RP2354B and both
+    MSPM0 images passed review.
+  - ▶️ **`F2.0.2` — current:** create reproducible environment manifests,
+    checksums and dependency locks without silently floating versions.
   - ⏳ `F2.0.3` — define the single local/CI matrix and canonical configure,
     build, clean and artifact commands.
 - ⏳ `F2.1` — shared source/component tree, warning policy and generated-file
@@ -54,10 +54,10 @@ documents are candidates only until checked against current primary sources.
   for all five targets.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.0.1` exits when every target names a current first-party source, exact
-supported toolchain version, host requirements, license and known platform
-limits. Closing any substep requires changing the exact marker on both landing
-and roadmap pages in the same commit before advancing work.
+`F2.0.2` exits when a clean host can resolve every SDK, compiler and supporting
+dependency from an immutable identifier and verify downloaded archives before
+installation. Closing any substep requires changing the exact marker on both
+landing and roadmap pages in the same commit before advancing work.
 
 ## Dependencies
 

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "phase": "F2",
+  "current_substep": "F2.0.2",
+  "updated_on": "2026-08-24",
+  "completed": [
+    "F2.0.0",
+    "F2.0.1"
+  ],
+  "reviewed": [
+    "F0",
+    "F1",
+    "F2.0.0",
+    "F2.0.1"
+  ],
+  "claims": {
+    "target_projects_created": false,
+    "target_builds_run": false,
+    "target_emulators_run": false,
+    "hardware_contract_available": true
+  }
+}
