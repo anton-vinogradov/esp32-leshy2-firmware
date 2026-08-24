@@ -35,11 +35,11 @@ target builds.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.0.3 -->
+<!-- current-substep: F2.4.0.4 -->
 
-**Точный маркер: `F2.4.0.3` (3 из 6)** — создать и проверить locked Python 3.12
-environment и host tools. Точные SDK sources и оба ESP target toolchain уже
-доступны локально; ни один target configure/build ещё не запускался.
+**Точный маркер: `F2.4.0.4` (4 из 6)** — установить и проверить Arm GNU
+`15.2.Rel1` для RP2354B. SDK sources, оба ESP target toolchain и hash-locked
+Python 3.12/CMake/Ninja environment прошли ревью; target configure/build не запускался.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -82,13 +82,13 @@ environment и host tools. Точные SDK sources и оба ESP target toolcha
     one-owner consumption прошли единое ревью.
 - `F2.4` — пройти debug/release builds, map files и image-size gates.
   - ▶️ `F2.4.0` — locked-toolchain preflight пяти targets.
-    - ✅ `F2.4.0.1` — локально проверены точные sources/revisions ESP-IDF
-      `v6.0.2`, Pico SDK `2.3.0` и TI MSPM0 SDK `2.11.00.07`.
+    - ✅ `F2.4.0.1` — точные sources/revisions ESP-IDF `v6.0.2`, Pico SDK
+      `2.3.0` и TI MSPM0 SDK `2.11.00.07` прошли ревью.
     - ✅ `F2.4.0.2` — установлены и распознаны ESP-IDF tool manager точные
-      S3/C5 compilers, debuggers, ULP tools, OpenOCD и ROM ELFs.
-    - ▶️ **`F2.4.0.3` — сейчас:** создать locked Python 3.12 environment и
-      предоставить точные CMake/Ninja host tools.
-    - ⏳ `F2.4.0.4` — установить и проверить Arm GNU `15.2.Rel1` для RP2354B.
+      S3/C5 compilers, debuggers, ULP tools, OpenOCD и ROM ELFs прошли ревью.
+    - ✅ `F2.4.0.3` — hash-locked Python 3.12 environment и точные CMake/Ninja
+      прошли ревью; evidence — [`config/f2_4_preflight_progress.json`](config/f2_4_preflight_progress.json).
+    - ▶️ **`F2.4.0.4` — сейчас:** установить и проверить Arm GNU `15.2.Rel1` для RP2354B.
     - ⏳ `F2.4.0.5` — установить и проверить TI Arm Clang `4.0.5.LTS` и
       SysConfig `1.28.0.4712` для Pack/Safety.
     - ⏳ `F2.4.0.6` — выполнить offline fail-closed preflight всех пяти targets

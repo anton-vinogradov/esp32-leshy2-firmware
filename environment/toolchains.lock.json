@@ -40,6 +40,15 @@
       "repository": "https://github.com/raspberrypi/pico-sdk.git",
       "commit": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
       "recursive_submodules": true
+    },
+    {
+      "id": "mspm0-sdk",
+      "version": "2.11.00.07",
+      "repository": "https://github.com/TexasInstruments/mspm0-sdk.git",
+      "tag": "mspm0_sdk_2_11_00_07",
+      "commit": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32",
+      "recursive_submodules": false,
+      "transport_note": "official public Git source for macOS preflight; canonical archive remains export-session gated"
     }
   ],
   "local_locks": [

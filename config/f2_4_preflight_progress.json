@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "stage": "F2.4.0",
+  "host_profile": "macos_arm64",
+  "current_substep": "F2.4.0.4",
+  "target_execution": {
+    "configure_runs": 0,
+    "build_runs": 0,
+    "emulator_runs": 0
+  },
+  "substeps": {
+    "F2.4.0.1": {
+      "status": "reviewed",
+      "result": "exact SDK sources and revisions are locally present",
+      "sources": {
+        "esp-idf": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+        "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+        "mspm0-sdk": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32"
+      }
+    },
+    "F2.4.0.2": {
+      "status": "reviewed",
+      "result": "ESP-IDF target packages are installed by the official tool manager",
+      "versions": {
+        "xtensa-esp-elf": "esp-15.2.0_20251204",
+        "riscv32-esp-elf": "esp-15.2.0_20251204",
+        "xtensa-esp-elf-gdb": "17.1_20260402",
+        "riscv32-esp-elf-gdb": "17.1_20260402",
+        "esp32ulp-elf": "2.38_20240113",
+        "openocd-esp32": "v0.12.0-esp32-20260424",
+        "esp-rom-elfs": "20241011"
+      }
+    },
+    "F2.4.0.3": {
+      "status": "reviewed",
+      "result": "hash-locked Python environment and exact host tools pass version checks",
+      "versions": {
+        "python": "3.12.6",
+        "cmake": "4.0.3",
+        "ninja": "1.12.1"
+      },
+      "python_lock": "environment/requirements/esp-idf-core.lock.txt",
+      "python_lock_mode": "--require-hashes"
+    },
+    "F2.4.0.4": {
+      "status": "in_progress",
+      "result": "Arm GNU 15.2.Rel1 installation and verification for RP2354B"
+    },
+    "F2.4.0.5": {
+      "status": "pending",
+      "result": "TI Arm Clang and SysConfig installation and verification"
+    },
+    "F2.4.0.6": {
+      "status": "pending",
+      "result": "offline fail-closed preflight and integrated evidence for five targets"
+    }
+  }
+}

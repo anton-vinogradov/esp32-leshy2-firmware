@@ -26,9 +26,10 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.3.1 | Reviewed | 11 deterministic C/header outputs in [`generated/source_manifest.json`](../generated/source_manifest.json); writes/checks with [`tools/generate_hardware_bsp.py`](../tools/generate_hardware_bsp.py) |
 | F2.3.2 | Reviewed | one-owner mapping in [`config/bsp_target_consumption.json`](../config/bsp_target_consumption.json); checked by [`tools/check_bsp_target_consumption.py`](../tools/check_bsp_target_consumption.py) |
 | F2.3.3 | Reviewed | integrated H2/BSP evidence in [`config/f2_3_review.json`](../config/f2_3_review.json); executed by [`tools/review_f2_3.py`](../tools/review_f2_3.py) |
-| F2.4.0.1 | Checked locally | exact ESP-IDF `7101770d`, Pico SDK `98a542c1` and TI MSPM0 SDK `20807db7` source revisions |
-| F2.4.0.2 | Checked locally | exact ESP S3/C5 compiler, debugger, ULP, OpenOCD and ROM packages installed by the ESP-IDF tool manager |
-| **F2.4.0.3** | **Current** | locked Python 3.12 environment and exact CMake/Ninja host tools |
+| F2.4.0.1 | Reviewed | exact ESP-IDF `7101770d`, Pico SDK `98a542c1` and TI MSPM0 SDK `20807db7` source revisions |
+| F2.4.0.2 | Reviewed | exact ESP S3/C5 compiler, debugger, ULP, OpenOCD and ROM packages installed by the ESP-IDF tool manager |
+| F2.4.0.3 | Reviewed | hash-locked Python 3.12 plus CMake `4.0.3` and Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
+| **F2.4.0.4** | **Current** | Arm GNU `15.2.Rel1` installation and verification for RP2354B |
 
 No row in this table claims a target build. Those results appear only after
 F2.4 executes both configurations for all five projects.
