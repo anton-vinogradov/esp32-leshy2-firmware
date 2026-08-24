@@ -91,6 +91,18 @@
         "observed": "1.12.1"
       },
       {
+        "id": "esp-idf-environment-version",
+        "status": "passed",
+        "expected": "6.0",
+        "observed": "6.0"
+      },
+      {
+        "id": "esp-component-manager-offline",
+        "status": "passed",
+        "expected": "0",
+        "observed": "0"
+      },
+      {
         "id": "tool:xtensa-esp-elf",
         "status": "passed",
         "expected": "esp-15.2.0_20251204",
@@ -125,6 +137,12 @@
         "status": "passed",
         "expected": "0.12.0",
         "observed": "Open On-Chip Debugger v0.12.0-esp32-20260424 (2026-04-24-15:13)"
+      },
+      {
+        "id": "esp-rom-environment",
+        "status": "passed",
+        "expected": "active",
+        "observed": "active"
       },
       {
         "id": "rom:esp32s3_rev0_rom.elf",
@@ -181,19 +199,19 @@
         "observed": "present"
       }
     ],
-    "passed": 26,
+    "passed": 29,
     "failed": 0
   },
   "dispatcher_preflight": [
     {
       "configuration": "debug",
       "status": "passed",
-      "summary": "preflight OK: 5 target(s), debug; 26 exact environment checks"
+      "summary": "preflight OK: 5 target(s), debug; 29 exact environment checks"
     },
     {
       "configuration": "release",
       "status": "passed",
-      "summary": "preflight OK: 5 target(s), release; 26 exact environment checks"
+      "summary": "preflight OK: 5 target(s), release; 29 exact environment checks"
     }
   ],
   "network_during_preflight": false,

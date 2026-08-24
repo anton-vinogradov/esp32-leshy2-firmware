@@ -5,7 +5,8 @@
   "scope": {
     "strict_warnings_apply_to": ["common/**", "targets/**", "generated/hardware/**"],
     "sdk_headers_are_system_headers": true,
-    "third_party_warnings_promoted_to_errors": false
+    "third_party_warnings_promoted_to_errors": false,
+    "esp_idf_sdk_include_boundary": "-Wundef is locally suppressed only while preprocessing upstream ESP-IDF headers; project sources retain the required warning"
   },
   "language": {
     "c": "C17",

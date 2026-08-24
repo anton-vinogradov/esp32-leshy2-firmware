@@ -1,8 +1,11 @@
 #include "leshy2/l2ip.h"
 #include "leshy2/hardware/c5_bsp.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
 #include "esp_chip_info.h"
 #include "esp_log.h"
+#pragma GCC diagnostic pop
 
 #include <stdint.h>
 

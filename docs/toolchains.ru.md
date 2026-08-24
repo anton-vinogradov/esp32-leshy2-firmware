@@ -32,11 +32,12 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.0.3 | Проведено ревью | hash-locked Python 3.12, CMake `4.0.3` и Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
 | F2.4.0.4 | Проведено ревью | hash-verified native Arm GNU `15.2.Rel1` для RP2354B |
 | F2.4.0.5 | Проведено ревью | hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
-| F2.4.0.6 | Проведено ревью | 26 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
-| **F2.4.1** | **Сейчас** | configure/build/verify S3 debug и release |
+| F2.4.0.6 | Проведено ревью | 29 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
+| F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 240 и 138 480 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
+| **F2.4.2** | **Сейчас** | configure/build/verify C5 debug и release |
 
-Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
-только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.
+Только строка F2.4.1 заявляет target build. C5, RP, Pack и Safety остаются
+несобранными, пока не пройдут собственные configure/build/artifact gates.
 
 ## Матрица SDK и компиляторов
 
@@ -87,6 +88,10 @@ make target-build TARGET=s3 CONFIG=debug
 make target-verify TARGET=s3 CONFIG=debug
 make target-artifacts TARGET=s3 CONFIG=debug
 make target-clean TARGET=s3 CONFIG=debug
+make locked-target-configure TARGET=s3 CONFIG=debug
+make locked-target-build TARGET=s3 CONFIG=debug
+make locked-target-verify TARGET=s3 CONFIG=debug
+make capture-target-build TARGET=s3
 ```
 
 Dispatcher не запускает shell, а matrix не разрешает скачивать зависимости во
@@ -94,7 +99,10 @@ Dispatcher не запускает shell, а matrix не разрешает ск
 точный SDK Git revision, hash-lock, версия compiler/tool, вход MSPM0C1106 или
 Python 3.12 environment. F2.0.3
 зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
-configure/build остаются на F2.4 после импорта BSP на F2.3.
+Locked-команды автоматически применяют проверенную локальную среду. Команда
+capture записывает относительные пути artifacts, размеры, SHA-256, image gate и
+manifest project inputs, не добавляя build outputs в Git. S3 прошёл этот путь;
+остальные targets следуют на F2.4.2–F2.4.5.
 
 ## Лицензии
 

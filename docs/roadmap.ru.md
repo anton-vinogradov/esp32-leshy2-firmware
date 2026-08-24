@@ -31,11 +31,11 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.4.1 -->
+<!-- current-substep: F2.4.2 -->
 
-**Точный маркер: `F2.4.1`** — configure, build и verify S3 в debug и release.
-Сводный preflight прошёл 26 точных проверок для всех пяти targets в обеих
-конфигурациях; target build ещё не запускался.
+**Точный маркер: `F2.4.2`** — configure, build и verify C5 в debug и release.
+Сводный preflight проходит 29 точных проверок. S3 debug/release builds и все
+десять заявленных S3 artifacts прошли ревью; emulator и hardware runs не заявлены.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -90,20 +90,22 @@ peripheral или board emulation и никогда не показываетс�
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` прошёл ревью для RP2354B.
     - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig
       `1.28.0.4712` прошли ревью для Pack/Safety.
-    - ✅ `F2.4.0.6` — прошли 26 точных проверок SDK, Git, lock, compiler и
+    - ✅ `F2.4.0.6` — прошли 29 точных проверок SDK, Git, lock, compiler и
       обязательных входов плюс debug/release dispatcher preflight; [машинный evidence](../config/f2_4_preflight_review.json).
-  - ▶️ **`F2.4.1` — сейчас:** configure/build/verify S3 debug и release.
-  - ⏳ `F2.4.2` — configure/build/verify C5 debug и release.
+  - ✅ `F2.4.1` — S3 debug/release configure, build, наличие десяти artifacts
+    и image-size gates прошли ревью; [машинный evidence](../config/f2_4_s3_build_review.json).
+  - ▶️ **`F2.4.2` — сейчас:** configure/build/verify C5 debug и release.
   - ⏳ `F2.4.3` — configure/build/verify RP debug и release.
   - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
   - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
   - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.4.0` завершён: локальный канонический host прошёл точную offline-проверку,
-а lock сохраняет соответствующие входы Linux CI. F2.4.1 — первый запуск target.
-Закрытие любой подзадачи обновляет её артефакт, публичный результат, обе
-стартовые страницы и оба роадмапа тем же commit до перехода дальше.
+`F2.4.1` завершён. S3 application занимает 180 240 байт в debug и 138 480 байт
+в release при OTA-слоте 7 340 032 байта. Это доказывает компиляцию, линковку и
+лимиты artifacts, но не boot, периферию или побайтную воспроизводимость.
+Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
+обе языковые страницы в одном commit.
 
 ## Зависимости
 

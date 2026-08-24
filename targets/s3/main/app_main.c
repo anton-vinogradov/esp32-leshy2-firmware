@@ -1,8 +1,11 @@
 #include "leshy2/system_model.h"
 #include "leshy2/hardware/s3_bsp.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
 #include "esp_chip_info.h"
 #include "esp_log.h"
+#pragma GCC diagnostic pop
 
 #include <stdint.h>
 

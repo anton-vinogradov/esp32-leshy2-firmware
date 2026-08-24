@@ -27,12 +27,12 @@ bool l2_scheduler_enqueue(
             return false;
         }
         queue->head = (uint8_t)((queue->head + 1U) % queue->capacity);
-        queue->count -= 1U;
+        queue->count = (uint8_t)(queue->count - 1U);
         queue->dropped += 1U;
     }
     const uint8_t tail = (uint8_t)((queue->head + queue->count) % queue->capacity);
     queue->message_ids[tail] = message_id;
-    queue->count += 1U;
+    queue->count = (uint8_t)(queue->count + 1U);
     return true;
 }
 
@@ -50,7 +50,7 @@ bool l2_scheduler_dequeue(
         *priority = (l2_priority_t)index;
         *message_id = queue->message_ids[queue->head];
         queue->head = (uint8_t)((queue->head + 1U) % queue->capacity);
-        queue->count -= 1U;
+        queue->count = (uint8_t)(queue->count - 1U);
         return true;
     }
     return false;

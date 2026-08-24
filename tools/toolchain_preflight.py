@@ -188,6 +188,20 @@ def validate_exact_environment(
 
     if target_ids & {"s3", "c5"}:
         esp = versions["F2.4.0.2"]["versions"]
+        _record(
+            checks,
+            errors,
+            "esp-idf-environment-version",
+            "6.0",
+            env.get("ESP_IDF_VERSION", "unset"),
+        )
+        _record(
+            checks,
+            errors,
+            "esp-component-manager-offline",
+            "0",
+            env.get("IDF_COMPONENT_MANAGER", "unset"),
+        )
         for check_id, command, output_token, path_token in (
             ("tool:xtensa-esp-elf", "xtensa-esp32s3-elf-gcc", esp["xtensa-esp-elf"], esp["xtensa-esp-elf"]),
             ("tool:riscv32-esp-elf", "riscv32-esp-elf-gcc", esp["riscv32-esp-elf"], esp["riscv32-esp-elf"]),
@@ -201,6 +215,15 @@ def validate_exact_environment(
             )
         tools_root = Path(env.get("IDF_TOOLS_PATH", ""))
         rom_root = tools_root / "tools" / "esp-rom-elfs" / esp["esp-rom-elfs"]
+        _record(
+            checks,
+            errors,
+            "esp-rom-environment",
+            "active",
+            "active"
+            if Path(env.get("ESP_ROM_ELF_DIR", "")).resolve() == rom_root.resolve()
+            else "different directory",
+        )
         for rom_name in ("esp32s3_rev0_rom.elf", "esp32c5_rev0_rom.elf"):
             observed = "present" if (rom_root / rom_name).is_file() else "missing"
             _record(checks, errors, f"rom:{rom_name}", "present", observed)

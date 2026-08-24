@@ -140,12 +140,13 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.4.1"}, set(markers.values()))
+        self.assertEqual({"F2.4.2"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
         self.assertIn("F2.0.1", state["reviewed"])
-        self.assertFalse(state["claims"]["target_builds_run"])
+        self.assertTrue(state["claims"]["target_builds_run"])
+        self.assertFalse(state["claims"]["target_emulators_run"])
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
             for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0", "F2.3", "F2.5"):
@@ -225,6 +226,7 @@ class ProductSiteTests(unittest.TestCase):
                 "tools/review_f2_3.py",
                 "config/f2_4_preflight_progress.json",
                 "config/f2_4_preflight_review.json",
+                "config/f2_4_s3_build_review.json",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
@@ -245,18 +247,19 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.4.1", progress["current_substep"])
+        self.assertEqual("F2.4.2", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.6"]["status"])
-        self.assertEqual(26, progress["substeps"]["F2.4.0.6"]["exact_checks"])
-        self.assertEqual(0, progress["target_execution"]["build_runs"])
+        self.assertEqual(29, progress["substeps"]["F2.4.0.6"]["exact_checks"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.4.1"]["status"])
+        self.assertEqual(2, progress["target_execution"]["build_runs"])
 
         review = json.loads(self.read("config/f2_4_preflight_review.json"))
         self.assertEqual("F2.4.0.6", review["stage"])
         self.assertEqual("reviewed", review["status"])
-        self.assertEqual(26, review["exact_environment"]["passed"])
+        self.assertEqual(29, review["exact_environment"]["passed"])
         self.assertEqual(0, review["exact_environment"]["failed"])
         self.assertEqual(
             {"debug", "release"},
@@ -266,6 +269,27 @@ class ProductSiteTests(unittest.TestCase):
             all(row["status"] == "passed" for row in review["dispatcher_preflight"])
         )
         self.assertEqual(0, review["target_execution"]["build_runs"])
+
+        s3_review = json.loads(self.read("config/f2_4_s3_build_review.json"))
+        self.assertEqual("F2.4.1", s3_review["stage"])
+        self.assertEqual("reviewed", s3_review["status"])
+        self.assertEqual("esp32s3", s3_review["sdk_target"])
+        self.assertEqual({"debug", "release"}, set(s3_review["configurations"]))
+        self.assertEqual(
+            {"debug": 180240, "release": 138480},
+            {
+                name: row["image_gate"]["size_bytes"]
+                for name, row in s3_review["configurations"].items()
+            },
+        )
+        for row in s3_review["configurations"].values():
+            self.assertEqual("ok", row["image_gate"]["result"])
+            self.assertEqual(5, len(row["artifacts"]))
+            self.assertTrue(all(len(item["sha256"]) == 64 for item in row["artifacts"]))
+        self.assertEqual(2, s3_review["execution"]["build_runs"])
+        self.assertFalse(s3_review["claims"]["runtime_boot_proven"])
+        self.assertFalse(s3_review["claims"]["byte_reproducibility_proven"])
+        self.assertEqual(64, len(s3_review["project_inputs"]["manifest_sha256"]))
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

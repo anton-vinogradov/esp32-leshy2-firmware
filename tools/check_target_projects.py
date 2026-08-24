@@ -14,6 +14,21 @@ REGISTRY_PATH = REPO_ROOT / "config" / "target_projects.json"
 PIN_RE = re.compile(r"\b(?:GPIO_NUM_|GPIO\d+|PIN_[A-Z0-9_]+)\b")
 
 
+def check_esp_sdk_warning_boundary(source: str, target: str, errors: list[str]) -> None:
+    required = (
+        '#pragma GCC diagnostic push',
+        '#pragma GCC diagnostic ignored "-Wundef"',
+        '#include "esp_chip_info.h"',
+        '#include "esp_log.h"',
+        '#pragma GCC diagnostic pop',
+    )
+    offsets = [source.find(token) for token in required]
+    if any(offset < 0 for offset in offsets) or offsets != sorted(offsets):
+        errors.append(
+            f"{target} entry point must isolate upstream ESP-IDF headers from -Wundef"
+        )
+
+
 def main() -> int:
     registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
     errors: list[str] = []
@@ -73,6 +88,7 @@ def main() -> int:
             errors.append(f"S3 portable component misses {flag}")
 
     app_main = (REPO_ROOT / "targets/s3/main/app_main.c").read_text(encoding="utf-8")
+    check_esp_sdk_warning_boundary(app_main, "S3", errors)
     if "l2_system_model_init" not in app_main or "leshy2/system_model.h" not in app_main:
         errors.append("S3 entry point does not consume the portable core")
     if PIN_RE.search(app_main):
@@ -134,6 +150,7 @@ def main() -> int:
             errors.append(f"C5 portable component misses {flag}")
 
     c5_main = (REPO_ROOT / "targets/c5/main/app_main.c").read_text(encoding="utf-8")
+    check_esp_sdk_warning_boundary(c5_main, "C5", errors)
     if "l2ip_replay_guard_reset" not in c5_main or "leshy2/l2ip.h" not in c5_main:
         errors.append("C5 entry point does not consume the portable core")
     if PIN_RE.search(c5_main):

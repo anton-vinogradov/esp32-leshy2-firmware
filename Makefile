@@ -9,8 +9,9 @@ HOST_SYSTEM_TEST := $(HOST_BUILD)/test_system_model
 TARGET ?= all
 CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
+LOCKED_PYTHON ?= .toolchains/python/idf6_py3.12_env/bin/python
 
-.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review capture-target-build locked-target-configure locked-target-build locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
 test: f2-3-review
 	python3 -m unittest discover -s tests
@@ -34,7 +35,19 @@ f2-3-review:
 	python3 tools/review_f2_3.py
 
 f2-4-preflight-review:
-	.toolchains/python/idf6_py3.12_env/bin/python tools/review_f2_4_preflight.py --check
+	$(LOCKED_PYTHON) tools/review_f2_4_preflight.py --check
+
+capture-target-build:
+	$(LOCKED_PYTHON) tools/capture_target_build_review.py --target $(TARGET) --write
+
+locked-target-configure:
+	$(LOCKED_PYTHON) tools/run_locked_target.py configure --target $(TARGET) --config $(CONFIG)
+
+locked-target-build:
+	$(LOCKED_PYTHON) tools/run_locked_target.py build --target $(TARGET) --config $(CONFIG)
+
+locked-target-verify:
+	$(LOCKED_PYTHON) tools/run_locked_target.py verify --target $(TARGET) --config $(CONFIG)
 
 bsp-input-check:
 	python3 tools/validate_bsp_generation_input.py

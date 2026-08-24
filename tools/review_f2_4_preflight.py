@@ -43,6 +43,11 @@ def local_environment() -> dict[str, str]:
             "IDF_PATH": str(root / "src/esp-idf"),
             "IDF_TOOLS_PATH": str(esp_tools),
             "IDF_PYTHON_ENV_PATH": str(root / "python/idf6_py3.12_env"),
+            "ESP_IDF_VERSION": "6.0",
+            "IDF_COMPONENT_MANAGER": "0",
+            "ESP_ROM_ELF_DIR": str(
+                esp_tools / "tools/esp-rom-elfs/20241011"
+            ),
             "PICO_SDK_PATH": str(root / "src/pico-sdk"),
             "ARM_GNU_TOOLCHAIN_PATH": str(arm_root),
             "MSPM0_SDK_PATH": str(root / "src/mspm0-sdk"),

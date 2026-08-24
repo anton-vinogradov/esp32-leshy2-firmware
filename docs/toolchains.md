@@ -31,11 +31,12 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.0.3 | Reviewed | hash-locked Python 3.12 plus CMake `4.0.3` and Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
 | F2.4.0.4 | Reviewed | hash-verified native Arm GNU `15.2.Rel1` for RP2354B |
 | F2.4.0.5 | Reviewed | hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety |
-| F2.4.0.6 | Reviewed | 26 exact checks and debug/release preflight for all five targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
-| **F2.4.1** | **Current** | configure/build/verify S3 debug and release |
+| F2.4.0.6 | Reviewed | 29 exact checks and debug/release preflight for all five targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
+| F2.4.1 | Reviewed | S3 debug/release builds produced and verified 10 artifacts; application images are 180,240 and 138,480 bytes; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
+| **F2.4.2** | **Current** | configure/build/verify C5 debug and release |
 
-No row in this table claims a target build. Those results appear only after
-F2.4 executes both configurations for all five projects.
+Only the F2.4.1 row claims a target build. C5, RP, Pack and Safety remain
+unbuilt until their own rows pass the same configure/build/artifact gates.
 
 ## SDK and compiler matrix
 
@@ -86,6 +87,10 @@ make target-build TARGET=s3 CONFIG=debug
 make target-verify TARGET=s3 CONFIG=debug
 make target-artifacts TARGET=s3 CONFIG=debug
 make target-clean TARGET=s3 CONFIG=debug
+make locked-target-configure TARGET=s3 CONFIG=debug
+make locked-target-build TARGET=s3 CONFIG=debug
+make locked-target-verify TARGET=s3 CONFIG=debug
+make capture-target-build TARGET=s3
 ```
 
 The dispatcher never invokes a shell and the matrix permits no dependency
@@ -93,7 +98,10 @@ downloads during configure/build. Preflight fails before execution when a
 project, exact SDK Git revision, hash lock, compiler/tool version, MSPM0C1106
 input or Python 3.12 environment is absent or mismatched.
 F2.0.3 fixed this contract; F2.2 reviewed all five project structures, while
-configure/build execution remains reserved for F2.4 after the F2.3 BSP import.
+The locked commands apply the reviewed local environment automatically. The
+capture command records relative artifact paths, byte counts, SHA-256 values,
+the image gate and a project-input manifest without copying build outputs into
+Git. S3 has passed this path; the remaining targets follow in F2.4.2–F2.4.5.
 
 ## Licenses
 

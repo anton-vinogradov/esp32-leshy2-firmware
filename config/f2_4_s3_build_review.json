@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "stage": "F2.4.1",
+  "status": "reviewed",
+  "target": "s3",
+  "sdk_target": "esp32s3",
+  "family": "esp_idf",
+  "configurations": {
+    "debug": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/s3/debug/leshy2_s3.bin",
+          "bytes": 180240,
+          "sha256": "884d9130017b05f14410b6112c92d9201ca90b517ac6c87bddb00717d03b4fb7"
+        },
+        {
+          "path": "build/targets/s3/debug/leshy2_s3.elf",
+          "bytes": 3946660,
+          "sha256": "ed92349976cc1880bf5ec61c7a5b394527cc617816561c0fd39e4de8333ca52f"
+        },
+        {
+          "path": "build/targets/s3/debug/leshy2_s3.map",
+          "bytes": 3884074,
+          "sha256": "fed009d01d9acb3f4f1febd19cbbc6d81afbad82ed4ddab09dbb3504d127846b"
+        },
+        {
+          "path": "build/targets/s3/debug/bootloader/bootloader.bin",
+          "bytes": 21120,
+          "sha256": "fded0b7396de71dde01877f90282880a66caaa8a3baf40c9348735966063ebcd"
+        },
+        {
+          "path": "build/targets/s3/debug/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "6fe85507c0dfe8fe7fcf857b0e18a473c1865cfe8de1896893082951a8a0287d"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/s3/debug/leshy2_s3.bin",
+        "size_bytes": 180240,
+        "result": "ok",
+        "warning_bytes": 6291456,
+        "maximum_image_bytes": 7077888,
+        "slot_bytes": 7340032
+      }
+    },
+    "release": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/s3/release/leshy2_s3.bin",
+          "bytes": 138480,
+          "sha256": "38638df92dde72e8e4337e4171865e9f0181bdd8a7380197e17027aded7b1fa4"
+        },
+        {
+          "path": "build/targets/s3/release/leshy2_s3.elf",
+          "bytes": 3821976,
+          "sha256": "b1fc6587f1810b094a962f59b3e76f13c77ad769480a361a6f23f35166179417"
+        },
+        {
+          "path": "build/targets/s3/release/leshy2_s3.map",
+          "bytes": 3624966,
+          "sha256": "5a2b91214b52338e79f1c91eb1b0f44b9de628b3cfa4764e1e17cd29518ef120"
+        },
+        {
+          "path": "build/targets/s3/release/bootloader/bootloader.bin",
+          "bytes": 19776,
+          "sha256": "e6da4a644ab79a1882471e507dcec83255f8a6d324b352754b036f5987dc59af"
+        },
+        {
+          "path": "build/targets/s3/release/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "6fe85507c0dfe8fe7fcf857b0e18a473c1865cfe8de1896893082951a8a0287d"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/s3/release/leshy2_s3.bin",
+        "size_bytes": 138480,
+        "result": "ok",
+        "warning_bytes": 6291456,
+        "maximum_image_bytes": 7077888,
+        "slot_bytes": 7340032
+      }
+    }
+  },
+  "project_inputs": {
+    "files": [
+      {
+        "path": "common/include/leshy2/l2ip.h",
+        "sha256": "5ef249d678be7300f99b798218295e3dfa30f96c75269df0395937d54a03918e"
+      },
+      {
+        "path": "common/include/leshy2/safety_core.h",
+        "sha256": "a8f3a7f2a05a8db5bd709c24fca0abbc68658659308ae66c0ed7bd8786784409"
+      },
+      {
+        "path": "common/include/leshy2/system_model.h",
+        "sha256": "fbe8f6512ed3d9cfc2f4301749c1ade96349d3ba0654218454d1b1bd09e054fc"
+      },
+      {
+        "path": "common/include/leshy2/update_core.h",
+        "sha256": "2bf34673117c75574117d6e8657f15931deed2790384f8b806f78b5782dacf87"
+      },
+      {
+        "path": "common/src/l2ip.c",
+        "sha256": "89dbec630e92bd5b71dacba23b7a43aa2b6a00935b5d5e5b79fc7cdf81a5af5a"
+      },
+      {
+        "path": "common/src/safety_core.c",
+        "sha256": "c6446f4e35c704e692efad769f23dece7c193769b216369e41158a7346432258"
+      },
+      {
+        "path": "common/src/system_model.c",
+        "sha256": "f48790052d2514f4cd1b4a167ecf5d0784f037e5fa51c5266ec4522e4273c90a"
+      },
+      {
+        "path": "common/src/update_core.c",
+        "sha256": "b7edd0eb47cdc13e4e417a5fe577a0b47cf0ca8673611f29b741c073cfff924b"
+      },
+      {
+        "path": "config/build_matrix.json",
+        "sha256": "125e138b183ed55da270ab0b6e4d5b3f33610b79335969223819b3959fd9b324"
+      },
+      {
+        "path": "config/build_policy.json",
+        "sha256": "ed86c9cf3e0b2447e82d309455e192eb3e790bcb029a39eac0f401256ec82dee"
+      },
+      {
+        "path": "config/s3_image_limits.json",
+        "sha256": "178235a2174b5baa6ed610e08703a0c437b627249893b2b92892dd95cc84d513"
+      },
+      {
+        "path": "generated/hardware/include/leshy2/hardware/s3_bsp.h",
+        "sha256": "c7753c51fae701d7ad20ed4ee260f0528c9eecd7152b7392e90238d77a957415"
+      },
+      {
+        "path": "generated/hardware/src/s3_bsp.c",
+        "sha256": "ba70d7bfb627e3c171c88ffce8b7ab7629fad771dac7b4bd009972d07971c8fd"
+      },
+      {
+        "path": "targets/s3/CMakeLists.txt",
+        "sha256": "a8346b5a321f79d9af2dcb820d41aa77f1f11dc168bc27239091962ec89a9130"
+      },
+      {
+        "path": "targets/s3/components/leshy2_portable/CMakeLists.txt",
+        "sha256": "a712884bedc4f5eb4e33c0fff81262cf3485faa6bee29c7483e8b67376787adf"
+      },
+      {
+        "path": "targets/s3/main/CMakeLists.txt",
+        "sha256": "89adc4157bad3366b541782b195fefe467fbc455941550bb9821d54d54acadde"
+      },
+      {
+        "path": "targets/s3/main/app_main.c",
+        "sha256": "78c5e36ab183600ac8e029975812bb930f7e5bf1e582c818bc3a9e22e6e8ef59"
+      },
+      {
+        "path": "targets/s3/sdkconfig.debug",
+        "sha256": "fbbc95993ca7373ed1720af6014a9e30f923f2da3b084e8919761e816308e0c3"
+      },
+      {
+        "path": "targets/s3/sdkconfig.defaults",
+        "sha256": "316a3006fd05df094f97b3520c4dcd0da88e760466116c577ac9133153124629"
+      },
+      {
+        "path": "targets/s3/sdkconfig.release",
+        "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
+      }
+    ],
+    "manifest_sha256": "7f6830bde415e0cf0b5595d7cb524cf3af8e888824c1156e54fb60dcd9cd4c4d"
+  },
+  "execution": {
+    "configure_runs": 2,
+    "build_runs": 2,
+    "artifact_verify_runs": 2,
+    "emulator_runs": 0,
+    "hardware_runs": 0,
+    "network_during_configure_or_build": false
+  },
+  "claims": {
+    "target_compilation_and_link_passed": true,
+    "all_declared_artifacts_present": true,
+    "image_size_gate_passed": true,
+    "runtime_boot_proven": false,
+    "byte_reproducibility_proven": false
+  },
+  "next": "F2.4.2"
+}

@@ -209,9 +209,7 @@ def main() -> int:
                     [
                         sys.executable,
                         str(REPO_ROOT / "tools" / "check_image_size.py"),
-                        "--target",
                         target["size_gate"]["target"],
-                        "--image",
                         str(image),
                     ],
                     check=True,

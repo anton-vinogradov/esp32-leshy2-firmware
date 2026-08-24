@@ -2,10 +2,11 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.1",
+  "current_substep": "F2.4.2",
   "target_execution": {
-    "configure_runs": 0,
-    "build_runs": 0,
+    "configure_runs": 2,
+    "build_runs": 2,
+    "artifact_verify_runs": 2,
     "emulator_runs": 0
   },
   "substeps": {
@@ -68,9 +69,19 @@
       "status": "reviewed",
       "result": "offline fail-closed preflight passed for five targets in debug and release",
       "evidence": "config/f2_4_preflight_review.json",
-      "exact_checks": 26,
+      "exact_checks": 29,
       "configurations": ["debug", "release"]
+    },
+    "F2.4.1": {
+      "status": "reviewed",
+      "result": "S3 debug and release configure, build and artifact gates passed",
+      "evidence": "config/f2_4_s3_build_review.json",
+      "configurations": ["debug", "release"],
+      "image_bytes": {
+        "debug": 180240,
+        "release": 138480
+      }
     }
   },
-  "next": "F2.4.1"
+  "next": "F2.4.2"
 }
