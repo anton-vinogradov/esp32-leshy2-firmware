@@ -38,12 +38,12 @@ instruction/peripheral execution remain unproven and now enter F3.
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.0.1 -->
+<!-- current-substep: F3.0.2 -->
 
-**Exact marker: `F3.0.1`** — define deterministic run recipes, boot markers,
-timeouts and fail-closed records for the one accepted exact virtual target
-path. No emulator or hardware run is claimed. This marker and its evidence
-move together in each commit.
+**Exact marker: `F3.0.2`** — publish the exact emulator/dev-board matrix and
+integrated F3 acceptance runner. Two deterministic S3 recipes are fixed, but no
+emulator or hardware run is claimed. This marker and its evidence move together
+in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -118,10 +118,11 @@ move together in each commit.
     boot observability and unavoidable dev-board gates
     for all five targets passed review: exact vendor QEMU exists only for S3;
     [machine matrix](config/f3_execution_capability_matrix.json).
-  - ▶️ **`F3.0.1` — current:** define deterministic run recipes, boot markers, timeouts and
-    fail-closed result records for every supported virtual path.
-  - `F3.0.2` — publish the exact emulator/dev-board matrix and integrated F3
-    acceptance runner.
+  - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, four
+    ordered boot markers, a 30-second timeout and fail-closed result contract
+    passed review; [machine plan](config/f3_runtime_plan.json).
+  - ▶️ **`F3.0.2` — current:** publish the exact emulator/dev-board matrix and
+    integrated F3 acceptance runner.
 - `F3.1` — boot the S3 image in the official ESP-IDF QEMU path.
 - `F3.2` — execute self-test, retained-fault and failed-update scenarios on
   the strongest faithful virtual paths.

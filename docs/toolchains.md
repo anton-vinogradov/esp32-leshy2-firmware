@@ -146,3 +146,10 @@ and [QEMU feature matrix](https://github.com/espressif/esp-toolchain-docs/blob/m
 the [ESP32-C5-DevKitC-1 guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html),
 Raspberry Pi's [Debug Probe documentation](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html)
 and TI's [`LP-MSPM0C1106` page](https://www.ti.com/tool/LP-MSPM0C1106).
+
+F3.0.1 also fixes two S3 run recipes (debug and release), the exact QEMU
+archives for both supported hosts, four ordered boot markers, a 30-second
+timeout and the fail-closed result schema in
+[`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). This is a
+reviewed execution plan, not an emulator-run claim; it is checked by
+[`tools/check_f3_runtime_plan.py`](../tools/check_f3_runtime_plan.py).

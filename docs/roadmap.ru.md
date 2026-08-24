@@ -30,12 +30,12 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F3
 
-<!-- current-substep: F3.0.1 -->
+<!-- current-substep: F3.0.2 -->
 
-**Точный маркер: `F3.0.1`** — определить детерминированные run recipes, boot
-markers, timeouts и fail-closed records для единственного принятого точного
-virtual target path. Emulator и hardware runs пока не заявлены. Маркер и
-evidence меняются вместе в каждом commit.
+**Точный маркер: `F3.0.2`** — опубликовать точную emulator/dev-board matrix и
+сводный F3 acceptance runner. Зафиксированы два детерминированных S3 recipes,
+но emulator и hardware runs пока не заявлены. Маркер и evidence меняются
+вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -113,9 +113,11 @@ evidence меняются вместе в каждом commit.
     coverage, наблюдаемость boot и неизбежные dev-board gates всех пяти targets
     прошли ревью: точный vendor QEMU есть только для S3;
     [машинная матрица](../config/f3_execution_capability_matrix.json).
-  - ▶️ **`F3.0.1` — сейчас:** определить детерминированные run recipes, boot markers,
-    timeouts и fail-closed records для каждого поддержанного virtual path.
-  - `F3.0.2` — опубликовать emulator/dev-board matrix и сводный F3 runner.
+  - ✅ `F3.0.1` — точные hash-locked QEMU archives, debug/release recipes,
+    четыре последовательных boot markers, 30-секундный timeout и fail-closed
+    result contract прошли ревью; [машинный план](../config/f3_runtime_plan.json).
+  - ▶️ **`F3.0.2` — сейчас:** опубликовать emulator/dev-board matrix и сводный
+    F3 runner.
 - `F3.1` — загрузить S3 skeleton через официальный ESP-IDF QEMU path.
 - `F3.2` — выполнить self-test, retained-fault и failed-update paths там, где
   virtual platform достаточно достоверна.

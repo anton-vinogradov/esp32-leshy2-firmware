@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F3",
-  "current_substep": "F3.0.1",
+  "current_substep": "F3.0.2",
   "updated_on": "2026-08-25",
   "completed": [
     "F2.0.0",
@@ -35,7 +35,8 @@
     "F2.4.6",
     "F2.5",
     "F2",
-    "F3.0.0"
+    "F3.0.0",
+    "F3.0.1"
   ],
   "reviewed": [
     "F0",
@@ -71,13 +72,15 @@
     "F2.4.6",
     "F2.5",
     "F2",
-    "F3.0.0"
+    "F3.0.0",
+    "F3.0.1"
   ],
   "claims": {
     "target_projects_created": true,
     "target_builds_run": true,
     "target_builds_byte_reproducible": true,
     "exact_vendor_emulator_paths": 1,
+    "deterministic_emulator_recipes": 2,
     "target_emulators_run": false,
     "hardware_contract_available": true
   }

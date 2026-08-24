@@ -108,6 +108,25 @@ class HostCoreExecutionTests(unittest.TestCase):
             )
             self.assertTrue(targets[target]["physical_gate"])
 
+    def test_f3_0_runtime_plan_is_exact_without_claiming_a_run(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f3_runtime_plan.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("2 S3 recipes", result.stdout)
+        plan = json.loads(
+            (REPO_ROOT / "config/f3_runtime_plan.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F3.0.1", plan["stage"])
+        self.assertTrue(plan["policy"]["timeout_is_failure"])
+        self.assertTrue(plan["policy"]["forbidden_marker_is_failure"])
+        self.assertEqual(0, plan["execution_counts"]["target_emulator_runs"])
+        self.assertEqual(4, len(plan["observation"]["ordered_success_markers"]))
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],

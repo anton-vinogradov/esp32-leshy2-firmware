@@ -11,9 +11,9 @@ CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 LOCKED_PYTHON ?= .toolchains/python/idf6_py3.12_env/bin/python
 
-.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: f2-3-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review
+test: f2-3-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review
 	python3 -m unittest discover -s tests
 
 matrix-check:
@@ -45,6 +45,9 @@ f2-5-reproducibility-review:
 
 f3-0-capability-review:
 	python3 tools/check_f3_execution_capability.py
+
+f3-0-runtime-plan-review:
+	python3 tools/check_f3_runtime_plan.py
 
 capture-target-build:
 	$(LOCKED_PYTHON) tools/capture_target_build_review.py --target $(TARGET) --write

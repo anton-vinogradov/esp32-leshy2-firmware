@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "stage": "F3.0.1",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-25",
+  "policy": {
+    "target_boot_requires_target_binary": true,
+    "success_requires_all_ordered_markers": true,
+    "timeout_is_failure": true,
+    "forbidden_marker_is_failure": true,
+    "runner_error_is_failure": true,
+    "raw_wall_clock_timing_is_not_committed": true,
+    "no_emulator_run_claimed": true,
+    "no_hardware_run_claimed": true
+  },
+  "qemu": {
+    "tool": "qemu-xtensa",
+    "version": "esp_develop_9.2.2_20250817",
+    "version_line": "QEMU emulator version 9.2.2 (esp_develop_9.2.2_20250817)",
+    "machine": "esp32s3",
+    "program": "qemu-system-xtensa",
+    "archives": {
+      "linux_x86_64": {
+        "url": "https://github.com/espressif/qemu/releases/download/esp-develop-9.2.2-20250817/qemu-xtensa-softmmu-esp_develop_9.2.2_20250817-x86_64-linux-gnu.tar.xz",
+        "sha256": "588bfaccd0f929650655d10a580f020c6ba9c131712d8fa519280081b8d126eb"
+      },
+      "macos_arm64": {
+        "url": "https://github.com/espressif/qemu/releases/download/esp-develop-9.2.2-20250817/qemu-xtensa-softmmu-esp_develop_9.2.2_20250817-aarch64-apple-darwin.tar.xz",
+        "sha256": "aa92e337461d482f5d9f31cd8efc0bd67b3de8fcfcfb567289cb43a59c184651",
+        "executable_sha256": "3a8eb6c4343087885c22750aab4ea3297be70382868b5688dbef7affd504b8d5",
+        "runtime_sonames": [
+          "/opt/homebrew/opt/pixman/lib/libpixman-1.0.dylib",
+          "/opt/homebrew/opt/libgcrypt/lib/libgcrypt.20.dylib",
+          "/opt/homebrew/opt/sdl2/lib/libSDL2-2.0.0.dylib",
+          "/opt/homebrew/opt/glib/lib/libglib-2.0.0.dylib",
+          "/opt/homebrew/opt/gettext/lib/libintl.8.dylib"
+        ],
+        "resolved_sdl_runtime": {
+          "formula": "sdl2-compat",
+          "version": "2.32.70",
+          "dependency": "sdl3 3.4.14"
+        }
+      }
+    }
+  },
+  "recipes": {
+    "s3_debug": {
+      "target": "s3",
+      "configuration": "debug",
+      "project": "targets/s3",
+      "build_directory": "build/targets/s3/debug",
+      "target_elf": "build/targets/s3/debug/leshy2_s3.elf",
+      "verify_command": [
+        "{locked_python}",
+        "tools/run_locked_target.py",
+        "verify",
+        "--target",
+        "s3",
+        "--config",
+        "debug"
+      ],
+      "run_command": [
+        "{locked_python}",
+        "{idf_path}/tools/idf.py",
+        "-C",
+        "targets/s3",
+        "-B",
+        "build/targets/s3/debug",
+        "qemu",
+        "--qemu-extra-args=-no-reboot"
+      ]
+    },
+    "s3_release": {
+      "target": "s3",
+      "configuration": "release",
+      "project": "targets/s3",
+      "build_directory": "build/targets/s3/release",
+      "target_elf": "build/targets/s3/release/leshy2_s3.elf",
+      "verify_command": [
+        "{locked_python}",
+        "tools/run_locked_target.py",
+        "verify",
+        "--target",
+        "s3",
+        "--config",
+        "release"
+      ],
+      "run_command": [
+        "{locked_python}",
+        "{idf_path}/tools/idf.py",
+        "-C",
+        "targets/s3",
+        "-B",
+        "build/targets/s3/release",
+        "qemu",
+        "--qemu-extra-args=-no-reboot"
+      ]
+    }
+  },
+  "observation": {
+    "timeout_seconds": 30,
+    "ordered_success_markers": [
+      "ESP-ROM:esp32s3-",
+      "boot: ESP-IDF v6.0.2",
+      "main_task: Calling app_main()",
+      "leshy2_s3: skeleton ready:"
+    ],
+    "forbidden_markers": [
+      "Guru Meditation Error",
+      "panic'ed",
+      "assert failed:",
+      "abort() was called",
+      "invalid header:",
+      "QEMU exited with error"
+    ],
+    "termination_after_success": "terminate the QEMU process group after every ordered marker is observed",
+    "normalization": "record marker presence and artifact/tool hashes; omit volatile log timestamps and absolute paths"
+  },
+  "result_contract": {
+    "required_fields": [
+      "schema_version",
+      "stage",
+      "status",
+      "target",
+      "configuration",
+      "target_elf_sha256",
+      "qemu_version",
+      "qemu_executable_sha256",
+      "ordered_markers",
+      "forbidden_markers_observed",
+      "timed_out",
+      "termination",
+      "accepted_claims",
+      "deferred_claims"
+    ],
+    "accepted_claims": [
+      "s3_target_binary_boot_chain",
+      "s3_app_main_reached",
+      "s3_uart_log",
+      "s3_cpu_memory_control_flow"
+    ],
+    "deferred_claims": [
+      "display",
+      "touch",
+      "microsd",
+      "audio",
+      "radio",
+      "external_gpio_timing",
+      "physical_board"
+    ]
+  },
+  "execution_counts": {
+    "defined_recipes": 2,
+    "target_emulator_runs": 0,
+    "hardware_runs": 0
+  },
+  "next": "F3.0.2"
+}

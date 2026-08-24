@@ -149,3 +149,10 @@ build. Принятой точной virtual SoC для RP2354B или MSPM0C110
 [ESP32-C5-DevKitC-1 guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html),
 Raspberry Pi [Debug Probe documentation](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html)
 и TI [`LP-MSPM0C1106`](https://www.ti.com/tool/LP-MSPM0C1106).
+
+F3.0.1 также фиксирует два S3 run recipes (debug и release), точные QEMU
+archives для двух поддержанных hosts, четыре последовательных boot markers,
+30-секундный timeout и fail-closed result schema в
+[`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). Это прошедший
+ревью план исполнения, а не заявление о состоявшемся emulator run; его
+проверяет [`tools/check_f3_runtime_plan.py`](../tools/check_f3_runtime_plan.py).
