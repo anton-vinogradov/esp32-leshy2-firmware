@@ -6,11 +6,38 @@ HOST_SAFETY_TEST := $(HOST_BUILD)/test_safety_core
 HOST_L2IP_TEST := $(HOST_BUILD)/test_l2ip
 HOST_UPDATE_TEST := $(HOST_BUILD)/test_update_core
 HOST_SYSTEM_TEST := $(HOST_BUILD)/test_system_model
+TARGET ?= all
+CONFIG ?= debug
+TARGET_PYTHON ?= python3.12
 
-.PHONY: test host-test clean
+.PHONY: test host-test matrix-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: host-test
+test: host-test matrix-check
 	python3 -m unittest discover -s tests
+
+matrix-check:
+	python3 tools/build_targets.py verify-matrix
+
+targets-list:
+	python3 tools/build_targets.py list
+
+target-preflight:
+	$(TARGET_PYTHON) tools/build_targets.py preflight --target $(TARGET) --config $(CONFIG)
+
+target-configure:
+	$(TARGET_PYTHON) tools/build_targets.py configure --target $(TARGET) --config $(CONFIG)
+
+target-build:
+	$(TARGET_PYTHON) tools/build_targets.py build --target $(TARGET) --config $(CONFIG)
+
+target-verify:
+	$(TARGET_PYTHON) tools/build_targets.py verify --target $(TARGET) --config $(CONFIG)
+
+target-artifacts:
+	$(TARGET_PYTHON) tools/build_targets.py artifacts --target $(TARGET) --config $(CONFIG)
+
+target-clean:
+	$(TARGET_PYTHON) tools/build_targets.py clean --target $(TARGET) --config $(CONFIG)
 
 host-test: $(HOST_SAFETY_TEST) $(HOST_L2IP_TEST) $(HOST_UPDATE_TEST) $(HOST_SYSTEM_TEST)
 	./$(HOST_SAFETY_TEST)

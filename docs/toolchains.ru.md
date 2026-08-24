@@ -39,6 +39,27 @@ builds относятся к F2.4.
 TI SDK требует export approval при скачивании. Это ограничение записано заранее
 и не обходится; оно не является разрешением на загрузку или установку.
 
+## Канонические команды
+
+Локально и в CI используется один shell-free dispatcher. `TARGET` — `s3`,
+`c5`, `rp`, `pack`, `safety` или `all`; `CONFIG` — `debug` или `release`.
+
+```text
+make matrix-check
+make target-preflight TARGET=all CONFIG=debug
+make target-configure TARGET=s3 CONFIG=debug
+make target-build TARGET=s3 CONFIG=debug
+make target-verify TARGET=s3 CONFIG=debug
+make target-artifacts TARGET=s3 CONFIG=debug
+make target-clean TARGET=s3 CONFIG=debug
+```
+
+Dispatcher не запускает shell, а matrix не разрешает скачивать зависимости во
+время configure/build. Preflight завершается до исполнения, если отсутствует
+проект, точный путь к SDK/компилятору или Python 3.12 environment. F2.0.3
+зафиксировала этот контракт; на текущей F2.1.0 проектов ещё нет до выполнения
+F2.1/F2.2, поэтому результат target-build не заявляется.
+
 ## Лицензии
 
 ESP-IDF распространяется по Apache-2.0, Pico SDK — BSD-3-Clause, основная часть

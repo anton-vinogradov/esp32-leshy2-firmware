@@ -31,11 +31,11 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.0.3 -->
+<!-- current-substep: F2.1.0 -->
 
-**Точный маркер: `F2.0.3`** — определить единую машиночитаемую local/CI build
-matrix и канонические команды configure, build, clean, verify и получения
-artifacts поверх прошедшей ревью [среды пяти образов](toolchains.ru.md).
+**Точный маркер: `F2.1.0`** — сформировать общее дерево source/components и
+явные границы владения portable, generated и target-local кодом без
+придумывания target pins.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -46,10 +46,14 @@ artifacts поверх прошедшей ревью [среды пяти обр
   - ✅ `F2.0.2` — неизменяемые SDK revisions, 26 записей URL/SHA-256 архивов
     для канонических local/CI hosts и ESP-IDF Python environment с hash-lock
     прошли ревью.
-  - ▶️ **`F2.0.3` — сейчас:** определить единую local/CI matrix и канонические
-    команды configure, build, clean, verify и получения artifacts.
-- ⏳ `F2.1` — общее дерево source/components, warning policy и границы
-  generated files без выдуманных target pins.
+  - ✅ `F2.0.3` — единая local/CI matrix, shell-free dispatcher, fail-closed
+    preflight и 20 названных target artifacts прошли ревью.
+- `F2.1` — общее дерево source/components, warning policy и границы generated
+  files без выдуманных target pins.
+  - ▶️ **`F2.1.0` — сейчас:** определить каталоги, владельцев и границу
+    generated sources.
+  - ⏳ `F2.1.1` — зафиксировать language standards, warning policy и link rules.
+  - ⏳ `F2.1.2` — доказать target-neutral состояние shared code и перейти F2.2.
 - ⏳ `F2.2` — минимальные production-SDK projects для S3, C5, RP, Pack и
   Safety.
 - ⏳ `F2.3` — импорт принятого генерируемого pin/BSP contract после F2.0–F2.2.
@@ -57,8 +61,8 @@ artifacts поверх прошедшей ревью [среды пяти обр
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.0.3` завершается, когда каждый физический target имеет однозначный путь
-команд local и CI, названные artifacts и fail-closed preflight. Закрытие любой
+`F2.1.0` завершается, когда каждое место для исходников имеет одного владельца,
+а generated hardware inputs нельзя перепутать с ручным кодом. Закрытие любой
 подзадачи требует в том же commit изменить точный маркер на стартовой странице
 и в роадмапе до перехода дальше.
 

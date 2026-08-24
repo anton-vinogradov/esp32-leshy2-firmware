@@ -20,6 +20,51 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertIn("environment lock OK: 26 archives", result.stdout)
 
+    def test_five_target_build_matrix_has_one_dispatcher(self):
+        result = subprocess.run(
+            ["python3", "tools/build_targets.py", "verify-matrix"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("build matrix OK: 5 targets, 2 configurations", result.stdout)
+
+        matrix = json.loads(
+            (REPO_ROOT / "config/build_matrix.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.0.3", matrix["stage"])
+        self.assertEqual("reviewed", matrix["status"])
+        self.assertEqual({"debug", "release"}, set(matrix["configurations"]))
+        self.assertEqual(
+            {"s3", "c5", "rp", "pack", "safety"},
+            {target["id"] for target in matrix["targets"]},
+        )
+        self.assertFalse(matrix["policy"]["shell_execution"])
+        self.assertFalse(matrix["policy"]["network_during_configure_or_build"])
+        self.assertEqual(20, sum(len(target["artifacts"]) for target in matrix["targets"]))
+
+        dry_run = subprocess.run(
+            [
+                "python3",
+                "tools/build_targets.py",
+                "configure",
+                "--target",
+                "all",
+                "--config",
+                "debug",
+                "--dry-run",
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        for target in ("s3", "c5", "rp", "pack", "safety"):
+            self.assertIn(f"{target}:debug:configure", dry_run.stdout)
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

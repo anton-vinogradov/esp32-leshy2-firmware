@@ -38,6 +38,27 @@ belong to F2.4.
 The TI SDK download requires export approval. The constraint is recorded and
 will not be bypassed; this page does not authorize a download or installation.
 
+## Canonical commands
+
+The same shell-free dispatcher is used locally and in CI. `TARGET` is one of
+`s3`, `c5`, `rp`, `pack`, `safety` or `all`; `CONFIG` is `debug` or `release`.
+
+```text
+make matrix-check
+make target-preflight TARGET=all CONFIG=debug
+make target-configure TARGET=s3 CONFIG=debug
+make target-build TARGET=s3 CONFIG=debug
+make target-verify TARGET=s3 CONFIG=debug
+make target-artifacts TARGET=s3 CONFIG=debug
+make target-clean TARGET=s3 CONFIG=debug
+```
+
+The dispatcher never invokes a shell and the matrix permits no dependency
+downloads during configure/build. Preflight fails before execution when a
+project, exact SDK path, compiler path or Python 3.12 environment is absent.
+F2.0.3 fixed this contract; projects remain absent at current F2.1.0 until
+F2.1/F2.2 create them, so no target-build result is claimed.
+
 ## Licenses
 
 ESP-IDF is Apache-2.0, Pico SDK is BSD-3-Clause, and the MSPM0 SDK core is

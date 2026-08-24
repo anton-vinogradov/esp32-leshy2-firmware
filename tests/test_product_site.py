@@ -103,7 +103,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.0.3"}, set(markers.values()))
+        self.assertEqual({"F2.1.0"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -111,7 +111,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertFalse(state["claims"]["target_builds_run"])
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
-            for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.3", "F2.5"):
+            for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0", "F2.3", "F2.5"):
                 self.assertIn(f"`{substep}`", page, f"{name}: {substep}")
 
     def test_five_target_toolchain_matrix_is_exact_and_honest(self):

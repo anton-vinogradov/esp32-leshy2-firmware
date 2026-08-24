@@ -35,11 +35,11 @@ pin/BSP-контракт уже доступен; F2 остаётся текущ
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.0.3 -->
+<!-- current-substep: F2.1.0 -->
 
-**Точный маркер: `F2.0.3`** — определить единую машиночитаемую local/CI build
-matrix и канонические команды configure, build, clean, verify и получения
-artifacts.
+**Точный маркер: `F2.1.0`** — сформировать общее дерево source/components и
+явные границы владения portable, generated и target-local кодом без
+придумывания target pins.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -49,18 +49,22 @@ artifacts.
     странице [среды сборки пяти образов](docs/toolchains.ru.md).
   - ✅ `F2.0.2` — неизменяемые SDK revisions, 26 проверяемых записей архивов и
     ESP-IDF Python environment с hash-lock прошли ревью.
-  - ▶️ **`F2.0.3` — сейчас:** определить единую local/CI build matrix и
-    канонические команды.
-- ⏳ `F2.1` — создать общее дерево source/components без target pins.
+  - ✅ `F2.0.3` — единая local/CI matrix, shell-free dispatcher, fail-closed
+    preflight и 20 названных target artifacts прошли ревью.
+- `F2.1` — создать общее дерево source/components без target pins.
+  - ▶️ **`F2.1.0` — сейчас:** определить каталоги, владельцев и границу
+    generated sources.
+  - ⏳ `F2.1.1` — зафиксировать language standards, warning policy и link rules.
+  - ⏳ `F2.1.2` — доказать target-neutral состояние shared code и перейти F2.2.
 - ⏳ `F2.2` — создать минимальные SDK-проекты S3, C5, RP, Pack и Safety.
 - ⏳ `F2.3` — подключить принятый генерируемый pin/BSP contract после F2.0–F2.2.
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.0.3` завершается, когда каждый из пяти target имеет одинаково однозначный
-путь команд local и CI, названные artifacts и fail-closed preflight. После
-закрытия любой подзадачи этот маркер и обе страницы роадмапа обновляются тем же
-commit до перехода дальше.
+`F2.1.0` завершается, когда каждое место для исходников имеет одного владельца,
+а generated hardware inputs нельзя перепутать с ручным кодом. После закрытия
+любой подзадачи этот маркер и обе страницы роадмапа обновляются тем же commit до
+перехода дальше.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает

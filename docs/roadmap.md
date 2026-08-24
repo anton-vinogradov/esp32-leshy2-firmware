@@ -30,11 +30,11 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.0.3 -->
+<!-- current-substep: F2.1.0 -->
 
-**Exact marker: `F2.0.3`** — define one machine-readable local/CI build matrix
-and canonical configure, build, clean, verify and artifact commands on top of
-the reviewed [five-image environment lock](toolchains.md).
+**Exact marker: `F2.1.0`** — establish the shared source/component tree and
+explicit ownership boundaries between portable, generated and target-local
+code without inventing target pins.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -45,18 +45,22 @@ the reviewed [five-image environment lock](toolchains.md).
   - ✅ `F2.0.2` — immutable SDK revisions, 26 archive URL/SHA-256 records for
     canonical local/CI hosts and a hash-locked ESP-IDF Python environment passed
     review.
-  - ▶️ **`F2.0.3` — current:** define the single local/CI matrix and canonical
-    configure, build, clean, verify and artifact commands.
-- ⏳ `F2.1` — shared source/component tree, warning policy and generated-file
+  - ✅ `F2.0.3` — one local/CI matrix, shell-free dispatcher, fail-closed
+    preflight and 20 named target artifacts passed review.
+- `F2.1` — shared source/component tree, warning policy and generated-file
   boundaries without inventing target pins.
+  - ▶️ **`F2.1.0` — current:** establish directories, ownership and the
+    generated-source boundary.
+  - ⏳ `F2.1.1` — freeze language standards, warning policy and link rules.
+  - ⏳ `F2.1.2` — prove shared code remains target-neutral and advance to F2.2.
 - ⏳ `F2.2` — minimal production-SDK projects for S3, C5, RP, Pack and Safety.
 - ⏳ `F2.3` — import the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — reproducible debug/release builds, map files and image-size gates
   for all five targets.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.0.3` exits when every physical target has an unambiguous local and CI
-command path, named artifacts and a fail-closed preflight. Closing any substep
+`F2.1.0` exits when every source location has one owner and generated hardware
+inputs cannot be confused with hand-maintained code. Closing any substep
 requires changing the exact marker on both landing and roadmap pages in the
 same commit before advancing work.
 
