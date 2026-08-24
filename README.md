@@ -3,7 +3,7 @@
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
 > **Firmware status: F2 — target projects and reproducible builds.** F0/F1
-> are reviewed; target/BSP work waits at the hardware H2 boundary. Follow the
+> are reviewed; the accepted hardware H2 contract is now available to F2. Follow the
 > [firmware roadmap](docs/roadmap.md).
 
 ## Firmware roadmap and current position
@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
 | F1 · Portable cores | ✅ Reviewed | 24 deterministic host scenarios plus clean ASan/UBSan |
-| **F2 · Target projects and build system** | **▶️ Current boundary; depends on hardware H2** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
+| **F2 · Target projects and build system** | **▶️ Current boundary; H2 contract available** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
 | F3 · Boot, memory and emulation | ⏳ Waiting for F2 | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
 | F4 · IPC and scheduling | ⏳ Waiting for F3 | real transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current schematic | all device, control, sensor and power-state drivers |
@@ -29,8 +29,9 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
 **Firmware is at F2.** Portable logic has evidence, but target projects,
-target builds and target-emulator runs do not yet exist. Actual pin/BSP freeze
-waits for the production ECAD contract at hardware H2.
+target builds and target-emulator runs do not yet exist. The accepted hardware
+H2 pin/BSP contract is available; F2 remains current because target/toolchain
+work has not been completed.
 
 ### Current phase F2 — detailed position
 
@@ -50,7 +51,7 @@ not current evidence.
   - ⏳ `F2.0.3` — define one local/CI build matrix and canonical commands.
 - ⏳ `F2.1` — create the shared source/component tree without target pins.
 - ⏳ `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
-- 🔒 `F2.3` — consume the generated pin/BSP contract; waits for hardware H2.
+- ⏳ `F2.3` — consume the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
@@ -127,6 +128,14 @@ may run only a signed fault viewer showing the cause, measured value and limit,
 action taken, event identifier and `KILL`→`RUN` instruction. If the display or
 UI zone is unsafe, the screen turns off and the independent amber `FAULT` LED
 remains visible.
+
+Long operation uses a qualified USB-PD source; the product makes no battery-
+autonomy or uptime-hours promise. `Settings > Safety > Full self-test` offers
+24-hour, default 48-hour and explicitly warned startup-only proof intervals.
+Only the local physical UI may stage a change, and it takes effect after the
+next physical `KILL`→`RUN` proof. The safety controller owns the deadline;
+expiry revokes leases and enters the retained fault state. This setting cannot
+weaken the watchdog, thermal limits, power-fault response or TX-lease checks.
 
 ## Update and owner control
 

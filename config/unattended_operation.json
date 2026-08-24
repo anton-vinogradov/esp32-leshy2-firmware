@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "contract_id": "LESHY2-UNATTENDED-1",
+  "status": "reviewed_target_contract_not_yet_implemented",
+  "hardware_evidence": "esp32-leshy2/hardware/verification/generated/H3-VRF63-unattended-envelope.json",
+  "source_policy": {
+    "runtime_claim": "none",
+    "extended_operation_guidance": "connect a qualified USB-PD source",
+    "endurance_intervals": "24 and 48 hours are validation durations, not uptime or battery-autonomy promises"
+  },
+  "ambient_engineering_target_c": {
+    "minimum": 0,
+    "maximum": 35,
+    "publication_rule": "H8 measurements determine the final published operating range"
+  },
+  "full_self_test_setting": {
+    "menu_path": "Settings > Safety > Full self-test",
+    "default": "EVERY_48_H",
+    "values": [
+      {"id": "EVERY_24_H", "active_session_seconds": 86400, "periodic_proof": true},
+      {"id": "EVERY_48_H", "active_session_seconds": 172800, "periodic_proof": true},
+      {"id": "STARTUP_ONLY", "active_session_seconds": null, "periodic_proof": false, "warning_confirmation_required": true}
+    ],
+    "change_authority": "local physical UI only",
+    "activation": "staged until the next physical KILL-to-RUN proof",
+    "warning_lead_seconds": [1800, 300, 60],
+    "check_now": true,
+    "timer_owner": "safety MSPM0 monotonic active-session timer",
+    "deadline_fault": "FAULT_PLANE_PROOF_DUE",
+    "deadline_action": "revoke leases, request quiet, retain first cause, assert SAFETY_FAULT_REQUEST and require physical KILL-to-RUN"
+  },
+  "non_configurable_safety": [
+    "TPS3435 watchdog service and timeout",
+    "thermal warning and FAULT_KILL thresholds",
+    "power-fault behavior",
+    "TX-lease lifetime and actual-TX evidence enforcement"
+  ],
+  "implementation_owners": {
+    "s3": "settings UI, confirmation, warnings and bounded log flush",
+    "safety_mspm0": "validated enum, active deadline, retained first cause and physical-proof admission"
+  },
+  "required_future_evidence": [
+    "F8 UI and safety-policy implementation",
+    "F10 24-hour and 48-hour USB endurance tests",
+    "F10 battery-to-protected-cutoff measurements without duration claims",
+    "F10 all setting, warning, S3-loss and KILL-to-RUN recovery cases"
+  ]
+}

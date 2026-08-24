@@ -173,6 +173,30 @@ class ProductSiteTests(unittest.TestCase):
             for token in tokens:
                 self.assertIn(token, page, f"{name}: {token}")
 
+    def test_unattended_operation_policy_is_machine_readable_and_fail_closed(self):
+        policy = json.loads(self.read("config/unattended_operation.json"))
+        self.assertEqual("LESHY2-UNATTENDED-1", policy["contract_id"])
+        self.assertEqual("none", policy["source_policy"]["runtime_claim"])
+        self.assertEqual(
+            {"minimum": 0, "maximum": 35},
+            {
+                key: policy["ambient_engineering_target_c"][key]
+                for key in ("minimum", "maximum")
+            },
+        )
+
+        setting = policy["full_self_test_setting"]
+        self.assertEqual("EVERY_48_H", setting["default"])
+        values = {value["id"]: value for value in setting["values"]}
+        self.assertEqual(86400, values["EVERY_24_H"]["active_session_seconds"])
+        self.assertEqual(172800, values["EVERY_48_H"]["active_session_seconds"])
+        self.assertIsNone(values["STARTUP_ONLY"]["active_session_seconds"])
+        self.assertFalse(values["STARTUP_ONLY"]["periodic_proof"])
+        self.assertEqual("local physical UI only", setting["change_authority"])
+        self.assertIn("KILL-to-RUN", setting["activation"])
+        self.assertEqual("FAULT_PLANE_PROOF_DUE", setting["deadline_fault"])
+        self.assertEqual(4, len(policy["non_configurable_safety"]))
+
     def test_update_model_preserves_owner_control(self):
         expected = {
             "docs/architecture.md": (

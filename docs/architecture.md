@@ -147,6 +147,16 @@ Evidence confirms execution but never creates permission.
 
 ### Unattended safety and fault display
 
+- No battery-autonomy or uptime-hours claim is made. Extended operation uses a
+  qualified USB-PD source; 24 and 48 hours are F10 validation durations.
+- `Settings > Safety > Full self-test` selects every 24 hours, every 48 hours
+  by default, or warned startup-only proof. `Check now` remains available.
+- Only the local physical UI may stage this setting, and it becomes active only
+  after the next physical `KILL`→`RUN` proof. It cannot alter watchdog,
+  thermal, power-fault or TX-lease enforcement.
+- The safety MSPM0 owns the monotonic active-session deadline. At expiry it
+  revokes leases, requests quiet, retains `FAULT_PLANE_PROOF_DUE`, asserts the
+  fault request and requires physical `KILL`→`RUN` recovery.
 - S3 publishes a bounded heartbeat and one short-lived lease naming the active
   signal group. The safety controller independently compares that lease with
   `ANY_TX_AON_N` and nine used bits of the 16-bit `TCA9535PWR` evidence register
