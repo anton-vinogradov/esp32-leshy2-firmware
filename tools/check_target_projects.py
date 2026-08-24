@@ -308,6 +308,8 @@ def main() -> int:
         "tiarmobjcopy",
         "leshy2_pack_boot.out",
         "leshy2_pack.out",
+        "-isystem $(MSPM0_SDK_PATH)/source",
+        "SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source",
     ):
         if required not in pack_make:
             errors.append(f"Pack Makefile misses {required}")
@@ -396,6 +398,8 @@ def main() -> int:
         "tiarmobjcopy",
         "leshy2_safety_boot.out",
         "leshy2_safety.out",
+        "-isystem $(MSPM0_SDK_PATH)/source",
+        "SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source",
     ):
         if required not in safety_make:
             errors.append(f"Safety Makefile misses {required}")

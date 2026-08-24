@@ -30,10 +30,10 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.4.4 -->
+<!-- current-substep: F2.4.5 -->
 
-**Exact marker: `F2.4.4`** — configure, build and verify Pack MSPM0C1106 in
-debug and release. S3, C5 and RP debug/release builds plus all 28 produced artifacts passed
+**Exact marker: `F2.4.5`** — configure, build and verify Safety MSPM0C1106 in
+debug and release. S3, C5, RP and Pack builds plus all 40 produced artifacts passed
 review; no emulator or hardware run is claimed.
 
 - `F2.0` — target/toolchain matrix.
@@ -97,14 +97,15 @@ review; no emulator or hardware run is claimed.
     image-size gates passed; [machine evidence](../config/f2_4_c5_build_review.json).
   - ✅ `F2.4.3` — RP debug/release configure, build, eight-artifact presence and
     image-size gates passed; [machine evidence](../config/f2_4_rp_build_review.json).
-  - ▶️ **`F2.4.4` — current:** configure/build/verify Pack debug and release.
-  - ⏳ `F2.4.5` — configure/build/verify Safety debug and release.
-  - ⏳ `F2.4.6` — review all 26 artifacts, map files and image-size gates.
+  - ✅ `F2.4.4` — Pack debug/release configure, build, twelve-artifact presence
+    and image-size gates passed; [machine evidence](../config/f2_4_pack_build_review.json).
+  - ▶️ **`F2.4.5` — current:** configure/build/verify Safety debug and release.
+  - ⏳ `F2.4.6` — review all 52 debug/release artifacts, map files and image-size gates.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.4.3` is complete. The RP binary is 18,724 bytes in debug and 10,656 bytes in
-release against the 884,736-byte image gate; ELF, BIN, UF2 and SDK map outputs
-exist in both configurations. This proves compilation and limits, not boot or peripherals.
+`F2.4.4` is complete. The Pack application is 3,168 bytes in both configurations
+against its 22,528-byte slot; its separate boot-manager binary is 256 bytes.
+All OUT, BIN and map outputs exist. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
 language pages in the same commit before work advances.
 

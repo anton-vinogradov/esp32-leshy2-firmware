@@ -15,7 +15,7 @@ GENERATED_HW := $(PROJECT_ROOT)/generated/hardware
 SYSCONFIG_STAMP := $(BUILD_DIR)/sysconfig.stamp
 
 ARCH_FLAGS := -D__MSPM0C1106__ -mcpu=cortex-m0plus -march=thumbv6m -mfloat-abi=soft -mthumb
-INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(GENERATED_HW)/include -I$(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -I$(MSPM0_SDK_PATH)/source
+INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(GENERATED_HW)/include -isystem $(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -isystem $(MSPM0_SDK_PATH)/source
 PROJECT_WARNINGS := -Wall -Wextra -Werror -Wformat=2 -Wshadow -Wundef -Wconversion -Wdouble-promotion -Wmissing-prototypes -Wpedantic -Wstrict-prototypes
 PROJECT_CODEGEN := -std=c17 -ffunction-sections -fdata-sections -fstack-usage -ffile-prefix-map=$(PROJECT_ROOT)=. -fdebug-prefix-map=$(PROJECT_ROOT)=.
 
@@ -30,6 +30,7 @@ endif
 PROJECT_CFLAGS := $(ARCH_FLAGS) $(INCLUDE_FLAGS) $(PROJECT_WARNINGS) $(PROJECT_CODEGEN) $(OPT_FLAGS)
 SDK_CFLAGS := $(ARCH_FLAGS) $(INCLUDE_FLAGS) $(OPT_FLAGS)
 LINK_FLAGS := $(ARCH_FLAGS) -Wl,--rom_model -Wl,--warn_sections -Wl,--emit_warnings_as_errors
+SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source
 APP_OUT := $(BUILD_DIR)/leshy2_pack.out
 APP_BIN := $(BUILD_DIR)/leshy2_pack.bin
 APP_MAP := $(BUILD_DIR)/leshy2_pack.map
@@ -71,7 +72,7 @@ $(BUILD_DIR)/pack_boot_main.obj: boot_main.c | $(BUILD_DIR)
 	$(CC) $(PROJECT_CFLAGS) -c $< -o $@
 
 $(APP_OUT): $(APP_OBJECTS) slot_a.cmd $(DRIVERLIB)
-	$(CC) $(LINK_FLAGS) -Wl,-u,_c_int00 -Wl,-m,$(APP_MAP) $(APP_OBJECTS) $(DRIVERLIB) -L$(BUILD_DIR) -ldevice.cmd.genlibs slot_a.cmd -o $@
+	$(CC) $(LINK_FLAGS) -Wl,-u,_c_int00 -Wl,-m,$(APP_MAP) $(APP_OBJECTS) $(SDK_LINK_PATH) -L$(BUILD_DIR) -ldevice.cmd.genlibs slot_a.cmd -o $@
 
 $(BOOT_OUT): $(BOOT_OBJECTS) boot_manager.cmd $(DRIVERLIB)
 	$(CC) $(LINK_FLAGS) -Wl,-u,_c_int00 -Wl,-m,$(BOOT_MAP) $(BOOT_OBJECTS) $(DRIVERLIB) boot_manager.cmd -o $@

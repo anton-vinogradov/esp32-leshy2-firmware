@@ -35,10 +35,11 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.1 | Reviewed | S3 debug/release builds produced and verified 10 artifacts; application images are 180,240 and 138,480 bytes; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
 | F2.4.2 | Reviewed | C5 debug/release builds produced and verified 10 artifacts; application images are 172,320 and 125,664 bytes; debug bootloader margin is watched at 2,176 bytes; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
 | F2.4.3 | Reviewed | RP2354B debug/release builds produced and verified 8 artifacts; binaries are 18,724 and 10,656 bytes; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
-| **F2.4.4** | **Current** | configure/build/verify Pack MSPM0C1106 debug and release |
+| F2.4.4 | Reviewed | Pack debug/release builds produced and verified 12 artifacts; application images are 3,168 bytes and boot-manager images are 256 bytes; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
+| **F2.4.5** | **Current** | configure/build/verify Safety MSPM0C1106 debug and release |
 
-Only the F2.4.1–F2.4.3 rows claim target builds. Pack and Safety remain unbuilt
-until their own rows pass the same configure/build/artifact gates.
+Only the F2.4.1–F2.4.4 rows claim target builds. Safety remains unbuilt until
+its own row passes the same configure/build/artifact gates.
 
 ## SDK and compiler matrix
 
@@ -103,8 +104,8 @@ F2.0.3 fixed this contract; F2.2 reviewed all five project structures, while
 The locked commands apply the reviewed local environment automatically. The
 capture command records relative artifact paths, byte counts, SHA-256 values,
 the image gate and a project-input manifest without copying build outputs into
-Git. S3, C5 and RP have passed this path; the remaining targets follow in
-F2.4.4–F2.4.5. ESP bootloader margins are captured beside the application gate.
+Git. S3, C5, RP and Pack have passed this path; Safety follows in F2.4.5. ESP
+bootloader margins are captured beside the application gate.
 
 ## Licenses
 

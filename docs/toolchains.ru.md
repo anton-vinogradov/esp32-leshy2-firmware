@@ -36,10 +36,11 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 240 и 138 480 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
 | F2.4.2 | Проведено ревью | C5 debug/release builds создали и проверили 10 artifacts; application images занимают 172 320 и 125 664 байта; debug bootloader отслеживается при запасе 2 176 байт; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
 | F2.4.3 | Проведено ревью | RP2354B debug/release builds создали и проверили 8 artifacts; binaries занимают 18 724 и 10 656 байт; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
-| **F2.4.4** | **Сейчас** | configure/build/verify Pack MSPM0C1106 debug и release |
+| F2.4.4 | Проведено ревью | Pack debug/release builds создали и проверили 12 artifacts; application images занимают 3 168 байт, boot-manager images — 256 байт; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
+| **F2.4.5** | **Сейчас** | configure/build/verify Safety MSPM0C1106 debug и release |
 
-Только строки F2.4.1–F2.4.3 заявляют target builds. Pack и Safety остаются
-несобранными, пока не пройдут собственные configure/build/artifact gates.
+Только строки F2.4.1–F2.4.4 заявляют target builds. Safety остаётся несобранным,
+пока не пройдёт собственный configure/build/artifact gate.
 
 ## Матрица SDK и компиляторов
 
@@ -103,8 +104,8 @@ Python 3.12 environment. F2.0.3
 зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
 Locked-команды автоматически применяют проверенную локальную среду. Команда
 capture записывает относительные пути artifacts, размеры, SHA-256, image gate и
-manifest project inputs, не добавляя build outputs в Git. S3, C5 и RP прошли
-этот путь; остальные targets следуют на F2.4.4–F2.4.5. Запас ESP bootloader
+manifest project inputs, не добавляя build outputs в Git. S3, C5, RP и Pack
+прошли этот путь; Safety следует на F2.4.5. Запас ESP bootloader
 фиксируется рядом с application gate.
 
 ## Лицензии

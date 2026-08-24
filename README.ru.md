@@ -33,16 +33,16 @@
 не её внутренних подэтапов.
 
 **Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
-проектов и generated BSP из hardware H2 имеют evidence. S3, C5 и RP уже проходят
-настоящие debug/release target builds; два MSPM0-образа и все target-
-emulator runs ещё ожидают выполнения.
+проектов и generated BSP из hardware H2 имеют evidence. S3, C5, RP и Pack уже
+проходят настоящие debug/release target builds; Safety и все target-emulator
+runs ещё ожидают выполнения.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.4 -->
+<!-- current-substep: F2.4.5 -->
 
-**Точный маркер: `F2.4.4`** — configure, build и verify Pack MSPM0C1106 в debug
-и release. S3, C5 и RP debug/release builds вместе со всеми 28 созданными artifacts
+**Точный маркер: `F2.4.5`** — configure, build и verify Safety MSPM0C1106 в
+debug и release. S3, C5, RP и Pack builds вместе со всеми 40 созданными artifacts
 прошли ревью; emulator и hardware runs не заявлены.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
@@ -103,14 +103,15 @@ emulator runs ещё ожидают выполнения.
     и image-size gates прошли ревью; [машинный evidence](config/f2_4_c5_build_review.json).
   - ✅ `F2.4.3` — RP debug/release configure, build, наличие восьми artifacts
     и image-size gates прошли ревью; [машинный evidence](config/f2_4_rp_build_review.json).
-  - ▶️ **`F2.4.4` — сейчас:** configure/build/verify Pack debug и release.
-  - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
-  - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
+  - ✅ `F2.4.4` — Pack debug/release configure, build, наличие двенадцати
+    artifacts и image-size gates прошли ревью; [машинный evidence](config/f2_4_pack_build_review.json).
+  - ▶️ **`F2.4.5` — сейчас:** configure/build/verify Safety debug и release.
+  - ⏳ `F2.4.6` — проверить все 52 debug/release artifacts, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.4.3` завершён. RP binary занимает 18 724 байта в debug и 10 656 байт в
-release при image gate 884 736 байт; ELF, BIN, UF2 и SDK map созданы в обеих
-конфигурациях. Это доказывает компиляцию и лимиты, но не boot или периферию.
+`F2.4.4` завершён. Pack application занимает 3 168 байт в обеих конфигурациях
+при слоте 22 528 байт; отдельный boot-manager binary занимает 256 байт. Все
+OUT, BIN и map outputs созданы. Это доказывает компиляцию и лимиты, но не boot или периферию.
 Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
 обе языковые страницы в одном commit.
 
