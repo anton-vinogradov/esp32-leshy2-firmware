@@ -10,7 +10,7 @@ TARGET ?= all
 CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 
-.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
 test: f2-3-review
 	python3 -m unittest discover -s tests
@@ -32,6 +32,9 @@ f2-2-review:
 
 f2-3-review:
 	python3 tools/review_f2_3.py
+
+f2-4-preflight-review:
+	.toolchains/python/idf6_py3.12_env/bin/python tools/review_f2_4_preflight.py --check
 
 bsp-input-check:
 	python3 tools/validate_bsp_generation_input.py

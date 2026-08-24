@@ -30,11 +30,11 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.4.0.6 -->
+<!-- current-substep: F2.4.1 -->
 
-**Exact marker: `F2.4.0.6` (6 of 6)** — run one offline fail-closed preflight
-for all five targets and publish integrated evidence. Every exact SDK, compiler,
-SysConfig, Python and host tool has passed its local review; no target build has run.
+**Exact marker: `F2.4.1`** — configure, build and verify S3 in debug and release.
+The integrated preflight passed 26 exact checks for all five targets in both
+configurations; no target build has run yet.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -79,7 +79,7 @@ SysConfig, Python and host tool has passed its local review; no target build has
   - ✅ `F2.3.3` — sibling H2, deterministic generation, strict C17 tables and
     one-owner consumption passed one integrated review.
 - `F2.4` — reproducible debug/release builds, map files and image-size gates.
-  - ▶️ `F2.4.0` — locked-toolchain preflight for five targets.
+  - ✅ `F2.4.0` — locked-toolchain preflight for five targets passed review.
     - ✅ `F2.4.0.1` — exact ESP-IDF `v6.0.2`, Pico SDK `2.3.0` and TI MSPM0
       SDK `2.11.00.07` sources and revisions passed review.
     - ✅ `F2.4.0.2` — exact S3/C5 compilers, debuggers, ULP tools, OpenOCD and
@@ -89,9 +89,9 @@ SysConfig, Python and host tool has passed its local review; no target build has
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` passed review for RP2354B.
     - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig
       `1.28.0.4712` passed review for Pack/Safety.
-    - ▶️ **`F2.4.0.6` — current:** run the offline fail-closed preflight for all five targets
-      and publish its machine-readable evidence.
-  - ⏳ `F2.4.1` — configure/build/verify S3 debug and release.
+    - ✅ `F2.4.0.6` — 26 exact SDK, Git, lock, compiler and input checks plus
+      debug/release dispatcher preflight passed; [machine evidence](../config/f2_4_preflight_review.json).
+  - ▶️ **`F2.4.1` — current:** configure/build/verify S3 debug and release.
   - ⏳ `F2.4.2` — configure/build/verify C5 debug and release.
   - ⏳ `F2.4.3` — configure/build/verify RP debug and release.
   - ⏳ `F2.4.4` — configure/build/verify Pack debug and release.
@@ -99,11 +99,10 @@ SysConfig, Python and host tool has passed its local review; no target build has
   - ⏳ `F2.4.6` — review all 26 artifacts, map files and image-size gates.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.4.0` exits when preflight verifies exact locked versions and paths for both
-host profiles without downloading during configure/build, and records which
-five targets can be built locally.
-Closing any substep updates its artifact, public result, both landing pages and
-both roadmap pages in the same commit before work advances.
+`F2.4.0` is complete: the local canonical host passed exact offline validation,
+while the lock retains the matching Linux CI inputs. F2.4.1 is the first target
+execution. Closing any substep updates its artifact, public result, both landing
+pages and both roadmap pages in the same commit before work advances.
 
 ## Dependencies
 

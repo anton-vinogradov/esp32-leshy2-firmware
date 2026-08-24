@@ -39,11 +39,11 @@ target builds.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.0.6 -->
+<!-- current-substep: F2.4.1 -->
 
-**Точный маркер: `F2.4.0.6` (6 из 6)** — выполнить единый offline fail-closed
-preflight всех пяти targets и опубликовать сводный evidence. Все точные SDK,
-compiler, SysConfig, Python и host tools прошли локальное ревью; target build не запускался.
+**Точный маркер: `F2.4.1`** — configure, build и verify S3 в debug и release.
+Сводный preflight прошёл 26 точных проверок для всех пяти targets в обеих
+конфигурациях; target build ещё не запускался.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -85,7 +85,7 @@ compiler, SysConfig, Python и host tools прошли локальное рев
   - ✅ `F2.3.3` — sibling H2, детерминированная генерация, строгие C17 tables и
     one-owner consumption прошли единое ревью.
 - `F2.4` — пройти debug/release builds, map files и image-size gates.
-  - ▶️ `F2.4.0` — locked-toolchain preflight пяти targets.
+  - ✅ `F2.4.0` — locked-toolchain preflight пяти targets прошёл ревью.
     - ✅ `F2.4.0.1` — точные sources/revisions ESP-IDF `v6.0.2`, Pico SDK
       `2.3.0` и TI MSPM0 SDK `2.11.00.07` прошли ревью.
     - ✅ `F2.4.0.2` — установлены и распознаны ESP-IDF tool manager точные
@@ -95,9 +95,9 @@ compiler, SysConfig, Python и host tools прошли локальное рев
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` прошёл ревью для RP2354B.
     - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig
       `1.28.0.4712` прошли ревью для Pack/Safety.
-    - ▶️ **`F2.4.0.6` — сейчас:** выполнить offline fail-closed preflight всех пяти targets
-      и опубликовать machine-readable evidence.
-  - ⏳ `F2.4.1` — configure/build/verify S3 debug и release.
+    - ✅ `F2.4.0.6` — прошли 26 точных проверок SDK, Git, lock, compiler и
+      обязательных входов плюс debug/release dispatcher preflight; [машинный evidence](config/f2_4_preflight_review.json).
+  - ▶️ **`F2.4.1` — сейчас:** configure/build/verify S3 debug и release.
   - ⏳ `F2.4.2` — configure/build/verify C5 debug и release.
   - ⏳ `F2.4.3` — configure/build/verify RP debug и release.
   - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
@@ -105,11 +105,10 @@ compiler, SysConfig, Python и host tools прошли локальное рев
   - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.4.0` завершается, когда preflight проверяет точные locked versions и paths
-для обоих host profiles без скачивания во время configure/build и фиксирует,
-какие пять targets могут собираться локально. После
-закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
-страницы роадмапа обновляются тем же commit до перехода дальше.
+`F2.4.0` завершён: локальный канонический host прошёл точную offline-проверку,
+а lock сохраняет соответствующие входы Linux CI. F2.4.1 — первый запуск target.
+После закрытия любой подзадачи её артефакт, этот маркер, страница результата и
+обе страницы роадмапа обновляются тем же commit до перехода дальше.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает

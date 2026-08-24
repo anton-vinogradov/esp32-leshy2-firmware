@@ -44,6 +44,10 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertFalse(matrix["policy"]["shell_execution"])
         self.assertFalse(matrix["policy"]["network_during_configure_or_build"])
         self.assertEqual(26, sum(len(target["artifacts"]) for target in matrix["targets"]))
+        for target in matrix["targets"]:
+            if target["family"] == "esp_idf":
+                self.assertIn("IDF_TOOLS_PATH", target["required_environment"])
+                self.assertIn("IDF_PYTHON_ENV_PATH", target["required_environment"])
 
         dry_run = subprocess.run(
             [
@@ -64,6 +68,22 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         for target in ("s3", "c5", "rp", "pack", "safety"):
             self.assertIn(f"{target}:debug:configure", dry_run.stdout)
+
+        preflight_source = (REPO_ROOT / "tools/toolchain_preflight.py").read_text(
+            encoding="utf-8"
+        )
+        dispatcher_source = (REPO_ROOT / "tools/build_targets.py").read_text(
+            encoding="utf-8"
+        )
+        for token in (
+            "git\", \"-C\"",
+            "pip\", \"check\"",
+            "esp32c5_rev0_rom.elf",
+            "startup_mspm0c1105_c1106_ticlang.c",
+            "validate_exact_environment",
+        ):
+            self.assertIn(token, preflight_source)
+        self.assertGreaterEqual(dispatcher_source.count("validate_exact_environment"), 3)
 
     def test_source_ownership_boundaries_are_enforced(self):
         result = subprocess.run(

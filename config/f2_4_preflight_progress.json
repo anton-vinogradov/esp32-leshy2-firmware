@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.0.6",
+  "current_substep": "F2.4.1",
   "target_execution": {
     "configure_runs": 0,
     "build_runs": 0,
@@ -65,8 +65,12 @@
       "mspm0c1106_inputs": "startup source, driverlib archive and SDK product metadata are present"
     },
     "F2.4.0.6": {
-      "status": "in_progress",
-      "result": "offline fail-closed preflight and integrated evidence for five targets"
+      "status": "reviewed",
+      "result": "offline fail-closed preflight passed for five targets in debug and release",
+      "evidence": "config/f2_4_preflight_review.json",
+      "exact_checks": 26,
+      "configurations": ["debug", "release"]
     }
-  }
+  },
+  "next": "F2.4.1"
 }

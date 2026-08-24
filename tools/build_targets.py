@@ -12,6 +12,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from toolchain_preflight import validate_exact_environment
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MATRIX = REPO_ROOT / "config" / "build_matrix.json"
@@ -177,12 +179,20 @@ def main() -> int:
                 print(build / artifact)
         return 0
     if args.action == "preflight":
-        failures = [error for target in targets for error in preflight(target, args.config)]
+        exact_failures, exact_evidence = validate_exact_environment(
+            {target["id"] for target in targets}
+        )
+        failures = exact_failures + [
+            error for target in targets for error in preflight(target, args.config)
+        ]
         if failures:
             for failure in failures:
                 print(f"ERROR: {failure}", file=sys.stderr)
             return 1
-        print(f"preflight OK: {len(targets)} target(s), {args.config}")
+        print(
+            f"preflight OK: {len(targets)} target(s), {args.config}; "
+            f"{exact_evidence['passed']} exact environment checks"
+        )
         return 0
 
     if args.action == "verify":
@@ -211,6 +221,15 @@ def main() -> int:
                 print(f"ERROR: missing artifact: {path}", file=sys.stderr)
             return 1
         return 0
+
+    if not args.dry_run:
+        exact_failures, _ = validate_exact_environment(
+            {target["id"] for target in targets}
+        )
+        if exact_failures:
+            for failure in exact_failures:
+                print(f"ERROR: {failure}", file=sys.stderr)
+            return 1
 
     for target in targets:
         if not args.dry_run:

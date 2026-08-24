@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "stage": "F2.4.0.6",
+  "status": "reviewed",
+  "host_profile": "macos_arm64",
+  "targets": [
+    "c5",
+    "pack",
+    "rp",
+    "s3",
+    "safety"
+  ],
+  "configurations": [
+    "debug",
+    "release"
+  ],
+  "exact_environment": {
+    "host_profile": "macos_arm64",
+    "targets": [
+      "c5",
+      "pack",
+      "rp",
+      "s3",
+      "safety"
+    ],
+    "checks": [
+      {
+        "id": "python-version",
+        "status": "passed",
+        "expected": "3.12",
+        "observed": "3.12.6"
+      },
+      {
+        "id": "python-environment",
+        "status": "passed",
+        "expected": "active",
+        "observed": "active"
+      },
+      {
+        "id": "python-packages",
+        "status": "passed",
+        "expected": "No broken requirements found",
+        "observed": "No broken requirements found."
+      },
+      {
+        "id": "lock:esp-idf-python-input",
+        "status": "passed",
+        "expected": "60c8847fc2f6dd9f6e217cd7af9faaadde9d6422057e3d32c381291221759742",
+        "observed": "60c8847fc2f6dd9f6e217cd7af9faaadde9d6422057e3d32c381291221759742"
+      },
+      {
+        "id": "lock:esp-idf-python-constraints-snapshot",
+        "status": "passed",
+        "expected": "f94014ad6be2cec51bf6fd1be9b44cfd8a18be0d5b187d3c634549cc4ec01498",
+        "observed": "f94014ad6be2cec51bf6fd1be9b44cfd8a18be0d5b187d3c634549cc4ec01498"
+      },
+      {
+        "id": "lock:esp-idf-python-lock",
+        "status": "passed",
+        "expected": "45620db7dadba1020055be6424a184c0a08626a625b117d97e840b578bd3f8eb",
+        "observed": "45620db7dadba1020055be6424a184c0a08626a625b117d97e840b578bd3f8eb"
+      },
+      {
+        "id": "source:esp-idf",
+        "status": "passed",
+        "expected": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+        "observed": "7101770dc6db2667b3c477cc31365dd1acd6db4e"
+      },
+      {
+        "id": "source:mspm0-sdk",
+        "status": "passed",
+        "expected": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32",
+        "observed": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32"
+      },
+      {
+        "id": "source:pico-sdk",
+        "status": "passed",
+        "expected": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+        "observed": "98a542c1a62fb549ffb5d66a3e5892b06276b670"
+      },
+      {
+        "id": "tool:cmake",
+        "status": "passed",
+        "expected": "4.0.3",
+        "observed": "cmake version 4.0.3"
+      },
+      {
+        "id": "tool:ninja",
+        "status": "passed",
+        "expected": "1.12.1",
+        "observed": "1.12.1"
+      },
+      {
+        "id": "tool:xtensa-esp-elf",
+        "status": "passed",
+        "expected": "esp-15.2.0_20251204",
+        "observed": "xtensa-esp-elf-gcc (crosstool-NG esp-15.2.0_20251204) 15.2.0"
+      },
+      {
+        "id": "tool:riscv32-esp-elf",
+        "status": "passed",
+        "expected": "esp-15.2.0_20251204",
+        "observed": "riscv32-esp-elf-gcc (crosstool-NG esp-15.2.0_20251204) 15.2.0"
+      },
+      {
+        "id": "tool:xtensa-gdb",
+        "status": "passed",
+        "expected": "GNU gdb (esp-gdb) 17.1_20260402",
+        "observed": "GNU gdb (esp-gdb) 17.1_20260402"
+      },
+      {
+        "id": "tool:riscv-gdb",
+        "status": "passed",
+        "expected": "GNU gdb (esp-gdb) 17.1_20260402",
+        "observed": "GNU gdb (esp-gdb) 17.1_20260402"
+      },
+      {
+        "id": "tool:esp32ulp",
+        "status": "passed",
+        "expected": "2.38",
+        "observed": "GNU assembler (GNU Binutils) 2.38_20240113"
+      },
+      {
+        "id": "tool:openocd",
+        "status": "passed",
+        "expected": "0.12.0",
+        "observed": "Open On-Chip Debugger v0.12.0-esp32-20260424 (2026-04-24-15:13)"
+      },
+      {
+        "id": "rom:esp32s3_rev0_rom.elf",
+        "status": "passed",
+        "expected": "present",
+        "observed": "present"
+      },
+      {
+        "id": "rom:esp32c5_rev0_rom.elf",
+        "status": "passed",
+        "expected": "present",
+        "observed": "present"
+      },
+      {
+        "id": "tool:arm-none-eabi",
+        "status": "passed",
+        "expected": "15.2.1 20251203",
+        "observed": "arm-none-eabi-gcc (Arm GNU Toolchain 15.2.Rel1 (Build arm-15.86)) 15.2.1 20251203"
+      },
+      {
+        "id": "tool:tiarmclang",
+        "status": "passed",
+        "expected": "4.0.5.LTS",
+        "observed": "TI Arm Clang Compiler 4.0.5.LTS"
+      },
+      {
+        "id": "tool:tiarmobjcopy",
+        "status": "passed",
+        "expected": "TI LLVM version 18.1.8",
+        "observed": "TI LLVM version 18.1.8"
+      },
+      {
+        "id": "tool:sysconfig",
+        "status": "passed",
+        "expected": "1.28.0+4712",
+        "observed": "1.28.0+4712"
+      },
+      {
+        "id": "mspm0-startup",
+        "status": "passed",
+        "expected": "present",
+        "observed": "present"
+      },
+      {
+        "id": "mspm0-driverlib",
+        "status": "passed",
+        "expected": "present",
+        "observed": "present"
+      },
+      {
+        "id": "mspm0-product",
+        "status": "passed",
+        "expected": "present",
+        "observed": "present"
+      }
+    ],
+    "passed": 26,
+    "failed": 0
+  },
+  "dispatcher_preflight": [
+    {
+      "configuration": "debug",
+      "status": "passed",
+      "summary": "preflight OK: 5 target(s), debug; 26 exact environment checks"
+    },
+    {
+      "configuration": "release",
+      "status": "passed",
+      "summary": "preflight OK: 5 target(s), release; 26 exact environment checks"
+    }
+  ],
+  "network_during_preflight": false,
+  "target_execution": {
+    "configure_runs": 0,
+    "build_runs": 0,
+    "emulator_runs": 0
+  },
+  "next": "F2.4.1"
+}

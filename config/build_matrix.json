@@ -22,7 +22,7 @@
       "family": "esp_idf",
       "sdk_target": "esp32s3",
       "project_dir": "targets/s3",
-      "required_environment": ["IDF_PATH"],
+      "required_environment": ["IDF_PATH", "IDF_TOOLS_PATH", "IDF_PYTHON_ENV_PATH"],
       "commands": {
         "configure": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/s3", "-B", "{build}", "-DIDF_TARGET=esp32s3", "-DSDKCONFIG={build}/sdkconfig", "-DSDKCONFIG_DEFAULTS={repo}/targets/s3/sdkconfig.defaults;{repo}/targets/s3/sdkconfig.{config}", "reconfigure"],
         "build": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/s3", "-B", "{build}", "build"],
@@ -36,7 +36,7 @@
       "family": "esp_idf",
       "sdk_target": "esp32c5",
       "project_dir": "targets/c5",
-      "required_environment": ["IDF_PATH"],
+      "required_environment": ["IDF_PATH", "IDF_TOOLS_PATH", "IDF_PYTHON_ENV_PATH"],
       "commands": {
         "configure": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/c5", "-B", "{build}", "-DIDF_TARGET=esp32c5", "-DSDKCONFIG={build}/sdkconfig", "-DSDKCONFIG_DEFAULTS={repo}/targets/c5/sdkconfig.defaults;{repo}/targets/c5/sdkconfig.{config}", "reconfigure"],
         "build": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/c5", "-B", "{build}", "build"],

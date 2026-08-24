@@ -140,7 +140,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.4.0.6"}, set(markers.values()))
+        self.assertEqual({"F2.4.1"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -224,6 +224,7 @@ class ProductSiteTests(unittest.TestCase):
                 "config/f2_3_review.json",
                 "tools/review_f2_3.py",
                 "config/f2_4_preflight_progress.json",
+                "config/f2_4_preflight_review.json",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
@@ -244,11 +245,27 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.4.0.6", progress["current_substep"])
+        self.assertEqual("F2.4.1", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.4.0.6"]["status"])
+        self.assertEqual(26, progress["substeps"]["F2.4.0.6"]["exact_checks"])
         self.assertEqual(0, progress["target_execution"]["build_runs"])
+
+        review = json.loads(self.read("config/f2_4_preflight_review.json"))
+        self.assertEqual("F2.4.0.6", review["stage"])
+        self.assertEqual("reviewed", review["status"])
+        self.assertEqual(26, review["exact_environment"]["passed"])
+        self.assertEqual(0, review["exact_environment"]["failed"])
+        self.assertEqual(
+            {"debug", "release"},
+            {row["configuration"] for row in review["dispatcher_preflight"]},
+        )
+        self.assertTrue(
+            all(row["status"] == "passed" for row in review["dispatcher_preflight"])
+        )
+        self.assertEqual(0, review["target_execution"]["build_runs"])
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
