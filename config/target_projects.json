@@ -89,7 +89,31 @@
         "targets/pack/slot_a.cmd"
       ]
     },
-    "safety": {"substep": "F2.2.4", "status": "pending"}
+    "safety": {
+      "substep": "F2.2.4",
+      "status": "reviewed_structure",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "device": "MSPM0C1106SDGS20R",
+      "package": "VSSOP-20(DGS20)",
+      "project_name": "leshy2_safety",
+      "boot_image": "leshy2_safety_boot",
+      "application_image": "leshy2_safety",
+      "boot_flash": {"origin": 0, "bytes": 16384},
+      "application_flash": {"origin": 16384, "bytes": 22528},
+      "sram": {"origin": 536870912, "bytes": 8192},
+      "pins_consumed": false,
+      "configure_run": false,
+      "build_run": false,
+      "files": [
+        "targets/safety/Makefile",
+        "targets/safety/boot_main.c",
+        "targets/safety/boot_manager.cmd",
+        "targets/safety/main.c",
+        "targets/safety/safety.syscfg",
+        "targets/safety/slot_a.cmd"
+      ]
+    }
   },
   "integrated_review": {"substep": "F2.2.5", "status": "pending"}
 }

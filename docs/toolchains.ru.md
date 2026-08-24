@@ -21,7 +21,8 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.2.1 | Проведено ревью | минимальный offline C5 ESP-IDF project, dual-OTA inputs и строгие components в [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.2 | Проведено ревью | точный RP2354B Arm-secure project, custom board на 2 МиБ и partition input в [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.3 | Проведено ревью | точный Pack MSPM0C1106 project, раздельные boot/application images и memory boundaries в [`config/target_projects.json`](../config/target_projects.json) |
-| **F2.2.4** | **Сейчас** | минимальный Safety MSPM0 SDK project и fail-closed device boundary |
+| F2.2.4 | Проведено ревью | точный Safety MSPM0C1106 project, раздельные boot/application images и fail-closed entry в [`config/target_projects.json`](../config/target_projects.json) |
+| **F2.2.5** | **Сейчас** | сводное ревью границ всех пяти projects |
 
 Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
 только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.

@@ -20,7 +20,8 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.2.1 | Reviewed | minimal offline C5 ESP-IDF project, dual-OTA inputs and strict components in [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.2 | Reviewed | exact RP2354B Arm-secure project, 2-MiB custom board and partition input in [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.3 | Reviewed | exact Pack MSPM0C1106 project, separate boot/application images and memory boundaries in [`config/target_projects.json`](../config/target_projects.json) |
-| **F2.2.4** | **Current** | minimal Safety MSPM0 SDK project and fail-closed device boundary |
+| F2.2.4 | Reviewed | exact Safety MSPM0C1106 project, separate boot/application images and fail-closed entry in [`config/target_projects.json`](../config/target_projects.json) |
+| **F2.2.5** | **Current** | integrated review of all five project boundaries |
 
 No row in this table claims a target build. Those results appear only after
 F2.4 executes both configurations for all five projects.

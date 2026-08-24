@@ -28,17 +28,17 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
-**Firmware is at F2.** Portable logic has evidence, but target projects,
-target builds and target-emulator runs do not yet exist. The accepted hardware
-H2 pin/BSP contract is available; F2 remains current because target/toolchain
-work has not been completed.
+**Firmware is at F2.** Portable logic and all five target-project structures have
+evidence, but no target configure/build or target-emulator run has occurred. The
+accepted hardware H2 pin/BSP contract is available; F2 remains current because
+target/toolchain work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.2.4 -->
+<!-- current-substep: F2.2.5 -->
 
-**Exact marker: `F2.2.4`** — create and structurally validate the minimal TI
-MSPM0 SDK project for the independent safety/watchdog domain.
+**Exact marker: `F2.2.5`** — review all five project boundaries together before
+the generated H2 pin/BSP contract is imported.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -66,16 +66,16 @@ MSPM0 SDK project for the independent safety/watchdog domain.
     partition input and debug/release policy passed structural review.
   - ✅ `F2.2.3` — the exact Pack MSPM0C1106 project, separate boot/application
     images, memory boundaries and debug/release policy passed structural review.
-  - ▶️ **`F2.2.4` — current:** create the Safety MSPM0 SDK project.
-  - ⏳ `F2.2.5` — review all five project boundaries together.
+  - ✅ `F2.2.4` — the exact Safety MSPM0C1106 project, separate boot/application
+    images, fail-closed entry and debug/release policy passed structural review.
+  - ▶️ **`F2.2.5` — current:** review all five project boundaries together.
 - ⏳ `F2.3` — consume the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.2.4` exits when the Safety project fixes the exact MSPM0C1106 device,
-startup, linker, SysConfig and separate boot/application images while preserving
-an independent fail-closed watchdog domain. It must not claim configure/build
-execution before F2.4. When
+`F2.2.5` exits when one integrated check proves that all five registered projects
+match the build matrix, source ownership and exact target identities without
+inventing pins or claiming configure/build execution. When
 any substep closes, its artifact, this marker, the result page and both roadmap
 pages are updated in the same commit before work advances.
 

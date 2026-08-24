@@ -325,11 +325,106 @@ def main() -> int:
         if PIN_RE.search((REPO_ROOT / relative).read_text(encoding="utf-8")):
             errors.append(f"{relative} contains a temporary pin assignment before F2.3")
 
+    safety = projects.get("safety", {})
+    if safety.get("substep") != "F2.2.4" or safety.get("status") != "reviewed_structure":
+        errors.append("Safety project structure is not reviewed at F2.2.4")
+    expected_safety_identity = {
+        "sdk_target": "MSPM0C1106",
+        "device": "MSPM0C1106SDGS20R",
+        "package": "VSSOP-20(DGS20)",
+        "project_name": "leshy2_safety",
+        "boot_image": "leshy2_safety_boot",
+        "application_image": "leshy2_safety",
+    }
+    for key, value in expected_safety_identity.items():
+        if safety.get(key) != value:
+            errors.append(f"Safety {key} changed: expected {value!r}")
+    if safety.get("boot_flash") != {"origin": 0, "bytes": 16384}:
+        errors.append("Safety boot-manager region changed")
+    if safety.get("application_flash") != {"origin": 16384, "bytes": 22528}:
+        errors.append("Safety application-slot region changed")
+    if safety.get("sram") != {"origin": 536870912, "bytes": 8192}:
+        errors.append("Safety SRAM region changed")
+    for claim in ("pins_consumed", "configure_run", "build_run"):
+        if safety.get(claim) is not False:
+            errors.append(f"Safety F2.2.4 must keep {claim}=false")
+
+    safety_declared = set(safety.get("files", []))
+    safety_actual = {
+        str(path.relative_to(REPO_ROOT))
+        for path in (REPO_ROOT / "targets/safety").rglob("*")
+        if path.is_file()
+    }
+    if safety_actual != safety_declared:
+        errors.append(
+            "Safety project file registry mismatch: "
+            f"missing={sorted(safety_declared - safety_actual)}, "
+            f"extra={sorted(safety_actual - safety_declared)}"
+        )
+
+    safety_make = (REPO_ROOT / "targets/safety/Makefile").read_text(encoding="utf-8")
+    for required in (
+        "startup_mspm0c1105_c1106_ticlang.c",
+        "mspm0c1105_c1106/driverlib.a",
+        "sysconfig_cli.sh",
+        "-D__MSPM0C1106__",
+        "-mcpu=cortex-m0plus",
+        "-march=thumbv6m",
+        "-Wl,--emit_warnings_as_errors",
+        "tiarmobjcopy",
+        "leshy2_safety_boot.out",
+        "leshy2_safety.out",
+    ):
+        if required not in safety_make:
+            errors.append(f"Safety Makefile misses {required}")
+    for flag in required_project_flags | {
+        "-Wconversion",
+        "-Wdouble-promotion",
+        "-Wmissing-prototypes",
+        "-Wpedantic",
+        "-Wstrict-prototypes",
+    }:
+        if flag not in safety_make:
+            errors.append(f"Safety project misses {flag}")
+
+    safety_syscfg = (REPO_ROOT / "targets/safety/safety.syscfg").read_text(encoding="utf-8")
+    for required in (
+        '--device "MSPM0C1106"',
+        '--package "VSSOP-20(DGS20)"',
+        'ProjectConfig.deviceSpin = "MSPM0C1106"',
+    ):
+        if required not in safety_syscfg:
+            errors.append(f"Safety SysConfig identity misses {required}")
+    if ".$assign" in safety_syscfg:
+        errors.append("Safety SysConfig invents a pre-F2.3 pin assignment")
+
+    safety_boot_link = (REPO_ROOT / "targets/safety/boot_manager.cmd").read_text(encoding="utf-8")
+    safety_app_link = (REPO_ROOT / "targets/safety/slot_a.cmd").read_text(encoding="utf-8")
+    for content, origin, length, label in (
+        (safety_boot_link, "0x00000000", "0x00004000", "boot"),
+        (safety_app_link, "0x00004000", "0x00005800", "application"),
+    ):
+        if f"origin = {origin}, length = {length}" not in content:
+            errors.append(f"Safety {label} linker region changed")
+        if "origin = 0x20000000, length = 0x00002000" not in content:
+            errors.append(f"Safety {label} linker SRAM region changed")
+
+    safety_main = (REPO_ROOT / "targets/safety/main.c").read_text(encoding="utf-8")
+    if "l2_safety_init" not in safety_main or "safety_supervisor" not in safety_main:
+        errors.append("Safety entry point does not instantiate the portable safety core")
+    if "L2_UNCONFIGURED_TEMPERATURE_LIMIT_DECI_C = 0" not in safety_main:
+        errors.append("Safety entry point does not default the absent F2.3 limit fail-closed")
+    if "l2_safety_set_run" in safety_main:
+        errors.append("Safety F2.2.4 entry point may not arm before the F2.3 BSP exists")
+    for relative in ("targets/safety/main.c", "targets/safety/boot_main.c"):
+        if PIN_RE.search((REPO_ROOT / relative).read_text(encoding="utf-8")):
+            errors.append(f"{relative} contains a temporary pin assignment before F2.3")
+
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
-    print("target projects OK: S3/C5/RP/Pack structures reviewed; Safety pending; 0 builds claimed")
+    print("target projects OK: S3/C5/RP/Pack/Safety structures reviewed; 0 builds claimed")
     return 0
 
 

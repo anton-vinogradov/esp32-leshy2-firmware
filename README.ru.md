@@ -28,17 +28,17 @@
 | F10 · HIL и системная квалификация | 🔒 Ожидает F4–F9 и hardware H7 | prototype fault, RF, power, thermal и endurance evidence |
 | F11 · Firmware release | 🔒 Ожидает F10 и hardware H8 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
 
-**Прошивка находится на F2.** У portable-логики есть evidence, но target-
-проектов, target-сборок и target-emulator runs ещё нет. Принятый hardware H2
-pin/BSP-контракт уже доступен; F2 остаётся текущей из-за незавершённой работы
-над target/toolchain.
+**Прошивка находится на F2.** Portable-логика и структуры всех пяти target-
+проектов имеют evidence, но target configure/build и target-emulator runs ещё
+не выполнялись. Принятый hardware H2 pin/BSP-контракт уже доступен; F2 остаётся
+текущей из-за незавершённой работы над target/toolchain.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.2.4 -->
+<!-- current-substep: F2.2.5 -->
 
-**Точный маркер: `F2.2.4`** — создать и структурно проверить минимальный TI
-MSPM0 SDK project независимого safety/watchdog domain.
+**Точный маркер: `F2.2.5`** — вместе проверить границы всех пяти projects до
+импорта генерируемого H2 pin/BSP contract.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -66,16 +66,16 @@ MSPM0 SDK project независимого safety/watchdog domain.
     partition input и debug/release policy прошли структурное ревью.
   - ✅ `F2.2.3` — точный Pack MSPM0C1106 project, раздельные boot/application
     images, memory boundaries и debug/release policy прошли структурное ревью.
-  - ▶️ **`F2.2.4` — сейчас:** создать Safety MSPM0 SDK project.
-  - ⏳ `F2.2.5` — провести сводное ревью пяти project boundaries.
+  - ✅ `F2.2.4` — точный Safety MSPM0C1106 project, раздельные boot/application
+    images, fail-closed entry и debug/release policy прошли структурное ревью.
+  - ▶️ **`F2.2.5` — сейчас:** провести сводное ревью пяти project boundaries.
 - ⏳ `F2.3` — подключить принятый генерируемый pin/BSP contract после F2.0–F2.2.
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.2.4` завершается, когда Safety project фиксирует точный MSPM0C1106 device,
-startup, linker, SysConfig и раздельные boot/application images, сохраняя
-независимый fail-closed watchdog domain. До F2.4 это не считается запуском
-configure/build. После
+`F2.2.5` завершается, когда единая проверка доказывает соответствие всех пяти
+projects build matrix, владению исходниками и точным target identities без
+выдуманных pins и заявлений о configure/build. После
 закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
 страницы роадмапа обновляются тем же commit до перехода дальше.
 

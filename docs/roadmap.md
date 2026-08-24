@@ -7,7 +7,7 @@
 > and F1 are reviewed. The accepted hardware H2 production ECAD and generated
 > pin/BSP contract are available. No target image or target emulator has run.
 
-Status last reconciled: **24 August 2026**. This is the firmware repository's
+Status last reconciled: **25 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -17,7 +17,7 @@ duplicated or given a second status here.
 |---|---|
 | Five-domain, memory/rollback and HW↔FW contracts | ✅ Reviewed at architecture/configuration level |
 | Portable safety, L2IP, update and five-domain model | ✅ Reviewed: 24 deterministic C scenarios; clean ASan/UBSan |
-| S3/C5/RP/Pack/Safety target projects | ▶️ F2; not created |
+| S3/C5/RP/Pack/Safety target projects | ✅ Five structures reviewed at F2.2.0–F2.2.4; no configure/build claim |
 | Target builds and map files | ⏳ Not run |
 | ESP32-S3 QEMU | ⏳ Not run |
 | C5, RP2354B and MSPM0 platform/dev-board tests | 🔒 Waiting for target BSP and hardware |
@@ -30,10 +30,10 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.2.4 -->
+<!-- current-substep: F2.2.5 -->
 
-**Exact marker: `F2.2.4`** — create and structurally validate the minimal Safety
-MSPM0 SDK project without inventing target pins.
+**Exact marker: `F2.2.5`** — review all five project boundaries together before
+the generated H2 pin/BSP contract is imported.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -64,17 +64,17 @@ MSPM0 SDK project without inventing target pins.
     partition input and debug/release policy passed structural review.
   - ✅ `F2.2.3` — the Pack MSPM0C1106 project, separate boot/application images,
     memory boundaries and debug/release policy passed structural review.
-  - ▶️ **`F2.2.4` — current:** Safety MSPM0 SDK project and device boundary.
-  - ⏳ `F2.2.5` — integrated five-project boundary review.
+  - ✅ `F2.2.4` — the Safety MSPM0C1106 project, separate boot/application
+    images, fail-closed entry and debug/release policy passed structural review.
+  - ▶️ **`F2.2.5` — current:** integrated five-project boundary review.
 - ⏳ `F2.3` — import the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — reproducible debug/release builds, map files and image-size gates
   for all five targets.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.2.4` exits when the Safety project fixes the exact MSPM0C1106 device,
-startup, linker, SysConfig and separate boot/application images while preserving
-an independent fail-closed watchdog domain. It does not claim configure/build
-execution before F2.4.
+`F2.2.5` exits when one integrated check proves that all five registered projects
+match the build matrix, source ownership and exact target identities without
+inventing pins or claiming configure/build execution.
 Closing any substep updates its artifact, public result, both landing pages and
 both roadmap pages in the same commit before work advances.
 

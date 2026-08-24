@@ -142,7 +142,7 @@ class HostCoreExecutionTests(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        self.assertIn("S3/C5/RP/Pack structures reviewed", result.stdout)
+        self.assertIn("S3/C5/RP/Pack/Safety structures reviewed", result.stdout)
 
         registry = json.loads(
             (REPO_ROOT / "config/target_projects.json").read_text(encoding="utf-8")
@@ -177,6 +177,18 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertFalse(pack["pins_consumed"])
         self.assertFalse(pack["configure_run"])
         self.assertFalse(pack["build_run"])
+        safety = registry["projects"]["safety"]
+        self.assertEqual("F2.2.4", safety["substep"])
+        self.assertEqual("reviewed_structure", safety["status"])
+        self.assertEqual("MSPM0C1106SDGS20R", safety["device"])
+        self.assertEqual("VSSOP-20(DGS20)", safety["package"])
+        self.assertEqual({"origin": 0, "bytes": 16384}, safety["boot_flash"])
+        self.assertEqual(
+            {"origin": 16384, "bytes": 22528}, safety["application_flash"]
+        )
+        self.assertFalse(safety["pins_consumed"])
+        self.assertFalse(safety["configure_run"])
+        self.assertFalse(safety["build_run"])
 
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
