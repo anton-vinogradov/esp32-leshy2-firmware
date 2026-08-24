@@ -1,4 +1,5 @@
 #include "leshy2/l2ip.h"
+#include "leshy2/hardware/c5_bsp.h"
 
 #include "esp_chip_info.h"
 #include "esp_log.h"
@@ -15,7 +16,8 @@ void app_main(void)
     l2ip_replay_guard_reset(&replay_guard, UINT32_C(0));
     ESP_LOGI(
         TAG,
-        "skeleton ready: %u cores; native RF/IR remain unconfigured",
-        (unsigned int)chip.cores
+        "skeleton ready: %u cores, %u reviewed contacts; native RF/IR remain unconfigured",
+        (unsigned int)chip.cores,
+        (unsigned int)l2_hw_c5_domain.pin_count
     );
 }

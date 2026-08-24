@@ -15,6 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 pico_sdk_init()
 
 set(LESHY2_COMMON_DIR "${CMAKE_CURRENT_LIST_DIR}/../../common")
+set(LESHY2_GENERATED_HW_DIR "${CMAKE_CURRENT_LIST_DIR}/../../generated/hardware")
 set(LESHY2_RP_PARTITION_SOURCE "${CMAKE_CURRENT_LIST_DIR}/../../config/rp2354b_partitions.json")
 if(NOT EXISTS "${LESHY2_RP_PARTITION_SOURCE}")
     message(FATAL_ERROR "Missing reviewed RP2354B partition source")
@@ -27,8 +28,12 @@ add_executable(leshy2_rp
     "${LESHY2_COMMON_DIR}/src/safety_core.c"
     "${LESHY2_COMMON_DIR}/src/system_model.c"
     "${LESHY2_COMMON_DIR}/src/update_core.c"
+    "${LESHY2_GENERATED_HW_DIR}/src/rp_bsp.c"
 )
-target_include_directories(leshy2_rp PRIVATE "${LESHY2_COMMON_DIR}/include")
+target_include_directories(leshy2_rp PRIVATE
+    "${LESHY2_COMMON_DIR}/include"
+    "${LESHY2_GENERATED_HW_DIR}/include"
+)
 target_link_libraries(leshy2_rp PRIVATE pico_stdlib)
 
 target_compile_options(leshy2_rp PRIVATE

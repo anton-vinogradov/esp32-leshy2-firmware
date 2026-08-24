@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "stage": "F2.3.2",
+  "status": "reviewed",
+  "source_manifest": "generated/source_manifest.json",
+  "projects": {
+    "s3": {
+      "domain": "S3",
+      "contacts": 33,
+      "build_input": "targets/s3/components/leshy2_portable/CMakeLists.txt",
+      "entrypoint": "targets/s3/main/app_main.c",
+      "header": "leshy2/hardware/s3_bsp.h",
+      "source": "generated/hardware/src/s3_bsp.c",
+      "include_marker": "${LESHY2_GENERATED_HW_DIR}/include",
+      "domain_symbol": "l2_hw_s3_domain"
+    },
+    "c5": {
+      "domain": "C5",
+      "contacts": 14,
+      "build_input": "targets/c5/components/leshy2_portable/CMakeLists.txt",
+      "entrypoint": "targets/c5/main/app_main.c",
+      "header": "leshy2/hardware/c5_bsp.h",
+      "source": "generated/hardware/src/c5_bsp.c",
+      "include_marker": "${LESHY2_GENERATED_HW_DIR}/include",
+      "domain_symbol": "l2_hw_c5_domain"
+    },
+    "rp": {
+      "domain": "RP",
+      "contacts": 48,
+      "build_input": "targets/rp/CMakeLists.txt",
+      "entrypoint": "targets/rp/main.c",
+      "header": "leshy2/hardware/rp_bsp.h",
+      "source": "generated/hardware/src/rp_bsp.c",
+      "include_marker": "${LESHY2_GENERATED_HW_DIR}/include",
+      "domain_symbol": "l2_hw_rp_domain"
+    },
+    "pack": {
+      "domain": "PACK",
+      "contacts": 13,
+      "build_input": "targets/pack/Makefile",
+      "entrypoint": "targets/pack/main.c",
+      "header": "leshy2/hardware/pack_bsp.h",
+      "source": "generated/hardware/src/pack_bsp.c",
+      "include_marker": "-I$(GENERATED_HW)/include",
+      "domain_symbol": "l2_hw_pack_domain"
+    },
+    "safety": {
+      "domain": "SAFETY",
+      "contacts": 17,
+      "build_input": "targets/safety/Makefile",
+      "entrypoint": "targets/safety/main.c",
+      "header": "leshy2/hardware/safety_bsp.h",
+      "source": "generated/hardware/src/safety_bsp.c",
+      "include_marker": "-I$(GENERATED_HW)/include",
+      "domain_symbol": "l2_hw_safety_domain"
+    }
+  },
+  "claims": {
+    "one_generated_domain_per_project": true,
+    "generated_sources_copied_into_targets": false,
+    "temporary_or_hand_authored_pins": false,
+    "target_configure_run": false,
+    "target_builds_run": false
+  },
+  "checker": "tools/check_bsp_target_consumption.py"
+}

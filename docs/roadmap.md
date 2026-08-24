@@ -30,10 +30,10 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.3.2 -->
+<!-- current-substep: F2.3.3 -->
 
-**Exact marker: `F2.3.2`** — connect each generated domain table to its one
-owning target project without copying or hand-authoring a pin.
+**Exact marker: `F2.3.3`** — review H2 import, deterministic generation and
+one-owner consumption together as the complete F2.3 boundary.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -73,15 +73,16 @@ owning target project without copying or hand-authoring a pin.
     112 nets, 4 transports, 10 groups and proof-field model passed review.
   - ✅ `F2.3.1` — 11 generated C/header files preserve all 125 contacts, pass
     strict C17 syntax checks and reproduce byte-for-byte with a hashed manifest.
-  - ▶️ **`F2.3.2` — current:** connect generated sources to all five projects.
-  - ⏳ `F2.3.3` — review generation determinism and five-project consumption.
+  - ✅ `F2.3.2` — every target consumes exactly its domain table and include
+    path; no foreign table, copied BSP file or hand-authored pin was found.
+  - ▶️ **`F2.3.3` — current:** review the complete generated-BSP boundary.
 - ⏳ `F2.4` — reproducible debug/release builds, map files and image-size gates
   for all five targets.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.3.2` exits when S3, C5, RP, Pack and Safety each compile exactly their owned
-generated table through the canonical project inputs, and structural checks
-reject a wrong domain, duplicate source or hand-authored GPIO.
+`F2.3.3` exits when one integrated review rechecks the sibling H2 export,
+immutable input, byte-reproducible outputs, strict C17 tables, ownership and all
+five consumers while preserving zero configure/build claims.
 Closing any substep updates its artifact, public result, both landing pages and
 both roadmap pages in the same commit before work advances.
 

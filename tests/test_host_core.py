@@ -273,6 +273,25 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertEqual("", compile_result.stdout)
 
+    def test_f2_3_each_target_consumes_only_its_generated_domain(self):
+        result = subprocess.run(
+            ["python3", "tools/check_bsp_target_consumption.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("BSP target consumption OK", result.stdout)
+        contract = json.loads(
+            (REPO_ROOT / "config/bsp_target_consumption.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.3.2", contract["stage"])
+        self.assertEqual("reviewed", contract["status"])
+        self.assertEqual({"s3", "c5", "rp", "pack", "safety"}, set(contract["projects"]))
+        self.assertTrue(contract["claims"]["one_generated_domain_per_project"])
+        self.assertFalse(contract["claims"]["target_builds_run"])
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

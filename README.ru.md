@@ -35,10 +35,10 @@
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.3.2 -->
+<!-- current-substep: F2.3.3 -->
 
-**Точный маркер: `F2.3.2`** — подключить каждую сгенерированную domain table к
-единственному владеющему target project без копирования или ручных pins.
+**Точный маркер: `F2.3.3`** — вместе проверить H2 import, детерминированную
+генерацию и one-owner consumption как полную границу F2.3.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -75,14 +75,15 @@
     112 nets, 4 transports, 10 groups и модель proof fields прошли ревью.
   - ✅ `F2.3.1` — 11 generated C/header files сохраняют все 125 contacts,
     проходят строгий C17 syntax-check и побайтно воспроизводятся по manifest.
-  - ▶️ **`F2.3.2` — сейчас:** подключить generated sources к пяти projects.
-  - ⏳ `F2.3.3` — проверить детерминизм и потребление всеми пятью projects.
+  - ✅ `F2.3.2` — каждый target потребляет ровно свою domain table и include
+    path; чужих таблиц, BSP-копий и ручных pins не найдено.
+  - ▶️ **`F2.3.3` — сейчас:** проверить всю generated-BSP boundary.
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.3.2` завершается, когда S3, C5, RP, Pack и Safety компилируют ровно свою
-generated table через канонические project inputs, а структурные проверки
-отвергают чужой domain, дубль source или ручной GPIO. После
+`F2.3.3` завершается, когда единое ревью повторно проверяет sibling H2 export,
+неизменяемый input, побайтно воспроизводимые outputs, строгие C17 tables,
+ownership и пять consumers при нулевых configure/build claims. После
 закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
 страницы роадмапа обновляются тем же commit до перехода дальше.
 

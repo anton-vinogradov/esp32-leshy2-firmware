@@ -11,10 +11,11 @@ SYSCONFIG_CLI := $(SYSCONFIG_PATH)/sysconfig_cli.sh
 STARTUP := $(MSPM0_SDK_PATH)/source/ti/devices/msp/m0p/startup_system_files/ticlang/startup_mspm0c1105_c1106_ticlang.c
 DRIVERLIB := $(MSPM0_SDK_PATH)/source/ti/driverlib/lib/ticlang/m0p/mspm0c1105_c1106/driverlib.a
 COMMON := $(PROJECT_ROOT)/common
+GENERATED_HW := $(PROJECT_ROOT)/generated/hardware
 SYSCONFIG_STAMP := $(BUILD_DIR)/sysconfig.stamp
 
 ARCH_FLAGS := -D__MSPM0C1106__ -mcpu=cortex-m0plus -march=thumbv6m -mfloat-abi=soft -mthumb
-INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -I$(MSPM0_SDK_PATH)/source
+INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(GENERATED_HW)/include -I$(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -I$(MSPM0_SDK_PATH)/source
 PROJECT_WARNINGS := -Wall -Wextra -Werror -Wformat=2 -Wshadow -Wundef -Wconversion -Wdouble-promotion -Wmissing-prototypes -Wpedantic -Wstrict-prototypes
 PROJECT_CODEGEN := -std=c17 -ffunction-sections -fdata-sections -fstack-usage -ffile-prefix-map=$(PROJECT_ROOT)=. -fdebug-prefix-map=$(PROJECT_ROOT)=.
 
@@ -35,7 +36,7 @@ APP_MAP := $(BUILD_DIR)/leshy2_safety.map
 BOOT_OUT := $(BUILD_DIR)/leshy2_safety_boot.out
 BOOT_BIN := $(BUILD_DIR)/leshy2_safety_boot.bin
 BOOT_MAP := $(BUILD_DIR)/leshy2_safety_boot.map
-APP_OBJECTS := $(BUILD_DIR)/safety_main.obj $(BUILD_DIR)/safety_core.obj $(BUILD_DIR)/ti_msp_dl_config.obj $(BUILD_DIR)/startup.obj
+APP_OBJECTS := $(BUILD_DIR)/safety_main.obj $(BUILD_DIR)/safety_core.obj $(BUILD_DIR)/safety_bsp.obj $(BUILD_DIR)/ti_msp_dl_config.obj $(BUILD_DIR)/startup.obj
 BOOT_OBJECTS := $(BUILD_DIR)/safety_boot_main.obj $(BUILD_DIR)/startup.obj
 
 .PHONY: all configure clean
@@ -55,6 +56,9 @@ $(BUILD_DIR)/safety_main.obj: main.c $(SYSCONFIG_STAMP)
 	$(CC) $(PROJECT_CFLAGS) @$(BUILD_DIR)/device.opt -c $< -o $@
 
 $(BUILD_DIR)/safety_core.obj: $(COMMON)/src/safety_core.c $(COMMON)/include/leshy2/safety_core.h | $(BUILD_DIR)
+	$(CC) $(PROJECT_CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/safety_bsp.obj: $(GENERATED_HW)/src/safety_bsp.c $(GENERATED_HW)/include/leshy2/hardware/safety_bsp.h $(GENERATED_HW)/include/leshy2/hardware/bsp_types.h | $(BUILD_DIR)
 	$(CC) $(PROJECT_CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/ti_msp_dl_config.obj: $(SYSCONFIG_STAMP)
