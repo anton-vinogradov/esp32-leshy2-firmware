@@ -38,10 +38,11 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.3 | Проведено ревью | RP2354B debug/release builds создали и проверили 8 artifacts; binaries занимают 18 724 и 10 656 байт; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
 | F2.4.4 | Проведено ревью | Pack debug/release builds создали и проверили 12 artifacts; application images занимают 3 168 байт, boot-manager images — 256 байт; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
 | F2.4.5 | Проведено ревью | Safety debug/release builds создали и проверили 12 artifacts; application images занимают 3 296 байт, boot-manager images — 256 байт; [`config/f2_4_safety_build_review.json`](../config/f2_4_safety_build_review.json) |
-| **F2.4.6** | **Сейчас** | сводное ревью всех 52 debug/release artifacts, maps и image-size gates |
+| F2.4.6 | Проведено ревью | сводное ревью прошло для 5 targets, 10 конфигураций, 52 artifacts, 14 maps и 10 image gates; [`config/f2_4_build_review.json`](../config/f2_4_build_review.json), [`tools/review_f2_4_builds.py`](../tools/review_f2_4_builds.py) |
+| **F2.5** | **Сейчас** | чистая воспроизводимая пересборка и закрывающее ревью F2 |
 
-Строки F2.4.1–F2.4.5 заявляют target builds. Runtime boot остаётся недоказанным
-до следующих emulator- и hardware-фаз.
+Строки F2.4.1–F2.4.6 заявляют target builds и их сводное artifact review.
+Runtime boot остаётся недоказанным до следующих emulator- и hardware-фаз.
 
 ## Матрица SDK и компиляторов
 

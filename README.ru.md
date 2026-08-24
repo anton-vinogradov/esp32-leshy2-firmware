@@ -33,17 +33,17 @@
 не её внутренних подэтапов.
 
 **Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
-проектов и generated BSP из hardware H2 имеют evidence. Все пять targets уже
-проходят настоящие debug/release builds; их сводное ревью artifacts и все
-target-emulator runs ещё ожидают выполнения.
+проектов и generated BSP из hardware H2 имеют evidence. Все пять targets и
+сводный набор из 52 debug/release artifacts прошли ревью; воспроизводимость и
+все runtime runs ещё ожидают выполнения.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.6 -->
+<!-- current-substep: F2.5 -->
 
-**Точный маркер: `F2.4.6`** — сводное ревью всех 52 debug/release artifacts,
-map files и image-size gates. Собственный build-этап каждого target пройден;
-emulator и hardware runs не заявлены.
+**Точный маркер: `F2.5`** — ревью воспроизводимости чистой пересборки и закрытие
+F2. Компиляция, линковка, наличие artifacts и image-size limits прошли для всех
+targets; emulator и hardware runs не заявлены.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -107,12 +107,13 @@ emulator и hardware runs не заявлены.
     artifacts и image-size gates прошли ревью; [машинный evidence](config/f2_4_pack_build_review.json).
   - ✅ `F2.4.5` — Safety debug/release configure, build, наличие двенадцати
     artifacts и image-size gates прошли ревью; [машинный evidence](config/f2_4_safety_build_review.json).
-  - ▶️ **`F2.4.6` — сейчас:** проверить все 52 debug/release artifacts, map files и image-size gates.
-- ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
+  - ✅ `F2.4.6` — все 52 debug/release artifacts, 14 maps и 10 image-size gates
+    прошли единое ревью; [машинный evidence](config/f2_4_build_review.json).
+- ▶️ **`F2.5` — сейчас:** провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.4.5` завершён. Safety application занимает 3 296 байт в обеих конфигурациях
-при слоте 22 528 байт; отдельный boot-manager binary занимает 256 байт. Все
-OUT, BIN и map outputs созданы. Это доказывает компиляцию и лимиты, но не boot или периферию.
+`F2.4.6` завершён. Пять targets, десять конфигураций, 52 artifacts, 14 maps и
+десять image gates проходят вместе. Единственный активный контроль размера —
+запас 2 176 байт у C5 debug bootloader. Это доказывает сборку и лимиты, но не boot или периферию.
 Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
 обе языковые страницы в одном commit.
 

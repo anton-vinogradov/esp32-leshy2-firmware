@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.6",
+  "current_substep": "F2.5",
   "target_execution": {
     "configure_runs": 10,
     "build_runs": 10,
@@ -123,7 +123,18 @@
         "debug": 3296,
         "release": 3296
       }
+    },
+    "F2.4.6": {
+      "status": "reviewed",
+      "result": "all five target-build reviews passed one integrated artifact, map and image-size review",
+      "evidence": "config/f2_4_build_review.json",
+      "targets": 5,
+      "configurations": 10,
+      "artifact_instances": 52,
+      "map_files": 14,
+      "image_size_gates": 10,
+      "watch": "C5 debug bootloader retains 2176 bytes before its current partition boundary"
     }
   },
-  "next": "F2.4.6"
+  "next": "F2.5"
 }

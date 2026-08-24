@@ -37,10 +37,11 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.3 | Reviewed | RP2354B debug/release builds produced and verified 8 artifacts; binaries are 18,724 and 10,656 bytes; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
 | F2.4.4 | Reviewed | Pack debug/release builds produced and verified 12 artifacts; application images are 3,168 bytes and boot-manager images are 256 bytes; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
 | F2.4.5 | Reviewed | Safety debug/release builds produced and verified 12 artifacts; application images are 3,296 bytes and boot-manager images are 256 bytes; [`config/f2_4_safety_build_review.json`](../config/f2_4_safety_build_review.json) |
-| **F2.4.6** | **Current** | integrated review of all 52 debug/release artifacts, maps and image-size gates |
+| F2.4.6 | Reviewed | integrated review passed for 5 targets, 10 configurations, 52 artifacts, 14 maps and 10 image gates; [`config/f2_4_build_review.json`](../config/f2_4_build_review.json), [`tools/review_f2_4_builds.py`](../tools/review_f2_4_builds.py) |
+| **F2.5** | **Current** | clean rebuild reproducibility and F2 closure review |
 
-The F2.4.1–F2.4.5 rows claim target builds. Runtime boot remains unproven until
-the later emulator and hardware phases.
+The F2.4.1–F2.4.6 rows claim target builds and their integrated artifact review.
+Runtime boot remains unproven until the later emulator and hardware phases.
 
 ## SDK and compiler matrix
 

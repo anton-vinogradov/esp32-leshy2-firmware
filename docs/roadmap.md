@@ -30,11 +30,11 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.4.6 -->
+<!-- current-substep: F2.5 -->
 
-**Exact marker: `F2.4.6`** — review all 52 debug/release artifacts, map files and
-image-size gates together. Every target's own build row has passed; no emulator
-or hardware run is claimed.
+**Exact marker: `F2.5`** — review clean rebuild reproducibility and close F2.
+Compilation, linking, artifact presence and image-size limits have passed for
+all targets; no emulator or hardware run is claimed.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -101,12 +101,13 @@ or hardware run is claimed.
     and image-size gates passed; [machine evidence](../config/f2_4_pack_build_review.json).
   - ✅ `F2.4.5` — Safety debug/release configure, build, twelve-artifact presence
     and image-size gates passed; [machine evidence](../config/f2_4_safety_build_review.json).
-  - ▶️ **`F2.4.6` — current:** review all 52 debug/release artifacts, map files and image-size gates.
-- ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
+  - ✅ `F2.4.6` — all 52 debug/release artifacts, 14 maps and 10 image-size
+    gates passed one integrated review; [machine evidence](../config/f2_4_build_review.json).
+- ▶️ **`F2.5` — current:** F2 reproducibility review; only then does F3 boot/emulation begin.
 
-`F2.4.5` is complete. The Safety application is 3,296 bytes in both configurations
-against its 22,528-byte slot; its separate boot-manager binary is 256 bytes.
-All OUT, BIN and map outputs exist. This proves compilation and limits, not boot or peripherals.
+`F2.4.6` is complete. Five targets, ten configurations, 52 artifacts, 14 maps
+and ten image gates pass together. The only active size watch is the C5 debug
+bootloader's 2,176-byte margin. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
 language pages in the same commit before work advances.
 

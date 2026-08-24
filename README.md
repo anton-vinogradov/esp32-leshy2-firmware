@@ -33,16 +33,16 @@ from this table. The F2 report appears only after all of F2 closes, not after an
 internal substep.
 
 **Firmware is at F2.** Portable logic, all five target-project structures and the
-generated H2 BSP have evidence. All five targets now pass real debug/release
-builds; their integrated artifact review and every target-emulator run are pending.
+generated H2 BSP have evidence. All five targets and the integrated set of 52
+debug/release artifacts now pass review; reproducibility and all runtime runs remain pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.4.6 -->
+<!-- current-substep: F2.5 -->
 
-**Exact marker: `F2.4.6`** — review all 52 debug/release artifacts, map files and
-image-size gates together. Every target's own build row has passed; no emulator
-or hardware run is claimed.
+**Exact marker: `F2.5`** — review clean rebuild reproducibility and close F2.
+Compilation, linking, artifact presence and image-size limits have passed for
+all targets; no emulator or hardware run is claimed.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -106,12 +106,13 @@ or hardware run is claimed.
     and image-size gates passed; [machine evidence](config/f2_4_pack_build_review.json).
   - ✅ `F2.4.5` — Safety debug/release configure, build, twelve-artifact presence
     and image-size gates passed; [machine evidence](config/f2_4_safety_build_review.json).
-  - ▶️ **`F2.4.6` — current:** review all 52 debug/release artifacts, map files and image-size gates.
-- ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
+  - ✅ `F2.4.6` — all 52 debug/release artifacts, 14 maps and 10 image-size
+    gates passed one integrated review; [machine evidence](config/f2_4_build_review.json).
+- ▶️ **`F2.5` — current:** review reproducibility and advance to F3 boot/emulation.
 
-`F2.4.5` is complete. The Safety application is 3,296 bytes in both configurations
-against its 22,528-byte slot; its separate boot-manager binary is 256 bytes.
-All OUT, BIN and map outputs exist. This proves compilation and limits, not boot or peripherals.
+`F2.4.6` is complete. Five targets, ten configurations, 52 artifacts, 14 maps
+and ten image gates pass together. The only active size watch is the C5 debug
+bootloader's 2,176-byte margin. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
 language pages in the same commit before work advances.
 
