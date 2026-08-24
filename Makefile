@@ -10,9 +10,9 @@ TARGET ?= all
 CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 
-.PHONY: test host-test matrix-check source-layout-check build-policy-check f2-1-review f2-2-review bsp-input-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test matrix-check source-layout-check build-policy-check f2-1-review f2-2-review bsp-input-check bsp-generate bsp-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: f2-2-review bsp-input-check
+test: f2-2-review bsp-input-check bsp-check
 	python3 -m unittest discover -s tests
 
 matrix-check:
@@ -32,6 +32,12 @@ f2-2-review:
 
 bsp-input-check:
 	python3 tools/validate_bsp_generation_input.py
+
+bsp-generate:
+	python3 tools/generate_hardware_bsp.py --write
+
+bsp-check:
+	python3 tools/generate_hardware_bsp.py --check
 
 target-projects-check:
 	python3 tools/check_target_projects.py

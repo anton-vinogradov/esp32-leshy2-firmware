@@ -24,7 +24,8 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.2.4 | Проведено ревью | точный Safety MSPM0C1106 project, раздельные boot/application images и fail-closed entry в [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.5 | Проведено ревью | сводный evidence пяти projects в [`config/f2_2_review.json`](../config/f2_2_review.json); исполняет [`tools/review_f2_2.py`](../tools/review_f2_2.py) |
 | F2.3.0 | Проведено ревью | неизменяемый H2 source и детерминированная pin model в [`config/bsp_generation_input.json`](../config/bsp_generation_input.json); проверяет [`tools/validate_bsp_generation_input.py`](../tools/validate_bsp_generation_input.py) |
-| **F2.3.1** | **Сейчас** | generated headers, tables пяти доменов и точный source manifest |
+| F2.3.1 | Проведено ревью | 11 детерминированных C/header outputs в [`generated/source_manifest.json`](../generated/source_manifest.json); записывает/проверяет [`tools/generate_hardware_bsp.py`](../tools/generate_hardware_bsp.py) |
+| **F2.3.2** | **Сейчас** | каждый target project потребляет одну свою generated domain table |
 
 Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
 только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.

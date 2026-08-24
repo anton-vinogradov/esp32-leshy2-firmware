@@ -31,10 +31,10 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.3.1 -->
+<!-- current-substep: F2.3.2 -->
 
-**Точный маркер: `F2.3.1`** — сгенерировать таблицы контактов пяти доменов,
-публичные headers и точный source manifest из проверенного H2 input.
+**Точный маркер: `F2.3.2`** — подключить каждую сгенерированную domain table к
+единственному владеющему target project без копирования или ручных pins.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -72,16 +72,17 @@ peripheral или board emulation и никогда не показываетс�
 - `F2.3` — импорт принятого генерируемого pin/BSP contract.
   - ✅ `F2.3.0` — неизменяемая H2 source identity, 5 domains, 125 contacts,
     112 nets, 4 transports, 10 groups и модель proof fields прошли ревью.
-  - ▶️ **`F2.3.1` — сейчас:** сгенерировать domain headers/tables и manifest.
-  - ⏳ `F2.3.2` — подключить generated sources ко всем пяти target projects.
+  - ✅ `F2.3.1` — 11 generated C/header files сохраняют все 125 contacts,
+    проходят строгий C17 syntax-check и побайтно воспроизводятся по manifest.
+  - ▶️ **`F2.3.2` — сейчас:** подключить generated sources к пяти projects.
   - ⏳ `F2.3.3` — проверить детерминизм и потребление всеми пятью projects.
 - ⏳ `F2.4` — воспроизводимые debug/release builds, map files и image-size
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.3.1` завершается, когда один детерминированный генератор записывает общий
-type header, пять domain headers, пять domain tables и полный manifest, а
-`--check` воспроизводит каждый байт без ручного редактирования. Закрытие
+`F2.3.2` завершается, когда S3, C5, RP, Pack и Safety компилируют ровно свою
+generated table через канонические project inputs, а структурные проверки
+отвергают чужой domain, дубль source или ручной GPIO. Закрытие
 любой подзадачи обновляет её артефакт, публичный результат, обе стартовые
 страницы и оба роадмапа тем же commit до перехода дальше.
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F2",
-  "current_substep": "F2.3.1",
+  "current_substep": "F2.3.2",
   "updated_on": "2026-08-25",
   "completed": [
     "F2.0.0",
@@ -17,7 +17,8 @@
     "F2.2.3",
     "F2.2.4",
     "F2.2.5",
-    "F2.3.0"
+    "F2.3.0",
+    "F2.3.1"
   ],
   "reviewed": [
     "F0",
@@ -35,7 +36,8 @@
     "F2.2.3",
     "F2.2.4",
     "F2.2.5",
-    "F2.3.0"
+    "F2.3.0",
+    "F2.3.1"
   ],
   "claims": {
     "target_projects_created": true,

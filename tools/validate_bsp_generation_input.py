@@ -175,7 +175,7 @@ def main() -> int:
         return fail(errors)
     print(
         "BSP generation input OK: 5 domains, 125 contacts, 112 nets, "
-        "4 transports and 10 signal groups; generated sources still absent"
+        "4 transports and 10 signal groups; input-only review"
     )
     return 0
 

@@ -1,9 +1,95 @@
 {
   "schema_version": 1,
-  "stage": "F2.1.0",
-  "status": "boundary_only",
+  "stage": "F2.3.1",
+  "status": "generated",
   "producer": "tools/generate_hardware_bsp.py",
   "source_contract": "config/hardware_bsp_contract.json",
-  "files": [],
-  "note": "No target pin source is generated before F2.3; an empty manifest makes the ownership boundary explicit."
+  "source_sha256": "858898892e6d77d9bd44ebcfdc7f25faa6c2ff59a61458ff9cd858b3e0c19f89",
+  "generation_model": "config/bsp_generation_input.json",
+  "allocated_contacts": 125,
+  "files": [
+    {
+      "path": "generated/hardware/include/leshy2/hardware/bsp_types.h",
+      "kind": "header",
+      "domain": "COMMON",
+      "bytes": 1050,
+      "sha256": "0ddca47dac4a36fb24287cb982fc954d3f530396e292a460af7a7f9621b7a8b4"
+    },
+    {
+      "path": "generated/hardware/include/leshy2/hardware/c5_bsp.h",
+      "kind": "header",
+      "domain": "C5",
+      "bytes": 853,
+      "sha256": "59d5d397d7072532917ef644eb44fd5013d3885f19fdbadeca6c27c8553d795c"
+    },
+    {
+      "path": "generated/hardware/include/leshy2/hardware/pack_bsp.h",
+      "kind": "header",
+      "domain": "PACK",
+      "bytes": 887,
+      "sha256": "c25e7b925c07308bc0231d5dcea210a5571bc0b20224abcb9ac0e04e66ea5cfe"
+    },
+    {
+      "path": "generated/hardware/include/leshy2/hardware/rp_bsp.h",
+      "kind": "header",
+      "domain": "RP",
+      "bytes": 1871,
+      "sha256": "90bee056640ee5f5cef08a0bf6172eddc97ffb1b327a17216d794e71c2a1895c"
+    },
+    {
+      "path": "generated/hardware/include/leshy2/hardware/s3_bsp.h",
+      "kind": "header",
+      "domain": "S3",
+      "bytes": 1435,
+      "sha256": "c7753c51fae701d7ad20ed4ee260f0528c9eecd7152b7392e90238d77a957415"
+    },
+    {
+      "path": "generated/hardware/include/leshy2/hardware/safety_bsp.h",
+      "kind": "header",
+      "domain": "SAFETY",
+      "bytes": 1087,
+      "sha256": "397530f0efb9c556b4c8af394925c60d05ce5db58bf99f624e98314f1c396dbc"
+    },
+    {
+      "path": "generated/hardware/src/c5_bsp.c",
+      "kind": "source",
+      "domain": "C5",
+      "bytes": 8443,
+      "sha256": "f9fa0d2c4251167a2a3019373d10492a4fcfbb8c5f5b3529eba9f523016fcb2a"
+    },
+    {
+      "path": "generated/hardware/src/pack_bsp.c",
+      "kind": "source",
+      "domain": "PACK",
+      "bytes": 8666,
+      "sha256": "fbb2298e25d8cfcc000a5939684e631374919c809264a900bc3814eacda8ffe6"
+    },
+    {
+      "path": "generated/hardware/src/rp_bsp.c",
+      "kind": "source",
+      "domain": "RP",
+      "bytes": 25749,
+      "sha256": "3f9ba609e2278928601d0f5e133aa509c5206a0ae66671be5577a52610cd245c"
+    },
+    {
+      "path": "generated/hardware/src/s3_bsp.c",
+      "kind": "source",
+      "domain": "S3",
+      "bytes": 20107,
+      "sha256": "ba70d7bfb627e3c171c88ffce8b7ab7629fad771dac7b4bd009972d07971c8fd"
+    },
+    {
+      "path": "generated/hardware/src/safety_bsp.c",
+      "kind": "source",
+      "domain": "SAFETY",
+      "bytes": 10716,
+      "sha256": "f8ca0606c4fde7a7a240cd9c069c6610f007eb0e0f9765bec7d7cede2bb53bfc"
+    }
+  ],
+  "claims": {
+    "generated_files_are_hand_edited": false,
+    "target_projects_consume_generated_sources": false,
+    "target_configure_run": false,
+    "target_builds_run": false
+  }
 }

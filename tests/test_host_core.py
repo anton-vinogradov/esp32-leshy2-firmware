@@ -86,8 +86,12 @@ class HostCoreExecutionTests(unittest.TestCase):
         manifest = json.loads(
             (REPO_ROOT / "generated/source_manifest.json").read_text(encoding="utf-8")
         )
-        self.assertEqual("boundary_only", manifest["status"])
-        self.assertEqual([], manifest["files"])
+        self.assertEqual("F2.3.1", manifest["stage"])
+        self.assertEqual("generated", manifest["status"])
+        self.assertEqual(11, len(manifest["files"]))
+        self.assertEqual(125, manifest["allocated_contacts"])
+        self.assertFalse(manifest["claims"]["generated_files_are_hand_edited"])
+        self.assertFalse(manifest["claims"]["target_projects_consume_generated_sources"])
 
     def test_build_policy_is_strict_across_sdk_families(self):
         result = subprocess.run(
@@ -235,6 +239,39 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(112, model["expected_counts"]["unique_nets"])
         self.assertTrue(model["claims"]["input_model_validated"])
         self.assertFalse(model["claims"]["generated_sources_created"])
+
+    def test_f2_3_generated_bsp_is_reproducible_and_valid_c17(self):
+        result = subprocess.run(
+            ["python3", "tools/generate_hardware_bsp.py", "--check"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("generated BSP OK: 11 generated C/header files", result.stdout)
+
+        sources = sorted((REPO_ROOT / "generated/hardware/src").glob("*_bsp.c"))
+        self.assertEqual(5, len(sources))
+        compile_result = subprocess.run(
+            [
+                "cc",
+                "-std=c17",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-pedantic",
+                "-Igenerated/hardware/include",
+                "-fsyntax-only",
+                *[str(path.relative_to(REPO_ROOT)) for path in sources],
+            ],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual("", compile_result.stdout)
 
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))

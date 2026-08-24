@@ -35,10 +35,10 @@ target/toolchain work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.3.1 -->
+<!-- current-substep: F2.3.2 -->
 
-**Exact marker: `F2.3.1`** — generate the five domain pin tables, public headers
-and exact source manifest from the validated H2 input.
+**Exact marker: `F2.3.2`** — connect each generated domain table to its one
+owning target project without copying or hand-authoring a pin.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -73,15 +73,16 @@ and exact source manifest from the validated H2 input.
 - `F2.3` — consume the accepted generated pin/BSP contract.
   - ✅ `F2.3.0` — the immutable H2 source identity, 5 domains, 125 contacts,
     112 nets, 4 transports, 10 groups and proof-field model passed review.
-  - ▶️ **`F2.3.1` — current:** generate domain headers/tables and a manifest.
-  - ⏳ `F2.3.2` — connect generated sources to all five target projects.
+  - ✅ `F2.3.1` — 11 generated C/header files preserve all 125 contacts, pass
+    strict C17 syntax checks and reproduce byte-for-byte with a hashed manifest.
+  - ▶️ **`F2.3.2` — current:** connect generated sources to all five projects.
   - ⏳ `F2.3.3` — review generation determinism and five-project consumption.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.3.1` exits when one deterministic generator writes the common type header,
-five domain headers, five domain tables and a complete manifest, and `--check`
-reproduces every byte without hand editing. When
+`F2.3.2` exits when S3, C5, RP, Pack and Safety each compile exactly their owned
+generated table through the canonical project inputs, and structural checks
+reject a wrong domain, duplicate source or hand-authored GPIO. When
 any substep closes, its artifact, this marker, the result page and both roadmap
 pages are updated in the same commit before work advances.
 
