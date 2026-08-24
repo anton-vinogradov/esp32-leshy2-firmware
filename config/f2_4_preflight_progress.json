@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.5",
+  "current_substep": "F3.0.0",
   "target_execution": {
     "configure_runs": 10,
     "build_runs": 10,
@@ -79,8 +79,8 @@
       "evidence": "config/f2_4_s3_build_review.json",
       "configurations": ["debug", "release"],
       "image_bytes": {
-        "debug": 180240,
-        "release": 138480
+        "debug": 180160,
+        "release": 138416
       }
     },
     "F2.4.2": {
@@ -89,10 +89,10 @@
       "evidence": "config/f2_4_c5_build_review.json",
       "configurations": ["debug", "release"],
       "image_bytes": {
-        "debug": 172320,
-        "release": 125664
+        "debug": 172224,
+        "release": 125616
       },
-      "watch": "debug bootloader retains 2176 bytes before its current partition boundary"
+      "watch": "debug bootloader retains 2240 bytes before its current partition boundary"
     },
     "F2.4.3": {
       "status": "reviewed",
@@ -100,7 +100,7 @@
       "evidence": "config/f2_4_rp_build_review.json",
       "configurations": ["debug", "release"],
       "image_bytes": {
-        "debug": 18724,
+        "debug": 18468,
         "release": 10656
       }
     },
@@ -133,8 +133,18 @@
       "artifact_instances": 52,
       "map_files": 14,
       "image_size_gates": 10,
-      "watch": "C5 debug bootloader retains 2176 bytes before its current partition boundary"
+      "watch": "C5 debug bootloader retains 2240 bytes before its current partition boundary"
+    },
+    "F2.5": {
+      "status": "reviewed",
+      "result": "two complete clean passes produced 52 of 52 byte-identical artifacts and no absolute workspace path in distributable images",
+      "evidence": "config/f2_5_reproducibility_review.json",
+      "passes": 2,
+      "artifact_instances_per_pass": 52,
+      "byte_identical_artifacts": 52,
+      "distributable_images_scanned": 24,
+      "absolute_workspace_path_leaks": 0
     }
   },
-  "next": "F2.5"
+  "next": "F3.0.0"
 }

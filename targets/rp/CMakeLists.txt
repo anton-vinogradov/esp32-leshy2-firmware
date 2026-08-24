@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.15)
 
+get_filename_component(LESHY2_REPO_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+add_compile_options(
+    "-ffile-prefix-map=${LESHY2_REPO_ROOT}=."
+    "-fdebug-prefix-map=${LESHY2_REPO_ROOT}=."
+)
+
 set(PICO_SDK_FETCH_FROM_GIT OFF CACHE BOOL "Network SDK fetch is forbidden" FORCE)
 set(FETCHCONTENT_FULLY_DISCONNECTED ON CACHE BOOL "Network fetches are forbidden" FORCE)
 set(PICO_BOARD_HEADER_DIRS "${CMAKE_CURRENT_LIST_DIR}/boards")
@@ -56,8 +62,6 @@ set(LESHY2_RP_PROJECT_COMPILE_OPTIONS
     -ffunction-sections
     -fdata-sections
     -fstack-usage
-    "-ffile-prefix-map=${CMAKE_SOURCE_DIR}=."
-    "-fdebug-prefix-map=${CMAKE_SOURCE_DIR}=."
     "$<$<CONFIG:Debug>:-Og>"
     "$<$<CONFIG:Debug>:-g3>"
     "$<$<CONFIG:Release>:-Os>"

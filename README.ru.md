@@ -2,8 +2,8 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F2 — target-проекты и воспроизводимая сборка.** F0/F1
-> прошли ревью; принятый аппаратный контракт H2 уже доступен этапу F2. Подробности —
+> **Статус прошивки: F3 — boot, память и эмуляция.** F0–F2 прошли ревью;
+> [итог F2](docs/f2-target-build-system-report.ru.md) фиксирует пять воспроизводимых target-сборок. Подробности —
 > в [роадмапе прошивки](docs/roadmap.ru.md).
 
 ## Роадмап прошивки и текущая позиция
@@ -17,8 +17,8 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ Проведено ревью | пять доменов, владельцы, L2IP, memory, safety, update и HW↔FW boundary |
 | F1 · Portable cores | ✅ Проведено ревью | [Итог F1: 24/24 host-сценария и чистые ASan/UBSan](docs/f1-portable-cores-report.ru.md) |
-| **F2 · Target-проекты и build system** | **▶️ Текущая граница; контракт H2 доступен** | воспроизводимые проекты ESP-IDF, Pico SDK и TI SDK для пяти target |
-| F3 · Boot, память и эмуляция | ⏳ Ожидает F2 | загружаемые skeletons, size gates, S3 QEMU и dev-board matrix |
+| F2 · Target-проекты и build system | ✅ [Проведено ревью](docs/f2-target-build-system-report.ru.md) | пять production-SDK projects; 52/52 artifacts воспроизводятся побайтно |
+| **F3 · Boot, память и эмуляция** | **▶️ Текущая граница** | загружаемые skeletons, size gates, S3 QEMU и dev-board matrix |
 | F4 · IPC и scheduling | ⏳ Ожидает F3 | реальные transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему | все драйверы устройств, органов управления, датчиков и power states |
 | F6 · UI, display, storage и audio | ⏳ Ожидает F5 | отзывчивые menu/waterfall, recording, audio и fault viewer |
@@ -32,18 +32,18 @@
 связанный с этой таблицей. Отчёт F2 появится только после закрытия всей F2, а
 не её внутренних подэтапов.
 
-**Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
-проектов и generated BSP из hardware H2 имеют evidence. Все пять targets и
-сводный набор из 52 debug/release artifacts прошли ревью; воспроизводимость и
-все runtime runs ещё ожидают выполнения.
+**Прошивка находится на F3.** Portable-логика, пять target-проектов, generated
+BSP из hardware H2 и воспроизводимые debug/release builds имеют evidence.
+Runtime boot и instruction/peripheral execution ещё не доказаны и входят в F3.
 
-### Текущая фаза F2 — детальная позиция
+### Текущая фаза F3 — детальная позиция
 
-<!-- current-substep: F2.5 -->
+<!-- current-substep: F3.0.0 -->
 
-**Точный маркер: `F2.5`** — ревью воспроизводимости чистой пересборки и закрытие
-F2. Компиляция, линковка, наличие artifacts и image-size limits прошли для всех
-targets; emulator и hardware runs не заявлены.
+**Точный маркер: `F3.0.0`** — инвентаризация точного executable/emulator
+coverage каждого target и фиксация границы evidence до первого runtime run.
+Emulator и hardware runs пока не заявлены. Маркер и его evidence меняются
+вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -109,13 +109,29 @@ targets; emulator и hardware runs не заявлены.
     artifacts и image-size gates прошли ревью; [машинный evidence](config/f2_4_safety_build_review.json).
   - ✅ `F2.4.6` — все 52 debug/release artifacts, 14 maps и 10 image-size gates
     прошли единое ревью; [машинный evidence](config/f2_4_build_review.json).
-- ▶️ **`F2.5` — сейчас:** провести ревью воспроизводимости и перейти к F3 boot/emulation.
+- ✅ `F2.5` — два полных чистых прохода дали 52/52 побайтно идентичных
+  artifacts; в 24 распространяемых образах нет абсолютного workspace path.
+  См. [итоговый отчёт F2](docs/f2-target-build-system-report.ru.md) и
+  [машинный evidence](config/f2_5_reproducibility_review.json).
+- `F3.0` — зафиксировать runtime-evidence plan до заявления о boot.
+  - ▶️ **`F3.0.0` — сейчас:** инвентаризировать официальную поддержку
+    emulator/simulator, instruction coverage, наблюдаемость boot и неизбежные
+    dev-board gates для S3, C5, RP2354B, Pack и Safety.
+  - `F3.0.1` — определить детерминированные run recipes, boot markers,
+    timeouts и fail-closed records для каждого поддержанного virtual path.
+  - `F3.0.2` — опубликовать точную emulator/dev-board matrix и сводный F3 runner.
+- `F3.1` — загрузить S3 image в официальном ESP-IDF QEMU path.
+- `F3.2` — выполнить self-test, retained-fault и failed-update сценарии на
+  наиболее достоверных доступных virtual paths.
+- `F3.3` — доказать границы image, RAM, partitions и rollback по target
+  artifacts и runtime evidence.
+- `F3.4` — свести результаты эмуляции и все честные dev-board/HIL deferred gates.
 
-`F2.4.6` завершён. Пять targets, десять конфигураций, 52 artifacts, 14 maps и
-десять image gates проходят вместе. Единственный активный контроль размера —
-запас 2 176 байт у C5 debug bootloader. Это доказывает сборку и лимиты, но не boot или периферию.
-Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
-обе языковые страницы в одном commit.
+F2 прошла ревью: пять targets, десять конфигураций, 52 artifacts, 14 maps и
+десять image gates проходят вместе и воспроизводятся в двух чистых проходах.
+Активный контроль размера — запас 2 240 байт у C5 debug bootloader. Это
+доказывает сборки и лимиты, но не boot или периферию. Каждый подэтап F3
+обновляет evidence, точный маркер и обе языковые страницы в одном commit.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает

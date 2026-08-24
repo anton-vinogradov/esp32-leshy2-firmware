@@ -2,7 +2,7 @@
 
 [Русский](toolchains.ru.md) · [Home](../README.md) · [Roadmap](roadmap.md)
 
-This page collects the accepted results of the current F2 phase: first-party
+This page collects the accepted results of the completed F2 phase: first-party
 toolchains, immutable environment locks, common commands and source ownership.
 
 ## Reviewed F2 results
@@ -32,13 +32,13 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.0.4 | Reviewed | hash-verified native Arm GNU `15.2.Rel1` for RP2354B |
 | F2.4.0.5 | Reviewed | hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety |
 | F2.4.0.6 | Reviewed | 30 exact checks and debug/release preflight for all five targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
-| F2.4.1 | Reviewed | S3 debug/release builds produced and verified 10 artifacts; application images are 180,240 and 138,480 bytes; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
-| F2.4.2 | Reviewed | C5 debug/release builds produced and verified 10 artifacts; application images are 172,320 and 125,664 bytes; debug bootloader margin is watched at 2,176 bytes; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
-| F2.4.3 | Reviewed | RP2354B debug/release builds produced and verified 8 artifacts; binaries are 18,724 and 10,656 bytes; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
+| F2.4.1 | Reviewed | S3 debug/release builds produced and verified 10 artifacts; application images are 180,160 and 138,416 bytes; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
+| F2.4.2 | Reviewed | C5 debug/release builds produced and verified 10 artifacts; application images are 172,224 and 125,616 bytes; debug bootloader margin is watched at 2,240 bytes; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
+| F2.4.3 | Reviewed | RP2354B debug/release builds produced and verified 8 artifacts; binaries are 18,468 and 10,656 bytes; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
 | F2.4.4 | Reviewed | Pack debug/release builds produced and verified 12 artifacts; application images are 3,168 bytes and boot-manager images are 256 bytes; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
 | F2.4.5 | Reviewed | Safety debug/release builds produced and verified 12 artifacts; application images are 3,296 bytes and boot-manager images are 256 bytes; [`config/f2_4_safety_build_review.json`](../config/f2_4_safety_build_review.json) |
 | F2.4.6 | Reviewed | integrated review passed for 5 targets, 10 configurations, 52 artifacts, 14 maps and 10 image gates; [`config/f2_4_build_review.json`](../config/f2_4_build_review.json), [`tools/review_f2_4_builds.py`](../tools/review_f2_4_builds.py) |
-| **F2.5** | **Current** | clean rebuild reproducibility and F2 closure review |
+| F2.5 | Reviewed | two clean passes produced 52/52 byte-identical artifacts; 24 distributable images have zero absolute workspace-path leaks; [`config/f2_5_reproducibility_review.json`](../config/f2_5_reproducibility_review.json) |
 
 The F2.4.1–F2.4.6 rows claim target builds and their integrated artifact review.
 Runtime boot remains unproven until the later emulator and hardware phases.
@@ -68,11 +68,9 @@ SDK/toolchain family.
 
 ## What is not claimed yet
 
-F2.0.1 does not claim a successful target build. F2.0.2 has now pinned the URL
-and SHA-256 of 26 host archives, both SDK revisions and the ESP-IDF Python
-environment in [`environment/toolchains.lock.json`](../environment/toolchains.lock.json).
-Current F2.0.3 defines common local/CI commands; actual debug/release builds
-belong to F2.4.
+F2 proves offline, reproducible debug/release builds and static image limits.
+It does not claim runtime boot, instruction/peripheral execution or a working
+physical board. Those claims belong to F3 and later dev-board/HIL gates.
 
 The canonical TI archive endpoint requires an export-session cookie on macOS.
 Local preflight therefore uses the same exact release from TI's official public
@@ -94,20 +92,22 @@ make target-artifacts TARGET=s3 CONFIG=debug
 make target-clean TARGET=s3 CONFIG=debug
 make locked-target-configure TARGET=s3 CONFIG=debug
 make locked-target-build TARGET=s3 CONFIG=debug
+make locked-target-clean TARGET=s3 CONFIG=debug
 make locked-target-verify TARGET=s3 CONFIG=debug
 make capture-target-build TARGET=s3
+make f2-5-reproducibility-review
 ```
 
 The dispatcher never invokes a shell and the matrix permits no dependency
 downloads during configure/build. Preflight fails before execution when a
 project, exact SDK Git revision, hash lock, compiler/tool version, MSPM0C1106
 input or Python 3.12 environment is absent or mismatched.
-F2.0.3 fixed this contract; F2.2 reviewed all five project structures, while
 The locked commands apply the reviewed local environment automatically. The
 capture command records relative artifact paths, byte counts, SHA-256 values,
 the image gate and a project-input manifest without copying build outputs into
 Git. All five targets have passed this path. F2.4.6 now checks their evidence
 together; ESP bootloader margins are captured beside the application gate.
+F2.5 records two complete clean passes and a hash for every artifact.
 
 ## Licenses
 

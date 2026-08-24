@@ -2,8 +2,8 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F2 — target projects and reproducible builds.** F0/F1
-> are reviewed; the accepted hardware H2 contract is now available to F2. Follow the
+> **Firmware status: F3 — boot, memory and emulation.** F0–F2 are reviewed;
+> the [F2 result](docs/f2-target-build-system-report.md) records five reproducible target builds. Follow the
 > [firmware roadmap](docs/roadmap.md).
 
 ## Firmware roadmap and current position
@@ -17,8 +17,8 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
 | F1 · Portable cores | ✅ Reviewed | [F1 result: 24/24 host scenarios and clean ASan/UBSan](docs/f1-portable-cores-report.md) |
-| **F2 · Target projects and build system** | **▶️ Current boundary; H2 contract available** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
-| F3 · Boot, memory and emulation | ⏳ Waiting for F2 | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
+| F2 · Target projects and build system | ✅ [Reviewed](docs/f2-target-build-system-report.md) | five production-SDK projects; 52/52 artifacts reproduce byte-for-byte |
+| **F3 · Boot, memory and emulation** | **▶️ Current boundary** | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
 | F4 · IPC and scheduling | ⏳ Waiting for F3 | real transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current schematic | all device, control, sensor and power-state drivers |
 | F6 · UI, display, storage and audio | ⏳ Waiting for F5 | responsive menu/waterfall, recording, audio and fault viewer |
@@ -32,17 +32,18 @@ Every completed top-level `F*` phase receives a separate result report linked
 from this table. The F2 report appears only after all of F2 closes, not after an
 internal substep.
 
-**Firmware is at F2.** Portable logic, all five target-project structures and the
-generated H2 BSP have evidence. All five targets and the integrated set of 52
-debug/release artifacts now pass review; reproducibility and all runtime runs remain pending.
+**Firmware is at F3.** Portable logic, all five target projects, the generated
+hardware H2 BSP and reproducible debug/release builds have evidence. Runtime boot and
+instruction/peripheral execution remain unproven and now enter F3.
 
-### Current phase F2 — detailed position
+### Current phase F3 — detailed position
 
-<!-- current-substep: F2.5 -->
+<!-- current-substep: F3.0.0 -->
 
-**Exact marker: `F2.5`** — review clean rebuild reproducibility and close F2.
-Compilation, linking, artifact presence and image-size limits have passed for
-all targets; no emulator or hardware run is claimed.
+**Exact marker: `F3.0.0`** — inventory the exact executable/emulator coverage
+available for each target and define the evidence boundary before the first
+runtime run. No emulator or hardware run is claimed. This marker and its
+evidence move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -108,13 +109,30 @@ all targets; no emulator or hardware run is claimed.
     and image-size gates passed; [machine evidence](config/f2_4_safety_build_review.json).
   - ✅ `F2.4.6` — all 52 debug/release artifacts, 14 maps and 10 image-size
     gates passed one integrated review; [machine evidence](config/f2_4_build_review.json).
-- ▶️ **`F2.5` — current:** review reproducibility and advance to F3 boot/emulation.
+- ✅ `F2.5` — two complete clean passes produced 52/52 byte-identical
+  artifacts; 24 distributable images contained no absolute workspace path.
+  See the [F2 result report](docs/f2-target-build-system-report.md) and
+  [machine evidence](config/f2_5_reproducibility_review.json).
+- `F3.0` — freeze the runtime-evidence plan before claiming a boot.
+  - ▶️ **`F3.0.0` — current:** inventory official emulator/simulator support,
+    instruction coverage, boot observability and unavoidable dev-board gates
+    for S3, C5, RP2354B, Pack and Safety.
+  - `F3.0.1` — define deterministic run recipes, boot markers, timeouts and
+    fail-closed result records for every supported virtual path.
+  - `F3.0.2` — publish the exact emulator/dev-board matrix and integrated F3
+    acceptance runner.
+- `F3.1` — boot the S3 image in the official ESP-IDF QEMU path.
+- `F3.2` — execute self-test, retained-fault and failed-update scenarios on
+  the strongest faithful virtual paths.
+- `F3.3` — prove image, RAM, partition and rollback boundaries from target
+  artifacts and runtime evidence.
+- `F3.4` — consolidate emulator results and every honest dev-board/HIL deferral.
 
-`F2.4.6` is complete. Five targets, ten configurations, 52 artifacts, 14 maps
-and ten image gates pass together. The only active size watch is the C5 debug
-bootloader's 2,176-byte margin. This proves compilation and limits, not boot or peripherals.
-Every later substep closure updates its evidence, this exact marker and both
-language pages in the same commit before work advances.
+F2 is reviewed: five targets, ten configurations, 52 artifacts, 14 maps and
+ten image gates pass together and reproduce in two clean passes. The active
+size watch is the C5 debug bootloader's 2,240-byte margin. This proves builds
+and limits, not boot or peripherals. Every F3 substep closure updates its
+evidence, this exact marker and both language pages in the same commit.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages

@@ -3,7 +3,7 @@
 [English](toolchains.md) · [На главную](../README.ru.md) ·
 [Роадмап](roadmap.ru.md)
 
-Эта страница собирает принятые результаты текущей фазы F2: официальные
+Эта страница собирает принятые результаты завершённой фазы F2: официальные
 toolchains, неизменяемые environment locks, общие команды и владение исходниками.
 
 ## Результаты F2, прошедшие ревью
@@ -33,13 +33,13 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.0.4 | Проведено ревью | hash-verified native Arm GNU `15.2.Rel1` для RP2354B |
 | F2.4.0.5 | Проведено ревью | hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
 | F2.4.0.6 | Проведено ревью | 30 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
-| F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 240 и 138 480 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
-| F2.4.2 | Проведено ревью | C5 debug/release builds создали и проверили 10 artifacts; application images занимают 172 320 и 125 664 байта; debug bootloader отслеживается при запасе 2 176 байт; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
-| F2.4.3 | Проведено ревью | RP2354B debug/release builds создали и проверили 8 artifacts; binaries занимают 18 724 и 10 656 байт; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
+| F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 160 и 138 416 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
+| F2.4.2 | Проведено ревью | C5 debug/release builds создали и проверили 10 artifacts; application images занимают 172 224 и 125 616 байт; debug bootloader отслеживается при запасе 2 240 байт; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
+| F2.4.3 | Проведено ревью | RP2354B debug/release builds создали и проверили 8 artifacts; binaries занимают 18 468 и 10 656 байт; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
 | F2.4.4 | Проведено ревью | Pack debug/release builds создали и проверили 12 artifacts; application images занимают 3 168 байт, boot-manager images — 256 байт; [`config/f2_4_pack_build_review.json`](../config/f2_4_pack_build_review.json) |
 | F2.4.5 | Проведено ревью | Safety debug/release builds создали и проверили 12 artifacts; application images занимают 3 296 байт, boot-manager images — 256 байт; [`config/f2_4_safety_build_review.json`](../config/f2_4_safety_build_review.json) |
 | F2.4.6 | Проведено ревью | сводное ревью прошло для 5 targets, 10 конфигураций, 52 artifacts, 14 maps и 10 image gates; [`config/f2_4_build_review.json`](../config/f2_4_build_review.json), [`tools/review_f2_4_builds.py`](../tools/review_f2_4_builds.py) |
-| **F2.5** | **Сейчас** | чистая воспроизводимая пересборка и закрывающее ревью F2 |
+| F2.5 | Проведено ревью | два чистых прохода дали 52/52 побайтно идентичных artifacts; в 24 распространяемых образах нет утечек абсолютного workspace path; [`config/f2_5_reproducibility_review.json`](../config/f2_5_reproducibility_review.json) |
 
 Строки F2.4.1–F2.4.6 заявляют target builds и их сводное artifact review.
 Runtime boot остаётся недоказанным до следующих emulator- и hardware-фаз.
@@ -69,11 +69,10 @@ SDK/toolchain family.
 
 ## Что ещё не утверждается
 
-F2.0.1 не означает, что образы уже собирались. F2.0.2 уже закрепила URL и
-SHA-256 26 архивов для host, обе SDK revisions и ESP-IDF Python environment в
-[`environment/toolchains.lock.json`](../environment/toolchains.lock.json).
-Текущая F2.0.3 определяет единые local/CI-команды, а фактические debug/release
-builds относятся к F2.4.
+F2 доказывает offline-воспроизводимые debug/release builds и статические
+image limits. Она не заявляет runtime boot, instruction/peripheral execution
+или работоспособность физической платы. Эти доказательства принадлежат F3 и
+последующим dev-board/HIL gates.
 
 Канонический TI archive endpoint на macOS требует export-session cookie.
 Поэтому local preflight использует тот же точный release из официального
@@ -95,20 +94,22 @@ make target-artifacts TARGET=s3 CONFIG=debug
 make target-clean TARGET=s3 CONFIG=debug
 make locked-target-configure TARGET=s3 CONFIG=debug
 make locked-target-build TARGET=s3 CONFIG=debug
+make locked-target-clean TARGET=s3 CONFIG=debug
 make locked-target-verify TARGET=s3 CONFIG=debug
 make capture-target-build TARGET=s3
+make f2-5-reproducibility-review
 ```
 
 Dispatcher не запускает shell, а matrix не разрешает скачивать зависимости во
 время configure/build. Preflight завершается до исполнения, если не совпадает
 точный SDK Git revision, hash-lock, версия compiler/tool, вход MSPM0C1106 или
-Python 3.12 environment. F2.0.3
-зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
-Locked-команды автоматически применяют проверенную локальную среду. Команда
+Python 3.12 environment. Locked-команды автоматически применяют проверенную
+локальную среду. Команда
 capture записывает относительные пути artifacts, размеры, SHA-256, image gate и
 manifest project inputs, не добавляя build outputs в Git. Все пять targets
 прошли этот путь; F2.4.6 теперь сводит их evidence. Запас ESP bootloader
-фиксируется рядом с application gate.
+фиксируется рядом с application gate. F2.5 фиксирует два полных чистых прохода
+и hash каждого artifact.
 
 ## Лицензии
 

@@ -97,6 +97,7 @@ def main() -> int:
     defaults = (REPO_ROOT / "targets/s3/sdkconfig.defaults").read_text(encoding="utf-8")
     for required in (
         "CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y",
+        "CONFIG_APP_REPRODUCIBLE_BUILD=y",
         'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="../../config/partitions_16m.csv"',
         "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
         "CONFIG_SPIRAM_MODE_OCT=y",
@@ -159,6 +160,7 @@ def main() -> int:
     c5_defaults = (REPO_ROOT / "targets/c5/sdkconfig.defaults").read_text(encoding="utf-8")
     for required in (
         "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+        "CONFIG_APP_REPRODUCIBLE_BUILD=y",
         'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="../../config/partitions_8m_c5.csv"',
         "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
         "CONFIG_SPIRAM=y",
@@ -310,6 +312,7 @@ def main() -> int:
         "leshy2_pack.out",
         "-isystem $(MSPM0_SDK_PATH)/source",
         "SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source",
+        "tools/normalize_ti_map.py",
     ):
         if required not in pack_make:
             errors.append(f"Pack Makefile misses {required}")
@@ -400,6 +403,7 @@ def main() -> int:
         "leshy2_safety.out",
         "-isystem $(MSPM0_SDK_PATH)/source",
         "SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source",
+        "tools/normalize_ti_map.py",
     ):
         if required not in safety_make:
             errors.append(f"Safety Makefile misses {required}")

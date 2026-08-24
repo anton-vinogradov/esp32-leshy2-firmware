@@ -66,9 +66,9 @@
       "project_dir": "targets/pack",
       "required_environment": ["MSPM0_SDK_PATH", "TI_ARM_CLANG_PATH", "SYSCONFIG_PATH"],
       "commands": {
-        "configure": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "configure"],
-        "build": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "all"],
-        "clean": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "clean"]
+        "configure": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "configure"],
+        "build": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "all"],
+        "clean": ["make", "-C", "{repo}/targets/pack", "CONFIG={config}", "BUILD_DIR={build}", "PYTHON={python}", "clean"]
       },
       "artifacts": ["leshy2_pack_boot.out", "leshy2_pack_boot.bin", "leshy2_pack_boot.map", "leshy2_pack.out", "leshy2_pack.bin", "leshy2_pack.map"],
       "size_gate": {"target": "pack", "image": "leshy2_pack.bin"}
@@ -80,9 +80,9 @@
       "project_dir": "targets/safety",
       "required_environment": ["MSPM0_SDK_PATH", "TI_ARM_CLANG_PATH", "SYSCONFIG_PATH"],
       "commands": {
-        "configure": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "configure"],
-        "build": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "all"],
-        "clean": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "clean"]
+        "configure": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "configure"],
+        "build": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "all"],
+        "clean": ["make", "-C", "{repo}/targets/safety", "CONFIG={config}", "BUILD_DIR={build}", "PYTHON={python}", "clean"]
       },
       "artifacts": ["leshy2_safety_boot.out", "leshy2_safety_boot.bin", "leshy2_safety_boot.map", "leshy2_safety.out", "leshy2_safety.bin", "leshy2_safety.map"],
       "size_gate": {"target": "safety", "image": "leshy2_safety.bin"}

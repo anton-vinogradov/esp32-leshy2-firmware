@@ -8,7 +8,7 @@
       "target": "s3",
       "stage": "F2.4.1",
       "evidence": "config/f2_4_s3_build_review.json",
-      "evidence_sha256": "34d7432e85db19e7b466a9798a6e2847854300449ff9916430c9c82350d920a1",
+      "evidence_sha256": "2b6494ac0609e2571389f785058098c601105691d4b99669e11459249863f362",
       "configurations": [
         "debug",
         "release"
@@ -16,15 +16,15 @@
       "artifact_instances": 10,
       "map_files": 2,
       "image_bytes": {
-        "debug": 180240,
-        "release": 138480
+        "debug": 180160,
+        "release": 138416
       }
     },
     {
       "target": "c5",
       "stage": "F2.4.2",
       "evidence": "config/f2_4_c5_build_review.json",
-      "evidence_sha256": "cb78a89dc1c0f5a47566d5f8e16a65029f6498a32849d585800865a8e816a1a1",
+      "evidence_sha256": "47dd4d99b3030fb3848eab6fe4252449f1fbd5b26f829aefd6cdaceda0c21be3",
       "configurations": [
         "debug",
         "release"
@@ -32,15 +32,15 @@
       "artifact_instances": 10,
       "map_files": 2,
       "image_bytes": {
-        "debug": 172320,
-        "release": 125664
+        "debug": 172224,
+        "release": 125616
       }
     },
     {
       "target": "rp",
       "stage": "F2.4.3",
       "evidence": "config/f2_4_rp_build_review.json",
-      "evidence_sha256": "46e33448899bba872ed50c64eab8ee671f4f18cd9d0a35eff9fe7d62a3f39980",
+      "evidence_sha256": "e14e8c27143870d3a8ff3cd2c75884cdc296ca60afa6924e7272938fa7c0c894",
       "configurations": [
         "debug",
         "release"
@@ -48,7 +48,7 @@
       "artifact_instances": 8,
       "map_files": 2,
       "image_bytes": {
-        "debug": 18724,
+        "debug": 18468,
         "release": 10656
       }
     },
@@ -56,7 +56,7 @@
       "target": "pack",
       "stage": "F2.4.4",
       "evidence": "config/f2_4_pack_build_review.json",
-      "evidence_sha256": "e1e5aea4788036be7bd325182e84fdf47c2b8fde2cb5cd226ffb0e4a4b3c3bc3",
+      "evidence_sha256": "9d568c3d46ba2ddb0e5a17b5cac12879d4ca115b92e8ba601ea58435c19cbe80",
       "configurations": [
         "debug",
         "release"
@@ -72,7 +72,7 @@
       "target": "safety",
       "stage": "F2.4.5",
       "evidence": "config/f2_4_safety_build_review.json",
-      "evidence_sha256": "88cda1cb11aa55ae311d421e3631d21a46df04766fecbeb4b2b08d32232c67b0",
+      "evidence_sha256": "2dda944759a4b05b869f7b2b88ccd742e6cddb12877a0401847816528b8ee920",
       "configurations": [
         "debug",
         "release"
@@ -101,7 +101,7 @@
     {
       "target": "c5",
       "configuration": "debug",
-      "free_bytes": 2176
+      "free_bytes": 2240
     }
   ],
   "claims": {

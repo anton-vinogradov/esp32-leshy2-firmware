@@ -4,6 +4,7 @@ CONFIG ?= debug
 MSPM0_SDK_PATH ?=
 TI_ARM_CLANG_PATH ?=
 SYSCONFIG_PATH ?=
+PYTHON ?= python3
 
 CC := $(TI_ARM_CLANG_PATH)/bin/tiarmclang
 OBJCOPY := $(TI_ARM_CLANG_PATH)/bin/tiarmobjcopy
@@ -73,9 +74,11 @@ $(BUILD_DIR)/pack_boot_main.obj: boot_main.c | $(BUILD_DIR)
 
 $(APP_OUT): $(APP_OBJECTS) slot_a.cmd $(DRIVERLIB)
 	$(CC) $(LINK_FLAGS) -Wl,-u,_c_int00 -Wl,-m,$(APP_MAP) $(APP_OBJECTS) $(SDK_LINK_PATH) -L$(BUILD_DIR) -ldevice.cmd.genlibs slot_a.cmd -o $@
+	$(PYTHON) $(PROJECT_ROOT)/tools/normalize_ti_map.py $(APP_MAP)
 
 $(BOOT_OUT): $(BOOT_OBJECTS) boot_manager.cmd $(DRIVERLIB)
 	$(CC) $(LINK_FLAGS) -Wl,-u,_c_int00 -Wl,-m,$(BOOT_MAP) $(BOOT_OBJECTS) $(DRIVERLIB) boot_manager.cmd -o $@
+	$(PYTHON) $(PROJECT_ROOT)/tools/normalize_ti_map.py $(BOOT_MAP)
 
 $(APP_BIN): $(APP_OUT)
 	$(OBJCOPY) -O binary $< $@

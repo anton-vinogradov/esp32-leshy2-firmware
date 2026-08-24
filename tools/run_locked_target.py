@@ -13,7 +13,7 @@ from review_f2_4_preflight import REPO_ROOT, local_environment
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "action", choices=("preflight", "configure", "build", "verify", "artifacts")
+        "action", choices=("preflight", "configure", "build", "clean", "verify", "artifacts")
     )
     parser.add_argument(
         "--target", choices=("all", "s3", "c5", "rp", "pack", "safety"), default="all"

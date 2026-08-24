@@ -21,6 +21,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/architecture.ru.md",
             "docs/f1-portable-cores-report.md",
             "docs/f1-portable-cores-report.ru.md",
+            "docs/f2-target-build-system-report.md",
+            "docs/f2-target-build-system-report.ru.md",
             "docs/memory.md",
             "docs/memory.ru.md",
             "docs/roadmap.md",
@@ -59,8 +61,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F2", "hardware H2"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F2", "hardware H2"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F3", "hardware H2"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F3", "hardware H2"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -72,7 +74,7 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F2",
+                "Current boundary: F3",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
                 "hardware H2",
@@ -80,7 +82,7 @@ class ProductSiteTests(unittest.TestCase):
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F2",
+                "Текущая граница: F3",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
                 "hardware H2",
@@ -124,6 +126,14 @@ class ProductSiteTests(unittest.TestCase):
 
         self.assertIn("f1-portable-cores-report.md", self.read("docs/roadmap.md"))
         self.assertIn("f1-portable-cores-report.ru.md", self.read("docs/roadmap.ru.md"))
+        self.assertIn("f2-target-build-system-report.md", self.read("README.md"))
+        self.assertIn(
+            "f2-target-build-system-report.ru.md", self.read("README.ru.md")
+        )
+        self.assertIn("52/52", self.read("docs/f2-target-build-system-report.md"))
+        self.assertIn(
+            "52/52", self.read("docs/f2-target-build-system-report.ru.md")
+        )
         makefile = self.read("Makefile")
         self.assertIn("host-sanitize:", makefile)
         self.assertIn("-fsanitize=address,undefined", makefile)
@@ -140,12 +150,13 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.5"}, set(markers.values()))
+        self.assertEqual({"F3.0.0"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
-        self.assertEqual("F2", state["phase"])
+        self.assertEqual("F3", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
         self.assertIn("F2.0.1", state["reviewed"])
         self.assertTrue(state["claims"]["target_builds_run"])
+        self.assertTrue(state["claims"]["target_builds_byte_reproducible"])
         self.assertFalse(state["claims"]["target_emulators_run"])
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
@@ -259,7 +270,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.5", progress["current_substep"])
+        self.assertEqual("F3.0.0", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
@@ -271,6 +282,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", progress["substeps"]["F2.4.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.6"]["status"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.5"]["status"])
+        self.assertEqual(52, progress["substeps"]["F2.5"]["byte_identical_artifacts"])
         self.assertEqual(10, progress["target_execution"]["build_runs"])
 
         review = json.loads(self.read("config/f2_4_preflight_review.json"))
@@ -293,7 +306,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("esp32s3", s3_review["sdk_target"])
         self.assertEqual({"debug", "release"}, set(s3_review["configurations"]))
         self.assertEqual(
-            {"debug": 180240, "release": 138480},
+            {"debug": 180160, "release": 138416},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in s3_review["configurations"].items()
@@ -313,14 +326,14 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", c5_review["status"])
         self.assertEqual("esp32c5", c5_review["sdk_target"])
         self.assertEqual(
-            {"debug": 172320, "release": 125664},
+            {"debug": 172224, "release": 125616},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in c5_review["configurations"].items()
             },
         )
         self.assertEqual(
-            2176,
+            2240,
             c5_review["configurations"]["debug"]["bootloader_margin"]["free_bytes"],
         )
         self.assertEqual(
@@ -335,7 +348,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", rp_review["status"])
         self.assertEqual("rp2350-arm-s", rp_review["sdk_target"])
         self.assertEqual(
-            {"debug": 18724, "release": 10656},
+            {"debug": 18468, "release": 10656},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in rp_review["configurations"].items()
@@ -404,11 +417,23 @@ class ProductSiteTests(unittest.TestCase):
         )
         self.assertEqual(5, len(integrated["targets"]))
         self.assertEqual(
-            [{"target": "c5", "configuration": "debug", "free_bytes": 2176}],
+            [{"target": "c5", "configuration": "debug", "free_bytes": 2240}],
             integrated["watched_margins"],
         )
         self.assertTrue(integrated["claims"]["all_target_compilation_and_link_passed"])
         self.assertFalse(integrated["claims"]["runtime_boot_proven"])
+
+        reproducibility = json.loads(
+            self.read("config/f2_5_reproducibility_review.json")
+        )
+        self.assertEqual("F2.5", reproducibility["stage"])
+        self.assertEqual("reviewed", reproducibility["status"])
+        self.assertEqual(2, reproducibility["passes"])
+        self.assertEqual(52, reproducibility["byte_identical_artifacts"])
+        self.assertEqual(24, reproducibility["distributable_images_scanned_for_absolute_workspace_path"])
+        self.assertEqual(0, reproducibility["absolute_workspace_path_leaks"])
+        self.assertEqual(52, len(reproducibility["final_manifest"]))
+        self.assertFalse(reproducibility["claims"]["runtime_boot_proven"])
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

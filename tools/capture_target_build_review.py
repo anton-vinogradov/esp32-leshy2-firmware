@@ -64,6 +64,8 @@ def input_paths(target_id: str) -> list[Path]:
     ]
     candidates.extend((REPO_ROOT / "common").rglob("*"))
     candidates.extend((REPO_ROOT / "targets" / target_id).rglob("*"))
+    if target_id in {"pack", "safety"}:
+        candidates.append(REPO_ROOT / "tools" / "normalize_ti_map.py")
     return sorted({path for path in candidates if path.is_file()})
 
 

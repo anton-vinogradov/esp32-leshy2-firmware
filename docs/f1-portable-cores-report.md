@@ -53,5 +53,5 @@ cores, while the update/rollback model becomes an input to F9.
 
 F1 proves portable product logic on a host machine. It does **not** prove target
 image boot, instruction-set/peripheral emulation, real GPIO, radio paths, the
-display or an assembled board. F2–F10 and hardware H4–H8 close those layers, so
-F2 remains the current firmware phase.
+display or an assembled board. F2–F10 and hardware H4–H8 close those layers;
+F2 builds are now reviewed and F3 is the current firmware phase.

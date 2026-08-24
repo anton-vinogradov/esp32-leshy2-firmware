@@ -21,8 +21,8 @@
         },
         {
           "path": "build/targets/safety/debug/leshy2_safety_boot.map",
-          "bytes": 8945,
-          "sha256": "2718d1536c92de88f054a55f4638067ecda4c4069116139c7b66a60d5498302d"
+          "bytes": 8949,
+          "sha256": "22a3b2ea9ae0bd2edcb1a6bb1a7e9509d419a4a3787230dc71e7372765dc2190"
         },
         {
           "path": "build/targets/safety/debug/leshy2_safety.out",
@@ -36,8 +36,8 @@
         },
         {
           "path": "build/targets/safety/debug/leshy2_safety.map",
-          "bytes": 23809,
-          "sha256": "b00511bd3e8ec7ac878a575da668f58c36513fee2a05dfec07c261c874283619"
+          "bytes": 23813,
+          "sha256": "dacc7a1fb5d411a81f185d045b90c870d97832ac4e9a09c0e3a8c2c3a58c0dff"
         }
       ],
       "image_gate": {
@@ -64,8 +64,8 @@
         },
         {
           "path": "build/targets/safety/release/leshy2_safety_boot.map",
-          "bytes": 8949,
-          "sha256": "7b0bf1cdf71eadb436ac663e2d59a4801843f3f57bc9cbc45389b76f1891c191"
+          "bytes": 8953,
+          "sha256": "cac43f4c6e7758c02986caf29c56a07e209bc182ccc800712d096f36f9a800be"
         },
         {
           "path": "build/targets/safety/release/leshy2_safety.out",
@@ -79,8 +79,8 @@
         },
         {
           "path": "build/targets/safety/release/leshy2_safety.map",
-          "bytes": 23813,
-          "sha256": "a67481a0cc6789dc9b1e26c3a83dcee3942e3e31b4d224bf8d6bb1abfc237568"
+          "bytes": 23817,
+          "sha256": "221f7e3eaae4ac6e767fa8aec9f9b7040217bdb5e9765b69fa981fba3876e0f8"
         }
       ],
       "image_gate": {
@@ -129,7 +129,7 @@
       },
       {
         "path": "config/build_matrix.json",
-        "sha256": "cfbbf2a7194187ee525e7598af0e59ac83081b8f15e46a9bc1d2d71fcfbfac03"
+        "sha256": "cf7520b041977ff107b52667ceef44fd071080023165fb1ed6f9160fd49c3f60"
       },
       {
         "path": "config/build_policy.json",
@@ -149,7 +149,7 @@
       },
       {
         "path": "targets/safety/Makefile",
-        "sha256": "8a954105925a2e50e4436b53b44dcc03f7b380e3a667d3967f70c2a9932c70a2"
+        "sha256": "38af00c44dce456589d58596754fa02534d845f9ab147963665abad7ea713a1c"
       },
       {
         "path": "targets/safety/boot_main.c",
@@ -170,9 +170,13 @@
       {
         "path": "targets/safety/slot_a.cmd",
         "sha256": "3dd7928715c247ed1eee2bf37c70d3c9b43529831e189c90f042188dc406461a"
+      },
+      {
+        "path": "tools/normalize_ti_map.py",
+        "sha256": "7d6d0ab4acb1c4cbb5074476f6de12af0cd1c3a40e44ee617680e53da361f870"
       }
     ],
-    "manifest_sha256": "17e2bdd390b4386dfdf40932c0d63ea50db6edf5afea51173a2ee5cb529e5df5"
+    "manifest_sha256": "c304366b9c81119e004e47a47f77bd9401dc15be7e1df63677ba5406ca53e3f6"
   },
   "execution": {
     "configure_runs": 2,

@@ -11,23 +11,23 @@
       "artifacts": [
         {
           "path": "build/targets/c5/debug/leshy2_c5.bin",
-          "bytes": 172320,
-          "sha256": "1076c21f7e44b5bce07b866905fc41f82b17a7e27f5b612db1158d9146b183be"
+          "bytes": 172224,
+          "sha256": "1dc5f566fbbb663774e9c836fa895b2cda5c1051cdbbd637d84ac9e08175b7a2"
         },
         {
           "path": "build/targets/c5/debug/leshy2_c5.elf",
-          "bytes": 4467888,
-          "sha256": "56ca251ec1318f1df1e69a493b5302c3443f05786dbdf5b23612fa15b411ed9c"
+          "bytes": 4252636,
+          "sha256": "aee132e1a61a75f69ef15a32054730c6e6ccf62f766d62cb652f22fa316d4112"
         },
         {
           "path": "build/targets/c5/debug/leshy2_c5.map",
           "bytes": 3704271,
-          "sha256": "3f7b892fd99b9d73e1a5c86f3a76e6badf3e6a86f31fcee768813a0cc989e02e"
+          "sha256": "97512222fb24436d5e10565ac8d0a1d406312e87241b8fa4ccb282a5015ebbf4"
         },
         {
           "path": "build/targets/c5/debug/bootloader/bootloader.bin",
-          "bytes": 22400,
-          "sha256": "df368eb212e0688cc3e7d8773bb094b76258a864d6f5a712fc019f3c3a9f8b62"
+          "bytes": 22336,
+          "sha256": "3fef67d3954bb554135449925294dc79b158068d4950ad78f03f87dcc3a1d00f"
         },
         {
           "path": "build/targets/c5/debug/partition_table/partition-table.bin",
@@ -37,7 +37,7 @@
       ],
       "image_gate": {
         "image": "build/targets/c5/debug/leshy2_c5.bin",
-        "size_bytes": 172320,
+        "size_bytes": 172224,
         "result": "ok",
         "warning_bytes": 3145728,
         "maximum_image_bytes": 3538944,
@@ -45,8 +45,8 @@
       },
       "bootloader_margin": {
         "partition_bytes": 24576,
-        "image_bytes": 22400,
-        "free_bytes": 2176,
+        "image_bytes": 22336,
+        "free_bytes": 2240,
         "warning_below_bytes": 4096,
         "result": "watch"
       }
@@ -56,23 +56,23 @@
       "artifacts": [
         {
           "path": "build/targets/c5/release/leshy2_c5.bin",
-          "bytes": 125664,
-          "sha256": "81684625d966187ee69e664cf262dba65b16ee91280210b04e203946fb2ff794"
+          "bytes": 125616,
+          "sha256": "1a2c14d764560b11557c37a38fd1a6dae2be86be46988b8b7611cb537bc7aff1"
         },
         {
           "path": "build/targets/c5/release/leshy2_c5.elf",
-          "bytes": 4240064,
-          "sha256": "3e9d656e12f7c6fdb40ce9a026a28994a9aae669b4319aba08ce9c27699a3628"
+          "bytes": 4031692,
+          "sha256": "10973683f07f4dd14ae48c41fb03419f4651aae37a7da03df072e9a428dbdb54"
         },
         {
           "path": "build/targets/c5/release/leshy2_c5.map",
           "bytes": 3503854,
-          "sha256": "5bf438039ca124b5de6f368c1e4e524438125960039c9dbac0dd0ed92f976703"
+          "sha256": "63d385a0e360b93a243a695f4dea50a61a80f9d71ad66bf322b638f8e1152aaa"
         },
         {
           "path": "build/targets/c5/release/bootloader/bootloader.bin",
-          "bytes": 20128,
-          "sha256": "999dcb58f90a4f0296f24d666c4f431fc9414a196e8ec4550e2c715915348c93"
+          "bytes": 20064,
+          "sha256": "ff8e083fd9e8a4d84d0622441bfc7c76d3fad58ca9e57b0bf0f525cba7eff7fd"
         },
         {
           "path": "build/targets/c5/release/partition_table/partition-table.bin",
@@ -82,7 +82,7 @@
       ],
       "image_gate": {
         "image": "build/targets/c5/release/leshy2_c5.bin",
-        "size_bytes": 125664,
+        "size_bytes": 125616,
         "result": "ok",
         "warning_bytes": 3145728,
         "maximum_image_bytes": 3538944,
@@ -90,8 +90,8 @@
       },
       "bootloader_margin": {
         "partition_bytes": 24576,
-        "image_bytes": 20128,
-        "free_bytes": 4448,
+        "image_bytes": 20064,
+        "free_bytes": 4512,
         "warning_below_bytes": 4096,
         "result": "ok"
       }
@@ -133,7 +133,7 @@
       },
       {
         "path": "config/build_matrix.json",
-        "sha256": "cfbbf2a7194187ee525e7598af0e59ac83081b8f15e46a9bc1d2d71fcfbfac03"
+        "sha256": "cf7520b041977ff107b52667ceef44fd071080023165fb1ed6f9160fd49c3f60"
       },
       {
         "path": "config/build_policy.json",
@@ -173,14 +173,14 @@
       },
       {
         "path": "targets/c5/sdkconfig.defaults",
-        "sha256": "6ad9d1cdf6707061388010107b685c184ed674c5be65071f6f5eff7a6c4f05a8"
+        "sha256": "af7999e291334bb67b82dbb79a39f98e6c3e0113f73f3ab6926228b5d309e60a"
       },
       {
         "path": "targets/c5/sdkconfig.release",
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "14d2b0ac025a18ccb6352e8be71e760a34205f00e70318843e5d1c164d680a38"
+    "manifest_sha256": "51bdce22a90688bbb765bcd21a1860e41bb0506a5f699da1017f86aebb6d8975"
   },
   "execution": {
     "configure_runs": 2,

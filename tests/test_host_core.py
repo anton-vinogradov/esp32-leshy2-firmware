@@ -1,6 +1,8 @@
 import json
+import os
 import shutil
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,6 +11,79 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class HostCoreExecutionTests(unittest.TestCase):
+    def test_ti_map_timestamp_normalizer_is_deterministic_and_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            map_path = Path(directory) / "image.map"
+            map_path.write_text(
+                "header\n>> Linked Tue Aug 25 02:03:11 2026\nbody\n",
+                encoding="utf-8",
+            )
+            environment = os.environ.copy()
+            environment["SOURCE_DATE_EPOCH"] = "1234567890"
+            result = subprocess.run(
+                ["python3", "tools/normalize_ti_map.py", str(map_path)],
+                cwd=REPO_ROOT,
+                env=environment,
+                check=True,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            self.assertEqual("", result.stdout)
+            self.assertEqual(
+                "header\n>> Linked SOURCE_DATE_EPOCH=1234567890\nbody\n",
+                map_path.read_text(encoding="utf-8"),
+            )
+
+            second = subprocess.run(
+                ["python3", "tools/normalize_ti_map.py", str(map_path)],
+                cwd=REPO_ROOT,
+                env=environment,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            self.assertEqual(0, second.returncode)
+            self.assertEqual(
+                "header\n>> Linked SOURCE_DATE_EPOCH=1234567890\nbody\n",
+                map_path.read_text(encoding="utf-8"),
+            )
+
+            invalid_path = Path(directory) / "invalid.map"
+            invalid_path.write_text("header without linker date\n", encoding="utf-8")
+            invalid = subprocess.run(
+                ["python3", "tools/normalize_ti_map.py", str(invalid_path)],
+                cwd=REPO_ROOT,
+                env=environment,
+                check=False,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            self.assertNotEqual(0, invalid.returncode)
+            self.assertIn("timestamp header not found", invalid.stdout)
+
+    def test_f2_5_clean_build_evidence_is_complete(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f2_5_reproducibility.py", "--check"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("52/52 byte-identical artifacts", result.stdout)
+        review = json.loads(
+            (REPO_ROOT / "config/f2_5_reproducibility_review.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(52, len(review["final_manifest"]))
+        self.assertEqual(24, review["distributable_images_scanned_for_absolute_workspace_path"])
+        self.assertEqual(0, review["absolute_workspace_path_leaks"])
+        self.assertFalse(review["claims"]["runtime_boot_proven"])
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],

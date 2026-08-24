@@ -11,23 +11,23 @@
       "artifacts": [
         {
           "path": "build/targets/s3/debug/leshy2_s3.bin",
-          "bytes": 180240,
-          "sha256": "884d9130017b05f14410b6112c92d9201ca90b517ac6c87bddb00717d03b4fb7"
+          "bytes": 180160,
+          "sha256": "0b790db73111439f84c38748abfc30d86c95461c43bdf4ed7796dee788f958b5"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.elf",
-          "bytes": 3946660,
-          "sha256": "ed92349976cc1880bf5ec61c7a5b394527cc617816561c0fd39e4de8333ca52f"
+          "bytes": 3749140,
+          "sha256": "0b35b55dbae0045bac536f67dea1aef3cd813d586b91295a0f93d9bb0a3bedde"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.map",
           "bytes": 3884074,
-          "sha256": "fed009d01d9acb3f4f1febd19cbbc6d81afbad82ed4ddab09dbb3504d127846b"
+          "sha256": "1ace32c2b56b434b91f1311a882673d4c74dc7a2381589e24491dc83b7871cb0"
         },
         {
           "path": "build/targets/s3/debug/bootloader/bootloader.bin",
-          "bytes": 21120,
-          "sha256": "fded0b7396de71dde01877f90282880a66caaa8a3baf40c9348735966063ebcd"
+          "bytes": 21072,
+          "sha256": "d4d0b0db81dcd9c14b3fe64b2e350b21be3c3b8438415deed069d23fbf15f0ee"
         },
         {
           "path": "build/targets/s3/debug/partition_table/partition-table.bin",
@@ -37,7 +37,7 @@
       ],
       "image_gate": {
         "image": "build/targets/s3/debug/leshy2_s3.bin",
-        "size_bytes": 180240,
+        "size_bytes": 180160,
         "result": "ok",
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
@@ -45,8 +45,8 @@
       },
       "bootloader_margin": {
         "partition_bytes": 32768,
-        "image_bytes": 21120,
-        "free_bytes": 11648,
+        "image_bytes": 21072,
+        "free_bytes": 11696,
         "warning_below_bytes": 4096,
         "result": "ok"
       }
@@ -56,23 +56,23 @@
       "artifacts": [
         {
           "path": "build/targets/s3/release/leshy2_s3.bin",
-          "bytes": 138480,
-          "sha256": "38638df92dde72e8e4337e4171865e9f0181bdd8a7380197e17027aded7b1fa4"
+          "bytes": 138416,
+          "sha256": "92734eac6990603f991189e9d084b5d298e18161bf0aac3469fc706e2fc37435"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.elf",
-          "bytes": 3821976,
-          "sha256": "b1fc6587f1810b094a962f59b3e76f13c77ad769480a361a6f23f35166179417"
+          "bytes": 3628288,
+          "sha256": "e3c0713168821eaaa9de383c9210dff13c5f1d2ab9a345a969e8d625de43608a"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.map",
-          "bytes": 3624966,
-          "sha256": "5a2b91214b52338e79f1c91eb1b0f44b9de628b3cfa4764e1e17cd29518ef120"
+          "bytes": 3624983,
+          "sha256": "7c642d83bf8f98471fe51f55a62eee89c397a58571c5295fb3267913ee4f3400"
         },
         {
           "path": "build/targets/s3/release/bootloader/bootloader.bin",
-          "bytes": 19776,
-          "sha256": "e6da4a644ab79a1882471e507dcec83255f8a6d324b352754b036f5987dc59af"
+          "bytes": 19728,
+          "sha256": "0722a3143c2c040aa97a92d81fa87f39ef223dd7b677597edc26059f8efb9bfc"
         },
         {
           "path": "build/targets/s3/release/partition_table/partition-table.bin",
@@ -82,7 +82,7 @@
       ],
       "image_gate": {
         "image": "build/targets/s3/release/leshy2_s3.bin",
-        "size_bytes": 138480,
+        "size_bytes": 138416,
         "result": "ok",
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
@@ -90,8 +90,8 @@
       },
       "bootloader_margin": {
         "partition_bytes": 32768,
-        "image_bytes": 19776,
-        "free_bytes": 12992,
+        "image_bytes": 19728,
+        "free_bytes": 13040,
         "warning_below_bytes": 4096,
         "result": "ok"
       }
@@ -133,7 +133,7 @@
       },
       {
         "path": "config/build_matrix.json",
-        "sha256": "cfbbf2a7194187ee525e7598af0e59ac83081b8f15e46a9bc1d2d71fcfbfac03"
+        "sha256": "cf7520b041977ff107b52667ceef44fd071080023165fb1ed6f9160fd49c3f60"
       },
       {
         "path": "config/build_policy.json",
@@ -173,14 +173,14 @@
       },
       {
         "path": "targets/s3/sdkconfig.defaults",
-        "sha256": "316a3006fd05df094f97b3520c4dcd0da88e760466116c577ac9133153124629"
+        "sha256": "8a211d1b5fd19c46ba8707121221902c434ae07bbbaecf4ebb2a2776702602ac"
       },
       {
         "path": "targets/s3/sdkconfig.release",
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "c161ba9211ca5c43ea2c10904690e335df4232d97c3af594e67d9a760e3b7af8"
+    "manifest_sha256": "7c324ebc6350c45333845fac14239639043193aaff22d48a93b178cc6ea755c4"
   },
   "execution": {
     "configure_runs": 2,

@@ -17,6 +17,21 @@ OUTPUT = REPO_ROOT / "config" / "f2_4_preflight_review.json"
 TARGETS = {"s3", "c5", "rp", "pack", "safety"}
 
 
+def source_date_epoch() -> str:
+    result = subprocess.run(
+        ["git", "log", "-1", "--format=%ct"],
+        cwd=REPO_ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    value = result.stdout.strip()
+    if not value.isdigit():
+        raise RuntimeError("git commit timestamp is not a valid SOURCE_DATE_EPOCH")
+    return value
+
+
 def local_environment() -> dict[str, str]:
     root = REPO_ROOT / ".toolchains"
     esp_tools = root / "esp-tools"
@@ -54,6 +69,7 @@ def local_environment() -> dict[str, str]:
             "MSPM0_SDK_PATH": str(root / "src/mspm0-sdk"),
             "TI_ARM_CLANG_PATH": str(ti_root),
             "SYSCONFIG_PATH": str(sysconfig_root),
+            "SOURCE_DATE_EPOCH": source_date_epoch(),
             "PATH": os.pathsep.join(str(path) for path in path_entries)
             + os.pathsep
             + environment.get("PATH", ""),

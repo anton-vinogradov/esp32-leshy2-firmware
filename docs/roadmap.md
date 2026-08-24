@@ -3,9 +3,9 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F2 — target projects and reproducible builds.** F0
-> and F1 are reviewed. The accepted hardware H2 production ECAD and generated
-> pin/BSP contract are available. No target image or target emulator has run.
+> **▶️ Current boundary: F3 — boot, memory and emulation.** F0–F2 are
+> reviewed. Five target projects build reproducibly from the accepted H2
+> pin/BSP contract. No target image has booted in an emulator or on hardware.
 
 Status last reconciled: **25 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
@@ -17,8 +17,8 @@ duplicated or given a second status here.
 |---|---|
 | Five-domain, memory/rollback and HW↔FW contracts | ✅ Reviewed at architecture/configuration level |
 | Portable safety, L2IP, update and five-domain model | ✅ [F1 result](f1-portable-cores-report.md): 24 deterministic C scenarios; clean ASan/UBSan |
-| S3/C5/RP/Pack/Safety target projects | ✅ Five structures and generated H2 domain tables reviewed; no configure/build claim |
-| Target builds and map files | ⏳ Not run |
+| S3/C5/RP/Pack/Safety target projects | ✅ Five structures consume generated H2 domain tables |
+| Target builds and map files | ✅ [F2 reviewed](f2-target-build-system-report.md): 10 configurations, 52/52 reproducible artifacts and 10 size gates |
 | ESP32-S3 QEMU | ⏳ Not run |
 | C5, RP2354B and MSPM0 platform/dev-board tests | 🔒 Waiting for target BSP and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
@@ -28,13 +28,14 @@ duplicated or given a second status here.
 The host model verifies portable logic. It is not instruction-set, peripheral
 or board emulation and is never presented as finished firmware.
 
-## Current F2 breakdown
+## Current F3 breakdown
 
-<!-- current-substep: F2.5 -->
+<!-- current-substep: F3.0.0 -->
 
-**Exact marker: `F2.5`** — review clean rebuild reproducibility and close F2.
-Compilation, linking, artifact presence and image-size limits have passed for
-all targets; no emulator or hardware run is claimed.
+**Exact marker: `F3.0.0`** — inventory exact executable/emulator coverage and
+honest dev-board gates for all five targets before the first runtime claim. No
+emulator or hardware run is claimed. The marker and evidence update together
+in every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -103,13 +104,30 @@ all targets; no emulator or hardware run is claimed.
     and image-size gates passed; [machine evidence](../config/f2_4_safety_build_review.json).
   - ✅ `F2.4.6` — all 52 debug/release artifacts, 14 maps and 10 image-size
     gates passed one integrated review; [machine evidence](../config/f2_4_build_review.json).
-- ▶️ **`F2.5` — current:** F2 reproducibility review; only then does F3 boot/emulation begin.
+- ✅ `F2.5` — two full clean passes produced 52/52 byte-identical artifacts;
+  24 distributable images contain no absolute workspace path. See the
+  [F2 result](f2-target-build-system-report.md) and
+  [machine evidence](../config/f2_5_reproducibility_review.json).
+- `F3.0` — runtime-evidence contract.
+  - ▶️ **`F3.0.0` — current:** inventory official emulator/simulator support,
+    instruction coverage, boot observability and unavoidable dev-board gates
+    for S3, C5, RP2354B, Pack and Safety.
+  - `F3.0.1` — define deterministic run recipes, boot markers, timeouts and
+    fail-closed evidence records for every supported virtual path.
+  - `F3.0.2` — publish the emulator/dev-board matrix and integrated F3 runner.
+- `F3.1` — boot the S3 skeleton through the official ESP-IDF QEMU path.
+- `F3.2` — exercise self-test, retained-fault and failed-update paths wherever
+  the virtual platform is faithful enough.
+- `F3.3` — reconcile runtime evidence with image, RAM, partition and rollback
+  boundaries for every target.
+- `F3.4` — integrate the results and assign every non-emulated item to an exact
+  dev-board or HIL gate.
 
-`F2.4.6` is complete. Five targets, ten configurations, 52 artifacts, 14 maps
-and ten image gates pass together. The only active size watch is the C5 debug
-bootloader's 2,176-byte margin. This proves compilation and limits, not boot or peripherals.
-Every later substep closure updates its evidence, this exact marker and both
-language pages in the same commit before work advances.
+F2 is reviewed: five targets, ten configurations, 52 artifacts, 14 maps and
+ten image gates pass together and reproduce in two clean passes. The active
+size watch is the C5 debug bootloader's 2,240-byte margin. This proves builds
+and limits, not boot or peripherals. Every F3 substep closure updates its
+evidence, this exact marker and both language pages in the same commit.
 
 ## Dependencies
 
@@ -145,8 +163,8 @@ flowchart TD
 |---|---|---|---|
 | **F0. Product contracts** | ✅ Reviewed | Five domains, owners, L2IP, memory/partition, safety, update and HW↔FW boundary | Both repositories agree; no target, transport, recovery path or required state is unknown |
 | **F1. Portable cores** | ✅ Reviewed | [F1 result](f1-portable-cores-report.md): C safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues and five-domain fault model | 24 scenarios pass normal and ASan/UBSan builds; heartbeat, lease-boundary, late-update and invalid-enum defects remain covered by regression tests |
-| **F2. Target projects and build system** | ▶️ Current boundary; H2 contract available | Five minimal production-SDK projects: ESP-IDF S3/C5, Pico SDK RP2354B and TI MSPM0 SDK ×2 | Projects configure reproducibly; pin/BSP source is generated from the accepted HW contract; CI builds debug/release; no temporary pin assignment exists |
-| **F3. Boot, memory and emulation** | ⏳ Waiting for F2 | Bootable skeleton images, map/size gates and maximum available virtual evidence | S3 boot/self-test/fault/update-failure runs in official QEMU; five ELF/bin images fit flash/RAM/rollback; shared code runs on host; non-emulated peripherals enter the dev-board matrix |
+| **F2. Target projects and build system** | ✅ [Reviewed](f2-target-build-system-report.md) | Five production-SDK projects: ESP-IDF S3/C5, Pico SDK RP2354B and TI MSPM0 SDK ×2; generated H2 BSP; reproducible artifacts | 10 debug/release configurations pass; 52/52 artifacts reproduce byte-for-byte; no temporary pin assignment exists |
+| **F3. Boot, memory and emulation** | ▶️ Current boundary | Bootable skeleton images, map/size gates and maximum available virtual evidence | S3 boot/self-test/fault/update-failure runs in official QEMU; five ELF/bin images fit flash/RAM/rollback; shared code runs on host; non-emulated peripherals enter the dev-board matrix |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3 | Real SDIO S3↔C5, SPI+alert S3↔RP, Pack/Safety I²C mailboxes, typed results, credits and queues | CRC/replay/deadline/duplicate/reset recovery work end-to-end; waterfall/bulk saturation cannot delay safety/control; link loss closes local side effects |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, CTIA jack detect, `0x39` headset-source control, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; reset/off/no-back-power/quiet transitions are explicit; P02 remains input-only, selector reset/readback and seven reserve pins are checked; unmodeled peripherals have dev-board tests |
 | **F6. UI, display, storage and audio** | ⏳ Waiting for F5 | Menu, dirty-region QSPI rendering, scrolling waterfall, controls/PTT, recording, CTIA/TRS playback/capture state machine and fault viewer | UI remains responsive at maximum stream load; changed regions meet the display budget; insertion first silences the speaker, source changes are pop-safe, removal restores reset default before playback, storage/audio faults remain isolated and the retained fault cause is displayed |
@@ -173,6 +191,6 @@ flowchart TD
 
 ## Next action
 
-The current boundary is F2. The accepted H2 production schematic and generated
-pin/BSP contract are available. F2.0–F2.2 now establish reproducible targets;
-F2.3 then consumes that contract before target builds and emulator execution.
+The current boundary is F3. F2's reproducible artifacts and H2-generated BSP
+are accepted inputs. F3.0.0 now records what each official virtual platform can
+actually execute before any boot or peripheral claim is made.
