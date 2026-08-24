@@ -2,11 +2,11 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.2",
+  "current_substep": "F2.4.3",
   "target_execution": {
-    "configure_runs": 2,
-    "build_runs": 2,
-    "artifact_verify_runs": 2,
+    "configure_runs": 4,
+    "build_runs": 4,
+    "artifact_verify_runs": 4,
     "emulator_runs": 0
   },
   "substeps": {
@@ -81,7 +81,18 @@
         "debug": 180240,
         "release": 138480
       }
+    },
+    "F2.4.2": {
+      "status": "reviewed",
+      "result": "C5 debug and release configure, build and artifact gates passed",
+      "evidence": "config/f2_4_c5_build_review.json",
+      "configurations": ["debug", "release"],
+      "image_bytes": {
+        "debug": 172320,
+        "release": 125664
+      },
+      "watch": "debug bootloader retains 2176 bytes before its current partition boundary"
     }
   },
-  "next": "F2.4.2"
+  "next": "F2.4.3"
 }

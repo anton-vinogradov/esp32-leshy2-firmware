@@ -34,9 +34,10 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.0.5 | Проведено ревью | hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
 | F2.4.0.6 | Проведено ревью | 29 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
 | F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 240 и 138 480 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
-| **F2.4.2** | **Сейчас** | configure/build/verify C5 debug и release |
+| F2.4.2 | Проведено ревью | C5 debug/release builds создали и проверили 10 artifacts; application images занимают 172 320 и 125 664 байта; debug bootloader отслеживается при запасе 2 176 байт; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
+| **F2.4.3** | **Сейчас** | configure/build/verify RP2354B debug и release |
 
-Только строка F2.4.1 заявляет target build. C5, RP, Pack и Safety остаются
+Только строки F2.4.1–F2.4.2 заявляют target builds. RP, Pack и Safety остаются
 несобранными, пока не пройдут собственные configure/build/artifact gates.
 
 ## Матрица SDK и компиляторов
@@ -101,8 +102,9 @@ Python 3.12 environment. F2.0.3
 зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
 Locked-команды автоматически применяют проверенную локальную среду. Команда
 capture записывает относительные пути artifacts, размеры, SHA-256, image gate и
-manifest project inputs, не добавляя build outputs в Git. S3 прошёл этот путь;
-остальные targets следуют на F2.4.2–F2.4.5.
+manifest project inputs, не добавляя build outputs в Git. S3 и C5 прошли этот
+путь; остальные targets следуют на F2.4.3–F2.4.5. Запас ESP bootloader
+фиксируется рядом с application gate.
 
 ## Лицензии
 

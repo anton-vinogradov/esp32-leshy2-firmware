@@ -33,16 +33,16 @@ from this table. The F2 report appears only after all of F2 closes, not after an
 internal substep.
 
 **Firmware is at F2.** Portable logic, all five target-project structures and the
-generated H2 BSP have evidence. S3 now passes real debug/release target builds;
-the other four images and every target-emulator run are still pending.
+generated H2 BSP have evidence. S3 and C5 now pass real debug/release target
+builds; the other three images and every target-emulator run are still pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.4.2 -->
+<!-- current-substep: F2.4.3 -->
 
-**Exact marker: `F2.4.2`** — configure, build and verify C5 in debug and release.
-The integrated preflight passes 29 exact checks. S3 debug/release builds and all
-ten declared S3 artifacts passed review; no emulator or hardware run is claimed.
+**Exact marker: `F2.4.3`** — configure, build and verify RP2354B in debug and
+release. S3 and C5 debug/release builds plus all 20 declared artifacts passed
+review; no emulator or hardware run is claimed.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -98,16 +98,18 @@ ten declared S3 artifacts passed review; no emulator or hardware run is claimed.
       debug/release dispatcher preflight passed; [machine evidence](config/f2_4_preflight_review.json).
   - ✅ `F2.4.1` — S3 debug/release configure, build, ten-artifact presence and
     image-size gates passed; [machine evidence](config/f2_4_s3_build_review.json).
-  - ▶️ **`F2.4.2` — current:** configure/build/verify C5 debug and release.
-  - ⏳ `F2.4.3` — configure/build/verify RP debug and release.
+  - ✅ `F2.4.2` — C5 debug/release configure, build, ten-artifact presence and
+    image-size gates passed; [machine evidence](config/f2_4_c5_build_review.json).
+  - ▶️ **`F2.4.3` — current:** configure/build/verify RP debug and release.
   - ⏳ `F2.4.4` — configure/build/verify Pack debug and release.
   - ⏳ `F2.4.5` — configure/build/verify Safety debug and release.
   - ⏳ `F2.4.6` — review all 26 artifacts, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.4.1` is complete. The S3 application is 180,240 bytes in debug and 138,480
-bytes in release against a 7,340,032-byte OTA slot. This proves compilation,
-linking and artifact limits, not boot, peripherals or byte reproducibility.
+`F2.4.2` is complete. The C5 application is 172,320 bytes in debug and 125,664
+bytes in release against a 3,670,016-byte OTA slot. Its debug bootloader leaves
+2,176 bytes to the current boundary, so that margin is tracked for later
+security growth. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
 language pages in the same commit before work advances.
 

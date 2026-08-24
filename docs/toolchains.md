@@ -33,9 +33,10 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.0.5 | Reviewed | hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety |
 | F2.4.0.6 | Reviewed | 29 exact checks and debug/release preflight for all five targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
 | F2.4.1 | Reviewed | S3 debug/release builds produced and verified 10 artifacts; application images are 180,240 and 138,480 bytes; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
-| **F2.4.2** | **Current** | configure/build/verify C5 debug and release |
+| F2.4.2 | Reviewed | C5 debug/release builds produced and verified 10 artifacts; application images are 172,320 and 125,664 bytes; debug bootloader margin is watched at 2,176 bytes; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
+| **F2.4.3** | **Current** | configure/build/verify RP2354B debug and release |
 
-Only the F2.4.1 row claims a target build. C5, RP, Pack and Safety remain
+Only the F2.4.1–F2.4.2 rows claim target builds. RP, Pack and Safety remain
 unbuilt until their own rows pass the same configure/build/artifact gates.
 
 ## SDK and compiler matrix
@@ -101,7 +102,8 @@ F2.0.3 fixed this contract; F2.2 reviewed all five project structures, while
 The locked commands apply the reviewed local environment automatically. The
 capture command records relative artifact paths, byte counts, SHA-256 values,
 the image gate and a project-input manifest without copying build outputs into
-Git. S3 has passed this path; the remaining targets follow in F2.4.2–F2.4.5.
+Git. S3 and C5 have passed this path; the remaining targets follow in
+F2.4.3–F2.4.5. ESP bootloader margins are captured beside the application gate.
 
 ## Licenses
 

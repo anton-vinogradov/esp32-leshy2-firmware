@@ -27,6 +27,11 @@ LIMIT_INPUTS = {
     "pack": "mspm0c1106_memory.json",
     "safety": "mspm0c1106_memory.json",
 }
+ESP_BOOTLOADER_PARTITION_BYTES = {
+    "s3": 32768,
+    "c5": 24576,
+}
+BOOTLOADER_MARGIN_WARNING_BYTES = 4096
 
 
 def sha256(path: Path) -> str:
@@ -111,6 +116,23 @@ def capture(target_id: str) -> dict[str, object]:
                 "slot_bytes": limits["slot_bytes"],
             },
         }
+        if target_id in ESP_BOOTLOADER_PARTITION_BYTES:
+            bootloader_size = (build_root / "bootloader/bootloader.bin").stat().st_size
+            partition_size = ESP_BOOTLOADER_PARTITION_BYTES[target_id]
+            free_bytes = partition_size - bootloader_size
+            if free_bytes < 0:
+                raise RuntimeError(
+                    f"{target_id}:{configuration}: bootloader exceeds partition"
+                )
+            configurations[configuration]["bootloader_margin"] = {
+                "partition_bytes": partition_size,
+                "image_bytes": bootloader_size,
+                "free_bytes": free_bytes,
+                "warning_below_bytes": BOOTLOADER_MARGIN_WARNING_BYTES,
+                "result": "watch"
+                if free_bytes < BOOTLOADER_MARGIN_WARNING_BYTES
+                else "ok",
+            }
     return {
         "schema_version": 1,
         "stage": stage,

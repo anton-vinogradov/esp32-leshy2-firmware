@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "stage": "F2.4.2",
+  "status": "reviewed",
+  "target": "c5",
+  "sdk_target": "esp32c5",
+  "family": "esp_idf",
+  "configurations": {
+    "debug": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/c5/debug/leshy2_c5.bin",
+          "bytes": 172320,
+          "sha256": "1076c21f7e44b5bce07b866905fc41f82b17a7e27f5b612db1158d9146b183be"
+        },
+        {
+          "path": "build/targets/c5/debug/leshy2_c5.elf",
+          "bytes": 4467888,
+          "sha256": "56ca251ec1318f1df1e69a493b5302c3443f05786dbdf5b23612fa15b411ed9c"
+        },
+        {
+          "path": "build/targets/c5/debug/leshy2_c5.map",
+          "bytes": 3704271,
+          "sha256": "3f7b892fd99b9d73e1a5c86f3a76e6badf3e6a86f31fcee768813a0cc989e02e"
+        },
+        {
+          "path": "build/targets/c5/debug/bootloader/bootloader.bin",
+          "bytes": 22400,
+          "sha256": "df368eb212e0688cc3e7d8773bb094b76258a864d6f5a712fc019f3c3a9f8b62"
+        },
+        {
+          "path": "build/targets/c5/debug/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "0dbd1b753321e2d7f507bebeee3ce73c7b32d13b1e29716f66a5b6f8af3c05df"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/c5/debug/leshy2_c5.bin",
+        "size_bytes": 172320,
+        "result": "ok",
+        "warning_bytes": 3145728,
+        "maximum_image_bytes": 3538944,
+        "slot_bytes": 3670016
+      },
+      "bootloader_margin": {
+        "partition_bytes": 24576,
+        "image_bytes": 22400,
+        "free_bytes": 2176,
+        "warning_below_bytes": 4096,
+        "result": "watch"
+      }
+    },
+    "release": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/c5/release/leshy2_c5.bin",
+          "bytes": 125664,
+          "sha256": "81684625d966187ee69e664cf262dba65b16ee91280210b04e203946fb2ff794"
+        },
+        {
+          "path": "build/targets/c5/release/leshy2_c5.elf",
+          "bytes": 4240064,
+          "sha256": "3e9d656e12f7c6fdb40ce9a026a28994a9aae669b4319aba08ce9c27699a3628"
+        },
+        {
+          "path": "build/targets/c5/release/leshy2_c5.map",
+          "bytes": 3503854,
+          "sha256": "5bf438039ca124b5de6f368c1e4e524438125960039c9dbac0dd0ed92f976703"
+        },
+        {
+          "path": "build/targets/c5/release/bootloader/bootloader.bin",
+          "bytes": 20128,
+          "sha256": "999dcb58f90a4f0296f24d666c4f431fc9414a196e8ec4550e2c715915348c93"
+        },
+        {
+          "path": "build/targets/c5/release/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "0dbd1b753321e2d7f507bebeee3ce73c7b32d13b1e29716f66a5b6f8af3c05df"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/c5/release/leshy2_c5.bin",
+        "size_bytes": 125664,
+        "result": "ok",
+        "warning_bytes": 3145728,
+        "maximum_image_bytes": 3538944,
+        "slot_bytes": 3670016
+      },
+      "bootloader_margin": {
+        "partition_bytes": 24576,
+        "image_bytes": 20128,
+        "free_bytes": 4448,
+        "warning_below_bytes": 4096,
+        "result": "ok"
+      }
+    }
+  },
+  "project_inputs": {
+    "files": [
+      {
+        "path": "common/include/leshy2/l2ip.h",
+        "sha256": "5ef249d678be7300f99b798218295e3dfa30f96c75269df0395937d54a03918e"
+      },
+      {
+        "path": "common/include/leshy2/safety_core.h",
+        "sha256": "a8f3a7f2a05a8db5bd709c24fca0abbc68658659308ae66c0ed7bd8786784409"
+      },
+      {
+        "path": "common/include/leshy2/system_model.h",
+        "sha256": "fbe8f6512ed3d9cfc2f4301749c1ade96349d3ba0654218454d1b1bd09e054fc"
+      },
+      {
+        "path": "common/include/leshy2/update_core.h",
+        "sha256": "2bf34673117c75574117d6e8657f15931deed2790384f8b806f78b5782dacf87"
+      },
+      {
+        "path": "common/src/l2ip.c",
+        "sha256": "89dbec630e92bd5b71dacba23b7a43aa2b6a00935b5d5e5b79fc7cdf81a5af5a"
+      },
+      {
+        "path": "common/src/safety_core.c",
+        "sha256": "c6446f4e35c704e692efad769f23dece7c193769b216369e41158a7346432258"
+      },
+      {
+        "path": "common/src/system_model.c",
+        "sha256": "f48790052d2514f4cd1b4a167ecf5d0784f037e5fa51c5266ec4522e4273c90a"
+      },
+      {
+        "path": "common/src/update_core.c",
+        "sha256": "b7edd0eb47cdc13e4e417a5fe577a0b47cf0ca8673611f29b741c073cfff924b"
+      },
+      {
+        "path": "config/build_matrix.json",
+        "sha256": "125e138b183ed55da270ab0b6e4d5b3f33610b79335969223819b3959fd9b324"
+      },
+      {
+        "path": "config/build_policy.json",
+        "sha256": "ed86c9cf3e0b2447e82d309455e192eb3e790bcb029a39eac0f401256ec82dee"
+      },
+      {
+        "path": "config/c5_image_limits.json",
+        "sha256": "32ef900ff75cbed7b49ab61b44449a176ef240fe54850a33f34eeb735013673c"
+      },
+      {
+        "path": "generated/hardware/include/leshy2/hardware/c5_bsp.h",
+        "sha256": "59d5d397d7072532917ef644eb44fd5013d3885f19fdbadeca6c27c8553d795c"
+      },
+      {
+        "path": "generated/hardware/src/c5_bsp.c",
+        "sha256": "f9fa0d2c4251167a2a3019373d10492a4fcfbb8c5f5b3529eba9f523016fcb2a"
+      },
+      {
+        "path": "targets/c5/CMakeLists.txt",
+        "sha256": "296305855dd72cb61d5a90ebc3801c023f86b684386bbf4a40c21cb91186be96"
+      },
+      {
+        "path": "targets/c5/components/leshy2_portable/CMakeLists.txt",
+        "sha256": "508be5b81de9fb539abe7c83a72a2ad7c5f662bee9c08eb4b24bedeb06edcfdf"
+      },
+      {
+        "path": "targets/c5/main/CMakeLists.txt",
+        "sha256": "89adc4157bad3366b541782b195fefe467fbc455941550bb9821d54d54acadde"
+      },
+      {
+        "path": "targets/c5/main/app_main.c",
+        "sha256": "6451c8ad48af4a6fa3f0be37f5189f30abf95d88e6f11a2e43c280e1ee2e7594"
+      },
+      {
+        "path": "targets/c5/sdkconfig.debug",
+        "sha256": "fbbc95993ca7373ed1720af6014a9e30f923f2da3b084e8919761e816308e0c3"
+      },
+      {
+        "path": "targets/c5/sdkconfig.defaults",
+        "sha256": "6ad9d1cdf6707061388010107b685c184ed674c5be65071f6f5eff7a6c4f05a8"
+      },
+      {
+        "path": "targets/c5/sdkconfig.release",
+        "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
+      }
+    ],
+    "manifest_sha256": "8b98b2a5697b13536e7e11d65b4ea1e4944f588dd695594e2da5b36ca4e56c1d"
+  },
+  "execution": {
+    "configure_runs": 2,
+    "build_runs": 2,
+    "artifact_verify_runs": 2,
+    "emulator_runs": 0,
+    "hardware_runs": 0,
+    "network_during_configure_or_build": false
+  },
+  "claims": {
+    "target_compilation_and_link_passed": true,
+    "all_declared_artifacts_present": true,
+    "image_size_gate_passed": true,
+    "runtime_boot_proven": false,
+    "byte_reproducibility_proven": false
+  },
+  "next": "F2.4.3"
+}

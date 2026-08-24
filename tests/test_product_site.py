@@ -140,7 +140,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.4.2"}, set(markers.values()))
+        self.assertEqual({"F2.4.3"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -227,6 +227,7 @@ class ProductSiteTests(unittest.TestCase):
                 "config/f2_4_preflight_progress.json",
                 "config/f2_4_preflight_review.json",
                 "config/f2_4_s3_build_review.json",
+                "config/f2_4_c5_build_review.json",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
@@ -247,14 +248,15 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.4.2", progress["current_substep"])
+        self.assertEqual("F2.4.3", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.6"]["status"])
         self.assertEqual(29, progress["substeps"]["F2.4.0.6"]["exact_checks"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.1"]["status"])
-        self.assertEqual(2, progress["target_execution"]["build_runs"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.4.2"]["status"])
+        self.assertEqual(4, progress["target_execution"]["build_runs"])
 
         review = json.loads(self.read("config/f2_4_preflight_review.json"))
         self.assertEqual("F2.4.0.6", review["stage"])
@@ -290,6 +292,28 @@ class ProductSiteTests(unittest.TestCase):
         self.assertFalse(s3_review["claims"]["runtime_boot_proven"])
         self.assertFalse(s3_review["claims"]["byte_reproducibility_proven"])
         self.assertEqual(64, len(s3_review["project_inputs"]["manifest_sha256"]))
+
+        c5_review = json.loads(self.read("config/f2_4_c5_build_review.json"))
+        self.assertEqual("F2.4.2", c5_review["stage"])
+        self.assertEqual("reviewed", c5_review["status"])
+        self.assertEqual("esp32c5", c5_review["sdk_target"])
+        self.assertEqual(
+            {"debug": 172320, "release": 125664},
+            {
+                name: row["image_gate"]["size_bytes"]
+                for name, row in c5_review["configurations"].items()
+            },
+        )
+        self.assertEqual(
+            2176,
+            c5_review["configurations"]["debug"]["bootloader_margin"]["free_bytes"],
+        )
+        self.assertEqual(
+            "watch",
+            c5_review["configurations"]["debug"]["bootloader_margin"]["result"],
+        )
+        self.assertEqual(2, c5_review["execution"]["build_runs"])
+        self.assertFalse(c5_review["claims"]["runtime_boot_proven"])
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

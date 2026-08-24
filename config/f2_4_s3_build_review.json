@@ -42,6 +42,13 @@
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
         "slot_bytes": 7340032
+      },
+      "bootloader_margin": {
+        "partition_bytes": 32768,
+        "image_bytes": 21120,
+        "free_bytes": 11648,
+        "warning_below_bytes": 4096,
+        "result": "ok"
       }
     },
     "release": {
@@ -80,6 +87,13 @@
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
         "slot_bytes": 7340032
+      },
+      "bootloader_margin": {
+        "partition_bytes": 32768,
+        "image_bytes": 19776,
+        "free_bytes": 12992,
+        "warning_below_bytes": 4096,
+        "result": "ok"
       }
     }
   },

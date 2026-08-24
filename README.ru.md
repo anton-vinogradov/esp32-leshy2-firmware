@@ -33,17 +33,17 @@
 не её внутренних подэтапов.
 
 **Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
-проектов и generated BSP из hardware H2 имеют evidence. S3 уже проходит
-настоящие debug/release target builds; остальные четыре образа и все
-target-emulator runs ещё ожидают выполнения.
+проектов и generated BSP из hardware H2 имеют evidence. S3 и C5 уже проходят
+настоящие debug/release target builds; остальные три образа и все target-
+emulator runs ещё ожидают выполнения.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.2 -->
+<!-- current-substep: F2.4.3 -->
 
-**Точный маркер: `F2.4.2`** — configure, build и verify C5 в debug и release.
-Сводный preflight проходит 29 точных проверок. S3 debug/release builds и все
-десять заявленных S3 artifacts прошли ревью; emulator и hardware runs не заявлены.
+**Точный маркер: `F2.4.3`** — configure, build и verify RP2354B в debug и
+release. S3 и C5 debug/release builds вместе со всеми 20 заявленными artifacts
+прошли ревью; emulator и hardware runs не заявлены.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -99,16 +99,18 @@ target-emulator runs ещё ожидают выполнения.
       обязательных входов плюс debug/release dispatcher preflight; [машинный evidence](config/f2_4_preflight_review.json).
   - ✅ `F2.4.1` — S3 debug/release configure, build, наличие десяти artifacts
     и image-size gates прошли ревью; [машинный evidence](config/f2_4_s3_build_review.json).
-  - ▶️ **`F2.4.2` — сейчас:** configure/build/verify C5 debug и release.
-  - ⏳ `F2.4.3` — configure/build/verify RP debug и release.
+  - ✅ `F2.4.2` — C5 debug/release configure, build, наличие десяти artifacts
+    и image-size gates прошли ревью; [машинный evidence](config/f2_4_c5_build_review.json).
+  - ▶️ **`F2.4.3` — сейчас:** configure/build/verify RP debug и release.
   - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
   - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
   - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.4.1` завершён. S3 application занимает 180 240 байт в debug и 138 480 байт
-в release при OTA-слоте 7 340 032 байта. Это доказывает компиляцию, линковку и
-лимиты artifacts, но не boot, периферию или побайтную воспроизводимость.
+`F2.4.2` завершён. C5 application занимает 172 320 байт в debug и 125 664 байта
+в release при OTA-слоте 3 670 016 байт. Debug bootloader оставляет 2 176 байт
+до текущей границы, поэтому этот запас отслеживается для будущего роста security.
+Это доказывает компиляцию и лимиты, но не boot или периферию.
 Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
 обе языковые страницы в одном commit.
 
