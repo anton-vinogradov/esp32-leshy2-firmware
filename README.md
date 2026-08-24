@@ -33,16 +33,16 @@ from this table. The F2 report appears only after all of F2 closes, not after an
 internal substep.
 
 **Firmware is at F2.** Portable logic, all five target-project structures and the
-generated H2 BSP have evidence. S3, C5, RP and Pack now pass real debug/release
-target builds; Safety and every target-emulator run are still pending.
+generated H2 BSP have evidence. All five targets now pass real debug/release
+builds; their integrated artifact review and every target-emulator run are pending.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.4.5 -->
+<!-- current-substep: F2.4.6 -->
 
-**Exact marker: `F2.4.5`** — configure, build and verify Safety MSPM0C1106 in
-debug and release. S3, C5, RP and Pack builds plus all 40 produced artifacts passed
-review; no emulator or hardware run is claimed.
+**Exact marker: `F2.4.6`** — review all 52 debug/release artifacts, map files and
+image-size gates together. Every target's own build row has passed; no emulator
+or hardware run is claimed.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -104,11 +104,12 @@ review; no emulator or hardware run is claimed.
     image-size gates passed; [machine evidence](config/f2_4_rp_build_review.json).
   - ✅ `F2.4.4` — Pack debug/release configure, build, twelve-artifact presence
     and image-size gates passed; [machine evidence](config/f2_4_pack_build_review.json).
-  - ▶️ **`F2.4.5` — current:** configure/build/verify Safety debug and release.
-  - ⏳ `F2.4.6` — review all 52 debug/release artifacts, map files and image-size gates.
+  - ✅ `F2.4.5` — Safety debug/release configure, build, twelve-artifact presence
+    and image-size gates passed; [machine evidence](config/f2_4_safety_build_review.json).
+  - ▶️ **`F2.4.6` — current:** review all 52 debug/release artifacts, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.4.4` is complete. The Pack application is 3,168 bytes in both configurations
+`F2.4.5` is complete. The Safety application is 3,296 bytes in both configurations
 against its 22,528-byte slot; its separate boot-manager binary is 256 bytes.
 All OUT, BIN and map outputs exist. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both

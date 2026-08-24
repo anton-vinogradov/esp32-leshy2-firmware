@@ -2,11 +2,11 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.5",
+  "current_substep": "F2.4.6",
   "target_execution": {
-    "configure_runs": 8,
-    "build_runs": 8,
-    "artifact_verify_runs": 8,
+    "configure_runs": 10,
+    "build_runs": 10,
+    "artifact_verify_runs": 10,
     "emulator_runs": 0
   },
   "substeps": {
@@ -113,7 +113,17 @@
         "debug": 3168,
         "release": 3168
       }
+    },
+    "F2.4.5": {
+      "status": "reviewed",
+      "result": "Safety MSPM0C1106 debug and release configure, build and artifact gates passed",
+      "evidence": "config/f2_4_safety_build_review.json",
+      "configurations": ["debug", "release"],
+      "image_bytes": {
+        "debug": 3296,
+        "release": 3296
+      }
     }
   },
-  "next": "F2.4.5"
+  "next": "F2.4.6"
 }

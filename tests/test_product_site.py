@@ -140,7 +140,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.4.5"}, set(markers.values()))
+        self.assertEqual({"F2.4.6"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -232,6 +232,7 @@ class ProductSiteTests(unittest.TestCase):
                 "config/f2_4_c5_build_review.json",
                 "config/f2_4_rp_build_review.json",
                 "config/f2_4_pack_build_review.json",
+                "config/f2_4_safety_build_review.json",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
@@ -256,7 +257,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.4.5", progress["current_substep"])
+        self.assertEqual("F2.4.6", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
@@ -266,7 +267,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", progress["substeps"]["F2.4.2"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.3"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.4"]["status"])
-        self.assertEqual(8, progress["target_execution"]["build_runs"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.4.5"]["status"])
+        self.assertEqual(10, progress["target_execution"]["build_runs"])
 
         review = json.loads(self.read("config/f2_4_preflight_review.json"))
         self.assertEqual("F2.4.0.6", review["stage"])
@@ -360,6 +362,24 @@ class ProductSiteTests(unittest.TestCase):
             self.assertTrue(all(len(item["sha256"]) == 64 for item in row["artifacts"]))
         self.assertEqual(2, pack_review["execution"]["build_runs"])
         self.assertFalse(pack_review["claims"]["runtime_boot_proven"])
+
+        safety_review = json.loads(self.read("config/f2_4_safety_build_review.json"))
+        self.assertEqual("F2.4.5", safety_review["stage"])
+        self.assertEqual("reviewed", safety_review["status"])
+        self.assertEqual("MSPM0C1106", safety_review["sdk_target"])
+        self.assertEqual(
+            {"debug": 3296, "release": 3296},
+            {
+                name: row["image_gate"]["size_bytes"]
+                for name, row in safety_review["configurations"].items()
+            },
+        )
+        for row in safety_review["configurations"].values():
+            self.assertEqual("ok", row["image_gate"]["result"])
+            self.assertEqual(6, len(row["artifacts"]))
+            self.assertTrue(all(len(item["sha256"]) == 64 for item in row["artifacts"]))
+        self.assertEqual(2, safety_review["execution"]["build_runs"])
+        self.assertFalse(safety_review["claims"]["runtime_boot_proven"])
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

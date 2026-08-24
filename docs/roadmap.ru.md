@@ -31,11 +31,11 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.4.5 -->
+<!-- current-substep: F2.4.6 -->
 
-**Точный маркер: `F2.4.5`** — configure, build и verify Safety MSPM0C1106 в
-debug и release. S3, C5, RP и Pack builds вместе со всеми 40 созданными artifacts
-прошли ревью; emulator и hardware runs не заявлены.
+**Точный маркер: `F2.4.6`** — сводное ревью всех 52 debug/release artifacts,
+map files и image-size gates. Собственный build-этап каждого target пройден;
+emulator и hardware runs не заявлены.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -100,11 +100,12 @@ debug и release. S3, C5, RP и Pack builds вместе со всеми 40 со
     и image-size gates прошли ревью; [машинный evidence](../config/f2_4_rp_build_review.json).
   - ✅ `F2.4.4` — Pack debug/release configure, build, наличие двенадцати
     artifacts и image-size gates прошли ревью; [машинный evidence](../config/f2_4_pack_build_review.json).
-  - ▶️ **`F2.4.5` — сейчас:** configure/build/verify Safety debug и release.
-  - ⏳ `F2.4.6` — проверить все 52 debug/release artifacts, map files и image-size gates.
+  - ✅ `F2.4.5` — Safety debug/release configure, build, наличие двенадцати
+    artifacts и image-size gates прошли ревью; [машинный evidence](../config/f2_4_safety_build_review.json).
+  - ▶️ **`F2.4.6` — сейчас:** проверить все 52 debug/release artifacts, map files и image-size gates.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.4.4` завершён. Pack application занимает 3 168 байт в обеих конфигурациях
+`F2.4.5` завершён. Safety application занимает 3 296 байт в обеих конфигурациях
 при слоте 22 528 байт; отдельный boot-manager binary занимает 256 байт. Все
 OUT, BIN и map outputs созданы. Это доказывает компиляцию и лимиты, но не boot или периферию.
 Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и

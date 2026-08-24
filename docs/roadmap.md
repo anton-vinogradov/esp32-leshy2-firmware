@@ -30,11 +30,11 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.4.5 -->
+<!-- current-substep: F2.4.6 -->
 
-**Exact marker: `F2.4.5`** — configure, build and verify Safety MSPM0C1106 in
-debug and release. S3, C5, RP and Pack builds plus all 40 produced artifacts passed
-review; no emulator or hardware run is claimed.
+**Exact marker: `F2.4.6`** — review all 52 debug/release artifacts, map files and
+image-size gates together. Every target's own build row has passed; no emulator
+or hardware run is claimed.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -99,11 +99,12 @@ review; no emulator or hardware run is claimed.
     image-size gates passed; [machine evidence](../config/f2_4_rp_build_review.json).
   - ✅ `F2.4.4` — Pack debug/release configure, build, twelve-artifact presence
     and image-size gates passed; [machine evidence](../config/f2_4_pack_build_review.json).
-  - ▶️ **`F2.4.5` — current:** configure/build/verify Safety debug and release.
-  - ⏳ `F2.4.6` — review all 52 debug/release artifacts, map files and image-size gates.
+  - ✅ `F2.4.5` — Safety debug/release configure, build, twelve-artifact presence
+    and image-size gates passed; [machine evidence](../config/f2_4_safety_build_review.json).
+  - ▶️ **`F2.4.6` — current:** review all 52 debug/release artifacts, map files and image-size gates.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.4.4` is complete. The Pack application is 3,168 bytes in both configurations
+`F2.4.5` is complete. The Safety application is 3,296 bytes in both configurations
 against its 22,528-byte slot; its separate boot-manager binary is 256 bytes.
 All OUT, BIN and map outputs exist. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
