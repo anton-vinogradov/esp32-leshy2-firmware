@@ -208,12 +208,17 @@ def main() -> int:
     rp_cmake = (REPO_ROOT / "targets/rp/CMakeLists.txt").read_text(encoding="utf-8")
     for required in (
         "PICO_SDK_FETCH_FROM_GIT OFF",
+        "FETCHCONTENT_FULLY_DISCONNECTED ON",
         "PICO_BOARD_HEADER_DIRS",
         "project(leshy2_rp C CXX ASM)",
+        "set(CMAKE_C_EXTENSIONS ON)",
         "pico_sdk_init()",
         "rp2354b_partitions.json",
+        "LESHY2_RP_PROJECT_SOURCES",
+        "LESHY2_RP_PROJECT_COMPILE_OPTIONS",
+        "set_source_files_properties(",
         "pico_add_extra_outputs(leshy2_rp)",
-        "-Wl,-Map=${CMAKE_BINARY_DIR}/leshy2_rp.map",
+        '"-Wl,--cref"',
         "$<$<CONFIG:Debug>:-Og>",
         "$<$<CONFIG:Release>:-Os>",
     ):
@@ -227,7 +232,7 @@ def main() -> int:
         "-Wstrict-prototypes",
     }:
         if flag not in rp_cmake:
-            errors.append(f"RP target misses {flag}")
+            errors.append(f"RP project sources miss {flag}")
 
     rp_board = (REPO_ROOT / "targets/rp/boards/leshy2_rp2354b.h").read_text(encoding="utf-8")
     for required in (

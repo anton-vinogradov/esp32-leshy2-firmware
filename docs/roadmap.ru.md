@@ -31,10 +31,10 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.4.3 -->
+<!-- current-substep: F2.4.4 -->
 
-**Точный маркер: `F2.4.3`** — configure, build и verify RP2354B в debug и
-release. S3 и C5 debug/release builds вместе со всеми 20 заявленными artifacts
+**Точный маркер: `F2.4.4`** — configure, build и verify Pack MSPM0C1106 в debug
+и release. S3, C5 и RP debug/release builds вместе со всеми 28 созданными artifacts
 прошли ревью; emulator и hardware runs не заявлены.
 
 - `F2.0` — target/toolchain matrix.
@@ -81,8 +81,8 @@ release. S3 и C5 debug/release builds вместе со всеми 20 заяв�
     one-owner consumption прошли единое ревью.
 - `F2.4` — воспроизводимые debug/release builds, map files и image-size gates.
   - ✅ `F2.4.0` — locked-toolchain preflight пяти targets прошёл ревью.
-    - ✅ `F2.4.0.1` — точные sources/revisions ESP-IDF `v6.0.2`, Pico SDK
-      `2.3.0` и TI MSPM0 SDK `2.11.00.07` прошли ревью.
+    - ✅ `F2.4.0.1` — точные sources/revisions ESP-IDF `v6.0.2`, Pico
+      SDK/picotool `2.3.0` и TI MSPM0 SDK `2.11.00.07` прошли ревью.
     - ✅ `F2.4.0.2` — установлены и распознаны ESP-IDF tool manager точные
       S3/C5 compilers, debuggers, ULP tools, OpenOCD и ROM ELFs прошли ревью.
     - ✅ `F2.4.0.3` — hash-locked Python 3.12 environment и точные CMake/Ninja
@@ -90,22 +90,22 @@ release. S3 и C5 debug/release builds вместе со всеми 20 заяв�
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` прошёл ревью для RP2354B.
     - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig
       `1.28.0.4712` прошли ревью для Pack/Safety.
-    - ✅ `F2.4.0.6` — прошли 29 точных проверок SDK, Git, lock, compiler и
+    - ✅ `F2.4.0.6` — прошли 30 точных проверок SDK, Git, lock, compiler и
       обязательных входов плюс debug/release dispatcher preflight; [машинный evidence](../config/f2_4_preflight_review.json).
   - ✅ `F2.4.1` — S3 debug/release configure, build, наличие десяти artifacts
     и image-size gates прошли ревью; [машинный evidence](../config/f2_4_s3_build_review.json).
   - ✅ `F2.4.2` — C5 debug/release configure, build, наличие десяти artifacts
     и image-size gates прошли ревью; [машинный evidence](../config/f2_4_c5_build_review.json).
-  - ▶️ **`F2.4.3` — сейчас:** configure/build/verify RP debug и release.
-  - ⏳ `F2.4.4` — configure/build/verify Pack debug и release.
+  - ✅ `F2.4.3` — RP debug/release configure, build, наличие восьми artifacts
+    и image-size gates прошли ревью; [машинный evidence](../config/f2_4_rp_build_review.json).
+  - ▶️ **`F2.4.4` — сейчас:** configure/build/verify Pack debug и release.
   - ⏳ `F2.4.5` — configure/build/verify Safety debug и release.
   - ⏳ `F2.4.6` — проверить 26 artifacts, map files и image-size gates.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.4.2` завершён. C5 application занимает 172 320 байт в debug и 125 664 байта
-в release при OTA-слоте 3 670 016 байт. Debug bootloader оставляет 2 176 байт
-до текущей границы, поэтому этот запас отслеживается для будущего роста security.
-Это доказывает компиляцию и лимиты, но не boot или периферию.
+`F2.4.3` завершён. RP binary занимает 18 724 байта в debug и 10 656 байт в
+release при image gate 884 736 байт; ELF, BIN, UF2 и SDK map созданы в обеих
+конфигурациях. Это доказывает компиляцию и лимиты, но не boot или периферию.
 Каждый следующий подэтап до перехода дальше обновляет evidence, точный маркер и
 обе языковые страницы в одном commit.
 

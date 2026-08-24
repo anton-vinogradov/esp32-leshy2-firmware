@@ -50,6 +50,7 @@ def local_environment() -> dict[str, str]:
             ),
             "PICO_SDK_PATH": str(root / "src/pico-sdk"),
             "ARM_GNU_TOOLCHAIN_PATH": str(arm_root),
+            "PICOTOOL_FETCH_FROM_GIT_PATH": str(root / "src/picotool-2.3.0"),
             "MSPM0_SDK_PATH": str(root / "src/mspm0-sdk"),
             "TI_ARM_CLANG_PATH": str(ti_root),
             "SYSCONFIG_PATH": str(sysconfig_root),

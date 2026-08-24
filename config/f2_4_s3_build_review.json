@@ -125,15 +125,15 @@
       },
       {
         "path": "common/src/system_model.c",
-        "sha256": "f48790052d2514f4cd1b4a167ecf5d0784f037e5fa51c5266ec4522e4273c90a"
+        "sha256": "dee61f60150332bf214ac9d4e20cd5dc3521d01bd7da2ad7cecbb8e8604fef3b"
       },
       {
         "path": "common/src/update_core.c",
-        "sha256": "b7edd0eb47cdc13e4e417a5fe577a0b47cf0ca8673611f29b741c073cfff924b"
+        "sha256": "ac6b2cbf70791feda8fe2f6364f2742cc94e7a33efb09d4e49c6f85805d98196"
       },
       {
         "path": "config/build_matrix.json",
-        "sha256": "125e138b183ed55da270ab0b6e4d5b3f33610b79335969223819b3959fd9b324"
+        "sha256": "cfbbf2a7194187ee525e7598af0e59ac83081b8f15e46a9bc1d2d71fcfbfac03"
       },
       {
         "path": "config/build_policy.json",
@@ -180,7 +180,7 @@
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "7f6830bde415e0cf0b5595d7cb524cf3af8e888824c1156e54fb60dcd9cd4c4d"
+    "manifest_sha256": "c161ba9211ca5c43ea2c10904690e335df4232d97c3af594e67d9a760e3b7af8"
   },
   "execution": {
     "configure_runs": 2,

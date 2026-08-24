@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "stage": "F2.4.3",
+  "status": "reviewed",
+  "target": "rp",
+  "sdk_target": "rp2350-arm-s",
+  "family": "pico_sdk",
+  "configurations": {
+    "debug": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/rp/debug/leshy2_rp.elf",
+          "bytes": 1756652,
+          "sha256": "28a892a04793943f1690468ff227afb101befd954e6d45d846581c6a7955f66a"
+        },
+        {
+          "path": "build/targets/rp/debug/leshy2_rp.bin",
+          "bytes": 18724,
+          "sha256": "5e0f8745cd934615573e8ecd0c6beb20c62e34adf158c7ed0f6a11effc11fe5e"
+        },
+        {
+          "path": "build/targets/rp/debug/leshy2_rp.uf2",
+          "bytes": 38400,
+          "sha256": "40c1ef61e9cedda0f5976bb322646f9ba8a213dd99cd21a69ee7c4da63b6404e"
+        },
+        {
+          "path": "build/targets/rp/debug/leshy2_rp.elf.map",
+          "bytes": 932345,
+          "sha256": "5d19e8a96e427a4568d3a43fc001f6946a88411a4a37a7b0cdf98e9f4055afbe"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/rp/debug/leshy2_rp.bin",
+        "size_bytes": 18724,
+        "result": "ok",
+        "warning_bytes": 786432,
+        "maximum_image_bytes": 884736,
+        "slot_bytes": 917504
+      }
+    },
+    "release": {
+      "status": "passed",
+      "artifacts": [
+        {
+          "path": "build/targets/rp/release/leshy2_rp.elf",
+          "bytes": 351212,
+          "sha256": "e993e68a8d54133586e5124094a20ddf71a7c6d2475f4fc3773e5262abf38f87"
+        },
+        {
+          "path": "build/targets/rp/release/leshy2_rp.bin",
+          "bytes": 10656,
+          "sha256": "8b744ca02ea10d7be9f5d2b535e5c5c808e794f5e4bcc254e48427a2ca3cd1b1"
+        },
+        {
+          "path": "build/targets/rp/release/leshy2_rp.uf2",
+          "bytes": 22016,
+          "sha256": "232f6a688d5ada56f84740bddd60b110125bf1405097d138f8d62757333a8cde"
+        },
+        {
+          "path": "build/targets/rp/release/leshy2_rp.elf.map",
+          "bytes": 868107,
+          "sha256": "904d315aa675d408562d60b17c16eb72de53622277cd7f789c48a367fd267aa3"
+        }
+      ],
+      "image_gate": {
+        "image": "build/targets/rp/release/leshy2_rp.bin",
+        "size_bytes": 10656,
+        "result": "ok",
+        "warning_bytes": 786432,
+        "maximum_image_bytes": 884736,
+        "slot_bytes": 917504
+      }
+    }
+  },
+  "project_inputs": {
+    "files": [
+      {
+        "path": "common/include/leshy2/l2ip.h",
+        "sha256": "5ef249d678be7300f99b798218295e3dfa30f96c75269df0395937d54a03918e"
+      },
+      {
+        "path": "common/include/leshy2/safety_core.h",
+        "sha256": "a8f3a7f2a05a8db5bd709c24fca0abbc68658659308ae66c0ed7bd8786784409"
+      },
+      {
+        "path": "common/include/leshy2/system_model.h",
+        "sha256": "fbe8f6512ed3d9cfc2f4301749c1ade96349d3ba0654218454d1b1bd09e054fc"
+      },
+      {
+        "path": "common/include/leshy2/update_core.h",
+        "sha256": "2bf34673117c75574117d6e8657f15931deed2790384f8b806f78b5782dacf87"
+      },
+      {
+        "path": "common/src/l2ip.c",
+        "sha256": "89dbec630e92bd5b71dacba23b7a43aa2b6a00935b5d5e5b79fc7cdf81a5af5a"
+      },
+      {
+        "path": "common/src/safety_core.c",
+        "sha256": "c6446f4e35c704e692efad769f23dece7c193769b216369e41158a7346432258"
+      },
+      {
+        "path": "common/src/system_model.c",
+        "sha256": "dee61f60150332bf214ac9d4e20cd5dc3521d01bd7da2ad7cecbb8e8604fef3b"
+      },
+      {
+        "path": "common/src/update_core.c",
+        "sha256": "ac6b2cbf70791feda8fe2f6364f2742cc94e7a33efb09d4e49c6f85805d98196"
+      },
+      {
+        "path": "config/build_matrix.json",
+        "sha256": "cfbbf2a7194187ee525e7598af0e59ac83081b8f15e46a9bc1d2d71fcfbfac03"
+      },
+      {
+        "path": "config/build_policy.json",
+        "sha256": "ed86c9cf3e0b2447e82d309455e192eb3e790bcb029a39eac0f401256ec82dee"
+      },
+      {
+        "path": "config/rp2354b_image_limits.json",
+        "sha256": "1c1f086a6f89c7d72cf291b823798d27c676c29f7fff532d33d42447681a2f2f"
+      },
+      {
+        "path": "generated/hardware/include/leshy2/hardware/rp_bsp.h",
+        "sha256": "90bee056640ee5f5cef08a0bf6172eddc97ffb1b327a17216d794e71c2a1895c"
+      },
+      {
+        "path": "generated/hardware/src/rp_bsp.c",
+        "sha256": "3f9ba609e2278928601d0f5e133aa509c5206a0ae66671be5577a52610cd245c"
+      },
+      {
+        "path": "targets/rp/CMakeLists.txt",
+        "sha256": "7555a26732ab552f09be65b05f04d28182c7f110155c8d60df8aa76ab04ced75"
+      },
+      {
+        "path": "targets/rp/boards/leshy2_rp2354b.h",
+        "sha256": "14e6452b2277ada041ac76afd1acb49b071a92e8fa0ec7e9d949f0834538c235"
+      },
+      {
+        "path": "targets/rp/main.c",
+        "sha256": "f1746f9b855b53766d95d095b0e51c6a021ff9824fa3318aa12019239cbabdb6"
+      }
+    ],
+    "manifest_sha256": "3d5edc2342f6844a142b54a8a6f6aeed2c0ffab5b8ee8e8f4a85ecc97a6e1fa3"
+  },
+  "execution": {
+    "configure_runs": 2,
+    "build_runs": 2,
+    "artifact_verify_runs": 2,
+    "emulator_runs": 0,
+    "hardware_runs": 0,
+    "network_during_configure_or_build": false
+  },
+  "claims": {
+    "target_compilation_and_link_passed": true,
+    "all_declared_artifacts_present": true,
+    "image_size_gate_passed": true,
+    "runtime_boot_proven": false,
+    "byte_reproducibility_proven": false
+  },
+  "next": "F2.4.4"
+}

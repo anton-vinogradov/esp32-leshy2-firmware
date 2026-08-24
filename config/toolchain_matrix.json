@@ -63,6 +63,13 @@
         "license": "BSD-3-Clause",
         "license_source": "https://github.com/raspberrypi/pico-sdk/blob/2.3.0/LICENSE.TXT"
       },
+      "packaging_tool": {
+        "name": "picotool",
+        "version": "2.3.0",
+        "source": "https://github.com/raspberrypi/picotool/tree/2.3.0",
+        "commit": "6f6458d792b93685a11423b244a585eaa99eafcf",
+        "purpose": "required offline RP2354B post-processing and UF2 generation"
+      },
       "host": {
         "operating_systems": ["Linux x86_64/arm64", "macOS 14+", "Windows 10/11"],
         "python": ">=3.10",

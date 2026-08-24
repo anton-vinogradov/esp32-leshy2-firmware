@@ -50,13 +50,13 @@
       "family": "pico_sdk",
       "sdk_target": "rp2350-arm-s",
       "project_dir": "targets/rp",
-      "required_environment": ["PICO_SDK_PATH", "ARM_GNU_TOOLCHAIN_PATH"],
+      "required_environment": ["PICO_SDK_PATH", "ARM_GNU_TOOLCHAIN_PATH", "PICOTOOL_FETCH_FROM_GIT_PATH"],
       "commands": {
-        "configure": ["cmake", "-S", "{repo}/targets/rp", "-B", "{build}", "-G", "Ninja", "-DCMAKE_BUILD_TYPE={cmake_build_type}", "-DPICO_SDK_PATH={env:PICO_SDK_PATH}", "-DPICO_PLATFORM=rp2350-arm-s", "-DPICO_BOARD=leshy2_rp2354b", "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}"],
+        "configure": ["cmake", "-S", "{repo}/targets/rp", "-B", "{build}", "-G", "Ninja", "-DCMAKE_BUILD_TYPE={cmake_build_type}", "-DPICO_SDK_PATH={env:PICO_SDK_PATH}", "-DPICO_PLATFORM=rp2350-arm-s", "-DPICO_BOARD=leshy2_rp2354b", "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}", "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}", "-DPython3_EXECUTABLE={python}", "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"],
         "build": ["cmake", "--build", "{build}", "--parallel"],
         "clean": ["cmake", "--build", "{build}", "--target", "clean"]
       },
-      "artifacts": ["leshy2_rp.elf", "leshy2_rp.bin", "leshy2_rp.uf2", "leshy2_rp.map"],
+      "artifacts": ["leshy2_rp.elf", "leshy2_rp.bin", "leshy2_rp.uf2", "leshy2_rp.elf.map"],
       "size_gate": {"target": "rp2354b", "image": "leshy2_rp.bin"}
     },
     {

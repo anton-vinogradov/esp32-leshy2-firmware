@@ -42,6 +42,14 @@
       "recursive_submodules": true
     },
     {
+      "id": "picotool",
+      "version": "2.3.0",
+      "repository": "https://github.com/raspberrypi/picotool.git",
+      "tag": "2.3.0",
+      "commit": "6f6458d792b93685a11423b244a585eaa99eafcf",
+      "recursive_submodules": false
+    },
+    {
       "id": "mspm0-sdk",
       "version": "2.11.00.07",
       "repository": "https://github.com/TexasInstruments/mspm0-sdk.git",

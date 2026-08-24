@@ -27,17 +27,18 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.3.1 | Проведено ревью | 11 детерминированных C/header outputs в [`generated/source_manifest.json`](../generated/source_manifest.json); записывает/проверяет [`tools/generate_hardware_bsp.py`](../tools/generate_hardware_bsp.py) |
 | F2.3.2 | Проведено ревью | one-owner mapping в [`config/bsp_target_consumption.json`](../config/bsp_target_consumption.json); проверяет [`tools/check_bsp_target_consumption.py`](../tools/check_bsp_target_consumption.py) |
 | F2.3.3 | Проведено ревью | сводный H2/BSP evidence в [`config/f2_3_review.json`](../config/f2_3_review.json); исполняет [`tools/review_f2_3.py`](../tools/review_f2_3.py) |
-| F2.4.0.1 | Проведено ревью | точные source revisions ESP-IDF `7101770d`, Pico SDK `98a542c1` и TI MSPM0 SDK `20807db7` |
+| F2.4.0.1 | Проведено ревью | точные source revisions ESP-IDF `7101770d`, Pico SDK `98a542c1`, picotool `6f6458d7` и TI MSPM0 SDK `20807db7` |
 | F2.4.0.2 | Проведено ревью | точные ESP S3/C5 compiler, debugger, ULP, OpenOCD и ROM packages установлены ESP-IDF tool manager |
 | F2.4.0.3 | Проведено ревью | hash-locked Python 3.12, CMake `4.0.3` и Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
 | F2.4.0.4 | Проведено ревью | hash-verified native Arm GNU `15.2.Rel1` для RP2354B |
 | F2.4.0.5 | Проведено ревью | hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
-| F2.4.0.6 | Проведено ревью | 29 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
+| F2.4.0.6 | Проведено ревью | 30 точных проверок и debug/release preflight всех пяти targets; [`config/f2_4_preflight_review.json`](../config/f2_4_preflight_review.json) |
 | F2.4.1 | Проведено ревью | S3 debug/release builds создали и проверили 10 artifacts; application images занимают 180 240 и 138 480 байт; [`config/f2_4_s3_build_review.json`](../config/f2_4_s3_build_review.json) |
 | F2.4.2 | Проведено ревью | C5 debug/release builds создали и проверили 10 artifacts; application images занимают 172 320 и 125 664 байта; debug bootloader отслеживается при запасе 2 176 байт; [`config/f2_4_c5_build_review.json`](../config/f2_4_c5_build_review.json) |
-| **F2.4.3** | **Сейчас** | configure/build/verify RP2354B debug и release |
+| F2.4.3 | Проведено ревью | RP2354B debug/release builds создали и проверили 8 artifacts; binaries занимают 18 724 и 10 656 байт; [`config/f2_4_rp_build_review.json`](../config/f2_4_rp_build_review.json) |
+| **F2.4.4** | **Сейчас** | configure/build/verify Pack MSPM0C1106 debug и release |
 
-Только строки F2.4.1–F2.4.2 заявляют target builds. RP, Pack и Safety остаются
+Только строки F2.4.1–F2.4.3 заявляют target builds. Pack и Safety остаются
 несобранными, пока не пройдут собственные configure/build/artifact gates.
 
 ## Матрица SDK и компиляторов
@@ -46,7 +47,7 @@ toolchains, неизменяемые environment locks, общие команд�
 |---|---|---|---|
 | S3 | ESP-IDF `v6.0.2` | `xtensa-esp-elf 15.2.0_20251204` | ESP32-S3 заявлен производителем минимум до 01.01.2033 |
 | C5 | ESP-IDF `v6.0.2` | `riscv32-esp-elf 15.2.0_20251204` | ESP32-C5 заявлен производителем минимум до 01.01.2037 |
-| RP | Pico SDK `2.3.0`, `rp2350-arm-s` | Arm GNU `15.2.Rel1` | RP2350/RP2354B заявлен в производстве минимум до 01.2045 |
+| RP | Pico SDK/picotool `2.3.0`, `rp2350-arm-s` | Arm GNU `15.2.Rel1` | RP2350/RP2354B заявлен в производстве минимум до 01.2045 |
 | Pack, Safety | TI MSPM0 SDK `2.11.00.07` | TI Arm Clang `4.0.5.LTS` | точный MSPM0C1106 поддержан SDK; компонент имеет статус ACTIVE |
 
 Для TI сохранена проверенная SDK ветка `4.0.x LTS`, но взят её последний
@@ -102,8 +103,8 @@ Python 3.12 environment. F2.0.3
 зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
 Locked-команды автоматически применяют проверенную локальную среду. Команда
 capture записывает относительные пути artifacts, размеры, SHA-256, image gate и
-manifest project inputs, не добавляя build outputs в Git. S3 и C5 прошли этот
-путь; остальные targets следуют на F2.4.3–F2.4.5. Запас ESP bootloader
+manifest project inputs, не добавляя build outputs в Git. S3, C5 и RP прошли
+этот путь; остальные targets следуют на F2.4.4–F2.4.5. Запас ESP bootloader
 фиксируется рядом с application gate.
 
 ## Лицензии

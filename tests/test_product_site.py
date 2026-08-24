@@ -140,7 +140,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.4.3"}, set(markers.values()))
+        self.assertEqual({"F2.4.4"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -173,6 +173,8 @@ class ProductSiteTests(unittest.TestCase):
             families["esp_idf"]["targets"]["c5"]["compiler_version"],
         )
         self.assertEqual("2.3.0", families["pico_sdk"]["sdk"]["version"])
+        self.assertEqual("picotool", families["pico_sdk"]["packaging_tool"]["name"])
+        self.assertEqual("2.3.0", families["pico_sdk"]["packaging_tool"]["version"])
         self.assertEqual("rp2350-arm-s", families["pico_sdk"]["target"]["platform"])
         self.assertEqual(
             "15.2.Rel1", families["pico_sdk"]["target"]["compiler_version"]
@@ -228,6 +230,7 @@ class ProductSiteTests(unittest.TestCase):
                 "config/f2_4_preflight_review.json",
                 "config/f2_4_s3_build_review.json",
                 "config/f2_4_c5_build_review.json",
+                "config/f2_4_rp_build_review.json",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
@@ -242,26 +245,31 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(
             {"linux_x86_64", "macos_arm64"}, set(lock["host_profiles"])
         )
-        self.assertEqual(3, len(lock["source_revisions"]))
+        self.assertEqual(4, len(lock["source_revisions"]))
+        self.assertEqual(
+            {"esp-idf", "pico-sdk", "picotool", "mspm0-sdk"},
+            {source["id"] for source in lock["source_revisions"]},
+        )
         self.assertEqual(26, len(lock["archives"]))
         self.assertTrue(
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F2.4.3", progress["current_substep"])
+        self.assertEqual("F2.4.4", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.6"]["status"])
-        self.assertEqual(29, progress["substeps"]["F2.4.0.6"]["exact_checks"])
+        self.assertEqual(30, progress["substeps"]["F2.4.0.6"]["exact_checks"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.1"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.2"]["status"])
-        self.assertEqual(4, progress["target_execution"]["build_runs"])
+        self.assertEqual("reviewed", progress["substeps"]["F2.4.3"]["status"])
+        self.assertEqual(6, progress["target_execution"]["build_runs"])
 
         review = json.loads(self.read("config/f2_4_preflight_review.json"))
         self.assertEqual("F2.4.0.6", review["stage"])
         self.assertEqual("reviewed", review["status"])
-        self.assertEqual(29, review["exact_environment"]["passed"])
+        self.assertEqual(30, review["exact_environment"]["passed"])
         self.assertEqual(0, review["exact_environment"]["failed"])
         self.assertEqual(
             {"debug", "release"},
@@ -314,6 +322,24 @@ class ProductSiteTests(unittest.TestCase):
         )
         self.assertEqual(2, c5_review["execution"]["build_runs"])
         self.assertFalse(c5_review["claims"]["runtime_boot_proven"])
+
+        rp_review = json.loads(self.read("config/f2_4_rp_build_review.json"))
+        self.assertEqual("F2.4.3", rp_review["stage"])
+        self.assertEqual("reviewed", rp_review["status"])
+        self.assertEqual("rp2350-arm-s", rp_review["sdk_target"])
+        self.assertEqual(
+            {"debug": 18724, "release": 10656},
+            {
+                name: row["image_gate"]["size_bytes"]
+                for name, row in rp_review["configurations"].items()
+            },
+        )
+        for row in rp_review["configurations"].values():
+            self.assertEqual("ok", row["image_gate"]["result"])
+            self.assertEqual(4, len(row["artifacts"]))
+            self.assertTrue(all(len(item["sha256"]) == 64 for item in row["artifacts"]))
+        self.assertEqual(2, rp_review["execution"]["build_runs"])
+        self.assertFalse(rp_review["claims"]["runtime_boot_proven"])
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):

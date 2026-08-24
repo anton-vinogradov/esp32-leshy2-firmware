@@ -2,11 +2,11 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.3",
+  "current_substep": "F2.4.4",
   "target_execution": {
-    "configure_runs": 4,
-    "build_runs": 4,
-    "artifact_verify_runs": 4,
+    "configure_runs": 6,
+    "build_runs": 6,
+    "artifact_verify_runs": 6,
     "emulator_runs": 0
   },
   "substeps": {
@@ -16,6 +16,7 @@
       "sources": {
         "esp-idf": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
         "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+        "picotool": "6f6458d792b93685a11423b244a585eaa99eafcf",
         "mspm0-sdk": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32"
       }
     },
@@ -69,7 +70,7 @@
       "status": "reviewed",
       "result": "offline fail-closed preflight passed for five targets in debug and release",
       "evidence": "config/f2_4_preflight_review.json",
-      "exact_checks": 29,
+      "exact_checks": 30,
       "configurations": ["debug", "release"]
     },
     "F2.4.1": {
@@ -92,7 +93,17 @@
         "release": 125664
       },
       "watch": "debug bootloader retains 2176 bytes before its current partition boundary"
+    },
+    "F2.4.3": {
+      "status": "reviewed",
+      "result": "RP2354B debug and release configure, build and artifact gates passed",
+      "evidence": "config/f2_4_rp_build_review.json",
+      "configurations": ["debug", "release"],
+      "image_bytes": {
+        "debug": 18724,
+        "release": 10656
+      }
     }
   },
-  "next": "F2.4.3"
+  "next": "F2.4.4"
 }

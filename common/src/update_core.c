@@ -12,7 +12,7 @@ static const l2_update_domain_t activation_order[L2_UPDATE_DOMAIN_COUNT] = {
 
 static bool domain_valid(l2_update_domain_t domain)
 {
-    return domain >= L2_UPDATE_PACK && domain < L2_UPDATE_DOMAIN_COUNT;
+    return (unsigned)domain < (unsigned)L2_UPDATE_DOMAIN_COUNT;
 }
 
 void l2_update_init(l2_update_t *state, uint32_t initial_build)

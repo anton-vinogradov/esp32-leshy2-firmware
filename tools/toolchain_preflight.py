@@ -148,21 +148,24 @@ def validate_exact_environment(
         _record(checks, errors, f"lock:{item['id']}", item["sha256"], observed)
 
     source_env = {
-        "esp-idf": "IDF_PATH",
-        "pico-sdk": "PICO_SDK_PATH",
-        "mspm0-sdk": "MSPM0_SDK_PATH",
+        "esp-idf": ("IDF_PATH", ""),
+        "pico-sdk": ("PICO_SDK_PATH", ""),
+        "picotool": ("PICOTOOL_FETCH_FROM_GIT_PATH", "picotool-src"),
+        "mspm0-sdk": ("MSPM0_SDK_PATH", ""),
     }
     needed_sources = set()
     if target_ids & {"s3", "c5"}:
         needed_sources.add("esp-idf")
     if "rp" in target_ids:
         needed_sources.add("pico-sdk")
+        needed_sources.add("picotool")
     if target_ids & {"pack", "safety"}:
         needed_sources.add("mspm0-sdk")
     source_revisions = {item["id"]: item for item in lock["source_revisions"]}
     for source_id in sorted(needed_sources):
-        variable = source_env[source_id]
-        source_path = env.get(variable, "")
+        variable, suffix = source_env[source_id]
+        source_root = env.get(variable, "")
+        source_path = str(Path(source_root) / suffix) if source_root else ""
         expected_commit = source_revisions[source_id]["commit"]
         if not source_path or not Path(source_path).is_dir():
             errors.append(f"source:{source_id}: invalid {variable}")

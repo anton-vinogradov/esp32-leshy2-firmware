@@ -30,10 +30,10 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.4.3 -->
+<!-- current-substep: F2.4.4 -->
 
-**Exact marker: `F2.4.3`** — configure, build and verify RP2354B in debug and
-release. S3 and C5 debug/release builds plus all 20 declared artifacts passed
+**Exact marker: `F2.4.4`** — configure, build and verify Pack MSPM0C1106 in
+debug and release. S3, C5 and RP debug/release builds plus all 28 produced artifacts passed
 review; no emulator or hardware run is claimed.
 
 - `F2.0` — target/toolchain matrix.
@@ -80,8 +80,8 @@ review; no emulator or hardware run is claimed.
     one-owner consumption passed one integrated review.
 - `F2.4` — reproducible debug/release builds, map files and image-size gates.
   - ✅ `F2.4.0` — locked-toolchain preflight for five targets passed review.
-    - ✅ `F2.4.0.1` — exact ESP-IDF `v6.0.2`, Pico SDK `2.3.0` and TI MSPM0
-      SDK `2.11.00.07` sources and revisions passed review.
+    - ✅ `F2.4.0.1` — exact ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0` and TI
+      MSPM0 SDK `2.11.00.07` sources and revisions passed review.
     - ✅ `F2.4.0.2` — exact S3/C5 compilers, debuggers, ULP tools, OpenOCD and
       ROM ELFs installed, recognized and passed review.
     - ✅ `F2.4.0.3` — hash-locked Python 3.12 environment and exact CMake/Ninja
@@ -89,22 +89,22 @@ review; no emulator or hardware run is claimed.
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` passed review for RP2354B.
     - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig
       `1.28.0.4712` passed review for Pack/Safety.
-    - ✅ `F2.4.0.6` — 29 exact SDK, Git, lock, compiler and input checks plus
+    - ✅ `F2.4.0.6` — 30 exact SDK, Git, lock, compiler and input checks plus
       debug/release dispatcher preflight passed; [machine evidence](../config/f2_4_preflight_review.json).
   - ✅ `F2.4.1` — S3 debug/release configure, build, ten-artifact presence and
     image-size gates passed; [machine evidence](../config/f2_4_s3_build_review.json).
   - ✅ `F2.4.2` — C5 debug/release configure, build, ten-artifact presence and
     image-size gates passed; [machine evidence](../config/f2_4_c5_build_review.json).
-  - ▶️ **`F2.4.3` — current:** configure/build/verify RP debug and release.
-  - ⏳ `F2.4.4` — configure/build/verify Pack debug and release.
+  - ✅ `F2.4.3` — RP debug/release configure, build, eight-artifact presence and
+    image-size gates passed; [machine evidence](../config/f2_4_rp_build_review.json).
+  - ▶️ **`F2.4.4` — current:** configure/build/verify Pack debug and release.
   - ⏳ `F2.4.5` — configure/build/verify Safety debug and release.
   - ⏳ `F2.4.6` — review all 26 artifacts, map files and image-size gates.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.4.2` is complete. The C5 application is 172,320 bytes in debug and 125,664
-bytes in release against a 3,670,016-byte OTA slot. Its debug bootloader leaves
-2,176 bytes to the current boundary, so that margin is tracked for later
-security growth. This proves compilation and limits, not boot or peripherals.
+`F2.4.3` is complete. The RP binary is 18,724 bytes in debug and 10,656 bytes in
+release against the 884,736-byte image gate; ELF, BIN, UF2 and SDK map outputs
+exist in both configurations. This proves compilation and limits, not boot or peripherals.
 Every later substep closure updates its evidence, this exact marker and both
 language pages in the same commit before work advances.
 

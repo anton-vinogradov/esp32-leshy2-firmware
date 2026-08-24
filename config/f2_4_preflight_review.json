@@ -79,6 +79,12 @@
         "observed": "98a542c1a62fb549ffb5d66a3e5892b06276b670"
       },
       {
+        "id": "source:picotool",
+        "status": "passed",
+        "expected": "6f6458d792b93685a11423b244a585eaa99eafcf",
+        "observed": "6f6458d792b93685a11423b244a585eaa99eafcf"
+      },
+      {
         "id": "tool:cmake",
         "status": "passed",
         "expected": "4.0.3",
@@ -199,19 +205,19 @@
         "observed": "present"
       }
     ],
-    "passed": 29,
+    "passed": 30,
     "failed": 0
   },
   "dispatcher_preflight": [
     {
       "configuration": "debug",
       "status": "passed",
-      "summary": "preflight OK: 5 target(s), debug; 29 exact environment checks"
+      "summary": "preflight OK: 5 target(s), debug; 30 exact environment checks"
     },
     {
       "configuration": "release",
       "status": "passed",
-      "summary": "preflight OK: 5 target(s), release; 29 exact environment checks"
+      "summary": "preflight OK: 5 target(s), release; 30 exact environment checks"
     }
   ],
   "network_during_preflight": false,

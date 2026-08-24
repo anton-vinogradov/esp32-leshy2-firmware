@@ -18,7 +18,7 @@ bool l2_scheduler_enqueue(
     uint16_t message_id
 )
 {
-    if (priority < L2_PRIORITY_SAFETY || priority >= L2_PRIORITY_COUNT) {
+    if ((unsigned)priority >= (unsigned)L2_PRIORITY_COUNT) {
         return false;
     }
     l2_queue_t *queue = &scheduler->queue[priority];
@@ -106,7 +106,7 @@ void l2_system_model_set_domain_online(
     bool online
 )
 {
-    if (domain >= L2_UPDATE_PACK && domain < L2_UPDATE_DOMAIN_COUNT) {
+    if ((unsigned)domain < (unsigned)L2_UPDATE_DOMAIN_COUNT) {
         model->domain_online[domain] = online;
     }
 }
