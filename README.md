@@ -16,7 +16,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | Stage | Status | Result |
 |---|---|---|
 | F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
-| F1 · Portable cores | ✅ Reviewed | 24 deterministic host scenarios plus clean ASan/UBSan |
+| F1 · Portable cores | ✅ Reviewed | [F1 result: 24/24 host scenarios and clean ASan/UBSan](docs/f1-portable-cores-report.md) |
 | **F2 · Target projects and build system** | **▶️ Current boundary; H2 contract available** | reproducible ESP-IDF, Pico SDK and TI SDK projects for five targets |
 | F3 · Boot, memory and emulation | ⏳ Waiting for F2 | bootable skeletons, size gates, S3 QEMU and dev-board matrix |
 | F4 · IPC and scheduling | ⏳ Waiting for F3 | real transports, typed messages, credits and priority isolation |
@@ -27,6 +27,10 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled five-target bundle, rollback and physical recovery |
 | F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
+
+Every completed top-level `F*` phase receives a separate result report linked
+from this table. The F2 report appears only after all of F2 closes, not after an
+internal substep.
 
 **Firmware is at F2.** Portable logic, all five target-project structures and the
 generated H2 BSP have evidence, but no target configure/build or target-emulator

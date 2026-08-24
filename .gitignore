@@ -13,6 +13,7 @@ dependencies.lock
 
 # Host-target / test artifacts
 /build_host/
+/build_host_sanitized/
 *.gcda
 *.gcno
 *.gcov

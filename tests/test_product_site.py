@@ -19,6 +19,8 @@ class ProductSiteTests(unittest.TestCase):
             "README.ru.md",
             "docs/architecture.md",
             "docs/architecture.ru.md",
+            "docs/f1-portable-cores-report.md",
+            "docs/f1-portable-cores-report.ru.md",
             "docs/memory.md",
             "docs/memory.ru.md",
             "docs/roadmap.md",
@@ -54,6 +56,8 @@ class ProductSiteTests(unittest.TestCase):
 
         self.assertIn("docs/roadmap.md", self.read("README.md"))
         self.assertIn("docs/roadmap.ru.md", self.read("README.ru.md"))
+        self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
+        self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
             "README.md": ("Firmware roadmap and current position", "Firmware is at F2", "hardware H2"),
             "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F2", "hardware H2"),
@@ -90,6 +94,39 @@ class ProductSiteTests(unittest.TestCase):
                 self.assertIn(token, page, f"{name}: {token}")
             for stage in range(12):
                 self.assertIn(f"F{stage}.", page, f"{name}: missing F{stage}")
+
+    def test_completed_global_phase_has_bilingual_result_report(self):
+        reports = {
+            "docs/f1-portable-cores-report.md": (
+                "24 of 24",
+                "8 scenarios",
+                "4 scenarios",
+                "5 scenarios",
+                "7 scenarios",
+                "make host-sanitize",
+                "does **not** prove target",
+            ),
+            "docs/f1-portable-cores-report.ru.md": (
+                "24 из 24",
+                "8 сценариев",
+                "4 сценария",
+                "5 сценариев",
+                "7 сценариев",
+                "make host-sanitize",
+                "**не** доказывает",
+            ),
+        }
+        for name, tokens in reports.items():
+            page = self.read(name)
+            self.assertIn("```mermaid", page, name)
+            for token in tokens:
+                self.assertIn(token, page, f"{name}: {token}")
+
+        self.assertIn("f1-portable-cores-report.md", self.read("docs/roadmap.md"))
+        self.assertIn("f1-portable-cores-report.ru.md", self.read("docs/roadmap.ru.md"))
+        makefile = self.read("Makefile")
+        self.assertIn("host-sanitize:", makefile)
+        self.assertIn("-fsanitize=address,undefined", makefile)
 
     def test_current_firmware_substep_is_visible_and_synchronized(self):
         pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
@@ -812,7 +849,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertNotIn("/docs/review", page, name)
 
     def test_all_local_public_links_exist(self):
-        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/memory.md", "docs/memory.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md", "docs/toolchains.md", "docs/toolchains.ru.md"):
+        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/f1-portable-cores-report.md", "docs/f1-portable-cores-report.ru.md", "docs/memory.md", "docs/memory.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md", "docs/toolchains.md", "docs/toolchains.ru.md"):
             page_path = REPO_ROOT / name
             page = page_path.read_text(encoding="utf-8")
             for target in re.findall(r"!?\[[^]]*\]\(([^)]+)\)", page):

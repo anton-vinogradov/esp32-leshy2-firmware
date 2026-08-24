@@ -10,7 +10,7 @@ TARGET ?= all
 CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 
-.PHONY: test host-test matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
 test: f2-3-review
 	python3 -m unittest discover -s tests
@@ -74,6 +74,9 @@ host-test: $(HOST_SAFETY_TEST) $(HOST_L2IP_TEST) $(HOST_UPDATE_TEST) $(HOST_SYST
 	./$(HOST_L2IP_TEST)
 	./$(HOST_UPDATE_TEST)
 	./$(HOST_SYSTEM_TEST)
+
+host-sanitize:
+	$(MAKE) HOST_BUILD=build_host_sanitized CFLAGS="-std=c17 -O1 -g -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -fno-omit-frame-pointer" host-test
 
 $(HOST_SAFETY_TEST): common/src/safety_core.c host/tests/test_safety_core.c common/include/leshy2/safety_core.h
 	mkdir -p $(HOST_BUILD)

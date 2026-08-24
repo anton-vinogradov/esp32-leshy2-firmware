@@ -17,7 +17,7 @@ firmware-репозитория. Пересечения с железом ука
 | Область | Фактическое состояние |
 |---|---|
 | Контракты пяти доменов, memory/rollback и HW↔FW boundary | ✅ Проведено ревью на уровне архитектуры и конфигураций |
-| Portable safety, L2IP, update и five-domain model | ✅ Проведено ревью: 24 детерминированных C-сценария; ASan/UBSan чистые |
+| Portable safety, L2IP, update и five-domain model | ✅ [Итог F1](f1-portable-cores-report.ru.md): 24 детерминированных C-сценария; ASan/UBSan чистые |
 | Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур и generated H2 domain tables прошли ревью; configure/build не заявлены |
 | Target-сборки и map-файлы | ⏳ Не выполнялись |
 | ESP32-S3 QEMU | ⏳ Не запускался |
@@ -139,7 +139,7 @@ flowchart TD
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ Проведено ревью | Пять доменов, владельцы функций, L2IP, memory/partition, safety, update и HW↔FW boundary | Конфигурации обоих репозиториев совпадают; нет неизвестного target, транспорта, recovery-пути или обязательного состояния |
-| **F1. Portable cores** | ✅ Проведено ревью | C-реализация safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues и five-domain fault model | 24 сценария проходят обычную сборку и ASan/UBSan; закрыты обнаруженные ошибки heartbeat, lease boundary, late update и invalid enum |
+| **F1. Portable cores** | ✅ Проведено ревью | [Итог F1](f1-portable-cores-report.ru.md): C-реализация safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues и five-domain fault model | 24 сценария проходят обычную сборку и ASan/UBSan; закрыты обнаруженные ошибки heartbeat, lease boundary, late update и invalid enum |
 | **F2. Target-проекты и build system** | ▶️ Текущая граница; контракт H2 доступен | Пять минимальных проектов на production SDK: ESP-IDF S3/C5, Pico SDK RP2354B и TI MSPM0 SDK ×2 | Все проекты воспроизводимо конфигурируются; pin/BSP source генерируется из принятого HW-контракта; CI строит debug/release; никаких временных pin assignments |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2 | Загружаемые skeleton images, map/size gates и максимально доступная виртуальная проверка | S3 boot/self-test/fault/update-failure проходит официальный QEMU; все пять ELF/bin укладываются в flash/RAM/rollback; shared code проходит host platform; отсутствующая периферия попадает в dev-board matrix |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3 | Реальные SDIO S3↔C5, SPI+alert S3↔RP, I²C mailboxes Pack/Safety, typed results, credits и priority queues | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; waterfall/bulk saturation не задерживает safety/control; link loss локально закрывает side effects |
@@ -162,6 +162,9 @@ flowchart TD
    revoke и fault tests; UI не может обойти hardware `FAULT_KILL`.
 5. Статус **«Проведено ревью»** открывается повторно, если target или HIL
    обнаруживает несоответствие.
+6. Закрытие каждой глобальной фазы `F*` публикует двуязычный итоговый отчёт и
+   ссылку из таблиц roadmap и стартовой страницы. Внутренний подэтап обновляет
+   точный текущий маркер, но отдельным глобальным отчётом не считается.
 
 ## Следующее действие
 

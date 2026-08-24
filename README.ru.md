@@ -16,7 +16,7 @@
 | Этап | Статус | Результат |
 |---|---|---|
 | F0 · Контракты продукта | ✅ Проведено ревью | пять доменов, владельцы, L2IP, memory, safety, update и HW↔FW boundary |
-| F1 · Portable cores | ✅ Проведено ревью | 24 детерминированных host-сценария и чистые ASan/UBSan |
+| F1 · Portable cores | ✅ Проведено ревью | [Итог F1: 24/24 host-сценария и чистые ASan/UBSan](docs/f1-portable-cores-report.ru.md) |
 | **F2 · Target-проекты и build system** | **▶️ Текущая граница; контракт H2 доступен** | воспроизводимые проекты ESP-IDF, Pico SDK и TI SDK для пяти target |
 | F3 · Boot, память и эмуляция | ⏳ Ожидает F2 | загружаемые skeletons, size gates, S3 QEMU и dev-board matrix |
 | F4 · IPC и scheduling | ⏳ Ожидает F3 | реальные transports, typed messages, credits и priority isolation |
@@ -27,6 +27,10 @@
 | F9 · Signed update и recovery | ⏳ Ожидает F1/F3 | управляемый владельцем bundle для пяти target, rollback и физический recovery |
 | F10 · HIL и системная квалификация | 🔒 Ожидает F4–F9 и hardware H7 | prototype fault, RF, power, thermal и endurance evidence |
 | F11 · Firmware release | 🔒 Ожидает F10 и hardware H8 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
+
+Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
+связанный с этой таблицей. Отчёт F2 появится только после закрытия всей F2, а
+не её внутренних подэтапов.
 
 **Прошивка находится на F2.** Portable-логика, структуры всех пяти target-
 проектов и generated BSP из hardware H2 имеют evidence, но target configure/build и

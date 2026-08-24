@@ -16,7 +16,7 @@ duplicated or given a second status here.
 | Area | Actual state |
 |---|---|
 | Five-domain, memory/rollback and HW↔FW contracts | ✅ Reviewed at architecture/configuration level |
-| Portable safety, L2IP, update and five-domain model | ✅ Reviewed: 24 deterministic C scenarios; clean ASan/UBSan |
+| Portable safety, L2IP, update and five-domain model | ✅ [F1 result](f1-portable-cores-report.md): 24 deterministic C scenarios; clean ASan/UBSan |
 | S3/C5/RP/Pack/Safety target projects | ✅ Five structures and generated H2 domain tables reviewed; no configure/build claim |
 | Target builds and map files | ⏳ Not run |
 | ESP32-S3 QEMU | ⏳ Not run |
@@ -138,7 +138,7 @@ flowchart TD
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
 | **F0. Product contracts** | ✅ Reviewed | Five domains, owners, L2IP, memory/partition, safety, update and HW↔FW boundary | Both repositories agree; no target, transport, recovery path or required state is unknown |
-| **F1. Portable cores** | ✅ Reviewed | C safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues and five-domain fault model | 24 scenarios pass normal and ASan/UBSan builds; heartbeat, lease-boundary, late-update and invalid-enum defects remain covered by regression tests |
+| **F1. Portable cores** | ✅ Reviewed | [F1 result](f1-portable-cores-report.md): C safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues and five-domain fault model | 24 scenarios pass normal and ASan/UBSan builds; heartbeat, lease-boundary, late-update and invalid-enum defects remain covered by regression tests |
 | **F2. Target projects and build system** | ▶️ Current boundary; H2 contract available | Five minimal production-SDK projects: ESP-IDF S3/C5, Pico SDK RP2354B and TI MSPM0 SDK ×2 | Projects configure reproducibly; pin/BSP source is generated from the accepted HW contract; CI builds debug/release; no temporary pin assignment exists |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2 | Bootable skeleton images, map/size gates and maximum available virtual evidence | S3 boot/self-test/fault/update-failure runs in official QEMU; five ELF/bin images fit flash/RAM/rollback; shared code runs on host; non-emulated peripherals enter the dev-board matrix |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3 | Real SDIO S3↔C5, SPI+alert S3↔RP, Pack/Safety I²C mailboxes, typed results, credits and queues | CRC/replay/deadline/duplicate/reset recovery work end-to-end; waterfall/bulk saturation cannot delay safety/control; link loss closes local side effects |
@@ -161,6 +161,9 @@ flowchart TD
 4. A potentially dangerous function receives permission, evidence, revoke and
    fault tests before features; UI cannot bypass hardware `FAULT_KILL`.
 5. **Reviewed** reopens when target or HIL evidence contradicts it.
+6. Closing each top-level `F*` phase publishes a bilingual result report and a
+   link from the roadmap tables and landing page. An internal substep updates
+   the exact current marker but does not receive a separate global report.
 
 ## Next action
 
