@@ -103,7 +103,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.3.0"}, set(markers.values()))
+        self.assertEqual({"F2.3.1"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -178,11 +178,13 @@ class ProductSiteTests(unittest.TestCase):
                 "tools/check_target_projects.py",
                 "config/f2_2_review.json",
                 "tools/review_f2_2.py",
+                "config/bsp_generation_input.json",
+                "tools/validate_bsp_generation_input.py",
             ):
                 self.assertIn(artifact, page, f"{name}: {artifact}")
             for completed in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0"):
                 self.assertIn(completed, page, f"{name}: {completed}")
-            for substep in ("F2.1.1", "F2.1.2", "F2.2.0", "F2.2.1", "F2.2.2", "F2.2.3", "F2.2.4", "F2.2.5", "F2.3.0"):
+            for substep in ("F2.1.1", "F2.1.2", "F2.2.0", "F2.2.1", "F2.2.2", "F2.2.3", "F2.2.4", "F2.2.5", "F2.3.0", "F2.3.1"):
                 self.assertIn(substep, page, f"{name}: {substep}")
 
         lock = json.loads(self.read("environment/toolchains.lock.json"))

@@ -30,10 +30,10 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2 breakdown
 
-<!-- current-substep: F2.3.0 -->
+<!-- current-substep: F2.3.1 -->
 
-**Exact marker: `F2.3.0`** — define and validate the deterministic generator
-input model for the accepted H2 pin/BSP contract.
+**Exact marker: `F2.3.1`** — generate the five domain pin tables, public headers
+and exact source manifest from the validated H2 input.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -69,17 +69,18 @@ input model for the accepted H2 pin/BSP contract.
   - ✅ `F2.2.5` — one integrated review passed for five projects, 29 files,
     26 artifacts and 20 debug/release command plans with zero target execution.
 - `F2.3` — import the accepted generated pin/BSP contract.
-  - ▶️ **`F2.3.0` — current:** validate the generator input model and invariants.
-  - ⏳ `F2.3.1` — generate domain headers/tables and an exact source manifest.
+  - ✅ `F2.3.0` — the immutable H2 source identity, 5 domains, 125 contacts,
+    112 nets, 4 transports, 10 groups and proof-field model passed review.
+  - ▶️ **`F2.3.1` — current:** generate domain headers/tables and a manifest.
   - ⏳ `F2.3.2` — connect generated sources to all five target projects.
   - ⏳ `F2.3.3` — review generation determinism and five-project consumption.
 - ⏳ `F2.4` — reproducible debug/release builds, map files and image-size gates
   for all five targets.
 - ⏳ `F2.5` — F2 evidence review; only then does F3 boot/emulation begin.
 
-`F2.3.0` exits when a machine-checked input model maps every reviewed H2 domain,
-contact, role, polarity and owner needed by the generator, rejects duplicates
-and temporary assignments, and adds no hand-authored GPIO.
+`F2.3.1` exits when one deterministic generator writes the common type header,
+five domain headers, five domain tables and a complete manifest, and `--check`
+reproduces every byte without hand editing.
 Closing any substep updates its artifact, public result, both landing pages and
 both roadmap pages in the same commit before work advances.
 

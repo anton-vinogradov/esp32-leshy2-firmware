@@ -215,6 +215,27 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertFalse(review["claims"]["target_builds_run"])
         self.assertFalse(review["claims"]["target_emulators_run"])
 
+    def test_f2_3_generator_input_matches_reviewed_h2_contract(self):
+        result = subprocess.run(
+            ["python3", "tools/validate_bsp_generation_input.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("BSP generation input OK: 5 domains, 125 contacts", result.stdout)
+
+        model = json.loads(
+            (REPO_ROOT / "config/bsp_generation_input.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.3.0", model["stage"])
+        self.assertEqual("reviewed", model["status"])
+        self.assertEqual(125, model["expected_counts"]["allocated_contacts"])
+        self.assertEqual(112, model["expected_counts"]["unique_nets"])
+        self.assertTrue(model["claims"]["input_model_validated"])
+        self.assertFalse(model["claims"]["generated_sources_created"])
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

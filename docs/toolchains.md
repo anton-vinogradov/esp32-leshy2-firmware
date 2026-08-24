@@ -22,7 +22,8 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.2.3 | Reviewed | exact Pack MSPM0C1106 project, separate boot/application images and memory boundaries in [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.4 | Reviewed | exact Safety MSPM0C1106 project, separate boot/application images and fail-closed entry in [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.5 | Reviewed | integrated five-project evidence in [`config/f2_2_review.json`](../config/f2_2_review.json); executed by [`tools/review_f2_2.py`](../tools/review_f2_2.py) |
-| **F2.3.0** | **Current** | validated generator input model for the accepted H2 pin/BSP contract |
+| F2.3.0 | Reviewed | immutable H2 source and deterministic pin model in [`config/bsp_generation_input.json`](../config/bsp_generation_input.json); checked by [`tools/validate_bsp_generation_input.py`](../tools/validate_bsp_generation_input.py) |
+| **F2.3.1** | **Current** | generated five-domain headers, tables and exact source manifest |
 
 No row in this table claims a target build. Those results appear only after
 F2.4 executes both configurations for all five projects.

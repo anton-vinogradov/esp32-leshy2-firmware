@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "stage": "F2.3.0",
+  "status": "reviewed",
+  "source_contract": "config/hardware_bsp_contract.json",
+  "integration_contract": "config/hardware_integration_contract.json",
+  "source_identity": {
+    "export_id": "LESHY2-H2-HWFW-1",
+    "hardware_stage": "H2.0.3",
+    "hardware_status": "reviewed_hwfw_export",
+    "contract_id": "LESHY2-HWFW-1",
+    "review_status": "h2_0_3_reviewed",
+    "source_sha256": "858898892e6d77d9bd44ebcfdc7f25faa6c2ff59a61458ff9cd858b3e0c19f89",
+    "integration_sha256": "4f0c9be2cf020dfc21bb90c2d5be0efc8e52815340f681d5481e197dd627760f"
+  },
+  "domains": [
+    {
+      "domain": "S3",
+      "instance": "s3",
+      "mpn": "ESP32-S3-WROOM-1U-N16R8",
+      "contacts": 33,
+      "output_stem": "s3"
+    },
+    {
+      "domain": "C5",
+      "instance": "c5",
+      "mpn": "ESP32-C5-WROOM-1U-N8R8",
+      "contacts": 14,
+      "output_stem": "c5"
+    },
+    {
+      "domain": "RP",
+      "instance": "rp",
+      "mpn": "SC1512-A4",
+      "contacts": 48,
+      "output_stem": "rp"
+    },
+    {
+      "domain": "PACK",
+      "instance": "pack_admission",
+      "mpn": "Texas Instruments MSPM0C1106SDGS20R",
+      "contacts": 13,
+      "output_stem": "pack"
+    },
+    {
+      "domain": "SAFETY",
+      "instance": "safety_controller",
+      "mpn": "Texas Instruments MSPM0C1106SDGS20R",
+      "contacts": 17,
+      "output_stem": "safety"
+    }
+  ],
+  "pin_model": {
+    "required_fields": ["instance", "contact", "net", "direction", "controller", "peers"],
+    "optional_proof_fields": ["strap_proof", "sharing_proof", "reset_proof"],
+    "directions": ["i", "o", "io", "od"],
+    "controllers": [
+      "ADC",
+      "BITBANG_I2C",
+      "GPIO",
+      "GPIO_IRQ",
+      "I2C0",
+      "I2C0_EXT",
+      "I2C1_OR_UART1_OR_GPIO",
+      "I2C_TARGET",
+      "I2S0",
+      "LEDC",
+      "PCNT0",
+      "PIO0_SM0_RF_SPI",
+      "PIO0_SM1_RF_SPI",
+      "PIO0_SM2_RF_SPI",
+      "PIO0_SM3_RF_SPI",
+      "PIO1_SM0_EXT_SPI",
+      "RMT_RX0",
+      "RMT_RX1",
+      "RMT_TX0",
+      "SDIO_SLAVE",
+      "SDMMC_SLOT1_1BIT",
+      "SPI1_IPC",
+      "SPI2",
+      "SPI3",
+      "SWD",
+      "UART0",
+      "UART1",
+      "USB_SERIAL_JTAG"
+    ],
+    "symbol_source": "net",
+    "symbol_format": "L2_HW_<DOMAIN>_<NET>",
+    "polarity_rule": {
+      "active_low": "net suffix _N",
+      "otherwise": "unspecified"
+    },
+    "contact_number_rule": {
+      "S3": "GPIO decimal suffix",
+      "C5": "GPIO decimal suffix",
+      "RP": "GPIO decimal suffix",
+      "PACK": "PA leading decimal before optional suffix",
+      "SAFETY": "PA leading decimal before optional suffix"
+    },
+    "shared_nets_are_domain_local_symbols": true,
+    "proof_text_is_preserved_as_data": true
+  },
+  "expected_counts": {
+    "domains": 5,
+    "allocated_contacts": 125,
+    "unique_nets": 112,
+    "shared_nets": 11,
+    "strap_proofs": 5,
+    "sharing_proofs": 11,
+    "reset_proofs": 16,
+    "transports": 4,
+    "signal_groups": 10
+  },
+  "outputs": {
+    "root": "generated/hardware",
+    "common_types_header": "generated/hardware/include/leshy2/hardware/bsp_types.h",
+    "domain_header_pattern": "generated/hardware/include/leshy2/hardware/{output_stem}_bsp.h",
+    "domain_source_pattern": "generated/hardware/src/{output_stem}_bsp.c",
+    "manifest": "generated/source_manifest.json"
+  },
+  "claims": {
+    "input_model_validated": true,
+    "generated_sources_created": false,
+    "target_projects_consume_generated_sources": false,
+    "target_configure_run": false,
+    "target_builds_run": false
+  },
+  "validator": "tools/validate_bsp_generation_input.py"
+}
