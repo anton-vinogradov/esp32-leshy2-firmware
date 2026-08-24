@@ -100,10 +100,11 @@
       },
       "compiler": {
         "name": "TI Arm Clang",
-        "version": "4.0.0.LTS",
-        "selection_reason": "newest compiler explicitly validated by MSPM0 SDK 2.11.00.07",
+        "version": "4.0.5.LTS",
+        "validated_line": "4.0.x LTS",
+        "selection_reason": "latest corrective release in the 4.0 LTS line validated by MSPM0 SDK 2.11.00.07; avoids defects present in the 4.0.0 base release",
         "license": "TI compiler license with LLVM/Apache-2.0 WITH LLVM-exception and component notices",
-        "source": "https://software-dl.ti.com/codegen/docs/tiarmclang/rel4_0_0_LTS/"
+        "source": "https://www.ti.com/tool/download/ARM-CGT-CLANG/4.0.5.LTS"
       },
       "targets": [
         {

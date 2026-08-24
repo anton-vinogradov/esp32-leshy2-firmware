@@ -35,11 +35,10 @@ work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.0.2 -->
+<!-- current-substep: F2.0.3 -->
 
-**Exact marker: `F2.0.2`** — turn the reviewed SDK/toolchain matrix into
-reproducible environment manifests with immutable revisions, archive checksums
-and dependency locks.
+**Exact marker: `F2.0.3`** — define one machine-readable local/CI build matrix
+and canonical configure, build, clean, verify and artifact commands.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -47,19 +46,20 @@ and dependency locks.
   - ✅ `F2.0.1` — reviewed exact SDK/toolchain versions, official support,
     lifecycle, license and build-host requirements; see the
     [five-image build environment](docs/toolchains.md).
-  - ▶️ **`F2.0.2` — current:** create reproducible environment manifests,
-    archive checksums and dependency locks.
-  - ⏳ `F2.0.3` — define one local/CI build matrix and canonical commands.
+  - ✅ `F2.0.2` — immutable SDK revisions, 26 verified archive records and the
+    hash-locked ESP-IDF Python environment passed review.
+  - ▶️ **`F2.0.3` — current:** define one local/CI build matrix and canonical
+    commands.
 - ⏳ `F2.1` — create the shared source/component tree without target pins.
 - ⏳ `F2.2` — create minimal S3, C5, RP, Pack and Safety SDK projects.
 - ⏳ `F2.3` — consume the accepted generated pin/BSP contract after F2.0–F2.2.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.0.2` exits only when a clean host can resolve every dependency from an
-immutable identifier and verify every downloaded archive before installation.
-When any substep closes, this marker and both roadmap pages are updated in the
-same commit before work advances.
+`F2.0.3` exits only when each of five targets has the same unambiguous local and
+CI command path, named artifacts and a fail-closed preflight. When any substep
+closes, this marker and both roadmap pages are updated in the same commit before
+work advances.
 
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages

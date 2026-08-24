@@ -1,0 +1,20 @@
+# Snapshot of https://dl.espressif.com/dl/esp-idf/espidf.constraints.v6.0.txt
+# SHA-256 at review: 316f9c4ab3b570f2a498409951c9ceeaaaa784ad106a924a041e33016840efc5
+
+setuptools>=64
+click>=7.0,<8.2
+rich-click>=1.8.1,<2.0
+pyserial>=3.3
+cryptography>=2.1.4,<46.1
+pyparsing>=3.1.0,<3.3
+idf-component-manager~=3.0.0
+esptool>=5.3.0.dev0,<6
+esp-coredump~=1.14
+esp-idf-kconfig>=3.2.0,<4.0.0
+freertos_gdb~=1.0
+esp-idf-monitor>=1.6.2,<2
+esp-idf-size>=2.0.0,<3.0.0
+esp-idf-nvs-partition-gen~=0.1.9
+tree-sitter~=0.25
+tree-sitter-c~=0.24
+mcp<2

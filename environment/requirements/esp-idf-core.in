@@ -1,0 +1,27 @@
+-c esp-idf-v6.0.constraints.txt
+
+# ESP-IDF v6.0.2 tools/requirements/requirements.core.txt at
+# commit 7101770dc6db2667b3c477cc31365dd1acd6db4e.
+setuptools
+packaging
+click
+pyserial
+cryptography
+pyparsing
+pyelftools
+idf-component-manager>=2.2
+esp-coredump
+esptool
+esp-idf-kconfig
+esp-idf-monitor
+esp-idf-nvs-partition-gen
+esp-idf-size
+esp-idf-diag
+esp-idf-panic-decoder
+pyclang
+construct
+rich
+psutil
+tree_sitter
+tree_sitter_c
+freertos_gdb

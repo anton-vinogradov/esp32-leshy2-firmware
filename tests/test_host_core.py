@@ -9,6 +9,17 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class HostCoreExecutionTests(unittest.TestCase):
+    def test_environment_lock_is_complete_and_self_consistent(self):
+        result = subprocess.run(
+            ["python3", "tools/verify_environment_lock.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("environment lock OK: 26 archives", result.stdout)
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

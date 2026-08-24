@@ -103,7 +103,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2.0.2"}, set(markers.values()))
+        self.assertEqual({"F2.0.3"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F2", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -143,7 +143,7 @@ class ProductSiteTests(unittest.TestCase):
             "2.11.00.07", families["ti_mspm0_sdk"]["sdk"]["version"]
         )
         self.assertEqual(
-            "4.0.0.LTS", families["ti_mspm0_sdk"]["compiler"]["version"]
+            "4.0.5.LTS", families["ti_mspm0_sdk"]["compiler"]["version"]
         )
         self.assertEqual("1.28.x", families["ti_mspm0_sdk"]["host"]["sysconfig"])
         self.assertIn(
@@ -159,10 +159,24 @@ class ProductSiteTests(unittest.TestCase):
                 "rp2350-arm-s",
                 "15.2.Rel1",
                 "2.11.00.07",
-                "4.0.0.LTS",
+                "4.0.5.LTS",
                 "F2.0.2",
+                "F2.0.3",
             ):
                 self.assertIn(token, page, f"{name}: {token}")
+
+        lock = json.loads(self.read("environment/toolchains.lock.json"))
+        self.assertEqual("F2.0.2", lock["stage"])
+        self.assertEqual("reviewed", lock["status"])
+        self.assertFalse(lock["policy"]["floating_versions_allowed"])
+        self.assertEqual(
+            {"linux_x86_64", "macos_arm64"}, set(lock["host_profiles"])
+        )
+        self.assertEqual(2, len(lock["source_revisions"]))
+        self.assertEqual(26, len(lock["archives"]))
+        self.assertTrue(
+            all(len(archive["sha256"]) == 64 for archive in lock["archives"])
+        )
 
     def test_runtime_architecture_has_five_physical_controllers(self):
         for name in ("docs/architecture.md", "docs/architecture.ru.md"):
@@ -763,7 +777,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertNotIn("/docs/review", page, name)
 
     def test_all_local_public_links_exist(self):
-        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/memory.md", "docs/memory.ru.md"):
+        for name in ("README.md", "README.ru.md", "docs/architecture.md", "docs/architecture.ru.md", "docs/memory.md", "docs/memory.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md", "docs/toolchains.md", "docs/toolchains.ru.md"):
             page_path = REPO_ROOT / name
             page = page_path.read_text(encoding="utf-8")
             for target in re.findall(r"!?\[[^]]*\]\(([^)]+)\)", page):

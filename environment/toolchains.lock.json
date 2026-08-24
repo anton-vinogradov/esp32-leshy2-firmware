@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "stage": "F2.0.2",
+  "status": "reviewed",
+  "generated_on": "2026-08-24",
+  "policy": {
+    "download_transport": "https only",
+    "archive_verification": "SHA-256 before extraction or installer execution",
+    "git_verification": "checkout exact commit and verify HEAD; recurse into commit-pinned submodules",
+    "floating_versions_allowed": false,
+    "ti_export_approval_bypass_allowed": false
+  },
+  "host_profiles": {
+    "linux_x86_64": {
+      "role": "canonical CI and release build host",
+      "os": "Linux",
+      "architecture": "x86_64",
+      "python": "3.12"
+    },
+    "macos_arm64": {
+      "role": "canonical local development host",
+      "os": "macOS",
+      "architecture": "arm64",
+      "python": "3.12",
+      "compatibility": "Rosetta 2 is required only for the TI Arm Clang macOS x86_64 package"
+    }
+  },
+  "source_revisions": [
+    {
+      "id": "esp-idf",
+      "version": "v6.0.2",
+      "repository": "https://github.com/espressif/esp-idf.git",
+      "tag_object": "b0d7ee8723d5cd90c1aa2c54729aa7c92f2bf187",
+      "commit": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+      "recursive_submodules": true
+    },
+    {
+      "id": "pico-sdk",
+      "version": "2.3.0",
+      "repository": "https://github.com/raspberrypi/pico-sdk.git",
+      "commit": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+      "recursive_submodules": true
+    }
+  ],
+  "local_locks": [
+    {
+      "id": "esp-idf-python-input",
+      "path": "environment/requirements/esp-idf-core.in",
+      "sha256": "60c8847fc2f6dd9f6e217cd7af9faaadde9d6422057e3d32c381291221759742"
+    },
+    {
+      "id": "esp-idf-python-constraints-snapshot",
+      "path": "environment/requirements/esp-idf-v6.0.constraints.txt",
+      "sha256": "f94014ad6be2cec51bf6fd1be9b44cfd8a18be0d5b187d3c634549cc4ec01498",
+      "upstream_url": "https://dl.espressif.com/dl/esp-idf/espidf.constraints.v6.0.txt",
+      "upstream_sha256_at_review": "316f9c4ab3b570f2a498409951c9ceeaaaa784ad106a924a041e33016840efc5"
+    },
+    {
+      "id": "esp-idf-python-lock",
+      "path": "environment/requirements/esp-idf-core.lock.txt",
+      "sha256": "45620db7dadba1020055be6424a184c0a08626a625b117d97e840b578bd3f8eb",
+      "python": "3.12",
+      "install_flags": ["--require-hashes", "--only-binary=cryptography"]
+    }
+  ],
+  "archives": [
+    {
+      "id": "cmake-linux_x86_64",
+      "family": "shared",
+      "tool": "cmake",
+      "version": "4.0.3",
+      "host": "linux_x86_64",
+      "url": "https://github.com/Kitware/CMake/releases/download/v4.0.3/cmake-4.0.3-linux-x86_64.tar.gz",
+      "sha256": "585ae9e013107bc8e7c7c9ce872cbdcbdff569e675b07ef57aacfb88c886faac"
+    },
+    {
+      "id": "cmake-macos_arm64",
+      "family": "shared",
+      "tool": "cmake",
+      "version": "4.0.3",
+      "host": "macos_arm64",
+      "url": "https://github.com/Kitware/CMake/releases/download/v4.0.3/cmake-4.0.3-macos-universal.tar.gz",
+      "sha256": "4e85de4daf1c3e82d7dc6b8ba5683972944b466343aeb9c327a742437bb3ce9a"
+    },
+    {
+      "id": "ninja-linux_x86_64",
+      "family": "shared",
+      "tool": "ninja",
+      "version": "1.12.1",
+      "host": "linux_x86_64",
+      "url": "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux.zip",
+      "sha256": "6f98805688d19672bd699fbbfa2c2cf0fc054ac3df1f0e6a47664d963d530255"
+    },
+    {
+      "id": "ninja-macos_arm64",
+      "family": "shared",
+      "tool": "ninja",
+      "version": "1.12.1",
+      "host": "macos_arm64",
+      "url": "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-mac.zip",
+      "sha256": "89a287444b5b3e98f88a945afa50ce937b8ffd1dcc59c555ad9b1baf855298c9"
+    },
+    {
+      "id": "esp-xtensa-gcc-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "xtensa-esp-elf",
+      "version": "esp-15.2.0_20251204",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/crosstool-NG/releases/download/esp-15.2.0_20251204/xtensa-esp-elf-15.2.0_20251204-x86_64-linux-gnu.tar.xz",
+      "sha256": "3d50f5cd5f173acfd524e07c1cd69bc99585731a415ca2e5bce879997fe602b8"
+    },
+    {
+      "id": "esp-xtensa-gcc-macos_arm64",
+      "family": "esp_idf",
+      "tool": "xtensa-esp-elf",
+      "version": "esp-15.2.0_20251204",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/crosstool-NG/releases/download/esp-15.2.0_20251204/xtensa-esp-elf-15.2.0_20251204-aarch64-apple-darwin.tar.xz",
+      "sha256": "68d3fb1e75c6bb1b88c6a2c74977abd51efd09b560a99149bafdcf403cb21941"
+    },
+    {
+      "id": "esp-riscv-gcc-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "riscv32-esp-elf",
+      "version": "esp-15.2.0_20251204",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/crosstool-NG/releases/download/esp-15.2.0_20251204/riscv32-esp-elf-15.2.0_20251204-x86_64-linux-gnu.tar.xz",
+      "sha256": "ace5aae6afe98f754947be043d40173e2e22ace57754b11a394b7238eefa01cf"
+    },
+    {
+      "id": "esp-riscv-gcc-macos_arm64",
+      "family": "esp_idf",
+      "tool": "riscv32-esp-elf",
+      "version": "esp-15.2.0_20251204",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/crosstool-NG/releases/download/esp-15.2.0_20251204/riscv32-esp-elf-15.2.0_20251204-aarch64-apple-darwin.tar.xz",
+      "sha256": "0869d1083532c631808543dd802885f02dbe1bb3bd640be0dee827e82ded768d"
+    },
+    {
+      "id": "esp-xtensa-gdb-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "xtensa-esp-elf-gdb",
+      "version": "17.1_20260402",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp-gdb-v17.1_20260402/xtensa-esp-elf-gdb-17.1_20260402-x86_64-linux-gnu.tar.gz",
+      "sha256": "73bc6c4e50b06dceb60e94b53aded61b7769be3cf563572269d9c8d643db8e95"
+    },
+    {
+      "id": "esp-xtensa-gdb-macos_arm64",
+      "family": "esp_idf",
+      "tool": "xtensa-esp-elf-gdb",
+      "version": "17.1_20260402",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp-gdb-v17.1_20260402/xtensa-esp-elf-gdb-17.1_20260402-aarch64-apple-darwin24.5.tar.gz",
+      "sha256": "da97440e74a9ff36370bdb598cf421a8183c11ae6fb44431be594ad16dbe77ef"
+    },
+    {
+      "id": "esp-riscv-gdb-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "riscv32-esp-elf-gdb",
+      "version": "17.1_20260402",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp-gdb-v17.1_20260402/riscv32-esp-elf-gdb-17.1_20260402-x86_64-linux-gnu.tar.gz",
+      "sha256": "35f3db841338cb4f9bc60d757bc3e87dfa50ff50607bcbc3867c5b1ac28dd342"
+    },
+    {
+      "id": "esp-riscv-gdb-macos_arm64",
+      "family": "esp_idf",
+      "tool": "riscv32-esp-elf-gdb",
+      "version": "17.1_20260402",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp-gdb-v17.1_20260402/riscv32-esp-elf-gdb-17.1_20260402-aarch64-apple-darwin24.5.tar.gz",
+      "sha256": "f944bb6a07b03e5d74dd1f878ba05320ee7957d3a06bcc80cd0a9cf355e8ceea"
+    },
+    {
+      "id": "esp-ulp-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "esp32ulp-elf",
+      "version": "2.38_20240113",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp32ulp-elf-2.38_20240113/esp32ulp-elf-2.38_20240113-linux-amd64.tar.gz",
+      "sha256": "d13a808365b78465fa6591636dfbbb9604d9d15a397c3d9cd22626d54828ac2c"
+    },
+    {
+      "id": "esp-ulp-macos_arm64",
+      "family": "esp_idf",
+      "tool": "esp32ulp-elf",
+      "version": "2.38_20240113",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/binutils-gdb/releases/download/esp32ulp-elf-2.38_20240113/esp32ulp-elf-2.38_20240113-macos-arm64.tar.gz",
+      "sha256": "e3a4dfea043e2bce8cd00b3a0b260a59249fa61ca5931bf02f18a3d43c18deb4"
+    },
+    {
+      "id": "esp-openocd-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "openocd-esp32",
+      "version": "v0.12.0-esp32-20260424",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/openocd-esp32/releases/download/v0.12.0-esp32-20260424/openocd-esp32-linux-amd64-0.12.0-esp32-20260424.tar.gz",
+      "sha256": "0c875beb0e8d89cee4335968e8a27c7d151f05b91f636263c81ab01e098d390d"
+    },
+    {
+      "id": "esp-openocd-macos_arm64",
+      "family": "esp_idf",
+      "tool": "openocd-esp32",
+      "version": "v0.12.0-esp32-20260424",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/openocd-esp32/releases/download/v0.12.0-esp32-20260424/openocd-esp32-macos-arm64-0.12.0-esp32-20260424.tar.gz",
+      "sha256": "c7bffa205ca92a69ae7bc74e6e428824084e404355cbb9df2238fe30f5f435bb"
+    },
+    {
+      "id": "esp-rom-elfs-linux_x86_64",
+      "family": "esp_idf",
+      "tool": "esp-rom-elfs",
+      "version": "20241011",
+      "host": "linux_x86_64",
+      "url": "https://github.com/espressif/esp-rom-elfs/releases/download/20241011/esp-rom-elfs-20241011.tar.gz",
+      "sha256": "921f000164a421c7628fbfee55b173384aafaa51883adc65cd27bf9b0af9e9a9"
+    },
+    {
+      "id": "esp-rom-elfs-macos_arm64",
+      "family": "esp_idf",
+      "tool": "esp-rom-elfs",
+      "version": "20241011",
+      "host": "macos_arm64",
+      "url": "https://github.com/espressif/esp-rom-elfs/releases/download/20241011/esp-rom-elfs-20241011.tar.gz",
+      "sha256": "921f000164a421c7628fbfee55b173384aafaa51883adc65cd27bf9b0af9e9a9"
+    },
+    {
+      "id": "arm-gnu-linux_x86_64",
+      "family": "pico_sdk",
+      "tool": "arm-none-eabi",
+      "version": "15.2.Rel1",
+      "host": "linux_x86_64",
+      "url": "https://armkeil.blob.core.windows.net/developer/files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz",
+      "sha256": "597893282ac8c6ab1a4073977f2362990184599643b4c5ee34870a8215783a16"
+    },
+    {
+      "id": "arm-gnu-macos_arm64",
+      "family": "pico_sdk",
+      "tool": "arm-none-eabi",
+      "version": "15.2.Rel1",
+      "host": "macos_arm64",
+      "url": "https://armkeil.blob.core.windows.net/developer/files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-darwin-arm64-arm-none-eabi.tar.xz",
+      "sha256": "1938a84b7105c192e3fb4fa5e893ba25f425f7ddab40515ae608cd40f68669a8"
+    },
+    {
+      "id": "ti-mspm0-sdk-linux_x86_64",
+      "family": "ti_mspm0_sdk",
+      "tool": "mspm0-sdk",
+      "version": "2.11.00.07",
+      "host": "linux_x86_64",
+      "url": "https://dr-download.ti.com/secure/software-development/software-development-kit-sdk/MD-eCeyqJj7JC/2.11.00/mspm0_sdk_2_11_00_07.run",
+      "sha256": "7a5873e728b894340733653ab516e7f56deb592c79035f348b7c2940e32f1199",
+      "requires_export_approval": true
+    },
+    {
+      "id": "ti-mspm0-sdk-macos_arm64",
+      "family": "ti_mspm0_sdk",
+      "tool": "mspm0-sdk",
+      "version": "2.11.00.07",
+      "host": "macos_arm64",
+      "url": "https://dr-download.ti.com/secure/software-development/software-development-kit-sdk/MD-eCeyqJj7JC/2.11.00/mspm0_sdk_2_11_00_07.app.zip",
+      "sha256": "87542b92fd7010cc80bf9aa6974b61c3370c5bdbfd1fca4f2fb4f18b3f8d3826",
+      "requires_export_approval": true
+    },
+    {
+      "id": "ti-arm-clang-linux_x86_64",
+      "family": "ti_mspm0_sdk",
+      "tool": "ti-arm-clang",
+      "version": "4.0.5.LTS",
+      "host": "linux_x86_64",
+      "url": "https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/4.0.5.LTS/ti_cgt_armllvm_4.0.5.LTS_linux-x64_installer.bin",
+      "sha256": "4aa30c21d09855b8951cdaa3232a7536e247c085798794a99fdfc79297bab7b5"
+    },
+    {
+      "id": "ti-arm-clang-macos_arm64",
+      "family": "ti_mspm0_sdk",
+      "tool": "ti-arm-clang",
+      "version": "4.0.5.LTS",
+      "host": "macos_arm64",
+      "url": "https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/4.0.5.LTS/ti_cgt_armllvm_4.0.5.LTS_osx-x64_installer.app.zip",
+      "sha256": "5ae8fd6eb8b819b960cb81d1edc14d462221c29f77ba73029173478a68254e9a",
+      "execution": "x86_64 through Rosetta 2"
+    },
+    {
+      "id": "ti-sysconfig-linux_x86_64",
+      "family": "ti_mspm0_sdk",
+      "tool": "sysconfig",
+      "version": "1.28.0.4712",
+      "host": "linux_x86_64",
+      "url": "https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-nsUM6f7Vvb/1.28.0.4712/sysconfig-1.28.0_4712-setup.run",
+      "sha256": "222dd65e0c8396e99e4f2839dcf9c2058238e875d85b06869c865a6e21962aee"
+    },
+    {
+      "id": "ti-sysconfig-macos_arm64",
+      "family": "ti_mspm0_sdk",
+      "tool": "sysconfig",
+      "version": "1.28.0.4712",
+      "host": "macos_arm64",
+      "url": "https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-nsUM6f7Vvb/1.28.0.4712/sysconfig-1.28.0_4712-setup.dmg",
+      "sha256": "6fe2fefba4118aecf5692bc2247903357c98fcdc7562ce849992bbfd83367717"
+    }
+  ]
+}

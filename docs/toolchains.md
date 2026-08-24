@@ -11,12 +11,12 @@ to build each of the five Leshy2 images. Exact machine-checkable records live in
 | S3 | ESP-IDF `v6.0.2` | `xtensa-esp-elf 15.2.0_20251204` | ESP32-S3 vendor commitment through at least 2033-01-01 |
 | C5 | ESP-IDF `v6.0.2` | `riscv32-esp-elf 15.2.0_20251204` | ESP32-C5 vendor commitment through at least 2037-01-01 |
 | RP | Pico SDK `2.3.0`, `rp2350-arm-s` | Arm GNU `15.2.Rel1` | RP2350/RP2354B production through at least January 2045 |
-| Pack, Safety | TI MSPM0 SDK `2.11.00.07` | TI Arm Clang `4.0.0.LTS` | the SDK supports MSPM0C1106 and the exact device is ACTIVE |
+| Pack, Safety | TI MSPM0 SDK `2.11.00.07` | TI Arm Clang `4.0.5.LTS` | the SDK supports MSPM0C1106 and the exact device is ACTIVE |
 
-The TI selection is not the newest compiler in isolation. It is the newest
-compiler explicitly validated with MSPM0 SDK `2.11.00.07`, reducing integration
-risk without degrading the product. Pack and Safety remain separate images and
-projects while sharing one verified SDK/toolchain family.
+The TI selection stays on the SDK-validated `4.0.x LTS` line but uses its latest
+corrective release instead of the defect-bearing `4.0.0` base release. Pack and
+Safety remain separate images and projects while sharing one verified
+SDK/toolchain family.
 
 ## What is verified
 
@@ -29,10 +29,11 @@ projects while sharing one verified SDK/toolchain family.
 
 ## What is not claimed yet
 
-F2.0.1 does not claim a successful target build. Current step F2.0.2 must pin
-the URL and SHA-256 of every installed archive, SDK revision, Python dependency
-and reproducible environment manifest. F2.0.3 then defines common local/CI
-commands; actual debug/release builds belong to F2.4.
+F2.0.1 does not claim a successful target build. F2.0.2 has now pinned the URL
+and SHA-256 of 26 host archives, both SDK revisions and the ESP-IDF Python
+environment in [`environment/toolchains.lock.json`](../environment/toolchains.lock.json).
+Current F2.0.3 defines common local/CI commands; actual debug/release builds
+belong to F2.4.
 
 The TI SDK download requires export approval. The constraint is recorded and
 will not be bypassed; this page does not authorize a download or installation.

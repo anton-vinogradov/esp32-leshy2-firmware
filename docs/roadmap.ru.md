@@ -31,12 +31,11 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.0.2 -->
+<!-- current-substep: F2.0.3 -->
 
-**Точный маркер: `F2.0.2`** — превратить прошедшую ревью
-[SDK/toolchain matrix пяти образов](toolchains.ru.md) в воспроизводимые
-environment manifests с неизменяемыми revisions, checksums архивов и
-dependency locks.
+**Точный маркер: `F2.0.3`** — определить единую машиночитаемую local/CI build
+matrix и канонические команды configure, build, clean, verify и получения
+artifacts поверх прошедшей ревью [среды пяти образов](toolchains.ru.md).
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -44,10 +43,11 @@ dependency locks.
   - ✅ `F2.0.1` — точные SDK/toolchain versions, first-party support status,
     lifecycle, license и требования к build host для S3, C5, RP2354B и обоих
     MSPM0 images прошли ревью.
-  - ▶️ **`F2.0.2` — сейчас:** создать воспроизводимые environment manifests,
-    checksums и dependency locks без молчаливо плавающих версий.
-  - ⏳ `F2.0.3` — определить единую local/CI matrix и канонические команды
-    configure, build, clean и получения artifacts.
+  - ✅ `F2.0.2` — неизменяемые SDK revisions, 26 записей URL/SHA-256 архивов
+    для канонических local/CI hosts и ESP-IDF Python environment с hash-lock
+    прошли ревью.
+  - ▶️ **`F2.0.3` — сейчас:** определить единую local/CI matrix и канонические
+    команды configure, build, clean, verify и получения artifacts.
 - ⏳ `F2.1` — общее дерево source/components, warning policy и границы
   generated files без выдуманных target pins.
 - ⏳ `F2.2` — минимальные production-SDK projects для S3, C5, RP, Pack и
@@ -57,11 +57,10 @@ dependency locks.
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.0.2` завершается, когда чистый host может разрешить каждый SDK, compiler и
-вспомогательную зависимость по неизменяемому идентификатору и проверить
-скачанные архивы до установки. Закрытие любой подзадачи требует в том же
-commit изменить точный маркер на стартовой странице и в роадмапе до перехода
-дальше.
+`F2.0.3` завершается, когда каждый физический target имеет однозначный путь
+команд local и CI, названные artifacts и fail-closed preflight. Закрытие любой
+подзадачи требует в том же commit изменить точный маркер на стартовой странице
+и в роадмапе до перехода дальше.
 
 ## Зависимости
 
