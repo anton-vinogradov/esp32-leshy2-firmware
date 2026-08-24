@@ -190,6 +190,31 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertFalse(safety["configure_run"])
         self.assertFalse(safety["build_run"])
 
+    def test_f2_2_project_boundaries_pass_as_one_review(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f2_2.py"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("F2.2 integrated review OK", result.stdout)
+
+        review = json.loads(
+            (REPO_ROOT / "config/f2_2_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F2.2.5", review["stage"])
+        self.assertEqual("reviewed", review["status"])
+        self.assertEqual(5, review["evidence"]["target_projects"])
+        self.assertEqual(29, review["evidence"]["project_files"])
+        self.assertEqual(26, review["evidence"]["named_build_artifacts"])
+        self.assertEqual(20, review["evidence"]["rendered_configure_and_build_plans"])
+        self.assertTrue(review["claims"]["target_projects_created"])
+        self.assertFalse(review["claims"]["target_configure_run"])
+        self.assertFalse(review["claims"]["target_builds_run"])
+        self.assertFalse(review["claims"]["target_emulators_run"])
+
     def test_portable_safety_core_executes_all_scenarios(self):
         self.assertIsNotNone(shutil.which("make"))
         self.assertIsNotNone(shutil.which("cc"))

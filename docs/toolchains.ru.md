@@ -22,7 +22,8 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.2.2 | Проведено ревью | точный RP2354B Arm-secure project, custom board на 2 МиБ и partition input в [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.3 | Проведено ревью | точный Pack MSPM0C1106 project, раздельные boot/application images и memory boundaries в [`config/target_projects.json`](../config/target_projects.json) |
 | F2.2.4 | Проведено ревью | точный Safety MSPM0C1106 project, раздельные boot/application images и fail-closed entry в [`config/target_projects.json`](../config/target_projects.json) |
-| **F2.2.5** | **Сейчас** | сводное ревью границ всех пяти projects |
+| F2.2.5 | Проведено ревью | сводный evidence пяти projects в [`config/f2_2_review.json`](../config/f2_2_review.json); исполняет [`tools/review_f2_2.py`](../tools/review_f2_2.py) |
+| **F2.3.0** | **Сейчас** | проверенная входная модель генератора принятого H2 pin/BSP contract |
 
 Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
 только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.
@@ -79,8 +80,8 @@ make target-clean TARGET=s3 CONFIG=debug
 Dispatcher не запускает shell, а matrix не разрешает скачивать зависимости во
 время configure/build. Preflight завершается до исполнения, если отсутствует
 проект, точный путь к SDK/компилятору или Python 3.12 environment. F2.0.3
-зафиксировала этот контракт; на текущей F2.1.0 проектов ещё нет до выполнения
-F2.1/F2.2, поэтому результат target-build не заявляется.
+зафиксировала этот контракт; F2.2 проверила структуры всех пяти проектов, а
+configure/build остаются на F2.4 после импорта BSP на F2.3.
 
 ## Лицензии
 

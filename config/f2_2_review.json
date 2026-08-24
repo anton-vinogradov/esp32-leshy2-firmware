@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "stage": "F2.2.5",
+  "status": "reviewed",
+  "scope": "integrated structural boundary for all five target projects",
+  "prerequisites": [
+    {
+      "stage": "F2.1.2",
+      "artifact": "config/f2_1_review.json",
+      "checker": "tools/review_f2_1.py"
+    },
+    {
+      "stage": "F2.2.0-F2.2.4",
+      "artifact": "config/target_projects.json",
+      "checker": "tools/check_target_projects.py"
+    },
+    {
+      "stage": "F2.0.3",
+      "artifact": "config/build_matrix.json",
+      "checker": "tools/build_targets.py verify-matrix"
+    }
+  ],
+  "evidence": {
+    "target_projects": 5,
+    "project_files": 29,
+    "configurations": 2,
+    "named_build_artifacts": 26,
+    "rendered_configure_and_build_plans": 20,
+    "target_pins_consumed": 0
+  },
+  "claims": {
+    "all_target_project_structures_reviewed": true,
+    "target_projects_created": true,
+    "target_configure_run": false,
+    "target_builds_run": false,
+    "target_emulators_run": false,
+    "target_pins_consumed_before_f2_3": false
+  },
+  "runner": "tools/review_f2_2.py"
+}

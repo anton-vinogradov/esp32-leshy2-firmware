@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": "F2.2",
-  "status": "in_progress",
+  "status": "reviewed",
   "projects": {
     "s3": {
       "substep": "F2.2.0",
@@ -115,5 +115,10 @@
       ]
     }
   },
-  "integrated_review": {"substep": "F2.2.5", "status": "pending"}
+  "integrated_review": {
+    "substep": "F2.2.5",
+    "status": "reviewed",
+    "artifact": "config/f2_2_review.json",
+    "runner": "tools/review_f2_2.py"
+  }
 }

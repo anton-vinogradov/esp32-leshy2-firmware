@@ -35,10 +35,10 @@ target/toolchain work has not been completed.
 
 ### Current phase F2 — detailed position
 
-<!-- current-substep: F2.2.5 -->
+<!-- current-substep: F2.3.0 -->
 
-**Exact marker: `F2.2.5`** — review all five project boundaries together before
-the generated H2 pin/BSP contract is imported.
+**Exact marker: `F2.3.0`** — define and validate the deterministic generator
+input model for the accepted H2 pin/BSP contract.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -68,14 +68,19 @@ the generated H2 pin/BSP contract is imported.
     images, memory boundaries and debug/release policy passed structural review.
   - ✅ `F2.2.4` — the exact Safety MSPM0C1106 project, separate boot/application
     images, fail-closed entry and debug/release policy passed structural review.
-  - ▶️ **`F2.2.5` — current:** review all five project boundaries together.
-- ⏳ `F2.3` — consume the accepted generated pin/BSP contract after F2.0–F2.2.
+  - ✅ `F2.2.5` — one integrated review passed for five projects, 29 files,
+    26 artifacts and 20 debug/release command plans with zero target execution.
+- `F2.3` — consume the accepted generated pin/BSP contract.
+  - ▶️ **`F2.3.0` — current:** validate the generator input model and invariants.
+  - ⏳ `F2.3.1` — generate domain headers/tables and an exact source manifest.
+  - ⏳ `F2.3.2` — connect generated sources to all five target projects.
+  - ⏳ `F2.3.3` — review generation determinism and five-project consumption.
 - ⏳ `F2.4` — pass debug/release builds, map files and image-size gates.
 - ⏳ `F2.5` — review reproducibility and advance to F3 boot/emulation.
 
-`F2.2.5` exits when one integrated check proves that all five registered projects
-match the build matrix, source ownership and exact target identities without
-inventing pins or claiming configure/build execution. When
+`F2.3.0` exits when a machine-checked input model maps every reviewed H2 domain,
+contact, role, polarity and owner needed by the generator, rejects duplicates
+and temporary assignments, and adds no hand-authored GPIO. When
 any substep closes, its artifact, this marker, the result page and both roadmap
 pages are updated in the same commit before work advances.
 

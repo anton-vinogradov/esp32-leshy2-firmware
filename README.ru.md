@@ -35,10 +35,10 @@
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.2.5 -->
+<!-- current-substep: F2.3.0 -->
 
-**Точный маркер: `F2.2.5`** — вместе проверить границы всех пяти projects до
-импорта генерируемого H2 pin/BSP contract.
+**Точный маркер: `F2.3.0`** — определить и проверить детерминированную входную
+модель генератора принятого H2 pin/BSP contract.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -68,14 +68,19 @@
     images, memory boundaries и debug/release policy прошли структурное ревью.
   - ✅ `F2.2.4` — точный Safety MSPM0C1106 project, раздельные boot/application
     images, fail-closed entry и debug/release policy прошли структурное ревью.
-  - ▶️ **`F2.2.5` — сейчас:** провести сводное ревью пяти project boundaries.
-- ⏳ `F2.3` — подключить принятый генерируемый pin/BSP contract после F2.0–F2.2.
+  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 29 файлов,
+    26 artifacts и 20 debug/release command plans без target execution.
+- `F2.3` — подключить принятый генерируемый pin/BSP contract.
+  - ▶️ **`F2.3.0` — сейчас:** проверить входную модель и инварианты генератора.
+  - ⏳ `F2.3.1` — сгенерировать domain headers/tables и точный source manifest.
+  - ⏳ `F2.3.2` — подключить generated sources ко всем пяти target projects.
+  - ⏳ `F2.3.3` — проверить детерминизм и потребление всеми пятью projects.
 - ⏳ `F2.4` — пройти debug/release builds, map files и image-size gates.
 - ⏳ `F2.5` — провести ревью воспроизводимости и перейти к F3 boot/emulation.
 
-`F2.2.5` завершается, когда единая проверка доказывает соответствие всех пяти
-projects build matrix, владению исходниками и точным target identities без
-выдуманных pins и заявлений о configure/build. После
+`F2.3.0` завершается, когда машинно проверенная входная модель отображает каждый
+принятый H2 domain, contact, role, polarity и owner, нужный генератору, отвергает
+дубли и временные assignments и не добавляет ручных GPIO. После
 закрытия любой подзадачи её артефакт, этот маркер, страница результата и обе
 страницы роадмапа обновляются тем же commit до перехода дальше.
 

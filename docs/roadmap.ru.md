@@ -31,10 +31,10 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2
 
-<!-- current-substep: F2.2.5 -->
+<!-- current-substep: F2.3.0 -->
 
-**Точный маркер: `F2.2.5`** — вместе проверить границы всех пяти projects до
-импорта генерируемого H2 pin/BSP contract.
+**Точный маркер: `F2.3.0`** — определить и проверить детерминированную входную
+модель генератора принятого H2 pin/BSP contract.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -67,15 +67,20 @@ peripheral или board emulation и никогда не показываетс�
     memory boundaries и debug/release policy прошли структурное ревью.
   - ✅ `F2.2.4` — Safety MSPM0C1106 project, раздельные boot/application images,
     fail-closed entry и debug/release policy прошли структурное ревью.
-  - ▶️ **`F2.2.5` — сейчас:** сводное ревью пяти project boundaries.
-- ⏳ `F2.3` — импорт принятого генерируемого pin/BSP contract после F2.0–F2.2.
+  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 29 файлов,
+    26 artifacts и 20 debug/release command plans без target execution.
+- `F2.3` — импорт принятого генерируемого pin/BSP contract.
+  - ▶️ **`F2.3.0` — сейчас:** проверить входную модель и инварианты генератора.
+  - ⏳ `F2.3.1` — сгенерировать domain headers/tables и точный source manifest.
+  - ⏳ `F2.3.2` — подключить generated sources ко всем пяти target projects.
+  - ⏳ `F2.3.3` — проверить детерминизм и потребление всеми пятью projects.
 - ⏳ `F2.4` — воспроизводимые debug/release builds, map files и image-size
   gates для всех пяти target.
 - ⏳ `F2.5` — ревью evidence F2; только после него начинается F3 boot/emulation.
 
-`F2.2.5` завершается, когда единая проверка доказывает соответствие всех пяти
-projects build matrix, владению исходниками и точным target identities без
-выдуманных pins и заявлений о configure/build. Закрытие
+`F2.3.0` завершается, когда машинно проверенная входная модель отображает каждый
+принятый H2 domain, contact, role, polarity и owner, нужный генератору, отвергает
+дубли и временные assignments и не добавляет ручных GPIO. Закрытие
 любой подзадачи обновляет её артефакт, публичный результат, обе стартовые
 страницы и оба роадмапа тем же commit до перехода дальше.
 
