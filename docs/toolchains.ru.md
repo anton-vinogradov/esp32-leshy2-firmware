@@ -31,7 +31,8 @@ toolchains, неизменяемые environment locks, общие команд�
 | F2.4.0.2 | Проведено ревью | точные ESP S3/C5 compiler, debugger, ULP, OpenOCD и ROM packages установлены ESP-IDF tool manager |
 | F2.4.0.3 | Проведено ревью | hash-locked Python 3.12, CMake `4.0.3` и Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
 | F2.4.0.4 | Проведено ревью | hash-verified native Arm GNU `15.2.Rel1` для RP2354B |
-| **F2.4.0.5** | **Сейчас** | TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
+| F2.4.0.5 | Проведено ревью | hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety |
+| **F2.4.0.6** | **Сейчас** | единый offline fail-closed preflight всех пяти targets |
 
 Ни одна строка этой таблицы не заявляет target build. Такие результаты появятся
 только после выполнения F2.4 в обеих конфигурациях для всех пяти проектов.

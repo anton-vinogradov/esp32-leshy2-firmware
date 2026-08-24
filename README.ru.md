@@ -35,11 +35,11 @@ target builds.
 
 ### Текущая фаза F2 — детальная позиция
 
-<!-- current-substep: F2.4.0.5 -->
+<!-- current-substep: F2.4.0.6 -->
 
-**Точный маркер: `F2.4.0.5` (5 из 6)** — установить и проверить TI Arm Clang
-`4.0.5.LTS` и SysConfig `1.28.0.4712` для Pack/Safety. SDK sources, ESP/RP
-toolchains и host environment прошли ревью; target build ещё не запускался.
+**Точный маркер: `F2.4.0.6` (6 из 6)** — выполнить единый offline fail-closed
+preflight всех пяти targets и опубликовать сводный evidence. Все точные SDK,
+compiler, SysConfig, Python и host tools прошли локальное ревью; target build не запускался.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -89,9 +89,9 @@ toolchains и host environment прошли ревью; target build ещё не
     - ✅ `F2.4.0.3` — hash-locked Python 3.12 environment и точные CMake/Ninja
       прошли ревью; evidence — [`config/f2_4_preflight_progress.json`](config/f2_4_preflight_progress.json).
     - ✅ `F2.4.0.4` — hash-verified native Arm GNU `15.2.Rel1` прошёл ревью для RP2354B.
-    - ▶️ **`F2.4.0.5` — сейчас:** установить и проверить TI Arm Clang `4.0.5.LTS` и
-      SysConfig `1.28.0.4712` для Pack/Safety.
-    - ⏳ `F2.4.0.6` — выполнить offline fail-closed preflight всех пяти targets
+    - ✅ `F2.4.0.5` — hash-verified TI Arm Clang `4.0.5.LTS` и SysConfig
+      `1.28.0.4712` прошли ревью для Pack/Safety.
+    - ▶️ **`F2.4.0.6` — сейчас:** выполнить offline fail-closed preflight всех пяти targets
       и опубликовать machine-readable evidence.
   - ⏳ `F2.4.1` — configure/build/verify S3 debug и release.
   - ⏳ `F2.4.2` — configure/build/verify C5 debug и release.

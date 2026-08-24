@@ -30,7 +30,8 @@ toolchains, immutable environment locks, common commands and source ownership.
 | F2.4.0.2 | Reviewed | exact ESP S3/C5 compiler, debugger, ULP, OpenOCD and ROM packages installed by the ESP-IDF tool manager |
 | F2.4.0.3 | Reviewed | hash-locked Python 3.12 plus CMake `4.0.3` and Ninja `1.12.1`; [`config/f2_4_preflight_progress.json`](../config/f2_4_preflight_progress.json) |
 | F2.4.0.4 | Reviewed | hash-verified native Arm GNU `15.2.Rel1` for RP2354B |
-| **F2.4.0.5** | **Current** | TI Arm Clang `4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety |
+| F2.4.0.5 | Reviewed | hash-verified TI Arm Clang `4.0.5.LTS` and SysConfig `1.28.0.4712` for Pack/Safety |
+| **F2.4.0.6** | **Current** | integrated offline fail-closed preflight for all five targets |
 
 No row in this table claims a target build. Those results appear only after
 F2.4 executes both configurations for all five projects.

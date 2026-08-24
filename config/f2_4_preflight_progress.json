@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F2.4.0.5",
+  "current_substep": "F2.4.0.6",
   "target_execution": {
     "configure_runs": 0,
     "build_runs": 0,
@@ -50,11 +50,22 @@
       "binary_architecture": "Mach-O arm64"
     },
     "F2.4.0.5": {
-      "status": "in_progress",
-      "result": "TI Arm Clang and SysConfig installation and verification"
+      "status": "reviewed",
+      "result": "TI Arm Clang and SysConfig are hash-verified, installed and executable for Pack/Safety",
+      "versions": {
+        "tiarmclang": "4.0.5.LTS",
+        "tiarmobjcopy": "TI LLVM 18.1.8",
+        "sysconfig": "1.28.0+4712"
+      },
+      "archive_sha256": {
+        "ti-arm-clang": "5ae8fd6eb8b819b960cb81d1edc14d462221c29f77ba73029173478a68254e9a",
+        "sysconfig": "6fe2fefba4118aecf5692bc2247903357c98fcdc7562ce849992bbfd83367717"
+      },
+      "compatibility": "x86_64 compiler and SysConfig payloads execute through available Rosetta 2",
+      "mspm0c1106_inputs": "startup source, driverlib archive and SDK product metadata are present"
     },
     "F2.4.0.6": {
-      "status": "pending",
+      "status": "in_progress",
       "result": "offline fail-closed preflight and integrated evidence for five targets"
     }
   }
