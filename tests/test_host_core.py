@@ -125,7 +125,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertTrue(plan["policy"]["timeout_is_failure"])
         self.assertTrue(plan["policy"]["forbidden_marker_is_failure"])
         self.assertEqual(0, plan["execution_counts"]["target_emulator_runs"])
-        self.assertEqual(4, len(plan["observation"]["ordered_success_markers"]))
+        self.assertEqual(6, len(plan["observation"]["ordered_success_markers"]))
 
     def test_f3_0_acceptance_runner_preserves_execution_boundaries(self):
         result = subprocess.run(
@@ -157,6 +157,37 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertIn("idf.py", dry_run.stdout)
         self.assertIn("qemu", dry_run.stdout)
         self.assertEqual(0, matrix["execution_counts"]["target_emulator_runs"])
+
+    def test_f3_1_s3_debug_and_release_boot_evidence_is_reviewed(self):
+        for configuration in ("debug", "release"):
+            result = subprocess.run(
+                [
+                    "python3",
+                    "tools/run_f3_acceptance.py",
+                    "--check-s3-evidence",
+                    "--config",
+                    configuration,
+                ],
+                cwd=REPO_ROOT,
+                check=True,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            self.assertIn("runtime evidence OK", result.stdout)
+            evidence = json.loads(
+                (
+                    REPO_ROOT
+                    / "config"
+                    / f"f3_1_s3_{configuration}_runtime_review.json"
+                ).read_text(encoding="utf-8")
+            )
+            self.assertEqual("reviewed", evidence["status"])
+            self.assertEqual(6, len(evidence["ordered_markers"]))
+            self.assertTrue(all(marker["observed"] for marker in evidence["ordered_markers"]))
+            self.assertFalse(evidence["timed_out"])
+            self.assertEqual([], evidence["forbidden_markers_observed"])
+            self.assertIn("rollback_transition", evidence["deferred_claims"])
 
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(

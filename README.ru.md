@@ -33,16 +33,17 @@
 не её внутренних подэтапов.
 
 **Прошивка находится на F3.** Portable-логика, пять target-проектов, generated
-BSP из hardware H2 и воспроизводимые debug/release builds имеют evidence.
-Runtime boot и instruction/peripheral execution ещё не доказаны и входят в F3.
+BSP из hardware H2 и воспроизводимые debug/release builds имеют evidence. S3
+debug/release boot и инициализация 8-МиБ octal PSRAM теперь подтверждены точным
+QEMU evidence. Периферия и boot четырёх non-S3 targets остаются физическими gates.
 
 ### Текущая фаза F3 — детальная позиция
 
-<!-- current-substep: F3.1 -->
+<!-- current-substep: F3.2 -->
 
-**Точный маркер: `F3.1`** — загрузить S3 debug и release target binaries в
-точном Espressif QEMU path и записать fail-closed machine evidence. Emulator и
-hardware runs пока не заявлены. Маркер и его evidence меняются вместе в каждом
+**Точный маркер: `F3.2`** — выполнить self-test, retained-fault и failed-update
+наиболее достоверным virtual path, не приписывая эмулятору неподдерживаемую
+запись flash и физическую периферию. Маркер и evidence меняются вместе в каждом
 commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
@@ -119,14 +120,16 @@ commit.
     прошли ревью: точный vendor QEMU есть только для S3;
     [машинная матрица](config/f3_execution_capability_matrix.json).
   - ✅ `F3.0.1` — точные hash-locked QEMU archives, debug/release recipes,
-    четыре последовательных boot markers, 30-секундный timeout и fail-closed
+    шесть последовательных boot markers, 30-секундный timeout и fail-closed
     result contract прошли ревью; [машинный план](config/f3_runtime_plan.json).
   - ✅ `F3.0.2` — матрица evidence пяти targets и единый fail-closed runner
     прошли ревью без запуска target; [машинная матрица](config/f3_acceptance_matrix.json).
-- ▶️ **`F3.1` — сейчас:** загрузить S3 debug и release images в официальном
-  ESP-IDF QEMU path и записать точный evidence.
-- `F3.2` — выполнить self-test, retained-fault и failed-update сценарии на
-  наиболее достоверных доступных virtual paths.
+- ✅ `F3.1` — S3 debug и release images прошли по шесть последовательных
+  markers в точном Espressif QEMU, включая инициализацию и memory test 8-МиБ
+  octal PSRAM; [debug evidence](config/f3_1_s3_debug_runtime_review.json) и
+  [release evidence](config/f3_1_s3_release_runtime_review.json).
+- ▶️ **`F3.2` — сейчас:** выполнить self-test, retained-fault и failed-update
+  сценарии на наиболее достоверных доступных virtual paths.
 - `F3.3` — доказать границы image, RAM, partitions и rollback по target
   artifacts и runtime evidence.
 - `F3.4` — свести результаты эмуляции и все честные dev-board/HIL deferred gates.

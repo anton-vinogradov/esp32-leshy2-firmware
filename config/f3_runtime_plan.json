@@ -67,7 +67,9 @@
         "-B",
         "build/targets/s3/debug",
         "qemu",
-        "--qemu-extra-args=-no-reboot"
+        "--flash-file",
+        "{repo}/build/targets/s3/debug/qemu_f3_flash.bin",
+        "--qemu-extra-args=-no-reboot -m 8M -d guest_errors,unimp -D build/targets/s3/debug/qemu_debug.log"
       ]
     },
     "s3_release": {
@@ -93,15 +95,41 @@
         "-B",
         "build/targets/s3/release",
         "qemu",
-        "--qemu-extra-args=-no-reboot"
+        "--flash-file",
+        "{repo}/build/targets/s3/release/qemu_f3_flash.bin",
+        "--qemu-extra-args=-no-reboot -m 8M -d guest_errors,unimp -D build/targets/s3/release/qemu_debug.log"
       ]
     }
+  },
+  "flash_fixture": {
+    "purpose": "avoid the unsupported first-boot otadata flash write in QEMU without changing the production target ELF",
+    "source": "merge the reviewed bootloader, partition table, blank otadata and application from flash_args",
+    "patch_offset": 61440,
+    "entry": {
+      "ota_seq": 1,
+      "ota_state": 2,
+      "ota_state_name": "ESP_OTA_IMG_VALID",
+      "crc": "ESP ROM little-endian CRC32 of ota_seq with initial value 0xFFFFFFFF"
+    },
+    "claims_excluded": [
+      "first_boot_otadata_write",
+      "ota_state_flash_mutation",
+      "rollback_transition"
+    ],
+    "known_qemu_diagnostics": [
+      "M25P80: Read id (command 0x90/0xAB) is not supported by device",
+      "M25P80: Unknown cmd 5a",
+      "M25P80: Unknown cmd 7a",
+      "Invalid read at addr 0x10200C"
+    ]
   },
   "observation": {
     "timeout_seconds": 30,
     "ordered_success_markers": [
       "ESP-ROM:esp32s3-",
       "boot: ESP-IDF v6.0.2",
+      "esp_psram: Found 8MB PSRAM device",
+      "esp_psram: SPI SRAM memory test OK",
       "main_task: Calling app_main()",
       "leshy2_s3: skeleton ready:"
     ],
@@ -131,13 +159,18 @@
       "timed_out",
       "termination",
       "accepted_claims",
-      "deferred_claims"
+      "deferred_claims",
+      "qemu_flash_sha256",
+      "qemu_efuse_sha256",
+      "ota_fixture",
+      "qemu_diagnostics"
     ],
     "accepted_claims": [
       "s3_target_binary_boot_chain",
       "s3_app_main_reached",
       "s3_uart_log",
-      "s3_cpu_memory_control_flow"
+      "s3_cpu_memory_control_flow",
+      "s3_octal_psram_8m_init_and_memory_test"
     ],
     "deferred_claims": [
       "display",
@@ -146,7 +179,10 @@
       "audio",
       "radio",
       "external_gpio_timing",
-      "physical_board"
+      "physical_board",
+      "first_boot_otadata_write",
+      "ota_state_flash_mutation",
+      "rollback_transition"
     ]
   },
   "execution_counts": {

@@ -67,7 +67,7 @@
       "production_target": "ESP32-S3-WROOM-1U-N16R8",
       "target_binary_execution": "official_vendor_qemu",
       "runner": "qemu-system-xtensa -M esp32s3",
-      "accepted_f3_claims": ["boot_chain", "app_main_reached", "uart_log", "cpu_memory_control_flow"],
+      "accepted_f3_claims": ["boot_chain", "app_main_reached", "uart_log", "cpu_memory_control_flow", "octal_psram_8m_init_and_memory_test"],
       "forbidden_claims": ["production_display", "touch", "microSD", "audio", "radio", "external_gpio_timing"],
       "f3_path": "install hash-locked QEMU, run deterministic boot and injected software-fault scenarios",
       "physical_gate": "H7/H8 for every external peripheral and electrical behavior"

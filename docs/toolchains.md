@@ -134,8 +134,8 @@ that the production SoC booted.
 The locked ESP-IDF registry exposes QEMU targets for ESP32, ESP32-C3 and
 ESP32-S3, but not ESP32-C5. Pico SDK's `host` platform explicitly defines a
 no-hardware build. No accepted exact virtual SoC was found for RP2354B or
-MSPM0C1106. Therefore only S3 has a target-emulator path; none has been run yet,
-and no development-board purchase is authorized by F3.0.0.
+MSPM0C1106. Therefore only S3 has a target-emulator path. Its debug and release
+images have now run; no development-board purchase is authorized by F3.
 
 The exact evidence boundary is machine-readable in
 [`config/f3_execution_capability_matrix.json`](../config/f3_execution_capability_matrix.json)
@@ -148,7 +148,8 @@ Raspberry Pi's [Debug Probe documentation](https://www.raspberrypi.com/documenta
 and TI's [`LP-MSPM0C1106` page](https://www.ti.com/tool/LP-MSPM0C1106).
 
 F3.0.1 also fixes two S3 run recipes (debug and release), the exact QEMU
-archives for both supported hosts, four ordered boot markers, a 30-second
+archives for both supported hosts, six ordered boot markers (including the
+8-MiB octal-PSRAM initialization and memory test), a 30-second
 timeout and the fail-closed result schema in
 [`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). This is a
 reviewed execution plan, not an emulator-run claim; it is checked by
@@ -159,3 +160,20 @@ F3.0.2 maps all five images to the strongest honest evidence class in
 [`tools/run_f3_acceptance.py`](../tools/run_f3_acceptance.py) is the single
 fail-closed plan, execution and evidence checker; only its exact S3 QEMU path
 may produce a target-boot claim.
+
+## Reviewed F3.1 execution
+
+Both S3 configurations booted through the exact hash-locked Espressif QEMU and
+passed the same six ordered UART markers: ROM, ESP-IDF bootloader, discovery of
+8 MiB octal PSRAM, its memory test, entry into `app_main()` and the Leshy2
+skeleton-ready message. QEMU is explicitly limited with `-m 8M`, matching the
+selected N16R8 module instead of its 32-MiB helper default. Results are recorded
+in the [debug evidence](../config/f3_1_s3_debug_runtime_review.json) and
+[release evidence](../config/f3_1_s3_release_runtime_review.json).
+
+A blank OTA-data sector exposed a QEMU SPI-flash write limitation before
+`app_main()`. The runner therefore creates a deterministic QEMU-only flash
+fixture with the initial valid OTA entry already present. It does not alter the
+production ELF. First-boot OTA-data writes, later flash-state mutations and
+rollback transitions remain physical HIL gates; the recorded known QEMU flash
+diagnostics do not expand the accepted claims.

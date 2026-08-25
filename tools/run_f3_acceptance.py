@@ -4,15 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import binascii
 import hashlib
 import json
 import os
 import platform
 import selectors
 import signal
+import struct
 import subprocess
 import sys
 import time
+import traceback
 from pathlib import Path
 
 from review_f2_4_preflight import local_environment
@@ -89,6 +92,7 @@ def expand(tokens: list[str]) -> list[str]:
     replacements = {
         "{locked_python}": str(LOCKED_PYTHON),
         "{idf_path}": str(IDF_PATH),
+        "{repo}": str(REPO_ROOT),
     }
     expanded: list[str] = []
     for token in tokens:
@@ -105,16 +109,71 @@ def f3_environment() -> dict[str, str]:
 
 
 def terminate_group(process: subprocess.Popen[bytes]) -> None:
-    if process.poll() is not None:
-        return
-    os.killpg(process.pid, signal.SIGTERM)
+    process_group = process.pid
     try:
-        process.wait(timeout=2)
+        os.killpg(process_group, signal.SIGTERM)
+    except ProcessLookupError:
+        pass
+    try:
+        process.wait(timeout=1)
     except subprocess.TimeoutExpired:
-        os.killpg(process.pid, signal.SIGKILL)
-        process.wait(timeout=2)
+        pass
+    try:
+        os.killpg(process_group, signal.SIGKILL)
+    except (ProcessLookupError, PermissionError):
+        return
+    try:
+        process.wait(timeout=1)
+    except subprocess.TimeoutExpired:
+        pass
 
 
+def prepare_s3_flash(recipe: dict, environment: dict[str, str]) -> tuple[Path, dict]:
+    build = REPO_ROOT / recipe["build_directory"]
+    flash = build / "qemu_f3_flash.bin"
+    command = [
+        str(LOCKED_PYTHON),
+        "-m",
+        "esptool",
+        "--chip=esp32s3",
+        "merge-bin",
+        f"--output={flash}",
+        "--pad-to-size=16MB",
+        "@flash_args",
+    ]
+    result = subprocess.run(
+        command,
+        cwd=build,
+        env=environment,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if result.returncode != 0:
+        raise RuntimeError("QEMU flash merge failed:\n" + result.stdout)
+    fixture = load(PLAN_PATH)["flash_fixture"]
+    offset = fixture["patch_offset"]
+    image = bytearray(flash.read_bytes())
+    if len(image) != 16 * 1024 * 1024:
+        raise RuntimeError("QEMU flash fixture is not exactly 16 MiB")
+    if image[offset : offset + 0x2000] != b"\xff" * 0x2000:
+        raise RuntimeError("QEMU otadata input is not the reviewed blank initial state")
+    ota_seq = fixture["entry"]["ota_seq"]
+    ota_state = fixture["entry"]["ota_state"]
+    ota_seq_bytes = struct.pack("<I", ota_seq)
+    crc = binascii.crc32(ota_seq_bytes, 0xFFFFFFFF) & 0xFFFFFFFF
+    entry = struct.pack("<I20sII", ota_seq, b"\xff" * 20, ota_state, crc)
+    image[offset : offset + len(entry)] = entry
+    flash.write_bytes(image)
+    return flash, {
+        "offset": offset,
+        "ota_seq": ota_seq,
+        "ota_state": ota_state,
+        "ota_state_name": fixture["entry"]["ota_state_name"],
+        "crc32_le": f"0x{crc:08x}",
+        "excluded_claims": fixture["claims_excluded"],
+    }
 def execute_s3(configuration: str) -> tuple[dict, str]:
     plan = load(PLAN_PATH)
     recipe = plan["recipes"][f"s3_{configuration}"]
@@ -141,6 +200,12 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
     )
     if qemu_check.returncode != 0:
         raise RuntimeError("QEMU preflight failed:\n" + qemu_check.stdout)
+
+    flash, ota_fixture = prepare_s3_flash(recipe, environment)
+    build = REPO_ROOT / recipe["build_directory"]
+    diagnostic_log = build / "qemu_debug.log"
+    diagnostic_log.unlink(missing_ok=True)
+    (build / "qemu_efuse.bin").unlink(missing_ok=True)
 
     command = expand(recipe["run_command"])
     process = subprocess.Popen(
@@ -208,6 +273,20 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
             pass
 
     transcript = chunks.decode("utf-8", errors="replace")
+    diagnostic_log = REPO_ROOT / recipe["build_directory"] / "qemu_debug.log"
+    diagnostic_text = ""
+    if diagnostic_log.is_file():
+        diagnostic_text = diagnostic_log.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        transcript += "\n--- qemu diagnostics ---\n" + diagnostic_text
+        if failure_marker is None:
+            failure_marker = next(
+                (candidate for candidate in forbidden if candidate in diagnostic_text),
+                None,
+            )
+            if failure_marker is not None:
+                termination = "forbidden_marker"
     status = (
         "reviewed"
         if not timed_out and failure_marker is None and marker_index == len(markers)
@@ -239,12 +318,29 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
         "termination": termination,
         "accepted_claims": plan["result_contract"]["accepted_claims"] if status == "reviewed" else [],
         "deferred_claims": plan["result_contract"]["deferred_claims"],
-        "qemu_flash_sha256": sha256(build / "qemu_flash.bin")
-        if (build / "qemu_flash.bin").is_file()
-        else None,
+        "qemu_flash_sha256": sha256(flash),
         "qemu_efuse_sha256": sha256(build / "qemu_efuse.bin")
         if (build / "qemu_efuse.bin").is_file()
         else None,
+        "ota_fixture": ota_fixture,
+        "qemu_diagnostics": {
+            "known_patterns_observed": [
+                pattern
+                for pattern in plan["flash_fixture"]["known_qemu_diagnostics"]
+                if pattern in diagnostic_text
+            ],
+            "unexpected_lines": [
+                line
+                for line in diagnostic_text.splitlines()
+                if line
+                and line != "Adding SPI flash device"
+                and not any(
+                    pattern in line
+                    for pattern in plan["flash_fixture"]["known_qemu_diagnostics"]
+                )
+            ],
+            "claims_expanded": False,
+        },
     }
     return record, transcript
 
@@ -278,6 +374,20 @@ def check_evidence(configuration: str) -> list[str]:
         errors.append(f"S3 {configuration} accepted claims changed")
     if record.get("deferred_claims") != plan["result_contract"]["deferred_claims"]:
         errors.append(f"S3 {configuration} deferred claims changed")
+    elf = REPO_ROOT / plan["recipes"][f"s3_{configuration}"]["target_elf"]
+    if elf.is_file() and record.get("target_elf_sha256") != sha256(elf):
+        errors.append(f"S3 {configuration} target ELF changed after runtime review")
+    if QEMU_PATH.is_file() and record.get("qemu_executable_sha256") != sha256(QEMU_PATH):
+        errors.append(f"S3 {configuration} QEMU executable changed after runtime review")
+    fixture = record.get("ota_fixture", {})
+    if fixture.get("excluded_claims") != plan["flash_fixture"]["claims_excluded"]:
+        errors.append(f"S3 {configuration} otadata exclusion changed")
+    diagnostics = record.get("qemu_diagnostics", {})
+    if diagnostics.get("unexpected_lines") != [] or diagnostics.get("claims_expanded") is not False:
+        errors.append(f"S3 {configuration} has unreviewed QEMU diagnostics")
+    for field in ("qemu_flash_sha256", "qemu_efuse_sha256"):
+        if not isinstance(record.get(field), str) or len(record[field]) != 64:
+            errors.append(f"S3 {configuration} evidence has invalid {field}")
     for field in plan["result_contract"]["required_fields"]:
         if field not in record:
             errors.append(f"S3 {configuration} evidence misses {field}")
@@ -324,6 +434,7 @@ def main() -> int:
     try:
         record, transcript = execute_s3(args.config)
     except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+        traceback.print_exc()
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     if record["status"] != "reviewed":

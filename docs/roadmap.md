@@ -30,12 +30,12 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F3 breakdown
 
-<!-- current-substep: F3.1 -->
+<!-- current-substep: F3.2 -->
 
-**Exact marker: `F3.1`** — boot both S3 debug and release target binaries in the
-exact Espressif QEMU path and record fail-closed machine evidence. No emulator
-or hardware run is claimed yet. The marker and evidence update together in
-every commit.
+**Exact marker: `F3.2`** — exercise self-test, retained-fault and failed-update
+paths on the strongest faithful virtual path, while unsupported flash mutation
+and physical-peripheral claims remain deferred. The marker and evidence update
+together in every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -113,15 +113,17 @@ every commit.
     boot observability and unavoidable dev-board gates for all five targets
     passed review: exact vendor QEMU exists only for S3;
     [machine matrix](../config/f3_execution_capability_matrix.json).
-  - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, four
+  - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, six
     ordered boot markers, a 30-second timeout and fail-closed result contract
     passed review; [machine plan](../config/f3_runtime_plan.json).
   - ✅ `F3.0.2` — the five-target evidence matrix and one fail-closed runner
     passed review without executing a target; [machine matrix](../config/f3_acceptance_matrix.json).
-- ▶️ **`F3.1` — current:** boot the S3 debug and release skeletons through the
-  official ESP-IDF QEMU path and record exact evidence.
-- `F3.2` — exercise self-test, retained-fault and failed-update paths wherever
-  the virtual platform is faithful enough.
+- ✅ `F3.1` — both S3 debug and release skeletons passed six ordered markers in
+  exact Espressif QEMU, including 8-MiB octal-PSRAM initialization and memory
+  test; [debug evidence](../config/f3_1_s3_debug_runtime_review.json) and
+  [release evidence](../config/f3_1_s3_release_runtime_review.json).
+- ▶️ **`F3.2` — current:** exercise self-test, retained-fault and failed-update
+  paths wherever the virtual platform is faithful enough.
 - `F3.3` — reconcile runtime evidence with image, RAM, partition and rollback
   boundaries for every target.
 - `F3.4` — integrate the results and assign every non-emulated item to an exact

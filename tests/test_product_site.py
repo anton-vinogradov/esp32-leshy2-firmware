@@ -150,14 +150,22 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F3.1"}, set(markers.values()))
+        self.assertEqual({"F3.2"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F3", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
         self.assertIn("F2.0.1", state["reviewed"])
         self.assertTrue(state["claims"]["target_builds_run"])
         self.assertTrue(state["claims"]["target_builds_byte_reproducible"])
-        self.assertFalse(state["claims"]["target_emulators_run"])
+        self.assertTrue(state["claims"]["target_emulators_run"])
+        self.assertEqual(2, state["claims"]["target_emulator_runs"])
+        self.assertTrue(state["claims"]["s3_debug_release_boot_reviewed"])
+        self.assertTrue(state["claims"]["s3_octal_psram_8m_test_reviewed"])
+        self.assertFalse(state["claims"]["qemu_flash_write_or_rollback_proven"])
+        for configuration in ("debug", "release"):
+            self.assertTrue(
+                (REPO_ROOT / f"config/f3_1_s3_{configuration}_runtime_review.json").is_file()
+            )
         for name in ("README.md", "README.ru.md"):
             page = self.read(name)
             for substep in ("F2.0.0", "F2.0.1", "F2.0.2", "F2.0.3", "F2.1.0", "F2.3", "F2.5"):
@@ -278,7 +286,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F3.1", progress["current_substep"])
+        self.assertEqual("F3.2", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.3"]["status"])

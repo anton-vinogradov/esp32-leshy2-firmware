@@ -137,8 +137,8 @@ F3 различает настоящую загрузку target binary и пе�
 Зафиксированный ESP-IDF публикует QEMU targets для ESP32, ESP32-C3 и
 ESP32-S3, но не ESP32-C5. Host-платформа Pico SDK прямо задаёт no-hardware
 build. Принятой точной virtual SoC для RP2354B или MSPM0C1106 не найдено.
-Поэтому target-emulator path есть только у S3; пока не выполнен ни один запуск,
-а F3.0.0 не разрешает покупку отладочных плат.
+Поэтому target-emulator path есть только у S3. Его debug и release images уже
+запущены; F3 не разрешает покупку отладочных плат.
 
 Точная граница доказательств записана в
 [`config/f3_execution_capability_matrix.json`](../config/f3_execution_capability_matrix.json)
@@ -151,8 +151,9 @@ Raspberry Pi [Debug Probe documentation](https://www.raspberrypi.com/documentati
 и TI [`LP-MSPM0C1106`](https://www.ti.com/tool/LP-MSPM0C1106).
 
 F3.0.1 также фиксирует два S3 run recipes (debug и release), точные QEMU
-archives для двух поддержанных hosts, четыре последовательных boot markers,
-30-секундный timeout и fail-closed result schema в
+archives для двух поддержанных hosts, шесть последовательных boot markers
+(включая инициализацию и memory test 8-МиБ octal PSRAM), 30-секундный timeout и
+fail-closed result schema в
 [`config/f3_runtime_plan.json`](../config/f3_runtime_plan.json). Это прошедший
 ревью план исполнения, а не заявление о состоявшемся emulator run; его
 проверяет [`tools/check_f3_runtime_plan.py`](../tools/check_f3_runtime_plan.py).
@@ -162,3 +163,20 @@ F3.0.2 сопоставляет все пять images с самым сильн�
 [`tools/run_f3_acceptance.py`](../tools/run_f3_acceptance.py) — единая
 fail-closed проверка плана, исполнения и evidence; только её точный S3 QEMU
 path может создать claim о target boot.
+
+## Проверенное исполнение F3.1
+
+Обе конфигурации S3 загрузились в точном hash-locked Espressif QEMU и прошли
+одинаковые шесть последовательных UART markers: ROM, ESP-IDF bootloader,
+обнаружение 8 МиБ octal PSRAM, её memory test, вход в `app_main()` и сообщение
+готовности Leshy2 skeleton. Параметр QEMU `-m 8M` соответствует выбранному
+модулю N16R8 вместо 32-МиБ значения official helper по умолчанию. Результаты:
+[debug evidence](../config/f3_1_s3_debug_runtime_review.json) и
+[release evidence](../config/f3_1_s3_release_runtime_review.json).
+
+Пустой OTA-data sector выявил ограничение записи SPI flash в QEMU ещё до
+`app_main()`. Поэтому runner создаёт детерминированный QEMU-only flash fixture,
+где исходная valid OTA entry уже записана. Production ELF не меняется. Запись
+OTA-data при первом boot, последующие flash-state mutations и rollback
+transitions остаются физическими HIL gates; известные QEMU flash diagnostics
+зафиксированы и не расширяют принятые claims.

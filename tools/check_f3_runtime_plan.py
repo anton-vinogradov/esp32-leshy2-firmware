@@ -91,8 +91,16 @@ def main() -> int:
         for token in ("{locked_python}", "{idf_path}/tools/idf.py", "qemu"):
             if token not in command:
                 errors.append(f"S3 {configuration} run command misses {token}")
-        if "--qemu-extra-args=-no-reboot" not in command:
+        qemu_args = next(
+            (token for token in command if token.startswith("--qemu-extra-args=")), ""
+        )
+        if not qemu_args.startswith("--qemu-extra-args=-no-reboot -m 8M -d guest_errors,unimp -D "):
             errors.append(f"S3 {configuration} may reboot after a fault")
+        if f"build/targets/s3/{configuration}/qemu_debug.log" not in qemu_args:
+            errors.append(f"S3 {configuration} diagnostic log path changed")
+        expected_flash = f"{{repo}}/build/targets/s3/{configuration}/qemu_f3_flash.bin"
+        if "--flash-file" not in command or expected_flash not in command:
+            errors.append(f"S3 {configuration} deterministic flash fixture is missing")
 
     observation = plan.get("observation", {})
     if observation.get("timeout_seconds") != 30:
@@ -101,6 +109,8 @@ def main() -> int:
     if markers != [
         "ESP-ROM:esp32s3-",
         "boot: ESP-IDF v6.0.2",
+        "esp_psram: Found 8MB PSRAM device",
+        "esp_psram: SPI SRAM memory test OK",
         "main_task: Calling app_main()",
         "leshy2_s3: skeleton ready:",
     ]:
@@ -114,10 +124,28 @@ def main() -> int:
         errors.append("forbidden failure markers are empty")
 
     contract = plan.get("result_contract", {})
-    if len(contract.get("required_fields", [])) != 14:
+    if len(contract.get("required_fields", [])) != 18:
         errors.append("result record schema is incomplete")
     if "physical_board" not in contract.get("deferred_claims", []):
         errors.append("physical board evidence must remain deferred")
+    fixture = plan.get("flash_fixture", {})
+    if fixture.get("patch_offset") != 0xF000:
+        errors.append("S3 otadata fixture offset changed")
+    if fixture.get("entry", {}).get("ota_state_name") != "ESP_OTA_IMG_VALID":
+        errors.append("S3 otadata fixture is not pre-confirmed")
+    if set(fixture.get("claims_excluded", [])) != {
+        "first_boot_otadata_write",
+        "ota_state_flash_mutation",
+        "rollback_transition",
+    }:
+        errors.append("S3 QEMU flash-write exclusions changed")
+    if set(fixture.get("known_qemu_diagnostics", [])) != {
+        "M25P80: Read id (command 0x90/0xAB) is not supported by device",
+        "M25P80: Unknown cmd 5a",
+        "M25P80: Unknown cmd 7a",
+        "Invalid read at addr 0x10200C",
+    }:
+        errors.append("S3 known QEMU diagnostics changed")
     if plan.get("execution_counts") != {
         "defined_recipes": 2,
         "target_emulator_runs": 0,
@@ -152,7 +180,7 @@ def main() -> int:
         return 1
     installed = "installed and exact" if QEMU_ROOT.is_file() and local_supported else "optional locally"
     print(
-        "F3.0.1 runtime plan OK: 2 S3 recipes, 4 ordered markers, "
+        "F3.0.1 runtime plan OK: 2 S3 recipes, 6 ordered markers, "
         f"30-second fail-closed timeout; QEMU {installed}; 0 runs claimed"
     )
     return 0

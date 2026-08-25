@@ -33,17 +33,18 @@ from this table. The F2 report appears only after all of F2 closes, not after an
 internal substep.
 
 **Firmware is at F3.** Portable logic, all five target projects, the generated
-hardware H2 BSP and reproducible debug/release builds have evidence. Runtime boot and
-instruction/peripheral execution remain unproven and now enter F3.
+hardware H2 BSP and reproducible debug/release builds have evidence. S3
+debug/release boot and 8-MiB octal-PSRAM initialization now have exact QEMU
+evidence. Peripheral execution and four non-S3 target boots remain physical gates.
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.1 -->
+<!-- current-substep: F3.2 -->
 
-**Exact marker: `F3.1`** — boot both S3 debug and release target binaries in the
-exact Espressif QEMU path and record fail-closed machine evidence. No emulator
-or hardware run is claimed yet. This marker and its evidence move together in
-each commit.
+**Exact marker: `F3.2`** — exercise self-test, retained-fault and failed-update
+paths on the strongest faithful virtual path, while keeping unsupported flash
+mutation and physical-peripheral claims deferred. This marker and its evidence
+move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -118,15 +119,17 @@ each commit.
     boot observability and unavoidable dev-board gates
     for all five targets passed review: exact vendor QEMU exists only for S3;
     [machine matrix](config/f3_execution_capability_matrix.json).
-  - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, four
+  - ✅ `F3.0.1` — exact hash-locked QEMU archives, debug/release recipes, six
     ordered boot markers, a 30-second timeout and fail-closed result contract
     passed review; [machine plan](config/f3_runtime_plan.json).
   - ✅ `F3.0.2` — the five-target evidence matrix and one fail-closed runner
     passed review without executing a target; [machine matrix](config/f3_acceptance_matrix.json).
-- ▶️ **`F3.1` — current:** boot the S3 debug and release images in the official
-  ESP-IDF QEMU path and record exact evidence.
-- `F3.2` — execute self-test, retained-fault and failed-update scenarios on
-  the strongest faithful virtual paths.
+- ✅ `F3.1` — S3 debug and release images each passed six ordered markers in
+  exact Espressif QEMU, including 8-MiB octal-PSRAM initialization and memory
+  test; [debug evidence](config/f3_1_s3_debug_runtime_review.json) and
+  [release evidence](config/f3_1_s3_release_runtime_review.json).
+- ▶️ **`F3.2` — current:** execute self-test, retained-fault and failed-update
+  scenarios on the strongest faithful virtual paths.
 - `F3.3` — prove image, RAM, partition and rollback boundaries from target
   artifacts and runtime evidence.
 - `F3.4` — consolidate emulator results and every honest dev-board/HIL deferral.
