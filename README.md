@@ -33,10 +33,10 @@ from this table; internal substeps only move the exact marker.
 
 **Firmware is at F4.** The accepted hardware H2 BSP remains the pin source;
 the hardware [H4 joined gate](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.md)
-is reviewed; the [H5.0.3 basket](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/component-sample-basket.md)
-covers every current component-evidence gate at `$266.63` known material plus
-one `SA518` manufacturer RFQ. Hardware remains at `H5.0.3`, and purchasing,
-layout and fabrication are still blocked.
+is reviewed. At H5.0.3, [JLCPCB Standard PCBA is the non-exclusive manufacturing reference](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.md):
+10 critical lines of the 209-line production BOM are mapped and the full audit
+is current. BOM upload, purchasing, replacement, layout and fabrication are
+still blocked.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named

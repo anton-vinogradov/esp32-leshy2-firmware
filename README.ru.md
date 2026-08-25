@@ -33,10 +33,9 @@
 
 **Прошивка находится на F4.** Принятый hardware H2 BSP остаётся источником pins;
 объединённый аппаратный [gate H4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.ru.md)
-проведён; [корзина H5.0.3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/component-sample-basket.ru.md)
-покрывает все текущие component-evidence gates: `$266.63` известного material
-budget плюс один manufacturer RFQ для `SA518`. Железо остаётся на `H5.0.3`,
-закупка, layout и fabrication заблокированы.
+проведён. На H5.0.3 [JLCPCB Standard PCBA выбран неэксклюзивным производственным ориентиром](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.ru.md):
+сопоставлены 10 критических строк production BOM из 209, полный аудит — текущая
+работа. BOM upload, закупка, замены, layout и fabrication заблокированы.
 F3 прошла ревью: S3 debug/release загружается и
 исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
 target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets

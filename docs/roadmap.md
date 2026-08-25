@@ -20,7 +20,7 @@ duplicated or given a second status here.
 | S3/C5/RP/Pack/Safety target projects | ✅ Five structures consume generated H2 domain tables |
 | Target builds and map files | ✅ [F2 reviewed](f2-target-build-system-report.md): 10 configurations, 52/52 reproducible artifacts and 10 size gates |
 | ESP32-S3 QEMU | ✅ F3 reviewed: debug/release boot, 8-MiB PSRAM and isolated fault paths |
-| Hardware joined gate | ✅ H4 reviewed; [H5.0.3 basket](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/component-sample-basket.md) published at `$266.63` known material + one SA518 manufacturer RFQ; purchasing still blocked |
+| Hardware joined gate | ✅ H4 reviewed; at H5.0.3 [JLCPCB Standard PCBA is the non-exclusive reference](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.md), 10/209 critical/BOM lines are mapped and the full audit is current; upload and purchasing blocked |
 | C5, RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for dev boards or hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
