@@ -180,3 +180,19 @@ path может создать claim о target boot.
 OTA-data при первом boot, последующие flash-state mutations и rollback
 transitions остаются физическими HIL gates; известные QEMU flash diagnostics
 зафиксированы и не расширяют принятые claims.
+
+## Проверенные сценарии F3.2
+
+Актуальные S3 debug и release binaries прошли по девять последовательных QEMU
+markers. После boot и проверки 8-МиБ PSRAM изолированное локальное состояние
+исполняет три fail-closed path внутри настоящего Xtensa target binary: полный
+five-domain self-test/commit, over-temperature retained first-cause в RAM и
+ошибку self-test посреди bundle, возвращающую все build identifiers RAM-модели.
+Те же portable cores прошли 24 host-сценария под AddressSanitizer и
+UndefinedBehaviorSanitizer. См.
+[сводный evidence](../config/f3_2_runtime_review.json).
+
+Эти тесты намеренно не пишут production flash и не управляют физическими
+пинами. Поэтому они не доказывают nonvolatile fault retention, проверку
+signature/readback образа, bootloader rollback, отрисовку ошибки, timing
+watchdog или `FAULT_KILL`; всё перечисленное остаётся явными physical gates.

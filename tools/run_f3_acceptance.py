@@ -25,6 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = REPO_ROOT / "config" / "f3_acceptance_matrix.json"
 CAPABILITY_PATH = REPO_ROOT / "config" / "f3_execution_capability_matrix.json"
 PLAN_PATH = REPO_ROOT / "config" / "f3_runtime_plan.json"
+SCENARIO_PLAN_PATH = REPO_ROOT / "config" / "f3_2_scenario_plan.json"
 LOCKED_PYTHON = REPO_ROOT / ".toolchains" / "python" / "idf6_py3.12_env" / "bin" / "python"
 IDF_PATH = REPO_ROOT / ".toolchains" / "src" / "esp-idf"
 QEMU_PATH = (
@@ -48,11 +49,32 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def execution_contract(stage: str) -> tuple[dict, dict, list[str], list[str]]:
+    runtime_plan = load(PLAN_PATH)
+    if stage == "F3.1":
+        return (
+            runtime_plan,
+            runtime_plan["observation"],
+            runtime_plan["result_contract"]["accepted_claims"],
+            runtime_plan["result_contract"]["deferred_claims"],
+        )
+    if stage == "F3.2":
+        scenario_plan = load(SCENARIO_PLAN_PATH)
+        return (
+            runtime_plan,
+            scenario_plan["observation"],
+            scenario_plan["result_contract"]["accepted_claims"],
+            scenario_plan["result_contract"]["deferred_claims"],
+        )
+    raise ValueError(f"unsupported execution stage: {stage}")
+
+
 def validate_plan() -> list[str]:
     errors: list[str] = []
     matrix = load(MATRIX_PATH)
     capability = load(CAPABILITY_PATH)
     plan = load(PLAN_PATH)
+    scenario_plan = load(SCENARIO_PLAN_PATH)
     if matrix.get("stage") != "F3.0.2" or matrix.get("status") != "reviewed":
         errors.append("F3.0.2 acceptance matrix is not reviewed")
     if matrix.get("next") != "F3.1":
@@ -82,9 +104,42 @@ def validate_plan() -> list[str]:
     runner = matrix.get("runner", {})
     if runner.get("path") != "tools/run_f3_acceptance.py":
         errors.append("acceptance runner path changed")
-    for command_name in ("plan_check", "s3_run", "s3_evidence_check"):
+    for command_name in (
+        "plan_check",
+        "s3_run",
+        "s3_evidence_check",
+        "s3_scenario_run",
+        "f3_2_review",
+    ):
         if not runner.get(command_name):
             errors.append(f"acceptance runner command is missing: {command_name}")
+    if (
+        scenario_plan.get("stage") != "F3.2"
+        or scenario_plan.get("status") != "reviewed_plan"
+    ):
+        errors.append("F3.2 scenario plan is not reviewed")
+    scenarios = scenario_plan.get("target_scenarios", [])
+    if [scenario.get("id") for scenario in scenarios] != [
+        "self_test_pass",
+        "retained_first_fault_ram_model",
+        "failed_update_ram_rollback_model",
+    ]:
+        errors.append("F3.2 target scenario set changed")
+    scenario_markers = [scenario.get("marker") for scenario in scenarios]
+    observed_contract = scenario_plan.get("observation", {}).get(
+        "ordered_success_markers", []
+    )
+    if len(observed_contract) != 9 or any(
+        marker not in observed_contract for marker in scenario_markers
+    ):
+        errors.append("F3.2 ordered marker contract is incomplete")
+    if (
+        scenario_plan.get("host_evidence", {})
+        .get("scenario_counts", {})
+        .get("total")
+        != 24
+    ):
+        errors.append("F3.2 portable host scenario count changed")
     return errors
 
 
@@ -174,10 +229,23 @@ def prepare_s3_flash(recipe: dict, environment: dict[str, str]) -> tuple[Path, d
         "crc32_le": f"0x{crc:08x}",
         "excluded_claims": fixture["claims_excluded"],
     }
-def execute_s3(configuration: str) -> tuple[dict, str]:
-    plan = load(PLAN_PATH)
+
+
+def execute_s3(configuration: str, stage: str) -> tuple[dict, str]:
+    plan, observation, accepted_claims, deferred_claims = execution_contract(stage)
     recipe = plan["recipes"][f"s3_{configuration}"]
     environment = f3_environment()
+    build_result = subprocess.run(
+        expand(recipe["build_command"]),
+        cwd=REPO_ROOT,
+        env=environment,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if build_result.returncode != 0:
+        raise RuntimeError("target build failed:\n" + build_result.stdout)
     prerequisite = subprocess.run(
         expand(recipe["verify_command"]),
         cwd=REPO_ROOT,
@@ -221,10 +289,10 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
         raise RuntimeError("QEMU output pipe was not created")
     selector = selectors.DefaultSelector()
     selector.register(process.stdout, selectors.EVENT_READ)
-    timeout = plan["observation"]["timeout_seconds"]
+    timeout = observation["timeout_seconds"]
     deadline = time.monotonic() + timeout
     chunks = bytearray()
-    markers = plan["observation"]["ordered_success_markers"]
+    markers = observation["ordered_success_markers"]
     forbidden = plan["observation"]["forbidden_markers"]
     marker_index = 0
     search_start = 0
@@ -302,7 +370,7 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
     ).stdout.splitlines()[0]
     record = {
         "schema_version": 1,
-        "stage": "F3.1",
+        "stage": stage,
         "status": status,
         "target": "s3",
         "configuration": configuration,
@@ -316,8 +384,8 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
         "forbidden_markers_observed": [] if failure_marker is None else [failure_marker],
         "timed_out": timed_out,
         "termination": termination,
-        "accepted_claims": plan["result_contract"]["accepted_claims"] if status == "reviewed" else [],
-        "deferred_claims": plan["result_contract"]["deferred_claims"],
+        "accepted_claims": accepted_claims if status == "reviewed" else [],
+        "deferred_claims": deferred_claims,
         "qemu_flash_sha256": sha256(flash),
         "qemu_efuse_sha256": sha256(build / "qemu_efuse.bin")
         if (build / "qemu_efuse.bin").is_file()
@@ -345,18 +413,20 @@ def execute_s3(configuration: str) -> tuple[dict, str]:
     return record, transcript
 
 
-def evidence_path(configuration: str) -> Path:
-    return REPO_ROOT / "config" / f"f3_1_s3_{configuration}_runtime_review.json"
+def evidence_path(configuration: str, stage: str) -> Path:
+    stage_token = stage.lower().replace(".", "_")
+    suffix = "runtime_review" if stage == "F3.1" else "scenario_review"
+    return REPO_ROOT / "config" / f"{stage_token}_s3_{configuration}_{suffix}.json"
 
 
-def check_evidence(configuration: str) -> list[str]:
+def check_evidence(configuration: str, stage: str) -> list[str]:
     errors: list[str] = []
-    path = evidence_path(configuration)
+    path = evidence_path(configuration, stage)
     if not path.is_file():
         return [f"runtime evidence does not exist: {path.relative_to(REPO_ROOT)}"]
     record = load(path)
-    plan = load(PLAN_PATH)
-    if record.get("stage") != "F3.1" or record.get("status") != "reviewed":
+    plan, observation, accepted_claims, deferred_claims = execution_contract(stage)
+    if record.get("stage") != stage or record.get("status") != "reviewed":
         errors.append(f"S3 {configuration} runtime evidence is not reviewed")
     if record.get("target") != "s3" or record.get("configuration") != configuration:
         errors.append(f"S3 {configuration} runtime evidence identity changed")
@@ -368,14 +438,19 @@ def check_evidence(configuration: str) -> list[str]:
         errors.append(f"S3 {configuration} observed a forbidden marker")
     if not all(item.get("observed") for item in record.get("ordered_markers", [])):
         errors.append(f"S3 {configuration} has missing boot markers")
-    if [item.get("marker") for item in record.get("ordered_markers", [])] != plan["observation"]["ordered_success_markers"]:
+    if [item.get("marker") for item in record.get("ordered_markers", [])] != observation["ordered_success_markers"]:
         errors.append(f"S3 {configuration} boot marker contract changed")
-    if record.get("accepted_claims") != plan["result_contract"]["accepted_claims"]:
+    if record.get("accepted_claims") != accepted_claims:
         errors.append(f"S3 {configuration} accepted claims changed")
-    if record.get("deferred_claims") != plan["result_contract"]["deferred_claims"]:
+    if record.get("deferred_claims") != deferred_claims:
         errors.append(f"S3 {configuration} deferred claims changed")
     elf = REPO_ROOT / plan["recipes"][f"s3_{configuration}"]["target_elf"]
-    if elf.is_file() and record.get("target_elf_sha256") != sha256(elf):
+    successor_exists = evidence_path(configuration, "F3.2").is_file()
+    if (
+        elf.is_file()
+        and (stage == "F3.2" or not successor_exists)
+        and record.get("target_elf_sha256") != sha256(elf)
+    ):
         errors.append(f"S3 {configuration} target ELF changed after runtime review")
     if QEMU_PATH.is_file() and record.get("qemu_executable_sha256") != sha256(QEMU_PATH):
         errors.append(f"S3 {configuration} QEMU executable changed after runtime review")
@@ -388,9 +463,129 @@ def check_evidence(configuration: str) -> list[str]:
     for field in ("qemu_flash_sha256", "qemu_efuse_sha256"):
         if not isinstance(record.get(field), str) or len(record[field]) != 64:
             errors.append(f"S3 {configuration} evidence has invalid {field}")
-    for field in plan["result_contract"]["required_fields"]:
+    for field in load(PLAN_PATH)["result_contract"]["required_fields"]:
         if field not in record:
             errors.append(f"S3 {configuration} evidence misses {field}")
+    return errors
+
+
+def f3_2_review_path() -> Path:
+    return REPO_ROOT / "config" / "f3_2_runtime_review.json"
+
+
+def create_f3_2_review() -> dict:
+    scenario_plan = load(SCENARIO_PLAN_PATH)
+    target_rows: list[dict] = []
+    for configuration in ("debug", "release"):
+        errors = check_evidence(configuration, "F3.2")
+        if errors:
+            raise RuntimeError("\n".join(errors))
+        path = evidence_path(configuration, "F3.2")
+        target_rows.append(
+            {
+                "configuration": configuration,
+                "path": str(path.relative_to(REPO_ROOT)),
+                "sha256": sha256(path),
+            }
+        )
+
+    host = subprocess.run(
+        ["make", "host-sanitize"],
+        cwd=REPO_ROOT,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if host.returncode != 0:
+        raise RuntimeError("F3.2 host sanitizer run failed:\n" + host.stdout)
+    host_contract = scenario_plan["host_evidence"]
+    missing = [
+        marker for marker in host_contract["required_markers"] if marker not in host.stdout
+    ]
+    if missing:
+        raise RuntimeError("F3.2 host markers missing: " + ", ".join(missing))
+
+    return {
+        "schema_version": 1,
+        "stage": "F3.2",
+        "status": "reviewed",
+        "target": "s3",
+        "target_emulator_evidence": target_rows,
+        "host_sanitizer_evidence": {
+            "command": host_contract["command"],
+            "sanitizers": ["address", "undefined"],
+            "scenario_counts": host_contract["scenario_counts"],
+            "markers": [
+                {"marker": marker, "observed": True}
+                for marker in host_contract["required_markers"]
+            ],
+        },
+        "accepted_claims": scenario_plan["result_contract"]["accepted_claims"]
+        + ["portable_host_fault_suite_sanitizer_clean"],
+        "deferred_claims": scenario_plan["result_contract"]["deferred_claims"],
+        "execution_counts": {
+            "s3_target_emulator_runs": 2,
+            "host_sanitizer_scenarios": host_contract["scenario_counts"]["total"],
+            "hardware_runs": 0,
+        },
+        "next": scenario_plan["next"],
+        "runner": "tools/run_f3_acceptance.py",
+    }
+
+
+def check_f3_2_review() -> list[str]:
+    path = f3_2_review_path()
+    if not path.is_file():
+        return ["F3.2 integrated runtime evidence does not exist"]
+    record = load(path)
+    scenario_plan = load(SCENARIO_PLAN_PATH)
+    errors: list[str] = []
+    if record.get("stage") != "F3.2" or record.get("status") != "reviewed":
+        errors.append("F3.2 integrated runtime evidence is not reviewed")
+    expected_rows = []
+    for configuration in ("debug", "release"):
+        errors.extend(check_evidence(configuration, "F3.2"))
+        evidence = evidence_path(configuration, "F3.2")
+        if evidence.is_file():
+            expected_rows.append(
+                {
+                    "configuration": configuration,
+                    "path": str(evidence.relative_to(REPO_ROOT)),
+                    "sha256": sha256(evidence),
+                }
+            )
+    if record.get("target_emulator_evidence") != expected_rows:
+        errors.append("F3.2 target evidence hashes changed")
+    host = record.get("host_sanitizer_evidence", {})
+    if host.get("sanitizers") != ["address", "undefined"]:
+        errors.append("F3.2 sanitizer set changed")
+    if host.get("scenario_counts") != scenario_plan["host_evidence"]["scenario_counts"]:
+        errors.append("F3.2 host scenario counts changed")
+    expected_host_markers = [
+        {"marker": marker, "observed": True}
+        for marker in scenario_plan["host_evidence"]["required_markers"]
+    ]
+    if host.get("markers") != expected_host_markers:
+        errors.append("F3.2 host evidence markers changed")
+    if record.get("execution_counts") != {
+        "s3_target_emulator_runs": 2,
+        "host_sanitizer_scenarios": 24,
+        "hardware_runs": 0,
+    }:
+        errors.append("F3.2 execution counts changed")
+    expected_claims = scenario_plan["result_contract"]["accepted_claims"] + [
+        "portable_host_fault_suite_sanitizer_clean"
+    ]
+    if record.get("accepted_claims") != expected_claims:
+        errors.append("F3.2 accepted claims changed")
+    if (
+        record.get("deferred_claims")
+        != scenario_plan["result_contract"]["deferred_claims"]
+    ):
+        errors.append("F3.2 deferred claims changed")
+    if record.get("next") != "F3.3":
+        errors.append("F3.2 next marker changed")
     return errors
 
 
@@ -401,6 +596,10 @@ def main() -> int:
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument("--run-s3", action="store_true")
     mode.add_argument("--check-s3-evidence", action="store_true")
+    mode.add_argument("--run-s3-f3-2", action="store_true")
+    mode.add_argument("--check-f3-2-evidence", action="store_true")
+    mode.add_argument("--review-f3-2", action="store_true")
+    mode.add_argument("--check-f3-2-review", action="store_true")
     parser.add_argument("--config", choices=("debug", "release"), default="debug")
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
@@ -418,12 +617,43 @@ def main() -> int:
         print(" ".join(expand(recipe["run_command"])))
         return 0
     if args.check_s3_evidence:
-        errors = check_evidence(args.config)
+        errors = check_evidence(args.config, "F3.1")
         if errors:
             for error in errors:
                 print(f"ERROR: {error}", file=sys.stderr)
             return 1
         print(f"F3.1 S3 {args.config} runtime evidence OK")
+        return 0
+    if args.check_f3_2_evidence:
+        errors = check_evidence(args.config, "F3.2")
+        if errors:
+            for error in errors:
+                print(f"ERROR: {error}", file=sys.stderr)
+            return 1
+        print(f"F3.2 S3 {args.config} scenario evidence OK")
+        return 0
+    if args.check_f3_2_review:
+        errors = check_f3_2_review()
+        if errors:
+            for error in errors:
+                print(f"ERROR: {error}", file=sys.stderr)
+            return 1
+        print("F3.2 integrated runtime review OK: 2 S3 runs and 24 sanitized host scenarios")
+        return 0
+    if args.review_f3_2:
+        if not args.write:
+            print("ERROR: F3.2 review execution requires --write evidence", file=sys.stderr)
+            return 1
+        try:
+            record = create_f3_2_review()
+        except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+            print(f"ERROR: {error}", file=sys.stderr)
+            return 1
+        f3_2_review_path().write_text(
+            json.dumps(record, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        print("F3.2 integrated runtime review OK: 2 S3 runs and 24 sanitized host scenarios")
         return 0
     if not args.write:
         print("ERROR: target execution requires --write evidence", file=sys.stderr)
@@ -432,21 +662,26 @@ def main() -> int:
         print("ERROR: this reviewed local run requires macOS arm64", file=sys.stderr)
         return 1
     try:
-        record, transcript = execute_s3(args.config)
+        stage = "F3.2" if args.run_s3_f3_2 else "F3.1"
+        record, transcript = execute_s3(args.config, stage)
     except (OSError, RuntimeError, subprocess.SubprocessError) as error:
         traceback.print_exc()
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     if record["status"] != "reviewed":
         print(transcript[-6000:], file=sys.stderr)
-        print(f"ERROR: S3 {args.config} QEMU run failed: {record['termination']}", file=sys.stderr)
+        print(
+            f"ERROR: {record['stage']} S3 {args.config} QEMU run failed: "
+            f"{record['termination']}",
+            file=sys.stderr,
+        )
         return 1
-    evidence_path(args.config).write_text(
+    evidence_path(args.config, record["stage"]).write_text(
         json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     print(
-        f"F3.1 S3 {args.config} QEMU run OK: "
-        f"{len(record['ordered_markers'])} ordered boot markers"
+        f"{record['stage']} S3 {args.config} QEMU run OK: "
+        f"{len(record['ordered_markers'])} ordered markers"
     )
     return 0
 

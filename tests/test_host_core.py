@@ -189,6 +189,32 @@ class HostCoreExecutionTests(unittest.TestCase):
             self.assertEqual([], evidence["forbidden_markers_observed"])
             self.assertIn("rollback_transition", evidence["deferred_claims"])
 
+    def test_f3_2_target_and_sanitized_host_scenarios_are_reviewed(self):
+        result = subprocess.run(
+            ["python3", "tools/run_f3_acceptance.py", "--check-f3-2-review"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("24 sanitized host scenarios", result.stdout)
+        plan = json.loads(
+            (REPO_ROOT / "config/f3_2_scenario_plan.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(3, len(plan["target_scenarios"]))
+        self.assertEqual(9, len(plan["observation"]["ordered_success_markers"]))
+        self.assertTrue(
+            plan["policy"]["ram_model_may_not_claim_nonvolatile_flash_or_physical_io"]
+        )
+        review = json.loads(
+            (REPO_ROOT / "config/f3_2_runtime_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(2, review["execution_counts"]["s3_target_emulator_runs"])
+        self.assertEqual(24, review["execution_counts"]["host_sanitizer_scenarios"])
+        self.assertEqual(0, review["execution_counts"]["hardware_runs"])
+        self.assertIn("bootloader_rollback_transition", review["deferred_claims"])
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],

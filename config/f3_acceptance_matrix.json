@@ -27,6 +27,19 @@
       "--check-s3-evidence",
       "--config",
       "{configuration}"
+    ],
+    "s3_scenario_run": [
+      "{locked_python}",
+      "tools/run_f3_acceptance.py",
+      "--run-s3-f3-2",
+      "--config",
+      "{configuration}",
+      "--write"
+    ],
+    "f3_2_review": [
+      "{python}",
+      "tools/run_f3_acceptance.py",
+      "--check-f3-2-review"
     ]
   },
   "targets": [

@@ -30,12 +30,12 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F3 breakdown
 
-<!-- current-substep: F3.2 -->
+<!-- current-substep: F3.3 -->
 
-**Exact marker: `F3.2`** — exercise self-test, retained-fault and failed-update
-paths on the strongest faithful virtual path, while unsupported flash mutation
-and physical-peripheral claims remain deferred. The marker and evidence update
-together in every commit.
+**Exact marker: `F3.3`** — reconcile the latest target artifacts and runtime
+evidence with image, RAM, partition and rollback boundaries for every domain.
+Flash mutation and physical-peripheral claims remain deferred. The marker and
+evidence update together in every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -122,10 +122,12 @@ together in every commit.
   exact Espressif QEMU, including 8-MiB octal-PSRAM initialization and memory
   test; [debug evidence](../config/f3_1_s3_debug_runtime_review.json) and
   [release evidence](../config/f3_1_s3_release_runtime_review.json).
-- ▶️ **`F3.2` — current:** exercise self-test, retained-fault and failed-update
-  paths wherever the virtual platform is faithful enough.
-- `F3.3` — reconcile runtime evidence with image, RAM, partition and rollback
-  boundaries for every target.
+- ✅ `F3.2` — S3 debug/release each passed nine ordered markers for boot,
+  self-test, retained-first-fault and failed-update RAM rollback; 24 portable
+  scenarios also passed ASan/UBSan. This does not claim nonvolatile persistence
+  or flash rollback; [integrated evidence](../config/f3_2_runtime_review.json).
+- ▶️ **`F3.3` — current:** reconcile runtime evidence with image, RAM,
+  partition and rollback boundaries for every target.
 - `F3.4` — integrate the results and assign every non-emulated item to an exact
   dev-board or HIL gate.
 

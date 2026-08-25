@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F3",
-  "current_substep": "F3.2",
+  "current_substep": "F3.3",
   "updated_on": "2026-08-25",
   "completed": [
     "F2.0.0",
@@ -39,7 +39,8 @@
     "F3.0.1",
     "F3.0.2",
     "F3.0",
-    "F3.1"
+    "F3.1",
+    "F3.2"
   ],
   "reviewed": [
     "F0",
@@ -79,7 +80,8 @@
     "F3.0.1",
     "F3.0.2",
     "F3.0",
-    "F3.1"
+    "F3.1",
+    "F3.2"
   ],
   "claims": {
     "target_projects_created": true,
@@ -89,10 +91,14 @@
     "deterministic_emulator_recipes": 2,
     "integrated_f3_acceptance_runner": true,
     "target_emulators_run": true,
-    "target_emulator_runs": 2,
+    "target_emulator_runs": 4,
     "s3_debug_release_boot_reviewed": true,
     "s3_octal_psram_8m_test_reviewed": true,
     "qemu_flash_write_or_rollback_proven": false,
+    "s3_virtual_fault_scenarios_reviewed": true,
+    "sanitized_host_fault_scenarios": 24,
+    "nonvolatile_retained_fault_proven": false,
+    "physical_update_rollback_proven": false,
     "hardware_contract_available": true
   }
 }

@@ -85,6 +85,16 @@ def main() -> int:
         recipe = recipes.get(f"s3_{configuration}", {})
         if recipe.get("target") != "s3" or recipe.get("configuration") != configuration:
             errors.append(f"invalid S3 {configuration} recipe identity")
+        if recipe.get("build_command") != [
+            "{locked_python}",
+            "tools/run_locked_target.py",
+            "build",
+            "--target",
+            "s3",
+            "--config",
+            configuration,
+        ]:
+            errors.append(f"S3 {configuration} locked build command changed")
         if recipe.get("target_elf") != f"build/targets/s3/{configuration}/leshy2_s3.elf":
             errors.append(f"invalid S3 {configuration} target ELF")
         command = recipe.get("run_command", [])

@@ -30,12 +30,12 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F3
 
-<!-- current-substep: F3.2 -->
+<!-- current-substep: F3.3 -->
 
-**Точный маркер: `F3.2`** — выполнить self-test, retained-fault и failed-update
-наиболее достоверным virtual path, оставив неподдерживаемую запись flash и
-физическую периферию отложенными. Маркер и evidence меняются вместе в каждом
-commit.
+**Точный маркер: `F3.3`** — сверить актуальные target artifacts и runtime
+evidence с границами image, RAM, partitions и rollback каждого домена. Запись
+flash и физическая периферия остаются отложенными. Маркер и evidence меняются
+вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -122,10 +122,12 @@ commit.
   markers в точном Espressif QEMU, включая инициализацию и memory test 8-МиБ
   octal PSRAM; [debug evidence](../config/f3_1_s3_debug_runtime_review.json) и
   [release evidence](../config/f3_1_s3_release_runtime_review.json).
-- ▶️ **`F3.2` — сейчас:** выполнить self-test, retained-fault и failed-update
-  paths там, где virtual platform достаточно достоверна.
-- `F3.3` — сверить runtime evidence с границами image, RAM, partitions и
-  rollback каждого target.
+- ✅ `F3.2` — S3 debug/release прошли по девять markers для boot, self-test,
+  retained-first-fault и failed-update RAM rollback; ещё 24 portable-сценария
+  прошли ASan/UBSan. Nonvolatile persistence и flash rollback этим не заявлены;
+  [сводный evidence](../config/f3_2_runtime_review.json).
+- ▶️ **`F3.3` — сейчас:** сверить runtime evidence с границами image, RAM,
+  partitions и rollback каждого target.
 - `F3.4` — свести результаты и назначить всё неэмулируемое точному dev-board
   или HIL gate.
 

@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "stage": "F3.2",
+  "status": "reviewed_plan",
+  "reviewed_on": "2026-08-25",
+  "scope": "target-executed S3 RAM-model scenarios plus the existing portable host fault suite",
+  "policy": {
+    "scenario_state_is_isolated_from_live_product_state": true,
+    "target_execution_requires_exact_s3_qemu": true,
+    "debug_and_release_must_pass_the_same_markers": true,
+    "host_suite_must_pass_with_address_and_undefined_behavior_sanitizers": true,
+    "ram_model_may_not_claim_nonvolatile_flash_or_physical_io": true,
+    "failure_is_fail_closed": true
+  },
+  "target_scenarios": [
+    {
+      "id": "self_test_pass",
+      "marker": "leshy2_s3: F3.2 scenario self-test PASS",
+      "exercises": "five-domain staged, verified, ordered activation with every self-test passing and one committed RAM model",
+      "accepted_claim": "s3_executes_portable_self_test_pass_path"
+    },
+    {
+      "id": "retained_first_fault_ram_model",
+      "marker": "leshy2_s3: F3.2 scenario retained-first-fault RAM model PASS",
+      "exercises": "over-temperature first-cause latch, RF hold and fault-viewer eligibility in isolated RAM",
+      "accepted_claim": "s3_executes_retained_first_fault_ram_model"
+    },
+    {
+      "id": "failed_update_ram_rollback_model",
+      "marker": "leshy2_s3: F3.2 scenario failed-update RAM rollback model PASS",
+      "exercises": "mid-bundle self-test failure restores every active build identifier in isolated RAM",
+      "accepted_claim": "s3_executes_failed_update_ram_rollback_model"
+    }
+  ],
+  "observation": {
+    "timeout_seconds": 30,
+    "ordered_success_markers": [
+      "ESP-ROM:esp32s3-",
+      "boot: ESP-IDF v6.0.2",
+      "esp_psram: Found 8MB PSRAM device",
+      "esp_psram: SPI SRAM memory test OK",
+      "main_task: Calling app_main()",
+      "leshy2_s3: F3.2 scenario self-test PASS",
+      "leshy2_s3: F3.2 scenario retained-first-fault RAM model PASS",
+      "leshy2_s3: F3.2 scenario failed-update RAM rollback model PASS",
+      "leshy2_s3: skeleton ready:"
+    ]
+  },
+  "host_evidence": {
+    "command": ["make", "host-sanitize"],
+    "scenario_counts": {
+      "safety": 8,
+      "l2ip": 4,
+      "update": 5,
+      "system": 7,
+      "total": 24
+    },
+    "required_markers": [
+      "host safety core: 8 scenarios passed",
+      "host L2IP core: 4 scenarios passed",
+      "host update core: 5 scenarios passed",
+      "host five-domain model: 7 scenarios passed"
+    ]
+  },
+  "result_contract": {
+    "accepted_claims": [
+      "s3_target_binary_boot_chain",
+      "s3_app_main_reached",
+      "s3_octal_psram_8m_init_and_memory_test",
+      "s3_executes_portable_self_test_pass_path",
+      "s3_executes_retained_first_fault_ram_model",
+      "s3_executes_failed_update_ram_rollback_model"
+    ],
+    "deferred_claims": [
+      "nonvolatile_retained_fault_persistence",
+      "physical_domain_self_tests",
+      "actual_flash_readback_or_signature_verification",
+      "ota_state_flash_mutation",
+      "bootloader_rollback_transition",
+      "display_fault_viewer_rendering",
+      "external_gpio_timing",
+      "physical_board"
+    ]
+  },
+  "execution_counts_before_review": {
+    "s3_target_emulator_runs": 0,
+    "host_sanitizer_scenarios": 0,
+    "hardware_runs": 0
+  },
+  "next": "F3.3"
+}

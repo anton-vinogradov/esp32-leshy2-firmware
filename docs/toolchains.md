@@ -177,3 +177,19 @@ fixture with the initial valid OTA entry already present. It does not alter the
 production ELF. First-boot OTA-data writes, later flash-state mutations and
 rollback transitions remain physical HIL gates; the recorded known QEMU flash
 diagnostics do not expand the accepted claims.
+
+## Reviewed F3.2 scenarios
+
+The current S3 debug and release binaries each passed nine ordered QEMU
+markers. After the boot and 8-MiB PSRAM checks, isolated local state exercises
+three fail-closed paths on the real Xtensa target binary: a complete five-domain
+self-test/commit, an over-temperature retained first-cause RAM record, and a
+mid-bundle self-test failure that restores every RAM-model build identifier.
+The same portable cores passed 24 host scenarios with AddressSanitizer and
+UndefinedBehaviorSanitizer. See the
+[integrated evidence](../config/f3_2_runtime_review.json).
+
+These tests deliberately do not write production flash or drive physical pins.
+They therefore do not prove nonvolatile fault retention, image signature/readback,
+bootloader rollback, display rendering, watchdog timing or `FAULT_KILL`; those
+remain explicit physical gates.

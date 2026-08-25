@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "stage": "F3.2",
+  "status": "reviewed",
+  "target": "s3",
+  "target_emulator_evidence": [
+    {
+      "configuration": "debug",
+      "path": "config/f3_2_s3_debug_scenario_review.json",
+      "sha256": "32785a07b368069155d59220e2951257d99bbfefc9656ea1af12e8ab3da9ac5b"
+    },
+    {
+      "configuration": "release",
+      "path": "config/f3_2_s3_release_scenario_review.json",
+      "sha256": "be27354c388d8e6fc93f748410c0e817303e5dc744e692c1abd7e89fa70f7b6f"
+    }
+  ],
+  "host_sanitizer_evidence": {
+    "command": [
+      "make",
+      "host-sanitize"
+    ],
+    "sanitizers": [
+      "address",
+      "undefined"
+    ],
+    "scenario_counts": {
+      "safety": 8,
+      "l2ip": 4,
+      "update": 5,
+      "system": 7,
+      "total": 24
+    },
+    "markers": [
+      {
+        "marker": "host safety core: 8 scenarios passed",
+        "observed": true
+      },
+      {
+        "marker": "host L2IP core: 4 scenarios passed",
+        "observed": true
+      },
+      {
+        "marker": "host update core: 5 scenarios passed",
+        "observed": true
+      },
+      {
+        "marker": "host five-domain model: 7 scenarios passed",
+        "observed": true
+      }
+    ]
+  },
+  "accepted_claims": [
+    "s3_target_binary_boot_chain",
+    "s3_app_main_reached",
+    "s3_octal_psram_8m_init_and_memory_test",
+    "s3_executes_portable_self_test_pass_path",
+    "s3_executes_retained_first_fault_ram_model",
+    "s3_executes_failed_update_ram_rollback_model",
+    "portable_host_fault_suite_sanitizer_clean"
+  ],
+  "deferred_claims": [
+    "nonvolatile_retained_fault_persistence",
+    "physical_domain_self_tests",
+    "actual_flash_readback_or_signature_verification",
+    "ota_state_flash_mutation",
+    "bootloader_rollback_transition",
+    "display_fault_viewer_rendering",
+    "external_gpio_timing",
+    "physical_board"
+  ],
+  "execution_counts": {
+    "s3_target_emulator_runs": 2,
+    "host_sanitizer_scenarios": 24,
+    "hardware_runs": 0
+  },
+  "next": "F3.3",
+  "runner": "tools/run_f3_acceptance.py"
+}

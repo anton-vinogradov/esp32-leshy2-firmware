@@ -50,6 +50,15 @@
       "project": "targets/s3",
       "build_directory": "build/targets/s3/debug",
       "target_elf": "build/targets/s3/debug/leshy2_s3.elf",
+      "build_command": [
+        "{locked_python}",
+        "tools/run_locked_target.py",
+        "build",
+        "--target",
+        "s3",
+        "--config",
+        "debug"
+      ],
       "verify_command": [
         "{locked_python}",
         "tools/run_locked_target.py",
@@ -78,6 +87,15 @@
       "project": "targets/s3",
       "build_directory": "build/targets/s3/release",
       "target_elf": "build/targets/s3/release/leshy2_s3.elf",
+      "build_command": [
+        "{locked_python}",
+        "tools/run_locked_target.py",
+        "build",
+        "--target",
+        "s3",
+        "--config",
+        "release"
+      ],
       "verify_command": [
         "{locked_python}",
         "tools/run_locked_target.py",

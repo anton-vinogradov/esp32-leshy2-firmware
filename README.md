@@ -39,12 +39,12 @@ evidence. Peripheral execution and four non-S3 target boots remain physical gate
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.2 -->
+<!-- current-substep: F3.3 -->
 
-**Exact marker: `F3.2`** — exercise self-test, retained-fault and failed-update
-paths on the strongest faithful virtual path, while keeping unsupported flash
-mutation and physical-peripheral claims deferred. This marker and its evidence
-move together in each commit.
+**Exact marker: `F3.3`** — reconcile the latest target artifacts and runtime
+evidence with image, RAM, partition and rollback boundaries for every domain.
+Flash mutation and physical-peripheral claims remain deferred. This marker and
+its evidence move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -128,10 +128,12 @@ move together in each commit.
   exact Espressif QEMU, including 8-MiB octal-PSRAM initialization and memory
   test; [debug evidence](config/f3_1_s3_debug_runtime_review.json) and
   [release evidence](config/f3_1_s3_release_runtime_review.json).
-- ▶️ **`F3.2` — current:** execute self-test, retained-fault and failed-update
-  scenarios on the strongest faithful virtual paths.
-- `F3.3` — prove image, RAM, partition and rollback boundaries from target
-  artifacts and runtime evidence.
+- ✅ `F3.2` — S3 debug/release each passed nine ordered markers for boot,
+  self-test, retained-first-fault and failed-update RAM rollback; 24 portable
+  scenarios also passed ASan/UBSan. This does not claim nonvolatile persistence
+  or flash rollback; [integrated evidence](config/f3_2_runtime_review.json).
+- ▶️ **`F3.3` — current:** prove image, RAM, partition and rollback boundaries
+  from target artifacts and runtime evidence.
 - `F3.4` — consolidate emulator results and every honest dev-board/HIL deferral.
 
 F2 is reviewed: five targets, ten configurations, 52 artifacts, 14 maps and
