@@ -31,7 +31,9 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F4.** Принятый hardware H2 BSP остаётся источником pins.
+**Прошивка находится на F4.** Принятый hardware H2 BSP остаётся источником pins;
+объединённый аппаратный [gate H4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.ru.md)
+проведён, а железо перешло к docs-first сокращению evidence `H5.0.1`.
 F3 прошла ревью: S3 debug/release загружается и
 исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
 target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets

@@ -31,7 +31,9 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F4.** The accepted hardware H2 BSP remains the pin source.
+**Firmware is at F4.** The accepted hardware H2 BSP remains the pin source;
+the hardware [H4 joined gate](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.md)
+is reviewed and hardware has moved to docs-first `H5.0.1` evidence reduction.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named

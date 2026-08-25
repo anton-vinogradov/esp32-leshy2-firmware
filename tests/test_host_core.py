@@ -620,6 +620,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertIn("ESP32-S3 exact debug/release images boot", contract["current_truth"]["instruction_emulation"])
         self.assertIn("remains explicitly assigned to dev-board and HIL gates", contract["current_truth"]["instruction_emulation"])
+        self.assertIn("H4 reviewed", contract["current_truth"]["joined_pre_layout"])
         gates = {gate["id"]: gate["status"] for gate in contract["gates"]}
         self.assertEqual("reviewed", gates["P3_VIRTUAL_ELECTRICAL"])
         self.assertEqual(
@@ -627,7 +628,7 @@ class HostCoreExecutionTests(unittest.TestCase):
             gates["P4_EXECUTABLE_FIRMWARE_MODEL"],
         )
         self.assertEqual("reviewed", gates["P5_TARGET_BUILDS_EMULATION"])
-        self.assertEqual("current_joined_review", gates["P6_PRE_LAYOUT_REVIEW"])
+        self.assertEqual("reviewed", gates["P6_PRE_LAYOUT_REVIEW"])
         self.assertEqual("not_authorized", gates["P7_ENGINEERING_SAMPLE_ORDER"])
 
         hardware_copy = (

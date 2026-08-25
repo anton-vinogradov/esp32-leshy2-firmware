@@ -20,6 +20,7 @@ duplicated or given a second status here.
 | S3/C5/RP/Pack/Safety target projects | ✅ Five structures consume generated H2 domain tables |
 | Target builds and map files | ✅ [F2 reviewed](f2-target-build-system-report.md): 10 configurations, 52/52 reproducible artifacts and 10 size gates |
 | ESP32-S3 QEMU | ✅ F3 reviewed: debug/release boot, 8-MiB PSRAM and isolated fault paths |
+| Hardware joined gate | ✅ H4 reviewed; hardware is at docs-first H5.0.1 with purchasing still blocked |
 | C5, RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for dev boards or hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
