@@ -35,8 +35,9 @@ from this table; internal substeps only move the exact marker.
 the hardware [H4 joined gate](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.md)
 is reviewed. At H5.0.3, [JLCPCB Standard PCBA is the non-exclusive manufacturing reference](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.md):
 the controlled normalized BOM Tool run matched 176/209 lines and parsed all
-1019 placements; exact search gave all 209 lines `J0`–`J4` routes without
-replacement. The JLCAPI app/key are ready outside Git while Parts permission is
+1019 placements; exact search gave all 209 lines `J0`–`J3`, `J4-F` or `J4-P`
+routes without replacement. Exact SA518 pricing and the factory `J4-F`
+box-build / `J4-P` kit-and-shipping gates remain open. The JLCAPI app/key are ready outside Git while Parts permission is
 reviewing. The generic `JLCPCB Assembly C9900300438` quote match was rejected
 because it does not prove exact NiceRF identity; no quote was submitted.
 Purchasing, quote/reservation, layout and fabrication remain blocked.

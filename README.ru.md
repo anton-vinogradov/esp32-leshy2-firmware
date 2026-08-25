@@ -35,8 +35,9 @@
 объединённый аппаратный [gate H4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.ru.md)
 проведён. На H5.0.3 [JLCPCB Standard PCBA выбран неэксклюзивным производственным ориентиром](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.ru.md):
 контрольный прогон нормализованного BOM сопоставил 176/209 строк и распознал все
-1019 установок; exact-поиск дал всем 209 строкам маршруты `J0`–`J4` без замен.
-JLCAPI app/key готовы вне Git, пока право Parts проходит ревью. Закупка,
+1019 установок; exact-поиск дал всем 209 строкам маршруты `J0`–`J3`, `J4-F`
+или `J4-P` без замен. Открыты цена exact SA518 и фабричные gates `J4-F`
+box-build / `J4-P` комплектации и доставки. JLCAPI app/key готовы вне Git, пока право Parts проходит ревью. Закупка,
 quote/reservation, layout и fabrication заблокированы. Generic-совпадение
 `JLCPCB Assembly C9900300438` отвергнуто: exact NiceRF identity оно не
 доказывает, quote не отправлен.
