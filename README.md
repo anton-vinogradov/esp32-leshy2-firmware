@@ -39,12 +39,12 @@ evidence. Peripheral execution and four non-S3 target boots remain physical gate
 
 ### Current phase F3 — detailed position
 
-<!-- current-substep: F3.3 -->
+<!-- current-substep: F3.4 -->
 
-**Exact marker: `F3.3`** — reconcile the latest target artifacts and runtime
-evidence with image, RAM, partition and rollback boundaries for every domain.
-Flash mutation and physical-peripheral claims remain deferred. This marker and
-its evidence move together in each commit.
+**Exact marker: `F3.4`** — consolidate the complete F3 emulator result and every
+remaining dev-board/HIL deferral into the phase report. No deferred physical
+claim may be promoted by summary alone. This marker and its evidence move
+together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -132,9 +132,13 @@ its evidence move together in each commit.
   self-test, retained-first-fault and failed-update RAM rollback; 24 portable
   scenarios also passed ASan/UBSan. This does not claim nonvolatile persistence
   or flash rollback; [integrated evidence](config/f3_2_runtime_review.json).
-- ▶️ **`F3.3` — current:** prove image, RAM, partition and rollback boundaries
-  from target artifacts and runtime evidence.
-- `F3.4` — consolidate emulator results and every honest dev-board/HIL deferral.
+- ✅ `F3.3` — a fresh double clean-build reproduced 52/52 artifacts; ten current
+  image/RAM gates and five static rollback topologies fit. S3 debug is 182,688
+  bytes with 6,895,200 bytes before its maximum; zero physical rollback
+  transitions are claimed. See the
+  [boundary evidence](config/f3_3_boundary_review.json).
+- ▶️ **`F3.4` — current:** consolidate emulator results and every honest
+  dev-board/HIL deferral.
 
 F2 is reviewed: five targets, ten configurations, 52 artifacts, 14 maps and
 ten image gates pass together and reproduce in two clean passes. The active

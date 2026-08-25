@@ -196,3 +196,18 @@ UndefinedBehaviorSanitizer. См.
 пинами. Поэтому они не доказывают nonvolatile fault retention, проверку
 signature/readback образа, bootloader rollback, отрисовку ошибки, timing
 watchdog или `FAULT_KILL`; всё перечисленное остаётся явными physical gates.
+
+## Проверенные границы F3.3
+
+Новый двухпроходный clean build после изменения исходников в F3.2 воспроизвёл
+все 52 artifacts. [Boundary evidence](../config/f3_3_boundary_review.json)
+связывает manifest актуальных project inputs каждого домена с debug/release
+image, linker map, linked-memory report, точным источником partitions и rollback
+topology.
+
+Самые крупные текущие application images: S3 — 182 688 байт, C5 — 172 224,
+RP — 18 468, Pack — 3 168, Safety — 3 296. Все десять image gates проходят.
+Пять статических A/B topologies заканчиваются в границах выбранной flash, все
+linked memory reports помещаются. 8-МиБ external RAM S3 также проверена в
+runtime; external RAM C5 и каждый реальный flash/boot rollback transition
+остаются физическими HIL gates.

@@ -150,7 +150,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F3.3"}, set(markers.values()))
+        self.assertEqual({"F3.4"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F3", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -158,7 +158,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["claims"]["target_builds_run"])
         self.assertTrue(state["claims"]["target_builds_byte_reproducible"])
         self.assertTrue(state["claims"]["target_emulators_run"])
-        self.assertEqual(4, state["claims"]["target_emulator_runs"])
+        self.assertEqual(6, state["claims"]["target_emulator_runs"])
         self.assertTrue(state["claims"]["s3_debug_release_boot_reviewed"])
         self.assertTrue(state["claims"]["s3_octal_psram_8m_test_reviewed"])
         self.assertFalse(state["claims"]["qemu_flash_write_or_rollback_proven"])
@@ -166,6 +166,10 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(24, state["claims"]["sanitized_host_fault_scenarios"])
         self.assertFalse(state["claims"]["nonvolatile_retained_fault_proven"])
         self.assertFalse(state["claims"]["physical_update_rollback_proven"])
+        self.assertTrue(state["claims"]["current_target_boundaries_reviewed"])
+        self.assertEqual(10, state["claims"]["linked_image_and_ram_gates_reviewed"])
+        self.assertEqual(5, state["claims"]["static_rollback_topologies_reviewed"])
+        self.assertEqual(0, state["claims"]["physical_rollback_transitions_reviewed"])
         for configuration in ("debug", "release"):
             self.assertTrue(
                 (REPO_ROOT / f"config/f3_1_s3_{configuration}_runtime_review.json").is_file()
@@ -290,7 +294,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F3.3", progress["current_substep"])
+        self.assertEqual("F3.4", progress["current_substep"])
         self.assertEqual(0, progress["target_execution"]["emulator_runs"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])
@@ -327,7 +331,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("esp32s3", s3_review["sdk_target"])
         self.assertEqual({"debug", "release"}, set(s3_review["configurations"]))
         self.assertEqual(
-            {"debug": 180160, "release": 138416},
+            {"debug": 182688, "release": 140496},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in s3_review["configurations"].items()

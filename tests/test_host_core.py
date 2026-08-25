@@ -214,6 +214,39 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(24, review["execution_counts"]["host_sanitizer_scenarios"])
         self.assertEqual(0, review["execution_counts"]["hardware_runs"])
         self.assertIn("bootloader_rollback_transition", review["deferred_claims"])
+        for configuration in ("debug", "release"):
+            evidence = json.loads(
+                (
+                    REPO_ROOT
+                    / f"config/f3_2_s3_{configuration}_scenario_review.json"
+                ).read_text(encoding="utf-8")
+            )
+            self.assertEqual(64, len(evidence["project_input_manifest_sha256"]))
+
+    def test_f3_3_current_artifact_and_rollback_boundaries_are_reviewed(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f3_3_boundaries.py", "--check"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("5 static rollback topologies", result.stdout)
+        review = json.loads(
+            (REPO_ROOT / "config/f3_3_boundary_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(5, review["totals"]["targets"])
+        self.assertEqual(10, review["totals"]["image_gates_passed"])
+        self.assertEqual(52, review["totals"]["byte_reproducible_artifacts"])
+        self.assertEqual(0, review["totals"]["physical_rollback_transitions"])
+        targets = {target["target"]: target for target in review["targets"]}
+        self.assertEqual(182688, targets["s3"]["configurations"]["debug"]["application"]["bytes"])
+        self.assertEqual(172224, targets["c5"]["configurations"]["debug"]["application"]["bytes"])
+        self.assertTrue(targets["s3"]["external_ram"]["runtime_init_and_memory_test_proven"])
+        self.assertFalse(targets["c5"]["external_ram"]["runtime_init_and_memory_test_proven"])
+        for target in targets.values():
+            self.assertTrue(target["rollback"]["static_topology_proven"])
 
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(

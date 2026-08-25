@@ -7,12 +7,12 @@
     {
       "configuration": "debug",
       "path": "config/f3_2_s3_debug_scenario_review.json",
-      "sha256": "32785a07b368069155d59220e2951257d99bbfefc9656ea1af12e8ab3da9ac5b"
+      "sha256": "cfb46a28db1f444b1dfa9ad5e066656a56c72fd5bd1bb028965ddcc83a6da62c"
     },
     {
       "configuration": "release",
       "path": "config/f3_2_s3_release_scenario_review.json",
-      "sha256": "be27354c388d8e6fc93f748410c0e817303e5dc744e692c1abd7e89fa70f7b6f"
+      "sha256": "f5ea78b24778f8b8edc2c329f0ea7d3afc37ac3f02a5b064b6dc4a4d908d11c6"
     }
   ],
   "host_sanitizer_evidence": {

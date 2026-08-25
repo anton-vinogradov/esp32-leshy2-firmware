@@ -12,17 +12,17 @@
         {
           "path": "build/targets/rp/debug/leshy2_rp.elf",
           "bytes": 1737796,
-          "sha256": "96386c8d592b5e3703cc0c21c8287f9a6dfed3aa01a6a94d8cd8a6033bff5a9a"
+          "sha256": "5cba3bf9f680281cce3199f50e5ff70a90af700f5486020ac82cb9240459072d"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.bin",
           "bytes": 18468,
-          "sha256": "5d008feec4410c564c33440a94e70453aca2bb9829b6db7a18ca68ff12801b66"
+          "sha256": "1f66ac7fcd4da62e398da7d12bf1010d2df6dd8ce8252b3654f2b50cfd7c4c5b"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.uf2",
           "bytes": 37888,
-          "sha256": "ad5852c0aa2b9189a8cd71d758bc3dc0901a784fc66af7b9359346aea6086198"
+          "sha256": "0eb7d059529c8e8f9dc28d3d7df7fa436cd873bd2adc1649653c650478a48f67"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.elf.map",
@@ -45,17 +45,17 @@
         {
           "path": "build/targets/rp/release/leshy2_rp.elf",
           "bytes": 335288,
-          "sha256": "dfe88dc7a47b46b4f0eb2d89be1e05045a95589190f38eab8c849c24110b01a2"
+          "sha256": "ecf439389334911be8d5a021765de7d22943d854c9418e64144eb2ef5d4d6229"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.bin",
           "bytes": 10656,
-          "sha256": "33cf33d70b8b9af069111f5ab7c1e1d817b5ff0a7be8ff8209fc29ec1608a3ae"
+          "sha256": "8b744ca02ea10d7be9f5d2b535e5c5c808e794f5e4bcc254e48427a2ca3cd1b1"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.uf2",
           "bytes": 22016,
-          "sha256": "a0ebee62caa067a71d27f9e73a8fc052a6f1f30edbd1522bbc70c1155c2eb076"
+          "sha256": "232f6a688d5ada56f84740bddd60b110125bf1405097d138f8d62757333a8cde"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.elf.map",

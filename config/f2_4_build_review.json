@@ -8,7 +8,7 @@
       "target": "s3",
       "stage": "F2.4.1",
       "evidence": "config/f2_4_s3_build_review.json",
-      "evidence_sha256": "2b6494ac0609e2571389f785058098c601105691d4b99669e11459249863f362",
+      "evidence_sha256": "83f1ac469944eb8c2b1cf180d9b4d5d148bde48f17f857a0eba59ce740131115",
       "configurations": [
         "debug",
         "release"
@@ -16,15 +16,15 @@
       "artifact_instances": 10,
       "map_files": 2,
       "image_bytes": {
-        "debug": 180160,
-        "release": 138416
+        "debug": 182688,
+        "release": 140496
       }
     },
     {
       "target": "c5",
       "stage": "F2.4.2",
       "evidence": "config/f2_4_c5_build_review.json",
-      "evidence_sha256": "47dd4d99b3030fb3848eab6fe4252449f1fbd5b26f829aefd6cdaceda0c21be3",
+      "evidence_sha256": "6f2fc5c1d39d213c8a33cd8231ef746b9fe0c5b647cca433aa5af460f1a26293",
       "configurations": [
         "debug",
         "release"
@@ -40,7 +40,7 @@
       "target": "rp",
       "stage": "F2.4.3",
       "evidence": "config/f2_4_rp_build_review.json",
-      "evidence_sha256": "e14e8c27143870d3a8ff3cd2c75884cdc296ca60afa6924e7272938fa7c0c894",
+      "evidence_sha256": "f9612831e037b5484d630a95576c961bf2c265599e16acc1b82765f513886969",
       "configurations": [
         "debug",
         "release"
@@ -56,7 +56,7 @@
       "target": "pack",
       "stage": "F2.4.4",
       "evidence": "config/f2_4_pack_build_review.json",
-      "evidence_sha256": "9d568c3d46ba2ddb0e5a17b5cac12879d4ca115b92e8ba601ea58435c19cbe80",
+      "evidence_sha256": "b5e5a0fd19101ae938d70182436a96aa6d29a9468edc161ecf841ce84e963f7a",
       "configurations": [
         "debug",
         "release"
@@ -72,7 +72,7 @@
       "target": "safety",
       "stage": "F2.4.5",
       "evidence": "config/f2_4_safety_build_review.json",
-      "evidence_sha256": "2dda944759a4b05b869f7b2b88ccd742e6cddb12877a0401847816528b8ee920",
+      "evidence_sha256": "99648e9b73efa0d28927ead310dc82eef13091b6b60519d5622bab412b7a9090",
       "configurations": [
         "debug",
         "release"

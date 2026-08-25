@@ -18,6 +18,7 @@ import time
 import traceback
 from pathlib import Path
 
+from capture_target_build_review import input_manifest
 from review_f2_4_preflight import local_environment
 
 
@@ -375,6 +376,7 @@ def execute_s3(configuration: str, stage: str) -> tuple[dict, str]:
         "target": "s3",
         "configuration": configuration,
         "target_elf_sha256": sha256(elf),
+        "project_input_manifest_sha256": input_manifest("s3")["manifest_sha256"],
         "qemu_version": version,
         "qemu_executable_sha256": sha256(QEMU_PATH),
         "ordered_markers": [
@@ -444,14 +446,10 @@ def check_evidence(configuration: str, stage: str) -> list[str]:
         errors.append(f"S3 {configuration} accepted claims changed")
     if record.get("deferred_claims") != deferred_claims:
         errors.append(f"S3 {configuration} deferred claims changed")
-    elf = REPO_ROOT / plan["recipes"][f"s3_{configuration}"]["target_elf"]
-    successor_exists = evidence_path(configuration, "F3.2").is_file()
-    if (
-        elf.is_file()
-        and (stage == "F3.2" or not successor_exists)
-        and record.get("target_elf_sha256") != sha256(elf)
-    ):
-        errors.append(f"S3 {configuration} target ELF changed after runtime review")
+    if stage == "F3.2" and record.get(
+        "project_input_manifest_sha256"
+    ) != input_manifest("s3")["manifest_sha256"]:
+        errors.append(f"S3 {configuration} project inputs changed after runtime review")
     if QEMU_PATH.is_file() and record.get("qemu_executable_sha256") != sha256(QEMU_PATH):
         errors.append(f"S3 {configuration} QEMU executable changed after runtime review")
     fixture = record.get("ota_fixture", {})

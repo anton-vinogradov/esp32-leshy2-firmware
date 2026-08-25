@@ -30,12 +30,11 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F3
 
-<!-- current-substep: F3.3 -->
+<!-- current-substep: F3.4 -->
 
-**Точный маркер: `F3.3`** — сверить актуальные target artifacts и runtime
-evidence с границами image, RAM, partitions и rollback каждого домена. Запись
-flash и физическая периферия остаются отложенными. Маркер и evidence меняются
-вместе в каждом commit.
+**Точный маркер: `F3.4`** — свести полный результат эмуляции F3 и все оставшиеся
+dev-board/HIL deferrals в итоговый отчёт фазы. Ни один физический claim нельзя
+повысить одним лишь summary. Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -126,10 +125,13 @@ flash и физическая периферия остаются отложен
   retained-first-fault и failed-update RAM rollback; ещё 24 portable-сценария
   прошли ASan/UBSan. Nonvolatile persistence и flash rollback этим не заявлены;
   [сводный evidence](../config/f3_2_runtime_review.json).
-- ▶️ **`F3.3` — сейчас:** сверить runtime evidence с границами image, RAM,
-  partitions и rollback каждого target.
-- `F3.4` — свести результаты и назначить всё неэмулируемое точному dev-board
-  или HIL gate.
+- ✅ `F3.3` — новый двойной clean-build воспроизвёл 52/52 artifacts; десять
+  актуальных image/RAM gates и пять статических rollback topologies помещаются.
+  S3 debug занимает 182 688 байт с запасом 6 895 200 байт до maximum; физических
+  rollback transitions заявлено ноль. См.
+  [boundary evidence](../config/f3_3_boundary_review.json).
+- ▶️ **`F3.4` — сейчас:** свести результаты и назначить всё неэмулируемое
+  точному dev-board или HIL gate.
 
 F2 прошла ревью: пять targets, десять конфигураций, 52 artifacts, 14 maps и
 десять image gates проходят вместе и воспроизводятся в двух чистых проходах.

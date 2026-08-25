@@ -193,3 +193,17 @@ These tests deliberately do not write production flash or drive physical pins.
 They therefore do not prove nonvolatile fault retention, image signature/readback,
 bootloader rollback, display rendering, watchdog timing or `FAULT_KILL`; those
 remain explicit physical gates.
+
+## Reviewed F3.3 boundaries
+
+A new two-pass clean build after the F3.2 source change reproduced all 52
+artifacts. The [boundary evidence](../config/f3_3_boundary_review.json) binds
+each current project-input manifest to its debug/release image, linker map,
+linked-memory report, exact partition source and rollback topology.
+
+The largest current application image in each domain is 182,688 bytes for S3,
+172,224 for C5, 18,468 for RP, 3,168 for Pack and 3,296 for Safety. All ten
+image gates pass. All five static A/B topologies end within their selected flash
+device, and every linked memory report fits. S3's 8-MiB external RAM is also
+runtime-tested; C5 external RAM and every real flash/boot rollback transition
+remain physical HIL gates.

@@ -1,0 +1,815 @@
+{
+  "schema_version": 1,
+  "stage": "F3.3",
+  "status": "reviewed",
+  "scope": "current image, linked-memory, partition and rollback boundaries for five firmware targets",
+  "inputs": {
+    "reproducibility_evidence": {
+      "path": "config/f2_5_reproducibility_review.json",
+      "sha256": "b4f3ecb87a75886e2d9363fcb39579e42e7ac2fb9ccc8e8ef025bfa683d5122d"
+    },
+    "runtime_evidence": {
+      "path": "config/f3_2_runtime_review.json",
+      "sha256": "63641933eea90efcac3e9da2d033ed3e0cb55c895e3ea2d430818c7361d7cea0"
+    }
+  },
+  "targets": [
+    {
+      "target": "s3",
+      "project_input_manifest_sha256": "342326d29540f41e6b4bc1c6dad29dce5cdc9da22c45ae74a315d9994f1ef2bb",
+      "flash_bytes": 16777216,
+      "partition_table": {
+        "path": "config/partitions_16m.csv",
+        "sha256": "a4891d2c8dd08f037a42d81af185c483d830870325a2c30cfe802a3660ae3247",
+        "regions": [
+          {
+            "name": "nvs",
+            "type": "data",
+            "subtype": "nvs",
+            "offset": 36864,
+            "size": 24576,
+            "end": 61440
+          },
+          {
+            "name": "otadata",
+            "type": "data",
+            "subtype": "ota",
+            "offset": 61440,
+            "size": 8192,
+            "end": 69632
+          },
+          {
+            "name": "phy_init",
+            "type": "data",
+            "subtype": "phy",
+            "offset": 69632,
+            "size": 4096,
+            "end": 73728
+          },
+          {
+            "name": "coredump",
+            "type": "data",
+            "subtype": "coredump",
+            "offset": 73728,
+            "size": 65536,
+            "end": 139264
+          },
+          {
+            "name": "nvs_keys",
+            "type": "data",
+            "subtype": "nvs_keys",
+            "offset": 139264,
+            "size": 12288,
+            "end": 151552
+          },
+          {
+            "name": "ota_0",
+            "type": "app",
+            "subtype": "ota_0",
+            "offset": 196608,
+            "size": 7340032,
+            "end": 7536640
+          },
+          {
+            "name": "ota_1",
+            "type": "app",
+            "subtype": "ota_1",
+            "offset": 7536640,
+            "size": 7340032,
+            "end": 14876672
+          },
+          {
+            "name": "rescue_fs",
+            "type": "data",
+            "subtype": "littlefs",
+            "offset": 14876672,
+            "size": 1048576,
+            "end": 15925248
+          },
+          {
+            "name": "eventlog",
+            "type": "data",
+            "subtype": "0x40",
+            "offset": 15925248,
+            "size": 524288,
+            "end": 16449536
+          },
+          {
+            "name": "future_res",
+            "type": "data",
+            "subtype": "0x41",
+            "offset": 16449536,
+            "size": 327680,
+            "end": 16777216
+          }
+        ],
+        "ends_at_flash_boundary": true
+      },
+      "rollback": {
+        "topology": "two equal OTA application slots plus OTA state",
+        "slot_names": [
+          "ota_0",
+          "ota_1"
+        ],
+        "slot_bytes": 7340032,
+        "static_topology_proven": true,
+        "ram_model_transition_proven": true,
+        "flash_or_bootloader_transition_proven": false
+      },
+      "external_ram": {
+        "selected_bytes": 8388608,
+        "target_configuration_present": true,
+        "runtime_init_and_memory_test_proven": true
+      },
+      "configurations": {
+        "debug": {
+          "application": {
+            "path": "build/targets/s3/debug/leshy2_s3.bin",
+            "bytes": 182688,
+            "sha256": "d8f0bb73b8532fe74951b0fe23c9246d1a6d30abd9da66fd6e828de6422a4ced"
+          },
+          "target_elf": {
+            "path": "build/targets/s3/debug/leshy2_s3.elf",
+            "bytes": 3758844,
+            "sha256": "e7fea9b50b8344980f24185b65a6456c2bf75af14f7f362e6b69841f8d4927bc"
+          },
+          "map_sha256": "22e05a3106c6d8b48497e4c2fe3e5e294a209173626fa1a7bc4681016b54e644",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 7340032,
+            "maximum_image_bytes": 7077888,
+            "free_before_maximum_bytes": 6895200,
+            "free_in_slot_bytes": 7157344
+          },
+          "bootloader": {
+            "path": "build/targets/s3/debug/bootloader/bootloader.bin",
+            "bytes": 21072,
+            "sha256": "d4d0b0db81dcd9c14b3fe64b2e350b21be3c3b8438415deed069d23fbf15f0ee",
+            "partition_bytes": 32768,
+            "free_bytes": 11696
+          },
+          "linked_memory": [
+            {
+              "name": "DIRAM",
+              "total_bytes": 341760,
+              "used_bytes": 54613,
+              "free_bytes": 287147
+            },
+            {
+              "name": "IRAM",
+              "total_bytes": 16384,
+              "used_bytes": 16384,
+              "free_bytes": 0
+            },
+            {
+              "name": "RTC SLOW",
+              "total_bytes": 8192,
+              "used_bytes": 36,
+              "free_bytes": 8156
+            },
+            {
+              "name": "RTC FAST",
+              "total_bytes": 8192,
+              "used_bytes": 24,
+              "free_bytes": 8168
+            }
+          ]
+        },
+        "release": {
+          "application": {
+            "path": "build/targets/s3/release/leshy2_s3.bin",
+            "bytes": 140496,
+            "sha256": "dbb3e54dbfbffb8b1b1ff94619ffbddc654924e256361bc8fc89338b27acc172"
+          },
+          "target_elf": {
+            "path": "build/targets/s3/release/leshy2_s3.elf",
+            "bytes": 3633204,
+            "sha256": "c77fc42b4aeb7b13b6dd0a84627f1bcef9a6c86aa64a72a11e8e4ee5d3d4286f"
+          },
+          "map_sha256": "2fbc4c5a83c2fbb3f7583f4fb20cdcf1b7038c5bbd808f191e9642887b46f9b1",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 7340032,
+            "maximum_image_bytes": 7077888,
+            "free_before_maximum_bytes": 6937392,
+            "free_in_slot_bytes": 7199536
+          },
+          "bootloader": {
+            "path": "build/targets/s3/release/bootloader/bootloader.bin",
+            "bytes": 19728,
+            "sha256": "0722a3143c2c040aa97a92d81fa87f39ef223dd7b677597edc26059f8efb9bfc",
+            "partition_bytes": 32768,
+            "free_bytes": 13040
+          },
+          "linked_memory": [
+            {
+              "name": "DIRAM",
+              "total_bytes": 341760,
+              "used_bytes": 40451,
+              "free_bytes": 301309
+            },
+            {
+              "name": "IRAM",
+              "total_bytes": 16384,
+              "used_bytes": 16384,
+              "free_bytes": 0
+            },
+            {
+              "name": "RTC SLOW",
+              "total_bytes": 8192,
+              "used_bytes": 36,
+              "free_bytes": 8156
+            },
+            {
+              "name": "RTC FAST",
+              "total_bytes": 8192,
+              "used_bytes": 24,
+              "free_bytes": 8168
+            }
+          ]
+        }
+      }
+    },
+    {
+      "target": "c5",
+      "project_input_manifest_sha256": "51bdce22a90688bbb765bcd21a1860e41bb0506a5f699da1017f86aebb6d8975",
+      "flash_bytes": 8388608,
+      "partition_table": {
+        "path": "config/partitions_8m_c5.csv",
+        "sha256": "baed4a7e5e644fa9814c69dd328666019e59ddc2a8bc14377d906449ef52b86c",
+        "regions": [
+          {
+            "name": "nvs",
+            "type": "data",
+            "subtype": "nvs",
+            "offset": 36864,
+            "size": 24576,
+            "end": 61440
+          },
+          {
+            "name": "otadata",
+            "type": "data",
+            "subtype": "ota",
+            "offset": 61440,
+            "size": 8192,
+            "end": 69632
+          },
+          {
+            "name": "phy_init",
+            "type": "data",
+            "subtype": "phy",
+            "offset": 69632,
+            "size": 4096,
+            "end": 73728
+          },
+          {
+            "name": "coredump",
+            "type": "data",
+            "subtype": "coredump",
+            "offset": 73728,
+            "size": 65536,
+            "end": 139264
+          },
+          {
+            "name": "nvs_keys",
+            "type": "data",
+            "subtype": "nvs_keys",
+            "offset": 139264,
+            "size": 12288,
+            "end": 151552
+          },
+          {
+            "name": "ota_0",
+            "type": "app",
+            "subtype": "ota_0",
+            "offset": 196608,
+            "size": 3670016,
+            "end": 3866624
+          },
+          {
+            "name": "ota_1",
+            "type": "app",
+            "subtype": "ota_1",
+            "offset": 3866624,
+            "size": 3670016,
+            "end": 7536640
+          },
+          {
+            "name": "eventlog",
+            "type": "data",
+            "subtype": "0x40",
+            "offset": 7536640,
+            "size": 327680,
+            "end": 7864320
+          },
+          {
+            "name": "future_res",
+            "type": "data",
+            "subtype": "0x41",
+            "offset": 7864320,
+            "size": 524288,
+            "end": 8388608
+          }
+        ],
+        "ends_at_flash_boundary": true
+      },
+      "rollback": {
+        "topology": "two equal OTA application slots plus OTA state",
+        "slot_names": [
+          "ota_0",
+          "ota_1"
+        ],
+        "slot_bytes": 3670016,
+        "static_topology_proven": true,
+        "ram_model_transition_proven": false,
+        "flash_or_bootloader_transition_proven": false
+      },
+      "external_ram": {
+        "selected_bytes": 8388608,
+        "target_configuration_present": true,
+        "runtime_init_and_memory_test_proven": false
+      },
+      "configurations": {
+        "debug": {
+          "application": {
+            "path": "build/targets/c5/debug/leshy2_c5.bin",
+            "bytes": 172224,
+            "sha256": "707e25b4af8ae0e16f717ad266ad49c793557f253790c3306305c4c480f6481a"
+          },
+          "target_elf": {
+            "path": "build/targets/c5/debug/leshy2_c5.elf",
+            "bytes": 4252636,
+            "sha256": "ae8202beca71c80392fe7c90d01b6c0c8d3e8940b95d38b9a961bc34711d3684"
+          },
+          "map_sha256": "97512222fb24436d5e10565ac8d0a1d406312e87241b8fa4ccb282a5015ebbf4",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 3670016,
+            "maximum_image_bytes": 3538944,
+            "free_before_maximum_bytes": 3366720,
+            "free_in_slot_bytes": 3497792
+          },
+          "bootloader": {
+            "path": "build/targets/c5/debug/bootloader/bootloader.bin",
+            "bytes": 22336,
+            "sha256": "3fef67d3954bb554135449925294dc79b158068d4950ad78f03f87dcc3a1d00f",
+            "partition_bytes": 24576,
+            "free_bytes": 2240
+          },
+          "linked_memory": [
+            {
+              "name": "HP SRAM",
+              "total_bytes": 320928,
+              "used_bytes": 57918,
+              "free_bytes": 263010
+            },
+            {
+              "name": "LP SRAM",
+              "total_bytes": 16384,
+              "used_bytes": 24,
+              "free_bytes": 16360
+            }
+          ]
+        },
+        "release": {
+          "application": {
+            "path": "build/targets/c5/release/leshy2_c5.bin",
+            "bytes": 125616,
+            "sha256": "478c9994a01789a6af97142b6cec06c1937699ea05f9ed4ed70253bb8733e4e5"
+          },
+          "target_elf": {
+            "path": "build/targets/c5/release/leshy2_c5.elf",
+            "bytes": 4031692,
+            "sha256": "05a9a5911036996d50f5a683b6019f083d515cb726f07b1db9e49d30adaa3ccd"
+          },
+          "map_sha256": "63d385a0e360b93a243a695f4dea50a61a80f9d71ad66bf322b638f8e1152aaa",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 3670016,
+            "maximum_image_bytes": 3538944,
+            "free_before_maximum_bytes": 3413328,
+            "free_in_slot_bytes": 3544400
+          },
+          "bootloader": {
+            "path": "build/targets/c5/release/bootloader/bootloader.bin",
+            "bytes": 20064,
+            "sha256": "ff8e083fd9e8a4d84d0622441bfc7c76d3fad58ca9e57b0bf0f525cba7eff7fd",
+            "partition_bytes": 24576,
+            "free_bytes": 4512
+          },
+          "linked_memory": [
+            {
+              "name": "HP SRAM",
+              "total_bytes": 320928,
+              "used_bytes": 44530,
+              "free_bytes": 276398
+            },
+            {
+              "name": "LP SRAM",
+              "total_bytes": 16384,
+              "used_bytes": 24,
+              "free_bytes": 16360
+            }
+          ]
+        }
+      }
+    },
+    {
+      "target": "rp",
+      "project_input_manifest_sha256": "bc2437937a078c01852106e2ba939846d9652665519e722d7fba90ba457c3c75",
+      "flash_bytes": 2097152,
+      "partition_table": {
+        "path": "config/rp2354b_partitions.json",
+        "sha256": "7560d973376046a084f78d09b002c321a4d7a53ca418fb1832c94daecd905a3f",
+        "image_slots": [
+          "Leshy2 RP image A",
+          "Leshy2 RP image B"
+        ],
+        "slot_bytes": 917504,
+        "mirrored_data_partitions": [
+          "Leshy2 RP data A",
+          "Leshy2 RP data B"
+        ],
+        "ends_at_flash_boundary": true
+      },
+      "rollback": {
+        "topology": "RP2350 A/B partitions with TBYB policy",
+        "static_topology_proven": true,
+        "ram_model_transition_proven": false,
+        "flash_or_bootrom_transition_proven": false
+      },
+      "configurations": {
+        "debug": {
+          "application": {
+            "path": "build/targets/rp/debug/leshy2_rp.bin",
+            "bytes": 18468,
+            "sha256": "1f66ac7fcd4da62e398da7d12bf1010d2df6dd8ce8252b3654f2b50cfd7c4c5b"
+          },
+          "target_elf": {
+            "path": "build/targets/rp/debug/leshy2_rp.elf",
+            "bytes": 1737796,
+            "sha256": "5cba3bf9f680281cce3199f50e5ff70a90af700f5486020ac82cb9240459072d"
+          },
+          "map_sha256": "d2273c74ea8ff386c1fd2c99ba2ff2a29114557a573b8e05f575e90065c1e302",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 917504,
+            "maximum_image_bytes": 884736,
+            "free_before_maximum_bytes": 866268,
+            "free_in_slot_bytes": 899036
+          },
+          "linked_memory": [
+            {
+              "name": "main_and_scratch_sram",
+              "total_bytes": 532480,
+              "used_or_reserved_bytes": 6472,
+              "free_bytes": 526008
+            }
+          ]
+        },
+        "release": {
+          "application": {
+            "path": "build/targets/rp/release/leshy2_rp.bin",
+            "bytes": 10656,
+            "sha256": "8b744ca02ea10d7be9f5d2b535e5c5c808e794f5e4bcc254e48427a2ca3cd1b1"
+          },
+          "target_elf": {
+            "path": "build/targets/rp/release/leshy2_rp.elf",
+            "bytes": 335288,
+            "sha256": "ecf439389334911be8d5a021765de7d22943d854c9418e64144eb2ef5d4d6229"
+          },
+          "map_sha256": "fd59b03b378afd675bf9a2e6cbc9df64bd425d2a6cacc091645f1f656b84d81e",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 917504,
+            "maximum_image_bytes": 884736,
+            "free_before_maximum_bytes": 874080,
+            "free_in_slot_bytes": 906848
+          },
+          "linked_memory": [
+            {
+              "name": "main_and_scratch_sram",
+              "total_bytes": 532480,
+              "used_or_reserved_bytes": 5540,
+              "free_bytes": 526940
+            }
+          ]
+        }
+      }
+    },
+    {
+      "target": "pack",
+      "project_input_manifest_sha256": "88294128d0f50c0736e871f4511d892ede4b690ca60a398047e1cefe213a9685",
+      "flash_bytes": 65536,
+      "sram_bytes": 8192,
+      "memory_map": {
+        "path": "config/mspm0c1106_memory.json",
+        "sha256": "bdc77fe069ec841cac725761d918092e11dd73a52eb6e0a8cc71e586c1ce7744",
+        "regions": [
+          {
+            "name": "protected_boot_manager",
+            "offset": 0,
+            "size": 16384,
+            "purpose": "ROM-invoked flash BSL, target/signature verification and fail-closed slot selection"
+          },
+          {
+            "name": "application_a",
+            "offset": 16384,
+            "size": 22528,
+            "purpose": "running or last-known-good controller image including its manifest and signature"
+          },
+          {
+            "name": "application_b",
+            "offset": 38912,
+            "size": 22528,
+            "purpose": "inactive/pending controller image including its manifest and signature"
+          },
+          {
+            "name": "boot_state",
+            "offset": 61440,
+            "size": 4096,
+            "purpose": "duplicated version, compatibility, pending/confirmed state and bounded fault metadata"
+          }
+        ],
+        "ends_at_flash_boundary": true
+      },
+      "rollback": {
+        "topology": "protected boot manager, equal application A/B slots and duplicated boot state",
+        "static_topology_proven": true,
+        "ram_model_transition_proven": false,
+        "flash_or_boot_manager_transition_proven": false
+      },
+      "configurations": {
+        "debug": {
+          "application": {
+            "path": "build/targets/pack/debug/leshy2_pack.bin",
+            "bytes": 3168,
+            "sha256": "b5de47c3b6b6d6f6f953aa78ae73bc8141495b51b8228f525f36a17fd7c7736f"
+          },
+          "boot_manager": {
+            "path": "build/targets/pack/debug/leshy2_pack_boot.bin",
+            "bytes": 256,
+            "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+          },
+          "application_map_sha256": "f5293ba72d0fb1d41aed3fa566d797dce635bdde7b0cad116fbad72b95e07b12",
+          "boot_map_sha256": "cea37bca0d9f0e03a85061b4806f5913bff0e92e8f9660aa383827eff5cadb21",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 22528,
+            "maximum_image_bytes": 22528,
+            "free_before_maximum_bytes": 19360,
+            "free_in_slot_bytes": 19360
+          },
+          "application_linked_memory": {
+            "flash": {
+              "origin": 16384,
+              "total_bytes": 22528,
+              "used_bytes": 3168,
+              "free_bytes": 19360
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 312,
+              "free_bytes": 7880
+            }
+          },
+          "boot_linked_memory": {
+            "flash": {
+              "origin": 0,
+              "total_bytes": 16384,
+              "used_bytes": 256,
+              "free_bytes": 16128
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 256,
+              "free_bytes": 7936
+            }
+          }
+        },
+        "release": {
+          "application": {
+            "path": "build/targets/pack/release/leshy2_pack.bin",
+            "bytes": 3168,
+            "sha256": "b5de47c3b6b6d6f6f953aa78ae73bc8141495b51b8228f525f36a17fd7c7736f"
+          },
+          "boot_manager": {
+            "path": "build/targets/pack/release/leshy2_pack_boot.bin",
+            "bytes": 256,
+            "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+          },
+          "application_map_sha256": "3d602433dd8bff70d633c392300c8f6096e8b735f26d81349f8def3709e4ca7d",
+          "boot_map_sha256": "dd639f1e57fe152b51a0116ca76d5520d8893484f339b090af6fd0d9ef7504ad",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 22528,
+            "maximum_image_bytes": 22528,
+            "free_before_maximum_bytes": 19360,
+            "free_in_slot_bytes": 19360
+          },
+          "application_linked_memory": {
+            "flash": {
+              "origin": 16384,
+              "total_bytes": 22528,
+              "used_bytes": 3168,
+              "free_bytes": 19360
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 312,
+              "free_bytes": 7880
+            }
+          },
+          "boot_linked_memory": {
+            "flash": {
+              "origin": 0,
+              "total_bytes": 16384,
+              "used_bytes": 256,
+              "free_bytes": 16128
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 256,
+              "free_bytes": 7936
+            }
+          }
+        }
+      }
+    },
+    {
+      "target": "safety",
+      "project_input_manifest_sha256": "c304366b9c81119e004e47a47f77bd9401dc15be7e1df63677ba5406ca53e3f6",
+      "flash_bytes": 65536,
+      "sram_bytes": 8192,
+      "memory_map": {
+        "path": "config/mspm0c1106_memory.json",
+        "sha256": "bdc77fe069ec841cac725761d918092e11dd73a52eb6e0a8cc71e586c1ce7744",
+        "regions": [
+          {
+            "name": "protected_boot_manager",
+            "offset": 0,
+            "size": 16384,
+            "purpose": "ROM-invoked flash BSL, target/signature verification and fail-closed slot selection"
+          },
+          {
+            "name": "application_a",
+            "offset": 16384,
+            "size": 22528,
+            "purpose": "running or last-known-good controller image including its manifest and signature"
+          },
+          {
+            "name": "application_b",
+            "offset": 38912,
+            "size": 22528,
+            "purpose": "inactive/pending controller image including its manifest and signature"
+          },
+          {
+            "name": "boot_state",
+            "offset": 61440,
+            "size": 4096,
+            "purpose": "duplicated version, compatibility, pending/confirmed state and bounded fault metadata"
+          }
+        ],
+        "ends_at_flash_boundary": true
+      },
+      "rollback": {
+        "topology": "protected boot manager, equal application A/B slots and duplicated boot state",
+        "static_topology_proven": true,
+        "ram_model_transition_proven": false,
+        "flash_or_boot_manager_transition_proven": false
+      },
+      "configurations": {
+        "debug": {
+          "application": {
+            "path": "build/targets/safety/debug/leshy2_safety.bin",
+            "bytes": 3296,
+            "sha256": "a42aab996f4a96d804b2b673ea544a3f79f1786876072e1879d5030b28856fdc"
+          },
+          "boot_manager": {
+            "path": "build/targets/safety/debug/leshy2_safety_boot.bin",
+            "bytes": 256,
+            "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+          },
+          "application_map_sha256": "8a39ce3d8f16d743a233653b190ef738fe57d6bbd82a2d73aca282ee32e8caab",
+          "boot_map_sha256": "fd93907148c80b0b27a33a9017a6d58b5695131a04e012b4753603e5ae89dd75",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 22528,
+            "maximum_image_bytes": 22528,
+            "free_before_maximum_bytes": 19232,
+            "free_in_slot_bytes": 19232
+          },
+          "application_linked_memory": {
+            "flash": {
+              "origin": 16384,
+              "total_bytes": 22528,
+              "used_bytes": 3296,
+              "free_bytes": 19232
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 312,
+              "free_bytes": 7880
+            }
+          },
+          "boot_linked_memory": {
+            "flash": {
+              "origin": 0,
+              "total_bytes": 16384,
+              "used_bytes": 256,
+              "free_bytes": 16128
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 256,
+              "free_bytes": 7936
+            }
+          }
+        },
+        "release": {
+          "application": {
+            "path": "build/targets/safety/release/leshy2_safety.bin",
+            "bytes": 3296,
+            "sha256": "a42aab996f4a96d804b2b673ea544a3f79f1786876072e1879d5030b28856fdc"
+          },
+          "boot_manager": {
+            "path": "build/targets/safety/release/leshy2_safety_boot.bin",
+            "bytes": 256,
+            "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+          },
+          "application_map_sha256": "619da33cb915b7480d94399cad7c35fd5f1c3ea20d07e46728a844158ddd2155",
+          "boot_map_sha256": "176c14a905fcead9f8069c15129213c9c6d102ce270a2aa823ac86f628145f1c",
+          "image_gate": {
+            "result": "ok",
+            "slot_bytes": 22528,
+            "maximum_image_bytes": 22528,
+            "free_before_maximum_bytes": 19232,
+            "free_in_slot_bytes": 19232
+          },
+          "application_linked_memory": {
+            "flash": {
+              "origin": 16384,
+              "total_bytes": 22528,
+              "used_bytes": 3296,
+              "free_bytes": 19232
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 312,
+              "free_bytes": 7880
+            }
+          },
+          "boot_linked_memory": {
+            "flash": {
+              "origin": 0,
+              "total_bytes": 16384,
+              "used_bytes": 256,
+              "free_bytes": 16128
+            },
+            "sram": {
+              "origin": 536870912,
+              "total_bytes": 8192,
+              "used_bytes": 256,
+              "free_bytes": 7936
+            }
+          }
+        }
+      }
+    }
+  ],
+  "totals": {
+    "targets": 5,
+    "configurations": 10,
+    "byte_reproducible_artifacts": 52,
+    "image_gates_passed": 10,
+    "static_rollback_topologies": 5,
+    "physical_rollback_transitions": 0
+  },
+  "claims": {
+    "current_target_inputs_match_build_evidence": true,
+    "all_current_artifacts_are_byte_reproducible": true,
+    "all_image_and_linked_memory_gates_pass": true,
+    "all_five_static_rollback_topologies_fit": true,
+    "s3_8m_psram_runtime_init_and_test_passed": true,
+    "nonvolatile_fault_retention_proven": false,
+    "physical_flash_or_rollback_transition_proven": false,
+    "physical_board_proven": false
+  },
+  "deferred_to_hil": [
+    "C5 external-PSRAM initialization and memory test",
+    "nonvolatile retained-fault write/read across power loss",
+    "signed image flash readback on every domain",
+    "pending-slot boot, confirmation, deadline and rollback on every domain",
+    "brownout during each flash and boot-state mutation",
+    "physical watchdog, FAULT_KILL and peripheral timing"
+  ],
+  "next": "F3.4",
+  "runner": "tools/review_f3_3_boundaries.py"
+}
