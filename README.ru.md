@@ -37,7 +37,9 @@
 контрольный прогон нормализованного BOM сопоставил 176/209 строк и распознал все
 1019 установок; exact-поиск дал всем 209 строкам маршруты `J0`–`J4` без замен.
 JLCAPI app/key готовы вне Git, пока право Parts проходит ревью. Закупка,
-quote/reservation, layout и fabrication заблокированы.
+quote/reservation, layout и fabrication заблокированы. Generic-совпадение
+`JLCPCB Assembly C9900300438` отвергнуто: exact NiceRF identity оно не
+доказывает, quote не отправлен.
 F3 прошла ревью: S3 debug/release загружается и
 исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
 target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets

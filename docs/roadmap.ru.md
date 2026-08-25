@@ -20,7 +20,7 @@ firmware-репозитория. Пересечения с железом ука
 | Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур потребляют generated H2 domain tables |
 | Target-сборки и map-файлы | ✅ [F2 проведено ревью](f2-target-build-system-report.ru.md): 10 конфигураций, 52/52 воспроизводимых artifacts и 10 size gates |
 | ESP32-S3 QEMU | ✅ F3 проведено ревью: debug/release boot, 8-МиБ PSRAM и изолированные fault paths |
-| Объединённый аппаратный gate | ✅ H4 проведён; на H5.0.3 [JLCPCB Standard PCBA выбран неэксклюзивным ориентиром](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.ru.md), 176/209 строк и все 1019 установок распознаны, все 209 строк имеют точные маршруты `J0`–`J4`, а право JLCAPI Parts проходит ревью; закупка заблокирована |
+| Объединённый аппаратный gate | ✅ H4 проведён; на H5.0.3 [JLCPCB Standard PCBA выбран неэксклюзивным ориентиром](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.ru.md), 176/209 строк и все 1019 установок распознаны, все 209 строк имеют точные маршруты `J0`–`J4`, generic `C9900300438` отвергнут как NiceRF evidence, а право JLCAPI Parts проходит ревью; закупка заблокирована |
 | C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает dev boards или hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |

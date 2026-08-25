@@ -37,7 +37,9 @@ is reviewed. At H5.0.3, [JLCPCB Standard PCBA is the non-exclusive manufacturing
 the controlled normalized BOM Tool run matched 176/209 lines and parsed all
 1019 placements; exact search gave all 209 lines `J0`–`J4` routes without
 replacement. The JLCAPI app/key are ready outside Git while Parts permission is
-reviewing. Purchasing, quote/reservation, layout and fabrication remain blocked.
+reviewing. The generic `JLCPCB Assembly C9900300438` quote match was rejected
+because it does not prove exact NiceRF identity; no quote was submitted.
+Purchasing, quote/reservation, layout and fabrication remain blocked.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named
