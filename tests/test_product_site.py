@@ -23,6 +23,8 @@ class ProductSiteTests(unittest.TestCase):
             "docs/f1-portable-cores-report.ru.md",
             "docs/f2-target-build-system-report.md",
             "docs/f2-target-build-system-report.ru.md",
+            "docs/f3-boot-memory-emulation-report.md",
+            "docs/f3-boot-memory-emulation-report.ru.md",
             "docs/memory.md",
             "docs/memory.ru.md",
             "docs/roadmap.md",
@@ -61,8 +63,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F3", "hardware H2"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F3", "hardware H2"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F4", "hardware H2"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F4", "hardware H2"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -74,7 +76,7 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F3",
+                "Current boundary: F4",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
                 "hardware H2",
@@ -82,7 +84,7 @@ class ProductSiteTests(unittest.TestCase):
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F3",
+                "Текущая граница: F4",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
                 "hardware H2",
@@ -134,6 +136,10 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn(
             "52/52", self.read("docs/f2-target-build-system-report.ru.md")
         )
+        self.assertIn("F3 is reviewed", self.read("docs/f3-boot-memory-emulation-report.md"))
+        self.assertIn("F3 прошла ревью", self.read("docs/f3-boot-memory-emulation-report.ru.md"))
+        self.assertIn("f3-boot-memory-emulation-report.md", self.read("README.md"))
+        self.assertIn("f3-boot-memory-emulation-report.ru.md", self.read("README.ru.md"))
         makefile = self.read("Makefile")
         self.assertIn("host-sanitize:", makefile)
         self.assertIn("-fsanitize=address,undefined", makefile)
@@ -150,9 +156,9 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F3.4"}, set(markers.values()))
+        self.assertEqual({"F4.0.0"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
-        self.assertEqual("F3", state["phase"])
+        self.assertEqual("F4", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
         self.assertIn("F2.0.1", state["reviewed"])
         self.assertTrue(state["claims"]["target_builds_run"])
@@ -168,6 +174,10 @@ class ProductSiteTests(unittest.TestCase):
         self.assertFalse(state["claims"]["physical_update_rollback_proven"])
         self.assertTrue(state["claims"]["current_target_boundaries_reviewed"])
         self.assertEqual(10, state["claims"]["linked_image_and_ram_gates_reviewed"])
+        self.assertTrue(state["claims"]["f3_reviewed"])
+        self.assertEqual(0, state["claims"]["f3_physical_runs"])
+        self.assertFalse(state["claims"]["non_s3_target_boot_proven"])
+        self.assertFalse(state["claims"]["physical_peripherals_proven"])
         self.assertEqual(5, state["claims"]["static_rollback_topologies_reviewed"])
         self.assertEqual(0, state["claims"]["physical_rollback_transitions_reviewed"])
         for configuration in ("debug", "release"):
@@ -294,7 +304,7 @@ class ProductSiteTests(unittest.TestCase):
             all(len(archive["sha256"]) == 64 for archive in lock["archives"])
         )
         progress = json.loads(self.read("config/f2_4_preflight_progress.json"))
-        self.assertEqual("F3.4", progress["current_substep"])
+        self.assertEqual("F4.0.0", progress["current_substep"])
         self.assertEqual(0, progress["target_execution"]["emulator_runs"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.4"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F2.4.0.5"]["status"])

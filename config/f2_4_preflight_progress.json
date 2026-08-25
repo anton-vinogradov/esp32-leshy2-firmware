@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F2.4.0",
   "host_profile": "macos_arm64",
-  "current_substep": "F3.4",
+  "current_substep": "F4.0.0",
   "target_execution": {
     "configure_runs": 10,
     "build_runs": 10,
@@ -146,5 +146,5 @@
       "absolute_workspace_path_leaks": 0
     }
   },
-  "next": "F3.4"
+  "next": "F4.0.0"
 }

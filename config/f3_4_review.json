@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "stage": "F3",
+  "closure_substep": "F3.4",
+  "status": "reviewed",
+  "scope": "boot, memory, virtual fault execution and honest physical deferrals",
+  "inputs": {
+    "capability_matrix": {
+      "path": "config/f3_execution_capability_matrix.json",
+      "sha256": "72ca72097fc74f977ee4dae0dbac3cf4bcb776851b1ce2f80b09daaae20cdc1f"
+    },
+    "debug_boot": {
+      "path": "config/f3_1_s3_debug_runtime_review.json",
+      "sha256": "6431a6fd7137fc48cabf8437bcae163af96c74e347b8806128531bce3b8b1d6a"
+    },
+    "release_boot": {
+      "path": "config/f3_1_s3_release_runtime_review.json",
+      "sha256": "f75de79ce7127107949afb89397701ac5881c4aeee6f9b88a681a9f79c869cbe"
+    },
+    "fault_scenarios": {
+      "path": "config/f3_2_runtime_review.json",
+      "sha256": "63641933eea90efcac3e9da2d033ed3e0cb55c895e3ea2d430818c7361d7cea0"
+    },
+    "resource_boundaries": {
+      "path": "config/f3_3_boundary_review.json",
+      "sha256": "7136f29450b347a03e6bac38dcde74220058e947fab54f046f0c371d16474112"
+    }
+  },
+  "result": {
+    "official_exact_target_emulator": "ESP32-S3 QEMU",
+    "s3_debug_release_boot_runs": 2,
+    "latest_s3_debug_release_scenario_runs": 2,
+    "portable_sanitized_scenarios": 24,
+    "byte_reproducible_artifacts": 52,
+    "image_and_linked_memory_gates": 10,
+    "static_rollback_topologies": 5,
+    "physical_runs": 0
+  },
+  "target_closure": [
+    {
+      "target": "s3",
+      "accepted": [
+        "exact target boot chain in debug and release",
+        "app_main and UART control flow",
+        "8-MiB octal-PSRAM initialization and memory test",
+        "self-test, retained-first-fault and failed-update RAM-model paths",
+        "current image, linked-memory and dual-slot static fit"
+      ],
+      "physical_gate": "Leshy2 H7/H8 and firmware F10 HIL",
+      "deferred": [
+        "display, touch, microSD, audio, radio and external GPIO timing",
+        "first-boot OTA-data write and nonvolatile retained fault",
+        "signed flash readback, pending-slot confirmation and bootloader rollback"
+      ]
+    },
+    {
+      "target": "c5",
+      "accepted": [
+        "reproducible debug/release target artifacts",
+        "portable contracts and current image/linked-memory/dual-slot static fit"
+      ],
+      "physical_gate": "ESP32-C5-DevKitC-1-N8R8, then Leshy2 H7/H8 and firmware F10",
+      "deferred": [
+        "target boot and 8-MiB external-PSRAM runtime test",
+        "Wi-Fi 2.4/5 GHz, BLE, IEEE 802.15.4, IR and SDIO",
+        "flash activation and rollback"
+      ]
+    },
+    {
+      "target": "rp",
+      "accepted": [
+        "reproducible RP2354B Arm-secure debug/release target artifacts",
+        "portable contracts and current image/SRAM/A-B static fit"
+      ],
+      "physical_gate": "SC1512-A4 carrier or Leshy2 H7 through SWD/UART, then firmware F10",
+      "deferred": [
+        "target boot, Boot ROM/TBYB transition and nonvolatile fault log",
+        "PIO, DMA, nRF24, Sub-GHz, voice and Cap-Bus timing"
+      ]
+    },
+    {
+      "target": "pack",
+      "accepted": [
+        "reproducible application/boot-manager artifacts",
+        "portable safety model and current flash/SRAM/A-B static fit"
+      ],
+      "physical_gate": "LP-MSPM0C1106, then Leshy2 H7/H8 and firmware F10",
+      "deferred": [
+        "target boot, ADC/I2C and pack-admission timing",
+        "signed flash activation, confirmation, brownout and rollback"
+      ]
+    },
+    {
+      "target": "safety",
+      "accepted": [
+        "reproducible application/boot-manager artifacts",
+        "portable safety model and current flash/SRAM/A-B static fit"
+      ],
+      "physical_gate": "LP-MSPM0C1106, then Leshy2 H7/H8 and firmware F10",
+      "deferred": [
+        "target boot, watchdog, thermal ADC, FAULT_KILL and TX-lease timing",
+        "signed flash activation, confirmation, brownout and rollback"
+      ]
+    }
+  ],
+  "claims": {
+    "f3_exit_criteria_pass": true,
+    "s3_exact_virtual_execution_proven": true,
+    "non_s3_target_boot_proven": false,
+    "physical_peripherals_proven": false,
+    "physical_flash_or_rollback_proven": false,
+    "hardware_order_authorized": false,
+    "pcb_layout_authorized": false
+  },
+  "next": "F4.0.0",
+  "hardware_intersection": "H4.0.1 prerequisite closes; hardware may begin H4.1 joined read-only review",
+  "runner": "tools/review_f3_4_closure.py"
+}

@@ -3,9 +3,9 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F3 — boot, память и эмуляция.** F0–F2 прошли ревью.
-> Пять target-проектов воспроизводимо собираются из принятого H2 pin/BSP
-> contract. Ни один target-образ ещё не загружался в эмуляторе или на железе.
+> **▶️ Текущая граница: F4 — IPC и scheduling.** F0–F3 прошли ревью.
+> Точные S3 debug/release images загружаются в QEMU; каждый non-S3 boot и
+> физический peripheral claim остаётся назначен dev-board или HIL gate.
 
 Последняя сверка статуса: **25 августа 2026 года**. Это собственный роадмап
 firmware-репозитория. Пересечения с железом указаны явно, но hardware-этапы не
@@ -19,8 +19,8 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP, update и five-domain model | ✅ [Итог F1](f1-portable-cores-report.ru.md): 24 детерминированных C-сценария; ASan/UBSan чистые |
 | Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур потребляют generated H2 domain tables |
 | Target-сборки и map-файлы | ✅ [F2 проведено ревью](f2-target-build-system-report.ru.md): 10 конфигураций, 52/52 воспроизводимых artifacts и 10 size gates |
-| ESP32-S3 QEMU | ⏳ Не запускался |
-| C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Ожидают target BSP и hardware |
+| ESP32-S3 QEMU | ✅ F3 проведено ревью: debug/release boot, 8-МиБ PSRAM и изолированные fault paths |
+| C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает dev boards или hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
 | HIL и release | 🔒 Ожидают аппаратный прототип H7 |
@@ -28,13 +28,14 @@ firmware-репозитория. Пересечения с железом ука
 Host-модель проверяет переносимую логику, но не заменяет instruction-set,
 peripheral или board emulation и никогда не показывается как готовая прошивка.
 
-## Детальный состав текущей F3
+## Детальный состав текущей F4
 
-<!-- current-substep: F3.4 -->
+<!-- current-substep: F4.0.0 -->
 
-**Точный маркер: `F3.4`** — свести полный результат эмуляции F3 и все оставшиеся
-dev-board/HIL deferrals в итоговый отчёт фазы. Ни один физический claim нельзя
-повысить одним лишь summary. Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.0.0`** — инвентаризировать точную SDK-поддержку и
+тестируемость SDIO S3↔C5, SPI+alert S3↔RP и I²C mailboxes Pack/Safety. Результат
+должен отделить исполнимый host/virtual evidence от dev-board/HIL-only поведения.
+Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -130,14 +131,24 @@ dev-board/HIL deferrals в итоговый отчёт фазы. Ни один �
   S3 debug занимает 182 688 байт с запасом 6 895 200 байт до maximum; физических
   rollback transitions заявлено ноль. См.
   [boundary evidence](../config/f3_3_boundary_review.json).
-- ▶️ **`F3.4` — сейчас:** свести результаты и назначить всё неэмулируемое
-  точному dev-board или HIL gate.
+- ✅ `F3.4` — [глобальный итог F3](f3-boot-memory-emulation-report.ru.md)
+  закрывает фазу точным S3 execution, 52 воспроизводимыми artifacts и пятью
+  названными физическими target/HIL gates.
+- `F4.0` — зафиксировать план исполнения и evidence transports.
+  - ▶️ **`F4.0.0` — сейчас:** инвентаризировать точную SDK-поддержку transports,
+    наблюдаемость и границы emulator/dev-board.
+  - `F4.0.1` — зафиксировать adapter states, credits, deadlines и reset behavior.
+  - `F4.0.2` — зафиксировать единый integrated execution/evidence runner.
+- `F4.1` — реализовать и исполнить SDIO S3↔C5.
+- `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
+- `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
+- `F4.4` — внедрить saturation, duplicate, deadline, reset и link-loss faults.
+- `F4.5` — свести target evidence и опубликовать глобальный итог F4.
 
-F2 прошла ревью: пять targets, десять конфигураций, 52 artifacts, 14 maps и
-десять image gates проходят вместе и воспроизводятся в двух чистых проходах.
-Активный контроль размера — запас 2 240 байт у C5 debug bootloader. Это
-доказывает сборки и лимиты, но не boot или периферию. Каждый подэтап F3
-обновляет evidence, точный маркер и обе языковые страницы в одном commit.
+F3 прошла ревью на честной границе evidence. Теперь F4 превращает принятые
+message contracts в реальные target transports, сохраняя приоритет
+safety/control под waterfall и bulk traffic. Каждый подэтап обновляет evidence,
+точный маркер и обе языковые страницы в одном commit.
 
 ## Зависимости
 
@@ -148,9 +159,9 @@ flowchart TD
   H8["hardware H8<br/>physical qualification"]
   F0["✅ F0<br/>контракты"]
   F1["✅ F1<br/>portable cores"]
-  F2["▶️ F2<br/>target projects"]
-  F3["F3<br/>boot и emulation"]
-  F4["F4<br/>IPC и scheduler"]
+  F2["✅ F2<br/>target projects"]
+  F3["✅ F3<br/>boot и emulation"]
+  F4["▶️ F4<br/>IPC и scheduler"]
   F5["F5<br/>BSP и drivers"]
   F6["F6<br/>UI, display, storage, audio"]
   F7["F7<br/>radio, IR и expansion"]
@@ -174,8 +185,8 @@ flowchart TD
 | **F0. Контракты продукта** | ✅ Проведено ревью | Пять доменов, владельцы функций, L2IP, memory/partition, safety, update и HW↔FW boundary | Конфигурации обоих репозиториев совпадают; нет неизвестного target, транспорта, recovery-пути или обязательного состояния |
 | **F1. Portable cores** | ✅ Проведено ревью | [Итог F1](f1-portable-cores-report.ru.md): C-реализация safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues и five-domain fault model | 24 сценария проходят обычную сборку и ASan/UBSan; закрыты обнаруженные ошибки heartbeat, lease boundary, late update и invalid enum |
 | **F2. Target-проекты и build system** | ✅ [Проведено ревью](f2-target-build-system-report.ru.md) | Пять projects на production SDK: ESP-IDF S3/C5, Pico SDK RP2354B и TI MSPM0 SDK ×2; generated H2 BSP; воспроизводимые artifacts | 10 debug/release configurations проходят; 52/52 artifacts воспроизводятся побайтно; временных pin assignments нет |
-| **F3. Boot, память и эмуляция** | ▶️ Текущая граница | Загружаемые skeleton images, map/size gates и максимально доступная виртуальная проверка | S3 boot/self-test/fault/update-failure проходит официальный QEMU; все пять ELF/bin укладываются в flash/RAM/rollback; shared code проходит host platform; отсутствующая периферия попадает в dev-board matrix |
-| **F4. IPC и scheduling** | ⏳ Ожидает F3 | Реальные SDIO S3↔C5, SPI+alert S3↔RP, I²C mailboxes Pack/Safety, typed results, credits и priority queues | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; waterfall/bulk saturation не задерживает safety/control; link loss локально закрывает side effects |
+| **F3. Boot, память и эмуляция** | ✅ [Проведено ревью](f3-boot-memory-emulation-report.ru.md) | Точное S3 QEMU execution, воспроизводимые artifacts пяти targets, size/memory/rollback boundaries и названные физические gates | S3 boot/self-test/fault/update-failure проходит официальный QEMU; все пять ELF/bin укладываются в flash/RAM/rollback; shared code проходит host platform; отсутствующая периферия попадает в dev-board matrix |
+| **F4. IPC и scheduling** | ▶️ Текущая граница | Реальные SDIO S3↔C5, SPI+alert S3↔RP, I²C mailboxes Pack/Safety, typed results, credits и priority queues | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; waterfall/bulk saturation не задерживает safety/control; link loss локально закрывает side effects |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; reset/off/no-back-power/quiet transitions явны; P02 остаётся только входом, проверены reset/readback селектора и семь резервных pins; неподдерживаемая эмулятором периферия имеет dev-board test |
 | **F6. UI, display, storage и audio** | ⏳ Ожидает F5 | Меню, dirty-region QSPI rendering, бегущий waterfall, touch/D-pad/keys/encoder/PTT, запись, CTIA/TRS playback/capture state machine и fault viewer | UI остаётся отзывчивым под максимальным потоком; малые области укладываются в display occupancy budget; вставка сначала отключает динамик, источник меняется без pop, извлечение восстанавливает reset-default до playback; storage/audio ошибки изолированы, причина аварии сохраняется и показывается |
 | **F7. Radio, IR и expansion features** | ⏳ Ожидает F5/F6 | Normal-mode receive/scan/record, полноценные `3R/1T2R/2T1R/3T`, Wi-Fi/BLE/802.15.4, Sub-GHz, voice, IR и профили расширений | Одна signal group активна; три nRF работают одновременно без программного урезания; inactive interfaces quiet; права, регион и antenna profile проверяются до TX |
@@ -201,6 +212,6 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — F3. Воспроизводимые artifacts F2 и generated BSP из H2
-приняты как входы. F3.0.0 фиксирует, что каждая официальная virtual platform
-реально способна выполнить, до любых заявлений о boot или периферии.
+Текущая граница — F4. Проверенные target artifacts F3, точное S3 execution и
+названные физические gates приняты как входы. F4.0.0 инвентаризирует точные
+transport APIs и границу исполнимого evidence до написания adapters.

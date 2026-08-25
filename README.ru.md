@@ -2,8 +2,8 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F3 — boot, память и эмуляция.** F0–F2 прошли ревью;
-> [итог F2](docs/f2-target-build-system-report.ru.md) фиксирует пять воспроизводимых target-сборок. Подробности —
+> **Статус прошивки: F4 — IPC и scheduling.** F0–F3 прошли ревью;
+> [итог F3](docs/f3-boot-memory-emulation-report.ru.md) фиксирует точное исполнение S3 в QEMU и честные физические gates. Подробности —
 > в [роадмапе прошивки](docs/roadmap.ru.md).
 
 ## Роадмап прошивки и текущая позиция
@@ -18,8 +18,8 @@
 | F0 · Контракты продукта | ✅ Проведено ревью | пять доменов, владельцы, L2IP, memory, safety, update и HW↔FW boundary |
 | F1 · Portable cores | ✅ Проведено ревью | [Итог F1: 24/24 host-сценария и чистые ASan/UBSan](docs/f1-portable-cores-report.ru.md) |
 | F2 · Target-проекты и build system | ✅ [Проведено ревью](docs/f2-target-build-system-report.ru.md) | пять production-SDK projects; 52/52 artifacts воспроизводятся побайтно |
-| **F3 · Boot, память и эмуляция** | **▶️ Текущая граница** | загружаемые skeletons, size gates, S3 QEMU и dev-board matrix |
-| F4 · IPC и scheduling | ⏳ Ожидает F3 | реальные transports, typed messages, credits и priority isolation |
+| F3 · Boot, память и эмуляция | ✅ [Проведено ревью](docs/f3-boot-memory-emulation-report.ru.md) | точный S3 debug/release QEMU; 52/52 воспроизводимых artifacts; явные физические gates |
+| **F4 · IPC и scheduling** | **▶️ Текущая граница** | реальные transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему | все драйверы устройств, органов управления, датчиков и power states |
 | F6 · UI, display, storage и audio | ⏳ Ожидает F5 | отзывчивые menu/waterfall, recording, audio и fault viewer |
 | F7 · Radio, IR и expansion | ⏳ Ожидает F5/F6 | receive/TX profiles, полноценные 3×nRF24 и тихие неактивные тракты |
@@ -29,21 +29,22 @@
 | F11 · Firmware release | 🔒 Ожидает F10 и hardware H8 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
 
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
-связанный с этой таблицей. Отчёт F2 появится только после закрытия всей F2, а
-не её внутренних подэтапов.
+связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F3.** Portable-логика, пять target-проектов, generated
-BSP из hardware H2 и воспроизводимые debug/release builds имеют evidence. S3
-debug/release boot и инициализация 8-МиБ octal PSRAM теперь подтверждены точным
-QEMU evidence. Периферия и boot четырёх non-S3 targets остаются физическими gates.
+**Прошивка находится на F4.** Принятый hardware H2 BSP остаётся источником pins.
+F3 прошла ревью: S3 debug/release загружается и
+исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
+target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets
+остаются названными физическими gates, а не emulator claims.
 
-### Текущая фаза F3 — детальная позиция
+### Текущая фаза F4 — детальная позиция
 
-<!-- current-substep: F3.4 -->
+<!-- current-substep: F4.0.0 -->
 
-**Точный маркер: `F3.4`** — свести полный результат эмуляции F3 и все оставшиеся
-dev-board/HIL deferrals в итоговый отчёт фазы. Ни один физический claim нельзя
-повысить одним лишь summary. Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.0.0`** — инвентаризировать точную SDK-поддержку и
+тестируемость SDIO S3↔C5, SPI+alert S3↔RP и I²C mailboxes Pack/Safety. Результат
+должен отделить исполнимый host/virtual evidence от dev-board/HIL-only поведения.
+Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -136,14 +137,24 @@ dev-board/HIL deferrals в итоговый отчёт фазы. Ни один �
   S3 debug занимает 182 688 байт с запасом 6 895 200 байт до maximum; физических
   rollback transitions заявлено ноль. См.
   [boundary evidence](config/f3_3_boundary_review.json).
-- ▶️ **`F3.4` — сейчас:** свести результаты эмуляции и все честные
-  dev-board/HIL deferred gates.
+- ✅ `F3.4` — [глобальный итог F3](docs/f3-boot-memory-emulation-report.ru.md)
+  закрывает фазу точным S3 execution, 52 воспроизводимыми artifacts и пятью
+  явными физическими target/HIL gates.
+- `F4.0` — зафиксировать план исполнения и evidence transports.
+  - ▶️ **`F4.0.0` — сейчас:** инвентаризировать точную SDK-поддержку transports,
+    наблюдаемость и границы emulator/dev-board.
+  - `F4.0.1` — зафиксировать adapter states, credits, deadlines и reset behavior.
+  - `F4.0.2` — зафиксировать единый integrated execution/evidence runner.
+- `F4.1` — реализовать и исполнить SDIO S3↔C5.
+- `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
+- `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
+- `F4.4` — внедрить saturation, duplicate, deadline, reset и link-loss faults.
+- `F4.5` — свести target evidence и опубликовать глобальный итог F4.
 
-F2 прошла ревью: пять targets, десять конфигураций, 52 artifacts, 14 maps и
-десять image gates проходят вместе и воспроизводятся в двух чистых проходах.
-Активный контроль размера — запас 2 240 байт у C5 debug bootloader. Это
-доказывает сборки и лимиты, но не boot или периферию. Каждый подэтап F3
-обновляет evidence, точный маркер и обе языковые страницы в одном commit.
+F3 прошла ревью на честной границе evidence. Теперь F4 превращает принятые
+message contracts в реальные target transports, сохраняя приоритет
+safety/control под waterfall и bulk traffic. Каждый подэтап обновляет evidence,
+точный маркер и обе языковые страницы в одном commit.
 
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает

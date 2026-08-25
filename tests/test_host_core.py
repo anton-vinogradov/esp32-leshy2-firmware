@@ -248,6 +248,28 @@ class HostCoreExecutionTests(unittest.TestCase):
         for target in targets.values():
             self.assertTrue(target["rollback"]["static_topology_proven"])
 
+    def test_f3_4_closes_f3_without_promoting_physical_claims(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f3_4_closure.py", "--check"],
+            cwd=REPO_ROOT,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertIn("F3 closure review OK", result.stdout)
+        review = json.loads(
+            (REPO_ROOT / "config/f3_4_review.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("F3", review["stage"])
+        self.assertEqual("reviewed", review["status"])
+        self.assertEqual("F4.0.0", review["next"])
+        self.assertEqual(5, len(review["target_closure"]))
+        self.assertEqual(0, review["result"]["physical_runs"])
+        self.assertFalse(review["claims"]["non_s3_target_boot_proven"])
+        self.assertFalse(review["claims"]["physical_peripherals_proven"])
+        self.assertFalse(review["claims"]["physical_flash_or_rollback_proven"])
+
     def test_environment_lock_is_complete_and_self_consistent(self):
         result = subprocess.run(
             ["python3", "tools/verify_environment_lock.py"],
@@ -588,21 +610,24 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertIn("host update core: 5 scenarios passed", result.stdout)
         self.assertIn("host five-domain model: 7 scenarios passed", result.stdout)
 
-    def test_preorder_contract_does_not_overstate_firmware_or_emulation(self):
+    def test_preorder_contract_tracks_reviewed_f3_without_physical_overclaim(self):
         contract_path = REPO_ROOT / "config/preorder_verification_contract.json"
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
         self.assertEqual("LESHY2-PREORDER-1", contract["contract_id"])
         self.assertIn(
-            "reviewed portable C safety, L2IP, update",
+            "52/52 artifacts reproduce byte-for-byte",
             contract["current_truth"]["executable_firmware"],
         )
-        self.assertIn("not run", contract["current_truth"]["instruction_emulation"])
+        self.assertIn("ESP32-S3 exact debug/release images boot", contract["current_truth"]["instruction_emulation"])
+        self.assertIn("remains explicitly assigned to dev-board and HIL gates", contract["current_truth"]["instruction_emulation"])
         gates = {gate["id"]: gate["status"] for gate in contract["gates"]}
+        self.assertEqual("reviewed", gates["P3_VIRTUAL_ELECTRICAL"])
         self.assertEqual(
             "reviewed",
             gates["P4_EXECUTABLE_FIRMWARE_MODEL"],
         )
-        self.assertEqual("not_started", gates["P5_TARGET_BUILDS_EMULATION"])
+        self.assertEqual("reviewed", gates["P5_TARGET_BUILDS_EMULATION"])
+        self.assertEqual("current_joined_review", gates["P6_PRE_LAYOUT_REVIEW"])
         self.assertEqual("not_authorized", gates["P7_ENGINEERING_SAMPLE_ORDER"])
 
         hardware_copy = (
