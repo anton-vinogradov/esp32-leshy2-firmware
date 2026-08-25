@@ -33,7 +33,8 @@ from this table; internal substeps only move the exact marker.
 
 **Firmware is at F4.** The accepted hardware H2 BSP remains the pin source;
 the hardware [H4 joined gate](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.md)
-is reviewed and hardware has moved to docs-first `H5.0.1` evidence reduction.
+is reviewed; the hardware `H5.0.1` evidence map is complete and hardware is at
+docs-first `H5.0.2` primary-source/serial-alternative research.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named
