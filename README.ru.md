@@ -34,9 +34,9 @@
 **Прошивка находится на F4.** Принятый hardware H2 BSP остаётся источником pins;
 объединённый аппаратный [gate H4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.ru.md)
 проведён. На H5.0.3 [JLCPCB Standard PCBA выбран неэксклюзивным производственным ориентиром](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.ru.md):
-сопоставлены 10 критических строк production BOM из 209, полный аудит — текущая
-работа. Минимальный upload из MPN и количества подготовлен, но ожидает
-пользовательского входа; закупка, замены, layout и fabrication заблокированы.
+контрольный прогон нормализованного BOM сопоставил 176/209 строк и распознал все
+1019 установок; 33 явных outlier проходят локальную квалификацию. Закупка,
+замены, quote/reservation, layout и fabrication заблокированы.
 F3 прошла ревью: S3 debug/release загружается и
 исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
 target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets
