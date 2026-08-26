@@ -5,10 +5,11 @@
 
 > **▶️ Текущая граница: F0-R2.0 — пересборка контракта шести доменов.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.4; инкрементальное размещение Hub/Airband/FPV,
+> Железо находится на H1-R2.5; инкрементальное размещение Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
-> архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step проходят текущие gates,
-> но полного мокапа, BSP и layout R2 ещё нет.
+> архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step, пиновая/силовая
+> совместимость K331 и точная антенна TBS FPV проходят текущие gates, но корпус/
+> фабричный маршрут K331, полный мокап, BSP и layout R2 ещё открыты.
 
 Последняя сверка статуса: **27 августа 2026 года**. Это собственный роадмап
 firmware-репозитория. Пересечения с железом указаны явно, но hardware-этапы не
@@ -22,7 +23,7 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP и update model | ⏳ [Итог F1 R1](f1-portable-cores-report.ru.md) сохранён: 24 детерминированных C-сценария; Hub/Airband и six-target rerun ожидают закрытия F0-R2 |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ⏳ Пять структур R1 сохранены; target Hub и six-image matrix ещё не собраны |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.4 сейчас; placement Hub/Airband/FPV, проверка фильтра/резерв настройки Airband, точные MMCX/LDO и admission-архитектура 3V3_MAIN проходят текущие gates, а полное placement, динамика/тепло H3 и production-схема R2 открыты |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.5 сейчас; placement Hub/Airband/резерва K331, фильтр/резерв Airband, точные MMCX/LDO/TBS-антенна и пиновая/силовая совместимость K331 проходят текущие gates, а корпус/фабричный маршрут K331, полное placement, динамика/тепло H3 и production-схема R2 открыты |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
