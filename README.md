@@ -42,7 +42,9 @@ pre-order and J4-F/J4-P factory responses remain open, with the hardware-side
 `H5-EVR07` gate ready to reject incomplete or negative replies. The optional
 Parts API permission was rejected without a stated reason, so manual evidence
 remains active; an information-only support request was submitted successfully
-on 26 August 2026 and now awaits a response. Former
+on 26 August 2026 and now awaits a response. Hardware `H5-EVR08` preserves
+PCBWay as the prepared but uncontacted full-device fallback and Seeed as the
+PCBA second source. Former
 SA518-based H5 evidence is superseded. Purchasing, quote/reservation, layout
 and fabrication remain blocked.
 F3 is reviewed: S3 debug/release boots and runs the
