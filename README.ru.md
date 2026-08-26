@@ -39,7 +39,8 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и ana
 остаются напрямую на S3; storage, audio и `BROADCAST_RX` переходят на Hub RP.
 Обязательный receive-only Airband использует Hub GP41/42, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
-находится на `H1-R2.1`: корпуса Hub/Airband/FPV получили инкрементальное
+находится на `H1-R2.2`: корпуса Hub/Airband/FPV, точный MMCX и LDO получили
+инкрементальное
 размещение с проверкой коллизий, а полный rail R2, мокап, BSP, KiCad layout и
 разрешение заказа остаются открыты.
 

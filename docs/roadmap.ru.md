@@ -5,7 +5,8 @@
 
 > **▶️ Текущая граница: F0-R2.0 — пересборка контракта шести доменов.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.1; инкрементальное размещение Hub/Airband/FPV
+> Железо находится на H1-R2.2; инкрементальное размещение Hub/Airband/FPV и
+> закрытие точных MMCX/LDO
 > проходит проверки коллизий, но полного rail, BSP и layout R2 ещё нет.
 
 Последняя сверка статуса: **27 августа 2026 года**. Это собственный роадмап
@@ -20,7 +21,7 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP и update model | ⏳ [Итог F1 R1](f1-portable-cores-report.ru.md) сохранён: 24 детерминированных C-сценария; Hub/Airband и six-target rerun ожидают закрытия F0-R2 |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ⏳ Пять структур R1 сохранены; target Hub и six-image matrix ещё не собраны |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.1 сейчас; начальное placement Hub/Airband/FPV проходит, полные placement, power и production-схема R2 открыты |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.2 сейчас; placement Hub/Airband/FPV и точные MMCX/LDO проходят, полные placement, power и production-схема R2 открыты |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
