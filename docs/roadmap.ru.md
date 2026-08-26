@@ -20,7 +20,7 @@ firmware-репозитория. Пересечения с железом ука
 | Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур потребляют generated H2 domain tables |
 | Target-сборки и map-файлы | ✅ [F2 проведено ревью](f2-target-build-system-report.ru.md): 10 конфигураций, 52/52 воспроизводимых artifacts и 10 size gates |
 | ESP32-S3 QEMU | ✅ F3 проведено ревью: debug/release boot, 8-МиБ PSRAM и изолированные fault paths |
-| Объединённый аппаратный gate | ✅ H4 проведён по текущим dual-SA818S hashes H2/H3 и принятой F3; hardware H5.0.3-R1 имеет корзину из 33 строк за `$286.43` и точные маршруты всех 210 строк BOM / 1052 установок; запрос JLCPCB без заказа отправлен 26 августа 2026 года, ответ по SA818S-V/J4-F/J4-P открыт; `H5-EVR07` fail-closed, необязательное право Parts API отклонено; закупка заблокирована |
+| Объединённый аппаратный gate | ✅ H4 проведён по текущим dual-SA818S hashes H2/H3 и принятой F3; hardware H5.0.3-R1 имеет корзину из 33 строк за `$286.43` и точные маршруты всех 210 строк BOM / 1052 установок; запрос JLCPCB без заказа отправлен 26 августа 2026 года, ответ по SA818S-V/J4-F/J4-P открыт; `H5-EVR07` fail-closed; необязательное право Parts API отклонено, запрос в поддержку ожидает ответа; закупка заблокирована |
 | C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает dev boards или hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |

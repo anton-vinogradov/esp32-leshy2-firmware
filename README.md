@@ -41,7 +41,8 @@ JLCPCB inquiry was successfully submitted on 26 August 2026; the SA818S-V
 pre-order and J4-F/J4-P factory responses remain open, with the hardware-side
 `H5-EVR07` gate ready to reject incomplete or negative replies. The optional
 Parts API permission was rejected without a stated reason, so manual evidence
-remains active. Former
+remains active; an information-only support request was submitted successfully
+on 26 August 2026 and now awaits a response. Former
 SA518-based H5 evidence is superseded. Purchasing, quote/reservation, layout
 and fabrication remain blocked.
 F3 is reviewed: S3 debug/release boots and runs the
