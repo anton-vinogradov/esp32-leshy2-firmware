@@ -54,13 +54,16 @@ physical gates rather than emulator claims.
 
 ### Current phase F4 — detailed position
 
-<!-- current-substep: F4.0.1 -->
+<!-- current-substep: F4.0.2 -->
 
-**Exact marker: `F4.0.1`** — freeze adapter states, queue ownership, credits,
-deadlines and reset/link-loss behavior. `F4.0.0` reviewed all four transports:
-their eight endpoints have exact locked-SDK APIs, while wire/DMA/interrupt
-execution remains explicitly dev-board/HIL-only. This marker and its evidence
-move together in each commit.
+**Exact marker: `F4.0.2`** — freeze one integrated execution/evidence runner.
+`F4.0.1` reviewed one seven-state fail-closed lifecycle for all four transports,
+32 fixed buffers per high-speed direction, protected queue reservations,
+credits, duplicates, deadlines and reset/link-loss actions. ESSL 1.1.2 is locked
+to its Registry object, upstream commit and normalized 30-file payload; raw ZIP
+timestamps are explicitly not used as identity. Wire/DMA/interrupt execution
+remains dev-board/HIL-only. This marker and its evidence move together in each
+commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -158,8 +161,8 @@ move together in each commit.
   explicit physical target/HIL gates.
 - `F4.0` — freeze the transport execution and evidence plan.
   - ✅ `F4.0.0` — [four transports and eight exact SDK endpoint bindings reviewed](config/f4_0_transport_capability_matrix.json); QEMU proves none of their PHYs.
-  - ▶️ **`F4.0.1` — current:** freeze adapter states, credits, deadlines and reset behavior.
-  - `F4.0.2` — freeze one integrated execution and evidence runner.
+  - ✅ `F4.0.1` — [one fail-closed lifecycle, fixed ownership/queues, credits, duplicates, deadlines, reset and exact ESSL lock reviewed](config/f4_0_1_adapter_contract.json).
+  - ▶️ **`F4.0.2` — current:** freeze one integrated execution and evidence runner.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.

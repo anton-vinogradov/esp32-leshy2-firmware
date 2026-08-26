@@ -31,13 +31,16 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F4 breakdown
 
-<!-- current-substep: F4.0.1 -->
+<!-- current-substep: F4.0.2 -->
 
-**Exact marker: `F4.0.1`** — freeze adapter states, queue ownership, credits,
-deadlines and reset/link-loss behavior. `F4.0.0` reviewed all four transports:
-their eight endpoints have exact locked-SDK APIs, while wire/DMA/interrupt
-execution remains explicitly dev-board/HIL-only. The marker and evidence update
-together in every commit.
+**Exact marker: `F4.0.2`** — freeze one integrated execution/evidence runner.
+`F4.0.1` reviewed one seven-state fail-closed lifecycle for all four transports,
+32 fixed buffers per high-speed direction, protected queue reservations,
+credits, duplicates, deadlines and reset/link-loss actions. ESSL 1.1.2 is locked
+to its Registry object, upstream commit and normalized 30-file payload; raw ZIP
+timestamps are explicitly not used as identity. Wire/DMA/interrupt execution
+remains dev-board/HIL-only. The marker and evidence update together in every
+commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -138,8 +141,8 @@ together in every commit.
   physical target/HIL gates.
 - `F4.0` — freeze the transport execution and evidence plan.
   - ✅ `F4.0.0` — [four transports and eight exact SDK endpoint bindings reviewed](../config/f4_0_transport_capability_matrix.json); QEMU proves none of their PHYs.
-  - ▶️ **`F4.0.1` — current:** freeze adapter states, credits, deadlines and reset behavior.
-  - `F4.0.2` — freeze one integrated execution and evidence runner.
+  - ✅ `F4.0.1` — [one fail-closed lifecycle, fixed ownership/queues, credits, duplicates, deadlines, reset and exact ESSL lock reviewed](../config/f4_0_1_adapter_contract.json).
+  - ▶️ **`F4.0.2` — current:** freeze one integrated execution and evidence runner.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
@@ -213,7 +216,8 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F4.0.1`. F3's reviewed target artifacts, exact S3
-execution and named physical gates are accepted inputs. F4.0.0 proved exact SDK
-paths for every endpoint and recorded that no production PHY runs in QEMU;
-the active step now freezes one fail-closed adapter lifecycle before code.
+The current boundary is `F4.0.2`. F3's reviewed target artifacts and the exact
+F4.0.0 SDK paths remain inputs. F4.0.1 now fixes the fail-closed lifecycle,
+ownership, queues, credits and recovery rules. The active step defines one
+runner that keeps host, target-build, QEMU and deferred physical evidence
+separate while presenting one reproducible result.

@@ -54,13 +54,16 @@ target artifacts воспроизводятся. Периферия и boot че
 
 ### Текущая фаза F4 — детальная позиция
 
-<!-- current-substep: F4.0.1 -->
+<!-- current-substep: F4.0.2 -->
 
-**Точный маркер: `F4.0.1`** — зафиксировать состояния adapters, владение
-очередями, credits, deadlines и поведение при reset/link loss. На `F4.0.0`
-проведены все четыре transport: у восьми endpoints есть точные API
-зафиксированных SDK, а исполнение wire/DMA/interrupt честно оставлено
-dev-board/HIL. Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.0.2`** — зафиксировать единый runner исполнения и evidence.
+На `F4.0.1` проведено ревью общего fail-closed lifecycle из семи состояний для
+всех четырёх transports, 32 фиксированных buffers на каждое направление
+быстрых links, защищённых резервов очередей, credits, duplicates, deadlines и
+действий при reset/link loss. ESSL 1.1.2 привязан к Registry object, upstream
+commit и нормализованному payload из 30 файлов; меняющиеся timestamps ZIP не
+считаются идентификатором. Исполнение wire/DMA/interrupt остаётся
+dev-board/HIL-only. Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -158,8 +161,8 @@ dev-board/HIL. Маркер и evidence меняются вместе в каж�
   явными физическими target/HIL gates.
 - `F4.0` — зафиксировать план исполнения и evidence transports.
   - ✅ `F4.0.0` — [проведены четыре transport и восемь точных SDK endpoint bindings](config/f4_0_transport_capability_matrix.json); QEMU не исполняет ни один их PHY.
-  - ▶️ **`F4.0.1` — сейчас:** зафиксировать adapter states, credits, deadlines и reset behavior.
-  - `F4.0.2` — зафиксировать единый integrated execution/evidence runner.
+  - ✅ `F4.0.1` — [проведены единый fail-closed lifecycle, фиксированные ownership/queues, credits, duplicates, deadlines, reset и точный ESSL lock](config/f4_0_1_adapter_contract.json).
+  - ▶️ **`F4.0.2` — сейчас:** зафиксировать единый integrated execution/evidence runner.
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.

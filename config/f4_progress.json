@@ -2,7 +2,7 @@
   "schema_version": 1,
   "phase": "F4",
   "status": "in_progress",
-  "current_substep": "F4.0.1",
+  "current_substep": "F4.0.2",
   "updated_on": "2026-08-26",
   "substeps": {
     "F4.0.0": {
@@ -11,16 +11,17 @@
       "artifact": "config/f4_0_transport_capability_matrix.json"
     },
     "F4.0.1": {
-      "status": "current",
-      "goal": "freeze adapter states, queue ownership, credits, deadlines and reset/link-loss behavior",
-      "required_inputs": [
-        "config/interdomain_protocol.json",
-        "config/f4_0_transport_capability_matrix.json"
-      ]
+      "status": "reviewed",
+      "result": "one seven-state fail-closed lifecycle now binds queue and buffer ownership, credits, duplicates, deadlines, reset and all four link-loss actions; ESSL 1.1.2 is exact-locked by Registry object, upstream commit and normalized payload hash",
+      "artifact": "config/f4_0_1_adapter_contract.json"
     },
     "F4.0.2": {
-      "status": "waiting_for_F4.0.1",
-      "goal": "freeze one integrated execution and evidence runner"
+      "status": "current",
+      "goal": "freeze one integrated execution and evidence runner",
+      "required_inputs": [
+        "config/f4_0_transport_capability_matrix.json",
+        "config/f4_0_1_adapter_contract.json"
+      ]
     },
     "F4.1": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-C5 SDIO"},
     "F4.2": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-RP SPI plus alert"},
@@ -30,9 +31,11 @@
   },
   "reviewed_claims": {
     "production_transports": 4,
+    "adapter_lifecycle_states": 7,
+    "high_speed_buffers_each_direction": 32,
     "exact_sdk_endpoint_bindings": 8,
     "qemu_phy_paths": 0,
     "physical_transport_runs": 0
   },
-  "next": "define one common fail-closed adapter lifecycle, then specialize it for SDIO, SPI and I2C without weakening owner-local safety"
+  "next": "define one fail-closed runner that executes host-model, target-build, QEMU-above-fake-boundary and deferred physical evidence without allowing one evidence class to impersonate another"
 }

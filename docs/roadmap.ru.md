@@ -31,13 +31,16 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F4
 
-<!-- current-substep: F4.0.1 -->
+<!-- current-substep: F4.0.2 -->
 
-**Точный маркер: `F4.0.1`** — зафиксировать состояния adapters, владение
-очередями, credits, deadlines и поведение при reset/link loss. На `F4.0.0`
-проведены все четыре transport: у восьми endpoints есть точные API
-зафиксированных SDK, а исполнение wire/DMA/interrupt честно оставлено
-dev-board/HIL. Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.0.2`** — зафиксировать единый runner исполнения и evidence.
+На `F4.0.1` проведено ревью общего fail-closed lifecycle из семи состояний для
+всех четырёх transports, 32 фиксированных buffers на каждое направление
+быстрых links, защищённых резервов очередей, credits, duplicates, deadlines и
+действий при reset/link loss. ESSL 1.1.2 привязан к Registry object, upstream
+commit и нормализованному payload из 30 файлов; меняющиеся timestamps ZIP не
+считаются идентификатором. Исполнение wire/DMA/interrupt остаётся
+dev-board/HIL-only. Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -138,8 +141,8 @@ dev-board/HIL. Маркер и evidence меняются вместе в каж�
   названными физическими target/HIL gates.
 - `F4.0` — зафиксировать план исполнения и evidence transports.
   - ✅ `F4.0.0` — [проведены четыре transport и восемь точных SDK endpoint bindings](../config/f4_0_transport_capability_matrix.json); QEMU не исполняет ни один их PHY.
-  - ▶️ **`F4.0.1` — сейчас:** зафиксировать adapter states, credits, deadlines и reset behavior.
-  - `F4.0.2` — зафиксировать единый integrated execution/evidence runner.
+  - ✅ `F4.0.1` — [проведены единый fail-closed lifecycle, фиксированные ownership/queues, credits, duplicates, deadlines, reset и точный ESSL lock](../config/f4_0_1_adapter_contract.json).
+  - ▶️ **`F4.0.2` — сейчас:** зафиксировать единый integrated execution/evidence runner.
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
@@ -213,7 +216,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F4.0.1`. Проверенные target artifacts F3, точное S3
-execution и названные физические gates приняты как входы. F4.0.0 доказал
-точные SDK-пути всех endpoints и зафиксировал, что QEMU не исполняет production
-PHY; текущий шаг до кода задаёт единый fail-closed lifecycle adapter.
+Текущая граница — `F4.0.2`. Проверенные target artifacts F3 и точные SDK-пути
+F4.0.0 остаются входами. F4.0.1 теперь фиксирует fail-closed lifecycle,
+ownership, queues, credits и правила восстановления. Текущий шаг задаёт единый
+runner, который не смешивает host, target-build, QEMU и отложенное физическое
+evidence, но выпускает один воспроизводимый результат.

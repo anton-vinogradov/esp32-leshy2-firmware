@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "current_substep": "F4.0.1",
+  "current_substep": "F4.0.2",
   "updated_on": "2026-08-26",
   "completed": [
     "F2.0.0",
@@ -44,7 +44,8 @@
     "F3.3",
     "F3.4",
     "F3",
-    "F4.0.0"
+    "F4.0.0",
+    "F4.0.1"
   ],
   "reviewed": [
     "F0",
@@ -89,7 +90,8 @@
     "F3.3",
     "F3.4",
     "F3",
-    "F4.0.0"
+    "F4.0.0",
+    "F4.0.1"
   ],
   "claims": {
     "target_projects_created": true,
@@ -117,7 +119,10 @@
     "physical_peripherals_proven": false,
     "hardware_contract_available": true,
     "f4_transport_capability_reviewed": true,
+    "f4_adapter_contract_reviewed": true,
     "f4_production_transports": 4,
+    "f4_adapter_lifecycle_states": 7,
+    "f4_high_speed_buffers_each_direction": 32,
     "f4_exact_sdk_endpoint_bindings": 8,
     "f4_qemu_phy_paths": 0,
     "f4_physical_transport_runs": 0

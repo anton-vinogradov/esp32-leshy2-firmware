@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "stage": "F4.0.1",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "purpose": "freeze one fail-closed adapter lifecycle, bounded ownership model and fault policy before any production transport adapter is accepted",
+  "inputs": [
+    "config/interdomain_protocol.json",
+    "config/f4_0_transport_capability_matrix.json"
+  ],
+  "essl_dependency_lock": {
+    "component": "espressif/esp_serial_slave_link",
+    "version": "1.1.2",
+    "license": "Apache-2.0",
+    "registry_object_id": "dedb3ae6-e261-489e-8109-ff5445fec9a1",
+    "registry_download_url": "https://components.espressif.com/api/downloads/?object_id=dedb3ae6-e261-489e-8109-ff5445fec9a1&object_type=component",
+    "repository": "https://github.com/espressif/idf-extra-components.git",
+    "repository_commit": "a93734f00aef26d6e8a3132bc20de869c75426f5",
+    "repository_path": "esp_serial_slave_link",
+    "file_count": 30,
+    "canonical_payload_hash": {
+      "algorithm": "sha256 over entries sorted by UTF-8 path; for each regular file append LE32 path length, path bytes, LE64 content length and SHA-256(content)",
+      "sha256": "9f217846a90d97a4897350b0c8cfafd4bbe1a2dd8af5619fd3463ea9dbe36053"
+    },
+    "registry_archive_observation": {
+      "raw_zip_is_reproducible": false,
+      "reason": "the registry regenerates ZIP timestamps, so raw ZIP SHA-256 changes while all 30 paths and contents remain identical",
+      "observed_raw_sha256": [
+        "74f7c69a8a4bd03b49c4feaba4e27ba095a7cd27987ffd73274fc36249da97a0",
+        "75028a58bdd8a838bb3209b454c8b92477401e040452beef663018da51f8292b"
+      ]
+    },
+    "build_policy": "registry-managed resolution remains disabled; F4.1 must vendor exactly this normalized payload or the exact repository subtree before target adapter code is accepted",
+    "floating_constraint_allowed": false
+  },
+  "common_lifecycle": {
+    "states": [
+      "DOWN",
+      "STARTING",
+      "NEGOTIATING",
+      "READY",
+      "QUIESCING",
+      "FAULTED",
+      "RESETTING"
+    ],
+    "initial_state": "DOWN",
+    "allowed_transitions": {
+      "DOWN": ["STARTING"],
+      "STARTING": ["NEGOTIATING", "FAULTED", "RESETTING", "DOWN"],
+      "NEGOTIATING": ["READY", "FAULTED", "RESETTING", "DOWN"],
+      "READY": ["QUIESCING", "FAULTED", "RESETTING"],
+      "QUIESCING": ["DOWN", "FAULTED", "RESETTING"],
+      "FAULTED": ["RESETTING", "DOWN"],
+      "RESETTING": ["STARTING", "FAULTED", "DOWN"]
+    },
+    "side_effect_closed_states": [
+      "DOWN",
+      "STARTING",
+      "NEGOTIATING",
+      "QUIESCING",
+      "FAULTED",
+      "RESETTING"
+    ],
+    "ready_rule": "READY requires a CRC-valid current-session handshake, compatible protocol major, accepted capability hash and fresh local and peer boot IDs",
+    "side_effect_gate": [
+      "state is READY",
+      "request belongs to the current peer boot ID and session",
+      "request is new rather than duplicate or stale",
+      "remaining deadline is positive at owner dispatch",
+      "the physical owner independently accepts its local permission, mode and lease gates"
+    ],
+    "boot_change_rule": "a changed peer boot ID in READY enters RESETTING; no hardware reset or reconnect may transition directly back to READY",
+    "quiesce_rule": "QUIESCING refuses new side effects, completes or explicitly fails already committed owner operations, and reaches DOWN only after the physical interface is parked",
+    "fault_rule": "any framing invariant, protected-queue exhaustion, ownership violation or session ambiguity enters FAULTED and closes local side effects before diagnostics"
+  },
+  "high_speed_adapters": {
+    "transports": ["S3_C5", "S3_RP"],
+    "cell_bytes": 512,
+    "payload_bytes_max": 480,
+    "per_direction_pool": {
+      "buffers": 32,
+      "bytes": 16384,
+      "classes": [
+        {"priority": 0, "name": "safety", "buffers": 4, "overflow": "FAULTED; close local side effects"},
+        {"priority": 1, "name": "control", "buffers": 8, "overflow": "FAULTED; close local side effects"},
+        {"priority": 2, "name": "interactive", "buffers": 8, "overflow": "reject admission with BUSY; do not create a side effect"},
+        {"priority": 3, "name": "telemetry", "buffers": 4, "overflow": "drop oldest queued telemetry, enqueue newest and increment the reported dropped counter"},
+        {"priority": 4, "name": "bulk", "buffers": 8, "overflow": "stop admission until receiver credit is available"}
+      ],
+      "borrowing_allowed": false,
+      "scheduler": "strict priority 0 through 4; a lower class never occupies or delays a ready higher-class cell"
+    },
+    "tx_buffer_ownership": {
+      "states": ["FREE", "APP_OWNED", "QUEUED", "PHY_OWNED"],
+      "normal_cycle": ["FREE", "APP_OWNED", "QUEUED", "PHY_OWNED", "FREE"],
+      "rule": "application bytes are immutable after QUEUED; reuse is forbidden until the physical completion or abort path returns the buffer to FREE"
+    },
+    "rx_buffer_ownership": {
+      "states": ["FREE", "PHY_OWNED", "VALIDATING", "DISPATCHED"],
+      "normal_cycle": ["FREE", "PHY_OWNED", "VALIDATING", "DISPATCHED", "FREE"],
+      "invalid_cycle": ["FREE", "PHY_OWNED", "VALIDATING", "FREE"],
+      "rule": "CRC, length, version, session, replay and deadline validation finish before DISPATCHED; receiver credit is not replenished before FREE"
+    },
+    "bulk_credit": {
+      "unit": "one 512-byte receiver buffer",
+      "initial_after_reset": 0,
+      "maximum": 8,
+      "seed_rule": "after READY, the receiver advertises an absolute current-session credit equal to its free bulk receive buffers",
+      "consume_rule": "the sender atomically consumes one current-session credit before a bulk cell enters QUEUED",
+      "replenish_rule": "the receiver advertises replacement credit only after the corresponding receive buffer returns to FREE",
+      "update_rule": "credit is an absolute value scoped by peer boot ID and session; duplicate, stale or previous-session CREDIT messages cannot add capacity",
+      "reset_rule": "reset, link loss and boot-ID change immediately set local and advertised credit to zero"
+    },
+    "duplicate_and_result_policy": {
+      "maximum_outstanding_side_effect_requests": 8,
+      "typed_result_cache_entries_per_direction": 8,
+      "cache_key": ["peer_boot_id", "message_id"],
+      "pending_duplicate": "coalesce with the original operation and return its one terminal typed result",
+      "cached_duplicate": "return the cached typed result without executing the owner transition again",
+      "stale_or_evicted": "return STALE_RESULT_UNAVAILABLE and never execute the request",
+      "reset_rule": "discard pending/results from the old session; old-boot requests remain inadmissible after the new handshake"
+    },
+    "deadline_policy": {
+      "clock": "owner-local monotonic milliseconds",
+      "start": "complete validated receipt of the request",
+      "queue_rule": "queueing and retries consume the original deadline; they never restart or extend it",
+      "pre_commit_expiry": "return DEADLINE_EXPIRED and do not commit a side effect",
+      "post_commit_expiry": "report the actual owner state; never claim cancellation of an already committed transition",
+      "safety_rule": "transport deadlines never extend the owner's 100-ms TX lease or any tighter local hardware deadline"
+    },
+    "liveness": {
+      "ping_period_ms": 50,
+      "valid_pong_gap_ms_max": 200,
+      "missed_periods_max": 4,
+      "rule": "only a CRC-valid PONG in the current boot/session advances liveness; owner-local TX lease expiry remains independent and no later than 100 ms"
+    }
+  },
+  "mailbox_adapters": {
+    "transports": [
+      {"id": "S3_PACK", "address_7bit": "0x2A", "poll_period_ms": 100, "status_stale_ms": 500},
+      {"id": "S3_SAFETY", "address_7bit": "0x2B", "heartbeat_period_ms": 50, "heartbeat_gap_ms_max": 200}
+    ],
+    "command_bytes": 32,
+    "status_bytes": 64,
+    "update_window_bytes": 128,
+    "ready_rule": "S3 reads a CRC-valid compatible status with a fresh target boot ID, then sends one zero-side-effect session-open command whose sequence and S3 session ID are acknowledged in a stable CRC-valid status",
+    "command_ownership": "at most one command per target is outstanding; the target publishes ack_sequence only after full CRC/sequence validation and a stable apply/result decision",
+    "status_ownership": "the target snapshots all 64 status bytes before serving a read; S3 discards a torn or CRC-invalid snapshot and retries without changing owner state",
+    "update_credit": "exactly one 128-byte offset-addressed update window may be outstanding; the next window is admitted only after flash read-back acknowledgement",
+    "reset_rule": "boot-ID change, stale status, bus fault or sequence ambiguity clears the session, outstanding command and update credit and returns the adapter through RESETTING",
+    "pack_authority": "PACK remains locally fail-closed; loss of S3 cannot admit cells or release protected pack hold",
+    "safety_authority": "SAFETY owns heartbeat, evidence and lease expiry and asserts FAULT_KILL when its local contract is violated"
+  },
+  "link_loss_actions": [
+    {
+      "transport": "S3_C5",
+      "remote_owner": "C5",
+      "required_action": "C5 parks its interface and disables all TX requests; its independent owner lease expires within 100 ms; S3 marks C5 state unknown and rejects new C5 side effects"
+    },
+    {
+      "transport": "S3_RP",
+      "remote_owner": "RP",
+      "required_action": "RP parks active paths and disables all TX requests; its independent owner lease expires within 100 ms; S3 marks RP state unknown and rejects new RP side effects"
+    },
+    {
+      "transport": "S3_PACK",
+      "remote_owner": "PACK",
+      "required_action": "PACK preserves its local protection/hold decision; S3 marks pack state stale and cannot admit cells, release hold or infer admission from the lost link"
+    },
+    {
+      "transport": "S3_SAFETY",
+      "remote_owner": "SAFETY",
+      "required_action": "SAFETY revokes the active lease and asserts FAULT_KILL under its 200-ms heartbeat-gap contract; S3 cannot restore RUN over the link"
+    }
+  ],
+  "evidence_boundary": {
+    "reviewed_now": [
+      "state machine and allowed transitions",
+      "fixed queue reservations and ownership cycles",
+      "credit, duplicate, deadline and reset rules",
+      "per-link local fail-safe actions",
+      "exact ESSL version, source commit and normalized component payload"
+    ],
+    "not_yet_claimed": [
+      "production adapter implementation",
+      "target compilation with ESSL",
+      "wire, DMA, interrupt or clock-stretching execution",
+      "latency, throughput, coexistence or physical reset recovery"
+    ]
+  },
+  "counts": {
+    "production_transports": 4,
+    "lifecycle_states": 7,
+    "high_speed_buffers_each_direction": 32,
+    "high_speed_bytes_each_direction": 16384,
+    "protected_queue_buffers_each_direction": 20,
+    "physical_transport_runs": 0
+  },
+  "authorization": {
+    "hardware_purchase": false,
+    "hardware_layout": false,
+    "fabrication": false
+  },
+  "next": "F4.0.2"
+}
