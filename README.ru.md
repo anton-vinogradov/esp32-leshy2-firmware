@@ -2,9 +2,10 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F4 — IPC и scheduling.** F0–F3 прошли ревью;
-> [итог F3](docs/f3-boot-memory-emulation-report.ru.md) фиксирует точное исполнение S3 в QEMU и честные физические gates. Подробности —
-> в [роадмапе прошивки](docs/roadmap.ru.md).
+> **Статус прошивки: F0-R2.0 — пересборка контракта шести доменов.** Работа
+> F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
+> доменов больше не является текущей. Подробности — в
+> [роадмапе прошивки](docs/roadmap.ru.md).
 
 ## Роадмап прошивки и текущая позиция
 
@@ -15,49 +16,49 @@
 
 | Этап | Статус | Результат |
 |---|---|---|
-| F0 · Контракты продукта | ✅ Проведено ревью | пять доменов, владельцы, L2IP, memory, safety, update и HW↔FW boundary |
-| F1 · Portable cores | ✅ Проведено ревью | [Итог F1: 24/24 host-сценария и чистые ASan/UBSan](docs/f1-portable-cores-report.ru.md) |
-| F2 · Target-проекты и build system | ✅ [Проведено ревью](docs/f2-target-build-system-report.ru.md) | пять production-SDK projects; 52/52 artifacts воспроизводятся побайтно |
-| F3 · Boot, память и эмуляция | ✅ [Проведено ревью](docs/f3-boot-memory-emulation-report.ru.md) | точный S3 debug/release QEMU; 52/52 воспроизводимых artifacts; явные физические gates |
-| **F4 · IPC и scheduling** | **▶️ Текущая граница** | реальные transports, typed messages, credits и priority isolation |
-| F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему | все драйверы устройств, органов управления, датчиков и power states |
+| **F0 · Контракты продукта** | **▶️ Сейчас: F0-R2.0** | пересобрать HW↔FW boundary шести доменов из принятого H0-R2 |
+| F1 · Portable cores | ⏳ [Отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md); ожидает F0-R2 | добавить состояния Hub/Airband и повторить portable regression |
+| F2 · Target-проекты и build system | ⏳ [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md); ожидает F1-R2 | шесть production-SDK projects и воспроизводимая six-image matrix |
+| F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
+| F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
+| F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
 | F6 · UI, display, storage и audio | ⏳ Ожидает F5 | отзывчивые menu/waterfall, recording, audio и fault viewer |
 | F7 · Radio, IR и expansion | ⏳ Ожидает F5/F6 | receive/TX profiles, полноценные 3×nRF24 и тихие неактивные тракты |
 | F8 · Уровни функций и safety UX | ⏳ Ожидает F7 | Основной режим, Лаборатория и Контролируемая зона |
-| F9 · Signed update и recovery | ⏳ Ожидает F1/F3 | управляемый владельцем bundle для пяти target, rollback и физический recovery |
+| F9 · Signed update и recovery | ⏳ Ожидает F1/F3 | управляемый владельцем bundle для шести targets, rollback и физический recovery |
 | F10 · HIL и системная квалификация | 🔒 Ожидает F4–F9 и hardware H7 | prototype fault, RF, power, thermal и endurance evidence |
 | F11 · Firmware release | 🔒 Ожидает F10 и hardware H8 | воспроизводимые подписанные образы, installer, recovery kit и release tag |
 
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F4.** Синхронизированный hardware H2 BSP остаётся
-источником pins. Hardware H2/H3 теперь используют независимые `SA818S-V` и
-`SA818S-U`, локальный one-hot selector и не расходуют новый MCU/M1 contact.
-Hardware H4 проведён по существующему пакету F3; железо сейчас на `H5.0.3-R1`:
-dual-SA818S residual/source reviews готовы, evidence-корзина из 33 строк стоит
-`$286.43`, а все 210 строк BOM / 1052 установки имеют точные маршруты.
-Частичный ответ JLCPCB от 26 августа подтверждает MOQ 1 / типичные 8–15 рабочих
-дней pre-order SA818S-V и условную post-order цену Function Test. Аккумуляторы
-— пользовательский `J5-U`, вне поставки и supplier-gates. Реальная схема с
-двумя designator, остальные J4-F/J4-P и identity
-control открыты; аппаратный `H5-EVR07` фиксирует частичный ответ fail-closed.
-Необязательное право
-Parts API отклонено без указанной причины, поэтому активным остаётся ручной
-evidence-путь; информационный запрос в поддержку успешно отправлен 26 августа
-2026 года и ожидает ответа. Аппаратный `H5-EVR08` сохраняет PCBWay как
-подготовленный, но не опрошенный резерв полной сборки, а Seeed — как второй
-источник PCBA. Прежнее H5 evidence на
-основе SA518 отменено. Закупка, quote/reservation, layout и fabrication
-заблокированы.
-F3 прошла ревью: S3 debug/release загружается и
-исполняет 8-МиБ octal-PSRAM и изолированные fault paths в точном QEMU; все 52
-target artifacts воспроизводятся. Периферия и boot четырёх non-S3 targets
-остаются названными физическими gates, а не emulator claims.
+**Прошивка находится на F0-R2.0.** Сгенерированный
+[`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
+репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
+targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и analog FPV
+остаются напрямую на S3; storage, audio и `BROADCAST_RX` переходят на Hub RP.
+Обязательный receive-only Airband использует Hub GP41/42, фиксированный LO
+112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
+находится на `H1-R2.0`; текущих BSP R2, KiCad layout и разрешения заказа нет.
 
-### Текущая фаза F4 — детальная позиция
+### Текущая фаза F0-R2 — детальная позиция
 
-<!-- current-substep: F4.1.4 -->
+<!-- current-substep: F0-R2.0 -->
+
+▶️ **`F0-R2.0` — сейчас.** Пересобрать продуктовый контракт до
+возобновления реализации. Этот точный маркер уже фиксирует шесть доменов,
+три новых Hub-centered transports, прямую границу S3 UI/display/FPV, управление
+режимом и питанием Airband и новый power envelope H1. F0-R2 закроется только
+после согласования ownership memory/update, identities шести target,
+emulator/dev-board gates и обоих репозиториев. Маркер и evidence меняются
+вместе в каждом commit.
+
+<details>
+<summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>
+
+### Историческая фаза F4 R1 — позиция на момент открытия R2
+
+<!-- historical-substep: F4.1.4 -->
 
 **Точный маркер: `F4.1.4`** — выполнить названный физический dev-board gate
 S3-C5. Четыре locked debug/release builds S3/C5 проходят, а точный S3 QEMU
@@ -180,6 +181,8 @@ message contracts в реальные target transports, сохраняя при
 safety/control под waterfall и bulk traffic. Каждый подэтап обновляет evidence,
 точный маркер и обе языковые страницы в одном commit.
 
+</details>
+
 Прошивка превращает радиотракты Leshy2 в единый полевой инструмент: показывает
 меню и водопад, управляет приёмом и передачей, записывает данные, обслуживает
 расширения и сохраняет безопасное состояние при сбоях. Здесь описаны
@@ -220,22 +223,24 @@ safety/control под waterfall и bulk traffic. Каждый подэтап о�
 recovery, смены профиля либо ошибки. После защёлкнутой аварии требуется
 физический цикл `KILL`→`RUN`.
 
-## Runtime в пяти доменах
+## Runtime в шести доменах
 
 ```mermaid
 flowchart TB
-  S3["S3 image<br/>приложение, UI, display, storage, audio"]
+  S3["S3 image<br/>приложение, прямые UI/display и analog FPV"]
+  HUB["Hub RP2354B image<br/>fan-out, storage, audio, broadcast/Airband RX"]
   C5["C5 image<br/>native 2,4/5 ГГц, 802.15.4, IR"]
-  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
+  RP["RF RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>локальный допуск батарейного pack"]
   SAFE["safety MSPM0 image<br/>watchdog, температурные зоны и TX lease"]
   WDG["TPS3435<br/>независимый timeout 1,6 с"]
-  S3 <-->|"versioned SDIO messages"| C5
-  S3 <-->|"versioned SPI messages + alert"| RP
-  S3 -->|"bounded commands"| PACK
-  PACK -->|"read-only state/fault"| S3
-  S3 -->|"heartbeat + lease одной группы"| SAFE
-  SAFE -->|"read-only fault record"| S3
+  S3 <-->|"40-МГц quad-SPI + alert"| HUB
+  HUB <-->|"20-МГц 4-bit SDIO"| C5
+  HUB <-->|"20-МГц SPI + alert"| RP
+  HUB -->|"bounded commands"| PACK
+  PACK -->|"read-only state/fault"| HUB
+  HUB -->|"heartbeat + lease одной группы"| SAFE
+  SAFE -->|"read-only fault record"| HUB
   SAFE -->|"deadline service"| WDG
   WDG -->|"аппаратный FAULT_KILL"| SAFE
 ```
@@ -245,7 +250,7 @@ flowchart TB
 lease и переводит зависимую функцию в безопасное состояние. Экран, storage и
 radio не блокируют друг друга длинными общими операциями.
 
-При аварии C5 и RP остаются в reset. Если температурная зона UI безопасна, S3
+При аварии C5, RF RP и Hub RP переходят в заданные safe/reset states. Если температурная зона UI безопасна, S3
 может запустить только подписанный экран аварии: причина, измеренное значение и
 предел, выполненное действие, идентификатор события и инструкция `KILL`→`RUN`.
 Если опасен экран или сама зона UI, дисплей выключается, а независимый янтарный
@@ -272,7 +277,7 @@ power fault или контроль TX leases.
 ## Документация
 
 - [Роадмап прошивки и текущая позиция](docs/roadmap.ru.md)
-- [Среда сборки всех пяти образов](docs/toolchains.ru.md)
+- [Среда сборки R1, сохранённая для повторной квалификации](docs/toolchains.ru.md)
 - [Архитектура прошивки и поведение подсистем](docs/architecture.ru.md)
 - [Разметка flash, PSRAM и rollback](docs/memory.ru.md)
 - [Аппаратная архитектура](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)

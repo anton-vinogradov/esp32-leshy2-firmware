@@ -3,9 +3,9 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F4 — IPC и scheduling.** F0–F3 прошли ревью.
-> Точные S3 debug/release images загружаются в QEMU; каждый non-S3 boot и
-> физический peripheral claim остаётся назначен dev-board или HIL gate.
+> **▶️ Текущая граница: F0-R2.0 — пересборка контракта шести доменов.**
+> Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
+> Железо находится на H1-R2.0; текущих BSP и layout R2 ещё нет.
 
 Последняя сверка статуса: **26 августа 2026 года**. Это собственный роадмап
 firmware-репозитория. Пересечения с железом указаны явно, но hardware-этапы не
@@ -15,13 +15,12 @@ firmware-репозитория. Пересечения с железом ука
 
 | Область | Фактическое состояние |
 |---|---|
-| Контракты пяти доменов, memory/rollback и HW↔FW boundary | ✅ Проведено ревью на уровне архитектуры и конфигураций |
-| Portable safety, L2IP, update и five-domain model | ✅ [Итог F1](f1-portable-cores-report.ru.md): 24 детерминированных C-сценария; ASan/UBSan чистые |
-| Target-проекты S3/C5/RP/Pack/Safety | ✅ Пять структур потребляют generated H2 domain tables |
-| Target-сборки и map-файлы | ✅ [F2 проведено ревью](f2-target-build-system-report.ru.md): 10 конфигураций, 52/52 воспроизводимых artifacts и 10 size gates |
-| ESP32-S3 QEMU | ✅ F3 проведено ревью: debug/release boot, 8-МиБ PSRAM и изолированные fault paths |
-| Объединённый аппаратный gate | ✅ H4 проведён по текущим dual-SA818S hashes H2/H3 и принятой F3; hardware H5.0.3-R1 имеет корзину из 33 строк за `$286.43` и точные маршруты всех 210 строк BOM / 1052 установок; частичный ответ JLCPCB подтверждает MOQ 1 / типичные 8–15 рабочих дней SA818S-V и условный Function Test; аккумуляторы — пользовательский `J5-U`; реальная схема с двумя designator, остальные J4-F/J4-P и identity control открыты; `H5-EVR07` fail-closed; `H5-EVR08` сохраняет PCBWay/Seeed fallback; закупка заблокирована |
-| C5, RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает dev boards или hardware |
+| HW↔FW projection шести доменов | ▶️ Сгенерирован из H0-R2 и связан с hardware SHA-256; части memory/update/build/HIL остаются открыты |
+| Portable safety, L2IP и update model | ⏳ [Итог F1 R1](f1-portable-cores-report.ru.md) сохранён: 24 детерминированных C-сценария; Hub/Airband и six-target rerun ожидают закрытия F0-R2 |
+| Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ⏳ Пять структур R1 сохранены; target Hub и six-image matrix ещё не собраны |
+| Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.0 сейчас; placement, power и production-схема R2 открыты |
+| C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
 | HIL и release | 🔒 Ожидают аппаратный прототип H7 |
@@ -29,16 +28,19 @@ firmware-репозитория. Пересечения с железом ука
 Host-модель проверяет переносимую логику, но не заменяет instruction-set,
 peripheral или board emulation и никогда не показывается как готовая прошивка.
 
-## Детальный состав текущей F4
+## Детальный состав текущей F0-R2
 
-<!-- current-substep: F4.1.4 -->
+<!-- current-substep: F0-R2.0 -->
 
-**Точный маркер: `F4.1.4`** — выполнить названный физический dev-board gate
-S3-C5. Четыре locked debug/release builds S3/C5 проходят, а точный S3 QEMU
-исполняет шесть fake-SDIO traffic/fault сценариев в обеих конфигурациях. Эти
-прогоны доказывают поведение приложения над fake boundary, но не SDIO signal,
-throughput, timing или сосуществование с C5 USB. Маркер и evidence меняются
-вместе в каждом commit.
+▶️ **`F0-R2.0` — сейчас.** Пересобрать полный firmware-контракт вокруг
+шести targets и Hub-centered топологии. Этот точный маркер уже содержит
+ownership доменов, бюджеты S3/Hub, transports, прямые display/FPV, receive-only
+Airband и power rebaseline. F0-R2 ещё должен закрыть ownership memory/rollback,
+порядок six-image update, identities targets и emulator/dev-board gates.
+Маркер и evidence меняются вместе в каждом commit.
+
+<details>
+<summary><strong>Сохранённый состав F2–F4 R1 — не текущая топология</strong></summary>
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -157,18 +159,20 @@ message contracts в реальные target transports, сохраняя при
 safety/control под waterfall и bulk traffic. Каждый подэтап обновляет evidence,
 точный маркер и обе языковые страницы в одном commit.
 
+</details>
+
 ## Зависимости
 
 ```mermaid
 flowchart TD
-  H2["hardware H2<br/>production ECAD"]
+  H2["hardware H2-R2<br/>production ECAD"]
   H7["hardware H7<br/>прототип"]
   H8["hardware H8<br/>physical qualification"]
-  F0["✅ F0<br/>контракты"]
-  F1["✅ F1<br/>portable cores"]
-  F2["✅ F2<br/>target projects"]
-  F3["✅ F3<br/>boot и emulation"]
-  F4["▶️ F4<br/>IPC и scheduler"]
+  F0["▶️ F0-R2<br/>контракты шести доменов"]
+  F1["F1-R2<br/>portable cores"]
+  F2["F2-R2<br/>шесть target projects"]
+  F3["F3-R2<br/>boot и emulation"]
+  F4["F4-R2<br/>IPC и scheduler"]
   F5["F5<br/>BSP и drivers"]
   F6["F6<br/>UI, display, storage, audio"]
   F7["F7<br/>radio, IR и expansion"]
@@ -189,16 +193,16 @@ flowchart TD
 
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
-| **F0. Контракты продукта** | ✅ Проведено ревью | Пять доменов, владельцы функций, L2IP, memory/partition, safety, update и HW↔FW boundary | Конфигурации обоих репозиториев совпадают; нет неизвестного target, транспорта, recovery-пути или обязательного состояния |
-| **F1. Portable cores** | ✅ Проведено ревью | [Итог F1](f1-portable-cores-report.ru.md): C-реализация safety state machine, CRC/L2IP, replay guard, atomic update/rollback, priority queues и five-domain fault model | 24 сценария проходят обычную сборку и ASan/UBSan; закрыты обнаруженные ошибки heartbeat, lease boundary, late update и invalid enum |
-| **F2. Target-проекты и build system** | ✅ [Проведено ревью](f2-target-build-system-report.ru.md) | Пять projects на production SDK: ESP-IDF S3/C5, Pico SDK RP2354B и TI MSPM0 SDK ×2; generated H2 BSP; воспроизводимые artifacts | 10 debug/release configurations проходят; 52/52 artifacts воспроизводятся побайтно; временных pin assignments нет |
-| **F3. Boot, память и эмуляция** | ✅ [Проведено ревью](f3-boot-memory-emulation-report.ru.md) | Точное S3 QEMU execution, воспроизводимые artifacts пяти targets, size/memory/rollback boundaries и названные физические gates | S3 boot/self-test/fault/update-failure проходит официальный QEMU; все пять ELF/bin укладываются в flash/RAM/rollback; shared code проходит host platform; отсутствующая периферия попадает в dev-board matrix |
-| **F4. IPC и scheduling** | ▶️ Текущая граница | Реальные SDIO S3↔C5, SPI+alert S3↔RP, I²C mailboxes Pack/Safety, typed results, credits и priority queues | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; waterfall/bulk saturation не задерживает safety/control; link loss локально закрывает side effects |
+| **F0. Контракты продукта** | ▶️ Сейчас: F0-R2.0 | Шесть доменов, Hub-centered transports, ownership, pins, memory/partition, safety, update и HW↔FW boundary | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
+| **F1. Portable cores** | ⏳ Ожидает F0-R2 | Переиспользовать [итог F1 R1](f1-portable-cores-report.ru.md), добавить Hub/Airband states и six-domain fault model | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
+| **F2. Target-проекты и build system** | ⏳ Ожидает F1-R2 и hardware H2-R2 | Шесть projects на production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
+| **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
+| **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; reset/off/no-back-power/quiet transitions явны; P02 остаётся только входом, проверены reset/readback селектора и семь резервных pins; неподдерживаемая эмулятором периферия имеет dev-board test |
 | **F6. UI, display, storage и audio** | ⏳ Ожидает F5 | Меню, dirty-region QSPI rendering, бегущий waterfall, touch/D-pad/keys/encoder/PTT, запись, CTIA/TRS playback/capture state machine и fault viewer | UI остаётся отзывчивым под максимальным потоком; малые области укладываются в display occupancy budget; вставка сначала отключает динамик, источник меняется без pop, извлечение восстанавливает reset-default до playback; storage/audio ошибки изолированы, причина аварии сохраняется и показывается |
 | **F7. Radio, IR и expansion features** | ⏳ Ожидает F5/F6 | Normal-mode receive/scan/record, полноценные `3R/1T2R/2T1R/3T`, Wi-Fi/BLE/802.15.4, Sub-GHz, voice, IR и профили расширений | Одна signal group активна; три nRF работают одновременно без программного урезания; inactive interfaces quiet; права, регион и antenna profile проверяются до TX |
 | **F8. Три уровня функций и safety UX** | ⏳ Ожидает F7 | Основной режим, Лаборатория и Лаборатория → Контролируемая зона; локальная настройка интервала полной самопроверки | Каждый вход в Controlled Zone показывает новый обязательный баннер; действие требует preview, separate arm, разрешённую цель/изолированную среду и bounded lease; установка требует принятия акта о ненападении; выбор 24 ч/48 ч по умолчанию/только при старте не может ослабить watchdog, thermal, power-fault или TX-lease enforcement |
-| **F9. Signed bundle, update и recovery** | ⏳ Ожидает F1/F3 | Один owner/release-signed bundle для пяти target с local owner roots, readback, activation order и rollback | Подмена и несовместимый bundle отвергаются; Pack→Safety→C5→RP→S3 подтверждаются self-test; сбой возвращает совместимый комплект; USB/UART/SWD recovery остаётся открытым владельцу |
+| **F9. Signed bundle, update и recovery** | ⏳ Ожидает F1/F3 | Один owner/release-signed bundle для шести targets с local owner roots, readback, activation order и rollback | Подмена и несовместимый bundle отвергаются; Pack→Safety→C5→RF-RP→Hub-RP→S3 подтверждаются self-test; сбой возвращает совместимый комплект; USB/UART/SWD recovery остаётся открытым владельцу |
 | **F10. HIL и системная квалификация** | 🔒 Ожидает F4–F9 и hardware H7 | Автоматизированные тесты на собранном прототипе, fault injection, RF/power/thermal/endurance | Пройдены реальные transports/peripherals, 3×nRF concurrency, quiet-state, watchdog, thermal, brownout и update interruption; USB endurance 24/48 ч и измерения от батарей до protected cutoff являются evidence, а не обещанием времени работы |
 | **F11. Firmware release** | 🔒 Ожидает F10 и hardware H8 | Воспроизводимые образы, installer, release notes, recovery kit и совместимый тег | Ноль blocker; target binaries воспроизводимы и подписаны; SBOM/licenses/tests опубликованы; сайт описывает реализованные возможности; firmware tag совместим с hardware release |
 
@@ -206,7 +210,7 @@ flowchart TD
 
 1. Прошивка не придумывает GPIO, polarity, rail или recovery path: они приходят
    из принятого hardware-контракта.
-2. Portable core используется всеми target, а не переписывается пять раз.
+2. Portable core используется всеми target, а не переписывается шесть раз.
 3. То, что QEMU/host не моделирует, не считается проверенным и переносится в
    dev-board/HIL matrix.
 4. Любая потенциально опасная функция сначала получает permission, evidence,
@@ -219,7 +223,7 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F4.1.4`. Точная debug/release target matrix и два S3 QEMU
-run над fake boundary проведены. Текущий шаг — первое физическое исполнение
-SDIO S3-C5 на названной dev-board fixture; emulator result не заменяет данные
-по signaling, timing, throughput и сосуществованию с USB.
+Текущая граница — `F0-R2.0`. Нужно закрыть machine-readable части memory,
+rollback, six-image activation и execution gates R2, затем строго перейти
+F1→F2→F3. Target matrix R1 и S3 QEMU runs остаются полезным regression evidence,
+но не квалифицируют добавленный Hub и изменённые transports.

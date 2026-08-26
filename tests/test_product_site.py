@@ -63,8 +63,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F4", "hardware H2"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F4", "hardware H2"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.0", "H1-R2.0"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.0", "H1-R2.0"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -76,18 +76,18 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F4",
+                "Current boundary: F0-R2.0",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
-                "hardware H2",
+                "hardware H2-R2",
                 "hardware H7",
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F4",
+                "Текущая граница: F0-R2.0",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
-                "hardware H2",
+                "hardware H2-R2",
                 "hardware H7",
                 "hardware H8",
             ),
@@ -149,17 +149,22 @@ class ProductSiteTests(unittest.TestCase):
         markers = {}
         for name in pages:
             page = self.read(name)
-            found = re.findall(r"<!-- current-substep: (F\d+(?:\.\d+)+) -->", page)
+            found = re.findall(r"<!-- current-substep: (F\d+(?:-R\d+)?(?:\.\d+)+) -->", page)
             self.assertEqual(1, len(found), name)
             markers[name] = found[0]
             self.assertIn(f"`{found[0]}`", page, name)
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F4.1.4"}, set(markers.values()))
+        self.assertEqual({"F0-R2.0"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
-        self.assertEqual("F4", state["phase"])
+        self.assertEqual("R2", state["baseline"])
+        self.assertEqual("F0", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
+        self.assertTrue(state["current_claims"]["hardware_contract_projection_generated"])
+        self.assertTrue(state["current_claims"]["six_domains_named"])
+        self.assertFalse(state["current_claims"]["hub_target_project_created"])
+        self.assertEqual("R1", state["claims"]["baseline"])
         self.assertIn("F2.0.1", state["reviewed"])
         self.assertTrue(state["claims"]["target_builds_run"])
         self.assertTrue(state["claims"]["target_builds_byte_reproducible"])

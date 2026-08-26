@@ -2,9 +2,9 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F4 — IPC and scheduling.** F0–F3 are reviewed;
-> the [F3 result](docs/f3-boot-memory-emulation-report.md) records exact S3 QEMU execution and honest physical gates. Follow the
-> [firmware roadmap](docs/roadmap.md).
+> **Firmware status: F0-R2.0 — six-domain contract rebaseline.** The R1
+> F0–F4 work remains regression evidence, but its five-domain topology is no
+> longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
 ## Firmware roadmap and current position
 
@@ -15,49 +15,49 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 
 | Stage | Status | Result |
 |---|---|---|
-| F0 · Product contracts | ✅ Reviewed | five domains, ownership, L2IP, memory, safety, update and HW↔FW boundary |
-| F1 · Portable cores | ✅ Reviewed | [F1 result: 24/24 host scenarios and clean ASan/UBSan](docs/f1-portable-cores-report.md) |
-| F2 · Target projects and build system | ✅ [Reviewed](docs/f2-target-build-system-report.md) | five production-SDK projects; 52/52 artifacts reproduce byte-for-byte |
-| F3 · Boot, memory and emulation | ✅ [Reviewed](docs/f3-boot-memory-emulation-report.md) | exact S3 debug/release QEMU; 52/52 reproducible artifacts; explicit physical gates |
-| **F4 · IPC and scheduling** | **▶️ Current boundary** | real transports, typed messages, credits and priority isolation |
-| F5 · BSP and drivers | ⏳ Waiting for F4 and current schematic | all device, control, sensor and power-state drivers |
+| **F0 · Product contracts** | **▶️ Current: F0-R2.0** | regenerate the six-domain HW↔FW boundary from the accepted H0-R2 contract |
+| F1 · Portable cores | ⏳ R1 [report retained](docs/f1-portable-cores-report.md); waiting for F0-R2 | add Hub/Airband states and rerun portable regression |
+| F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
+| F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
+| F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
+| F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
 | F6 · UI, display, storage and audio | ⏳ Waiting for F5 | responsive menu/waterfall, recording, audio and fault viewer |
 | F7 · Radio, IR and expansion | ⏳ Waiting for F5/F6 | receive/TX profiles, full 3×nRF24 operation and quiet inactive paths |
 | F8 · Functional levels and safety UX | ⏳ Waiting for F7 | Normal, Laboratory and Controlled Zone workflows |
-| F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled five-target bundle, rollback and physical recovery |
+| F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled six-target bundle, rollback and physical recovery |
 | F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F4.** The synchronized hardware H2 BSP remains the pin source.
-Hardware H2/H3 now use independent `SA818S-V` and `SA818S-U` paths with a
-local one-hot selector and no new MCU or M1 contact. Hardware H4 is reviewed
-against the existing F3 package; hardware is now at `H5.0.3-R1`, with the
-dual-SA818S residual/source reviews complete, a 33-line `$286.43` evidence
-basket, and exact routes for all 210 BOM lines / 1052 placements. A no-order
-JLCPCB's partial 26 August response confirms SA818S-V MOQ 1 / typical
-8–15-working-day pre-order and conditional post-order Function Test pricing.
-Accumulators are user-supplied `J5-U`, outside delivery and supplier gates. The
-actual two-designator job and remaining J4-F/J4-P plus
-identity-control lines remain open; hardware `H5-EVR07` records the partial
-reply fail-closed. The optional
-Parts API permission was rejected without a stated reason, so manual evidence
-remains active; an information-only support request was submitted successfully
-on 26 August 2026 and now awaits a response. Hardware `H5-EVR08` preserves
-PCBWay as the prepared but uncontacted full-device fallback and Seeed as the
-PCBA second source. Former
-SA518-based H5 evidence is superseded. Purchasing, quote/reservation, layout
-and fabrication remain blocked.
-F3 is reviewed: S3 debug/release boots and runs the
-8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
-artifacts reproduce. Peripheral execution and four non-S3 boots remain named
-physical gates rather than emulator claims.
+**Firmware is at F0-R2.0.** The generated
+[`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
+firmware repository to the reviewed hardware source by SHA-256. R2 has six
+targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
+FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
+Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.0`;
+there is no current R2 BSP, KiCad layout or order authorization yet.
 
-### Current phase F4 — detailed position
+### Current phase F0-R2 — detailed position
 
-<!-- current-substep: F4.1.4 -->
+<!-- current-substep: F0-R2.0 -->
+
+▶️ **`F0-R2.0` — current.** Regenerate the product contract before resuming
+implementation. This exact marker's checked-in projection already names all six domains,
+three new Hub-centered transports, the direct S3 UI/display/FPV boundary,
+Airband mode and power controls, and the H1 power rebaseline. F0-R2 closes only
+after memory/update ownership, six-target build identities, emulator/dev-board
+gates and both repositories agree. This marker and its evidence move together
+in every commit.
+
+<details>
+<summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>
+
+### Historical R1 phase F4 — position when R2 reopened the architecture
+
+<!-- historical-substep: F4.1.4 -->
 
 **Exact marker: `F4.1.4`** — run the named S3-C5 dev-board physical gate. Four
 locked S3/C5 debug/release builds pass, and exact S3 QEMU executes six
@@ -180,6 +180,8 @@ message contracts into real target transports while preserving safety/control
 priority under waterfall and bulk traffic. Each substep updates evidence, this
 exact marker and both language pages in the same commit.
 
+</details>
+
 The firmware turns Leshy2 radio paths into one field instrument: it renders the
 menu and waterfall, controls receive and transmit, records data, manages
 expansion and preserves a safe state through faults. This documentation
@@ -218,22 +220,24 @@ Firmware cannot override hardware `FAULT_KILL`, derive permission from detected
 transmission or restore old arming after reset, recovery, profile change or a
 fault. A latched fault requires a physical `KILL`→`RUN` cycle.
 
-## Five-domain runtime
+## Six-domain runtime
 
 ```mermaid
 flowchart TB
-  S3["S3 image<br/>application, UI, display, storage, audio"]
+  S3["S3 image<br/>application, direct UI/display and analog FPV"]
+  HUB["Hub RP2354B image<br/>fan-out, storage, audio, broadcast/Airband RX"]
   C5["C5 image<br/>native 2.4/5 GHz, 802.15.4, IR"]
-  RP["RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
+  RP["RF RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>local battery-pack admission"]
   SAFE["safety MSPM0 image<br/>watchdog, thermal zones and TX leases"]
   WDG["TPS3435<br/>independent 1.6 s timeout"]
-  S3 <-->|"versioned SDIO messages"| C5
-  S3 <-->|"versioned SPI messages + alert"| RP
-  S3 -->|"bounded commands"| PACK
-  PACK -->|"read-only state/fault"| S3
-  S3 -->|"heartbeat + one group lease"| SAFE
-  SAFE -->|"read-only fault record"| S3
+  S3 <-->|"40-MHz quad-SPI + alert"| HUB
+  HUB <-->|"20-MHz 4-bit SDIO"| C5
+  HUB <-->|"20-MHz SPI + alert"| RP
+  HUB -->|"bounded commands"| PACK
+  PACK -->|"read-only state/fault"| HUB
+  HUB -->|"heartbeat + one group lease"| SAFE
+  SAFE -->|"read-only fault record"| HUB
   SAFE -->|"deadline service"| WDG
   WDG -->|"hardware FAULT_KILL"| SAFE
 ```
@@ -243,7 +247,7 @@ messages are typed and versioned; link loss revokes the lease and moves the
 dependent function to a safe state. Display, storage and radio avoid long
 cross-subsystem blocking operations.
 
-On a fault, C5 and RP stay in reset. If the UI thermal zone remains safe, S3
+On a fault, C5, RF RP and Hub RP enter their defined safe/reset states. If the UI thermal zone remains safe, S3
 may run only a signed fault viewer showing the cause, measured value and limit,
 action taken, event identifier and `KILL`→`RUN` instruction. If the display or
 UI zone is unsafe, the screen turns off and the independent amber `FAULT` LED
@@ -267,7 +271,7 @@ physical interface. Irreversible lockdown is not enabled by default.
 ## Documentation
 
 - [Firmware roadmap and current position](docs/roadmap.md)
-- [Build environment for all five images](docs/toolchains.md)
+- [R1 build environment retained for requalification](docs/toolchains.md)
 - [Firmware architecture and subsystem behavior](docs/architecture.md)
 - [Flash, PSRAM and rollback layout](docs/memory.md)
 - [Hardware architecture](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.md)

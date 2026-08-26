@@ -1,8 +1,19 @@
 {
   "schema_version": 1,
-  "phase": "F4",
-  "current_substep": "F4.1.4",
+  "baseline": "R2",
+  "phase": "F0",
+  "current_substep": "F0-R2.0",
   "updated_on": "2026-08-26",
+  "current_claims": {
+    "hardware_contract_projection_generated": true,
+    "hardware_source_sha256_bound": true,
+    "six_domains_named": true,
+    "hub_target_project_created": false,
+    "six_target_memory_update_contract_reviewed": false,
+    "six_target_build_matrix_reviewed": false,
+    "r2_emulator_devboard_matrix_reviewed": false
+  },
+  "historical_evidence_baseline": "R1",
   "completed": [
     "F2.0.0",
     "F2.0.1",
@@ -106,6 +117,7 @@
     "F4.1.3"
   ],
   "claims": {
+    "baseline": "R1",
     "target_projects_created": true,
     "target_builds_run": true,
     "target_builds_byte_reproducible": true,

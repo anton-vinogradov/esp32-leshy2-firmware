@@ -2,7 +2,54 @@
 
 [На главную](../README.ru.md) · [English](architecture.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/hardware.ru.md)
 
-## Домены исполнения
+## Текущая runtime-граница R2
+
+Machine projection
+[`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
+генерируется из принятого аппаратного source H0-R2 и фиксирует его SHA-256.
+Это текущий вход прошивки; контракт R1 ниже сохранён как regression evidence.
+
+| Образ | Физический владелец | Текущая ответственность R2 |
+|---|---|---|
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder, QSPI display и захват analog FPV |
+| C5 | `ESP32-C5-WROOM-1U-N8R8` | native Wi-Fi 2,4/5 ГГц, IEEE 802.15.4 и IR |
+| RF RP | `SC1512-A4` | 3×nRF24, CC1101, VHF/UHF voice и U214/LoRa Cap |
+| Hub RP | второй `SC1512-A4` | fan-out C5/RF, microSD, audio, FM/AM/SW/LW/Airband и M5 Unit |
+| Pack | `MSPM0C1106SDGS20R` | допуск элементов и защищённое выключение |
+| Safety | второй `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases и `FAULT_KILL` |
+
+```mermaid
+flowchart TD
+  S3["S3 · прямые UI/display/FPV"] <-->|"40-МГц quad-SPI + alert"| HUB["Hub RP · владелец периферии и RX"]
+  HUB <-->|"20-МГц 4-bit SDIO"| C5["C5 · native radio/IR"]
+  HUB <-->|"20-МГц SPI + alert"| RF["RF RP · deterministic radios"]
+  HUB <-->|"400-кГц fail-closed I²C"| PACK["Pack MSPM0"]
+  HUB <-->|"400-кГц fail-closed I²C"| SAFE["Safety MSPM0"]
+```
+
+Связь S3-Hub переносит команды и выбранные данные, но никогда не пиксели
+display или кадры analog video. Локальные для Hub microSD и audio не спорят с
+экраном. Кнопки заканчиваются на локальном для S3 `TCA9539PWR`; A/B энкодера
+остаются прямыми входами PCNT. Цель первого видимого отклика — 20 мс под
+квалифицированной одновременной нагрузкой.
+
+`BROADCAST_RX` принадлежит Hub и взаимоисключается с остальными верхнеуровневыми
+группами. Airband AM переносит 118–137 МГц в FMI-диапазон Si4732 6–25 МГц
+фиксированным low-side LO 112 МГц. Hub GP41 — fail-low `AIR_RX_EN`; GP42 выбирает
+direct FM/SW или converted Airband и после reset остаётся в direct FM/SW.
+Включены AM voice, сетки 25/8,33 кГц, scan/banks, recording, activity history и
+последующий ACARS 2400 decode. Airband TX, VDL2, wideband spectrum capture и
+сертифицированные VOR/ILS не заявляются.
+
+Состояние Pack и mailboxes heartbeat/lease/fault Safety используют выделенную
+I²C Hub GP43/44. Safety по-прежнему локально владеет watchdog и асинхронным
+`FAULT_KILL`: IPC-hop не может создать разрешение или подавить fault. Оставшаяся
+работа F0-R2 — новые memory, update, target-build и HIL matrices.
+
+<details>
+<summary><strong>Сохранённая архитектура R1 — не текущая физическая топология</strong></summary>
+
+## Исторические runtime-домены R1
 
 | Image | Физический владелец | Локальные задачи | Независимое восстановление |
 |---|---|---|---|
@@ -207,3 +254,5 @@ USB/UART/SWD можно заменить все образы и ключи, но
 
 Точные контракты flash, RAM, slot, update и recovery для всех пяти образов
 приведены в [контракте памяти](memory.ru.md).
+
+</details>
