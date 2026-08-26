@@ -34,7 +34,8 @@ from this table; internal substeps only move the exact marker.
 **Firmware is at F4.** The synchronized hardware H2 BSP remains the pin source.
 Hardware H2/H3 now use independent `SA818S-V` and `SA818S-U` paths with a
 local one-hot selector and no new MCU or M1 contact. Hardware H4 is reviewed
-against the existing F3 package; hardware is now at `H5.0.1-R1`, rebuilding
+against the existing F3 package; hardware is now at `H5.0.2-R1`, with the
+dual-SA818S residual map reviewed and primary-source research being rebuilt;
 component evidence for the 210-line dual-SA818S BOM. Former SA518-based H5
 evidence is superseded. Purchasing, quote/reservation, layout and
 fabrication remain blocked.

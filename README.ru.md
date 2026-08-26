@@ -34,7 +34,8 @@
 **Прошивка находится на F4.** Синхронизированный hardware H2 BSP остаётся
 источником pins. Hardware H2/H3 теперь используют независимые `SA818S-V` и
 `SA818S-U`, локальный one-hot selector и не расходуют новый MCU/M1 contact.
-Hardware H4 проведён по существующему пакету F3; железо сейчас на `H5.0.1-R1`
+Hardware H4 проведён по существующему пакету F3; железо сейчас на `H5.0.2-R1`:
+dual-SA818S карта residuals проведена, primary-source research пересобирается;
 и пересобирает component evidence для dual-SA818S BOM из 210 строк. Прежнее
 H5 evidence на основе SA518 отменено. Закупка, quote/reservation, layout и
 fabrication заблокированы.
