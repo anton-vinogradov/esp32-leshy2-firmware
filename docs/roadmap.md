@@ -31,14 +31,14 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F4 breakdown
 
-<!-- current-substep: F4.1.3 -->
+<!-- current-substep: F4.1.4 -->
 
-**Exact marker: `F4.1.3`** — execute the exact S3/C5 target matrix and S3 QEMU
-above a fake-SDIO boundary. The reviewed endpoints use generated H2 contacts,
-one-bit 20-MHz SDIO, exact offline ESSL 1.1.2 and eight 512-byte C5 DMA cells
-per direction. S3 and C5 debug images compile and link; QEMU fake-SDIO and
-physical SDIO remain unclaimed. The marker and evidence update together in
-every commit.
+**Exact marker: `F4.1.4`** — run the named S3-C5 dev-board physical gate. Four
+locked S3/C5 debug/release builds pass, and exact S3 QEMU executes six
+fake-SDIO traffic/fault scenarios in both configurations. Those runs prove
+application behavior above the fake boundary, not SDIO signaling, throughput,
+timing or C5 USB coexistence. The marker and evidence update together in every
+commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -71,7 +71,7 @@ every commit.
     memory boundaries and debug/release policy passed structural review.
   - ✅ `F2.2.4` — the Safety MSPM0C1106 project, separate boot/application
     images, fail-closed entry and debug/release policy passed structural review.
-  - ✅ `F2.2.5` — one integrated review passed for five projects, 35 files,
+  - ✅ `F2.2.5` — one integrated review passed for five projects, 37 files,
     26 artifacts and 20 debug/release command plans with zero target execution.
 - `F2.3` — import the accepted generated pin/BSP contract.
   - ✅ `F2.3.0` — the immutable H2 source identity, 5 domains, 125 contacts,
@@ -130,8 +130,8 @@ every commit.
   scenarios also passed ASan/UBSan. This does not claim nonvolatile persistence
   or flash rollback; [integrated evidence](../config/f3_2_runtime_review.json).
 - ✅ `F3.3` — a fresh double clean-build reproduced 52/52 artifacts; ten current
-  image/RAM gates and five static rollback topologies fit. S3 debug is 182,736
-  bytes with 6,895,152 bytes before its maximum; zero physical rollback
+  image/RAM gates and five static rollback topologies fit. S3 debug is 187,040
+  bytes with 6,890,848 bytes before its maximum; zero physical rollback
   transitions are claimed. See the
   [boundary evidence](../config/f3_3_boundary_review.json).
 - ✅ `F3.4` — the [global F3 result](f3-boot-memory-emulation-report.md) closes
@@ -145,8 +145,8 @@ every commit.
   - ✅ `F4.1.0` — [exact offline ESSL 1.1.2 payload and single-owner S3↔C5 source boundary reviewed](../config/f4_1_s3_c5_source_boundary.json); [30-file manifest](../third_party/esp_serial_slave_link.vendor-lock.json).
   - ✅ `F4.1.1` — [common high-speed core reviewed](../config/f4_1_1_high_speed_core_review.json): 19 ASan/UBSan scenarios; cumulative duplicate-safe bulk grants replace the unsafe absolute-credit draft.
   - ✅ `F4.1.2` — [S3 host and C5 SDIO slave endpoints reviewed](../config/f4_1_2_s3_c5_endpoint_review.json): generated pins, one-bit 20-MHz SDIO, exact ESSL and two locked debug builds; zero QEMU/PHY claims.
-  - ▶️ **`F4.1.3` — current:** run exact target builds and S3 QEMU above the fake SDIO boundary.
-  - `F4.1.4` — run and review the named S3-C5 dev-board physical gate.
+  - ✅ `F4.1.3` — [exact builds and fake-SDIO QEMU reviewed](../config/f4_1_3_s3_c5_qemu_review.json): four target builds, two S3 QEMU runs, six scenarios per run and zero PHY claims.
+  - ▶️ **`F4.1.4` — current:** run and review the named S3-C5 dev-board physical gate.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
 - `F4.4` — inject saturation, duplicate, deadline, reset and link-loss faults.
@@ -219,7 +219,7 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F4.1.3`. The S3 SDMMC/ESSL host and C5 SDIO-slave
-endpoints compile in the locked debug toolchains. The active step expands that
-evidence to the exact debug/release target matrix and executes portable traffic
-above a fake-SDIO boundary in S3 QEMU without claiming a physical wire run.
+The current boundary is `F4.1.4`. The exact debug/release target matrix and two
+S3 fake-boundary QEMU runs are reviewed. The active step is the first physical
+S3-C5 SDIO execution on the named development-board fixture; no emulator result
+can substitute for its signaling, timing, throughput or USB-coexistence data.

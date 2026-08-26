@@ -156,7 +156,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F4.1.3"}, set(markers.values()))
+        self.assertEqual({"F4.1.4"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F4", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -192,6 +192,9 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["claims"]["f4_bulk_credit_duplicate_safe"])
         self.assertTrue(state["claims"]["f4_s3_c5_endpoints_reviewed"])
         self.assertEqual(2, state["claims"]["f4_s3_c5_exact_debug_builds"])
+        self.assertEqual(4, state["claims"]["f4_s3_c5_exact_target_builds"])
+        self.assertEqual(2, state["claims"]["f4_s3_c5_qemu_fake_runs"])
+        self.assertEqual(6, state["claims"]["f4_s3_c5_qemu_fake_scenarios_per_run"])
         self.assertEqual(1, state["claims"]["f4_s3_c5_bus_width_bits"])
         self.assertEqual(20000, state["claims"]["f4_s3_c5_frequency_khz"])
         self.assertEqual(4, state["claims"]["f4_production_transports"])
@@ -203,7 +206,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(0, state["claims"]["f4_qemu_phy_paths"])
         self.assertEqual(0, state["claims"]["f4_physical_transport_runs"])
         progress = json.loads(self.read("config/f4_progress.json"))
-        self.assertEqual("F4.1.3", progress["current_substep"])
+        self.assertEqual("F4.1.4", progress["current_substep"])
         self.assertEqual("reviewed", progress["substeps"]["F4.0.0"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.0.1"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.0.2"]["status"])
@@ -211,7 +214,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", progress["substeps"]["F4.1.0"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.1.1"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.1.2"]["status"])
-        self.assertEqual("current", progress["substeps"]["F4.1.3"]["status"])
+        self.assertEqual("reviewed", progress["substeps"]["F4.1.3"]["status"])
+        self.assertEqual("current", progress["substeps"]["F4.1.4"]["status"])
         for configuration in ("debug", "release"):
             self.assertTrue(
                 (REPO_ROOT / f"config/f3_1_s3_{configuration}_runtime_review.json").is_file()
@@ -373,7 +377,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("esp32s3", s3_review["sdk_target"])
         self.assertEqual({"debug", "release"}, set(s3_review["configurations"]))
         self.assertEqual(
-            {"debug": 182736, "release": 140528},
+            {"debug": 187040, "release": 144016},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in s3_review["configurations"].items()

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "current_substep": "F4.1.3",
+  "current_substep": "F4.1.4",
   "status": "in_progress",
   "matrix_sha256": "1c1b5db5f283a92174d525b9c937a3be0f0bfbfec7adfeec649a096639e635d2",
   "providers": [
@@ -23,7 +23,17 @@
         "S3_C5"
       ],
       "path": "config/f4_1_2_s3_c5_endpoint_review.json",
-      "sha256": "5d704d3ef9d3b6c6125d6b6211f318f292982088d19eaa339beb06c9abce374b",
+      "sha256": "fa6451c626269713643064f1e5a4215d7de94edc01a8fc7215df0b72b89fbba1",
+      "status": "reviewed"
+    },
+    {
+      "stage": "F4.1.3",
+      "evidence_class": "S3_QEMU_FAKE_BOUNDARY",
+      "applies_to": [
+        "S3_C5"
+      ],
+      "path": "config/f4_1_3_s3_c5_qemu_review.json",
+      "sha256": "15715011c24d2dde7ff31f1177cb86e2e26ccf0d0bf20ffc6cfdebafb99edf85",
       "status": "reviewed"
     }
   ],
@@ -36,18 +46,30 @@
     "S3 host endpoint uses generated H2 contacts, one-bit SDMMC and the exact offline ESSL source",
     "C5 slave endpoint uses generated H2 contacts, eight 512-byte DMA RX cells and eight 512-byte DMA TX cells",
     "both endpoints compile the reviewed portable adapter and fail its lifecycle closed on transport errors",
-    "locked ESP-IDF debug images compile and link both endpoint implementations"
+    "locked ESP-IDF debug images compile and link both endpoint implementations",
+    "s3_exact_target_boot_and_app_main_execution",
+    "s3_fake_sdio_handshake_and_512_byte_cell_execution",
+    "s3_fake_sdio_partial_cell_fault_closes_both_sessions",
+    "s3_fake_sdio_slave_reset_clears_session",
+    "s3_fake_sdio_interrupt_loss_closes_side_effect_gate",
+    "s3_fake_sdio_control_preempts_eight_queued_bulk_cells",
+    "s3_fake_sdio_link_loss_closes_side_effect_gate",
+    "s3_and_c5_debug_release_endpoint_images_compile_and_link"
   ],
   "deferred_claims": [
-    "runtime execution above an S3 QEMU fake-SDIO boundary",
-    "physical SDIO signaling, throughput, timing margin and USB coexistence"
+    "physical_sdio_signaling",
+    "physical_sdio_throughput",
+    "physical_sdio_timing_margin",
+    "physical_interrupt_electrical_behavior",
+    "physical_c5_usb_sdio_coexistence",
+    "physical_board"
   ],
   "execution_counts": {
     "host_sanitized_scenarios": 19,
-    "exact_target_adapter_builds": 2,
-    "s3_qemu_fake_runs": 0,
+    "exact_target_adapter_builds": 4,
+    "s3_qemu_fake_runs": 2,
     "physical_transport_runs": 0
   },
-  "next": "F4.1.3",
+  "next": "F4.1.4",
   "runner": "tools/run_f4_acceptance.py"
 }

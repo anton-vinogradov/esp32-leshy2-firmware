@@ -27,6 +27,7 @@ MATRIX_PATH = REPO_ROOT / "config" / "f3_acceptance_matrix.json"
 CAPABILITY_PATH = REPO_ROOT / "config" / "f3_execution_capability_matrix.json"
 PLAN_PATH = REPO_ROOT / "config" / "f3_runtime_plan.json"
 SCENARIO_PLAN_PATH = REPO_ROOT / "config" / "f3_2_scenario_plan.json"
+F4_S3_C5_QEMU_PLAN_PATH = REPO_ROOT / "config" / "f4_1_3_s3_c5_qemu_plan.json"
 LOCKED_PYTHON = REPO_ROOT / ".toolchains" / "python" / "idf6_py3.12_env" / "bin" / "python"
 IDF_PATH = REPO_ROOT / ".toolchains" / "src" / "esp-idf"
 QEMU_PATH = (
@@ -66,6 +67,14 @@ def execution_contract(stage: str) -> tuple[dict, dict, list[str], list[str]]:
             scenario_plan["observation"],
             scenario_plan["result_contract"]["accepted_claims"],
             scenario_plan["result_contract"]["deferred_claims"],
+        )
+    if stage == "F4.1.3":
+        qemu_plan = load(F4_S3_C5_QEMU_PLAN_PATH)
+        return (
+            runtime_plan,
+            qemu_plan["observation"],
+            qemu_plan["result_contract"]["accepted_claims"],
+            qemu_plan["result_contract"]["deferred_claims"],
         )
     raise ValueError(f"unsupported execution stage: {stage}")
 
@@ -417,7 +426,12 @@ def execute_s3(configuration: str, stage: str) -> tuple[dict, str]:
 
 def evidence_path(configuration: str, stage: str) -> Path:
     stage_token = stage.lower().replace(".", "_")
-    suffix = "runtime_review" if stage == "F3.1" else "scenario_review"
+    if stage == "F3.1":
+        suffix = "runtime_review"
+    elif stage == "F4.1.3":
+        suffix = "qemu_review"
+    else:
+        suffix = "scenario_review"
     return REPO_ROOT / "config" / f"{stage_token}_s3_{configuration}_{suffix}.json"
 
 
@@ -446,7 +460,7 @@ def check_evidence(configuration: str, stage: str) -> list[str]:
         errors.append(f"S3 {configuration} accepted claims changed")
     if record.get("deferred_claims") != deferred_claims:
         errors.append(f"S3 {configuration} deferred claims changed")
-    if stage == "F3.2" and record.get(
+    if stage in {"F3.2", "F4.1.3"} and record.get(
         "project_input_manifest_sha256"
     ) != input_manifest("s3")["manifest_sha256"]:
         errors.append(f"S3 {configuration} project inputs changed after runtime review")

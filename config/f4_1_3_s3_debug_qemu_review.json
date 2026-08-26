@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "stage": "F3.2",
+  "stage": "F4.1.3",
   "status": "reviewed",
   "target": "s3",
   "configuration": "debug",
@@ -30,15 +30,27 @@
       "observed": true
     },
     {
-      "marker": "leshy2_s3: F3.2 scenario self-test PASS",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO handshake/full-cell PASS",
       "observed": true
     },
     {
-      "marker": "leshy2_s3: F3.2 scenario retained-first-fault RAM model PASS",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO partial-cell fail-closed PASS",
       "observed": true
     },
     {
-      "marker": "leshy2_s3: F3.2 scenario failed-update RAM rollback model PASS",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO slave-reset fail-closed PASS",
+      "observed": true
+    },
+    {
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO interrupt-loss fail-closed PASS",
+      "observed": true
+    },
+    {
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO priority-under-bulk PASS",
+      "observed": true
+    },
+    {
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO link-loss side-effect gate PASS",
       "observed": true
     },
     {
@@ -50,21 +62,20 @@
   "timed_out": false,
   "termination": "ordered_markers_complete",
   "accepted_claims": [
-    "s3_target_binary_boot_chain",
-    "s3_app_main_reached",
-    "s3_octal_psram_8m_init_and_memory_test",
-    "s3_executes_portable_self_test_pass_path",
-    "s3_executes_retained_first_fault_ram_model",
-    "s3_executes_failed_update_ram_rollback_model"
+    "s3_exact_target_boot_and_app_main_execution",
+    "s3_fake_sdio_handshake_and_512_byte_cell_execution",
+    "s3_fake_sdio_partial_cell_fault_closes_both_sessions",
+    "s3_fake_sdio_slave_reset_clears_session",
+    "s3_fake_sdio_interrupt_loss_closes_side_effect_gate",
+    "s3_fake_sdio_control_preempts_eight_queued_bulk_cells",
+    "s3_fake_sdio_link_loss_closes_side_effect_gate"
   ],
   "deferred_claims": [
-    "nonvolatile_retained_fault_persistence",
-    "physical_domain_self_tests",
-    "actual_flash_readback_or_signature_verification",
-    "ota_state_flash_mutation",
-    "bootloader_rollback_transition",
-    "display_fault_viewer_rendering",
-    "external_gpio_timing",
+    "physical_sdio_signaling",
+    "physical_sdio_throughput",
+    "physical_sdio_timing_margin",
+    "physical_interrupt_electrical_behavior",
+    "physical_c5_usb_sdio_coexistence",
     "physical_board"
   ],
   "qemu_flash_sha256": "42b92bc5efe63c4118f0f43df44c81312eb64a58bdce084b7c355198faddbd86",

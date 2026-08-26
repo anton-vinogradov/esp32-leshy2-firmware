@@ -34,7 +34,7 @@ rollback, периферию, radio, watchdog или переход `FAULT_KILL`
 
 | Target | Самый большой image | Policy maximum | Запас до maximum | Результат linked memory |
 |---|---:|---:|---:|---|
-| S3 | 182 736 Б | 7 077 888 Б | 6 895 152 Б | в DIRAM свободно 287 147 Б; 8-МиБ PSRAM проверена в runtime |
+| S3 | 187 040 Б | 7 077 888 Б | 6 890 848 Б | в DIRAM свободно 280 715 Б; 8-МиБ PSRAM проверена в runtime |
 | C5 | 172 224 Б | 3 538 944 Б | 3 366 720 Б | в HP SRAM свободно 263 010 Б; external PSRAM ожидает железа |
 | RP2354B | 18 484 Б | 884 736 Б | 866 252 Б | в main + scratch SRAM свободно 526 008 Б |
 | Pack | 3 168 Б | 22 528 Б | 19 360 Б | в application SRAM свободно 7 880 Б |

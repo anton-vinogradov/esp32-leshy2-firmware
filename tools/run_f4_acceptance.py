@@ -280,6 +280,13 @@ def create_current_evidence() -> dict:
             "evidence_class": "EXACT_TARGET_BUILD",
             "applies_to": ["S3_C5"],
         },
+        {
+            "stage": "F4.1.3",
+            "command": [sys.executable, "tools/review_f4_1_qemu.py", "--run", "--write"],
+            "path": REPO_ROOT / "config" / "f4_1_3_s3_c5_qemu_review.json",
+            "evidence_class": "S3_QEMU_FAKE_BOUNDARY",
+            "applies_to": ["S3_C5"],
+        },
     ]
     providers = []
     records = []
@@ -311,19 +318,23 @@ def create_current_evidence() -> dict:
     return {
         "schema_version": 1,
         "phase": "F4",
-        "current_substep": "F4.1.3",
+        "current_substep": "F4.1.4",
         "status": "in_progress",
         "matrix_sha256": sha256(MATRIX_PATH),
         "providers": providers,
-        "accepted_claims": records[0]["accepted_claims"] + records[1]["accepted_claims"],
-        "deferred_claims": records[1]["deferred_claims"],
+        "accepted_claims": (
+            records[0]["accepted_claims"]
+            + records[1]["accepted_claims"]
+            + records[2]["accepted_claims"]
+        ),
+        "deferred_claims": records[2]["deferred_claims"],
         "execution_counts": {
             "host_sanitized_scenarios": 19,
-            "exact_target_adapter_builds": 2,
-            "s3_qemu_fake_runs": 0,
+            "exact_target_adapter_builds": 4,
+            "s3_qemu_fake_runs": 2,
             "physical_transport_runs": 0,
         },
-        "next": "F4.1.3",
+        "next": "F4.1.4",
         "runner": "tools/run_f4_acceptance.py",
     }
 
@@ -334,18 +345,20 @@ def check_current_evidence() -> list[str]:
     record = load(CURRENT_EVIDENCE_PATH)
     core_path = REPO_ROOT / "config" / "f4_1_1_high_speed_core_review.json"
     endpoint_path = REPO_ROOT / "config" / "f4_1_2_s3_c5_endpoint_review.json"
+    qemu_path = REPO_ROOT / "config" / "f4_1_3_s3_c5_qemu_review.json"
     errors: list[str] = []
-    if record.get("phase") != "F4" or record.get("current_substep") != "F4.1.3":
+    if record.get("phase") != "F4" or record.get("current_substep") != "F4.1.4":
         errors.append("integrated F4 marker changed")
     if record.get("status") != "in_progress":
         errors.append("partial F4 evidence may not close the top-level phase")
     if record.get("matrix_sha256") != sha256(MATRIX_PATH):
         errors.append("integrated F4 matrix hash changed")
-    if not core_path.is_file() or not endpoint_path.is_file():
-        errors.append("F4.1.1 or F4.1.2 provider is missing")
+    if not core_path.is_file() or not endpoint_path.is_file() or not qemu_path.is_file():
+        errors.append("F4.1.1, F4.1.2 or F4.1.3 provider is missing")
         return errors
     core = load(core_path)
     endpoint = load(endpoint_path)
+    qemu = load(qemu_path)
     expected_provider = [
         {
             "stage": "F4.1.1",
@@ -363,21 +376,33 @@ def check_current_evidence() -> list[str]:
             "sha256": sha256(endpoint_path),
             "status": "reviewed",
         },
+        {
+            "stage": "F4.1.3",
+            "evidence_class": "S3_QEMU_FAKE_BOUNDARY",
+            "applies_to": ["S3_C5"],
+            "path": "config/f4_1_3_s3_c5_qemu_review.json",
+            "sha256": sha256(qemu_path),
+            "status": "reviewed",
+        },
     ]
     if record.get("providers") != expected_provider:
         errors.append("integrated F4 provider record changed")
-    if record.get("accepted_claims") != core.get("accepted_claims") + endpoint.get("accepted_claims"):
+    if record.get("accepted_claims") != (
+        core.get("accepted_claims")
+        + endpoint.get("accepted_claims")
+        + qemu.get("accepted_claims")
+    ):
         errors.append("integrated F4 accepted claims changed")
-    if record.get("deferred_claims") != endpoint.get("deferred_claims"):
+    if record.get("deferred_claims") != qemu.get("deferred_claims"):
         errors.append("integrated F4 deferred claims changed")
     if record.get("execution_counts") != {
         "host_sanitized_scenarios": 19,
-        "exact_target_adapter_builds": 2,
-        "s3_qemu_fake_runs": 0,
+        "exact_target_adapter_builds": 4,
+        "s3_qemu_fake_runs": 2,
         "physical_transport_runs": 0,
     }:
         errors.append("integrated F4 execution counts changed")
-    if record.get("next") != "F4.1.3":
+    if record.get("next") != "F4.1.4":
         errors.append("integrated F4 next marker changed")
     return errors
 
@@ -435,7 +460,7 @@ def main() -> int:
         errors = check_current_evidence()
         if errors:
             return print_errors(errors)
-        print("F4 integrated evidence OK: F4.1.1 core and F4.1.2 target endpoints reviewed; QEMU/PHY remain deferred")
+        print("F4 integrated evidence OK: F4.1.1 core, F4.1.2 endpoints and F4.1.3 fake-SDIO QEMU reviewed; PHY remains deferred")
         return 0
     if not args.write:
         return print_errors(["integrated execution requires --write evidence"])
@@ -447,7 +472,7 @@ def main() -> int:
         json.dumps(record, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
-    print("F4 integrated evidence written: F4.1.1 core and F4.1.2 endpoints reviewed; phase remains in progress")
+    print("F4 integrated evidence written: core, endpoints and fake-SDIO QEMU reviewed; phase remains in progress")
     return 0
 
 

@@ -31,14 +31,14 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F4
 
-<!-- current-substep: F4.1.3 -->
+<!-- current-substep: F4.1.4 -->
 
-**Точный маркер: `F4.1.3`** — выполнить точную target matrix S3/C5 и S3 QEMU
-над fake-SDIO boundary. Проведённые endpoints используют сгенерированные
-контакты H2, однобитный SDIO 20 МГц, точный offline ESSL 1.1.2 и по восемь
-512-байтных DMA-ячеек C5 в каждом направлении. Debug-образы S3 и C5
-компилируются и линкуются; QEMU fake-SDIO и физический SDIO пока не заявлены.
-Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.1.4`** — выполнить названный физический dev-board gate
+S3-C5. Четыре locked debug/release builds S3/C5 проходят, а точный S3 QEMU
+исполняет шесть fake-SDIO traffic/fault сценариев в обеих конфигурациях. Эти
+прогоны доказывают поведение приложения над fake boundary, но не SDIO signal,
+throughput, timing или сосуществование с C5 USB. Маркер и evidence меняются
+вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -71,7 +71,7 @@ peripheral или board emulation и никогда не показываетс�
     memory boundaries и debug/release policy прошли структурное ревью.
   - ✅ `F2.2.4` — Safety MSPM0C1106 project, раздельные boot/application images,
     fail-closed entry и debug/release policy прошли структурное ревью.
-  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 35 файлов,
+  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 37 файлов,
     26 artifacts и 20 debug/release command plans без target execution.
 - `F2.3` — импорт принятого генерируемого pin/BSP contract.
   - ✅ `F2.3.0` — неизменяемая H2 source identity, 5 domains, 125 contacts,
@@ -131,7 +131,7 @@ peripheral или board emulation и никогда не показываетс�
   [сводный evidence](../config/f3_2_runtime_review.json).
 - ✅ `F3.3` — новый двойной clean-build воспроизвёл 52/52 artifacts; десять
   актуальных image/RAM gates и пять статических rollback topologies помещаются.
-  S3 debug занимает 182 736 байт с запасом 6 895 152 байт до maximum; физических
+  S3 debug занимает 187 040 байт с запасом 6 890 848 байт до maximum; физических
   rollback transitions заявлено ноль. См.
   [boundary evidence](../config/f3_3_boundary_review.json).
 - ✅ `F3.4` — [глобальный итог F3](f3-boot-memory-emulation-report.ru.md)
@@ -145,8 +145,8 @@ peripheral или board emulation и никогда не показываетс�
   - ✅ `F4.1.0` — [проведены точный offline payload ESSL 1.1.2 и single-owner source boundary S3↔C5](../config/f4_1_s3_c5_source_boundary.json); [manifest 30 файлов](../third_party/esp_serial_slave_link.vendor-lock.json).
   - ✅ `F4.1.1` — [проведён общий high-speed core](../config/f4_1_1_high_speed_core_review.json): 19 сценариев ASan/UBSan; unsafe absolute-credit draft заменён накопительными duplicate-safe grants.
   - ✅ `F4.1.2` — [проведены endpoints S3 host и C5 SDIO slave](../config/f4_1_2_s3_c5_endpoint_review.json): generated pins, однобитный SDIO 20 МГц, точный ESSL и две locked debug builds; QEMU/PHY claims — ноль.
-  - ▶️ **`F4.1.3` — сейчас:** выполнить exact target builds и S3 QEMU над fake SDIO boundary.
-  - `F4.1.4` — выполнить и провести ревью физического dev-board gate S3-C5.
+  - ✅ `F4.1.3` — [проведены exact builds и fake-SDIO QEMU](../config/f4_1_3_s3_c5_qemu_review.json): четыре target builds, два S3 QEMU runs, по шесть сценариев и ноль PHY claims.
+  - ▶️ **`F4.1.4` — сейчас:** выполнить и провести ревью физического dev-board gate S3-C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
 - `F4.4` — внедрить saturation, duplicate, deadline, reset и link-loss faults.
@@ -219,7 +219,7 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F4.1.3`. Endpoints S3 SDMMC/ESSL host и C5 SDIO slave
-собираются locked debug toolchains. Текущий шаг расширяет evidence до точной
-debug/release target matrix и исполняет переносимый traffic над fake-SDIO
-boundary в S3 QEMU, не заявляя физический wire run.
+Текущая граница — `F4.1.4`. Точная debug/release target matrix и два S3 QEMU
+run над fake boundary проведены. Текущий шаг — первое физическое исполнение
+SDIO S3-C5 на названной dev-board fixture; emulator result не заменяет данные
+по signaling, timing, throughput и сосуществованию с USB.

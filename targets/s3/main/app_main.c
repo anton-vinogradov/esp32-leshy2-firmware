@@ -1,5 +1,6 @@
 #include "leshy2/system_model.h"
 #include "leshy2/hardware/s3_bsp.h"
+#include "leshy2/s3_c5_fake.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundef"
@@ -137,11 +138,27 @@ static void run_power_on_software_self_test(void)
     ESP_LOGI(TAG, "F3.2 scenario failed-update RAM rollback model PASS");
 }
 
+static void run_s3_c5_fake_boundary_review(void)
+{
+    l2_s3_c5_fake_review_t review;
+    if (!l2_s3_c5_fake_run_review(&review)) {
+        ESP_LOGE(TAG, "F4.1.3 fake-SDIO scenario FAIL");
+        abort();
+    }
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO handshake/full-cell PASS");
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO partial-cell fail-closed PASS");
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO slave-reset fail-closed PASS");
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO interrupt-loss fail-closed PASS");
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO priority-under-bulk PASS");
+    ESP_LOGI(TAG, "F4.1.3 fake-SDIO link-loss side-effect gate PASS");
+}
+
 void app_main(void)
 {
     esp_chip_info_t chip = {0};
     esp_chip_info(&chip);
     run_power_on_software_self_test();
+    run_s3_c5_fake_boundary_review();
     l2_system_model_init(&system_model, INT16_C(700), UINT32_C(0));
     ESP_LOGI(
         TAG,

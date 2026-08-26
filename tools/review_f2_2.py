@@ -56,7 +56,7 @@ def main() -> int:
 
     expected_evidence = {
         "target_projects": 5,
-        "project_files": 35,
+        "project_files": 37,
         "configurations": 2,
         "named_build_artifacts": 26,
         "rendered_configure_and_build_plans": 20,
@@ -154,7 +154,7 @@ def main() -> int:
         return fail(f"rendered command-plan count changed: {rendered_plans}")
 
     print(
-        "F2.2 integrated review OK: 5 project structures, 35 files, "
+        "F2.2 integrated review OK: 5 project structures, 37 files, "
         "26 named artifacts and 20 configure/build plans; "
         "0 pins and 0 SDK executions claimed"
     )

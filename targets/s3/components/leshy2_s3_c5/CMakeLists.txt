@@ -1,5 +1,7 @@
 idf_component_register(
-    SRCS "s3_c5_host.c"
+    SRCS
+        "s3_c5_fake.c"
+        "s3_c5_host.c"
     INCLUDE_DIRS "include"
     REQUIRES
         esp_driver_sdmmc

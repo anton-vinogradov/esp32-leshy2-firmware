@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "stage": "F4.1.3",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "locked_inputs": {
+    "endpoint_review_sha256": "fa6451c626269713643064f1e5a4215d7de94edc01a8fc7215df0b72b89fbba1",
+    "qemu_plan_sha256": "a50f404da95379350fa24755a4be67d6d702c1c7620846eee982166317c3abdd"
+  },
+  "fake_sources": [
+    {
+      "path": "targets/s3/main/app_main.c",
+      "sha256": "8aa9d243cf1617f3dece75b40fe715de2146b7c775d7288eb8efdf4f4677f2a2"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
+      "sha256": "bad75f206464b5fd4598405d1f5a26791f438317110a7a44192be691582dead6"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_fake.h",
+      "sha256": "311d89b8bb36313d153cdebcbcfddf77d30f9acd42323bd568e6242b3c4eacc8"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/s3_c5_fake.c",
+      "sha256": "a60767483e308b699b9f06c45e7d6f1e034c21ee02964d6c10662479c30df0e5"
+    }
+  ],
+  "target_builds": [
+    {
+      "target": "s3",
+      "configuration": "debug",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=s3",
+        "CONFIG=debug"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "s3",
+      "configuration": "release",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=s3",
+        "CONFIG=release"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "debug",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=c5",
+        "CONFIG=debug"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "release",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=c5",
+        "CONFIG=release"
+      ],
+      "status": "passed"
+    }
+  ],
+  "qemu_runs": [
+    {
+      "configuration": "debug",
+      "path": "config/f4_1_3_s3_debug_qemu_review.json",
+      "sha256": "5f8b62751dd84a6827b33e5938c521b2535062a70f87fac9970214cab689dea7",
+      "status": "reviewed"
+    },
+    {
+      "configuration": "release",
+      "path": "config/f4_1_3_s3_release_qemu_review.json",
+      "sha256": "73b079757f5939629aa3fa65185199c47b4b131927e3d5122d94edc1ce5684a0",
+      "status": "reviewed"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "handshake_and_full_cell",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO handshake/full-cell PASS"
+    },
+    {
+      "id": "partial_cell_fault",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO partial-cell fail-closed PASS"
+    },
+    {
+      "id": "slave_reset_fault",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO slave-reset fail-closed PASS"
+    },
+    {
+      "id": "interrupt_loss_fault",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO interrupt-loss fail-closed PASS"
+    },
+    {
+      "id": "priority_under_bulk",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO priority-under-bulk PASS"
+    },
+    {
+      "id": "link_loss_side_effect_gate",
+      "marker": "leshy2_s3: F4.1.3 fake-SDIO link-loss side-effect gate PASS"
+    }
+  ],
+  "accepted_claims": [
+    "s3_exact_target_boot_and_app_main_execution",
+    "s3_fake_sdio_handshake_and_512_byte_cell_execution",
+    "s3_fake_sdio_partial_cell_fault_closes_both_sessions",
+    "s3_fake_sdio_slave_reset_clears_session",
+    "s3_fake_sdio_interrupt_loss_closes_side_effect_gate",
+    "s3_fake_sdio_control_preempts_eight_queued_bulk_cells",
+    "s3_fake_sdio_link_loss_closes_side_effect_gate",
+    "s3_and_c5_debug_release_endpoint_images_compile_and_link"
+  ],
+  "deferred_claims": [
+    "physical_sdio_signaling",
+    "physical_sdio_throughput",
+    "physical_sdio_timing_margin",
+    "physical_interrupt_electrical_behavior",
+    "physical_c5_usb_sdio_coexistence",
+    "physical_board"
+  ],
+  "execution_counts": {
+    "exact_target_adapter_builds": 4,
+    "s3_qemu_fake_runs": 2,
+    "physical_transport_runs": 0
+  },
+  "next": "F4.1.4"
+}

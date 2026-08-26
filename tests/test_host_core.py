@@ -241,7 +241,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(52, review["totals"]["byte_reproducible_artifacts"])
         self.assertEqual(0, review["totals"]["physical_rollback_transitions"])
         targets = {target["target"]: target for target in review["targets"]}
-        self.assertEqual(182736, targets["s3"]["configurations"]["debug"]["application"]["bytes"])
+        self.assertEqual(187040, targets["s3"]["configurations"]["debug"]["application"]["bytes"])
         self.assertEqual(172224, targets["c5"]["configurations"]["debug"]["application"]["bytes"])
         self.assertTrue(targets["s3"]["external_ram"]["runtime_init_and_memory_test_proven"])
         self.assertFalse(targets["c5"]["external_ram"]["runtime_init_and_memory_test_proven"])
@@ -492,7 +492,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual("F2.2.5", review["stage"])
         self.assertEqual("reviewed", review["status"])
         self.assertEqual(5, review["evidence"]["target_projects"])
-        self.assertEqual(35, review["evidence"]["project_files"])
+        self.assertEqual(37, review["evidence"]["project_files"])
         self.assertEqual(26, review["evidence"]["named_build_artifacts"])
         self.assertEqual(20, review["evidence"]["rendered_configure_and_build_plans"])
         self.assertTrue(review["claims"]["target_projects_created"])

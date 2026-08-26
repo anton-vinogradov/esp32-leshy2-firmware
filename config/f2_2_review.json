@@ -22,7 +22,7 @@
   ],
   "evidence": {
     "target_projects": 5,
-    "project_files": 35,
+    "project_files": 37,
     "configurations": 2,
     "named_build_artifacts": 26,
     "rendered_configure_and_build_plans": 20,

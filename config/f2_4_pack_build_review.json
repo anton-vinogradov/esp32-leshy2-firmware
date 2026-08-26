@@ -22,7 +22,7 @@
         {
           "path": "build/targets/pack/debug/leshy2_pack_boot.map",
           "bytes": 8921,
-          "sha256": "e9ccf1dd2b40a6e957916f3082b1aff9f5fc4e859e3183002c3cd6c48e9ce815"
+          "sha256": "966715fda9bd6f67712d611453f2f71b9d98306162100ed765a7e47ea06c8420"
         },
         {
           "path": "build/targets/pack/debug/leshy2_pack.out",
@@ -37,7 +37,7 @@
         {
           "path": "build/targets/pack/debug/leshy2_pack.map",
           "bytes": 22017,
-          "sha256": "1032876584b31575ca8ec77e9ac7ff9fe7f7f4f3ca4e34167da2a2580fe6a80b"
+          "sha256": "f799fdcb32ff45dca3315ecb94de4d8de94ba24c3b84f99b96a855814a219061"
         }
       ],
       "image_gate": {
@@ -65,7 +65,7 @@
         {
           "path": "build/targets/pack/release/leshy2_pack_boot.map",
           "bytes": 8925,
-          "sha256": "4df19653bdf9b0966dffb29762b5f5d99314f156241d5269ca07b979424624e9"
+          "sha256": "03de67cf2776f122c286926a2d7802ee839f73ba903de495a86ea377fe5e22ec"
         },
         {
           "path": "build/targets/pack/release/leshy2_pack.out",
@@ -80,7 +80,7 @@
         {
           "path": "build/targets/pack/release/leshy2_pack.map",
           "bytes": 22021,
-          "sha256": "0f45b9437c988e703ee7a25f50ffa44e2679a3a1de6a4926d1f75ce8b07bdf97"
+          "sha256": "b257296c14abeb3297e32d81e5ffe61c6d57c241bc4ab643812bf5657612a2a4"
         }
       ],
       "image_gate": {

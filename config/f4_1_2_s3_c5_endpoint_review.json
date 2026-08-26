@@ -23,7 +23,7 @@
     },
     {
       "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
-      "sha256": "4b0a97a5148dff981841ffd4cc5392be7c6490ae189d95e4f75e76d1a5c2b58e"
+      "sha256": "bad75f206464b5fd4598405d1f5a26791f438317110a7a44192be691582dead6"
     },
     {
       "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_host.h",

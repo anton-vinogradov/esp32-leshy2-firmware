@@ -11,18 +11,18 @@
       "artifacts": [
         {
           "path": "build/targets/s3/debug/leshy2_s3.bin",
-          "bytes": 182736,
-          "sha256": "d7a3eed714687918af5b0beb673b67bb01eb79700ff09a6338236fe6c6e9eb78"
+          "bytes": 187040,
+          "sha256": "14d6809a12839dccfcf2dbbc054498a280da21e8d7beb9219791bd4c996e084c"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.elf",
-          "bytes": 3758844,
-          "sha256": "1eaff609dc746c253b8ecb4025bf4270f63f2cd9a04b4e8f60c657b74264d828"
+          "bytes": 3803576,
+          "sha256": "eb6f1e74acae0f9501961f035508e15e919ede4340ca9f7ed45cc38567187d63"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.map",
-          "bytes": 3890904,
-          "sha256": "2442636a5b82e357f80e60a2e7dba61559a74e98ef81a681616b3320f8d5d7c2"
+          "bytes": 3918984,
+          "sha256": "67d03db45d8fb78de86f45bfd2454182ef0cb94e3c594a4f63afb7b4252a890a"
         },
         {
           "path": "build/targets/s3/debug/bootloader/bootloader.bin",
@@ -37,7 +37,7 @@
       ],
       "image_gate": {
         "image": "build/targets/s3/debug/leshy2_s3.bin",
-        "size_bytes": 182736,
+        "size_bytes": 187040,
         "result": "ok",
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
@@ -56,18 +56,18 @@
       "artifacts": [
         {
           "path": "build/targets/s3/release/leshy2_s3.bin",
-          "bytes": 140528,
-          "sha256": "9c30371a0ce12d2229101da0e8cead64c702fdfffe678df1f42064114b1e12b9"
+          "bytes": 144016,
+          "sha256": "6a95e2eeef9e44c57f69722044cb7e35793bf7c0806aecbe95ee619411e16b94"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.elf",
-          "bytes": 3633204,
-          "sha256": "51527dab70269d7d6b475f5c800ccbd8fe5e19eb381401fe0848d99cdcbfb329"
+          "bytes": 3672240,
+          "sha256": "3a7e1ffd939fed788de98c284f54e6ba256a406cc07736ca5af635d8191797de"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.map",
-          "bytes": 3630153,
-          "sha256": "4cd4c86837012868c1265bce4019dbce8c526f63956890910e24b7d7f8c6265f"
+          "bytes": 3653145,
+          "sha256": "0c51904175e0ee6a8b602c35b25760e45f1e26e71becc6f1f37335d77e87860a"
         },
         {
           "path": "build/targets/s3/release/bootloader/bootloader.bin",
@@ -82,7 +82,7 @@
       ],
       "image_gate": {
         "image": "build/targets/s3/release/leshy2_s3.bin",
-        "size_bytes": 140528,
+        "size_bytes": 144016,
         "result": "ok",
         "warning_bytes": 6291456,
         "maximum_image_bytes": 7077888,
@@ -169,11 +169,19 @@
       },
       {
         "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
-        "sha256": "4b0a97a5148dff981841ffd4cc5392be7c6490ae189d95e4f75e76d1a5c2b58e"
+        "sha256": "bad75f206464b5fd4598405d1f5a26791f438317110a7a44192be691582dead6"
+      },
+      {
+        "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_fake.h",
+        "sha256": "311d89b8bb36313d153cdebcbcfddf77d30f9acd42323bd568e6242b3c4eacc8"
       },
       {
         "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_host.h",
         "sha256": "d4e03f1c6fffc567a02537e9e48a61a56d4d6cf2e83cd17123d77822567a734b"
+      },
+      {
+        "path": "targets/s3/components/leshy2_s3_c5/s3_c5_fake.c",
+        "sha256": "a60767483e308b699b9f06c45e7d6f1e034c21ee02964d6c10662479c30df0e5"
       },
       {
         "path": "targets/s3/components/leshy2_s3_c5/s3_c5_host.c",
@@ -185,7 +193,7 @@
       },
       {
         "path": "targets/s3/main/app_main.c",
-        "sha256": "52181bc2f0ff717d50d7d91224a3fdf5b4e63b68d515d0b9c8faa6f86d282f3b"
+        "sha256": "8aa9d243cf1617f3dece75b40fe715de2146b7c775d7288eb8efdf4f4677f2a2"
       },
       {
         "path": "targets/s3/sdkconfig.debug",
@@ -200,7 +208,7 @@
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "ece220ab492cf8dc0f8a0e53d2cfa141d9cb378ba6f32b862d2d178413bb2a4a"
+    "manifest_sha256": "2c7c1f4440d8fe3acb0c50f4f9cc6d0f1d488eef243b1934f7be00da6b42e266"
   },
   "execution": {
     "configure_runs": 2,
