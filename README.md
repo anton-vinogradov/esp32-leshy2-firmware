@@ -35,10 +35,11 @@ from this table; internal substeps only move the exact marker.
 Hardware H2/H3 now use independent `SA818S-V` and `SA818S-U` paths with a
 local one-hot selector and no new MCU or M1 contact. Hardware H4 is reviewed
 against the existing F3 package; hardware is now at `H5.0.3-R1`, with the
-dual-SA818S residual map reviewed and primary-source research being rebuilt;
-component evidence for the 210-line dual-SA818S BOM. Former SA518-based H5
-evidence is superseded. Purchasing, quote/reservation, layout and
-fabrication remain blocked.
+dual-SA818S residual/source reviews complete, a 33-line `$286.43` evidence
+basket, and exact routes for all 210 BOM lines / 1052 placements. SA818S-V
+pre-order lead time and J4-F/J4-P factory responses remain open. Former
+SA518-based H5 evidence is superseded. Purchasing, quote/reservation, layout
+and fabrication remain blocked.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named
