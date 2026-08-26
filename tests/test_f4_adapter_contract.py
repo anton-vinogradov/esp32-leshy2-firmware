@@ -28,7 +28,10 @@ class F4AdapterContractTests(unittest.TestCase):
             set(contract["common_lifecycle"]["states"]) - {"READY"},
             set(contract["common_lifecycle"]["side_effect_closed_states"]),
         )
-        self.assertEqual(0, contract["high_speed_adapters"]["bulk_credit"]["initial_after_reset"])
+        credit = contract["high_speed_adapters"]["bulk_credit"]
+        self.assertEqual(0, credit["initial_granted_total"])
+        self.assertEqual(0, credit["initial_consumed_total"])
+        self.assertEqual(8, credit["maximum_outstanding"])
         self.assertEqual(0, contract["counts"]["physical_transport_runs"])
         self.assertTrue(all(value is False for value in contract["authorization"].values()))
 

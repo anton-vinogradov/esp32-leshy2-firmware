@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "phase": "F4",
+  "current_substep": "F4.1.2",
+  "status": "in_progress",
+  "matrix_sha256": "1c1b5db5f283a92174d525b9c937a3be0f0bfbfec7adfeec649a096639e635d2",
+  "providers": [
+    {
+      "stage": "F4.1.1",
+      "evidence_class": "HOST_SANITIZED_MODEL",
+      "applies_to": [
+        "S3_C5",
+        "S3_RP"
+      ],
+      "path": "config/f4_1_1_high_speed_core_review.json",
+      "sha256": "24c302b8135e049721053ce06ed10c8e9d43f998da4448a9b287403365c38f14",
+      "status": "reviewed"
+    }
+  ],
+  "accepted_claims": [
+    "portable seven-state high-speed lifecycle implemented",
+    "fixed 4/8/8/4/8 per-direction queue ownership implemented",
+    "duplicate-safe cumulative bulk grants implemented",
+    "pending/result duplicate handling and deadlines implemented",
+    "19 host scenarios pass ASan and UBSan"
+  ],
+  "deferred_claims": [
+    "S3 and C5 target adapter build",
+    "ESSL integration",
+    "S3 QEMU fake-SDIO integration",
+    "physical SDIO execution and timing"
+  ],
+  "execution_counts": {
+    "host_sanitized_scenarios": 19,
+    "exact_target_adapter_builds": 0,
+    "s3_qemu_fake_runs": 0,
+    "physical_transport_runs": 0
+  },
+  "next": "F4.1.2",
+  "runner": "tools/run_f4_acceptance.py"
+}

@@ -12,12 +12,12 @@
         {
           "path": "build/targets/c5/debug/leshy2_c5.bin",
           "bytes": 172224,
-          "sha256": "bea1fd9957c89c5bea314bdb32ebff37172df095b1820aad792fde55afbff1f0"
+          "sha256": "0c9690503f19b893ad92d53702779d248be3cdc97729848a3bc88dd88642270f"
         },
         {
           "path": "build/targets/c5/debug/leshy2_c5.elf",
           "bytes": 4252636,
-          "sha256": "3e68c40c0c5929ce60d3860454eb7acd89554b09d7356d8064cc8b61877a97f6"
+          "sha256": "00d5e03338f6d3db86d63b8eedd0576a1aa48474cd2e815bbb0d311de130cd6f"
         },
         {
           "path": "build/targets/c5/debug/leshy2_c5.map",
@@ -57,12 +57,12 @@
         {
           "path": "build/targets/c5/release/leshy2_c5.bin",
           "bytes": 125616,
-          "sha256": "6d8acc31a1c17df67059060fca0c3ea9b90c51dc4225cb3fd8c172c6c33fda76"
+          "sha256": "3d4e172d9d4f29896bd3cc2f88bf6afe6a3c5ffab43ee0c068207d2afbdde730"
         },
         {
           "path": "build/targets/c5/release/leshy2_c5.elf",
           "bytes": 4031692,
-          "sha256": "2d3d93430899f5b6416e46bdc82f15f3984d145f885f4f05846f7cbb09f4dfc9"
+          "sha256": "3f604fb8c134aae2e0bf9e463fd1d0b4ef683fb8899799a260c38b4750b50547"
         },
         {
           "path": "build/targets/c5/release/leshy2_c5.map",
@@ -100,6 +100,10 @@
   "project_inputs": {
     "files": [
       {
+        "path": "common/include/leshy2/high_speed_adapter.h",
+        "sha256": "6c1d17c9dfe0e73525a45a9d3fdd8e01043d8228d946d7669506c9f444377b7e"
+      },
+      {
         "path": "common/include/leshy2/l2ip.h",
         "sha256": "5ef249d678be7300f99b798218295e3dfa30f96c75269df0395937d54a03918e"
       },
@@ -114,6 +118,10 @@
       {
         "path": "common/include/leshy2/update_core.h",
         "sha256": "2bf34673117c75574117d6e8657f15931deed2790384f8b806f78b5782dacf87"
+      },
+      {
+        "path": "common/src/high_speed_adapter.c",
+        "sha256": "059c25bd4440c1214023f700b83b966e2e1f05173f49fa405323d5b8aa6ad5c9"
       },
       {
         "path": "common/src/l2ip.c",
@@ -180,7 +188,7 @@
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "51bdce22a90688bbb765bcd21a1860e41bb0506a5f699da1017f86aebb6d8975"
+    "manifest_sha256": "d0ca7519873edef3c636fb72a9e8718694b77b79c966a05ffde1aaed21dc06f2"
   },
   "execution": {
     "configure_runs": 2,

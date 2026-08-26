@@ -152,12 +152,18 @@ def main() -> int:
         errors.append("invalid RX ownership cycle changed")
 
     credit = high_speed.get("bulk_credit", {})
-    if credit.get("initial_after_reset") != 0 or credit.get("maximum") != classes.get(4, {}).get("buffers"):
+    if credit.get("initial_granted_total") != 0 or credit.get("initial_consumed_total") != 0:
+        errors.append("bulk-credit counters must reset to zero")
+    if credit.get("maximum_outstanding") != classes.get(4, {}).get("buffers"):
         errors.append("bulk-credit reset or maximum changed")
+    if credit.get("counter_width_bits") != 32:
+        errors.append("bulk-credit counter width changed")
     if "before" not in credit.get("consume_rule", "") or "FREE" not in credit.get("replenish_rule", ""):
         errors.append("bulk-credit ownership ordering is incomplete")
-    if "zero" not in credit.get("reset_rule", ""):
-        errors.append("bulk credit must reset to zero")
+    if "granted_total minus locally consumed_total" not in credit.get("update_rule", ""):
+        errors.append("bulk credit must remain duplicate-safe with cells in flight")
+    if "do not wrap" not in credit.get("wrap_rule", ""):
+        errors.append("bulk-credit wrap boundary is missing")
 
     duplicates = high_speed.get("duplicate_and_result_policy", {})
     if duplicates.get("maximum_outstanding_side_effect_requests") != 8:

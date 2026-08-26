@@ -54,14 +54,14 @@ target artifacts воспроизводятся. Периферия и boot че
 
 ### Текущая фаза F4 — детальная позиция
 
-<!-- current-substep: F4.1.1 -->
+<!-- current-substep: F4.1.2 -->
 
-**Точный маркер: `F4.1.1`** — реализовать и прогнать с sanitizers
-target-neutral high-speed adapter core. На `F4.1.0` импортирован точный payload
-ESSL 1.1.2 из 30 файлов с автоматическим manifest нормализованного содержимого;
-floating Registry resolution остаётся выключенным. Adapter build, QEMU
-transport и физический SDIO run пока не заявлены. Маркер и evidence меняются
-вместе в каждом commit.
+**Точный маркер: `F4.1.2`** — реализовать endpoints S3 host и C5 SDIO slave.
+Общий core из семи состояний теперь проходит 19 сценариев ASan/UBSan. На
+саморевью bulk flow control исправлен: небезопасное абсолютное число свободных
+буферов заменено duplicate-safe моделью `granted_total − consumed_total`.
+Exact target builds, QEMU fake-SDIO и физический SDIO пока не заявлены. Маркер
+и evidence меняются вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -163,8 +163,8 @@ transport и физический SDIO run пока не заявлены. Ма�
   - ✅ `F4.0.2` — [проведены единый runner, шесть классов evidence и 37 сценариев](config/f4_0_2_acceptance_matrix.json); [baseline snapshot](config/f4_0_2_acceptance_snapshot.json) заявляет ноль transport runs.
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
   - ✅ `F4.1.0` — [проведены точный offline payload ESSL 1.1.2 и single-owner source boundary S3↔C5](config/f4_1_s3_c5_source_boundary.json); [manifest 30 файлов](third_party/esp_serial_slave_link.vendor-lock.json).
-  - ▶️ **`F4.1.1` — сейчас:** реализовать и прогнать с sanitizers общий high-speed adapter core.
-  - `F4.1.2` — реализовать endpoints S3 host и C5 SDIO slave.
+  - ✅ `F4.1.1` — [проведён общий high-speed core](config/f4_1_1_high_speed_core_review.json): 19 сценариев ASan/UBSan; unsafe absolute-credit draft заменён накопительными duplicate-safe grants.
+  - ▶️ **`F4.1.2` — сейчас:** реализовать endpoints S3 host и C5 SDIO slave.
   - `F4.1.3` — выполнить exact target builds и S3 QEMU над fake SDIO boundary.
   - `F4.1.4` — выполнить и провести ревью физического dev-board gate S3-C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.

@@ -14,6 +14,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = REPO_ROOT / "config" / "f4_0_2_acceptance_matrix.json"
 SNAPSHOT_PATH = REPO_ROOT / "config" / "f4_0_2_acceptance_snapshot.json"
+CURRENT_EVIDENCE_PATH = REPO_ROOT / "config" / "f4_acceptance_current.json"
 
 
 def load(path: Path) -> dict:
@@ -263,6 +264,81 @@ def dry_run_plan() -> dict:
     }
 
 
+def create_current_evidence() -> dict:
+    command = [sys.executable, "tools/review_f4_1_core.py", "--run", "--write"]
+    result = subprocess.run(
+        command,
+        cwd=REPO_ROOT,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if result.returncode != 0:
+        raise RuntimeError("F4.1.1 evidence provider failed:\n" + result.stdout)
+    provider_path = REPO_ROOT / "config" / "f4_1_1_high_speed_core_review.json"
+    provider = load(provider_path)
+    return {
+        "schema_version": 1,
+        "phase": "F4",
+        "current_substep": "F4.1.2",
+        "status": "in_progress",
+        "matrix_sha256": sha256(MATRIX_PATH),
+        "providers": [
+            {
+                "stage": provider["stage"],
+                "evidence_class": "HOST_SANITIZED_MODEL",
+                "applies_to": ["S3_C5", "S3_RP"],
+                "path": str(provider_path.relative_to(REPO_ROOT)),
+                "sha256": sha256(provider_path),
+                "status": provider["status"],
+            }
+        ],
+        "accepted_claims": provider["accepted_claims"],
+        "deferred_claims": provider["deferred_claims"],
+        "execution_counts": provider["execution_counts"],
+        "next": provider["next"],
+        "runner": "tools/run_f4_acceptance.py",
+    }
+
+
+def check_current_evidence() -> list[str]:
+    if not CURRENT_EVIDENCE_PATH.is_file():
+        return ["current integrated F4 evidence does not exist"]
+    record = load(CURRENT_EVIDENCE_PATH)
+    provider_path = REPO_ROOT / "config" / "f4_1_1_high_speed_core_review.json"
+    errors: list[str] = []
+    if record.get("phase") != "F4" or record.get("current_substep") != "F4.1.2":
+        errors.append("integrated F4 marker changed")
+    if record.get("status") != "in_progress":
+        errors.append("partial F4 evidence may not close the top-level phase")
+    if record.get("matrix_sha256") != sha256(MATRIX_PATH):
+        errors.append("integrated F4 matrix hash changed")
+    if not provider_path.is_file():
+        errors.append("F4.1.1 provider is missing")
+        return errors
+    provider = load(provider_path)
+    expected_provider = [{
+        "stage": "F4.1.1",
+        "evidence_class": "HOST_SANITIZED_MODEL",
+        "applies_to": ["S3_C5", "S3_RP"],
+        "path": "config/f4_1_1_high_speed_core_review.json",
+        "sha256": sha256(provider_path),
+        "status": "reviewed",
+    }]
+    if record.get("providers") != expected_provider:
+        errors.append("integrated F4 provider record changed")
+    if record.get("accepted_claims") != provider.get("accepted_claims"):
+        errors.append("integrated F4 accepted claims changed")
+    if record.get("deferred_claims") != provider.get("deferred_claims"):
+        errors.append("integrated F4 deferred claims changed")
+    if record.get("execution_counts") != provider.get("execution_counts"):
+        errors.append("integrated F4 execution counts changed")
+    if record.get("next") != "F4.1.2":
+        errors.append("integrated F4 next marker changed")
+    return errors
+
+
 def print_errors(errors: list[str]) -> int:
     for error in errors:
         print(f"ERROR: {error}", file=sys.stderr)
@@ -312,12 +388,24 @@ def main() -> int:
         )
         print("F4.0.2 acceptance snapshot written: 2 static checks; 0 execution claims")
         return 0
-    return print_errors(
-        [
-            "integrated execution is intentionally unavailable until F4.1 adds "
-            "the first adapter evidence provider"
-        ]
+    if args.check_evidence:
+        errors = check_current_evidence()
+        if errors:
+            return print_errors(errors)
+        print("F4 integrated evidence OK: F4.1.1 host provider reviewed; target/QEMU/PHY remain deferred")
+        return 0
+    if not args.write:
+        return print_errors(["integrated execution requires --write evidence"])
+    try:
+        record = create_current_evidence()
+    except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+        return print_errors([str(error)])
+    CURRENT_EVIDENCE_PATH.write_text(
+        json.dumps(record, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
     )
+    print("F4 integrated evidence written: F4.1.1 host provider reviewed; phase remains in progress")
+    return 0
 
 
 if __name__ == "__main__":

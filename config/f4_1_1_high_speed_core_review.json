@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "stage": "F4.1.1",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "contract_sha256": "d27a8de18ef58f06628b102ccca5dcb4a7ec8af6acc45635ae7063c9176392aa",
+  "sources": [
+    {
+      "path": "common/include/leshy2/high_speed_adapter.h",
+      "sha256": "6c1d17c9dfe0e73525a45a9d3fdd8e01043d8228d946d7669506c9f444377b7e"
+    },
+    {
+      "path": "common/src/high_speed_adapter.c",
+      "sha256": "059c25bd4440c1214023f700b83b966e2e1f05173f49fa405323d5b8aa6ad5c9"
+    },
+    {
+      "path": "host/tests/test_high_speed_adapter.c",
+      "sha256": "277c36b5fa3f3211378d63653d1405a43b0780009ba247a6c513d91db8adc98f"
+    }
+  ],
+  "command": [
+    "make",
+    "host-sanitize"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "success_marker": "host high-speed adapter: 19 scenarios passed",
+  "scenarios": [
+    "fresh_boot_handshake_and_non_ready_gate",
+    "incompatible_handshake_faults_closed",
+    "reset_cannot_jump_to_ready",
+    "tx_ownership_requires_phy_completion",
+    "rx_ownership_requires_validation_dispatch_release",
+    "safety_queue_exhaustion_faults_closed",
+    "control_queue_exhaustion_faults_closed",
+    "interactive_queue_backpressure",
+    "telemetry_overflow_preserves_newest",
+    "bulk_zero_credit_does_not_block_control",
+    "bulk_credit_returns_only_after_rx_release",
+    "monotonic_remote_grant_is_duplicate_safe",
+    "pending_duplicate_coalesces",
+    "cached_duplicate_returns_same_result",
+    "evicted_duplicate_is_stale",
+    "deadline_expiry_prevents_commit",
+    "post_commit_result_survives_deadline",
+    "peer_boot_change_clears_session_credit_and_results",
+    "liveness_gap_faults_closed"
+  ],
+  "review_finding": {
+    "id": "F4-FND-0001",
+    "problem": "an absolute free-buffer value can re-grant capacity while cells are in flight",
+    "correction": "CREDIT now carries monotonic granted_total and sender availability is granted_total minus locally consumed_total",
+    "functional_or_cost_change": "no hardware, memory-pool or BOM change; duplicate credit updates can no longer over-admit bulk RX"
+  },
+  "accepted_claims": [
+    "portable seven-state high-speed lifecycle implemented",
+    "fixed 4/8/8/4/8 per-direction queue ownership implemented",
+    "duplicate-safe cumulative bulk grants implemented",
+    "pending/result duplicate handling and deadlines implemented",
+    "19 host scenarios pass ASan and UBSan"
+  ],
+  "deferred_claims": [
+    "S3 and C5 target adapter build",
+    "ESSL integration",
+    "S3 QEMU fake-SDIO integration",
+    "physical SDIO execution and timing"
+  ],
+  "execution_counts": {
+    "host_sanitized_scenarios": 19,
+    "exact_target_adapter_builds": 0,
+    "s3_qemu_fake_runs": 0,
+    "physical_transport_runs": 0
+  },
+  "next": "F4.1.2"
+}

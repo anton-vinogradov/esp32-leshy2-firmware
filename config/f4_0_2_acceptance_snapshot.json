@@ -2,7 +2,7 @@
   "schema_version": 1,
   "stage": "F4.0.2",
   "status": "reviewed_plan",
-  "matrix_sha256": "2b239a02e6e07b48d9d7ced880262ceb102ca1d5df789850548135f07b453200",
+  "matrix_sha256": "1c1b5db5f283a92174d525b9c937a3be0f0bfbfec7adfeec649a096639e635d2",
   "locked_inputs": [
     {
       "id": "L2IP",
@@ -17,7 +17,7 @@
     {
       "id": "F4_ADAPTER",
       "path": "config/f4_0_1_adapter_contract.json",
-      "sha256": "5e3c5e816e28973b2b4e2ab5e3e2887cf1e2a799bb390950ecc9834a9c117cd7"
+      "sha256": "d27a8de18ef58f06628b102ccca5dcb4a7ec8af6acc45635ae7063c9176392aa"
     }
   ],
   "checks": [

@@ -23,7 +23,7 @@ CHECKS = (
     ),
     (
         ("python3", "tools/check_source_layout.py"),
-        "source layout OK: 8 portable files",
+        "source layout OK: 10 portable files",
     ),
     (
         ("python3", "tools/check_build_policy.py"),
@@ -89,8 +89,9 @@ def main() -> int:
             return fail(f"check did not report expected evidence: {' '.join(command)}")
 
     print(
-        "F2.1 integrated review OK: 8 portable files, 24 host scenarios, "
-        "5 targets, 3 SDK families; no target project/build/emulator claim"
+        "F2.1 integrated review OK: 8-file reviewed baseline, 10 current "
+        "portable files after the owned F4 extension, 24 baseline host scenarios, "
+        "5 targets, 3 SDK families; no F2 target project/build/emulator claim"
     )
     return 0
 

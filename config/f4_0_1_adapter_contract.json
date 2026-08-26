@@ -103,13 +103,17 @@
     },
     "bulk_credit": {
       "unit": "one 512-byte receiver buffer",
-      "initial_after_reset": 0,
-      "maximum": 8,
-      "seed_rule": "after READY, the receiver advertises an absolute current-session credit equal to its free bulk receive buffers",
-      "consume_rule": "the sender atomically consumes one current-session credit before a bulk cell enters QUEUED",
-      "replenish_rule": "the receiver advertises replacement credit only after the corresponding receive buffer returns to FREE",
-      "update_rule": "credit is an absolute value scoped by peer boot ID and session; duplicate, stale or previous-session CREDIT messages cannot add capacity",
-      "reset_rule": "reset, link loss and boot-ID change immediately set local and advertised credit to zero"
+      "counter_width_bits": 32,
+      "initial_granted_total": 0,
+      "initial_consumed_total": 0,
+      "maximum_outstanding": 8,
+      "seed_rule": "after READY, the receiver sets current-session granted_total to its eight free bulk receive buffers",
+      "consume_rule": "the sender increments current-session consumed_total before a bulk cell enters QUEUED and only when granted_total minus consumed_total is positive",
+      "replenish_rule": "the receiver increments granted_total by one only after the corresponding receive buffer returns to FREE",
+      "update_rule": "CREDIT carries monotonic current-session granted_total; sender availability is granted_total minus locally consumed_total, so duplicate or stale CREDIT messages cannot add capacity",
+      "cancel_rule": "a bulk cell cancelled before PHY_OWNED releases its one local consumed reservation; a cell that reached PHY_OWNED never receives a speculative refund",
+      "wrap_rule": "grant counters do not wrap within a session; renegotiation creates a fresh boot/session before uint32 exhaustion",
+      "reset_rule": "reset, link loss and boot-ID change immediately set granted_total and consumed_total to zero"
     },
     "duplicate_and_result_policy": {
       "maximum_outstanding_side_effect_requests": 8,

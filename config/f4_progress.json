@@ -2,7 +2,7 @@
   "schema_version": 1,
   "phase": "F4",
   "status": "in_progress",
-  "current_substep": "F4.1.1",
+  "current_substep": "F4.1.2",
   "updated_on": "2026-08-26",
   "substeps": {
     "F4.0.0": {
@@ -37,8 +37,13 @@
         "tools/vendor_essl.py"
       ]
     },
-    "F4.1.1": {"status": "current", "goal": "implement and sanitize the common high-speed adapter core"},
-    "F4.1.2": {"status": "waiting_for_F4.1.1", "goal": "implement S3 host and C5 SDIO slave endpoints"},
+    "F4.1.1": {
+      "status": "reviewed",
+      "result": "the target-neutral seven-state core implements fixed queues, ownership, cumulative duplicate-safe bulk grants, duplicate/result handling, deadlines, reset and liveness; 19 scenarios pass ASan/UBSan",
+      "artifact": "config/f4_1_1_high_speed_core_review.json",
+      "finding": "F4-FND-0001 replaced unsafe absolute free-buffer credit updates with monotonic granted_total minus locally consumed_total"
+    },
+    "F4.1.2": {"status": "current", "goal": "implement S3 host and C5 SDIO slave endpoints"},
     "F4.1.3": {"status": "waiting_for_F4.1.2", "goal": "run exact target builds and S3 QEMU above the fake SDIO boundary"},
     "F4.1.4": {"status": "waiting_for_F4.1.3", "goal": "run and review the named S3-C5 dev-board physical gate"},
     "F4.2": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-RP SPI plus alert"},
@@ -55,9 +60,12 @@
     "integrated_acceptance_runner": true,
     "vendored_essl_files": 30,
     "floating_component_resolution": false,
+    "high_speed_core_reviewed": true,
+    "high_speed_host_sanitized_scenarios": 19,
+    "bulk_credit_model": "monotonic_granted_minus_consumed",
     "exact_sdk_endpoint_bindings": 8,
     "qemu_phy_paths": 0,
     "physical_transport_runs": 0
   },
-  "next": "implement the target-neutral seven-state high-speed adapter, fixed queue ownership, bulk credits, duplicate-result handling and deadline/reset behavior, then execute all common host scenarios under sanitizers"
+  "next": "wire the reviewed common core to a repository-relative vendored ESSL SDIO host on S3 and the locked ESP-IDF SDIO slave FIFO/DMA API on C5, using only generated H2 contacts and no floating dependencies"
 }

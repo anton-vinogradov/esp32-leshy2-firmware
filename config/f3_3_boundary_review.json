@@ -6,17 +6,17 @@
   "inputs": {
     "reproducibility_evidence": {
       "path": "config/f2_5_reproducibility_review.json",
-      "sha256": "4fb34163e082bc99c99b75d0cf41041895b4a8021b05e4a5c2f1e9ea5f507916"
+      "sha256": "ddc43e3e2004bc704e596491e43b576813be3154678cf666d3e089d086c88afd"
     },
     "runtime_evidence": {
       "path": "config/f3_2_runtime_review.json",
-      "sha256": "c0e4bf4664d414b91e26785fda53bbd31e12a3068726958ada90a9898b0f409c"
+      "sha256": "c52a213e2dd350c3f3dd6d3e4fc4715b1a0c49aa77f530708a775e11d00eedbe"
     }
   },
   "targets": [
     {
       "target": "s3",
-      "project_input_manifest_sha256": "03f6fb368c5e25f9e4ddf422e793f520ef87fbb0262b76a194c679e6a8627fc8",
+      "project_input_manifest_sha256": "82f896ffc0ed59695e19dd5472a90592b5d33538047138a2a3b71f3b81cfa036",
       "flash_bytes": 16777216,
       "partition_table": {
         "path": "config/partitions_16m.csv",
@@ -126,12 +126,12 @@
           "application": {
             "path": "build/targets/s3/debug/leshy2_s3.bin",
             "bytes": 182736,
-            "sha256": "2662808840536f48d761b5dc38a8765b6ff4f897785e20c998775f9a551f54dc"
+            "sha256": "49d0199c6975da5629bdad6fc79b3e9a05b23bc2d89c2c1ca34b736c26a59fb2"
           },
           "target_elf": {
             "path": "build/targets/s3/debug/leshy2_s3.elf",
             "bytes": 3758844,
-            "sha256": "9b5f794dd9c89d61cd9b565c2919c1108b5df5688c860b76b0074a9053179944"
+            "sha256": "429e9774a081f88ba1797a981321f0307a50d7896302fdf2d36f3d9884c08b69"
           },
           "map_sha256": "55bb80cf8c2645765e83eb0c9674ba6401c00854a51115ee4163da7eeeb1e61a",
           "image_gate": {
@@ -179,12 +179,12 @@
           "application": {
             "path": "build/targets/s3/release/leshy2_s3.bin",
             "bytes": 140528,
-            "sha256": "3e5e95ac1cdbfa6191ae90d3f86273bc54e0702c5839263ed06ad960dbd4f768"
+            "sha256": "c902ee69235a5b3c428feef2bf0311ba79809f9e4c4467e4a8831fef4474debc"
           },
           "target_elf": {
             "path": "build/targets/s3/release/leshy2_s3.elf",
             "bytes": 3633204,
-            "sha256": "ffa86f28fc420e7e71e52a5ce5dc22390f19a3b8626beb4f3bd32a85d694cb05"
+            "sha256": "c6ca2eb6af0444564dc2b90fac00eba064b3919463558efb2aa9c97e8dcfa74f"
           },
           "map_sha256": "3fab41ab54c81f9cde04094ab0c184b5573055649c7732bae545ec8bc43501f7",
           "image_gate": {
@@ -232,7 +232,7 @@
     },
     {
       "target": "c5",
-      "project_input_manifest_sha256": "51bdce22a90688bbb765bcd21a1860e41bb0506a5f699da1017f86aebb6d8975",
+      "project_input_manifest_sha256": "d0ca7519873edef3c636fb72a9e8718694b77b79c966a05ffde1aaed21dc06f2",
       "flash_bytes": 8388608,
       "partition_table": {
         "path": "config/partitions_8m_c5.csv",
@@ -334,12 +334,12 @@
           "application": {
             "path": "build/targets/c5/debug/leshy2_c5.bin",
             "bytes": 172224,
-            "sha256": "bea1fd9957c89c5bea314bdb32ebff37172df095b1820aad792fde55afbff1f0"
+            "sha256": "0c9690503f19b893ad92d53702779d248be3cdc97729848a3bc88dd88642270f"
           },
           "target_elf": {
             "path": "build/targets/c5/debug/leshy2_c5.elf",
             "bytes": 4252636,
-            "sha256": "3e68c40c0c5929ce60d3860454eb7acd89554b09d7356d8064cc8b61877a97f6"
+            "sha256": "00d5e03338f6d3db86d63b8eedd0576a1aa48474cd2e815bbb0d311de130cd6f"
           },
           "map_sha256": "97512222fb24436d5e10565ac8d0a1d406312e87241b8fa4ccb282a5015ebbf4",
           "image_gate": {
@@ -375,12 +375,12 @@
           "application": {
             "path": "build/targets/c5/release/leshy2_c5.bin",
             "bytes": 125616,
-            "sha256": "6d8acc31a1c17df67059060fca0c3ea9b90c51dc4225cb3fd8c172c6c33fda76"
+            "sha256": "3d4e172d9d4f29896bd3cc2f88bf6afe6a3c5ffab43ee0c068207d2afbdde730"
           },
           "target_elf": {
             "path": "build/targets/c5/release/leshy2_c5.elf",
             "bytes": 4031692,
-            "sha256": "2d3d93430899f5b6416e46bdc82f15f3984d145f885f4f05846f7cbb09f4dfc9"
+            "sha256": "3f604fb8c134aae2e0bf9e463fd1d0b4ef683fb8899799a260c38b4750b50547"
           },
           "map_sha256": "63d385a0e360b93a243a695f4dea50a61a80f9d71ad66bf322b638f8e1152aaa",
           "image_gate": {
@@ -416,7 +416,7 @@
     },
     {
       "target": "rp",
-      "project_input_manifest_sha256": "7fc7c0889072499248b8deb6a90267fa263d77dd1d82cb8db95d3c4fbc7d25ab",
+      "project_input_manifest_sha256": "2cd1081bf56c71c8aeaa22c349aebc0df67ecc9b7ebf0685cf042f779f113706",
       "flash_bytes": 2097152,
       "partition_table": {
         "path": "config/rp2354b_partitions.json",
@@ -443,12 +443,12 @@
           "application": {
             "path": "build/targets/rp/debug/leshy2_rp.bin",
             "bytes": 18484,
-            "sha256": "6976e4a6e4f47043de1ed53dd6616603637bce792ecd753de2163ef2d5720472"
+            "sha256": "09cecbeef4c11ec3b4d8398583439c9e1a17b5bd9a00430dd122af080de85901"
           },
           "target_elf": {
             "path": "build/targets/rp/debug/leshy2_rp.elf",
             "bytes": 1737812,
-            "sha256": "a4c65c4d0b5e6ce0b6247ba5d94545c929f07af830a4f5275ed12ac7aecb8f86"
+            "sha256": "684cb520dd7ea157eb19c311f57b911513f229fcc3c909266807569588bf27d2"
           },
           "map_sha256": "c695136c3d0b42767b49aabd40155d2fbe211909cd245a00e2d15b15a8f5a30e",
           "image_gate": {
@@ -471,12 +471,12 @@
           "application": {
             "path": "build/targets/rp/release/leshy2_rp.bin",
             "bytes": 10676,
-            "sha256": "67d0da2df53469f7618b7a8a4e09ace7b3b253920b00f8dcca836b96fc87bdb2"
+            "sha256": "b17fe04a4196dfa426a774f29db12b0a1a0c66aeb6220dadd2e1c89fde3ab97a"
           },
           "target_elf": {
             "path": "build/targets/rp/release/leshy2_rp.elf",
             "bytes": 335312,
-            "sha256": "2d87849efea0817a50978cf6415ba8d4654fb59055104d589ff26d82e30613df"
+            "sha256": "90b62fcfc2498ed0af6fd9085cc3455df439cd7010c8930aa9c2576265bf48a0"
           },
           "map_sha256": "1726f72abcc6f2a334d3b8ed765b59b20ac537d4140816af206830ab4c8e58c2",
           "image_gate": {
@@ -499,7 +499,7 @@
     },
     {
       "target": "pack",
-      "project_input_manifest_sha256": "88294128d0f50c0736e871f4511d892ede4b690ca60a398047e1cefe213a9685",
+      "project_input_manifest_sha256": "8a948e6fa8da64af2bbeb51659942600300d0cce31898c066b0362a09efed58f",
       "flash_bytes": 65536,
       "sram_bytes": 8192,
       "memory_map": {
@@ -551,8 +551,8 @@
             "bytes": 256,
             "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
           },
-          "application_map_sha256": "68c2fb80440812806e9fd2814aad1ae7b1878754a9783e5320ad56819b1cb066",
-          "boot_map_sha256": "c451a479633344a02c95ddef318d2a957db669153c49c88e773dc1bd423628f0",
+          "application_map_sha256": "25ce5758b38e87f01f60f049b673a565f5087b7d0c9b94582c77d68e647c224c",
+          "boot_map_sha256": "3a5d6497b86c4d2444a190a6b4212b2171ee016c6d3f4fd6af51074e9a024368",
           "image_gate": {
             "result": "ok",
             "slot_bytes": 22528,
@@ -600,8 +600,8 @@
             "bytes": 256,
             "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
           },
-          "application_map_sha256": "982bf4f565f43fc609f9dccbef4cd52463526c11e73142a5ec0ec99997baecc9",
-          "boot_map_sha256": "4ab89e328dd893d574374046d226e7088fa0409bf955ddf8d31f17bc3c00cb3b",
+          "application_map_sha256": "60d3696cb39902284437c37711df210d008be91f446e9166808d38dc892cacce",
+          "boot_map_sha256": "c3279745167d2293539b87f2baed189af8eee5c62c73215c733b33456602a492",
           "image_gate": {
             "result": "ok",
             "slot_bytes": 22528,
@@ -642,7 +642,7 @@
     },
     {
       "target": "safety",
-      "project_input_manifest_sha256": "c304366b9c81119e004e47a47f77bd9401dc15be7e1df63677ba5406ca53e3f6",
+      "project_input_manifest_sha256": "21f2f1c3ac1d000a89a56d8c796d0da5e275c89018435d7a3f074f3baa90b18c",
       "flash_bytes": 65536,
       "sram_bytes": 8192,
       "memory_map": {
@@ -694,8 +694,8 @@
             "bytes": 256,
             "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
           },
-          "application_map_sha256": "be6d88ad201b403ff3aeff5099b487113b935b5acb3fb3a61ab5aafea1da072b",
-          "boot_map_sha256": "4656d3a089da8195e3bc71a3573fc89f66dc32af96ad0db3d9aa13fada81f5ee",
+          "application_map_sha256": "7d96573fa75e961f2567f6802d9c55fd3a1fc46902f4c77befa8226a0bddc386",
+          "boot_map_sha256": "13397aa208cc6d3760e91cc2ed07bbd3647df86a0140153ec1079fb01f8abd91",
           "image_gate": {
             "result": "ok",
             "slot_bytes": 22528,
@@ -743,8 +743,8 @@
             "bytes": 256,
             "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
           },
-          "application_map_sha256": "f78f45281fdde9f8a52168952ba5839ee9a10b6fd1941372f369c787e0f8821c",
-          "boot_map_sha256": "d685186c4827936ee2a2f32a9e65a375ee7c82d87466e7098fd2b2be29bf947b",
+          "application_map_sha256": "2ff3353322035625cc0999db837f3d6fad1c99ad62eff41c3a84b9610b6b9b6b",
+          "boot_map_sha256": "90cecc53489cd6eeabddaa24e64e0fd7626a0028730b87942d2bbe26b2fe5245",
           "image_gate": {
             "result": "ok",
             "slot_bytes": 22528,
