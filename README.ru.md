@@ -54,14 +54,14 @@ target artifacts воспроизводятся. Периферия и boot че
 
 ### Текущая фаза F4 — детальная позиция
 
-<!-- current-substep: F4.1.2 -->
+<!-- current-substep: F4.1.3 -->
 
-**Точный маркер: `F4.1.2`** — реализовать endpoints S3 host и C5 SDIO slave.
-Общий core из семи состояний теперь проходит 19 сценариев ASan/UBSan. На
-саморевью bulk flow control исправлен: небезопасное абсолютное число свободных
-буферов заменено duplicate-safe моделью `granted_total − consumed_total`.
-Exact target builds, QEMU fake-SDIO и физический SDIO пока не заявлены. Маркер
-и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.1.3`** — выполнить точную target matrix S3/C5 и S3 QEMU
+над fake-SDIO boundary. Проведённые endpoints используют сгенерированные
+контакты H2, однобитный SDIO 20 МГц, точный offline ESSL 1.1.2 и по восемь
+512-байтных DMA-ячеек C5 в каждом направлении. Debug-образы S3 и C5
+компилируются и линкуются; QEMU fake-SDIO и физический SDIO пока не заявлены.
+Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -91,7 +91,7 @@ Exact target builds, QEMU fake-SDIO и физический SDIO пока не �
     images, memory boundaries и debug/release policy прошли структурное ревью.
   - ✅ `F2.2.4` — точный Safety MSPM0C1106 project, раздельные boot/application
     images, fail-closed entry и debug/release policy прошли структурное ревью.
-  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 29 файлов,
+  - ✅ `F2.2.5` — единое ревью прошло для пяти projects, 35 файлов,
     26 artifacts и 20 debug/release command plans без target execution.
 - `F2.3` — подключить принятый генерируемый pin/BSP contract.
   - ✅ `F2.3.0` — неизменяемая H2 source identity, 5 domains, 125 contacts,
@@ -151,7 +151,7 @@ Exact target builds, QEMU fake-SDIO и физический SDIO пока не �
   [сводный evidence](config/f3_2_runtime_review.json).
 - ✅ `F3.3` — новый двойной clean-build воспроизвёл 52/52 artifacts; десять
   актуальных image/RAM gates и пять статических rollback topologies помещаются.
-  S3 debug занимает 182 688 байт с запасом 6 895 200 байт до maximum; физических
+  S3 debug занимает 182 736 байт с запасом 6 895 152 байт до maximum; физических
   rollback transitions заявлено ноль. См.
   [boundary evidence](config/f3_3_boundary_review.json).
 - ✅ `F3.4` — [глобальный итог F3](docs/f3-boot-memory-emulation-report.ru.md)
@@ -164,8 +164,8 @@ Exact target builds, QEMU fake-SDIO и физический SDIO пока не �
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
   - ✅ `F4.1.0` — [проведены точный offline payload ESSL 1.1.2 и single-owner source boundary S3↔C5](config/f4_1_s3_c5_source_boundary.json); [manifest 30 файлов](third_party/esp_serial_slave_link.vendor-lock.json).
   - ✅ `F4.1.1` — [проведён общий high-speed core](config/f4_1_1_high_speed_core_review.json): 19 сценариев ASan/UBSan; unsafe absolute-credit draft заменён накопительными duplicate-safe grants.
-  - ▶️ **`F4.1.2` — сейчас:** реализовать endpoints S3 host и C5 SDIO slave.
-  - `F4.1.3` — выполнить exact target builds и S3 QEMU над fake SDIO boundary.
+  - ✅ `F4.1.2` — [проведены endpoints S3 host и C5 SDIO slave](config/f4_1_2_s3_c5_endpoint_review.json): generated pins, однобитный SDIO 20 МГц, точный ESSL и две locked debug builds; QEMU/PHY claims — ноль.
+  - ▶️ **`F4.1.3` — сейчас:** выполнить exact target builds и S3 QEMU над fake SDIO boundary.
   - `F4.1.4` — выполнить и провести ревью физического dev-board gate S3-C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.

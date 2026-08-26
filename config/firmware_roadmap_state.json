@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "current_substep": "F4.1.2",
+  "current_substep": "F4.1.3",
   "updated_on": "2026-08-26",
   "completed": [
     "F2.0.0",
@@ -49,7 +49,8 @@
     "F4.0.2",
     "F4.0",
     "F4.1.0",
-    "F4.1.1"
+    "F4.1.1",
+    "F4.1.2"
   ],
   "reviewed": [
     "F0",
@@ -99,7 +100,8 @@
     "F4.0.2",
     "F4.0",
     "F4.1.0",
-    "F4.1.1"
+    "F4.1.1",
+    "F4.1.2"
   ],
   "claims": {
     "target_projects_created": true,
@@ -136,6 +138,10 @@
     "f4_high_speed_core_reviewed": true,
     "f4_high_speed_host_sanitized_scenarios": 19,
     "f4_bulk_credit_duplicate_safe": true,
+    "f4_s3_c5_endpoints_reviewed": true,
+    "f4_s3_c5_exact_debug_builds": 2,
+    "f4_s3_c5_bus_width_bits": 1,
+    "f4_s3_c5_frequency_khz": 20000,
     "f4_production_transports": 4,
     "f4_adapter_lifecycle_states": 7,
     "f4_high_speed_buffers_each_direction": 32,

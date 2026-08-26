@@ -19,11 +19,11 @@
     },
     "fault_scenarios": {
       "path": "config/f3_2_runtime_review.json",
-      "sha256": "c52a213e2dd350c3f3dd6d3e4fc4715b1a0c49aa77f530708a775e11d00eedbe"
+      "sha256": "86ac2a3bf82627c5004942dc9127c29404c2b0e3643698b6d15aea8e968c3225"
     },
     "resource_boundaries": {
       "path": "config/f3_3_boundary_review.json",
-      "sha256": "b7ae17b9688ac7aff8204df61a8db1c49a8f866cf7ed47cf072431abf2ce28c2"
+      "sha256": "5a2489326887bc1ad12621881b1cb1beb87ab43f7adc1210d9951a6a273ee957"
     }
   },
   "result": {

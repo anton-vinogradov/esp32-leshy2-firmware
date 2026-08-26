@@ -12,17 +12,17 @@
         {
           "path": "build/targets/s3/debug/leshy2_s3.bin",
           "bytes": 182736,
-          "sha256": "49d0199c6975da5629bdad6fc79b3e9a05b23bc2d89c2c1ca34b736c26a59fb2"
+          "sha256": "d7a3eed714687918af5b0beb673b67bb01eb79700ff09a6338236fe6c6e9eb78"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.elf",
           "bytes": 3758844,
-          "sha256": "429e9774a081f88ba1797a981321f0307a50d7896302fdf2d36f3d9884c08b69"
+          "sha256": "1eaff609dc746c253b8ecb4025bf4270f63f2cd9a04b4e8f60c657b74264d828"
         },
         {
           "path": "build/targets/s3/debug/leshy2_s3.map",
-          "bytes": 3889672,
-          "sha256": "55bb80cf8c2645765e83eb0c9674ba6401c00854a51115ee4163da7eeeb1e61a"
+          "bytes": 3890904,
+          "sha256": "2442636a5b82e357f80e60a2e7dba61559a74e98ef81a681616b3320f8d5d7c2"
         },
         {
           "path": "build/targets/s3/debug/bootloader/bootloader.bin",
@@ -57,17 +57,17 @@
         {
           "path": "build/targets/s3/release/leshy2_s3.bin",
           "bytes": 140528,
-          "sha256": "c902ee69235a5b3c428feef2bf0311ba79809f9e4c4467e4a8831fef4474debc"
+          "sha256": "9c30371a0ce12d2229101da0e8cead64c702fdfffe678df1f42064114b1e12b9"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.elf",
           "bytes": 3633204,
-          "sha256": "c6ca2eb6af0444564dc2b90fac00eba064b3919463558efb2aa9c97e8dcfa74f"
+          "sha256": "51527dab70269d7d6b475f5c800ccbd8fe5e19eb381401fe0848d99cdcbfb329"
         },
         {
           "path": "build/targets/s3/release/leshy2_s3.map",
-          "bytes": 3628921,
-          "sha256": "3fab41ab54c81f9cde04094ab0c184b5573055649c7732bae545ec8bc43501f7"
+          "bytes": 3630153,
+          "sha256": "4cd4c86837012868c1265bce4019dbce8c526f63956890910e24b7d7f8c6265f"
         },
         {
           "path": "build/targets/s3/release/bootloader/bootloader.bin",
@@ -161,15 +161,27 @@
       },
       {
         "path": "targets/s3/CMakeLists.txt",
-        "sha256": "a8346b5a321f79d9af2dcb820d41aa77f1f11dc168bc27239091962ec89a9130"
+        "sha256": "505da58b679c4dc4eef9c191a7f4227d4625a78f8213ffceb519cc2a554dc612"
       },
       {
         "path": "targets/s3/components/leshy2_portable/CMakeLists.txt",
-        "sha256": "a712884bedc4f5eb4e33c0fff81262cf3485faa6bee29c7483e8b67376787adf"
+        "sha256": "ccbf89f336c3426d352eb7affd1a6c3d4d5280a37b82bdd25adae7cfd6cb5eee"
+      },
+      {
+        "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
+        "sha256": "4b0a97a5148dff981841ffd4cc5392be7c6490ae189d95e4f75e76d1a5c2b58e"
+      },
+      {
+        "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_host.h",
+        "sha256": "d4e03f1c6fffc567a02537e9e48a61a56d4d6cf2e83cd17123d77822567a734b"
+      },
+      {
+        "path": "targets/s3/components/leshy2_s3_c5/s3_c5_host.c",
+        "sha256": "1fcbda75b645c330ad81f907d8624a534074d1ee03dddf71bfba2cc3bff2a8af"
       },
       {
         "path": "targets/s3/main/CMakeLists.txt",
-        "sha256": "89adc4157bad3366b541782b195fefe467fbc455941550bb9821d54d54acadde"
+        "sha256": "76f1dfe027e3252d63c4af1dfe93f5b702d8766d422746850d027c9690f20ab1"
       },
       {
         "path": "targets/s3/main/app_main.c",
@@ -188,7 +200,7 @@
         "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61"
       }
     ],
-    "manifest_sha256": "82f896ffc0ed59695e19dd5472a90592b5d33538047138a2a3b71f3b81cfa036"
+    "manifest_sha256": "ece220ab492cf8dc0f8a0e53d2cfa141d9cb378ba6f32b862d2d178413bb2a4a"
   },
   "execution": {
     "configure_runs": 2,

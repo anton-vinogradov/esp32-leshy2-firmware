@@ -35,9 +35,9 @@ the slot.
 
 | Target | Largest image | Policy maximum | Free before maximum | Linked-memory result |
 |---|---:|---:|---:|---|
-| S3 | 182,688 B | 7,077,888 B | 6,895,200 B | DIRAM has 287,147 B free; 8-MiB PSRAM runtime-tested |
+| S3 | 182,736 B | 7,077,888 B | 6,895,152 B | DIRAM has 287,147 B free; 8-MiB PSRAM runtime-tested |
 | C5 | 172,224 B | 3,538,944 B | 3,366,720 B | HP SRAM has 263,010 B free; external PSRAM awaits hardware |
-| RP2354B | 18,468 B | 884,736 B | 866,268 B | main + scratch SRAM has 526,008 B free |
+| RP2354B | 18,484 B | 884,736 B | 866,252 B | main + scratch SRAM has 526,008 B free |
 | Pack | 3,168 B | 22,528 B | 19,360 B | application SRAM has 7,880 B free |
 | Safety | 3,296 B | 22,528 B | 19,232 B | application SRAM has 7,880 B free |
 

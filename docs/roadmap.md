@@ -31,14 +31,14 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F4 breakdown
 
-<!-- current-substep: F4.1.2 -->
+<!-- current-substep: F4.1.3 -->
 
-**Exact marker: `F4.1.2`** — implement the S3 host and C5 SDIO slave endpoints.
-The shared seven-state core now passes 19 ASan/UBSan scenarios. Its self-review
-corrected bulk flow control from an unsafe absolute free-buffer update to a
-duplicate-safe monotonic `granted_total − consumed_total` model. Exact target
-builds, QEMU fake-SDIO and physical SDIO are still unclaimed. The marker and
-evidence update together in every commit.
+**Exact marker: `F4.1.3`** — execute the exact S3/C5 target matrix and S3 QEMU
+above a fake-SDIO boundary. The reviewed endpoints use generated H2 contacts,
+one-bit 20-MHz SDIO, exact offline ESSL 1.1.2 and eight 512-byte C5 DMA cells
+per direction. S3 and C5 debug images compile and link; QEMU fake-SDIO and
+physical SDIO remain unclaimed. The marker and evidence update together in
+every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -71,7 +71,7 @@ evidence update together in every commit.
     memory boundaries and debug/release policy passed structural review.
   - ✅ `F2.2.4` — the Safety MSPM0C1106 project, separate boot/application
     images, fail-closed entry and debug/release policy passed structural review.
-  - ✅ `F2.2.5` — one integrated review passed for five projects, 29 files,
+  - ✅ `F2.2.5` — one integrated review passed for five projects, 35 files,
     26 artifacts and 20 debug/release command plans with zero target execution.
 - `F2.3` — import the accepted generated pin/BSP contract.
   - ✅ `F2.3.0` — the immutable H2 source identity, 5 domains, 125 contacts,
@@ -130,8 +130,8 @@ evidence update together in every commit.
   scenarios also passed ASan/UBSan. This does not claim nonvolatile persistence
   or flash rollback; [integrated evidence](../config/f3_2_runtime_review.json).
 - ✅ `F3.3` — a fresh double clean-build reproduced 52/52 artifacts; ten current
-  image/RAM gates and five static rollback topologies fit. S3 debug is 182,688
-  bytes with 6,895,200 bytes before its maximum; zero physical rollback
+  image/RAM gates and five static rollback topologies fit. S3 debug is 182,736
+  bytes with 6,895,152 bytes before its maximum; zero physical rollback
   transitions are claimed. See the
   [boundary evidence](../config/f3_3_boundary_review.json).
 - ✅ `F3.4` — the [global F3 result](f3-boot-memory-emulation-report.md) closes
@@ -144,8 +144,8 @@ evidence update together in every commit.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
   - ✅ `F4.1.0` — [exact offline ESSL 1.1.2 payload and single-owner S3↔C5 source boundary reviewed](../config/f4_1_s3_c5_source_boundary.json); [30-file manifest](../third_party/esp_serial_slave_link.vendor-lock.json).
   - ✅ `F4.1.1` — [common high-speed core reviewed](../config/f4_1_1_high_speed_core_review.json): 19 ASan/UBSan scenarios; cumulative duplicate-safe bulk grants replace the unsafe absolute-credit draft.
-  - ▶️ **`F4.1.2` — current:** implement the S3 host and C5 SDIO slave endpoints.
-  - `F4.1.3` — run exact target builds and S3 QEMU above the fake SDIO boundary.
+  - ✅ `F4.1.2` — [S3 host and C5 SDIO slave endpoints reviewed](../config/f4_1_2_s3_c5_endpoint_review.json): generated pins, one-bit 20-MHz SDIO, exact ESSL and two locked debug builds; zero QEMU/PHY claims.
+  - ▶️ **`F4.1.3` — current:** run exact target builds and S3 QEMU above the fake SDIO boundary.
   - `F4.1.4` — run and review the named S3-C5 dev-board physical gate.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
@@ -219,7 +219,7 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F4.1.2`. The exact ESSL source and the sanitized common
-adapter are reviewed inputs. The active step connects them to the S3 SDMMC/ESSL
-host and C5 SDIO-slave SDK surfaces without inventing pins or claiming a wire
-run.
+The current boundary is `F4.1.3`. The S3 SDMMC/ESSL host and C5 SDIO-slave
+endpoints compile in the locked debug toolchains. The active step expands that
+evidence to the exact debug/release target matrix and executes portable traffic
+above a fake-SDIO boundary in S3 QEMU without claiming a physical wire run.

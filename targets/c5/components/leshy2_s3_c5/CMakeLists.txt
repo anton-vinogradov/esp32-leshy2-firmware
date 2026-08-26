@@ -1,7 +1,9 @@
 idf_component_register(
-    SRCS "app_main.c"
-    INCLUDE_DIRS "."
-    PRIV_REQUIRES esp_system log leshy2_portable leshy2_s3_c5
+    SRCS "s3_c5_slave.c"
+    INCLUDE_DIRS "include"
+    REQUIRES
+        esp_driver_sdio
+        leshy2_portable
 )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE
@@ -12,6 +14,11 @@ target_compile_options(${COMPONENT_LIB} PRIVATE
     -Wformat=2
     -Wshadow
     -Wundef
+    -Wconversion
+    -Wdouble-promotion
+    -Wmissing-prototypes
+    -Wpedantic
+    -Wstrict-prototypes
     -ffunction-sections
     -fdata-sections
     -fstack-usage

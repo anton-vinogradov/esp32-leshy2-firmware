@@ -21,7 +21,10 @@
         "targets/s3/sdkconfig.release",
         "targets/s3/main/CMakeLists.txt",
         "targets/s3/main/app_main.c",
-        "targets/s3/components/leshy2_portable/CMakeLists.txt"
+        "targets/s3/components/leshy2_portable/CMakeLists.txt",
+        "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
+        "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_host.h",
+        "targets/s3/components/leshy2_s3_c5/s3_c5_host.c"
       ]
     },
     "c5": {
@@ -42,7 +45,10 @@
         "targets/c5/sdkconfig.release",
         "targets/c5/main/CMakeLists.txt",
         "targets/c5/main/app_main.c",
-        "targets/c5/components/leshy2_portable/CMakeLists.txt"
+        "targets/c5/components/leshy2_portable/CMakeLists.txt",
+        "targets/c5/components/leshy2_s3_c5/CMakeLists.txt",
+        "targets/c5/components/leshy2_s3_c5/include/leshy2/s3_c5_slave.h",
+        "targets/c5/components/leshy2_s3_c5/s3_c5_slave.c"
       ]
     },
     "rp": {

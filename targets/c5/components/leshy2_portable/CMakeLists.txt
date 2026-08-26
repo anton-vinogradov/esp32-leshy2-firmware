@@ -4,6 +4,7 @@ set(LESHY2_GENERATED_HW_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../generated/har
 idf_component_register(
     SRCS
         "${LESHY2_COMMON_DIR}/src/l2ip.c"
+        "${LESHY2_COMMON_DIR}/src/high_speed_adapter.c"
         "${LESHY2_COMMON_DIR}/src/safety_core.c"
         "${LESHY2_COMMON_DIR}/src/system_model.c"
         "${LESHY2_COMMON_DIR}/src/update_core.c"

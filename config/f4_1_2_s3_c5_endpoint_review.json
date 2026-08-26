@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "stage": "F4.1.2",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "locked_inputs": {
+    "adapter_contract_sha256": "d27a8de18ef58f06628b102ccca5dcb4a7ec8af6acc45635ae7063c9176392aa",
+    "hardware_contract_sha256": "3604889fbf94c28fd0b110b16596c63fa56927df7ff3ff49d0cdfff9d6e7b014",
+    "essl_vendor_lock_sha256": "4de40edf538d359ab9d2a16460dbcbf346898b1fdaf475149f503b06f018066d"
+  },
+  "sources": [
+    {
+      "path": "targets/s3/CMakeLists.txt",
+      "sha256": "505da58b679c4dc4eef9c191a7f4227d4625a78f8213ffceb519cc2a554dc612"
+    },
+    {
+      "path": "targets/s3/main/CMakeLists.txt",
+      "sha256": "76f1dfe027e3252d63c4af1dfe93f5b702d8766d422746850d027c9690f20ab1"
+    },
+    {
+      "path": "targets/s3/components/leshy2_portable/CMakeLists.txt",
+      "sha256": "ccbf89f336c3426d352eb7affd1a6c3d4d5280a37b82bdd25adae7cfd6cb5eee"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
+      "sha256": "4b0a97a5148dff981841ffd4cc5392be7c6490ae189d95e4f75e76d1a5c2b58e"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/include/leshy2/s3_c5_host.h",
+      "sha256": "d4e03f1c6fffc567a02537e9e48a61a56d4d6cf2e83cd17123d77822567a734b"
+    },
+    {
+      "path": "targets/s3/components/leshy2_s3_c5/s3_c5_host.c",
+      "sha256": "1fcbda75b645c330ad81f907d8624a534074d1ee03dddf71bfba2cc3bff2a8af"
+    },
+    {
+      "path": "targets/c5/main/CMakeLists.txt",
+      "sha256": "76f1dfe027e3252d63c4af1dfe93f5b702d8766d422746850d027c9690f20ab1"
+    },
+    {
+      "path": "targets/c5/components/leshy2_portable/CMakeLists.txt",
+      "sha256": "ff22445efa988db919c4ae53d2da55cd34c5e1792814874eb1a7b2c99477dbab"
+    },
+    {
+      "path": "targets/c5/components/leshy2_s3_c5/CMakeLists.txt",
+      "sha256": "5325910f8798bf2991639a48982a9775a41f808a171d8697589d03a1bd4e8b22"
+    },
+    {
+      "path": "targets/c5/components/leshy2_s3_c5/include/leshy2/s3_c5_slave.h",
+      "sha256": "59dd583ceb9def4874d350cf736c8dab5117d7d17ec1f678472bbd675b12b710"
+    },
+    {
+      "path": "targets/c5/components/leshy2_s3_c5/s3_c5_slave.c",
+      "sha256": "1b0efa8377f3db94a5016cb97247b112c800eb15c7c565af041858cf595c133b"
+    }
+  ],
+  "builds": [
+    {
+      "target": "s3",
+      "config": "debug",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=s3",
+        "CONFIG=debug"
+      ],
+      "status": "passed",
+      "success_marker": "Project build complete"
+    },
+    {
+      "target": "c5",
+      "config": "debug",
+      "command": [
+        "make",
+        "locked-target-build",
+        "TARGET=c5",
+        "CONFIG=debug"
+      ],
+      "status": "passed",
+      "success_marker": "Project build complete"
+    }
+  ],
+  "endpoint_contract": {
+    "s3_host": {
+      "sdk_surface": "SDMMC host plus vendored ESSL 1.1.2",
+      "bus_width_bits": 1,
+      "frequency_khz": 20000,
+      "generated_gpio": {
+        "clk": 10,
+        "cmd": 11,
+        "d0": 12,
+        "d1_irq": 13
+      },
+      "cell_bytes": 512
+    },
+    "c5_slave": {
+      "sdk_surface": "locked ESP-IDF esp_driver_sdio packet mode",
+      "generated_gpio": {
+        "d1_irq": 7,
+        "d0": 8,
+        "clk": 9,
+        "cmd": 10
+      },
+      "dma_receive_cells": 8,
+      "dma_send_cells": 8,
+      "cell_bytes": 512,
+      "timing": "SDIO_SLAVE_TIMING_PSEND_NSAMPLE",
+      "flags": [
+        "SDIO_SLAVE_FLAG_DAT2_DISABLED",
+        "SDIO_SLAVE_FLAG_HIGH_SPEED"
+      ]
+    },
+    "usb_coexistence": "one-bit SDIO leaves C5 module GPIO13/GPIO14 D3/D2 contacts unused by SDIO for native USB D-/D+"
+  },
+  "accepted_claims": [
+    "S3 host endpoint uses generated H2 contacts, one-bit SDMMC and the exact offline ESSL source",
+    "C5 slave endpoint uses generated H2 contacts, eight 512-byte DMA RX cells and eight 512-byte DMA TX cells",
+    "both endpoints compile the reviewed portable adapter and fail its lifecycle closed on transport errors",
+    "locked ESP-IDF debug images compile and link both endpoint implementations"
+  ],
+  "deferred_claims": [
+    "runtime execution above an S3 QEMU fake-SDIO boundary",
+    "physical SDIO signaling, throughput, timing margin and USB coexistence"
+  ],
+  "execution_counts": {
+    "host_sanitized_scenarios": 0,
+    "exact_target_adapter_builds": 2,
+    "s3_qemu_fake_runs": 0,
+    "physical_transport_runs": 0
+  },
+  "next": "F4.1.3"
+}

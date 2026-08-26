@@ -492,7 +492,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual("F2.2.5", review["stage"])
         self.assertEqual("reviewed", review["status"])
         self.assertEqual(5, review["evidence"]["target_projects"])
-        self.assertEqual(29, review["evidence"]["project_files"])
+        self.assertEqual(35, review["evidence"]["project_files"])
         self.assertEqual(26, review["evidence"]["named_build_artifacts"])
         self.assertEqual(20, review["evidence"]["rendered_configure_and_build_plans"])
         self.assertTrue(review["claims"]["target_projects_created"])

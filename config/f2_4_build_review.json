@@ -8,7 +8,7 @@
       "target": "s3",
       "stage": "F2.4.1",
       "evidence": "config/f2_4_s3_build_review.json",
-      "evidence_sha256": "0b4e0b240971fd0238c3d7945adaaa4c1ffcaf2da5635fb59bc6acc463af7d15",
+      "evidence_sha256": "8905398a089e58a3b76477fcaccb3056f612a8e88082c1b716c7fc189fbc9821",
       "configurations": [
         "debug",
         "release"
@@ -24,7 +24,7 @@
       "target": "c5",
       "stage": "F2.4.2",
       "evidence": "config/f2_4_c5_build_review.json",
-      "evidence_sha256": "abe9b9fa127e7c8eaff769b1c99d4ce638f9ff1e61bcd933af755757648b1736",
+      "evidence_sha256": "e7ef100b0a8430d7d62a685fbc42b9c56d4d1f6367d5e647dd6b46f7d06ad8b4",
       "configurations": [
         "debug",
         "release"
@@ -56,7 +56,7 @@
       "target": "pack",
       "stage": "F2.4.4",
       "evidence": "config/f2_4_pack_build_review.json",
-      "evidence_sha256": "d5db3421e5ca134416294267c9512aa78bedbd51b77ee685581b44ae62eb0bb9",
+      "evidence_sha256": "e2b4f79224567e42e31020e2ee860f32d250ffbd2effc7ec2299465c06721712",
       "configurations": [
         "debug",
         "release"
@@ -72,7 +72,7 @@
       "target": "safety",
       "stage": "F2.4.5",
       "evidence": "config/f2_4_safety_build_review.json",
-      "evidence_sha256": "e3aad19733054b8b4b213d65033e7f48e2d13d4357a727d3f9e12f9411fc4c35",
+      "evidence_sha256": "2e6c8fdc50a0eaa998f4db4c6fcfec2352952df7c82e484d4c50887deb4c3758",
       "configurations": [
         "debug",
         "release"
