@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "stage": "F4.0.0",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "purpose": "bind every production IPC transport to exact locked-SDK APIs and an honest executable evidence boundary before adapter implementation",
+  "locked_sdk_revisions": {
+    "esp-idf": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+    "pico-sdk": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+    "mspm0-sdk": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32"
+  },
+  "source_evidence": [
+    {
+      "id": "S3_SOC_CAPS",
+      "path": ".toolchains/src/esp-idf/components/soc/esp32s3/include/soc/soc_caps.h",
+      "sha256": "31ad4334809b5eeff04627189b7794d15c8e04497865895d916016b5364fa320",
+      "required_tokens": ["SOC_SDMMC_HOST_SUPPORTED", "SOC_GPSPI_SUPPORTED", "SOC_I2C_SUPPORTED"]
+    },
+    {
+      "id": "C5_SOC_CAPS",
+      "path": ".toolchains/src/esp-idf/components/soc/esp32c5/include/soc/soc_caps.h",
+      "sha256": "cf1b9ca798afc07a313ee39bdf8733ee39706ab2afea585578bdc5b09d0d8de6",
+      "required_tokens": ["SOC_SDIO_SLAVE_SUPPORTED"]
+    },
+    {
+      "id": "S3_SDMMC_HOST",
+      "path": ".toolchains/src/esp-idf/components/esp_driver_sdmmc/legacy/include/driver/sdmmc_host.h",
+      "sha256": "4be921dad90c0ca88f5dafe7adf7bd0882bf26a3d3744328c9da53e70b3cbf9a",
+      "required_tokens": ["sdmmc_host_init", "sdmmc_host_init_slot", "sdmmc_host_set_bus_width"]
+    },
+    {
+      "id": "S3_SDIO_COMMANDS",
+      "path": ".toolchains/src/esp-idf/components/sdmmc/include/sdmmc_cmd.h",
+      "sha256": "64d47da9fdbf9bca071c89c0b844c3e9b9fa3da5c5dfdd3517cb1aaf4990c407",
+      "required_tokens": ["sdmmc_card_init", "sdmmc_io_read_bytes", "sdmmc_io_write_bytes"]
+    },
+    {
+      "id": "C5_SDIO_SLAVE",
+      "path": ".toolchains/src/esp-idf/components/esp_driver_sdio/include/driver/sdio_slave.h",
+      "sha256": "5e17f0f099bce1e589e530bd8c8e1913307dce8173d00858fe5db8218939af3c",
+      "required_tokens": ["sdio_slave_initialize", "sdio_slave_send_queue", "sdio_slave_recv_packet", "sdio_slave_reset_hw"]
+    },
+    {
+      "id": "S3_SPI_MASTER",
+      "path": ".toolchains/src/esp-idf/components/esp_driver_spi/include/driver/spi_master.h",
+      "sha256": "1f553eca0093c40c8b3108e662c0479090a271db46f30e98ff6938b1573e74ef",
+      "required_tokens": ["spi_bus_add_device", "spi_device_queue_trans", "spi_device_get_trans_result"]
+    },
+    {
+      "id": "S3_I2C_MASTER",
+      "path": ".toolchains/src/esp-idf/components/esp_driver_i2c/include/driver/i2c_master.h",
+      "sha256": "d24e2b3d3cd0816ea25b9196908f8991ff1b9437923542598fd0eb1e12302b5a",
+      "required_tokens": ["i2c_new_master_bus", "i2c_master_bus_add_device", "i2c_master_transmit_receive"]
+    },
+    {
+      "id": "IDF_SDIO_HOST_DEPENDENCY",
+      "path": ".toolchains/src/esp-idf/examples/peripherals/sdio/host/main/idf_component.yml",
+      "sha256": "a897dc0a2fbb9bad482564600290659992f9752f39ca7dd07af1aa7dfe7353d4",
+      "required_tokens": ["espressif/esp_serial_slave_link", "^1.0.1"]
+    },
+    {
+      "id": "RP_SPI_SLAVE",
+      "path": ".toolchains/src/pico-sdk/src/rp2_common/hardware_spi/include/hardware/spi.h",
+      "sha256": "0271ec086f2194e596d8d1cf540e0f9830c4c3aab3a7c1127da09dbf0da5afe1",
+      "required_tokens": ["spi_set_slave", "spi_get_dreq", "DREQ_SPI1_TX", "DREQ_SPI1_RX"]
+    },
+    {
+      "id": "RP_DMA",
+      "path": ".toolchains/src/pico-sdk/src/rp2_common/hardware_dma/include/hardware/dma.h",
+      "sha256": "e845c9d7ce649e99694ebd07046ed939df60c25339ea554b2732d03b0a1f77e4",
+      "required_tokens": ["dma_channel_configure", "channel_config_set_dreq"]
+    },
+    {
+      "id": "RP2350_DREQ",
+      "path": ".toolchains/src/pico-sdk/src/rp2350/hardware_regs/include/hardware/regs/dreq.h",
+      "sha256": "b9c82890be8468ed2135b51298f5e82169a7277013cf5619a75029737a1f4e14",
+      "required_tokens": ["DREQ_SPI1_TX", "DREQ_SPI1_RX"]
+    },
+    {
+      "id": "MSPM0_I2C_TARGET",
+      "path": ".toolchains/src/mspm0-sdk/source/ti/driverlib/dl_i2c.h",
+      "sha256": "a981a099978b8abbb777f2af66d4e9ad8eb99e36cca8fb453bde4a6d5580f4ec",
+      "required_tokens": ["DL_I2C_setTargetOwnAddress", "DL_I2C_enableTargetClockStretching", "DL_I2C_fillTargetTXFIFO", "DL_I2C_receiveTargetData"]
+    },
+    {
+      "id": "MSPM0C1106_I2C_TARGET_EXAMPLE",
+      "path": ".toolchains/src/mspm0-sdk/examples/nortos/LP_MSPM0C1106/msp_subsystems/io_expander_i2c_target/io_expander_i2c.syscfg",
+      "sha256": "1a059622943bfbf70977fea097386021e5abb633a83ddb59e2789ea5a483c3b3",
+      "required_tokens": ["--device \"MSPM0C1106\"", "basicControllerBusSpeed                 = 400000", "basicEnableTarget                       = true"]
+    }
+  ],
+  "official_sources": [
+    {
+      "id": "ESP32_C5_SDIO_SLAVE",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32c5/api-reference/peripherals/sdio_slave.html",
+      "supports": "1-bit SDIO, bidirectional FIFO/DMA, shared registers, two-way interrupts and hardware reset recovery"
+    },
+    {
+      "id": "ESP_QEMU_FEATURES",
+      "url": "https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/README.md",
+      "supports": "ESP32-S3 QEMU explicitly lacks SD/MMC, GP-SPI and I2C peripheral models"
+    },
+    {
+      "id": "ESP_SERIAL_SLAVE_LINK",
+      "url": "https://components.espressif.com/components/espressif/esp_serial_slave_link",
+      "supports": "Espressif-maintained host library; exact current release 1.1.2 supports all targets"
+    },
+    {
+      "id": "PICO_SDK_HARDWARE",
+      "url": "https://www.raspberrypi.com/documentation/pico-sdk/hardware.html",
+      "supports": "RP SPI controller/slave selection and independent SPI1 TX/RX DMA request lines"
+    },
+    {
+      "id": "MSPM0_SDK_EXAMPLES",
+      "url": "https://software-dl.ti.com/msp430/esd/MSPM0-SDK/latest/docs/english/sdk_users_guide/doc_guide/doc_guide-srcs/examples_guide.html",
+      "supports": "MSPM0 I2C target examples; exact C1106 source is present in the locked 2.11.00.07 SDK"
+    }
+  ],
+  "transports": [
+    {
+      "id": "S3_C5",
+      "physical": "20-MHz 1-bit SDIO with DAT1 interrupt",
+      "endpoints": {
+        "S3": "ESP-IDF SDMMC host plus exact-pinned ESSL host adapter",
+        "C5": "ESP-IDF SDIO slave FIFO/DMA/register/interrupt driver"
+      },
+      "sdk_path_complete": true,
+      "host_executable": "L2IP framing, queues, adapter state and fault model only",
+      "qemu_phy_execution": false,
+      "physical_gate": "S3 board to ESP32-C5-DevKitC-1, then Leshy2 H7/H8 for pull-ups, 20-MHz throughput, coexistence and reset recovery"
+    },
+    {
+      "id": "S3_RP",
+      "physical": "20-MHz full-duplex SPI plus active-low RP alert",
+      "endpoints": {
+        "S3": "ESP-IDF queued SPI master with DMA and GPIO interrupt",
+        "RP": "Pico SDK SPI1 slave with separate TX/RX DMA pacing"
+      },
+      "sdk_path_complete": true,
+      "host_executable": "512-byte cell framing, alert races, queues, adapter state and fault model only",
+      "qemu_phy_execution": false,
+      "physical_gate": "S3 board to RP2354B carrier, then Leshy2 H7/H8 for DMA, CS abort, alert latency and aggregate radio load"
+    },
+    {
+      "id": "S3_PACK",
+      "physical": "400-kHz I2C mailbox at 7-bit address 0x2A",
+      "endpoints": {
+        "S3": "ESP-IDF I2C master transmit/receive API",
+        "PACK": "MSPM0 DriverLib interrupt/FIFO I2C target with clock stretching"
+      },
+      "sdk_path_complete": true,
+      "host_executable": "32-byte command, 64-byte status, CRC, sequence and reset/fault model only",
+      "qemu_phy_execution": false,
+      "physical_gate": "S3 board to LP-MSPM0C1106, then Leshy2 H7/H8 for 400-kHz timing, clock stretching and pack-local authority"
+    },
+    {
+      "id": "S3_SAFETY",
+      "physical": "400-kHz I2C mailbox at 7-bit address 0x2B",
+      "endpoints": {
+        "S3": "ESP-IDF I2C master transmit/receive API",
+        "SAFETY": "MSPM0 DriverLib interrupt/FIFO I2C target with clock stretching"
+      },
+      "sdk_path_complete": true,
+      "host_executable": "mailbox, heartbeat, lease, sequence, CRC and link-loss model only",
+      "qemu_phy_execution": false,
+      "physical_gate": "S3 board to LP-MSPM0C1106, then Leshy2 H7/H8 for 400-kHz timing, watchdog/FAULT_KILL and lease deadlines"
+    }
+  ],
+  "dependency_decision": {
+    "component": "espressif/esp_serial_slave_link",
+    "selected_exact_version": "1.1.2",
+    "license": "Apache-2.0",
+    "reason": "use the maintained host implementation of the same ESP SDIO slave protocol instead of duplicating its register/FIFO/interrupt machinery",
+    "freeze_action": "F4.0.1 must hash-lock the exact archive and dependency lock before adapter code is accepted",
+    "floating_constraint_allowed": false
+  },
+  "evidence_boundary": {
+    "host_can_prove": ["framing and CRC", "typed results", "credits and queue isolation", "deadline, duplicate, reset and link-loss state transitions"],
+    "target_build_can_prove": ["exact SDK APIs compile for each owner", "adapter sizes and static contracts fit each target"],
+    "qemu_can_prove": ["S3 application integration above a fake transport boundary"],
+    "physical_only": ["wire timing", "DMA and interrupt behavior", "20-MHz throughput", "400-kHz clock stretching", "reset races", "RF coexistence under IPC load"]
+  },
+  "counts": {
+    "production_transports": 4,
+    "exact_sdk_endpoint_bindings": 8,
+    "sdk_paths_complete": 4,
+    "qemu_phy_paths": 0,
+    "physical_transport_runs": 0
+  },
+  "authorization": {
+    "hardware_purchase": false,
+    "hardware_layout": false,
+    "fabrication": false
+  },
+  "next": "F4.0.1"
+}

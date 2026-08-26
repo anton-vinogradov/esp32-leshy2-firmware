@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "phase": "F4",
+  "status": "in_progress",
+  "current_substep": "F4.0.1",
+  "updated_on": "2026-08-26",
+  "substeps": {
+    "F4.0.0": {
+      "status": "reviewed",
+      "result": "all four production transports have eight exact locked-SDK endpoint bindings; host/QEMU/physical evidence boundaries are explicit",
+      "artifact": "config/f4_0_transport_capability_matrix.json"
+    },
+    "F4.0.1": {
+      "status": "current",
+      "goal": "freeze adapter states, queue ownership, credits, deadlines and reset/link-loss behavior",
+      "required_inputs": [
+        "config/interdomain_protocol.json",
+        "config/f4_0_transport_capability_matrix.json"
+      ]
+    },
+    "F4.0.2": {
+      "status": "waiting_for_F4.0.1",
+      "goal": "freeze one integrated execution and evidence runner"
+    },
+    "F4.1": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-C5 SDIO"},
+    "F4.2": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-RP SPI plus alert"},
+    "F4.3": {"status": "waiting_for_F4.0", "goal": "implement and exercise Pack/Safety I2C mailboxes"},
+    "F4.4": {"status": "waiting", "goal": "inject saturation, duplicate, deadline, reset and link-loss faults"},
+    "F4.5": {"status": "waiting", "goal": "reconcile target evidence and publish the global F4 result"}
+  },
+  "reviewed_claims": {
+    "production_transports": 4,
+    "exact_sdk_endpoint_bindings": 8,
+    "qemu_phy_paths": 0,
+    "physical_transport_runs": 0
+  },
+  "next": "define one common fail-closed adapter lifecycle, then specialize it for SDIO, SPI and I2C without weakening owner-local safety"
+}

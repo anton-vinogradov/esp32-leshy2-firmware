@@ -156,7 +156,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F4.0.0"}, set(markers.values()))
+        self.assertEqual({"F4.0.1"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("F4", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
@@ -180,6 +180,15 @@ class ProductSiteTests(unittest.TestCase):
         self.assertFalse(state["claims"]["physical_peripherals_proven"])
         self.assertEqual(5, state["claims"]["static_rollback_topologies_reviewed"])
         self.assertEqual(0, state["claims"]["physical_rollback_transitions_reviewed"])
+        self.assertTrue(state["claims"]["f4_transport_capability_reviewed"])
+        self.assertEqual(4, state["claims"]["f4_production_transports"])
+        self.assertEqual(8, state["claims"]["f4_exact_sdk_endpoint_bindings"])
+        self.assertEqual(0, state["claims"]["f4_qemu_phy_paths"])
+        self.assertEqual(0, state["claims"]["f4_physical_transport_runs"])
+        progress = json.loads(self.read("config/f4_progress.json"))
+        self.assertEqual("F4.0.1", progress["current_substep"])
+        self.assertEqual("reviewed", progress["substeps"]["F4.0.0"]["status"])
+        self.assertEqual("current", progress["substeps"]["F4.0.1"]["status"])
         for configuration in ("debug", "release"):
             self.assertTrue(
                 (REPO_ROOT / f"config/f3_1_s3_{configuration}_runtime_review.json").is_file()

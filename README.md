@@ -54,12 +54,13 @@ physical gates rather than emulator claims.
 
 ### Current phase F4 — detailed position
 
-<!-- current-substep: F4.0.0 -->
+<!-- current-substep: F4.0.1 -->
 
-**Exact marker: `F4.0.0`** — inventory exact SDK support and testability for
-SDIO S3↔C5, SPI+alert S3↔RP and the Pack/Safety I²C mailboxes. The result must
-separate executable host/virtual evidence from dev-board/HIL-only behavior.
-This marker and its evidence move together in each commit.
+**Exact marker: `F4.0.1`** — freeze adapter states, queue ownership, credits,
+deadlines and reset/link-loss behavior. `F4.0.0` reviewed all four transports:
+their eight endpoints have exact locked-SDK APIs, while wire/DMA/interrupt
+execution remains explicitly dev-board/HIL-only. This marker and its evidence
+move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -156,9 +157,8 @@ This marker and its evidence move together in each commit.
   closes the phase with exact S3 execution, 52 reproducible artifacts and five
   explicit physical target/HIL gates.
 - `F4.0` — freeze the transport execution and evidence plan.
-  - ▶️ **`F4.0.0` — current:** inventory exact SDK transport support,
-    observability and emulator/dev-board boundaries.
-  - `F4.0.1` — freeze adapter states, credits, deadlines and reset behavior.
+  - ✅ `F4.0.0` — [four transports and eight exact SDK endpoint bindings reviewed](config/f4_0_transport_capability_matrix.json); QEMU proves none of their PHYs.
+  - ▶️ **`F4.0.1` — current:** freeze adapter states, credits, deadlines and reset behavior.
   - `F4.0.2` — freeze one integrated execution and evidence runner.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.

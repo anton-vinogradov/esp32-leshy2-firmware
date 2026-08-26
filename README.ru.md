@@ -54,12 +54,13 @@ target artifacts воспроизводятся. Периферия и boot че
 
 ### Текущая фаза F4 — детальная позиция
 
-<!-- current-substep: F4.0.0 -->
+<!-- current-substep: F4.0.1 -->
 
-**Точный маркер: `F4.0.0`** — инвентаризировать точную SDK-поддержку и
-тестируемость SDIO S3↔C5, SPI+alert S3↔RP и I²C mailboxes Pack/Safety. Результат
-должен отделить исполнимый host/virtual evidence от dev-board/HIL-only поведения.
-Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.0.1`** — зафиксировать состояния adapters, владение
+очередями, credits, deadlines и поведение при reset/link loss. На `F4.0.0`
+проведены все четыре transport: у восьми endpoints есть точные API
+зафиксированных SDK, а исполнение wire/DMA/interrupt честно оставлено
+dev-board/HIL. Маркер и evidence меняются вместе в каждом commit.
 
 - `F2.0` — зафиксировать target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрировать пять target и их flash/RAM/rollback
@@ -156,9 +157,8 @@ target artifacts воспроизводятся. Периферия и boot че
   закрывает фазу точным S3 execution, 52 воспроизводимыми artifacts и пятью
   явными физическими target/HIL gates.
 - `F4.0` — зафиксировать план исполнения и evidence transports.
-  - ▶️ **`F4.0.0` — сейчас:** инвентаризировать точную SDK-поддержку transports,
-    наблюдаемость и границы emulator/dev-board.
-  - `F4.0.1` — зафиксировать adapter states, credits, deadlines и reset behavior.
+  - ✅ `F4.0.0` — [проведены четыре transport и восемь точных SDK endpoint bindings](config/f4_0_transport_capability_matrix.json); QEMU не исполняет ни один их PHY.
+  - ▶️ **`F4.0.1` — сейчас:** зафиксировать adapter states, credits, deadlines и reset behavior.
   - `F4.0.2` — зафиксировать единый integrated execution/evidence runner.
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
