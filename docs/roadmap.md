@@ -31,16 +31,15 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F4 breakdown
 
-<!-- current-substep: F4.0.2 -->
+<!-- current-substep: F4.1.0 -->
 
-**Exact marker: `F4.0.2`** — freeze one integrated execution/evidence runner.
-`F4.0.1` reviewed one seven-state fail-closed lifecycle for all four transports,
-32 fixed buffers per high-speed direction, protected queue reservations,
-credits, duplicates, deadlines and reset/link-loss actions. ESSL 1.1.2 is locked
-to its Registry object, upstream commit and normalized 30-file payload; raw ZIP
-timestamps are explicitly not used as identity. Wire/DMA/interrupt execution
-remains dev-board/HIL-only. The marker and evidence update together in every
-commit.
+**Exact marker: `F4.1.0`** — vendor the exact ESSL 1.1.2 payload for offline S3
+builds and freeze the common S3↔C5 source boundary. F4.0 is reviewed: one
+runner preserves six non-substitutable evidence classes across four transports
+and 37 scenarios. The firmware pre-order gate requires contract, sanitized host,
+exact target-build and S3/QEMU fake-boundary evidence for every transport, but
+does not authorize a purchase. Wire/DMA/interrupt execution remains
+dev-board/HIL-only. The marker and evidence update together in every commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — the five target identities and their flash, RAM and rollback
@@ -142,8 +141,13 @@ commit.
 - `F4.0` — freeze the transport execution and evidence plan.
   - ✅ `F4.0.0` — [four transports and eight exact SDK endpoint bindings reviewed](../config/f4_0_transport_capability_matrix.json); QEMU proves none of their PHYs.
   - ✅ `F4.0.1` — [one fail-closed lifecycle, fixed ownership/queues, credits, duplicates, deadlines, reset and exact ESSL lock reviewed](../config/f4_0_1_adapter_contract.json).
-  - ▶️ **`F4.0.2` — current:** freeze one integrated execution and evidence runner.
+  - ✅ `F4.0.2` — [one integrated runner, six evidence classes and 37 scenarios reviewed](../config/f4_0_2_acceptance_matrix.json); [baseline snapshot](../config/f4_0_2_acceptance_snapshot.json) claims zero transport runs.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
+  - ▶️ **`F4.1.0` — current:** vendor exact ESSL for offline builds and freeze the S3↔C5 source boundary.
+  - `F4.1.1` — implement and sanitize the common high-speed adapter core.
+  - `F4.1.2` — implement the S3 host and C5 SDIO slave endpoints.
+  - `F4.1.3` — run exact target builds and S3 QEMU above the fake SDIO boundary.
+  - `F4.1.4` — run and review the named S3-C5 dev-board physical gate.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
 - `F4.4` — inject saturation, duplicate, deadline, reset and link-loss faults.
@@ -216,8 +220,7 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F4.0.2`. F3's reviewed target artifacts and the exact
-F4.0.0 SDK paths remain inputs. F4.0.1 now fixes the fail-closed lifecycle,
-ownership, queues, credits and recovery rules. The active step defines one
-runner that keeps host, target-build, QEMU and deferred physical evidence
-separate while presenting one reproducible result.
+The current boundary is `F4.1.0`. F4.0 is reviewed: exact SDK paths, one
+fail-closed lifecycle and one non-substituting evidence runner are locked. The
+active step imports the exact ESSL source into the offline build boundary and
+defines the shared S3-C5 adapter source surface before behavior is implemented.

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "stage": "F4.0.2",
+  "status": "reviewed_plan",
+  "matrix_sha256": "2b239a02e6e07b48d9d7ced880262ceb102ca1d5df789850548135f07b453200",
+  "locked_inputs": [
+    {
+      "id": "L2IP",
+      "path": "config/interdomain_protocol.json",
+      "sha256": "dd28de59520c7822bd74fb88d9b52960ec27a1c369e474eb566cd97b58e14f53"
+    },
+    {
+      "id": "F4_CAPABILITY",
+      "path": "config/f4_0_transport_capability_matrix.json",
+      "sha256": "8e830a8977c21a4e2359152c99a156be3122680276adfbf60fca51a717930145"
+    },
+    {
+      "id": "F4_ADAPTER",
+      "path": "config/f4_0_1_adapter_contract.json",
+      "sha256": "5e3c5e816e28973b2b4e2ab5e3e2887cf1e2a799bb390950ecc9834a9c117cd7"
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "{python}",
+        "tools/check_f4_transport_capability.py"
+      ],
+      "status": "passed",
+      "output_last_line": "F4.0.0 transport capability review OK: 4 transports, 8 exact SDK endpoint bindings, 0 physical/QEMU PHY runs"
+    },
+    {
+      "command": [
+        "{python}",
+        "tools/check_f4_adapter_contract.py"
+      ],
+      "status": "passed",
+      "output_last_line": "F4.0.1 adapter contract OK: 7 states, 4 transports, 32 buffers/direction, 0 physical runs"
+    }
+  ],
+  "accepted_claims": [
+    "transport_capability_contract_current",
+    "adapter_lifecycle_contract_current",
+    "evidence_classes_and_non_substitution_frozen"
+  ],
+  "deferred_claims": [
+    "adapter_implementation",
+    "host_sanitized_transport_scenarios",
+    "exact_target_adapter_builds",
+    "S3_QEMU_fake_transport_integration",
+    "dev_board_physical_transport_execution",
+    "assembled_product_HIL"
+  ],
+  "execution_counts": {
+    "static_contract_checks": 2,
+    "host_sanitized_scenarios": 0,
+    "exact_target_adapter_builds": 0,
+    "s3_qemu_fake_runs": 0,
+    "dev_board_phy_runs": 0,
+    "assembled_hil_runs": 0
+  },
+  "next": "F4.1.0",
+  "runner": "tools/run_f4_acceptance.py"
+}

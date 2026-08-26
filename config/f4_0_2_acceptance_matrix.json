@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "stage": "F4.0.2",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "purpose": "freeze one fail-closed runner and evidence taxonomy before transport implementation, so host, target, QEMU and physical results cannot be confused",
+  "locked_inputs": [
+    {
+      "id": "L2IP",
+      "path": "config/interdomain_protocol.json",
+      "sha256": "dd28de59520c7822bd74fb88d9b52960ec27a1c369e474eb566cd97b58e14f53"
+    },
+    {
+      "id": "F4_CAPABILITY",
+      "path": "config/f4_0_transport_capability_matrix.json",
+      "sha256": "8e830a8977c21a4e2359152c99a156be3122680276adfbf60fca51a717930145"
+    },
+    {
+      "id": "F4_ADAPTER",
+      "path": "config/f4_0_1_adapter_contract.json",
+      "sha256": "5e3c5e816e28973b2b4e2ab5e3e2887cf1e2a799bb390950ecc9834a9c117cd7"
+    }
+  ],
+  "policy": {
+    "one_runner": true,
+    "evidence_class_substitution_allowed": false,
+    "a_failure_aborts_the_requested_run": true,
+    "missing_required_evidence_is_failure_not_skip": true,
+    "physical_evidence_requires_exact_fixture_identity": true,
+    "qemu_fake_transport_may_claim_physical_execution": false,
+    "prototype_order_gate_is_stricter_than_plan_review": true,
+    "no_purchase_authorized": true
+  },
+  "runner": {
+    "path": "tools/run_f4_acceptance.py",
+    "plan_check": ["{python}", "tools/run_f4_acceptance.py", "--check-plan"],
+    "dry_run": ["{python}", "tools/run_f4_acceptance.py", "--dry-run"],
+    "baseline_run": ["{python}", "tools/run_f4_acceptance.py", "--snapshot", "--write"],
+    "baseline_check": ["{python}", "tools/run_f4_acceptance.py", "--check-snapshot"],
+    "future_integrated_run": ["{locked_python}", "tools/run_f4_acceptance.py", "--run-available", "--write"],
+    "future_integrated_check": ["{python}", "tools/run_f4_acceptance.py", "--check-evidence"]
+  },
+  "evidence_classes": [
+    {
+      "id": "STATIC_CONTRACT",
+      "proves": "reviewed protocol, SDK binding, lifecycle, ownership and evidence-plan invariants",
+      "cannot_prove": "compiled adapter code, target execution or physical transport"
+    },
+    {
+      "id": "HOST_SANITIZED_MODEL",
+      "proves": "portable adapter state, queue, credit, duplicate, deadline and injected-fault behavior under ASan/UBSan",
+      "cannot_prove": "target ABI, SDK calls, DMA, interrupt or wire timing"
+    },
+    {
+      "id": "EXACT_TARGET_BUILD",
+      "proves": "the adapter compiles and fits against the exact locked SDK/toolchain for both endpoints",
+      "cannot_prove": "boot, runtime behavior, peripheral execution or timing"
+    },
+    {
+      "id": "S3_QEMU_FAKE_BOUNDARY",
+      "proves": "the exact S3 image integrates scheduling and recovery above a deterministic fake transport boundary",
+      "cannot_prove": "physical SDIO, SPI, I2C, DMA, GPIO interrupt or clock-stretching execution"
+    },
+    {
+      "id": "DEV_BOARD_PHY",
+      "proves": "the named endpoint boards execute the production physical protocol and fault cases with the recorded fixture",
+      "cannot_prove": "Leshy2 PCB signal integrity, final power/RF coexistence or assembled-product endurance"
+    },
+    {
+      "id": "ASSEMBLED_HIL",
+      "proves": "the final prototype executes the transport under product power, RF, thermal and coexistence conditions",
+      "cannot_prove": "unrun endurance intervals or a different hardware revision"
+    }
+  ],
+  "transport_tracks": [
+    {
+      "id": "S3_C5",
+      "implementation_stage": "F4.1",
+      "endpoint_targets": ["s3", "c5"],
+      "required_for_f4_review": ["STATIC_CONTRACT", "HOST_SANITIZED_MODEL", "EXACT_TARGET_BUILD", "S3_QEMU_FAKE_BOUNDARY", "DEV_BOARD_PHY"],
+      "deferred_to_f10": ["ASSEMBLED_HIL"]
+    },
+    {
+      "id": "S3_RP",
+      "implementation_stage": "F4.2",
+      "endpoint_targets": ["s3", "rp"],
+      "required_for_f4_review": ["STATIC_CONTRACT", "HOST_SANITIZED_MODEL", "EXACT_TARGET_BUILD", "S3_QEMU_FAKE_BOUNDARY", "DEV_BOARD_PHY"],
+      "deferred_to_f10": ["ASSEMBLED_HIL"]
+    },
+    {
+      "id": "S3_PACK",
+      "implementation_stage": "F4.3",
+      "endpoint_targets": ["s3", "pack"],
+      "required_for_f4_review": ["STATIC_CONTRACT", "HOST_SANITIZED_MODEL", "EXACT_TARGET_BUILD", "S3_QEMU_FAKE_BOUNDARY", "DEV_BOARD_PHY"],
+      "deferred_to_f10": ["ASSEMBLED_HIL"]
+    },
+    {
+      "id": "S3_SAFETY",
+      "implementation_stage": "F4.3",
+      "endpoint_targets": ["s3", "safety"],
+      "required_for_f4_review": ["STATIC_CONTRACT", "HOST_SANITIZED_MODEL", "EXACT_TARGET_BUILD", "S3_QEMU_FAKE_BOUNDARY", "DEV_BOARD_PHY"],
+      "deferred_to_f10": ["ASSEMBLED_HIL"]
+    }
+  ],
+  "prototype_order_gate": {
+    "name": "firmware_preorder_confidence",
+    "required_for_each_transport": ["STATIC_CONTRACT", "HOST_SANITIZED_MODEL", "EXACT_TARGET_BUILD", "S3_QEMU_FAKE_BOUNDARY"],
+    "not_substituted_by": ["DEV_BOARD_PHY", "ASSEMBLED_HIL"],
+    "rule": "hardware H7 order may not claim firmware pre-order confidence until all four non-physical evidence classes pass for every transport; this plan does not authorize an order"
+  },
+  "scenario_campaign": {
+    "common": [
+      "fresh_boot_handshake_reaches_ready",
+      "incompatible_protocol_never_reaches_ready",
+      "reset_cannot_jump_directly_to_ready",
+      "tx_buffer_cannot_be_reused_before_completion",
+      "rx_buffer_cannot_be_released_before_validation_and_dispatch",
+      "safety_queue_exhaustion_faults_closed",
+      "control_queue_exhaustion_faults_closed",
+      "interactive_overflow_returns_busy_without_side_effect",
+      "telemetry_overflow_preserves_newest_and_counts_drop",
+      "bulk_zero_credit_stalls_without_blocking_control",
+      "bulk_credit_returns_only_after_rx_release",
+      "pending_duplicate_coalesces",
+      "cached_duplicate_returns_same_typed_result",
+      "evicted_or_stale_duplicate_never_reexecutes",
+      "deadline_expires_before_commit_without_side_effect",
+      "post_commit_expiry_reports_actual_owner_state",
+      "peer_boot_change_clears_session_and_credits"
+    ],
+    "transport_specific": {
+      "S3_C5": ["sdio_partial_cell", "sdio_slave_reset", "sdio_interrupt_loss", "sdio_priority_under_bulk", "sdio_link_loss_local_tx_off"],
+      "S3_RP": ["spi_cs_abort", "spi_dma_half_completion", "rp_alert_race", "spi_priority_under_bulk", "spi_link_loss_local_tx_off"],
+      "S3_PACK": ["pack_torn_status", "pack_duplicate_sequence", "pack_update_window_readback", "pack_status_stale", "pack_link_loss_preserves_hold"],
+      "S3_SAFETY": ["safety_torn_status", "safety_duplicate_heartbeat", "safety_lease_expiry", "safety_status_stale", "safety_link_loss_asserts_fault_kill"]
+    }
+  },
+  "baseline": {
+    "artifact": "config/f4_0_2_acceptance_snapshot.json",
+    "commands": [
+      ["{python}", "tools/check_f4_transport_capability.py"],
+      ["{python}", "tools/check_f4_adapter_contract.py"]
+    ],
+    "accepted_claims": [
+      "transport_capability_contract_current",
+      "adapter_lifecycle_contract_current",
+      "evidence_classes_and_non_substitution_frozen"
+    ],
+    "deferred_claims": [
+      "adapter_implementation",
+      "host_sanitized_transport_scenarios",
+      "exact_target_adapter_builds",
+      "S3_QEMU_fake_transport_integration",
+      "dev_board_physical_transport_execution",
+      "assembled_product_HIL"
+    ]
+  },
+  "execution_counts": {
+    "static_contract_checks": 2,
+    "host_sanitized_scenarios": 0,
+    "exact_target_adapter_builds": 0,
+    "s3_qemu_fake_runs": 0,
+    "dev_board_phy_runs": 0,
+    "assembled_hil_runs": 0
+  },
+  "authorization": {
+    "hardware_purchase": false,
+    "hardware_layout": false,
+    "fabrication": false
+  },
+  "next": "F4.1.0"
+}
