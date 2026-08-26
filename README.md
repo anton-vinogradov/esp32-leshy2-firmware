@@ -37,8 +37,10 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.2`:
-Hub/Airband/FPV bodies have an incremental collision-tested placement, while
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.3`:
+Hub/Airband/FPV bodies have an incremental collision-tested placement, the
+Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
+cell, and port/antenna kit codes are synchronized, while
 the complete R2 rail, mockup, BSP, KiCad layout and order authorization remain open.
 
 ### Current phase F0-R2 — detailed position
