@@ -31,16 +31,13 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F4.** The accepted hardware H2 BSP remains the pin source;
-the hardware [H4 joined gate](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-prelayout-gate-report.md)
-is reviewed. At H5.0.3, [JLCPCB Standard PCBA is the non-exclusive manufacturing reference](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/manufacturing-platform.md):
-the controlled normalized BOM Tool run matched 176/209 lines and parsed all
-1019 placements; exact search gave all 209 lines `J0`–`J3`, `J4-F` or `J4-P`
-routes without replacement. Exact SA518 pricing and the factory `J4-F`
-box-build / `J4-P` kit-and-shipping gates remain open. The JLCAPI app/key are ready outside Git while Parts permission is
-reviewing. The generic `JLCPCB Assembly C9900300438` quote match was rejected
-because it does not prove exact NiceRF identity; no quote was submitted.
-Purchasing, quote/reservation, layout and fabrication remain blocked.
+**Firmware is at F4.** The synchronized hardware H2 BSP remains the pin source.
+Hardware H2/H3 now use independent `SA818S-V` and `SA818S-U` paths with a
+local one-hot selector and no new MCU or M1 contact. Hardware H4 is reviewed
+against the existing F3 package; hardware is now at `H5.0.1-R1`, rebuilding
+component evidence for the 210-line dual-SA818S BOM. Former SA518-based H5
+evidence is superseded. Purchasing, quote/reservation, layout and
+fabrication remain blocked.
 F3 is reviewed: S3 debug/release boots and runs the
 8-MiB octal-PSRAM and isolated fault paths in exact QEMU; all 52 target
 artifacts reproduce. Peripheral execution and four non-S3 boots remain named

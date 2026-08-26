@@ -8,7 +8,7 @@
       "target": "s3",
       "stage": "F2.4.1",
       "evidence": "config/f2_4_s3_build_review.json",
-      "evidence_sha256": "83f1ac469944eb8c2b1cf180d9b4d5d148bde48f17f857a0eba59ce740131115",
+      "evidence_sha256": "c8202880c6413938d2f84125be2986b2573b44b52fdb55ceb31239fb3d9618e9",
       "configurations": [
         "debug",
         "release"
@@ -16,15 +16,15 @@
       "artifact_instances": 10,
       "map_files": 2,
       "image_bytes": {
-        "debug": 182688,
-        "release": 140496
+        "debug": 182736,
+        "release": 140528
       }
     },
     {
       "target": "c5",
       "stage": "F2.4.2",
       "evidence": "config/f2_4_c5_build_review.json",
-      "evidence_sha256": "6f2fc5c1d39d213c8a33cd8231ef746b9fe0c5b647cca433aa5af460f1a26293",
+      "evidence_sha256": "e5f32485aa47a93e688d1a3339aa9f82e1c2e6f66dfdd349b9ad7fa502b54a7a",
       "configurations": [
         "debug",
         "release"
@@ -40,7 +40,7 @@
       "target": "rp",
       "stage": "F2.4.3",
       "evidence": "config/f2_4_rp_build_review.json",
-      "evidence_sha256": "f9612831e037b5484d630a95576c961bf2c265599e16acc1b82765f513886969",
+      "evidence_sha256": "6879407e39f5b182220d3ae4c9fcd2fa018203e1bb9dc044b90eb50f2c4e9791",
       "configurations": [
         "debug",
         "release"
@@ -48,15 +48,15 @@
       "artifact_instances": 8,
       "map_files": 2,
       "image_bytes": {
-        "debug": 18468,
-        "release": 10656
+        "debug": 18484,
+        "release": 10676
       }
     },
     {
       "target": "pack",
       "stage": "F2.4.4",
       "evidence": "config/f2_4_pack_build_review.json",
-      "evidence_sha256": "b5e5a0fd19101ae938d70182436a96aa6d29a9468edc161ecf841ce84e963f7a",
+      "evidence_sha256": "8e893c62c737b70c4cb097b2f5374b39e53268dcd5b74dd34bac02bb8f0f0f09",
       "configurations": [
         "debug",
         "release"
@@ -72,7 +72,7 @@
       "target": "safety",
       "stage": "F2.4.5",
       "evidence": "config/f2_4_safety_build_review.json",
-      "evidence_sha256": "99648e9b73efa0d28927ead310dc82eef13091b6b60519d5622bab412b7a9090",
+      "evidence_sha256": "3ef97a1a7eac46b620770d2c803891dfa7c1eb79fe4f9e1a4342deda406d359d",
       "configurations": [
         "debug",
         "release"

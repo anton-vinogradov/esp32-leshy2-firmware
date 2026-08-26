@@ -8,7 +8,7 @@
 |---|---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Application, menu, display, microSD, audio, BLE/Wi-Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2.4/5 GHz, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
-| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
+| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA818S-V/U selection, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1106SDGS20R` | Two-cell admission and local fail-closed power state | NRST, SWD, UART1 and isolated fixture power |
 | Safety | second `MSPM0C1106SDGS20R` | Heartbeats, TX leases, three thermal zones, physical TX evidence and retained fault record | NRST, SWD, UART1 and isolated fixture power |
 
@@ -123,7 +123,11 @@ hardware `RUN_PERMIT` qualification and optical evidence.
   microphone for an ordinary TRS headphone plug. Removal restores the reset
   default before speaker playback can resume. P1–P7 are pulled, interrupt-
   capable local reserves rather than floating pins.
-- SA518 PTT is never inferred from audio samples or microphone choice.
+- A dedicated `TCA9534A` at `0x3A` selects VHF or UHF. Hardware one-hot PD and
+  three `TMUX1136` paths keep UART, PTT/AUDIO_ON and AFOUT/MIC_IN on the same
+  selected SA818S module. PTT is never inferred from audio samples or
+  microphone choice; `SA818S-CE` may replace only UHF after qualification and
+  then firmware disables 470–480 MHz.
 - The Cap Bus and M5 Unit use independent `OFF → STARTING → IDENTIFY → ACTIVE →
   STOPPING` states and a latch-off fault. An unknown module profile never gains
   power or dangerous commands automatically.

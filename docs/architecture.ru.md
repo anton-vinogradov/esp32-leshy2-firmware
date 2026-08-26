@@ -8,7 +8,7 @@
 |---|---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | Приложение, меню, display, microSD, audio, BLE/Wi‑Fi | Product USB, UART0, RESET, BOOT |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | Native 2,4/5 ГГц, IEEE 802.15.4, IR | Data-only USB, UART0, RESET, BOOT |
-| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, SA518, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
+| RP | `SC1512-A4` (RP2354B) | nRF24 ×3, CC1101, выбор SA818S-V/U, Cap Bus | Data-only USB, SWD, RUN, USB_BOOT |
 | Pack | `MSPM0C1106SDGS20R` | Допуск двух ячеек и локальный fail-closed power state | NRST, SWD, UART1 и изолированное fixture-питание |
 | Safety | второй `MSPM0C1106SDGS20R` | Heartbeat, TX lease, три температурные зоны, физическое TX evidence и сохранённый fault record | NRST, SWD, UART1 и изолированное fixture-питание |
 
@@ -127,7 +127,11 @@ group scheduler синхронизирует их, не превращая mixed
   восстанавливается reset-default и лишь затем разрешается динамик. P1–P7
   остаются подтянутыми interrupt-capable локальными резервами, а не висящими
   входами.
-- SA518 PTT не выводится из audio samples или выбора микрофона.
+- Выделенный `TCA9534A` по адресу `0x3A` выбирает VHF или UHF. Аппаратный
+  one-hot PD и три `TMUX1136` удерживают UART, PTT/AUDIO_ON и AFOUT/MIC_IN на
+  одном выбранном SA818S. PTT не выводится из audio samples или выбора
+  микрофона; `SA818S-CE` может заменить только UHF после квалификации, и тогда
+  firmware запрещает 470–480 МГц.
 - Cap Bus и M5 Unit имеют независимые состояния `OFF → STARTING → IDENTIFY →
   ACTIVE → STOPPING` и latch-off fault. Неизвестный module profile не получает
   питание или опасные команды автоматически.

@@ -59,10 +59,10 @@ static const char *const l2_hw_rp_pin_15_peers[] = {
     "safe_gate_a.4A"
 };
 static const char *const l2_hw_rp_pin_16_peers[] = {
-    "voice_uart_tx_iso.A"
+    "voice_control_mux_a.D1"
 };
 static const char *const l2_hw_rp_pin_17_peers[] = {
-    "voice.UART_TX"
+    "voice_control_mux_a.D2"
 };
 static const char *const l2_hw_rp_pin_18_peers[] = {
     "safe_ptt_or.1A"
@@ -71,7 +71,7 @@ static const char *const l2_hw_rp_pin_19_peers[] = {
     "s3.GPIO3"
 };
 static const char *const l2_hw_rp_pin_20_peers[] = {
-    "voice.AUDIO_ON",
+    "voice_control_mux_b.D2",
     "voice_audio_on_pulldown.END_1"
 };
 static const char *const l2_hw_rp_pin_21_peers[] = {

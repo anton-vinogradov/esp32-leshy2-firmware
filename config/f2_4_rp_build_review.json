@@ -11,28 +11,28 @@
       "artifacts": [
         {
           "path": "build/targets/rp/debug/leshy2_rp.elf",
-          "bytes": 1737796,
-          "sha256": "5cba3bf9f680281cce3199f50e5ff70a90af700f5486020ac82cb9240459072d"
+          "bytes": 1737812,
+          "sha256": "a4c65c4d0b5e6ce0b6247ba5d94545c929f07af830a4f5275ed12ac7aecb8f86"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.bin",
-          "bytes": 18468,
-          "sha256": "1f66ac7fcd4da62e398da7d12bf1010d2df6dd8ce8252b3654f2b50cfd7c4c5b"
+          "bytes": 18484,
+          "sha256": "6976e4a6e4f47043de1ed53dd6616603637bce792ecd753de2163ef2d5720472"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.uf2",
           "bytes": 37888,
-          "sha256": "0eb7d059529c8e8f9dc28d3d7df7fa436cd873bd2adc1649653c650478a48f67"
+          "sha256": "a083f71f4e0d0d2d8ba4849c2ec0742bdc0a801de1305791f1d55aec7696bb40"
         },
         {
           "path": "build/targets/rp/debug/leshy2_rp.elf.map",
-          "bytes": 932384,
-          "sha256": "d2273c74ea8ff386c1fd2c99ba2ff2a29114557a573b8e05f575e90065c1e302"
+          "bytes": 932345,
+          "sha256": "c695136c3d0b42767b49aabd40155d2fbe211909cd245a00e2d15b15a8f5a30e"
         }
       ],
       "image_gate": {
         "image": "build/targets/rp/debug/leshy2_rp.bin",
-        "size_bytes": 18468,
+        "size_bytes": 18484,
         "result": "ok",
         "warning_bytes": 786432,
         "maximum_image_bytes": 884736,
@@ -44,28 +44,28 @@
       "artifacts": [
         {
           "path": "build/targets/rp/release/leshy2_rp.elf",
-          "bytes": 335288,
-          "sha256": "ecf439389334911be8d5a021765de7d22943d854c9418e64144eb2ef5d4d6229"
+          "bytes": 335312,
+          "sha256": "2d87849efea0817a50978cf6415ba8d4654fb59055104d589ff26d82e30613df"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.bin",
-          "bytes": 10656,
-          "sha256": "8b744ca02ea10d7be9f5d2b535e5c5c808e794f5e4bcc254e48427a2ca3cd1b1"
+          "bytes": 10676,
+          "sha256": "67d0da2df53469f7618b7a8a4e09ace7b3b253920b00f8dcca836b96fc87bdb2"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.uf2",
           "bytes": 22016,
-          "sha256": "232f6a688d5ada56f84740bddd60b110125bf1405097d138f8d62757333a8cde"
+          "sha256": "fe613d7fb82630781f7eb2ad4eded00647f457a85cb860b493d4bcffca04064f"
         },
         {
           "path": "build/targets/rp/release/leshy2_rp.elf.map",
           "bytes": 868107,
-          "sha256": "fd59b03b378afd675bf9a2e6cbc9df64bd425d2a6cacc091645f1f656b84d81e"
+          "sha256": "1726f72abcc6f2a334d3b8ed765b59b20ac537d4140816af206830ab4c8e58c2"
         }
       ],
       "image_gate": {
         "image": "build/targets/rp/release/leshy2_rp.bin",
-        "size_bytes": 10656,
+        "size_bytes": 10676,
         "result": "ok",
         "warning_bytes": 786432,
         "maximum_image_bytes": 884736,
@@ -125,7 +125,7 @@
       },
       {
         "path": "generated/hardware/src/rp_bsp.c",
-        "sha256": "3f9ba609e2278928601d0f5e133aa509c5206a0ae66671be5577a52610cd245c"
+        "sha256": "c0d22fa9ea8854203b43c919169645bb6498068d2c45fed5e94c6124c5e9d64d"
       },
       {
         "path": "targets/rp/CMakeLists.txt",
@@ -140,7 +140,7 @@
         "sha256": "f1746f9b855b53766d95d095b0e51c6a021ff9824fa3318aa12019239cbabdb6"
       }
     ],
-    "manifest_sha256": "bc2437937a078c01852106e2ba939846d9652665519e722d7fba90ba457c3c75"
+    "manifest_sha256": "7fc7c0889072499248b8deb6a90267fa263d77dd1d82cb8db95d3c4fbc7d25ab"
   },
   "execution": {
     "configure_runs": 2,

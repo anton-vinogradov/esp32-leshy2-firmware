@@ -341,7 +341,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("esp32s3", s3_review["sdk_target"])
         self.assertEqual({"debug", "release"}, set(s3_review["configurations"]))
         self.assertEqual(
-            {"debug": 182688, "release": 140496},
+            {"debug": 182736, "release": 140528},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in s3_review["configurations"].items()
@@ -383,7 +383,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", rp_review["status"])
         self.assertEqual("rp2350-arm-s", rp_review["sdk_target"])
         self.assertEqual(
-            {"debug": 18468, "release": 10656},
+            {"debug": 18484, "release": 10676},
             {
                 name: row["image_gate"]["size_bytes"]
                 for name, row in rp_review["configurations"].items()

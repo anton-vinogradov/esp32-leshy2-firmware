@@ -241,7 +241,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual(52, review["totals"]["byte_reproducible_artifacts"])
         self.assertEqual(0, review["totals"]["physical_rollback_transitions"])
         targets = {target["target"]: target for target in review["targets"]}
-        self.assertEqual(182688, targets["s3"]["configurations"]["debug"]["application"]["bytes"])
+        self.assertEqual(182736, targets["s3"]["configurations"]["debug"]["application"]["bytes"])
         self.assertEqual(172224, targets["c5"]["configurations"]["debug"]["application"]["bytes"])
         self.assertTrue(targets["s3"]["external_ram"]["runtime_init_and_memory_test_proven"])
         self.assertFalse(targets["c5"]["external_ram"]["runtime_init_and_memory_test_proven"])
