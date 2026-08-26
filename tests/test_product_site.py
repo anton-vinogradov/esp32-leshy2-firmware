@@ -63,8 +63,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.0", "H1-R2.0"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.0", "H1-R2.0"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.0", "H1-R2.1"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.0", "H1-R2.1"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
