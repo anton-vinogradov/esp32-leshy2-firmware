@@ -42,10 +42,13 @@ Hub/Airband/K331-reserve bodies have an incremental collision-tested placement, 
 Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. K331 fits the reserved Hub
 controls and 5-V budget; exact linear `TBS5G8MMCXA` is the thirteenth kit
-antenna for the keyed `FPV RX 5.8G` MMCX. The controlled K331 body and factory
+antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
+`FXP831.09.0100C` selected as a backorder-only paper fallback. The controlled K331 body and factory
 route remain open. The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
-dynamic and enclosure proof remains an H3 gate. The complete R2 mockup, BSP,
+dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
+pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
+the VNA-qualified fitted/DNP state. The complete R2 mockup, BSP,
 KiCad layout and order authorization remain open.
 
 ### Current phase F0-R2 — detailed position
