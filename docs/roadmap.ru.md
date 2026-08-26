@@ -31,15 +31,14 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F4
 
-<!-- current-substep: F4.1.0 -->
+<!-- current-substep: F4.1.1 -->
 
-**Точный маркер: `F4.1.0`** — поместить точный payload ESSL 1.1.2 в offline
-S3 build и зафиксировать общую source boundary S3↔C5. F4.0 прошла ревью: единый
-runner сохраняет шесть невзаимозаменяемых классов evidence для четырёх
-transports и 37 сценариев. Firmware-gate перед заказом требует contract,
-sanitized host, exact target-build и S3/QEMU fake-boundary evidence по каждому
-transport, но не разрешает закупку. Исполнение wire/DMA/interrupt остаётся
-dev-board/HIL-only. Маркер и evidence меняются вместе в каждом commit.
+**Точный маркер: `F4.1.1`** — реализовать и прогнать с sanitizers
+target-neutral high-speed adapter core. На `F4.1.0` импортирован точный payload
+ESSL 1.1.2 из 30 файлов с автоматическим manifest нормализованного содержимого;
+floating Registry resolution остаётся выключенным. Adapter build, QEMU
+transport и физический SDIO run пока не заявлены. Маркер и evidence меняются
+вместе в каждом commit.
 
 - `F2.0` — target/toolchain matrix.
   - ✅ `F2.0.0` — зарегистрированы пять target и их flash, RAM и rollback
@@ -143,8 +142,8 @@ dev-board/HIL-only. Маркер и evidence меняются вместе в к
   - ✅ `F4.0.1` — [проведены единый fail-closed lifecycle, фиксированные ownership/queues, credits, duplicates, deadlines, reset и точный ESSL lock](../config/f4_0_1_adapter_contract.json).
   - ✅ `F4.0.2` — [проведены единый runner, шесть классов evidence и 37 сценариев](../config/f4_0_2_acceptance_matrix.json); [baseline snapshot](../config/f4_0_2_acceptance_snapshot.json) заявляет ноль transport runs.
 - `F4.1` — реализовать и исполнить SDIO S3↔C5.
-  - ▶️ **`F4.1.0` — сейчас:** поместить точный ESSL в offline build и зафиксировать source boundary S3↔C5.
-  - `F4.1.1` — реализовать и прогнать с sanitizers общий high-speed adapter core.
+  - ✅ `F4.1.0` — [проведены точный offline payload ESSL 1.1.2 и single-owner source boundary S3↔C5](../config/f4_1_s3_c5_source_boundary.json); [manifest 30 файлов](../third_party/esp_serial_slave_link.vendor-lock.json).
+  - ▶️ **`F4.1.1` — сейчас:** реализовать и прогнать с sanitizers общий high-speed adapter core.
   - `F4.1.2` — реализовать endpoints S3 host и C5 SDIO slave.
   - `F4.1.3` — выполнить exact target builds и S3 QEMU над fake SDIO boundary.
   - `F4.1.4` — выполнить и провести ревью физического dev-board gate S3-C5.
@@ -220,7 +219,7 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F4.1.0`. F4.0 прошла ревью: зафиксированы точные SDK paths,
-единый fail-closed lifecycle и runner без подмены классов evidence. Текущий шаг
-вводит точный source ESSL в offline build boundary и задаёт общий source surface
-adapter S3-C5 до реализации поведения.
+Текущая граница — `F4.1.1`. Точный source ESSL теперь находится в репозитории и
+проверяется без сетевого resolution. Текущий шаг реализует общий high-speed
+adapter из семи состояний и выполняет с sanitizers общие сценарии queues,
+credits, duplicates, deadlines, reset и link loss.

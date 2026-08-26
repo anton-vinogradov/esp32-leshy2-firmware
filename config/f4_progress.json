@@ -2,7 +2,7 @@
   "schema_version": 1,
   "phase": "F4",
   "status": "in_progress",
-  "current_substep": "F4.1.0",
+  "current_substep": "F4.1.1",
   "updated_on": "2026-08-26",
   "substeps": {
     "F4.0.0": {
@@ -29,10 +29,15 @@
       "result": "SDK capability, fail-closed adapter semantics and the integrated evidence runner are frozen before implementation"
     },
     "F4.1.0": {
-      "status": "current",
-      "goal": "vendor the exact ESSL payload for offline S3 builds and freeze the common S3-C5 source boundary"
+      "status": "reviewed",
+      "result": "the exact 30-file ESSL 1.1.2 payload is checked in with an automated normalized-content manifest; Registry resolution remains disabled and three future source areas have one owner each",
+      "artifacts": [
+        "config/f4_1_s3_c5_source_boundary.json",
+        "third_party/esp_serial_slave_link.vendor-lock.json",
+        "tools/vendor_essl.py"
+      ]
     },
-    "F4.1.1": {"status": "waiting_for_F4.1.0", "goal": "implement and sanitize the common high-speed adapter core"},
+    "F4.1.1": {"status": "current", "goal": "implement and sanitize the common high-speed adapter core"},
     "F4.1.2": {"status": "waiting_for_F4.1.1", "goal": "implement S3 host and C5 SDIO slave endpoints"},
     "F4.1.3": {"status": "waiting_for_F4.1.2", "goal": "run exact target builds and S3 QEMU above the fake SDIO boundary"},
     "F4.1.4": {"status": "waiting_for_F4.1.3", "goal": "run and review the named S3-C5 dev-board physical gate"},
@@ -48,9 +53,11 @@
     "evidence_classes": 6,
     "planned_transport_scenarios": 37,
     "integrated_acceptance_runner": true,
+    "vendored_essl_files": 30,
+    "floating_component_resolution": false,
     "exact_sdk_endpoint_bindings": 8,
     "qemu_phy_paths": 0,
     "physical_transport_runs": 0
   },
-  "next": "vendor and verify the exact ESSL 1.1.2 normalized payload without enabling floating Registry resolution, then expose one common high-speed adapter boundary to the S3 and C5 target projects"
+  "next": "implement the target-neutral seven-state high-speed adapter, fixed queue ownership, bulk credits, duplicate-result handling and deadline/reset behavior, then execute all common host scenarios under sanitizers"
 }

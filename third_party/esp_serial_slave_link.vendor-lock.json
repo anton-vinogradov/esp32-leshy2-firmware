@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "stage": "F4.1.0",
+  "status": "imported",
+  "component": "espressif/esp_serial_slave_link",
+  "version": "1.1.2",
+  "license": "Apache-2.0",
+  "registry_object_id": "dedb3ae6-e261-489e-8109-ff5445fec9a1",
+  "repository_commit": "a93734f00aef26d6e8a3132bc20de869c75426f5",
+  "repository_path": "esp_serial_slave_link",
+  "canonical_payload_sha256": "9f217846a90d97a4897350b0c8cfafd4bbe1a2dd8af5619fd3463ea9dbe36053",
+  "producer": "tools/vendor_essl.py",
+  "files": [
+    {
+      "path": "third_party/esp_serial_slave_link/.build-test-rules.yml",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/CHANGELOG.md",
+      "bytes": 305,
+      "sha256": "f52f43bd0ca278b88f924aeb13713c1b610ee1a9dfaacdc113e816a22512e50b"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/CMakeLists.txt",
+      "bytes": 525,
+      "sha256": "a5dc499ededce672b4641a90152f0d2770088ddc329ada3e5a4e5b6ba9051ddd"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/README.md",
+      "bytes": 654,
+      "sha256": "e47b715233f5b480227247f1b30e66035d9ed40114dba59f8194a227083f38e4"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/Doxyfile",
+      "bytes": 735,
+      "sha256": "a0b8f3f51596ce026f475bad44d234881147bffba6ce0a2fbfcbecfb0ed3aed0"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/book.toml",
+      "bytes": 333,
+      "sha256": "78a8aead48e2d4c8905215bbadf163ef0f61ee04c8c8c9e51d72f45d57adf463"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/src/SUMMARY.md",
+      "bytes": 238,
+      "sha256": "da70966dd6a3e59a45ee53b9a520cd8fa821ccb102ff2477d35c3c9d09fe5f26"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/src/api.md",
+      "bytes": 128,
+      "sha256": "d06c809c85c02f6ae22bd090331e1150dad89bd57034f056dbf3df0449cdc22b"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/src/index.md",
+      "bytes": 6744,
+      "sha256": "789460aaa1fd0ed6aef56d7ec1164576a86ad0409308e03dce4cadd4714df1bd"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/src/sdio_slave_protocol.md",
+      "bytes": 8425,
+      "sha256": "1aed372f00b6b99ba5042b311337a913acf6a9aecde75e471f596e7682a34d67"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/docs/src/spi_slave_hd_protocol.md",
+      "bytes": 7212,
+      "sha256": "8a66988f209332e4a47df87cdc797c2ffdb9ece24ae6baeadb532919eb3b1e1b"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/essl.c",
+      "bytes": 7151,
+      "sha256": "830b8a004976fcdfa229780d3561676f7edf0404820ac399ed219221d4eac6dd"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/essl_internal.h",
+      "bytes": 1541,
+      "sha256": "adbebabb1963abcc4ad9ef083f8e5ac3b2fc4a81a32d0a874de096c6b5b04849"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/essl_sdio.c",
+      "bytes": 18154,
+      "sha256": "38b3a86dbb4c7667c8a2a6b549aaca6101bf1dc70be8a59deb5829ec7626df8d"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/essl_sdio_defs.c",
+      "bytes": 355,
+      "sha256": "8677c9d8cfa16f3401cee7c8257134008ef676f8166edffb0e23423f42a32f9f"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/essl_spi.c",
+      "bytes": 18203,
+      "sha256": "f06158713477be58e61fe609b33a723d41b64b83edf988220da096931ff95975"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/idf_component.yml",
+      "bytes": 517,
+      "sha256": "1a7840b8965362f1dfc31a9240741f1eba90d7669af6ec25d4716f7840866d51"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/esp_serial_slave_link/essl.h",
+      "bytes": 9825,
+      "sha256": "e7779f1114d6f892544c9f108dc63696761f013f486fda53ef205527d6722da0"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/esp_serial_slave_link/essl_sdio.h",
+      "bytes": 8520,
+      "sha256": "1285aba1701ea25b4d4ccff54d23b8170dff1c7edb95b98e3cd9bc202d03e012"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/esp_serial_slave_link/essl_sdio_defs.h",
+      "bytes": 566,
+      "sha256": "f369a68dca485eca872c2d98ddd899ebeae0d437fa9a94b8c68a008eebf93e7d"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/esp_serial_slave_link/essl_spi.h",
+      "bytes": 15397,
+      "sha256": "26c3bb432d37b0030c6fedecf2f3ff8296f8bbb96ac691f31a04ceebc553aa85"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/essl_spi/esp32c2_defs.h",
+      "bytes": 733,
+      "sha256": "b32a64fc7ad166abcd3045d35a06b980a862eef3199f7c6a1082ca9825aba3bf"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/essl_spi/esp32c3_defs.h",
+      "bytes": 732,
+      "sha256": "76f86417e5362857e83e148eb5198fa9f8a909c0a10d32403556e702e20f41a6"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/essl_spi/esp32s2_defs.h",
+      "bytes": 732,
+      "sha256": "f30944be51b12ee99fb8176b168652fee6ca06f898bb5216516be41fb4e101fe"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/include/essl_spi/esp32s3_defs.h",
+      "bytes": 732,
+      "sha256": "76f86417e5362857e83e148eb5198fa9f8a909c0a10d32403556e702e20f41a6"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/test_apps/CMakeLists.txt",
+      "bytes": 128,
+      "sha256": "4c0ea925ee136b4c387c9b54ba4cf3bd7839dc62c3f00ffa8f5853e892d51388"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/test_apps/main/CMakeLists.txt",
+      "bytes": 120,
+      "sha256": "001c47841e3b6f91d2faea62204f4e2cda00e1477ce8b5abbd16a3521a2423d7"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/test_apps/main/essl_test.c",
+      "bytes": 45,
+      "sha256": "63859f2330363c3d3767bd9dbd841c41d960187c3eca5af2c2436779c4768b96"
+    },
+    {
+      "path": "third_party/esp_serial_slave_link/test_apps/main/idf_component.yml",
+      "bytes": 93,
+      "sha256": "55723ae1d7d0c5e2e97ddc92501f9c55ecd0fec3811705723e9ef5bdb83cdf14"
+    }
+  ]
+}

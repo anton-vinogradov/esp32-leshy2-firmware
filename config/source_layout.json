@@ -34,6 +34,16 @@
       "allowed_dependencies": ["ISO C headers", "leshy2 portable headers"]
     },
     {
+      "path": "third_party/esp_serial_slave_link/** and third_party/esp_serial_slave_link.vendor-lock.json",
+      "owner": "upstream_vendor_import",
+      "content": "exact normalized ESSL 1.1.2 payload and generated file manifest",
+      "hand_maintained": false,
+      "generated": true,
+      "producer": "tools/vendor_essl.py",
+      "manifest": "third_party/esp_serial_slave_link.vendor-lock.json",
+      "network_required_for_build": false
+    },
+    {
       "path": "targets/{s3,c5,rp,pack,safety}/**",
       "owner": "target_project",
       "content": "SDK adapters, startup, linker inputs and target-local entry points",

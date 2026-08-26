@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "stage": "F4.1.0",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-26",
+  "purpose": "bind the exact offline ESSL source and the future common/S3/C5 adapter ownership paths before behavior is implemented",
+  "inputs": [
+    "config/f4_0_1_adapter_contract.json",
+    "config/f4_0_2_acceptance_matrix.json",
+    "third_party/esp_serial_slave_link.vendor-lock.json"
+  ],
+  "vendor": {
+    "component": "espressif/esp_serial_slave_link",
+    "version": "1.1.2",
+    "path": "third_party/esp_serial_slave_link",
+    "manifest": "third_party/esp_serial_slave_link.vendor-lock.json",
+    "files": 30,
+    "canonical_payload_sha256": "9f217846a90d97a4897350b0c8cfafd4bbe1a2dd8af5619fd3463ea9dbe36053",
+    "component_manager_enabled": false,
+    "rule": "the checked-in source is the only accepted ESSL input; no configure or build may resolve a floating Registry version"
+  },
+  "source_ownership": [
+    {
+      "area": "common/include/leshy2/high_speed_adapter.h and common/src/high_speed_adapter.c",
+      "owner": "portable_core",
+      "introduced_at": "F4.1.1",
+      "allowed_dependencies": ["ISO C headers", "leshy2 portable headers"],
+      "forbidden_dependencies": ["ESP-IDF", "FreeRTOS", "ESP32 pins"]
+    },
+    {
+      "area": "targets/s3/components/leshy2_s3_c5/**",
+      "owner": "s3_target_adapter",
+      "introduced_at": "F4.1.2",
+      "allowed_dependencies": ["generated S3 BSP", "portable high-speed adapter", "vendored ESSL 1.1.2", "locked ESP-IDF APIs"],
+      "forbidden_dependencies": ["hand-authored pins", "Registry resolution"]
+    },
+    {
+      "area": "targets/c5/components/leshy2_s3_c5/**",
+      "owner": "c5_target_adapter",
+      "introduced_at": "F4.1.2",
+      "allowed_dependencies": ["generated C5 BSP", "portable high-speed adapter", "locked ESP-IDF SDIO slave APIs"],
+      "forbidden_dependencies": ["hand-authored pins", "ESSL host code", "Registry resolution"]
+    }
+  ],
+  "build_boundary": {
+    "s3": "F4.1.2 adds the vendored component through a repository-relative EXTRA_COMPONENT_DIRS path while IDF_COMPONENT_MANAGER remains 0",
+    "c5": "F4.1.2 consumes the built-in locked ESP-IDF esp_driver_sdio component and never links ESSL host code",
+    "common": "both endpoints compile the same target-neutral lifecycle, queue, credit, duplicate and deadline core",
+    "current_target_build_claim": false
+  },
+  "evidence_boundary": {
+    "reviewed_now": [
+      "exact 30-file ESSL normalized payload",
+      "Apache-2.0 license file present",
+      "exact upstream component metadata and commit",
+      "offline-only resolution policy",
+      "single-owner future source paths"
+    ],
+    "not_yet_claimed": [
+      "common adapter implementation",
+      "S3 or C5 adapter compilation",
+      "QEMU fake-boundary execution",
+      "SDIO physical execution"
+    ]
+  },
+  "counts": {
+    "vendored_files": 30,
+    "implemented_adapter_files": 0,
+    "target_adapter_builds": 0,
+    "qemu_fake_runs": 0,
+    "physical_transport_runs": 0
+  },
+  "authorization": {
+    "hardware_purchase": false,
+    "hardware_layout": false,
+    "fabrication": false
+  },
+  "next": "F4.1.1"
+}

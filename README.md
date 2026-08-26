@@ -54,15 +54,13 @@ physical gates rather than emulator claims.
 
 ### Current phase F4 — detailed position
 
-<!-- current-substep: F4.1.0 -->
+<!-- current-substep: F4.1.1 -->
 
-**Exact marker: `F4.1.0`** — vendor the exact ESSL 1.1.2 payload for offline S3
-builds and freeze the common S3↔C5 source boundary. F4.0 is reviewed: one
-runner preserves six non-substitutable evidence classes across four transports
-and 37 scenarios. The firmware pre-order gate requires contract, sanitized host,
-exact target-build and S3/QEMU fake-boundary evidence for every transport, but
-does not authorize a purchase. Wire/DMA/interrupt execution remains
-dev-board/HIL-only. This marker and its evidence move together in each commit.
+**Exact marker: `F4.1.1`** — implement and sanitize the target-neutral
+high-speed adapter core. `F4.1.0` imported the exact 30-file ESSL 1.1.2 payload
+with an automated normalized-content manifest; floating Registry resolution
+remains disabled. No adapter build, QEMU transport or physical SDIO run is
+claimed yet. This marker and its evidence move together in each commit.
 
 - `F2.0` — freeze the target/toolchain matrix.
   - ✅ `F2.0.0` — register the five targets and their flash/RAM/rollback
@@ -163,8 +161,8 @@ dev-board/HIL-only. This marker and its evidence move together in each commit.
   - ✅ `F4.0.1` — [one fail-closed lifecycle, fixed ownership/queues, credits, duplicates, deadlines, reset and exact ESSL lock reviewed](config/f4_0_1_adapter_contract.json).
   - ✅ `F4.0.2` — [one integrated runner, six evidence classes and 37 scenarios reviewed](config/f4_0_2_acceptance_matrix.json); [baseline snapshot](config/f4_0_2_acceptance_snapshot.json) claims zero transport runs.
 - `F4.1` — implement and exercise S3↔C5 SDIO.
-  - ▶️ **`F4.1.0` — current:** vendor exact ESSL for offline builds and freeze the S3↔C5 source boundary.
-  - `F4.1.1` — implement and sanitize the common high-speed adapter core.
+  - ✅ `F4.1.0` — [exact offline ESSL 1.1.2 payload and single-owner S3↔C5 source boundary reviewed](config/f4_1_s3_c5_source_boundary.json); [30-file manifest](third_party/esp_serial_slave_link.vendor-lock.json).
+  - ▶️ **`F4.1.1` — current:** implement and sanitize the common high-speed adapter core.
   - `F4.1.2` — implement the S3 host and C5 SDIO slave endpoints.
   - `F4.1.3` — run exact target builds and S3 QEMU above the fake SDIO boundary.
   - `F4.1.4` — run and review the named S3-C5 dev-board physical gate.

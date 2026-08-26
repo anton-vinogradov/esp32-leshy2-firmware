@@ -11,9 +11,9 @@ CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 LOCKED_PYTHON ?= .toolchains/python/idf6_py3.12_env/bin/python
 
-.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review f3-s3-run f3-s3-evidence-check f3-s3-scenario-run f3-s3-scenario-check capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review f4-1-source-review f3-s3-run f3-s3-evidence-check f3-s3-scenario-run f3-s3-scenario-check capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: f2-3-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review
+test: f2-3-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review f4-1-source-review
 	python3 -m unittest discover -s tests
 
 matrix-check:
@@ -74,6 +74,9 @@ f4-0-adapter-review:
 f4-0-acceptance-review:
 	python3 tools/run_f4_acceptance.py --check-plan
 	python3 tools/run_f4_acceptance.py --check-snapshot
+
+f4-1-source-review:
+	python3 tools/check_f4_1_source_boundary.py
 
 f3-s3-run:
 	$(LOCKED_PYTHON) tools/run_f3_acceptance.py --run-s3 --config $(CONFIG) --write

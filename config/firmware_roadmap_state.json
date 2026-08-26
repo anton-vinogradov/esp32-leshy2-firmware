@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "current_substep": "F4.1.0",
+  "current_substep": "F4.1.1",
   "updated_on": "2026-08-26",
   "completed": [
     "F2.0.0",
@@ -47,7 +47,8 @@
     "F4.0.0",
     "F4.0.1",
     "F4.0.2",
-    "F4.0"
+    "F4.0",
+    "F4.1.0"
   ],
   "reviewed": [
     "F0",
@@ -95,7 +96,8 @@
     "F4.0.0",
     "F4.0.1",
     "F4.0.2",
-    "F4.0"
+    "F4.0",
+    "F4.1.0"
   ],
   "claims": {
     "target_projects_created": true,
@@ -126,6 +128,9 @@
     "f4_adapter_contract_reviewed": true,
     "f4_acceptance_plan_reviewed": true,
     "f4_integrated_acceptance_runner": true,
+    "f4_essl_vendor_reviewed": true,
+    "f4_vendored_essl_files": 30,
+    "f4_floating_component_resolution": false,
     "f4_production_transports": 4,
     "f4_adapter_lifecycle_states": 7,
     "f4_high_speed_buffers_each_direction": 32,
