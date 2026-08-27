@@ -37,7 +37,7 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.6`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.7`:
 Hub/Airband/K331-reserve bodies have an incremental collision-tested placement, the
 Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. K331 fits the reserved Hub
@@ -48,6 +48,9 @@ route remain open; exact evidence requests were sent to AKK and JLCPCB on
 27 August 2026 and both replies are pending.
 Those two external items are the only present H1 blockers. Assembled RF/video
 proof and the Taoglas fallback stay mandatory at downstream H3/H5/H6/H8.
+Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
+MOQ 442 and no purchasable module route; the bare RTC6715 also lacks a public
+reference RF/IF application, so firmware keeps the K331 module boundary.
 The exact MMCX is now registered with 3.6 mm on-board and a 3.0-mm outboard
 barrel; its wave-solder tail, 4.5-mm minimum wall opening and Ø12×20-mm plug
 service corridor pass the hardware coordinate audit. Received mating,
