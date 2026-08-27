@@ -5,9 +5,10 @@
 
 > **▶️ Current boundary: F0-R2.0 — six-domain contract rebaseline.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.7; its incremental Hub/Airband/K331-reserve placement, Airband filter feasibility
+> H1-R2.8; its incremental Hub/Airband/K331-reserve placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
-> 3V3_MAIN architecture, K331 pin/power fit, exact TBS FPV antenna and independent
+> 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
+> K331 pin/power fit, exact TBS FPV antenna and independent
 > Taoglas paper fallback pass their
 > current checks. Exact MMCX edge registration, wave-solder-tail clearance and
 > sidewall/plug service keepouts now pass the coordinate audit. Exact evidence requests were sent to AKK and JLCPCB on
@@ -29,7 +30,7 @@ duplicated or given a second status here.
 | Portable safety, L2IP and update model | ⏳ R1 [F1 result](f1-portable-cores-report.md) retained: 24 deterministic C scenarios; Hub/Airband and six-target rerun waits for F0-R2 closure |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ⏳ Five R1 structures retained; the Hub target and six-image matrix are not built yet |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.7 is current; Hub/Airband/K331-reserve placement, Airband filter/tuning reserve, corrected MMCX edge/service geometry, exact LDO/TBS antenna, independent Taoglas paper fallback and K331 pin/power fit pass their current checks; only the controlled K331 body and installation route block H1 now; complete R2 views then follow, while H3/H5/H6/H8 retain their physical RF and production proof |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.8 is current; official K331 application/14-pin/24-channel evidence, Hub/Airband/K331-reserve placement, Airband filter/tuning reserve, corrected MMCX edge/service geometry, exact LDO/TBS antenna, independent Taoglas paper fallback and K331 pin/power fit pass their current checks; only the controlled K331 body and installation route block H1 now; complete R2 views then follow, while H3/H5/H6/H8 retain their physical RF and production proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
