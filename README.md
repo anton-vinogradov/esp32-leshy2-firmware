@@ -37,7 +37,7 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.12`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.13`:
 Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
 complete current exterior, mirrored inner-face, service, antenna-edge and section
 views are generated. Regeneration corrected the missing independent Hub recovery
@@ -50,9 +50,11 @@ hardware deliberately collision-checks a 30×24×4-mm reserve and still retains
 1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved Hub
 controls and 5-V budget; exact linear `TBS5G8MMCXA` is the thirteenth kit
 antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
-`FXP831.09.0100C` selected as a backorder-only paper fallback. The controlled K331 maximum body/land data and factory
-route remain open; exact evidence requests were sent to AKK and JLCPCB on
-27 August 2026 and both replies are pending.
+`FXP831.09.0100C` selected as a backorder-only paper fallback. JLCPCB confirmed
+that K331 is absent from Parts Library and Global Sourcing, found no direct
+replacement and accepts genuine AKK modules through Consigned Parts. The one
+remaining H1 blocker is an AKK-controlled production package with maximum XYZ,
+land-pattern and packaging/soldering/reflow data; it also unlocks the consignment application.
 Manufacturer-documented `AWM666V RX` fits the same physical and power reserve,
 but remains a degraded contingency: seven 5725–5875-MHz channels instead of
 K331's 24-channel 5645–5945-MHz plan, and no exact public JLCPCB result.
@@ -62,8 +64,9 @@ channel table, while `MM238R-MCU` fits function and space but has only
 reseller-hosted evidence, no controlled current manufacturer route and only
 out-of-stock/discontinued sellers. Exact JLCPCB searches return zero results
 for both.
-Those two external items are the only present H1 blockers. Assembled RF/video
-proof and the Taoglas fallback stay mandatory at downstream H3/H5/H6/H8.
+Consigned Parts approval, final Gerber/BOM/CPL DFM and optional factory function-test
+review are assigned to H5/H6/H7. Assembled RF/video proof and the Taoglas
+fallback stay mandatory at downstream H3/H5/H6/H8.
 Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
 MOQ 442 and no purchasable module route; the bare RTC6715 also lacks a public
 reference RF/IF application, so firmware keeps the K331 module boundary.
@@ -76,7 +79,7 @@ admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
 pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
 the VNA-qualified fitted/DNP state. The current R2 mockup remains in progress
-until the K331 body and installation route close; BSP, KiCad layout and order
+until the K331 reserve becomes a controlled fixed body; BSP, KiCad layout and order
 authorization remain open.
 
 ### Current phase F0-R2 — detailed position

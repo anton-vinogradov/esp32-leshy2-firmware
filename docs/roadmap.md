@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F0-R2.0 — six-domain contract rebaseline.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.12; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
+> H1-R2.13; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
 > 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
 > K331 pin/power fit, exact TBS FPV antenna and independent
@@ -13,13 +13,15 @@
 > current checks. A 28.7×23.1-mm nominal K331 drawing is corroborating evidence;
 > the hardware collision audit uses a conservative 30×24×4-mm reserve and retains
 > 1.44 mm against 0.70 mm required. Exact MMCX edge registration, wave-solder-tail clearance and
-> sidewall/plug service keepouts now pass the coordinate audit. Exact evidence requests were sent to AKK and JLCPCB on
-> 27 August 2026; both replies are pending. Complete current exterior, mirrored
+> sidewall/plug service keepouts now pass the coordinate audit. JLCPCB confirmed
+> that K331 is absent from Parts Library and Global Sourcing, found no direct
+> replacement and accepts genuine AKK modules through Consigned Parts. Complete current exterior, mirrored
 > inner-face, service, antenna-edge and section views are generated; this corrected
-> the missing independent Hub USB/RESET/BOOT/DBG10 set. The K331 controlled maximum
-> body/land data and factory route remain open, and the generated mockup remains
-> in progress with BSP and layout. Those two K331 items are the only present
-> H1 blockers; RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
+> the missing independent Hub USB/RESET/BOOT/DBG10 set. One AKK-controlled
+> production package with maximum XYZ, land pattern and packaging/soldering/reflow
+> is the remaining H1 blocker and also unlocks the Consigned Parts application.
+> Final DFM and optional factory function-test review belong to H5/H6/H7;
+> RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
 > Controlled `AWM666V RX` body/land data fit the same reserve, but its seven-channel
 > 5725–5875-MHz plan and zero exact JLCPCB results keep it a degraded contingency.
 > Live RTC6715/RX5808 cards have zero stock and no purchasable drop-in route;
@@ -37,7 +39,7 @@ duplicated or given a second status here.
 | Portable safety, L2IP and update model | ⏳ R1 [F1 result](f1-portable-cores-report.md) retained: 24 deterministic C scenarios; Hub/Airband and six-target rerun waits for F0-R2 closure |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ⏳ Five R1 structures retained; the Hub target and six-image matrix are not built yet |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.12 is current; complete current physical views are generated, all four compute chips now have independent USB/RESET/BOOT/DBG10 recovery, and the K331/Airband/MMCX/power boundaries pass their present checks; only controlled K331 maximum body/land data and the installation route block H1, while H3/H5/H6/H8 retain physical RF and production proof |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.13 is current; complete current physical views are generated, all four compute chips now have independent USB/RESET/BOOT/DBG10 recovery, and the K331/Airband/MMCX/power boundaries pass their present checks; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
