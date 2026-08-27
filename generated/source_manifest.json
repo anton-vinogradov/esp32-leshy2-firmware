@@ -4,7 +4,7 @@
   "status": "generated",
   "producer": "tools/generate_hardware_bsp.py",
   "source_contract": "config/hardware_bsp_contract.json",
-  "source_sha256": "3604889fbf94c28fd0b110b16596c63fa56927df7ff3ff49d0cdfff9d6e7b014",
+  "source_sha256": "5459b4365af26f37eacab760fc29ed8276508b943f1740e8eb729e5102b6983a",
   "generation_model": "config/bsp_generation_input.json",
   "allocated_contacts": 125,
   "files": [

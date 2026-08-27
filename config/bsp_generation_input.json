@@ -10,7 +10,7 @@
     "hardware_status": "reviewed_hwfw_export",
     "contract_id": "LESHY2-HWFW-1",
     "review_status": "h2_0_3_reviewed",
-    "source_sha256": "3604889fbf94c28fd0b110b16596c63fa56927df7ff3ff49d0cdfff9d6e7b014",
+    "source_sha256": "5459b4365af26f37eacab760fc29ed8276508b943f1740e8eb729e5102b6983a",
     "integration_sha256": "7f0fb4904a81851e3aa2a21ac15181b49245ca96a4608cdb9e9bd2ca735fcab0"
   },
   "domains": [

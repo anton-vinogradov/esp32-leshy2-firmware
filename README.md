@@ -58,7 +58,7 @@ RF-RP/Hub-RP update state, five Hub/Airband receive-only states and integrated
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.13`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.14`:
 Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
 complete current exterior, mirrored inner-face, service, antenna-edge and section
 views are generated. Regeneration corrected the missing independent Hub recovery
