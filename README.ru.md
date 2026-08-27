@@ -62,7 +62,7 @@ integrated faults Hub/Pack/Safety. Его 34 сценария проходят n
 host runs; это portable evidence, а не target build.
 Обязательный receive-only Airband использует GP35/36 заднего RP, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
-находится на `H1-R2.15`: сгенерированы locality-first размещение двух плат,
+находится на `H1-R2.16`: сгенерированы locality-first размещение двух плат,
 читаемые внешние стороны, отдельные зеркальные внутренние стороны, сервисный
 доступ и проверка вертикального FPV-разъёма. У S3, C5, RF RP и Hub RP есть
 собственные USB, RESET/BOOT и внутренний DBG10. Фильтр Airband получил nominal/stress-аудит и

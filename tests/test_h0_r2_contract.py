@@ -47,7 +47,9 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         groups = {tuple(row["gpios"]): row["role"] for row in self.actual["hub_pin_groups"]}
         self.assertIn("Pack and Safety", groups[(43, 44)])
         self.assertEqual(3, self.actual["hub_gpio_budget"]["free"])
-        self.assertEqual(2, self.actual["rear_gpio_budget"]["free"])
+        self.assertEqual(3, self.actual["rear_gpio_budget"]["free"])
+        rear_roles = " ".join(row["role"] for row in self.actual["rear_pin_groups"])
+        self.assertIn("K331 RSSI is NC", rear_roles)
 
     def test_locality_first_repartition_is_explicit(self):
         domains = {row["id"]: row["role"] for row in self.actual["domains"]}
