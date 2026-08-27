@@ -60,7 +60,7 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.18`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.19`:
 the locality-first two-board placement, matched outer/mirrored-inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
 direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
@@ -69,7 +69,8 @@ S3, C5, RF RP and Hub RP each retain USB, RESET/BOOT and internal DBG10.
 The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
 confirms the K331 application circuit, all 14 pin functions and the 24-channel
-table. An AKK-branded reseller drawing corroborates 28.7×23.1 mm nominal XY;
+table. The official Sinopine SP331RX manual controls 28.7×23.1 mm nominal XY,
+2.54-mm contact pitch and 1.4-mm edge offset for the matching 331RX family;
 hardware deliberately collision-checks a 30×24×4-mm reserve and still retains
 1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved rear-RP
 controls and 5-V budget; exact linear `TBS5G8MMCXA` is the FPV kit
@@ -77,8 +78,9 @@ antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
 `FXP831.09.0100C` selected as a backorder-only paper fallback. JLCPCB confirmed
 that K331 is absent from Parts Library and Global Sourcing, found no direct
 replacement and accepts genuine AKK modules through Consigned Parts. The one
-remaining H1 blocker is an AKK-controlled production package with maximum XYZ,
-land-pattern and packaging/soldering/reflow data; it also unlocks the consignment application.
+remaining H1 blocker is formal K331↔SP331RX production equivalence or an
+AKK-native package, plus maximum Z/tolerances, recommended land/paste and
+packaging/soldering/reflow data; it also unlocks the consignment application.
 Manufacturer-documented `AWM666V RX` fits the same physical and power reserve,
 but remains a degraded contingency: seven 5725–5875-MHz channels instead of
 K331's 24-channel 5645–5945-MHz plan, and no exact public JLCPCB result.

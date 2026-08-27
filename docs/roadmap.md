@@ -5,21 +5,23 @@
 
 > **▶️ Current boundary: F2-R2.0 — six-target build rebaseline.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.18; its locality-first two-board placement, Airband filter feasibility
+> H1-R2.19; its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
 > 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
 > K331 pin/power fit, exact TBS FPV antenna and independent
 > Taoglas paper fallback pass their
-> current checks. A 28.7×23.1-mm nominal K331 drawing is corroborating evidence;
+> current checks. The official Sinopine SP331RX manual controls 28.7×23.1-mm
+> nominal XY, 2.54-mm contact pitch and 1.4-mm edge offset for the matching family;
 > the hardware collision audit uses a conservative 30×24×4-mm reserve and retains
 > 1.44 mm against 0.70 mm required. The vertical Molex `73415-2063` MMCX body,
 > SMA handling and U214 service keepouts pass the coordinate audit. JLCPCB confirmed
 > that K331 is absent from Parts Library and Global Sourcing, found no direct
 > replacement and accepts genuine AKK modules through Consigned Parts. Complete current exterior, separate mirrored
 > inner-face, service and connector-proof views are generated; this corrected
-> the missing independent Hub USB/RESET/BOOT/DBG10 set. One AKK-controlled
-> production package with maximum XYZ, land pattern and packaging/soldering/reflow
-> is the remaining H1 blocker and also unlocks the Consigned Parts application.
+> the missing independent Hub USB/RESET/BOOT/DBG10 set. Formal K331↔SP331RX
+> equivalence or an AKK-native package, plus maximum Z/tolerances, recommended
+> land/paste and packaging/soldering/reflow, is the remaining H1 blocker and
+> also unlocks the Consigned Parts application.
 > Final DFM and optional factory function-test review belong to H5/H6/H7;
 > RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
 > Controlled `AWM666V RX` body/land data fit the same reserve, but its seven-channel
@@ -39,7 +41,7 @@ duplicated or given a second status here.
 | Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, rear-RP Airband receiver and integrated faults are current |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ F2-R2.0: six project/image identities are reviewed; five R1 structures are historical while the exact six-project/toolchain/artifact rebaseline is current |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.18 is current; ten SMA ports are split 5+5 and carry collision-audited user-facing silk, the vertical rear-face FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; K331 RSSI is officially NC and decoder lock is the supported evidence; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.19 is current; ten SMA ports are split 5+5 and carry collision-audited user-facing silk, the vertical rear-face FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; K331 RSSI is officially NC and decoder lock is the supported evidence; official SP331RX data controls candidate-family nominal XY/contact axes, while formal K331 equivalence and remaining production/assembly evidence block H1; Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
