@@ -46,7 +46,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(400_000, transports["HUB_PACK_SAFETY"]["clock_hz"])
         groups = {tuple(row["gpios"]): row["role"] for row in self.actual["hub_pin_groups"]}
         self.assertIn("Pack and Safety", groups[(43, 44)])
-        self.assertEqual(3, self.actual["hub_gpio_budget"]["free"])
+        self.assertEqual(2, self.actual["hub_gpio_budget"]["free"])
         self.assertEqual(3, self.actual["rear_gpio_budget"]["free"])
         rear_roles = " ".join(row["role"] for row in self.actual["rear_pin_groups"])
         self.assertIn("K331 RSSI is NC", rear_roles)
@@ -57,12 +57,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertIn("CC1101", domains["rf_rp"])
         self.assertIn("one 75-ohm FPV_CVBS", self.actual["interboard"]["video"])
         self.assertEqual(9, len(self.actual["interboard"]["released_legacy_nets"]))
-        self.assertIn("eight released signal contacts remain", self.actual["interboard"]["result"])
+        self.assertEqual(14, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
+        self.assertEqual(80, len(self.actual["interboard"]["pin_map"]))
+        self.assertIn("fourteen true NC reserve contacts", self.actual["interboard"]["result"])
 
     def test_direct_ui_and_display_contract_survives_rebaseline(self):
-        self.assertEqual(40_000_000, self.actual["display"]["selected_clock_hz"])
+        self.assertEqual(32_000_000, self.actual["display"]["selected_clock_hz"])
         s3_nets = {row["net"] for row in self.actual["s3_pin_map"]}
-        self.assertTrue({"LCD_QSPI_SCK", "LCD_QSPI_D0", "LCD_QSPI_D1_DC", "LCD_QSPI_D2", "LCD_QSPI_D3"}.issubset(s3_nets))
+        self.assertTrue({"LCD_WR_N", "LCD_DC", *(f"LCD_DB{i}" for i in range(8))}.issubset(s3_nets))
+        self.assertIn("QSPI", self.actual["display"]["fallback"])
 
     def test_six_target_identity_contract_passes(self):
         result = subprocess.run(

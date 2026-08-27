@@ -77,14 +77,14 @@
         "machine": "esp32s3",
         "source": "ESP32S3_QEMU",
         "required": "boot, 8-MiB octal-PSRAM init/test, retained fault model and update-failure scenarios",
-        "not_covered": ["direct QSPI display timing", "LCD_CAM analog-FPV capture", "real USB/power", "S3-Hub SPI PHY", "buttons/encoder/touch"]
+        "not_covered": ["direct i8080 display timing", "simultaneous LCD_CAM TX and analog-FPV camera RX", "real USB/power", "S3-Hub SPI PHY", "buttons/encoder/touch"]
       },
       "development_board": {
         "candidate": "ESP32-S3-DevKitC-1 populated with ESP32-S3-WROOM-1U-N16R8; module label must be verified",
         "exact_selected_module": true,
         "required": ["native USB/UART recovery", "PSRAM ECC", "GPIO strap sampling", "display/video peripheral smoke fixtures"]
       },
-      "leshy2_hil": ["direct UI latency", "40-MHz QSPI display occupancy", "analog FPV capture", "S3-Hub 4-data SPI", "product USB power and recovery"]
+      "leshy2_hil": ["direct UI latency", "32-MHz i8080 display occupancy", "simultaneous analog FPV capture", "S3-Hub 4-data SPI", "product USB power and recovery"]
     },
     {
       "id": "c5",

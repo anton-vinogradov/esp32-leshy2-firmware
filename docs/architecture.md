@@ -11,7 +11,7 @@ It is the current firmware input; the R1 contract below is regression evidence.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder, direct QSPI display and direct analog-FPV capture |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB, direct 32-MHz i8080-8 display TX and independent analog-FPV camera RX |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
 | RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and U214/LoRa Cap |
 | Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |
@@ -33,6 +33,11 @@ with the display; rear audio uses bounded full-duplex transport below 0.4 MB/s.
 Button edges terminate on the S3-local
 `TCA9539PWR`; encoder A/B remain direct PCNT inputs. The first visible response
 target remains 20 ms under qualified concurrent load.
+
+The display and camera use the separate LCD TX and camera RX units concurrently.
+The exact M1 map defines all 80 contacts: 25 live signals, 14 main-power, 2 AON,
+25 returns and 14 NC reserves. M1 is electrical/alignment-only; enclosure stops,
+anti-shear datums and PCB capture carry impact and bending loads.
 
 `BROADCAST_RX` is rear-RP-owned and mutually exclusive with other top-level signal
 groups. Airband AM maps 118–137 MHz to Si4732's 6–25-MHz FMI range using a
@@ -128,7 +133,7 @@ A group transition is transactional:
 4. verify discharge and quiet state;
 5. power the new group, verify identity and only then grant a lease.
 
-Display QSPI, microSD sessions and inter-processor links use bounded quanta.
+Display i8080 DMA, microSD sessions and inter-processor links use bounded quanta.
 They do not hold CPU or bus resources long enough to miss a radio deadline.
 
 ## User interface
