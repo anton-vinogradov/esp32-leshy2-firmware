@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F0-R2.1 — проведено ревью identities шести targets.** Работа
+> **Статус прошивки: F0-R2.2 — проведено ревью memory и rollback шести доменов.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -16,7 +16,7 @@
 
 | Этап | Статус | Результат |
 |---|---|---|
-| **F0 · Контракты продукта** | **▶️ Сейчас: F0-R2.1** | hardware projection и identities шести targets/images проведены ревью; memory, update и execution gates остаются |
+| **F0 · Контракты продукта** | **▶️ Сейчас: F0-R2.2** | hardware projection, шесть identities и независимый локальный rollback проведены ревью; activation order и execution gates остаются |
 | F1 · Portable cores | ⏳ [Отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md); ожидает F0-R2 | добавить состояния Hub/Airband и повторить portable regression |
 | F2 · Target-проекты и build system | ⏳ [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md); ожидает F1-R2 | шесть production-SDK projects и воспроизводимая six-image matrix |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F0-R2.1.** Сгенерированный
+**Прошивка находится на F0-R2.2.** Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
 targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и analog FPV
@@ -40,6 +40,11 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и ana
 [Контракт identities targets](config/f0_r2_target_identity_contract.json),
 прошедший ревью, задаёт шесть уникальных application images и два boot images
 защитных контроллеров, не заявляя, что R2 projects или builds уже существуют.
+[Контракт memory и rollback](config/f0_r2_memory_rollback_contract.json),
+прошедший ревью, сохраняет шесть независимых dual-slot доменов: оба RP2354B и
+оба MSPM0 имеют общую только геометрию, но не target identity, state или flash.
+Физические rollback transitions и помещаемость production verifier подписи
+пока не заявлены.
 Обязательный receive-only Airband использует Hub GP41/42, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
 находится на `H1-R2.13`: корпуса Hub/Airband/резерв K331, точный MMCX и LDO получили
@@ -88,14 +93,14 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 
 ### Текущая фаза F0-R2 — детальная позиция
 
-<!-- current-substep: F0-R2.1 -->
+<!-- current-substep: F0-R2.2 -->
 
-▶️ **`F0-R2.1` — сейчас.** Проведено ревью уникальных identities target,
-project и image для S3, C5, RF RP, Hub RP, Pack и Safety. Контракт явно оставляет
-все claims о R2 projects/builds ложными: реализация относится к F2-R2.
-F0-R2 ещё должен закрыть ownership memory/rollback, порядок активации шести
-образов и emulator/dev-board gates. Маркер и evidence меняются вместе в каждом
-commit.
+▶️ **`F0-R2.2` — сейчас.** Проведено ревью capacity, slot geometry, локального
+pending state, владельца rollback и физического recovery всех шести доменов.
+Зафиксированы шесть независимых dual-slot topologies и ноль заявленных
+физических rollback transitions. F0-R2 ещё должен закрыть порядок активации
+шести образов и emulator/dev-board gates. Маркер и evidence меняются вместе в
+каждом commit.
 
 <details>
 <summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>

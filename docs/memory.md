@@ -5,6 +5,8 @@
 Each physical controller owns its image, inactive slot, boot health and recovery
 path. The user still installs one product bundle: a shared manifest prevents a
 new image for one domain from activating beside incompatible peers.
+The current machine-readable R2 ownership is
+[`f0_r2_memory_rollback_contract.json`](../config/f0_r2_memory_rollback_contract.json).
 
 ## Capacity at a glance
 
@@ -12,7 +14,8 @@ new image for one domain from activating beside incompatible peers.
 |---|---|---:|---:|---:|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | 8 MiB octal PSRAM with ECC | 16 MiB flash | two 7-MiB OTA slots; image limit 6.75 MiB |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | 8 MiB PSRAM | 8 MiB flash | two 3.5-MiB OTA slots; image limit 3.375 MiB |
-| RP | `SC1512-A4` (`RP2354B`) | 520 KiB on-chip SRAM | 2 MiB stacked flash | native 896-KiB A/B pair; image limit 864 KiB |
+| RF RP | `SC1512-A4` (`RP2354B`) | 520 KiB on-chip SRAM | 2 MiB stacked flash | its own native 896-KiB A/B pair; image limit 864 KiB |
+| Hub RP | second `SC1512-A4` (`RP2354B`) | 520 KiB on-chip SRAM | 2 MiB stacked flash | a separate native 896-KiB A/B pair; image limit 864 KiB |
 | Pack | `MSPM0C1106SDGS20R` | 8 KiB SRAM | 64 KiB flash | protected 16 KiB + 22 KiB A + 22 KiB B + 4 KiB state |
 | Safety | second `MSPM0C1106SDGS20R` | 8 KiB SRAM | 64 KiB flash | the same independent 16/22/22/4-KiB map |
 
@@ -20,23 +23,27 @@ new image for one domain from activating beside incompatible peers.
 target's JSON limit and returns `ok`, `warning` or `reject`. A feature cannot
 silently consume its second slot.
 
-## One signed bundle
+## One bundle, six local rollback owners
 
-[`config/update_policy.json`](../config/update_policy.json) is the machine
-contract. The bundle manifest binds every image hash to the Leshy2 product,
-hardware revision range, physical target, build ID and protocol compatibility.
-Normal installation accepts a release root or a locally enrolled owner root.
-The selected common package signature is ECDSA P-256 over SHA-256; release is
-blocked until the complete verifier fits and passes fault injection on C1106.
+The F0-R2.2 contract fixes storage and rollback ownership only. Every payload is
+target-bound; S3, C5, RF RP, Hub RP, Pack and Safety each write, boot, confirm
+and roll back their own inactive slot. Shared RP and MSPM0 partition geometry
+does not share target ID, image identity, boot state or flash contents.
+
+The user still installs one signed bundle. Its manifest binds every image hash
+to the Leshy2 product, hardware revision range, physical target, build ID and
+protocol compatibility. Normal installation accepts a release root or a
+locally enrolled owner root. The existing
+[`update_policy.json`](../config/update_policy.json) is retained R1 input until
+F0-R2.3 replaces its old five-domain activation sequence with the reviewed
+six-domain order; it is not current activation evidence. Release remains
+blocked until the complete production signature verifier fits and passes fault
+injection on C1106.
 
 Update requires physical `RUN=KILL`, no actual-TX evidence and qualified stable
-power. The updater first writes and reads back every inactive image. Pack,
-Safety, C5 and RP then boot pending without discarding their old images. S3
-boots last and must observe the expected build ID and local self-test from all
-four peers within the bounded RP2350 TBYB window. Only then does it issue the
-global commit. A crash, timeout, wrong target, bad signature, incompatible
-protocol or missing confirmation returns every pending domain to its previous
-image.
+power. Every inactive image is written and read back before global commit. A
+crash, timeout, wrong target, bad signature, incompatible protocol or missing
+confirmation must leave each domain able to return to its own previous image.
 
 This protects the normal update path without closing the device. The baseline
 does not burn irreversible secure-boot, anti-rollback or debug locks. A person
@@ -104,7 +111,7 @@ The sources are [`config/partitions_8m_c5.csv`](../config/partitions_8m_c5.csv),
 ESP-IDF rollback remains mandatory. Unlike S3, C5 PSRAM is not presented as
 ECC-protected; deadline-critical buffers and state remain in internal RAM.
 
-## RP2354B: native A/B and Try Before You Buy
+## Both RP2354B domains: independent native A/B and Try Before You Buy
 
 The first 8 KiB are the two default RP2350 partition-table boot slots. The
 remaining 2040 KiB are described by
@@ -121,11 +128,13 @@ usable as input to `picotool partition create`.
 | fault log | `0x1E2000` | `0x018000` | bounded retained diagnostics |
 | service reserve | `0x1FA000` | `0x006000` | partition/schema migration |
 
-Every candidate contains an IMAGE_DEF hash and TBYB flag. After a flash-update
-boot, RP2350 ROM starts it under the fixed 16.7-second watchdog. New S3 sends
-the commit only after all domains identify and self-test; RP then calls
-`explicit_buy()`. Without that call the ROM returns to the previous partition.
-The size source is
+RF RP and Hub RP use this geometry independently. Their target IDs, image
+identities, partition-table state and physical flash are never shared. Every
+candidate contains an IMAGE_DEF hash and TBYB flag. After a flash-update boot,
+RP2350 ROM starts it under the fixed 16.7-second watchdog. S3 can authorize the
+bundle commit only after all six domains identify and self-test; each RP then
+calls `explicit_buy()` locally. Without that call its ROM returns to its own
+previous partition. The size source is
 [`config/rp2354b_image_limits.json`](../config/rp2354b_image_limits.json).
 
 ## Pack and Safety: independent 64-KiB maps
@@ -152,7 +161,8 @@ permits fail-closed.
 
 - S3: product USB plus UART0/RESET/BOOT.
 - C5: data-only USB plus UART0/RESET/BOOT.
-- RP2354B: data-only USB plus SWD/RUN/USB_BOOT.
+- RF RP: independent data-only USB plus SWD/RUN/USB_BOOT.
+- Hub RP: independent data-only USB plus SWD/RUN/USB_BOOT.
 - each C1106: NRST, SWDIO/SWCLK, UART1 and isolated fixture power.
 
 Service USB never powers the product. Recovery can erase firmware and replace

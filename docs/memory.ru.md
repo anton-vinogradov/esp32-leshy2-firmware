@@ -6,6 +6,8 @@
 и путём восстановления. Пользователь всё равно устанавливает один product
 bundle: общий manifest не позволяет активировать новый образ одного домена
 рядом с несовместимыми peer.
+Текущий machine-readable ownership R2 находится в
+[`f0_r2_memory_rollback_contract.json`](../config/f0_r2_memory_rollback_contract.json).
 
 ## Ёмкость всех доменов
 
@@ -13,7 +15,8 @@ bundle: общий manifest не позволяет активировать н�
 |---|---|---:|---:|---:|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | 8 МиБ octal PSRAM с ECC | 16 МиБ flash | два OTA slot по 7 МиБ; предел образа 6,75 МиБ |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | 8 МиБ PSRAM | 8 МиБ flash | два OTA slot по 3,5 МиБ; предел 3,375 МиБ |
-| RP | `SC1512-A4` (`RP2354B`) | 520 КиБ on-chip SRAM | 2 МиБ stacked flash | нативная A/B-пара по 896 КиБ; предел 864 КиБ |
+| RF RP | `SC1512-A4` (`RP2354B`) | 520 КиБ on-chip SRAM | 2 МиБ stacked flash | собственная нативная A/B-пара по 896 КиБ; предел 864 КиБ |
+| Hub RP | второй `SC1512-A4` (`RP2354B`) | 520 КиБ on-chip SRAM | 2 МиБ stacked flash | отдельная нативная A/B-пара по 896 КиБ; предел 864 КиБ |
 | Pack | `MSPM0C1106SDGS20R` | 8 КиБ SRAM | 64 КиБ flash | protected 16 КиБ + A 22 КиБ + B 22 КиБ + state 4 КиБ |
 | Safety | второй `MSPM0C1106SDGS20R` | 8 КиБ SRAM | 64 КиБ flash | независимая разметка 16/22/22/4 КиБ |
 
@@ -21,24 +24,28 @@ bundle: общий manifest не позволяет активировать н�
 target и возвращает `ok`, `warning` или `reject`. Новая функция не может
 незаметно занять второй slot.
 
-## Один подписанный bundle
+## Один bundle, шесть локальных владельцев rollback
 
-Машинный контракт находится в
-[`config/update_policy.json`](../config/update_policy.json). Manifest связывает
-hash каждого образа с Leshy2, диапазоном аппаратных ревизий, физическим target,
-build ID и совместимостью протоколов. Штатная установка принимает release root
-или локально добавленный owner root. Для общей подписи package выбран ECDSA
-P-256 поверх SHA-256; выпуск заблокирован, пока полный verifier не помещён в
+Контракт F0-R2.2 фиксирует только storage и ownership rollback. Каждый payload
+привязан к target; S3, C5, RF RP, Hub RP, Pack и Safety сами записывают,
+запускают, подтверждают и откатывают свой inactive slot. Общая геометрия RP и
+MSPM0 не означает общий target ID, image identity, boot state или flash.
+
+Пользователь по-прежнему устанавливает один подписанный bundle. Manifest
+связывает hash каждого образа с Leshy2, диапазоном аппаратных ревизий,
+физическим target, build ID и совместимостью протоколов. Штатная установка
+принимает release root или локально добавленный owner root. Существующий
+[`update_policy.json`](../config/update_policy.json) сохраняется как input R1,
+пока F0-R2.3 не заменит старый порядок активации пяти доменов на проведённый
+ревью порядок шести доменов; текущим activation evidence он не является.
+Release остаётся заблокирован, пока production verifier подписи не помещён в
 C1106 и не прошёл fault injection.
 
 Update требует физического `RUN=KILL`, отсутствия actual-TX evidence и
-стабильного допущенного питания. Сначала все inactive images записываются и
-проверяются чтением. Pack, Safety, C5 и RP загружаются pending, не уничтожая
-старые образы. S3 запускается последним и должен увидеть ожидаемые build ID и
-локальные self-test четырёх peer в пределах окна RP2350 TBYB. Только после
-этого выдаётся global commit. Crash, timeout, неверный target, плохая подпись,
-несовместимый протокол или отсутствие подтверждения возвращают все pending
-домены к предыдущим образам.
+стабильного допущенного питания. Каждый inactive image записывается и
+проверяется чтением до global commit. Crash, timeout, неверный target, плохая
+подпись, несовместимый protocol или отсутствие confirmation должны оставлять
+каждому домену возможность вернуться к собственному предыдущему образу.
 
 Так защищается штатный update path без закрытия устройства. По умолчанию не
 прожигаются необратимые secure-boot, anti-rollback или debug lock. Человек с
@@ -106,7 +113,7 @@ CI предупреждает после 3 МиБ и отвергает обра
 ESP-IDF rollback обязателен. В отличие от S3, C5 PSRAM не заявляется как
 ECC-защищённая; deadline-critical buffers и state остаются во внутренней RAM.
 
-## RP2354B: нативные A/B и Try Before You Buy
+## Оба RP2354B: независимые нативные A/B и Try Before You Buy
 
 Первые 8 КиБ занимают два стандартных boot slot таблицы разделов RP2350.
 Оставшиеся 2040 КиБ описаны в
@@ -123,11 +130,13 @@ ECC-защищённая; deadline-critical buffers и state остаются в
 | fault log | `0x1E2000` | `0x018000` | ограниченная retained diagnostics |
 | service reserve | `0x1FA000` | `0x006000` | миграция partition/schema |
 
-Каждый candidate содержит IMAGE_DEF hash и TBYB flag. После flash-update boot
-ROM RP2350 запускает его под фиксированным watchdog 16,7 с. Новый S3 выдаёт
-commit лишь после identification и self-test всех доменов; RP вызывает
-`explicit_buy()`. Без этого вызова ROM возвращается в предыдущий partition.
-Лимит задаёт
+RF RP и Hub RP независимо используют эту геометрию. Их target IDs, identities
+images, состояние partition table и физическая flash никогда не общие. Каждый
+candidate содержит IMAGE_DEF hash и TBYB flag. После flash-update boot ROM
+RP2350 запускает его под фиксированным watchdog 16,7 с. S3 может разрешить
+commit bundle лишь после identification и self-test всех шести доменов; затем
+каждый RP локально вызывает `explicit_buy()`. Без этого вызова его ROM
+возвращается в собственный предыдущий partition. Лимит задаёт
 [`config/rp2354b_image_limits.json`](../config/rp2354b_image_limits.json).
 
 ## Pack и Safety: независимые карты 64 КиБ
@@ -154,7 +163,8 @@ Blank flash, recovery и update failure оставляют pack release и вс�
 
 - S3: product USB и UART0/RESET/BOOT.
 - C5: data-only USB и UART0/RESET/BOOT.
-- RP2354B: data-only USB и SWD/RUN/USB_BOOT.
+- RF RP: независимый data-only USB и SWD/RUN/USB_BOOT.
+- Hub RP: независимый data-only USB и SWD/RUN/USB_BOOT.
 - каждый C1106: NRST, SWDIO/SWCLK, UART1 и изолированное fixture-питание.
 
 Service USB не питает продукт. Recovery может стереть firmware и заменить

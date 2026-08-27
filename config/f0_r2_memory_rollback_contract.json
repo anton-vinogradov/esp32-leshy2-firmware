@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "stage": "F0-R2.2",
+  "status": "reviewed_contract",
+  "target_identity_contract": "config/f0_r2_target_identity_contract.json",
+  "targets": [
+    {
+      "id": "s3",
+      "flash_bytes": 16777216,
+      "partition_source": "config/partitions_16m.csv",
+      "image_limit_source": "config/s3_image_limits.json",
+      "rollback_slots": ["ota_0", "ota_1"],
+      "slot_bytes": 7340032,
+      "maximum_image_bytes": 7077888,
+      "rollback_owner": "local ESP-IDF bootloader and S3 application confirmation state",
+      "recovery": "native product USB plus UART0/RESET/BOOT"
+    },
+    {
+      "id": "c5",
+      "flash_bytes": 8388608,
+      "partition_source": "config/partitions_8m_c5.csv",
+      "image_limit_source": "config/c5_image_limits.json",
+      "rollback_slots": ["ota_0", "ota_1"],
+      "slot_bytes": 3670016,
+      "maximum_image_bytes": 3538944,
+      "rollback_owner": "local ESP-IDF bootloader and C5 application confirmation state",
+      "recovery": "independent data-only USB plus UART0/RESET/BOOT"
+    },
+    {
+      "id": "rf_rp",
+      "flash_bytes": 2097152,
+      "partition_source": "config/rp2354b_partitions.json",
+      "image_limit_source": "config/rp2354b_image_limits.json",
+      "rollback_slots": ["Leshy2 RP image A", "Leshy2 RP image B"],
+      "slot_bytes": 917504,
+      "maximum_image_bytes": 884736,
+      "rollback_owner": "local RP2350 ROM Try Before You Buy state and RF-RP explicit confirmation",
+      "recovery": "independent data-only USB plus SWD/RUN/USB_BOOT"
+    },
+    {
+      "id": "hub_rp",
+      "flash_bytes": 2097152,
+      "partition_source": "config/rp2354b_partitions.json",
+      "image_limit_source": "config/rp2354b_image_limits.json",
+      "rollback_slots": ["Leshy2 RP image A", "Leshy2 RP image B"],
+      "slot_bytes": 917504,
+      "maximum_image_bytes": 884736,
+      "rollback_owner": "local RP2350 ROM Try Before You Buy state and Hub-RP explicit confirmation",
+      "recovery": "independent data-only USB plus SWD/RUN/USB_BOOT"
+    },
+    {
+      "id": "pack",
+      "flash_bytes": 65536,
+      "partition_source": "config/mspm0c1106_memory.json",
+      "image_limit_source": "config/mspm0c1106_memory.json",
+      "rollback_slots": ["application_a", "application_b"],
+      "slot_bytes": 22528,
+      "maximum_image_bytes": 22528,
+      "rollback_owner": "independent Pack boot manager, watchdog and local self-test",
+      "recovery": "dedicated NRST/SWDIO/SWCLK/UART1 fixture path"
+    },
+    {
+      "id": "safety",
+      "flash_bytes": 65536,
+      "partition_source": "config/mspm0c1106_memory.json",
+      "image_limit_source": "config/mspm0c1106_memory.json",
+      "rollback_slots": ["application_a", "application_b"],
+      "slot_bytes": 22528,
+      "maximum_image_bytes": 22528,
+      "rollback_owner": "independent Safety boot manager, watchdog and local self-test",
+      "recovery": "dedicated NRST/SWDIO/SWCLK/UART1 fixture path"
+    }
+  ],
+  "ownership": {
+    "inactive_slot_writer": "each target writes only its own inactive slot from a target-bound verified payload",
+    "local_pending_state": "each target owns and persists its own pending, confirmed and last-known-good state",
+    "global_bundle_coordinator": "s3",
+    "global_commit_rule": "no target discards its local last-known-good image until all six application targets identify and self-test as one compatible bundle",
+    "shared_geometry_rule": "RF RP and Hub RP share partition geometry but never target ID, image identity, boot state or flash contents; Pack and Safety follow the same rule",
+    "recovery_authority": "physical owner recovery may erase images and replace owner keys without bypassing independent watchdog, RUN=KILL or FAULT_KILL hardware",
+    "irreversible_lock_default": false
+  },
+  "claims": {
+    "memory_and_rollback_ownership_reviewed": true,
+    "target_count": 6,
+    "independent_local_rollback_domains": 6,
+    "static_dual_slot_topologies": 6,
+    "r2_target_projects_created": false,
+    "r2_target_builds_run": false,
+    "physical_rollback_transitions_proven": 0,
+    "production_signature_verifier_fit_proven": false,
+    "six_image_activation_order_reviewed_here": false,
+    "emulator_or_devboard_gate_reviewed_here": false
+  },
+  "checker": "tools/check_f0_r2_memory_rollback.py"
+}

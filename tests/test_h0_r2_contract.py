@@ -65,6 +65,18 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertIn("6 application images", result.stdout)
 
+    def test_six_target_memory_rollback_contract_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f0_r2_memory_rollback.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("6 independent dual-slot domains", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
