@@ -37,9 +37,12 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.11`:
-Hub/Airband/K331-reserve bodies have an incremental collision-tested placement, the
-Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.12`:
+Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
+complete current exterior, mirrored inner-face, service, antenna-edge and section
+views are generated. Regeneration corrected the missing independent Hub recovery
+set, so S3, C5, RF RP and Hub RP each have USB, RESET/BOOT and internal DBG10.
+The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
 confirms the K331 application circuit, all 14 pin functions and the 24-channel
 table. An AKK-branded reseller drawing corroborates 28.7×23.1 mm nominal XY;
@@ -72,8 +75,9 @@ The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
 pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
-the VNA-qualified fitted/DNP state. The complete R2 mockup, BSP,
-KiCad layout and order authorization remain open.
+the VNA-qualified fitted/DNP state. The current R2 mockup remains in progress
+until the K331 body and installation route close; BSP, KiCad layout and order
+authorization remain open.
 
 ### Current phase F0-R2 — detailed position
 
