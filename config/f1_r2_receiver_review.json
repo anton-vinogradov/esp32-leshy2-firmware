@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "stage": "F1-R2.2",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-27",
+  "hardware_contract": "config/h0_r2_hardware_contract.json",
+  "owner": "hub_rp",
+  "signal_group": "BROADCAST_RX",
+  "frequency_plan_khz": {
+    "user_min": 118000,
+    "user_max": 137000,
+    "lo": 112000,
+    "if_min": 6000,
+    "if_max": 25000
+  },
+  "states": [
+    "L2_RECEIVER_DISABLED",
+    "L2_RECEIVER_DIRECT_ACTIVE",
+    "L2_RECEIVER_AIRBAND_SETTLING",
+    "L2_RECEIVER_AIRBAND_ACTIVE",
+    "L2_RECEIVER_FAULT"
+  ],
+  "evidence": {
+    "strict_c17_normal": true,
+    "asan_ubsan": true,
+    "scenarios_per_run": 6,
+    "reset_outputs_safe": true,
+    "airband_requires_lo_lock_and_rf_path_settle": true,
+    "hub_loss_and_evidence_loss_latch_safe_outputs": true,
+    "explicit_clear_required": true
+  },
+  "claims": {
+    "portable_receive_state_machine_implemented": true,
+    "airband_tx_surface_present": false,
+    "physical_rf_switch_or_lo_timing_proven": false,
+    "airband_reception_proven": false,
+    "target_build_or_execution_run": false
+  },
+  "checker": "tools/review_f1_r2_receiver.py"
+}

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "baseline": "R2",
   "phase": "F1",
-  "current_substep": "F1-R2.2",
+  "current_substep": "F1-R2.3",
   "updated_on": "2026-08-27",
   "current_claims": {
     "hardware_contract_projection_generated": true,
@@ -20,7 +20,8 @@
     "f1_r2_portable_rebaseline_started": true,
     "f1_r2_scenario_rebaseline_reviewed": true,
     "f1_r2_six_domain_update_implemented": true,
-    "f1_r2_airband_receiver_implemented": false
+    "f1_r2_airband_receiver_implemented": true,
+    "f1_r2_integrated_fault_model_reviewed": false
   },
   "historical_evidence_baseline": "R1",
   "completed": [
@@ -32,6 +33,7 @@
     "F0-R2",
     "F1-R2.0",
     "F1-R2.1",
+    "F1-R2.2",
     "F2.0.0",
     "F2.0.1",
     "F2.0.2",
@@ -90,6 +92,7 @@
     "F0-R2",
     "F1-R2.0",
     "F1-R2.1",
+    "F1-R2.2",
     "F0",
     "F1",
     "F2.0.0",

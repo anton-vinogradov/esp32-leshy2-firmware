@@ -617,6 +617,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertIn("host L2IP core: 4 scenarios passed", result.stdout)
         self.assertIn("host update core: 6 scenarios passed", result.stdout)
         self.assertIn("host six-domain model: 7 scenarios passed", result.stdout)
+        self.assertIn("host receiver core: 6 scenarios passed", result.stdout)
 
     def test_preorder_contract_tracks_reviewed_f3_without_physical_overclaim(self):
         contract_path = REPO_ROOT / "config/preorder_verification_contract.json"

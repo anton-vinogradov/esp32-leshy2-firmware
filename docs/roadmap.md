@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F1-R2.2 — Hub/Airband receive-only model.** R1 F0–F4
+> **▶️ Current boundary: F1-R2.3 — integrated Hub/Pack/Safety faults.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.13; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -36,7 +36,7 @@ duplicated or given a second status here.
 | Area | Actual state |
 |---|---|
 | Six-domain HW↔FW projection | ✅ [F0-R2 reviewed](f0-product-contracts-report.md): H0-R2 source is hash-bound; identities, local rollback, S3-last update and five-layer execution gates are coherent |
-| Portable safety, L2IP and update model | ▶️ F1-R2.2: [six-domain update](../config/f1_r2_six_domain_update_review.json) reviewed in normal plus sanitizer runs; the [R1 result](f1-portable-cores-report.md) retains 24 deterministic C scenarios; Hub/Airband receive states are current |
+| Portable safety, L2IP and update model | ▶️ F1-R2.3: [Hub/Airband model](../config/f1_r2_receiver_review.json) reviewed in six normal plus sanitizer scenarios; the [R1 result](f1-portable-cores-report.md) retains 24 deterministic C scenarios; integrated Hub/Pack/Safety faults are current |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ Six project/image identities reviewed; five R1 structures are historical, while the two RP splits and all R2 builds remain F2-R2 work |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
 | Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.13 is current; complete current physical views are generated, all four compute chips now have independent USB/RESET/BOOT/DBG10 recovery, and the K331/Airband/MMCX/power boundaries pass their present checks; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
@@ -50,15 +50,15 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F1-R2 breakdown
 
-<!-- current-substep: F1-R2.2 -->
+<!-- current-substep: F1-R2.3 -->
 
-▶️ **`F1-R2.2` — current.** The [reviewed six-domain
-implementation](../config/f1_r2_six_domain_update_review.json) distinguishes RF
-RP and Hub RP and executes the exact six-target S3-last order; six update and
-seven system scenarios pass normal plus ASan/UBSan. The current step implements
-the Hub-owned receive-only state machine: disabled, direct FM/SW, Airband
-settling, Airband active and fault, with no Airband TX state. The marker and
-evidence update together in every commit.
+▶️ **`F1-R2.3` — current.** The [reviewed Hub/Airband
+model](../config/f1_r2_receiver_review.json) has five receive-only states and six
+normal plus sanitizer scenarios. It requires LO-lock and RF-settle evidence,
+latches safe outputs on loss and exposes no TX state. The current step integrates
+receiver shutdown, downstream-domain isolation and Safety-local authority under
+Hub, Pack and Safety failures. The marker and evidence update together in every
+commit.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>
@@ -215,7 +215,7 @@ flowchart TD
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
 | **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
-| **F1. Portable cores** | ▶️ Current: F1-R2.2 | Six-domain update reviewed; implement Hub/Airband receive-only states before integrated Hub/Pack/Safety fault scenarios | Normal and ASan/UBSan scenarios cover the new heartbeat, lease, receiver-mode and update ownership |
+| **F1. Portable cores** | ▶️ Current: F1-R2.3 | Hub/Airband receive states reviewed; integrate Hub/Pack/Safety failures before the closure run | Normal and ASan/UBSan scenarios cover the new heartbeat, lease, receiver-mode and update ownership |
 | **F2. Target projects and build system** | ⏳ Waiting for F1-R2 and hardware H2-R2 | Six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |
@@ -244,8 +244,8 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F1-R2.2`. Implement and review the Hub-owned direct
-FM/SW and Airband receive-only state machine, including settle, disable and
-fault paths. Then integrate Hub/Pack/Safety link-loss scenarios before the F1
-closure run. Host evidence does not claim target projects, RF reception or
-physical transport behavior.
+The current boundary is `F1-R2.3`. Integrate Hub loss, receiver shutdown,
+independent RF/Hub state, Pack availability and Safety watchdog authority in the
+six-domain model. Then run the complete normal and ASan/UBSan closure suite.
+Host evidence does not claim target projects, RF reception or physical
+transport behavior.

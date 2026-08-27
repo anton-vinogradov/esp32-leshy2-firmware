@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F1-R2.2 — receive-only model Hub/Airband.**
+> **▶️ Текущая граница: F1-R2.3 — integrated faults Hub/Pack/Safety.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.13; полные текущие виды размещения Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -37,7 +37,7 @@ firmware-репозитория. Пересечения с железом ука
 | Область | Фактическое состояние |
 |---|---|
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
-| Portable safety, L2IP и update model | ▶️ F1-R2.2: [six-domain update](../config/f1_r2_six_domain_update_review.json) проведён ревью в normal и sanitizer runs; [итог R1](f1-portable-cores-report.ru.md) сохраняет 24 детерминированных C-сценария; сейчас реализуются receive states Hub/Airband |
+| Portable safety, L2IP и update model | ▶️ F1-R2.3: [модель Hub/Airband](../config/f1_r2_receiver_review.json) проведена ревью в шести normal+sanitizer scenarios; [итог R1](f1-portable-cores-report.ru.md) сохраняет 24 детерминированных C-сценария; сейчас интегрируются faults Hub/Pack/Safety |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ Проведено ревью шести identities projects/images; пять структур R1 исторические, а разделение двух RP и все R2 builds остаются работой F2-R2 |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.13 сейчас; полные текущие физические виды сгенерированы, все четыре вычислителя получили независимые USB/RESET/BOOT/DBG10, а границы K331/Airband/MMCX/power проходят свои текущие проверки; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
@@ -51,13 +51,13 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F1-R2
 
-<!-- current-substep: F1-R2.2 -->
+<!-- current-substep: F1-R2.3 -->
 
-▶️ **`F1-R2.2` — сейчас.** [Six-domain implementation](../config/f1_r2_six_domain_update_review.json),
-проведённый ревью, разделяет RF RP и Hub RP и исполняет точный S3-last order;
-шесть update и семь system scenarios проходят normal и ASan/UBSan. Текущий шаг
-реализует принадлежащий Hub receive-only state machine: disabled, direct FM/SW,
-Airband settling, Airband active и fault без какого-либо Airband TX-state.
+▶️ **`F1-R2.3` — сейчас.** [Модель Hub/Airband](../config/f1_r2_receiver_review.json),
+проведённая ревью, имеет пять receive-only states и шесть normal+sanitizer
+scenarios. Она требует evidence LO-lock и RF-settle, фиксирует safe outputs при
+потере и не имеет TX-state. Текущий шаг объединяет выключение receiver, изоляцию
+downstream domains и локальную authority Safety при отказах Hub, Pack и Safety.
 Маркер и evidence меняются вместе в каждом commit.
 
 <details>
@@ -215,7 +215,7 @@ flowchart TD
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
-| **F1. Portable cores** | ▶️ Сейчас: F1-R2.2 | Six-domain update проведён ревью; реализовать receive-only states Hub/Airband до integrated fault scenarios Hub/Pack/Safety | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
+| **F1. Portable cores** | ▶️ Сейчас: F1-R2.3 | Receive states Hub/Airband проведены ревью; интегрировать failures Hub/Pack/Safety до closure run | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
 | **F2. Target-проекты и build system** | ⏳ Ожидает F1-R2 и hardware H2-R2 | Шесть projects на production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
@@ -244,8 +244,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F1-R2.2`. Нужно реализовать и провести ревью принадлежащего
-Hub receive-only state machine direct FM/SW и Airband, включая settle, disable и
-fault paths. Затем интегрировать сценарии link loss Hub/Pack/Safety до закрытия
-F1. Host evidence не заявляет target projects, реальный RF-приём или поведение
-физических transports.
+Текущая граница — `F1-R2.3`. Нужно объединить loss Hub, выключение receiver,
+независимые state RF/Hub, доступность Pack и authority watchdog Safety в модели
+шести доменов. Затем выполнить полный closure suite normal и ASan/UBSan. Host
+evidence не заявляет target projects, реальный RF-приём или поведение физических
+transports.
