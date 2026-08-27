@@ -37,15 +37,17 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.8`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.9`:
 Hub/Airband/K331-reserve bodies have an incremental collision-tested placement, the
 Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
 confirms the K331 application circuit, all 14 pin functions and the 24-channel
-table. K331 fits the reserved Hub
+table. An AKK-branded reseller drawing corroborates 28.7×23.1 mm nominal XY;
+hardware deliberately collision-checks a 30×24×4-mm reserve and still retains
+1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved Hub
 controls and 5-V budget; exact linear `TBS5G8MMCXA` is the thirteenth kit
 antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
-`FXP831.09.0100C` selected as a backorder-only paper fallback. The controlled K331 body and factory
+`FXP831.09.0100C` selected as a backorder-only paper fallback. The controlled K331 maximum body/land data and factory
 route remain open; exact evidence requests were sent to AKK and JLCPCB on
 27 August 2026 and both replies are pending.
 Those two external items are the only present H1 blockers. Assembled RF/video
