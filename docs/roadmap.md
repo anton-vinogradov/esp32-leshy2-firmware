@@ -12,7 +12,8 @@
 > current checks. Exact MMCX edge registration, wave-solder-tail clearance and
 > sidewall/plug service keepouts now pass the coordinate audit. Exact evidence requests were sent to AKK and JLCPCB on
 > 27 August 2026; both replies are pending, and the K331 body/factory route and complete R2
-> mockup, BSP and layout remain open.
+> mockup, BSP and layout remain open. Those two K331 items are the only present
+> H1 blockers; RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
 
 Status last reconciled: **27 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
@@ -26,7 +27,7 @@ duplicated or given a second status here.
 | Portable safety, L2IP and update model | ⏳ R1 [F1 result](f1-portable-cores-report.md) retained: 24 deterministic C scenarios; Hub/Airband and six-target rerun waits for F0-R2 closure |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ⏳ Five R1 structures retained; the Hub target and six-image matrix are not built yet |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.6 is current; Hub/Airband/K331-reserve placement, Airband filter/tuning reserve, corrected MMCX edge/service geometry, exact LDO/TBS antenna, independent Taoglas paper fallback and K331 pin/power fit pass their current gates; AKK/JLCPCB requests are sent and pending; K331 body/factory, complete R2 placement, H3 bounded pre-layout proof, H6 routed extraction, H8 VNA and production schematic remain open |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.6 is current; Hub/Airband/K331-reserve placement, Airband filter/tuning reserve, corrected MMCX edge/service geometry, exact LDO/TBS antenna, independent Taoglas paper fallback and K331 pin/power fit pass their current checks; only the controlled K331 body and installation route block H1 now; complete R2 views then follow, while H3/H5/H6/H8 retain their physical RF and production proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

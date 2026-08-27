@@ -46,6 +46,8 @@ antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
 `FXP831.09.0100C` selected as a backorder-only paper fallback. The controlled K331 body and factory
 route remain open; exact evidence requests were sent to AKK and JLCPCB on
 27 August 2026 and both replies are pending.
+Those two external items are the only present H1 blockers. Assembled RF/video
+proof and the Taoglas fallback stay mandatory at downstream H3/H5/H6/H8.
 The exact MMCX is now registered with 3.6 mm on-board and a 3.0-mm outboard
 barrel; its wave-solder tail, 4.5-mm minimum wall opening and Ø12×20-mm plug
 service corridor pass the hardware coordinate audit. Received mating,
