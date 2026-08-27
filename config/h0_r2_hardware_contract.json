@@ -4,7 +4,7 @@
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
   "hardware_source_sha256": "e3ac657d4a6ac19974affd3053f2e5258143c3ce8dd631a752d9db179c5eb77e",
   "hardware_status": "reviewed_functional_architecture",
-  "firmware_marker": "F0-R2.4",
+  "firmware_marker": "F1-R2.0",
   "domains": [
     {
       "id": "s3",

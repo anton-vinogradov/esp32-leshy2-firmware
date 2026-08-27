@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "stage": "F0-R2",
+  "status": "reviewed",
+  "closed_on": "2026-08-27",
+  "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
+  "hardware_source_sha256": "e3ac657d4a6ac19974affd3053f2e5258143c3ce8dd631a752d9db179c5eb77e",
+  "artifacts": [
+    {"stage": "F0-R2.0", "path": "config/h0_r2_hardware_contract.json", "checker": "tests/test_h0_r2_contract.py"},
+    {"stage": "F0-R2.1", "path": "config/f0_r2_target_identity_contract.json", "checker": "tools/check_f0_r2_target_identities.py"},
+    {"stage": "F0-R2.2", "path": "config/f0_r2_memory_rollback_contract.json", "checker": "tools/check_f0_r2_memory_rollback.py"},
+    {"stage": "F0-R2.3", "path": "config/update_policy.json", "checker": "tools/check_f0_r2_update_policy.py"},
+    {"stage": "F0-R2.4", "path": "config/f0_r2_execution_gate_matrix.json", "checker": "tools/check_f0_r2_execution_gates.py"}
+  ],
+  "evidence": {
+    "hardware_domains": 6,
+    "hub_centered_transports": 5,
+    "application_image_identities": 6,
+    "protected_controller_boot_images": 2,
+    "independent_dual_slot_domains": 6,
+    "staged_pending_commit_targets": 6,
+    "execution_evidence_layers": 5,
+    "exact_vendor_emulator_targets": 1,
+    "exact_selected_module_or_mcu_devboards": 4,
+    "explicit_surrogate_devboards": 2,
+    "r2_target_builds_run": 0,
+    "r2_devboard_runs": 0,
+    "r2_leshy2_hil_runs": 0
+  },
+  "claims": {
+    "hardware_projection_current_and_hash_bound": true,
+    "target_memory_update_and_execution_contracts_coherent": true,
+    "r1_topology_is_historical_only": true,
+    "f0_r2_reviewed": true,
+    "r2_projects_or_binaries_implemented": false,
+    "physical_target_or_transport_execution_proven": false,
+    "qualified_update_timing_proven": false,
+    "production_signature_verifier_fit_proven": false
+  },
+  "next_gates": [
+    "F1-R2 adds Hub/Airband and six-domain safety/update roles to portable cores and reruns normal plus sanitizer scenarios",
+    "F2-R2 creates and reproducibly builds six production-SDK projects against the generated R2 BSP",
+    "F3-R2 executes S3 QEMU and every named dev-board/static gate, including measured update timing",
+    "H7/F10 proves all real transports, peripherals, recovery and rollback on the Leshy2 prototype"
+  ],
+  "reports": ["docs/f0-product-contracts-report.md", "docs/f0-product-contracts-report.ru.md"],
+  "checker": "tools/review_f0_r2.py"
+}

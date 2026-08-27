@@ -102,6 +102,18 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertIn("1 exact emulator", result.stdout)
         self.assertIn("2 explicit surrogates", result.stdout)
 
+    def test_integrated_f0_r2_closure_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f0_r2.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("F0-R2 closure review OK", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

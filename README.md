@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F0-R2.4 — six-target execution gates reviewed.** The R1
+> **Firmware status: F1-R2.0 — portable-core R2 rebaseline is current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -15,8 +15,8 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 
 | Stage | Status | Result |
 |---|---|---|
-| **F0 · Product contracts** | **▶️ Current: F0-R2.4** | all R2 contracts and honest execution gates reviewed; closure audit/report remains |
-| F1 · Portable cores | ⏳ R1 [report retained](docs/f1-portable-cores-report.md); waiting for F0-R2 | add Hub/Airband states and rerun portable regression |
+| F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
+| **F1 · Portable cores** | **▶️ Current: F1-R2.0**; R1 [report retained](docs/f1-portable-cores-report.md) | rebaseline the portable model for Hub/Airband and six-domain faults, then rerun it |
 | F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
@@ -31,7 +31,8 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F0-R2.4.** The generated
+**Firmware is at F1-R2.0.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
@@ -98,15 +99,16 @@ the VNA-qualified fitted/DNP state. The current R2 mockup remains in progress
 until the K331 reserve becomes a controlled fixed body; BSP, KiCad layout and order
 authorization remain open.
 
-### Current phase F0-R2 — detailed position
+### Current phase F1-R2 — detailed position
 
-<!-- current-substep: F0-R2.4 -->
+<!-- current-substep: F1-R2.0 -->
 
-▶️ **`F0-R2.4` — current.** Host, target-build, official-emulator,
-development-board and Leshy2-HIL evidence are now separated for all six targets.
-Only S3 has an exact emulator; both RP dev boards remain explicit surrogates.
-Zero R2 executions are claimed. The only remaining F0-R2 work is its integrated
-closure audit and bilingual top-level report. This marker and its evidence move
+▶️ **`F1-R2.0` — current.** Rebaseline the retained portable R1 core against the
+reviewed six-domain contracts. The work must add distinct RF-RP and Hub-RP
+ownership, Hub/Airband receiver states, Pack/Safety heartbeat and lease faults,
+and the S3-last bundle transaction. Its exact output is a reviewed R2 scenario
+matrix before implementation proceeds to six target projects in F2-R2. Zero R2
+target builds or physical runs are claimed. This marker and its evidence move
 together in every commit.
 
 <details>

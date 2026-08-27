@@ -19,6 +19,8 @@ class ProductSiteTests(unittest.TestCase):
             "README.ru.md",
             "docs/architecture.md",
             "docs/architecture.ru.md",
+            "docs/f0-product-contracts-report.md",
+            "docs/f0-product-contracts-report.ru.md",
             "docs/f1-portable-cores-report.md",
             "docs/f1-portable-cores-report.ru.md",
             "docs/f2-target-build-system-report.md",
@@ -63,8 +65,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.4", "H1-R2.13"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.4", "H1-R2.13"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F1-R2.0", "H1-R2.13"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F1-R2.0", "H1-R2.13"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -76,7 +78,7 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F0-R2.4",
+                "Current boundary: F1-R2.0",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
                 "hardware H2-R2",
@@ -84,7 +86,7 @@ class ProductSiteTests(unittest.TestCase):
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F0-R2.4",
+                "Текущая граница: F1-R2.0",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
                 "hardware H2-R2",
@@ -101,6 +103,14 @@ class ProductSiteTests(unittest.TestCase):
 
     def test_completed_global_phase_has_bilingual_result_report(self):
         reports = {
+            "docs/f0-product-contracts-report.md": (
+                "6 domains", "6 independent A/B owners", "F1-R2.0",
+                "does not claim", "0 R2 builds/dev-board/HIL runs",
+            ),
+            "docs/f0-product-contracts-report.ru.md": (
+                "6 доменов", "6 независимых владельцев A/B", "F1-R2.0",
+                "не заявляет", "0 R2 builds/dev-board/HIL runs",
+            ),
             "docs/f1-portable-cores-report.md": (
                 "24 of 24",
                 "8 scenarios",
@@ -128,6 +138,8 @@ class ProductSiteTests(unittest.TestCase):
 
         self.assertIn("f1-portable-cores-report.md", self.read("docs/roadmap.md"))
         self.assertIn("f1-portable-cores-report.ru.md", self.read("docs/roadmap.ru.md"))
+        self.assertIn("f0-product-contracts-report.md", self.read("README.md"))
+        self.assertIn("f0-product-contracts-report.ru.md", self.read("README.ru.md"))
         self.assertIn("f2-target-build-system-report.md", self.read("README.md"))
         self.assertIn(
             "f2-target-build-system-report.ru.md", self.read("README.ru.md")
@@ -156,10 +168,10 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F0-R2.4"}, set(markers.values()))
+        self.assertEqual({"F1-R2.0"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("R2", state["baseline"])
-        self.assertEqual("F0", state["phase"])
+        self.assertEqual("F1", state["phase"])
         self.assertEqual(next(iter(set(markers.values()))), state["current_substep"])
         self.assertTrue(state["current_claims"]["hardware_contract_projection_generated"])
         self.assertTrue(state["current_claims"]["six_domains_named"])
@@ -168,7 +180,11 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["current_claims"]["six_target_memory_update_contract_reviewed"])
         self.assertTrue(state["current_claims"]["six_target_activation_order_reviewed"])
         self.assertTrue(state["current_claims"]["r2_emulator_devboard_matrix_reviewed"])
-        self.assertFalse(state["current_claims"]["f0_r2_closure_report_published"])
+        self.assertTrue(state["current_claims"]["f0_r2_closure_report_published"])
+        self.assertTrue(state["current_claims"]["f0_r2_reviewed"])
+        self.assertFalse(state["current_claims"]["f1_r2_portable_rebaseline_started"])
+        self.assertIn("F0-R2", state["completed"])
+        self.assertIn("F0-R2", state["reviewed"])
         self.assertFalse(state["current_claims"]["hub_target_project_created"])
         self.assertEqual("R1", state["claims"]["baseline"])
         self.assertIn("F2.0.1", state["reviewed"])
