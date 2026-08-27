@@ -25,25 +25,35 @@ silently consume its second slot.
 
 ## One bundle, six local rollback owners
 
-The F0-R2.2 contract fixes storage and rollback ownership only. Every payload is
+The F0-R2.2 contract fixes storage and rollback ownership. Every payload is
 target-bound; S3, C5, RF RP, Hub RP, Pack and Safety each write, boot, confirm
 and roll back their own inactive slot. Shared RP and MSPM0 partition geometry
 does not share target ID, image identity, boot state or flash contents.
 
-The user still installs one signed bundle. Its manifest binds every image hash
-to the Leshy2 product, hardware revision range, physical target, build ID and
-protocol compatibility. Normal installation accepts a release root or a
-locally enrolled owner root. The existing
-[`update_policy.json`](../config/update_policy.json) is retained R1 input until
-F0-R2.3 replaces its old five-domain activation sequence with the reviewed
-six-domain order; it is not current activation evidence. Release remains
-blocked until the complete production signature verifier fits and passes fault
-injection on C1106.
+The reviewed F0-R2.3
+[`update_policy.json`](../config/update_policy.json) fixes the global transaction.
+All six inactive images are written, read back and locally verified before any
+pending boot. Pending boot and commit order are both
+Pack → Safety → C5 → RF RP → Hub RP → S3. S3 persists a duplicated transaction
+journal, enters pending last, reconciles every reported bundle/build/self-test
+and commits itself last.
 
-Update requires physical `RUN=KILL`, no actual-TX evidence and qualified stable
-power. Every inactive image is written and read back before global commit. A
-crash, timeout, wrong target, bad signature, incompatible protocol or missing
-confirmation must leave each domain able to return to its own previous image.
+The manifest binds every image hash to the product, hardware range, target,
+build and protocol-transition range. If an old S3 cannot talk to a new peer or
+the new S3 cannot talk through the new Hub, the bundle is rejected and a
+separately signed bridge bundle is required. Power loss before commit causes
+local rollback; power loss during commit uses the journal to return already
+advanced peers to `previous_bundle_id`.
+
+Update requires physical `RUN=KILL`, revoked TX leases, quiet actual-TX
+evidence and qualified USB power. The RP2350 TBYB window starts only when RF RP
+enters pending. Its measured worst-case budget is deliberately still null:
+F3/F10 must prove boot, self-test, journal and commit timing within 16.7 seconds
+with margin before release.
+
+Normal installation accepts a release root or a locally enrolled owner root.
+Release remains blocked until the production signature verifier fits and passes
+fault injection on C1106.
 
 This protects the normal update path without closing the device. The baseline
 does not burn irreversible secure-boot, anti-rollback or debug locks. A person

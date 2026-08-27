@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F0-R2.2 — проведено ревью memory и rollback шести доменов.**
+> **▶️ Текущая граница: F0-R2.3 — проведено ревью update transaction шести доменов.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.13; полные текущие виды размещения Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -36,7 +36,7 @@ firmware-репозитория. Пересечения с железом ука
 
 | Область | Фактическое состояние |
 |---|---|
-| HW↔FW projection шести доменов | ▶️ Сгенерирован из H0-R2 и связан с hardware SHA-256; identities и шесть независимых rollback-доменов проведены ревью, activation/execution gates остаются открыты |
+| HW↔FW projection шести доменов | ▶️ Сгенерирован из H0-R2 и связан с hardware SHA-256; identities, шесть локальных rollback-доменов и S3-last bundle transaction проведены ревью, execution gates остаются открыты |
 | Portable safety, L2IP и update model | ⏳ [Итог F1 R1](f1-portable-cores-report.ru.md) сохранён: 24 детерминированных C-сценария; Hub/Airband и six-target rerun ожидают закрытия F0-R2 |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ Проведено ревью шести identities projects/images; пять структур R1 исторические, а разделение двух RP и все R2 builds остаются работой F2-R2 |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
@@ -51,15 +51,15 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F0-R2
 
-<!-- current-substep: F0-R2.2 -->
+<!-- current-substep: F0-R2.3 -->
 
-▶️ **`F0-R2.2` — сейчас.** Проведённый ревью
-[контракт memory/rollback](../config/f0_r2_memory_rollback_contract.json)
-фиксирует capacity, slot geometry, локальный pending state, владельца rollback
-и физический recovery всех шести доменов. Он заявляет шесть статических
-dual-slot topologies, но ноль физических rollback transitions и R2 builds.
-F0-R2 ещё должен закрыть порядок активации шести образов и emulator/dev-board
-gates. Маркер и evidence меняются вместе в каждом commit.
+▶️ **`F0-R2.3` — сейчас.** Проведённая ревью
+[политика update](../config/update_policy.json) staging всех шести inactive
+images, затем загружает и подтверждает Pack → Safety → C5 → RF RP → Hub RP →
+S3. Дублированный journal S3 возобновляет transaction после power loss, а
+breaking IPC требует подписанный bridge bundle. Заявлено ноль flash transitions
+и нет qualified timing. F0-R2 ещё должен закрыть emulator/dev-board gates.
+Маркер и evidence меняются вместе в каждом commit.
 
 <details>
 <summary><strong>Сохранённый состав F2–F4 R1 — не текущая топология</strong></summary>
@@ -215,7 +215,7 @@ flowchart TD
 
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
-| **F0. Контракты продукта** | ▶️ Сейчас: F0-R2.2 | Шесть доменов, Hub transports, identities и независимый локальный rollback проведены ревью; six-image activation и execution gates остаются | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
+| **F0. Контракты продукта** | ▶️ Сейчас: F0-R2.3 | Шесть доменов, Hub transports, identities, локальный rollback и S3-last transaction шести образов проведены ревью; execution gates остаются | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
 | **F1. Portable cores** | ⏳ Ожидает F0-R2 | Переиспользовать [итог F1 R1](f1-portable-cores-report.ru.md), добавить Hub/Airband states и six-domain fault model | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
 | **F2. Target-проекты и build system** | ⏳ Ожидает F1-R2 и hardware H2-R2 | Шесть projects на production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
@@ -245,8 +245,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F0-R2.2`. Нужно закрыть machine-readable части six-image
-activation и execution gates R2, затем строго перейти
+Текущая граница — `F0-R2.3`. Нужно закрыть machine-readable execution gates R2,
+затем строго перейти
 F1→F2→F3. Проведённые ревью identities не означают, что эти projects уже
 созданы. Target matrix R1 и S3 QEMU runs остаются полезным regression evidence,
 но не квалифицируют добавленный Hub и изменённые transports.

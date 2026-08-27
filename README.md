@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F0-R2.2 — six-domain memory and rollback reviewed.** The R1
+> **Firmware status: F0-R2.3 — six-domain update transaction reviewed.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -15,7 +15,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 
 | Stage | Status | Result |
 |---|---|---|
-| **F0 · Product contracts** | **▶️ Current: F0-R2.2** | hardware projection, six identities and independent local rollback reviewed; activation order and execution gates remain |
+| **F0 · Product contracts** | **▶️ Current: F0-R2.3** | projection, identities, rollback and S3-last six-image transaction reviewed; execution gates remain |
 | F1 · Portable cores | ⏳ R1 [report retained](docs/f1-portable-cores-report.md); waiting for F0-R2 | add Hub/Airband states and rerun portable regression |
 | F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F0-R2.2.** The generated
+**Firmware is at F0-R2.3.** The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
@@ -43,6 +43,10 @@ The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contrac
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
 share geometry only, never target identity, state or flash contents. No physical
 rollback transition or production signature-verifier fit is claimed yet.
+The reviewed [update policy](config/update_policy.json) stages all six images,
+boots and commits Pack → Safety → C5 → RF RP → Hub RP → S3, persists a
+power-loss-safe journal and requires a signed bridge bundle for breaking IPC
+changes. Its 16.7-second RP TBYB budget remains explicitly unmeasured.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.13`:
 Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
@@ -91,14 +95,14 @@ authorization remain open.
 
 ### Current phase F0-R2 — detailed position
 
-<!-- current-substep: F0-R2.2 -->
+<!-- current-substep: F0-R2.3 -->
 
-▶️ **`F0-R2.2` — current.** Memory capacity, slot geometry, local pending state,
-rollback owner and physical recovery are now reviewed for all six domains.
-There are six independent dual-slot topologies and zero claimed physical
-rollback transitions. F0-R2 still has to close the six-image activation order
-and emulator/dev-board gates. This marker and its evidence move together in
-every commit.
+▶️ **`F0-R2.3` — current.** The six-image stage, pending boot, commit,
+power-loss resume and compensating rollback transaction is now reviewed. S3
+enters pending and commits last; breaking transport changes require a bridge
+bundle. Zero flash transitions and no qualified timing are claimed. F0-R2 still
+has to close emulator/dev-board gates. This marker and its evidence move
+together in every commit.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>

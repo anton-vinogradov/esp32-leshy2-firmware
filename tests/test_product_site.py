@@ -63,8 +63,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.md", self.read("README.md"))
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
-            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.2", "H1-R2.13"),
-            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.2", "H1-R2.13"),
+            "README.md": ("Firmware roadmap and current position", "Firmware is at F0-R2.3", "H1-R2.13"),
+            "README.ru.md": ("Роадмап прошивки и текущая позиция", "Прошивка находится на F0-R2.3", "H1-R2.13"),
         }
         for name, tokens in landing_pages.items():
             page = self.read(name)
@@ -76,7 +76,7 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F0-R2.2",
+                "Current boundary: F0-R2.3",
                 "24 deterministic C scenarios",
                 "not instruction-set, peripheral",
                 "hardware H2-R2",
@@ -84,7 +84,7 @@ class ProductSiteTests(unittest.TestCase):
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F0-R2.2",
+                "Текущая граница: F0-R2.3",
                 "24 детерминированных C-сценария",
                 "не заменяет instruction-set",
                 "hardware H2-R2",
@@ -156,7 +156,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F0-R2.2"}, set(markers.values()))
+        self.assertEqual({"F0-R2.3"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("R2", state["baseline"])
         self.assertEqual("F0", state["phase"])
@@ -165,6 +165,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["current_claims"]["six_domains_named"])
         self.assertTrue(state["current_claims"]["six_target_identity_contract_reviewed"])
         self.assertTrue(state["current_claims"]["six_target_memory_rollback_contract_reviewed"])
+        self.assertTrue(state["current_claims"]["six_target_memory_update_contract_reviewed"])
+        self.assertTrue(state["current_claims"]["six_target_activation_order_reviewed"])
         self.assertFalse(state["current_claims"]["hub_target_project_created"])
         self.assertEqual("R1", state["claims"]["baseline"])
         self.assertIn("F2.0.1", state["reviewed"])
@@ -788,14 +790,19 @@ class ProductSiteTests(unittest.TestCase):
 
     def test_all_in_one_update_policy_is_open_and_fail_closed(self):
         policy = json.loads(self.read("config/update_policy.json"))
-        self.assertIn("one Leshy2 bundle", policy["package"])
+        self.assertIn("Leshy2 bundle", policy["package"])
         self.assertEqual(
             {"release", "locally_enrolled_owner"},
             set(policy["signature_contract"]["accepted_roots"]),
         )
         self.assertIn("ECDSA P-256", policy["signature_contract"]["algorithm"])
-        self.assertEqual(12000, policy["global_activation_deadline_ms"])
-        self.assertIn("16.7-second", policy["deadline_basis"])
+        self.assertEqual(16700, policy["deadline"]["rp2350_tbyb_window_ms"])
+        self.assertIsNone(policy["deadline"]["qualified_budget_ms"])
+        self.assertEqual(
+            ["pack", "safety", "c5", "rf_rp", "hub_rp", "s3"],
+            policy["pending_boot_order"],
+        )
+        self.assertEqual(policy["pending_boot_order"], policy["commit_order"])
         self.assertFalse(
             policy["open_recovery"]["irreversible_secure_boot_or_debug_lock_default"]
         )
@@ -803,7 +810,10 @@ class ProductSiteTests(unittest.TestCase):
             policy["open_recovery"]["physical_owner_recovery_may_replace_keys_and_all_images"]
         )
         self.assertIn("physical RUN is in KILL", policy["preconditions"])
-        self.assertIn("all TX evidence is quiet", policy["preconditions"])
+        preconditions = " ".join(policy["preconditions"])
+        self.assertIn("actual-TX evidence is quiet", preconditions)
+        self.assertIn("all six application targets", preconditions)
+        self.assertIn("bridge bundle", policy["bridge_rule"])
 
     def test_interdomain_header_and_transports_are_exact(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))

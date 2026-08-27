@@ -77,6 +77,18 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertIn("6 independent dual-slot domains", result.stdout)
 
+    def test_six_target_update_policy_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f0_r2_update_policy.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("6 staged/pending/commit targets", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -43,8 +43,8 @@ VOR/ILS are not claimed.
 
 Pack state and the Safety heartbeat/lease/fault mailboxes use dedicated Hub
 GP43/44 I²C. Safety still owns watchdog service and asynchronous `FAULT_KILL`;
-an IPC hop cannot create permission or suppress a local fault. The R2 memory,
-update, target-build and HIL matrices are the remaining F0-R2 work.
+an IPC hop cannot create permission or suppress a local fault. Only the R2
+emulator/dev-board and HIL execution-gate matrix remains in F0-R2.
 
 <details>
 <summary><strong>Retained R1 architecture — not the current physical topology</strong></summary>

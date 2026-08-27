@@ -26,26 +26,35 @@ target и возвращает `ok`, `warning` или `reject`. Новая фу�
 
 ## Один bundle, шесть локальных владельцев rollback
 
-Контракт F0-R2.2 фиксирует только storage и ownership rollback. Каждый payload
+Контракт F0-R2.2 фиксирует storage и ownership rollback. Каждый payload
 привязан к target; S3, C5, RF RP, Hub RP, Pack и Safety сами записывают,
 запускают, подтверждают и откатывают свой inactive slot. Общая геометрия RP и
 MSPM0 не означает общий target ID, image identity, boot state или flash.
 
-Пользователь по-прежнему устанавливает один подписанный bundle. Manifest
-связывает hash каждого образа с Leshy2, диапазоном аппаратных ревизий,
-физическим target, build ID и совместимостью протоколов. Штатная установка
-принимает release root или локально добавленный owner root. Существующий
-[`update_policy.json`](../config/update_policy.json) сохраняется как input R1,
-пока F0-R2.3 не заменит старый порядок активации пяти доменов на проведённый
-ревью порядок шести доменов; текущим activation evidence он не является.
+Проведённый ревью F0-R2.3
+[`update_policy.json`](../config/update_policy.json) фиксирует глобальную
+transaction. Все шесть inactive images записываются, читаются обратно и
+проверяются локально до первого pending boot. Порядок pending boot и commit
+одинаков: Pack → Safety → C5 → RF RP → Hub RP → S3. S3 сохраняет дублированный
+transaction journal, входит в pending последней, сверяет bundle/build/self-test
+каждого домена и последней подтверждает себя.
+
+Manifest связывает hash каждого образа с продуктом, hardware range, target,
+build и диапазоном переходной совместимости protocol. Если старая S3 не может
+говорить с новым peer или новая S3 не может работать через новый Hub, bundle
+отвергается и требуется отдельно подписанный bridge bundle. Потеря питания до
+commit вызывает локальный rollback; потеря во время commit использует journal,
+чтобы вернуть уже продвинутые peer к `previous_bundle_id`.
+
+Update требует физического `RUN=KILL`, отозванных TX leases, тихого actual-TX
+evidence и qualified USB power. Окно TBYB RP2350 начинается лишь при pending
+boot RF RP. Измеренный worst-case budget намеренно остаётся null: F3/F10 должны
+доказать boot, self-test, journal и commit в пределах 16,7 с с запасом до
+release.
+
+Штатная установка принимает release root или локально добавленный owner root.
 Release остаётся заблокирован, пока production verifier подписи не помещён в
 C1106 и не прошёл fault injection.
-
-Update требует физического `RUN=KILL`, отсутствия actual-TX evidence и
-стабильного допущенного питания. Каждый inactive image записывается и
-проверяется чтением до global commit. Crash, timeout, неверный target, плохая
-подпись, несовместимый protocol или отсутствие confirmation должны оставлять
-каждому домену возможность вернуться к собственному предыдущему образу.
 
 Так защищается штатный update path без закрытия устройства. По умолчанию не
 прожигаются необратимые secure-boot, anti-rollback или debug lock. Человек с

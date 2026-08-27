@@ -1,41 +1,91 @@
 {
-  "schema": 1,
-  "package": "one Leshy2 bundle with target-bound S3, C5, RP2354B, pack-MSPM0 and safety-MSPM0 images plus one compatibility manifest",
+  "schema_version": 2,
+  "stage": "F0-R2.3",
+  "status": "reviewed_contract",
+  "package": "one target-bound Leshy2 bundle with six application images and one compatibility/transaction manifest",
+  "memory_contract": "config/f0_r2_memory_rollback_contract.json",
+  "application_targets": ["pack", "safety", "c5", "rf_rp", "hub_rp", "s3"],
+  "coordinator": {
+    "target": "s3",
+    "journal": "duplicated power-loss-safe bundle transaction record in the S3 local state partition",
+    "resume_rule": "old or pending S3 reconstructs the transaction from the journal and every target's reported bundle/build/pending state before issuing any commit or compensating rollback",
+    "authority_limit": "S3 coordinates the bundle but cannot mark another target healthy or bypass its local signature, self-test, watchdog or rollback owner"
+  },
   "manifest_required_fields": [
     "product_id",
+    "bundle_id",
+    "previous_bundle_id",
     "hardware_revision_range",
     "target_id",
     "image_length",
     "image_sha256",
     "build_id",
     "protocol_compatibility",
+    "transition_compatibility",
     "minimum_power_policy",
     "signing_key_id"
   ],
   "signature_contract": {
     "algorithm": "ECDSA P-256 over SHA-256",
     "accepted_roots": ["release", "locally_enrolled_owner"],
-    "status": "algorithm and exact C1106 verifier remain build-size and fault-injection closure gates"
+    "irreversible_secure_boot_or_debug_lock_default": false,
+    "status": "algorithm and owner-open trust model reviewed; production verifier fit and fault-injection evidence remain F3/F9 gates"
   },
   "preconditions": [
     "physical RUN is in KILL",
-    "all TX evidence is quiet",
-    "qualified USB power is stable and battery policy permits flash writes",
-    "every target and cross-domain protocol range matches the connected hardware"
+    "all actual-TX evidence is quiet and every TX lease is revoked",
+    "qualified USB power is stable and the Pack controller permits flash writes",
+    "all six application targets identify their current bundle, build and local recovery state",
+    "the candidate manifest is target-complete and each old-to-new transport pair satisfies transition_compatibility"
   ],
-  "activation_order": [
-    "stage and read-back verify every inactive image before activating any of them",
-    "activate and self-test pack MSPM0, safety MSPM0, C5 and RP2354B while S3 remains the known-good coordinator",
-    "activate S3 last",
-    "commit the bundle only after every domain reports its own build ID and health result"
+  "staging": [
+    "create the power-loss-safe S3 transaction journal before changing any inactive slot",
+    "stream each target-bound payload to that target only; the target verifies signature, target ID, length and hash before writing",
+    "write and read back all six inactive images before any pending boot",
+    "require every target to report the expected candidate build ID and a verified inactive slot",
+    "abort without changing active slots if any stage or transition-compatibility check fails"
   ],
-  "global_activation_deadline_ms": 12000,
-  "deadline_basis": "complete identification, self-test and commit must fit below the fixed 16.7-second RP2350 TBYB watchdog window",
-  "failure_policy": "a failed target returns to its local last-known-good image; the known-good S3 coordinator then returns any already advanced peer to the bundle's compatible previous image",
+  "pending_boot_order": ["pack", "safety", "c5", "rf_rp", "hub_rp", "s3"],
+  "pending_boot_rules": [
+    "Pack and Safety enter pending under their local watchdogs while the known-good S3 and Hub remain active",
+    "C5 and RF RP enter pending and must pass local self-test plus their old-S3/old-Hub transition protocol",
+    "the RP2350 Try Before You Buy deadline starts when RF RP first enters pending; no earlier step may consume that window",
+    "Hub RP enters pending only after every downstream domain is healthy, then proves both old-S3 and candidate-S3 transition compatibility",
+    "S3 enters pending last, reconstructs the transaction journal and verifies all six candidate build IDs and self-tests"
+  ],
+  "commit_order": ["pack", "safety", "c5", "rf_rp", "hub_rp", "s3"],
+  "commit_rule": "pending S3 requests local commit in order, reads back each committed state, and commits itself last; the previous image remains physically present on every target until the whole transaction is reconciled",
+  "deadline": {
+    "bounded_by": "the earliest active RP2350 Try Before You Buy watchdog window",
+    "rp2350_tbyb_window_ms": 16700,
+    "starts_at": "RF RP pending boot",
+    "measured_budget_required": true,
+    "qualified_budget_ms": null,
+    "fail_closed_rule": "F3/F10 must measure boot, self-test, journal and commit worst cases with margin; release is blocked while the qualified budget is null or does not fit"
+  },
+  "failure_policy": {
+    "before_any_commit": "every pending target returns locally to its last-known-good image; no peer is advanced",
+    "during_commit": "the journal identifies already committed peers; after restoring a working Hub path, S3 commands those peers back to previous_bundle_id and verifies the compatible previous set",
+    "hub_loss": "Hub RP local TBYB rollback restores the supervisory path before Pack/Safety reconciliation; independent watchdog and FAULT_KILL remain effective while the path is absent",
+    "s3_loss": "S3 local rollback restores the previous coordinator, which resumes the journal and reconciles all peers",
+    "unrecoverable_target": "remain in RUN=KILL with TX leases revoked and require the target's physical recovery path"
+  },
+  "bridge_rule": "a bundle that cannot prove both old-coordinator-to-new-peer and new-coordinator-to-new-peer transition compatibility is rejected; a separately signed intermediate bridge bundle is required",
   "open_recovery": {
     "irreversible_secure_boot_or_debug_lock_default": false,
     "downgrade_counter_is_reversible_flash_state": true,
     "physical_owner_recovery_may_replace_keys_and_all_images": true,
     "recovery_must_leave_run_kill_watchdog_and_fault_kill_effective": true
-  }
+  },
+  "claims": {
+    "six_target_activation_order_reviewed": true,
+    "six_target_commit_order_reviewed": true,
+    "power_loss_resume_and_compensation_reviewed": true,
+    "transition_bridge_rule_reviewed": true,
+    "r2_target_builds_run": false,
+    "target_flash_transitions_run": 0,
+    "qualified_activation_budget_measured": false,
+    "production_signature_verifier_fit_proven": false
+  },
+  "checker": "tools/check_f0_r2_update_policy.py"
 }
