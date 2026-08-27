@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "stage": "F1-R2.0",
+  "status": "reviewed_plan",
+  "reviewed_on": "2026-08-27",
+  "inputs": {
+    "f0_review": {
+      "path": "config/f0_r2_review.json",
+      "sha256": "e486b85f2cfdf1eddd32bff24078371023fbacca1dd62a5dbd1bc536284ac99a"
+    },
+    "target_identities": {
+      "path": "config/f0_r2_target_identity_contract.json",
+      "sha256": "7700df169bbf22d5071ee9661157bda03e03260c32f9001d20bb8772b77a1a00"
+    },
+    "memory_rollback": {
+      "path": "config/f0_r2_memory_rollback_contract.json",
+      "sha256": "8de1a75699992eed4f2aa00ff2f3741db3bb9d3c4303dbef6ce869b322cc768c"
+    },
+    "update_policy": {
+      "path": "config/update_policy.json",
+      "sha256": "9477608e9f33f7e05752cb5c0ec52eb8084509ff9255648a32c8ce3a91158e31"
+    }
+  },
+  "retained_r1_evidence": {
+    "normal_and_sanitizer_scenarios": 24,
+    "safety": 8,
+    "l2ip": 4,
+    "update": 5,
+    "five_domain_system": 7,
+    "reuse_rule": "retain target-neutral behavior and regression cases; replace every five-domain topology claim before R2 review"
+  },
+  "required_delta": [
+    {
+      "id": "SIX_DOMAIN_IDENTITY",
+      "output": "portable enum and state arrays distinguish pack, safety, c5, rf_rp, hub_rp and s3",
+      "forbidden_shortcut": "one generic RP identity or shared state for the two SC1512-A4 devices"
+    },
+    {
+      "id": "SIX_TARGET_UPDATE",
+      "output": "stage all six and activate/commit pack, safety, c5, rf_rp, hub_rp, s3",
+      "forbidden_shortcut": "starting the 16700-ms RP TBYB model before RF RP pending or activating S3 before Hub"
+    },
+    {
+      "id": "HUB_FAILURE_BOUNDARY",
+      "output": "Hub loss closes Hub-owned receiver/storage/audio and both downstream radio paths without weakening Safety watchdog or FAULT_KILL",
+      "forbidden_shortcut": "treating an IPC hop as safety authority"
+    },
+    {
+      "id": "AIRBAND_RECEIVER",
+      "output": "portable receive-only state machine owns disabled, direct FM/SW, Airband settling, Airband active and fault states",
+      "forbidden_shortcut": "any Airband TX state or instant RF switch without a settling boundary"
+    },
+    {
+      "id": "EVIDENCE_RERUN",
+      "output": "all R2 scenarios pass strict C17 in normal and ASan/UBSan host builds",
+      "forbidden_shortcut": "promoting host execution to target, peripheral, RF or physical evidence"
+    }
+  ],
+  "planned_substeps": [
+    {"stage": "F1-R2.1", "output": "six-domain identities and exact update activation model"},
+    {"stage": "F1-R2.2", "output": "Hub/Airband receive-only portable state machine"},
+    {"stage": "F1-R2.3", "output": "integrated Hub, Pack, Safety and six-domain fault scenarios"},
+    {"stage": "F1-R2.4", "output": "normal plus sanitizer closure review and bilingual F1 report"}
+  ],
+  "evidence_boundary": {
+    "may_claim": ["portable state-machine behavior", "deterministic host fault outcomes", "ASan/UBSan-clean host execution"],
+    "must_not_claim": ["R2 target project or build", "target boot", "peripheral or transport timing", "RF reception or transmission", "physical watchdog, rollback or HIL transition"]
+  },
+  "checker": "tools/check_f1_r2_rebaseline.py"
+}

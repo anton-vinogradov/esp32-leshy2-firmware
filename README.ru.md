@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F1-R2.0 — выполняется R2-rebaseline portable core.** Работа
+> **Статус прошивки: F1-R2.1 — выполняется six-domain update model.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -17,7 +17,7 @@
 | Этап | Статус | Результат |
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
-| **F1 · Portable cores** | **▶️ Сейчас: F1-R2.0**; [отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md) | перевести portable model на Hub/Airband и faults шести доменов, затем повторить прогон |
+| **F1 · Portable cores** | **▶️ Сейчас: F1-R2.1**; [отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md) | план rebaseline проведён ревью; реализовать точные identities и update order шести доменов |
 | F2 · Target-проекты и build system | ⏳ [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md); ожидает F1-R2 | шесть production-SDK projects и воспроизводимая six-image matrix |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F1-R2.0.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
+**Прошивка находится на F1-R2.1.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
@@ -103,14 +103,15 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 
 ### Текущая фаза F1-R2 — детальная позиция
 
-<!-- current-substep: F1-R2.0 -->
+<!-- current-substep: F1-R2.1 -->
 
-▶️ **`F1-R2.0` — сейчас.** Сохранённый portable core R1 переводится на прошедшие
-ревью контракты шести доменов. Нужно добавить раздельное владение RF-RP и
-Hub-RP, состояния receiver Hub/Airband, faults heartbeat/lease Pack и Safety и
-S3-last bundle transaction. Точный результат — проверенная scenario matrix R2
-до перехода к шести target projects в F2-R2. Ни один R2 target build или
-физический run не заявлен. Маркер и evidence меняются вместе в каждом commit.
+▶️ **`F1-R2.1` — сейчас.** Проверенный машиной
+[план R2-rebaseline](config/f1_r2_portable_rebaseline.json) связывает пять
+обязательных delta с контрактами F0 и сохраняет все 24 сценария R1 как regression
+input. Подэтап заменяет общий identity RP независимыми RF-RP и Hub-RP и реализует
+точный update order Pack → Safety → C5 → RF RP → Hub RP → S3. Ни один R2 target
+build или физический run не заявлен. Маркер и evidence меняются вместе в каждом
+commit.
 
 <details>
 <summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "baseline": "R2",
   "phase": "F1",
-  "current_substep": "F1-R2.0",
+  "current_substep": "F1-R2.1",
   "updated_on": "2026-08-27",
   "current_claims": {
     "hardware_contract_projection_generated": true,
@@ -17,7 +17,9 @@
     "r2_emulator_devboard_matrix_reviewed": true,
     "f0_r2_closure_report_published": true,
     "f0_r2_reviewed": true,
-    "f1_r2_portable_rebaseline_started": false
+    "f1_r2_portable_rebaseline_started": true,
+    "f1_r2_scenario_rebaseline_reviewed": true,
+    "f1_r2_six_domain_update_implemented": false
   },
   "historical_evidence_baseline": "R1",
   "completed": [
@@ -27,6 +29,7 @@
     "F0-R2.3",
     "F0-R2.4",
     "F0-R2",
+    "F1-R2.0",
     "F2.0.0",
     "F2.0.1",
     "F2.0.2",
@@ -83,6 +86,7 @@
     "F0-R2.3",
     "F0-R2.4",
     "F0-R2",
+    "F1-R2.0",
     "F0",
     "F1",
     "F2.0.0",

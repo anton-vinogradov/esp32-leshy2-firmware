@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F1-R2.0 — R2-rebaseline portable core.**
+> **▶️ Текущая граница: F1-R2.1 — identities и update model шести доменов.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.13; полные текущие виды размещения Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -37,7 +37,7 @@ firmware-репозитория. Пересечения с железом ука
 | Область | Фактическое состояние |
 |---|---|
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
-| Portable safety, L2IP и update model | ▶️ F1-R2.0: [итог F1 R1](f1-portable-cores-report.ru.md) сохраняет 24 детерминированных C-сценария; перед повторным прогоном добавляются Hub/Airband и six-domain fault/update states |
+| Portable safety, L2IP и update model | ▶️ F1-R2.1: [план R2](../config/f1_r2_portable_rebaseline.json) проведён ревью; [итог R1](f1-portable-cores-report.ru.md) сохраняет 24 детерминированных C-сценария, пока реализуются независимые identities RF/Hub и точный update order шести targets |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ Проведено ревью шести identities projects/images; пять структур R1 исторические, а разделение двух RP и все R2 builds остаются работой F2-R2 |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.13 сейчас; полные текущие физические виды сгенерированы, все четыре вычислителя получили независимые USB/RESET/BOOT/DBG10, а границы K331/Airband/MMCX/power проходят свои текущие проверки; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
@@ -51,15 +51,14 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F1-R2
 
-<!-- current-substep: F1-R2.0 -->
+<!-- current-substep: F1-R2.1 -->
 
-▶️ **`F1-R2.0` — сейчас.** Фиксированный вход — [проведённое ревью
-F0-R2](f0-product-contracts-report.ru.md). Подэтап отображает сохранённый
-portable core R1 на шесть владельцев, добавляет раздельные состояния Hub/Airband
-и RF, поведение heartbeat/lease/retained-fault Pack и Safety и сценарии S3-last
-bundle transaction. Следующее evidence — scenario manifest R2, проведённый
-ревью до запуска normal и ASan/UBSan. Маркер и evidence меняются вместе в каждом
-commit.
+▶️ **`F1-R2.1` — сейчас.** [Проверенный машиной план
+rebaseline](../config/f1_r2_portable_rebaseline.json) завершён: пять обязательных
+delta, четыре последовательных подэтапа и явные пределы host evidence. Текущая
+реализация разделяет state RF-RP и Hub-RP и переводит portable bundle transaction
+на staging шести targets и activation Pack → Safety → C5 → RF RP → Hub RP → S3.
+Маркер и evidence меняются вместе в каждом commit.
 
 <details>
 <summary><strong>Сохранённый состав F2–F4 R1 — не текущая топология</strong></summary>
@@ -216,7 +215,7 @@ flowchart TD
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
-| **F1. Portable cores** | ▶️ Сейчас: F1-R2.0 | Переиспользовать [итог F1 R1](f1-portable-cores-report.ru.md), добавить Hub/Airband states и six-domain fault model | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
+| **F1. Portable cores** | ▶️ Сейчас: F1-R2.1 | [План R2-rebaseline](../config/f1_r2_portable_rebaseline.json) проведён ревью; реализовать независимые identities RF/Hub и update шести targets до Hub/Airband/fault scenarios | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
 | **F2. Target-проекты и build system** | ⏳ Ожидает F1-R2 и hardware H2-R2 | Шесть projects на production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
@@ -245,9 +244,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F1-R2.0`. Нужно перевести manifest ролей, состояний и fault
-scenarios на [проведённые ревью контракты F0-R2](f0-product-contracts-report.ru.md),
-затем запустить normal и ASan/UBSan до создания target projects в F2-R2.
-Проведённые ревью identities не означают, что эти projects уже существуют.
-Target matrix R1 и S3 QEMU runs остаются regression evidence, но не
-квалифицируют добавленный Hub и изменённые transports.
+Текущая граница — `F1-R2.1`. Нужно реализовать шесть независимых portable
+identities и принятый S3-last activation order, затем добавить Hub/Airband и
+integrated fault scenarios до закрывающего normal и ASan/UBSan-прогона.
+Проведённые ревью identities не означают, что target projects уже существуют;
+evidence target/QEMU R1 не квалифицирует добавленный Hub и новые transports.

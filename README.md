@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F1-R2.0 — portable-core R2 rebaseline is current.** The R1
+> **Firmware status: F1-R2.1 — six-domain update model is current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -16,7 +16,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | Stage | Status | Result |
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
-| **F1 · Portable cores** | **▶️ Current: F1-R2.0**; R1 [report retained](docs/f1-portable-cores-report.md) | rebaseline the portable model for Hub/Airband and six-domain faults, then rerun it |
+| **F1 · Portable cores** | **▶️ Current: F1-R2.1**; R1 [report retained](docs/f1-portable-cores-report.md) | rebaseline plan reviewed; implement exact six-domain identity and update order |
 | F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F1-R2.0.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F1-R2.1.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
@@ -101,15 +101,15 @@ authorization remain open.
 
 ### Current phase F1-R2 — detailed position
 
-<!-- current-substep: F1-R2.0 -->
+<!-- current-substep: F1-R2.1 -->
 
-▶️ **`F1-R2.0` — current.** Rebaseline the retained portable R1 core against the
-reviewed six-domain contracts. The work must add distinct RF-RP and Hub-RP
-ownership, Hub/Airband receiver states, Pack/Safety heartbeat and lease faults,
-and the S3-last bundle transaction. Its exact output is a reviewed R2 scenario
-matrix before implementation proceeds to six target projects in F2-R2. Zero R2
-target builds or physical runs are claimed. This marker and its evidence move
-together in every commit.
+▶️ **`F1-R2.1` — current.** The machine-reviewed
+[R2 rebaseline plan](config/f1_r2_portable_rebaseline.json) binds five required
+deltas to the F0 contracts and keeps all 24 R1 scenarios as regression input.
+This substep replaces the generic RP identity with independent RF-RP and Hub-RP
+state and implements the exact Pack → Safety → C5 → RF RP → Hub RP → S3 update
+order. Zero R2 target builds or physical runs are claimed. This marker and its
+evidence move together in every commit.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>
