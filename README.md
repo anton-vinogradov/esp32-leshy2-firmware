@@ -60,7 +60,7 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.20`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.21`:
 the locality-first two-board placement, matched outer/turned-over inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
 direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
@@ -73,26 +73,27 @@ cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
 confirms the K331 application circuit, all 14 pin functions and the 24-channel
 table. The official Sinopine SP331RX manual controls 28.7×23.1 mm nominal XY,
 2.54-mm contact pitch and 1.4-mm edge offset for the matching 331RX family;
-hardware deliberately collision-checks a 30×24×4-mm reserve and still retains
-1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved rear-RP
+hardware now accepts a dual mutually exclusive post-PCBA receiver land inside
+a 30×24×8-mm reserve and retains 1.05 mm opposing clearance against 0.70 mm
+required after relocating C5 DBG10. K331 fits the reserved rear-RP
 controls and 5-V budget; exact linear `TBS5G8MMCXA` is the FPV kit
 antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
 `FXP831.09.0100C` selected as a backorder-only paper fallback. JLCPCB confirmed
 that K331 is absent from Parts Library and Global Sourcing, found no direct
-replacement and accepts genuine AKK modules through Consigned Parts. The one
-remaining H1 blocker is formal K331↔SP331RX production equivalence or an
-AKK-native package, plus maximum Z/tolerances, recommended land/paste and
-packaging/soldering/reflow data; it also unlocks the consignment application.
-Manufacturer-documented `AWM666V RX` fits the same physical and power reserve,
-but remains a degraded contingency: seven 5725–5875-MHz channels instead of
-K331's 24-channel 5645–5945-MHz plan, and no exact public JLCPCB result.
+replacement. The normal PCBA BOM omits the receiver: exactly one module is
+installed after reflow. K331 is primary on a tolerant 14-pad direct-solder
+land; manufacturer-documented `AWM666V RX` uses its exact nested land as a
+degraded seven-channel fallback. The selected 50-ohm branch is completed at
+the MMCX launch and the unused branch is isolated there, without U.FL, cable
+or live stub. Received body, hand soldering, actual Z and durability move to
+H5/H7; Consigned Parts and a later AKK/Sinopine package are optional footprint simplifications.
 The full-coverage fallback search found no production replacement: controlled
 `SP166RX` is 42.418×29.46 mm before height and its RF summary contradicts its
 channel table, while `MM238R-MCU` fits function and space but has only
 reseller-hosted evidence, no controlled current manufacturer route and only
 out-of-stock/discontinued sellers. Exact JLCPCB searches return zero results
 for both.
-Consigned Parts approval, final Gerber/BOM/CPL DFM and optional factory function-test
+Optional Consigned Parts approval, final Gerber/BOM/CPL DFM and factory function-test
 review are assigned to H5/H6/H7. Assembled RF/video proof and the Taoglas
 fallback stay mandatory at downstream H3/H5/H6/H8.
 Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
@@ -109,9 +110,10 @@ The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
 pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
-the VNA-qualified fitted/DNP state. The current R2 mockup remains in progress
-until the K331 reserve becomes a controlled fixed body; BSP, KiCad layout and order
-authorization remain open.
+the VNA-qualified fitted/DNP state. The current R2 mockup has no engineering
+blocker and remains in progress only until the complete exterior, true-view
+inner faces and sandwich sections are explicitly accepted; BSP, KiCad layout
+and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position
 
