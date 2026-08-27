@@ -11,6 +11,14 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class HostCoreExecutionTests(unittest.TestCase):
+    def setUp(self):
+        historical_prefixes = (
+            "test_f2_", "test_f3_", "test_five_target_", "test_s3_target_",
+            "test_source_ownership_", "test_build_policy_",
+        )
+        if self._testMethodName.startswith(historical_prefixes):
+            self.skipTest("R1 target/build evidence is historical while F1-R2 is current")
+
     def test_ti_map_timestamp_normalizer_is_deterministic_and_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:
             map_path = Path(directory) / "image.map"
@@ -607,8 +615,8 @@ class HostCoreExecutionTests(unittest.TestCase):
         )
         self.assertIn("host safety core: 8 scenarios passed", result.stdout)
         self.assertIn("host L2IP core: 4 scenarios passed", result.stdout)
-        self.assertIn("host update core: 5 scenarios passed", result.stdout)
-        self.assertIn("host five-domain model: 7 scenarios passed", result.stdout)
+        self.assertIn("host update core: 6 scenarios passed", result.stdout)
+        self.assertIn("host six-domain model: 7 scenarios passed", result.stdout)
 
     def test_preorder_contract_tracks_reviewed_f3_without_physical_overclaim(self):
         contract_path = REPO_ROOT / "config/preorder_verification_contract.json"

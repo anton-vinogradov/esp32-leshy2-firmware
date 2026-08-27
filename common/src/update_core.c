@@ -6,7 +6,8 @@ static const l2_update_domain_t activation_order[L2_UPDATE_DOMAIN_COUNT] = {
     L2_UPDATE_PACK,
     L2_UPDATE_SAFETY,
     L2_UPDATE_C5,
-    L2_UPDATE_RP,
+    L2_UPDATE_RF_RP,
+    L2_UPDATE_HUB_RP,
     L2_UPDATE_S3,
 };
 

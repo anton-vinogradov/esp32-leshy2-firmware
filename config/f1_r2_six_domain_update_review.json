@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "stage": "F1-R2.1",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-27",
+  "contract": "config/update_policy.json",
+  "domain_order": ["pack", "safety", "c5", "rf_rp", "hub_rp", "s3"],
+  "portable_symbols": [
+    "L2_UPDATE_PACK",
+    "L2_UPDATE_SAFETY",
+    "L2_UPDATE_C5",
+    "L2_UPDATE_RF_RP",
+    "L2_UPDATE_HUB_RP",
+    "L2_UPDATE_S3"
+  ],
+  "evidence": {
+    "strict_c17_normal": true,
+    "asan_ubsan": true,
+    "update_scenarios_per_run": 6,
+    "system_scenarios_per_run": 7,
+    "independent_rf_and_hub_state_tested": true,
+    "hub_before_rf_rejected_and_bundle_rolled_back": true,
+    "global_deadline_ms": 16700
+  },
+  "claims": {
+    "six_portable_domain_identities_implemented": true,
+    "six_target_activation_order_implemented": true,
+    "s3_last_implemented": true,
+    "host_normal_and_sanitizer_runs_passed": true,
+    "r2_target_builds_run": false,
+    "target_or_physical_rollback_proven": false,
+    "qualified_activation_budget_measured": false
+  },
+  "checker": "tools/review_f1_r2_six_domain_update.py"
+}

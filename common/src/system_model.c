@@ -128,7 +128,8 @@ void l2_system_model_tick(l2_system_model_t *model, uint32_t now_ms)
 
     model->rf_domains_held_in_reset = true;
     model->domain_online[L2_UPDATE_C5] = false;
-    model->domain_online[L2_UPDATE_RP] = false;
+    model->domain_online[L2_UPDATE_RF_RP] = false;
+    model->domain_online[L2_UPDATE_HUB_RP] = false;
     if (!model->safety.run_requested || model->safety.first_fault == L2_FAULT_NONE) {
         model->fault_viewer_available = false;
         return;

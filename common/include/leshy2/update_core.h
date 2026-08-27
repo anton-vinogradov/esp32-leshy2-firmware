@@ -8,9 +8,10 @@ typedef enum {
     L2_UPDATE_PACK = 0,
     L2_UPDATE_SAFETY = 1,
     L2_UPDATE_C5 = 2,
-    L2_UPDATE_RP = 3,
-    L2_UPDATE_S3 = 4,
-    L2_UPDATE_DOMAIN_COUNT = 5,
+    L2_UPDATE_RF_RP = 3,
+    L2_UPDATE_HUB_RP = 4,
+    L2_UPDATE_S3 = 5,
+    L2_UPDATE_DOMAIN_COUNT = 6,
 } l2_update_domain_t;
 
 typedef enum {
@@ -32,7 +33,7 @@ typedef enum {
     L2_UPDATE_FAULT_DEADLINE,
 } l2_update_fault_t;
 
-enum { L2_UPDATE_GLOBAL_DEADLINE_MS = 12000 };
+enum { L2_UPDATE_GLOBAL_DEADLINE_MS = 16700 };
 
 typedef struct {
     uint32_t active_build[L2_UPDATE_DOMAIN_COUNT];

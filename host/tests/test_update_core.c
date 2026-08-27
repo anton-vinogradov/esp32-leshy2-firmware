@@ -38,6 +38,29 @@ static void test_s3_is_activated_last_and_commit_succeeds(void)
     }
 }
 
+static void test_rf_and_hub_are_independent_and_hub_follows_rf(void)
+{
+    l2_update_t state;
+    l2_update_init(&state, 15);
+    assert(l2_update_begin(&state, true, true, true, true, 0));
+    stage_complete_bundle(&state, 16);
+    assert(state.pending_build[L2_UPDATE_RF_RP] == 16);
+    assert(state.pending_build[L2_UPDATE_HUB_RP] == 16);
+    assert(!state.activated[L2_UPDATE_RF_RP]);
+    assert(!state.activated[L2_UPDATE_HUB_RP]);
+
+    assert(l2_update_activate(&state, L2_UPDATE_PACK, 1));
+    assert(l2_update_report_self_test(&state, L2_UPDATE_PACK, true));
+    assert(l2_update_activate(&state, L2_UPDATE_SAFETY, 2));
+    assert(l2_update_report_self_test(&state, L2_UPDATE_SAFETY, true));
+    assert(l2_update_activate(&state, L2_UPDATE_C5, 3));
+    assert(l2_update_report_self_test(&state, L2_UPDATE_C5, true));
+    assert(!l2_update_activate(&state, L2_UPDATE_HUB_RP, 4));
+    assert(state.phase == L2_UPDATE_ROLLED_BACK);
+    assert(state.active_build[L2_UPDATE_RF_RP] == 15);
+    assert(state.active_build[L2_UPDATE_HUB_RP] == 15);
+}
+
 static void test_wrong_order_rolls_every_domain_back(void)
 {
     l2_update_t state;
@@ -68,7 +91,7 @@ static void test_mid_bundle_self_test_and_deadline_restore_previous_bundle(void)
 
     assert(l2_update_begin(&state, true, true, true, true, 100));
     stage_complete_bundle(&state, 32);
-    l2_update_check_deadline(&state, 12101);
+    l2_update_check_deadline(&state, 16801);
     assert(state.phase == L2_UPDATE_ROLLED_BACK);
     assert(state.first_fault == L2_UPDATE_FAULT_DEADLINE);
 }
@@ -97,9 +120,10 @@ int main(void)
 {
     test_preconditions_are_fail_closed();
     test_s3_is_activated_last_and_commit_succeeds();
+    test_rf_and_hub_are_independent_and_hub_follows_rf();
     test_wrong_order_rolls_every_domain_back();
     test_mid_bundle_self_test_and_deadline_restore_previous_bundle();
     test_invalid_or_late_commands_cannot_mutate_committed_state();
-    puts("host update core: 5 scenarios passed");
+    puts("host update core: 6 scenarios passed");
     return 0;
 }

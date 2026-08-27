@@ -26,6 +26,19 @@ class F1R2PortableTests(unittest.TestCase):
         self.assertEqual(4, len(plan["planned_substeps"]))
         self.assertIn("RF reception or transmission", plan["evidence_boundary"]["must_not_claim"])
 
+    def test_six_domain_update_review_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f1_r2_six_domain_update.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("6 independent domains", result.stdout)
+        self.assertIn("0 target/physical runs claimed", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

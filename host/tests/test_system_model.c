@@ -67,7 +67,8 @@ static void test_foreign_tx_fails_closed_under_saturation(void)
     assert(model.safety.first_fault == L2_FAULT_UNEXPECTED_EVIDENCE);
     assert(model.rf_domains_held_in_reset);
     assert(!model.domain_online[L2_UPDATE_C5]);
-    assert(!model.domain_online[L2_UPDATE_RP]);
+    assert(!model.domain_online[L2_UPDATE_RF_RP]);
+    assert(!model.domain_online[L2_UPDATE_HUB_RP]);
     assert(model.fault_viewer_available);
     assert(strcmp(l2_system_model_fault_text(&model),
                   "Unexpected physical transmission detected") == 0);
@@ -121,7 +122,7 @@ static void test_dead_safety_controller_releases_external_watchdog(void)
     assert(model.rf_domains_held_in_reset);
 }
 
-static void test_five_domain_update_rolls_back_as_one_bundle(void)
+static void test_six_domain_update_rolls_back_as_one_bundle(void)
 {
     l2_system_model_t model;
     l2_system_model_init(&model, 700, 100);
@@ -150,7 +151,7 @@ int main(void)
     test_ui_thermal_fault_suppresses_screen();
     test_controlled_kill_is_not_reported_as_a_fault();
     test_dead_safety_controller_releases_external_watchdog();
-    test_five_domain_update_rolls_back_as_one_bundle();
-    puts("host five-domain model: 7 scenarios passed");
+    test_six_domain_update_rolls_back_as_one_bundle();
+    puts("host six-domain model: 7 scenarios passed");
     return 0;
 }
