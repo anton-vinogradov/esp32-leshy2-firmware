@@ -5,11 +5,13 @@
 
 > **▶️ Текущая граница: F0-R2.0 — пересборка контракта шести доменов.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.5; инкрементальное размещение Hub/Airband/резерва K331,
+> Железо находится на H1-R2.6; инкрементальное размещение Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
 > архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step, пиновая/силовая
 > совместимость K331, точная антенна TBS FPV и независимый бумажный резерв
-> Taoglas проходят текущие gates. 27 августа 2026 года запросы отправлены AKK
+> Taoglas проходят текущие gates. Исправленные привязка MMCX к кромке, зазор
+> выводов wave soldering и service-keepout стенки/штекера проходят координатный
+> аудит. 27 августа 2026 года запросы отправлены AKK
 > и JLCPCB; оба ответа ожидаются, а корпус/
 > фабричный маршрут K331, полный мокап, BSP и layout R2 ещё открыты.
 
@@ -25,7 +27,7 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP и update model | ⏳ [Итог F1 R1](f1-portable-cores-report.ru.md) сохранён: 24 детерминированных C-сценария; Hub/Airband и six-target rerun ожидают закрытия F0-R2 |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ⏳ Пять структур R1 сохранены; target Hub и six-image matrix ещё не собраны |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.5 сейчас; placement Hub/Airband/резерва K331, фильтр/резерв Airband, точные MMCX/LDO/TBS-антенна, независимый резерв Taoglas и пиновая/силовая совместимость K331 проходят текущие gates; запросы AKK/JLCPCB отправлены и ожидают ответов; корпус/фабричный маршрут K331, полное placement, H3 bounded pre-layout proof, H6 routed extraction, H8 VNA и production-схема R2 открыты |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.6 сейчас; placement Hub/Airband/резерва K331, фильтр/резерв Airband, исправленная edge/service-геометрия MMCX, точные LDO/TBS-антенна, независимый резерв Taoglas и пиновая/силовая совместимость K331 проходят текущие gates; запросы AKK/JLCPCB отправлены и ожидают ответов; корпус/фабричный маршрут K331, полное placement, H3 bounded pre-layout proof, H6 routed extraction, H8 VNA и production-схема R2 открыты |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
