@@ -2,7 +2,7 @@
   "schema_version": 1,
   "baseline": "R2",
   "phase": "F0",
-  "current_substep": "F0-R2.3",
+  "current_substep": "F0-R2.4",
   "updated_on": "2026-08-27",
   "current_claims": {
     "hardware_contract_projection_generated": true,
@@ -14,7 +14,8 @@
     "six_target_memory_update_contract_reviewed": true,
     "six_target_activation_order_reviewed": true,
     "six_target_build_matrix_reviewed": false,
-    "r2_emulator_devboard_matrix_reviewed": false
+    "r2_emulator_devboard_matrix_reviewed": true,
+    "f0_r2_closure_report_published": false
   },
   "historical_evidence_baseline": "R1",
   "completed": [

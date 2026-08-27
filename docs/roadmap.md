@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F0-R2.3 — six-domain update transaction reviewed.** R1 F0–F4
+> **▶️ Current boundary: F0-R2.4 — six-target execution gates reviewed.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.13; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -35,7 +35,7 @@ duplicated or given a second status here.
 
 | Area | Actual state |
 |---|---|
-| Six-domain HW↔FW projection | ▶️ Generated from H0-R2 with a bound hardware SHA-256; identities, six local rollback domains and the S3-last bundle transaction are reviewed while execution gates remain open |
+| Six-domain HW↔FW projection | ▶️ Generated from H0-R2 with a bound hardware SHA-256; identities, local rollback, S3-last update and five-layer execution gates are reviewed; closure audit/report remains |
 | Portable safety, L2IP and update model | ⏳ R1 [F1 result](f1-portable-cores-report.md) retained: 24 deterministic C scenarios; Hub/Airband and six-target rerun waits for F0-R2 closure |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ Six project/image identities reviewed; five R1 structures are historical, while the two RP splits and all R2 builds remain F2-R2 work |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
@@ -50,15 +50,15 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F0-R2 breakdown
 
-<!-- current-substep: F0-R2.3 -->
+<!-- current-substep: F0-R2.4 -->
 
-▶️ **`F0-R2.3` — current.** The reviewed
-[update policy](../config/update_policy.json) stages all six inactive images,
-then boots and commits Pack → Safety → C5 → RF RP → Hub RP → S3. A duplicated
-S3 journal resumes power loss, and breaking IPC requires a signed bridge
-bundle. It claims zero flash transitions and no qualified timing. F0-R2 still
-must close emulator/dev-board gates. The marker and evidence update together in
-every commit.
+▶️ **`F0-R2.4` — current.** The reviewed
+[execution matrix](../config/f0_r2_execution_gate_matrix.json) separates host,
+target-build, official-emulator, development-board and Leshy2-HIL evidence for
+all six targets. Only S3 has an exact emulator; both RP paths use explicitly
+non-exact Pico 2 surrogates until Leshy2 H7. It claims zero R2 runs. Only the
+integrated F0-R2 closure audit and bilingual report remain. The marker and
+evidence update together in every commit.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>
@@ -214,7 +214,7 @@ flowchart TD
 
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
-| **F0. Product contracts** | ▶️ Current: F0-R2.3 | Six domains, Hub transports, identities, local rollback and S3-last six-image transaction reviewed; execution gates remain | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
+| **F0. Product contracts** | ▶️ Current: F0-R2.4 | Six domains, Hub transports, identities, rollback, update and execution gates reviewed; closure audit/report remains | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
 | **F1. Portable cores** | ⏳ Waiting for F0-R2 | Reuse the [R1 F1 result](f1-portable-cores-report.md), add Hub/Airband states and a six-domain fault model | Normal and ASan/UBSan scenarios cover the new heartbeat, lease, receiver-mode and update ownership |
 | **F2. Target projects and build system** | ⏳ Waiting for F1-R2 and hardware H2-R2 | Six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
@@ -244,9 +244,9 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F0-R2.3`. Complete the machine-readable
-execution-gate portion of the R2 contract,
-then regenerate portable/build work in strict F1→F2→F3 order. The reviewed
+The current boundary is `F0-R2.4`. Run the integrated F0-R2 closure audit and
+publish its bilingual report, then regenerate portable/build work in strict
+F1→F2→F3 order. The reviewed
 target identities do not claim that those projects have been created. The R1 target
 matrix and S3 QEMU runs remain useful regression evidence but cannot qualify
 the added Hub or changed transports.

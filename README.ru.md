@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F0-R2.3 — проведено ревью update transaction шести доменов.** Работа
+> **Статус прошивки: F0-R2.4 — проведено ревью execution gates шести targets.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -16,7 +16,7 @@
 
 | Этап | Статус | Результат |
 |---|---|---|
-| **F0 · Контракты продукта** | **▶️ Сейчас: F0-R2.3** | projection, identities, rollback и S3-last transaction шести образов проведены ревью; execution gates остаются |
+| **F0 · Контракты продукта** | **▶️ Сейчас: F0-R2.4** | все контракты R2 и честные execution gates проведены ревью; остаётся closure audit/report |
 | F1 · Portable cores | ⏳ [Отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md); ожидает F0-R2 | добавить состояния Hub/Airband и повторить portable regression |
 | F2 · Target-проекты и build system | ⏳ [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md); ожидает F1-R2 | шесть production-SDK projects и воспроизводимая six-image matrix |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F0-R2.3.** Сгенерированный
+**Прошивка находится на F0-R2.4.** Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
 targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и analog FPV
@@ -49,6 +49,11 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и ana
 шести images, загружает и подтверждает Pack → Safety → C5 → RF RP → Hub RP →
 S3, сохраняет power-loss-safe journal и требует подписанный bridge bundle для
 breaking IPC changes. Budget окна RP TBYB 16,7 с явно ещё не измерен.
+[Execution matrix](config/f0_r2_execution_gate_matrix.json), прошедшая ревью,
+не смешивает пять слоёв evidence. Только S3 имеет точную официальную QEMU
+machine. Для S3, C5, Pack и Safety есть dev-board paths с точным выбранным
+module/MCU; Pico 2 явно остаётся лишь неточным surrogate RP2350A для обоих
+targets RP2354B. Ни один R2 build, dev-board или Leshy2 HIL run не заявлен.
 Обязательный receive-only Airband использует Hub GP41/42, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
 находится на `H1-R2.13`: корпуса Hub/Airband/резерв K331, точный MMCX и LDO получили
@@ -97,14 +102,13 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 
 ### Текущая фаза F0-R2 — детальная позиция
 
-<!-- current-substep: F0-R2.3 -->
+<!-- current-substep: F0-R2.4 -->
 
-▶️ **`F0-R2.3` — сейчас.** Проведено ревью stage, pending boot, commit,
-power-loss resume и compensating rollback transaction шести образов. S3 входит
-в pending и подтверждается последней; breaking transport changes требуют
-bridge bundle. Заявлено ноль flash transitions и нет qualified timing. F0-R2
-ещё должен закрыть emulator/dev-board gates. Маркер и evidence меняются вместе
-в каждом commit.
+▶️ **`F0-R2.4` — сейчас.** Host, target-build, official-emulator,
+development-board и Leshy2-HIL evidence разделены для всех шести targets.
+Точный emulator есть только у S3; оба dev-board RP остаются явными surrogates.
+Заявлено ноль R2 executions. У F0-R2 остаются только integrated closure audit и
+двуязычный глобальный отчёт. Маркер и evidence меняются вместе в каждом commit.
 
 <details>
 <summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>

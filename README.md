@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F0-R2.3 — six-domain update transaction reviewed.** The R1
+> **Firmware status: F0-R2.4 — six-target execution gates reviewed.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -15,7 +15,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 
 | Stage | Status | Result |
 |---|---|---|
-| **F0 · Product contracts** | **▶️ Current: F0-R2.3** | projection, identities, rollback and S3-last six-image transaction reviewed; execution gates remain |
+| **F0 · Product contracts** | **▶️ Current: F0-R2.4** | all R2 contracts and honest execution gates reviewed; closure audit/report remains |
 | F1 · Portable cores | ⏳ R1 [report retained](docs/f1-portable-cores-report.md); waiting for F0-R2 | add Hub/Airband states and rerun portable regression |
 | F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F0-R2.3.** The generated
+**Firmware is at F0-R2.4.** The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
@@ -47,6 +47,11 @@ The reviewed [update policy](config/update_policy.json) stages all six images,
 boots and commits Pack → Safety → C5 → RF RP → Hub RP → S3, persists a
 power-loss-safe journal and requires a signed bridge bundle for breaking IPC
 changes. Its 16.7-second RP TBYB budget remains explicitly unmeasured.
+The reviewed [execution matrix](config/f0_r2_execution_gate_matrix.json) keeps
+five evidence layers distinct. Only S3 has an exact official QEMU machine. S3,
+C5, Pack and Safety have exact selected-module/MCU development-board paths;
+Pico 2 is explicitly only a non-exact RP2350A surrogate for both RP2354B
+targets. No R2 build, dev-board or Leshy2 HIL run is claimed.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.13`:
 Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
@@ -95,13 +100,13 @@ authorization remain open.
 
 ### Current phase F0-R2 — detailed position
 
-<!-- current-substep: F0-R2.3 -->
+<!-- current-substep: F0-R2.4 -->
 
-▶️ **`F0-R2.3` — current.** The six-image stage, pending boot, commit,
-power-loss resume and compensating rollback transaction is now reviewed. S3
-enters pending and commits last; breaking transport changes require a bridge
-bundle. Zero flash transitions and no qualified timing are claimed. F0-R2 still
-has to close emulator/dev-board gates. This marker and its evidence move
+▶️ **`F0-R2.4` — current.** Host, target-build, official-emulator,
+development-board and Leshy2-HIL evidence are now separated for all six targets.
+Only S3 has an exact emulator; both RP dev boards remain explicit surrogates.
+Zero R2 executions are claimed. The only remaining F0-R2 work is its integrated
+closure audit and bilingual top-level report. This marker and its evidence move
 together in every commit.
 
 <details>

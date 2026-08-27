@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "stage": "F0-R2.4",
+  "status": "reviewed_contract",
+  "checked_on": "2026-08-27",
+  "sources": [
+    {
+      "id": "ESP_QEMU_FEATURES",
+      "url": "https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/README.md",
+      "evidence": "official feature table names ESP32, ESP32-S3 and ESP32-C3 machines; ESP32-C5 is absent"
+    },
+    {
+      "id": "ESP32S3_QEMU",
+      "url": "https://github.com/espressif/esp-toolchain-docs/blob/main/qemu/esp32s3/README.md",
+      "evidence": "official esp32s3 machine, flash image, GDB and supported hardware-crypto path"
+    },
+    {
+      "id": "ESP32S3_DEVKIT",
+      "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/index.html",
+      "evidence": "official DevKitC accepts ESP32-S3-WROOM-1U modules"
+    },
+    {
+      "id": "ESP32C5_DEVKIT",
+      "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html",
+      "evidence": "official C5 DevKitC-1 and exact GPIO13/14 USB/SDIO multiplexed functions"
+    },
+    {
+      "id": "PICO_HOST_PLATFORM",
+      "url": "https://github.com/raspberrypi/pico-sdk/blob/master/cmake/pico_pre_load_platform.cmake",
+      "evidence": "official SDK exposes a host build platform; it is not an RP2350 instruction or peripheral emulator"
+    },
+    {
+      "id": "PICO2_DATASHEET",
+      "url": "https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf",
+      "evidence": "official Pico 2 uses RP2350A with external 4-MB flash, unlike selected RP2354B with stacked 2-MB flash"
+    },
+    {
+      "id": "MSPM0_LAUNCHPAD",
+      "url": "https://www.ti.com/tool/LP-MSPM0C1106",
+      "evidence": "official exact-MCU LaunchPad with XDS110, UART and EnergyTrace; no product power/watchdog wiring"
+    }
+  ],
+  "evidence_layers": [
+    {
+      "id": "host",
+      "proves": "portable framing, safety, update and scheduling logic under deterministic faults and sanitizers",
+      "does_not_prove": "target instruction execution, boot ROM, peripheral registers, signal timing or physical fault paths"
+    },
+    {
+      "id": "target_build",
+      "proves": "selected production SDK/compiler linkage, image/map generation, partition fit and reproducibility",
+      "does_not_prove": "target boot, peripheral behavior, transport PHY or rollback transitions"
+    },
+    {
+      "id": "official_emulator",
+      "proves": "only the CPU/memory/peripherals implemented by the named vendor machine",
+      "does_not_prove": "omitted peripherals, board wiring, RF, analog, power, timing or enclosure behavior"
+    },
+    {
+      "id": "development_board",
+      "proves": "named silicon/module behavior and exposed peripherals on the named board",
+      "does_not_prove": "Leshy2 routing, muxes, quiet state, shared rails, antennas or cross-board transports"
+    },
+    {
+      "id": "leshy2_hil",
+      "proves": "integrated product wiring, real transports/peripherals, recovery, power, RF coexistence and rollback under injected faults",
+      "does_not_prove": "production-lot variation until H8/H9 sampling"
+    }
+  ],
+  "targets": [
+    {
+      "id": "s3",
+      "host_gate": "portable and fake-peripheral suites under ASan/UBSan",
+      "target_build_gate": "ESP-IDF esp32s3 debug/release, image/map/partition and reproducibility",
+      "official_emulator": {
+        "available": true,
+        "machine": "esp32s3",
+        "source": "ESP32S3_QEMU",
+        "required": "boot, 8-MiB octal-PSRAM init/test, retained fault model and update-failure scenarios",
+        "not_covered": ["direct QSPI display timing", "LCD_CAM analog-FPV capture", "real USB/power", "S3-Hub SPI PHY", "buttons/encoder/touch"]
+      },
+      "development_board": {
+        "candidate": "ESP32-S3-DevKitC-1 populated with ESP32-S3-WROOM-1U-N16R8; module label must be verified",
+        "exact_selected_module": true,
+        "required": ["native USB/UART recovery", "PSRAM ECC", "GPIO strap sampling", "display/video peripheral smoke fixtures"]
+      },
+      "leshy2_hil": ["direct UI latency", "40-MHz QSPI display occupancy", "analog FPV capture", "S3-Hub 4-data SPI", "product USB power and recovery"]
+    },
+    {
+      "id": "c5",
+      "host_gate": "portable radio-control, quiet-state and IPC adapter tests with mocked ESP-IDF dependencies",
+      "target_build_gate": "ESP-IDF esp32c5 debug/release, image/map/partition and reproducibility",
+      "official_emulator": {
+        "available": false,
+        "machine": null,
+        "source": "ESP_QEMU_FEATURES",
+        "reason": "the official QEMU machine/feature table does not list ESP32-C5; installing qemu-riscv32 alone is not C5 execution evidence"
+      },
+      "development_board": {
+        "candidate": "ESP32-C5-DevKitC-1 v1.2 populated with ESP32-C5-WROOM-1U-N8R8; module label must be verified",
+        "exact_selected_module": true,
+        "required": ["2.4/5-GHz Wi-Fi", "BLE", "802.15.4", "IR GPIO timing", "native USB recovery", "SDIO endpoint"]
+      },
+      "leshy2_hil": ["Hub-C5 4-bit SDIO", "GPIO13/14 runtime/service mux", "IR power/quiet state", "RF coexistence", "data-only USB no-back-power"]
+    },
+    {
+      "id": "rf_rp",
+      "host_gate": "portable RF scheduling, three-nRF concurrency and Hub-link protocol with fake peripherals",
+      "target_build_gate": "Pico SDK rp2350-arm-s RF-RP debug/release, image/map/TBYB partition and reproducibility",
+      "official_emulator": {
+        "available": false,
+        "machine": null,
+        "source": "PICO_HOST_PLATFORM",
+        "reason": "Pico SDK host is a native library platform, not RP2350 Arm instruction, boot-ROM or peripheral emulation"
+      },
+      "development_board": {
+        "candidate": "Raspberry Pi Pico 2 as a non-exact RP2350A/4-MB-flash silicon surrogate",
+        "exact_selected_module": false,
+        "source": "PICO2_DATASHEET",
+        "required": ["Arm Cortex-M33 runtime", "PIO/DMA/SPI behavior", "USB_BOOT/SWD flow", "portable TBYB API behavior"],
+        "not_covered": ["RP2354B B-package GPIO", "stacked 2-MB flash", "exact partition boot", "Leshy2 RF fan-out"]
+      },
+      "leshy2_hil": ["three simultaneous full-function nRF24", "CC1101", "two voice modules", "U214", "Hub-RF SPI+alert", "exact RP2354B TBYB and recovery"]
+    },
+    {
+      "id": "hub_rp",
+      "host_gate": "portable fan-out, queue, storage/audio/Airband state and failure injection with fake peripherals",
+      "target_build_gate": "Pico SDK rp2350-arm-s Hub-RP debug/release, image/map/TBYB partition and reproducibility",
+      "official_emulator": {
+        "available": false,
+        "machine": null,
+        "source": "PICO_HOST_PLATFORM",
+        "reason": "Pico SDK host is a native library platform, not RP2350 Arm instruction, boot-ROM or peripheral emulation"
+      },
+      "development_board": {
+        "candidate": "Raspberry Pi Pico 2 as a non-exact RP2350A/4-MB-flash silicon surrogate",
+        "exact_selected_module": false,
+        "source": "PICO2_DATASHEET",
+        "required": ["Arm Cortex-M33 runtime", "SPI/SDIO/I2C/DMA scheduling", "USB_BOOT/SWD flow", "portable TBYB API behavior"],
+        "not_covered": ["RP2354B B-package GPIO", "stacked 2-MB flash", "exact partition boot", "Leshy2 fan-out wiring"]
+      },
+      "leshy2_hil": ["S3-Hub quad SPI", "Hub-C5 SDIO", "Hub-RF SPI+alert", "microSD", "audio", "FM/AM/Airband", "Pack/Safety I2C", "exact RP2354B TBYB and recovery"]
+    },
+    {
+      "id": "pack",
+      "host_gate": "portable pack admission, source transition, thermal and update state with injected faults",
+      "target_build_gate": "TI MSPM0 SDK/Clang Pack boot+application debug/release, map/slot fit and reproducibility",
+      "official_emulator": {
+        "available": false,
+        "machine": null,
+        "source": "MSPM0_LAUNCHPAD",
+        "reason": "no official MSPM0C1106 instruction/peripheral simulator was found; TI provides the physical LaunchPad path"
+      },
+      "development_board": {
+        "candidate": "TI LP-MSPM0C1106",
+        "exact_selected_mcu": true,
+        "source": "MSPM0_LAUNCHPAD",
+        "required": ["boot/application images", "SWD/UART recovery", "watchdog", "ADC/temperature", "EnergyTrace power profiling"]
+      },
+      "leshy2_hil": ["cell admission", "USB/battery source transitions", "protected shutdown", "Hub mailbox", "brownout/update interruption", "fail-closed blank firmware"]
+    },
+    {
+      "id": "safety",
+      "host_gate": "portable heartbeat, TX lease/evidence, thermal fault and retained first-cause state with injected faults",
+      "target_build_gate": "TI MSPM0 SDK/Clang Safety boot+application debug/release, map/slot fit and reproducibility",
+      "official_emulator": {
+        "available": false,
+        "machine": null,
+        "source": "MSPM0_LAUNCHPAD",
+        "reason": "no official MSPM0C1106 instruction/peripheral simulator was found; TI provides the physical LaunchPad path"
+      },
+      "development_board": {
+        "candidate": "TI LP-MSPM0C1106",
+        "exact_selected_mcu": true,
+        "source": "MSPM0_LAUNCHPAD",
+        "required": ["boot/application images", "SWD/UART recovery", "independent watchdog", "fault latch IO", "EnergyTrace power profiling"]
+      },
+      "leshy2_hil": ["TPS3435 service", "FAULT_KILL", "unexpected TX evidence", "thermal shutdown", "Hub mailbox loss", "fail-closed blank firmware"]
+    }
+  ],
+  "phase_gates": {
+    "F1": "all six portable roles and fault paths pass deterministic normal and sanitizer suites",
+    "F2": "six production-SDK projects build debug/release reproducibly and consume only generated R2 BSP inputs",
+    "F3": "S3 official QEMU plus every named dev-board/static gate runs; absent exact RP2354B and product wiring stay explicit",
+    "H7_F10": "all six physical Leshy2 controllers program, boot, recover and pass real transport/peripheral/fault/update scenarios",
+    "H8_F11": "endurance, RF/power/thermal margins, release images and recovery kit pass on the final hardware"
+  },
+  "claims": {
+    "six_target_execution_gate_matrix_reviewed": true,
+    "exact_vendor_emulator_targets": ["s3"],
+    "exact_vendor_emulator_target_count": 1,
+    "exact_selected_module_or_mcu_devboards": ["s3", "c5", "pack", "safety"],
+    "surrogate_devboard_targets": ["rf_rp", "hub_rp"],
+    "r2_target_builds_run": false,
+    "r2_devboard_runs": 0,
+    "r2_leshy2_hil_runs": 0,
+    "non_s3_target_boot_proven": false,
+    "physical_peripherals_or_transports_proven": false
+  },
+  "checker": "tools/check_f0_r2_execution_gates.py"
+}

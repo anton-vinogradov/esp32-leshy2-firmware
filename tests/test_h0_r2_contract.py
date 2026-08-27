@@ -89,6 +89,19 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertIn("6 staged/pending/commit targets", result.stdout)
 
+    def test_six_target_execution_gate_matrix_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f0_r2_execution_gates.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("1 exact emulator", result.stdout)
+        self.assertIn("2 explicit surrogates", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

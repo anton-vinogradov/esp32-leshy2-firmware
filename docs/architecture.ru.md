@@ -43,8 +43,9 @@ direct FM/SW или converted Airband и после reset остаётся в di
 
 Состояние Pack и mailboxes heartbeat/lease/fault Safety используют выделенную
 I²C Hub GP43/44. Safety по-прежнему локально владеет watchdog и асинхронным
-`FAULT_KILL`: IPC-hop не может создать разрешение или подавить fault. В F0-R2
-остаётся только matrix emulator/dev-board и HIL execution gates R2.
+`FAULT_KILL`: IPC-hop не может создать разрешение или подавить fault. Execution
+gate matrix R2 проведена ревью; остаётся только integrated closure audit/report
+F0-R2.
 
 <details>
 <summary><strong>Сохранённая архитектура R1 — не текущая физическая топология</strong></summary>
