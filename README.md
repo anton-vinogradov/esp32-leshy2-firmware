@@ -60,7 +60,7 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.16`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.17`:
 the locality-first two-board placement, readable outer faces, separate mirrored
 inner faces, service access and vertical FPV-connector proof are generated.
 S3, C5, RF RP and Hub RP each retain USB, RESET/BOOT and internal DBG10.
@@ -93,8 +93,10 @@ Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
 MOQ 442 and no purchasable module route; the bare RTC6715 also lacks a public
 reference RF/IF application, so firmware keeps the K331 module boundary.
 The exact connector is vertical SMT Molex `73415-2063` (`C588480`) on the rear
-face. Its body stays 5.72 mm from the nearest SMA; the Ø12 handling envelope
-leaves 1.95 mm to SMA and 0.70 mm to U214, and no tail enters the sandwich.
+face below the evenly pitched five-SMA row. Its body stays 2.07 mm from SMA;
+the controlled right-angle plug stays 2.40 mm from SMA and 4.80 mm from U214,
+clears both mounting holes, and no tail enters the sandwich. Ø12 is only the
+temporary H5 finger-access check.
 Received mating,
 retention, final enclosure tolerance and strain remain H5 evidence.
 The exact 3V3_MAIN cell

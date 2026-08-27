@@ -5,7 +5,7 @@
 
 > **▶️ Текущая граница: F2-R2.0 — rebaseline build для шести targets.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.16; актуальное locality-first размещение двух плат,
+> Железо находится на H1-R2.17; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
 > архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step, официальные схема
 > включения K331/функции 14 контактов/таблица 24 каналов, пиновая/силовая
@@ -40,7 +40,7 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, Airband заднего RP и integrated faults актуальны |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ F2-R2.0: шесть identities projects/images проведены ревью; пять структур R1 исторические, сейчас формируется точный rebaseline шести projects/toolchains/artifacts |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.16 сейчас; десять SMA разделены 5+5, вертикальный задний FPV MMCX не имеет хвоста в межплатный просвет, TVP5150 остаётся спереди, а M1 несёт один CVBS; K331 RSSI официально NC, поддерживаемое свидетельство — decoder lock; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.17 сейчас; десять SMA разделены 5+5, вертикальный задний FPV MMCX не имеет хвоста в межплатный просвет, TVP5150 остаётся спереди, а M1 несёт один CVBS; K331 RSSI официально NC, поддерживаемое свидетельство — decoder lock; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
