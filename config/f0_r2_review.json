@@ -4,7 +4,7 @@
   "status": "reviewed",
   "closed_on": "2026-08-27",
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "e3ac657d4a6ac19974affd3053f2e5258143c3ce8dd631a752d9db179c5eb77e",
+  "hardware_source_sha256": "d3ebf9aeb381dae48393816082d3d648dad6052c1c24aff7e77fff25b5223a21",
   "artifacts": [
     {"stage": "F0-R2.0", "path": "config/h0_r2_hardware_contract.json", "checker": "tests/test_h0_r2_contract.py"},
     {"stage": "F0-R2.1", "path": "config/f0_r2_target_identity_contract.json", "checker": "tools/check_f0_r2_target_identities.py"},
@@ -38,7 +38,7 @@
     "production_signature_verifier_fit_proven": false
   },
   "next_gates": [
-    "F1-R2 adds Hub/Airband and six-domain safety/update roles to portable cores and reruns normal plus sanitizer scenarios",
+    "F1-R2 adds rear-RP Airband and six-domain safety/update roles to portable cores and reruns normal plus sanitizer scenarios",
     "F2-R2 creates and reproducibly builds six production-SDK projects against the generated R2 BSP",
     "F3-R2 executes S3 QEMU and every named dev-board/static gate, including measured update timing",
     "H7/F10 proves all real transports, peripherals, recovery and rollback on the Leshy2 prototype"

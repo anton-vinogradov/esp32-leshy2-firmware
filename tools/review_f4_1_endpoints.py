@@ -87,7 +87,7 @@ def create_review() -> dict:
         "schema_version": 1,
         "stage": "F4.1.2",
         "status": "reviewed",
-        "reviewed_on": "2026-08-26",
+        "reviewed_on": "2026-08-27",
         "locked_inputs": {
             "adapter_contract_sha256": sha256(CONTRACT_PATH),
             "hardware_contract_sha256": sha256(HARDWARE_CONTRACT_PATH),

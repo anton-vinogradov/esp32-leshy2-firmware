@@ -5,19 +5,19 @@
 
 > **▶️ Текущая граница: F2-R2.0 — rebaseline build для шести targets.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.14; полные текущие виды размещения Hub/Airband/резерва K331,
+> Железо находится на H1-R2.15; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
 > архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step, официальные схема
 > включения K331/функции 14 контактов/таблица 24 каналов, пиновая/силовая
 > совместимость K331, точная антенна TBS FPV и независимый бумажный резерв
 > Taoglas проходят текущие gates. AKK-брендированный чертёж у продавца подтверждает
 > номинал K331 28,7×23,1 мм; аппаратный аудит использует консервативный резерв
-> 30×24×4 мм и сохраняет 1,44 мм при требовании 0,70 мм. Исправленные привязка MMCX к кромке, зазор
-> выводов wave soldering и service-keepout стенки/штекера проходят координатный
+> 30×24×4 мм и сохраняет 1,44 мм при требовании 0,70 мм. Корпус вертикального
+> Molex `73415-2063`, handling SMA и service-keepout U214 проходят координатный
 > аудит. JLCPCB подтвердила отсутствие K331 в Parts Library и Global Sourcing,
 > не нашла прямой замены и принимает оригинальные модули AKK через Consigned Parts.
-> Полные текущие внешние, зеркальные внутренние,
-> сервисные, антенные виды и разрезы сгенерированы; при этом восстановлен
+> Полные текущие внешние, отдельные зеркальные внутренние,
+> сервисные виды и проверка разъёма сгенерированы; при этом восстановлен
 > пропущенный независимый набор Hub USB/RESET/BOOT/DBG10. Единственный оставшийся
 > блокер H1 — контролируемый production-пакет AKK с максимальными XYZ, посадкой
 > и packaging/soldering/reflow; он же открывает Consigned Parts application.
@@ -37,10 +37,10 @@ firmware-репозитория. Пересечения с железом ука
 | Область | Фактическое состояние |
 |---|---|
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
-| Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, receiver Hub/Airband и integrated faults актуальны |
+| Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, Airband заднего RP и integrated faults актуальны |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ F2-R2.0: шесть identities projects/images проведены ревью; пять структур R1 исторические, сейчас формируется точный rebaseline шести projects/toolchains/artifacts |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.14 сейчас; все четыре USB смотрят вниз, восемь recovery-кнопок используют единый точный физический/визуальный контракт SKRTLAE010, а неизменённая RF-топология помещает верхний MMCX FPV без нового RF-перехода; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.15 сейчас; десять SMA разделены 5+5, вертикальный задний FPV MMCX не имеет хвоста в межплатный просвет, TVP5150 остаётся спереди, а M1 несёт один CVBS; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
@@ -215,7 +215,7 @@ flowchart TD
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
-| **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Hub/Airband и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
+| **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Airband заднего RP и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
 | **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.0 | Инвентаризировать и перевести на R2 шесть projects production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 следует принятому hardware | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |

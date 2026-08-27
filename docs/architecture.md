@@ -13,35 +13,36 @@ It is the current firmware input; the R1 contract below is regression evidence.
 |---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder, direct QSPI display and direct analog-FPV capture |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
-| RF RP | `SC1512-A4` | 3×nRF24, CC1101, VHF/UHF voice and U214/LoRa Cap |
-| Hub RP | second `SC1512-A4` | C5/RF fan-out, microSD, audio, FM/AM/SW/LW/Airband and M5 Unit |
+| RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and U214/LoRa Cap |
+| Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |
 | Pack | `MSPM0C1106SDGS20R` | cell admission and protected shutdown |
 | Safety | second `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases and `FAULT_KILL` |
 
 ```mermaid
 flowchart TD
-  S3["S3 · direct UI/display/FPV"] <-->|"40-MHz quad-SPI + alert"| HUB["Hub RP · peripheral and receiver owner"]
+  S3["S3 · direct UI/display/video"] <-->|"40-MHz quad-SPI + alert"| HUB["front Hub RP · fan-out/storage/nRF24"]
   HUB <-->|"20-MHz 4-bit SDIO"| C5["C5 · native radio/IR"]
-  HUB <-->|"20-MHz SPI + alert"| RF["RF RP · deterministic radios"]
+  HUB <-->|"20-MHz SPI + alert"| RF["rear RF RP · RF/audio/expansion"]
   HUB <-->|"400-kHz fail-closed I²C"| PACK["Pack MSPM0"]
   HUB <-->|"400-kHz fail-closed I²C"| SAFE["Safety MSPM0"]
 ```
 
 The S3-Hub link carries control and selected data, never display pixels or
-analog-video frames. Hub-local microSD and audio prevent those workloads from
-contending with the display. Button edges terminate on the S3-local
+analog-video frames. Hub-local microSD and three nRF24 islands do not contend
+with the display; rear audio uses bounded full-duplex transport below 0.4 MB/s.
+Button edges terminate on the S3-local
 `TCA9539PWR`; encoder A/B remain direct PCNT inputs. The first visible response
 target remains 20 ms under qualified concurrent load.
 
-`BROADCAST_RX` is Hub-owned and mutually exclusive with other top-level signal
+`BROADCAST_RX` is rear-RP-owned and mutually exclusive with other top-level signal
 groups. Airband AM maps 118–137 MHz to Si4732's 6–25-MHz FMI range using a
-fixed 112-MHz low-side LO. Hub GP41 is fail-low `AIR_RX_EN`; GP42 selects direct
+fixed 112-MHz low-side LO. Rear RP GP35 is fail-low `AIR_RX_EN`; GP36 selects direct
 FM/SW or converted Airband and resets to direct FM/SW. Included behavior is AM
 voice, 25/8.33-kHz plans, scan/banks, recording, activity history and downstream
 ACARS 2400 decode. Airband TX, VDL2, wideband spectrum capture and certified
 VOR/ILS are not claimed.
 
-Pack state and the Safety heartbeat/lease/fault mailboxes use dedicated Hub
+Pack state and the Safety heartbeat/lease/fault mailboxes use dedicated front-Hub
 GP43/44 I²C. Safety still owns watchdog service and asynchronous `FAULT_KILL`;
 an IPC hop cannot create permission or suppress a local fault. The complete
 [F0-R2 contract foundation is reviewed](f0-product-contracts-report.md);

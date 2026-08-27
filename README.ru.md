@@ -17,7 +17,7 @@
 | Этап | Статус | Результат |
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
-| F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Hub/Airband и integrated faults |
+| F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
 | **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.0**; [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | перевести plan projects/build на шесть production-SDK targets и текущий generated BSP |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
@@ -36,8 +36,9 @@
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
-targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и analog FPV
-остаются напрямую на S3; storage, audio и `BROADCAST_RX` переходят на Hub RP.
+targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и декодер
+TVP5150 остаются локальными на передней плате. Hub RP владеет microSD и всеми
+тремя nRF24; задний RF RP — CC1101, voice, audio, `BROADCAST_RX`, FPV, M5 и U214.
 [Контракт identities targets](config/f0_r2_target_identity_contract.json),
 прошедший ревью, задаёт шесть уникальных application images и два boot images
 защитных контроллеров, не заявляя, что R2 projects или builds уже существуют.
@@ -56,23 +57,22 @@ machine. Для S3, C5, Pack и Safety есть dev-board paths с точным 
 module/MCU; Pico 2 явно остаётся лишь неточным surrogate RP2350A для обоих
 targets RP2354B. Ни один R2 build, dev-board или Leshy2 HIL run не заявлен.
 [Итог F1-R2](docs/f1-portable-cores-report.ru.md), проведённый ревью, добавляет
-независимые update state RF-RP/Hub-RP, пять receive-only states Hub/Airband и
+независимые update state RF-RP/Hub-RP, пять receive-only states Airband заднего RP и
 integrated faults Hub/Pack/Safety. Его 34 сценария проходят normal и ASan/UBSan
 host runs; это portable evidence, а не target build.
-Обязательный receive-only Airband использует Hub GP41/42, фиксированный LO
+Обязательный receive-only Airband использует GP35/36 заднего RP, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
-находится на `H1-R2.14`: корпуса Hub/Airband/резерв K331, точный MMCX и LDO получили
-размещение с проверкой коллизий, а полные текущие внешние, зеркальные внутренние,
-сервисные, антенные виды и разрезы сгенерированы. Перегенерация восстановила
-пропущенный независимый recovery-набор Hub, поэтому у S3, C5, RF RP и Hub RP есть
+находится на `H1-R2.15`: сгенерированы locality-first размещение двух плат,
+читаемые внешние стороны, отдельные зеркальные внутренние стороны, сервисный
+доступ и проверка вертикального FPV-разъёма. У S3, C5, RF RP и Hub RP есть
 собственные USB, RESET/BOOT и внутренний DBG10. Фильтр Airband получил nominal/stress-аудит и
 ячейку настройки 24×11 мм, а порты и антенны — совпадающие коды. Официальные
 материалы на сайте AKK подтверждают схему включения K331, функции всех 14
 контактов и таблицу 24 каналов. AKK-брендированный чертёж у продавца подтверждает
 номинал 28,7×23,1 мм; аппаратный аудит намеренно использует резерв 30×24×4 мм
 и всё равно сохраняет 1,44 мм встречного зазора при требовании 0,70 мм. K331
-вписывается в зарезервированные GPIO Hub и 5-В бюджет; точная линейная
-`TBS5G8MMCXA` стала тринадцатой антенной комплекта для ключованного MMCX
+вписывается в зарезервированные GPIO заднего RP и 5-В бюджет; точная линейная
+`TBS5G8MMCXA` выбрана для ключованного MMCX
 `FPV RX 5.8G`, а независимая Taoglas `FXP831.09.0100C` выбрана как бумажный
 резерв с текущим backorder. JLCPCB подтвердила отсутствие K331 в Parts Library
 и Global Sourcing, не нашла прямой замены и принимает оригинальные модули AKK
@@ -93,9 +93,10 @@ RF/video-тракта и запасная Taoglas остаются обязат�
 последующих H3/H5/H6/H8. Живые карточки `RichWave RTC6715` и безродного
 `RX5808` имеют нулевой склад, MOQ 442 и не дают доступного module route;
 у голого RTC6715 также нет публичного reference RF/IF application, поэтому
-firmware сохраняет модульную границу K331. Точный MMCX теперь зарегистрирован как 3,6 мм корпуса
-на плате и 3,0 мм ствола снаружи; его выводы wave soldering, минимальный проём
-стенки 4,5 мм и коридор подключения Ø12×20 мм проходят аппаратный аудит.
+firmware сохраняет модульную границу K331. Точный вертикальный SMT-разъём —
+Molex `73415-2063` (`C588480`) на задней стороне. До ближайшего SMA остаётся
+5,72 мм, Ø12-зона обращения оставляет 1,95 мм до SMA и 0,70 мм до U214, а
+хвост не входит в межплатный просвет.
 Стыковка полученных деталей, удержание, финальный допуск корпуса и strain
 остаются evidence H5. Точная ячейка
 3V3_MAIN допускает 3,75 А continuous / 4,25 А step во всех 12 разрешённых
@@ -291,9 +292,9 @@ recovery, смены профиля либо ошибки. После защёл
 ```mermaid
 flowchart TB
   S3["S3 image<br/>приложение, прямые UI/display и analog FPV"]
-  HUB["Hub RP2354B image<br/>fan-out, storage, audio, broadcast/Airband RX"]
+  HUB["Hub RP2354B image<br/>передний fan-out, storage, nRF24 ×3"]
   C5["C5 image<br/>native 2,4/5 ГГц, 802.15.4, IR"]
-  RP["RF RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
+  RP["RF RP2354B image<br/>broadcast/Airband, audio, FPV, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>локальный допуск батарейного pack"]
   SAFE["safety MSPM0 image<br/>watchdog, температурные зоны и TX lease"]
   WDG["TPS3435<br/>независимый timeout 1,6 с"]

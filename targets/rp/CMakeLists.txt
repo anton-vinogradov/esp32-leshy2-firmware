@@ -34,6 +34,7 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${LESHY2_RP_PART
 set(LESHY2_RP_PROJECT_SOURCES
     main.c
     "${LESHY2_COMMON_DIR}/src/l2ip.c"
+    "${LESHY2_COMMON_DIR}/src/receiver_core.c"
     "${LESHY2_COMMON_DIR}/src/safety_core.c"
     "${LESHY2_COMMON_DIR}/src/system_model.c"
     "${LESHY2_COMMON_DIR}/src/update_core.c"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Review the F1-R2.2 Hub/Airband portable receiver model."""
+"""Review the F1-R2.2 rear-RP Airband portable receiver model."""
 
 from __future__ import annotations
 

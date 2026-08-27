@@ -5,18 +5,18 @@
 
 > **▶️ Current boundary: F2-R2.0 — six-target build rebaseline.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.14; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
+> H1-R2.15; its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
 > 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
 > K331 pin/power fit, exact TBS FPV antenna and independent
 > Taoglas paper fallback pass their
 > current checks. A 28.7×23.1-mm nominal K331 drawing is corroborating evidence;
 > the hardware collision audit uses a conservative 30×24×4-mm reserve and retains
-> 1.44 mm against 0.70 mm required. Exact MMCX edge registration, wave-solder-tail clearance and
-> sidewall/plug service keepouts now pass the coordinate audit. JLCPCB confirmed
+> 1.44 mm against 0.70 mm required. The vertical Molex `73415-2063` MMCX body,
+> SMA handling and U214 service keepouts pass the coordinate audit. JLCPCB confirmed
 > that K331 is absent from Parts Library and Global Sourcing, found no direct
-> replacement and accepts genuine AKK modules through Consigned Parts. Complete current exterior, mirrored
-> inner-face, service, antenna-edge and section views are generated; this corrected
+> replacement and accepts genuine AKK modules through Consigned Parts. Complete current exterior, separate mirrored
+> inner-face, service and connector-proof views are generated; this corrected
 > the missing independent Hub USB/RESET/BOOT/DBG10 set. One AKK-controlled
 > production package with maximum XYZ, land pattern and packaging/soldering/reflow
 > is the remaining H1 blocker and also unlocks the Consigned Parts application.
@@ -36,10 +36,10 @@ duplicated or given a second status here.
 | Area | Actual state |
 |---|---|
 | Six-domain HW↔FW projection | ✅ [F0-R2 reviewed](f0-product-contracts-report.md): H0-R2 source is hash-bound; identities, local rollback, S3-last update and five-layer execution gates are coherent |
-| Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, Hub/Airband receiver and integrated faults are current |
+| Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, rear-RP Airband receiver and integrated faults are current |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ F2-R2.0: six project/image identities are reviewed; five R1 structures are historical while the exact six-project/toolchain/artifact rebaseline is current |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.14 is current; all four USB openings face downward, all eight recovery switches share one exact SKRTLAE010 physical/visual contract, and the unchanged RF topology fits the top-edge FPV MMCX without adding an RF transition; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.15 is current; ten SMA ports are split 5+5, the vertical rear-face FPV MMCX has no interboard tail, TVP5150 stays front-local and M1 carries one CVBS signal; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
@@ -213,7 +213,7 @@ flowchart TD
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
 | **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
-| **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only Hub/Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
+| **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only rear-RP Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
 | **F2. Target projects and build system** | ▶️ Current: F2-R2.0 | Inventory and rebaseline six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP follows accepted hardware | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |

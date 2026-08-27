@@ -16,7 +16,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | Stage | Status | Result |
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
-| F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, Hub/Airband and integrated faults |
+| F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
 | **F2 · Target projects and build system** | **▶️ Current: F2-R2.0**; R1 [report retained](docs/f2-target-build-system-report.md) | rebaseline the project/build plan for six production-SDK targets and current generated BSP |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
@@ -35,8 +35,10 @@ from this table; internal substeps only move the exact marker.
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
-targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
-FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
+targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and the
+TVP5150 video decoder remain front-local. Hub RP owns microSD and all three
+nRF24 paths; rear RF RP owns CC1101, voice, audio, `BROADCAST_RX`, FPV control,
+M5 and U214.
 The reviewed [target identity contract](config/f0_r2_target_identity_contract.json)
 names six unique application images and the two protected-controller boot
 images without claiming that R2 projects or builds already exist.
@@ -54,22 +56,21 @@ C5, Pack and Safety have exact selected-module/MCU development-board paths;
 Pico 2 is explicitly only a non-exact RP2350A surrogate for both RP2354B
 targets. No R2 build, dev-board or Leshy2 HIL run is claimed.
 The [reviewed F1-R2 result](docs/f1-portable-cores-report.md) adds independent
-RF-RP/Hub-RP update state, five Hub/Airband receive-only states and integrated
+RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrated
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
-Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.14`:
-Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
-complete current exterior, mirrored inner-face, service, antenna-edge and section
-views are generated. Regeneration corrected the missing independent Hub recovery
-set, so S3, C5, RF RP and Hub RP each have USB, RESET/BOOT and internal DBG10.
+Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.15`:
+the locality-first two-board placement, readable outer faces, separate mirrored
+inner faces, service access and vertical FPV-connector proof are generated.
+S3, C5, RF RP and Hub RP each retain USB, RESET/BOOT and internal DBG10.
 The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
 confirms the K331 application circuit, all 14 pin functions and the 24-channel
 table. An AKK-branded reseller drawing corroborates 28.7×23.1 mm nominal XY;
 hardware deliberately collision-checks a 30×24×4-mm reserve and still retains
-1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved Hub
-controls and 5-V budget; exact linear `TBS5G8MMCXA` is the thirteenth kit
+1.44 mm opposing clearance against 0.70 mm required. K331 fits the reserved rear-RP
+controls and 5-V budget; exact linear `TBS5G8MMCXA` is the FPV kit
 antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
 `FXP831.09.0100C` selected as a backorder-only paper fallback. JLCPCB confirmed
 that K331 is absent from Parts Library and Global Sourcing, found no direct
@@ -91,9 +92,10 @@ fallback stay mandatory at downstream H3/H5/H6/H8.
 Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
 MOQ 442 and no purchasable module route; the bare RTC6715 also lacks a public
 reference RF/IF application, so firmware keeps the K331 module boundary.
-The exact MMCX is now registered with 3.6 mm on-board and a 3.0-mm outboard
-barrel; its wave-solder tail, 4.5-mm minimum wall opening and Ø12×20-mm plug
-service corridor pass the hardware coordinate audit. Received mating,
+The exact connector is vertical SMT Molex `73415-2063` (`C588480`) on the rear
+face. Its body stays 5.72 mm from the nearest SMA; the Ø12 handling envelope
+leaves 1.95 mm to SMA and 0.70 mm to U214, and no tail enters the sandwich.
+Received mating,
 retention, final enclosure tolerance and strain remain H5 evidence.
 The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
@@ -287,9 +289,9 @@ fault. A latched fault requires a physical `KILL`→`RUN` cycle.
 ```mermaid
 flowchart TB
   S3["S3 image<br/>application, direct UI/display and analog FPV"]
-  HUB["Hub RP2354B image<br/>fan-out, storage, audio, broadcast/Airband RX"]
+  HUB["Hub RP2354B image<br/>front fan-out, storage, nRF24 ×3"]
   C5["C5 image<br/>native 2.4/5 GHz, 802.15.4, IR"]
-  RP["RF RP2354B image<br/>nRF24 ×3, Sub-GHz, voice, Cap Bus"]
+  RP["RF RP2354B image<br/>broadcast/Airband, audio, FPV, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>local battery-pack admission"]
   SAFE["safety MSPM0 image<br/>watchdog, thermal zones and TX leases"]
   WDG["TPS3435<br/>independent 1.6 s timeout"]

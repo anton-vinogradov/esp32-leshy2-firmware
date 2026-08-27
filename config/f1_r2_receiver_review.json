@@ -4,7 +4,7 @@
   "status": "reviewed",
   "reviewed_on": "2026-08-27",
   "hardware_contract": "config/h0_r2_hardware_contract.json",
-  "owner": "hub_rp",
+  "owner": "rf_rp",
   "signal_group": "BROADCAST_RX",
   "frequency_plan_khz": {
     "user_min": 118000,

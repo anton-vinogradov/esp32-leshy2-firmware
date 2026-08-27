@@ -5,6 +5,7 @@ idf_component_register(
     SRCS
         "${LESHY2_COMMON_DIR}/src/l2ip.c"
         "${LESHY2_COMMON_DIR}/src/high_speed_adapter.c"
+        "${LESHY2_COMMON_DIR}/src/receiver_core.c"
         "${LESHY2_COMMON_DIR}/src/safety_core.c"
         "${LESHY2_COMMON_DIR}/src/system_model.c"
         "${LESHY2_COMMON_DIR}/src/update_core.c"

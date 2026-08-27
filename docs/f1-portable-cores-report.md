@@ -5,7 +5,7 @@
 
 F1-R2 is **reviewed**. The target-neutral strict-C17 core now distinguishes all
 six hardware domains, models the S3-last six-image transaction, owns a
-receive-only Hub/Airband state machine and fails closed across Hub, Pack and
+receive-only rear-RP Airband state machine and fails closed across Hub, Pack and
 Safety loss. All `34` F1 scenarios pass both normal and ASan/UBSan host runs:
 `68` scenario executions in total.
 
@@ -15,7 +15,7 @@ flowchart TB
   S["Safety<br/>8 scenarios"]
   L["L2IP<br/>4 scenarios"]
   U["Six-target update<br/>6 scenarios"]
-  R["Hub/Airband RX<br/>5 states · 6 scenarios"]
+  R["rear-RP Airband RX<br/>5 states · 6 scenarios"]
   M["Six-domain faults<br/>10 scenarios"]
   V["34 normal + 34 ASan/UBSan<br/>68 executions"]
   C --> S --> V

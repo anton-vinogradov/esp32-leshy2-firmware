@@ -30,14 +30,14 @@ class H0R2FirmwareContractTest(unittest.TestCase):
     def test_six_targets_and_hub_owner_are_explicit(self):
         self.assertEqual(6, len(self.actual["domains"]))
         self.assertEqual("hub_rp", self.actual["firmware_rebaseline"]["new_target"])
-        self.assertEqual("hub_rp", self.actual["airband"]["owner"])
+        self.assertEqual("rf_rp", self.actual["airband"]["owner"])
         self.assertEqual(6, self.actual["firmware_rebaseline"]["target_count"])
 
     def test_airband_is_receive_only_and_fail_low(self):
         air = self.actual["airband"]
         self.assertEqual([118.0, 137.0], air["user_range_mhz"])
         self.assertEqual([6.0, 25.0], air["if_range_mhz"])
-        self.assertIn("pulled low", air["gp41"])
+        self.assertIn("pulled low", air["gp35"])
         self.assertTrue(any("transmit" in item.lower() for item in air["excluded"]))
 
     def test_pack_and_safety_have_a_real_hub_transport(self):
@@ -47,6 +47,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         groups = {tuple(row["gpios"]): row["role"] for row in self.actual["hub_pin_groups"]}
         self.assertIn("Pack and Safety", groups[(43, 44)])
         self.assertEqual(3, self.actual["hub_gpio_budget"]["free"])
+        self.assertEqual(2, self.actual["rear_gpio_budget"]["free"])
+
+    def test_locality_first_repartition_is_explicit(self):
+        domains = {row["id"]: row["role"] for row in self.actual["domains"]}
+        self.assertIn("three fully concurrent local nRF24", domains["hub_rp"])
+        self.assertIn("CC1101", domains["rf_rp"])
+        self.assertIn("one 75-ohm FPV_CVBS", self.actual["interboard"]["video"])
+        self.assertEqual(9, len(self.actual["interboard"]["released_legacy_nets"]))
+        self.assertIn("eight released signal contacts remain", self.actual["interboard"]["result"])
 
     def test_direct_ui_and_display_contract_survives_rebaseline(self):
         self.assertEqual(40_000_000, self.actual["display"]["selected_clock_hz"])

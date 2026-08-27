@@ -5,7 +5,7 @@
 
 F1-R2 **проведена ревью**. Target-neutral strict-C17 core теперь различает все
 шесть аппаратных доменов, моделирует S3-last transaction шести images, содержит
-receive-only state machine Hub/Airband и fail-closed обрабатывает loss Hub, Pack
+receive-only state machine Airband заднего RP и fail-closed обрабатывает loss Hub, Pack
 и Safety. Все `34` сценария F1 проходят обычный и ASan/UBSan host runs: всего
 `68` executions сценариев.
 
@@ -15,7 +15,7 @@ flowchart TB
   S["Safety<br/>8 сценариев"]
   L["L2IP<br/>4 сценария"]
   U["Update шести targets<br/>6 сценариев"]
-  R["Hub/Airband RX<br/>5 states · 6 сценариев"]
+  R["Airband заднего RP<br/>5 states · 6 сценариев"]
   M["Faults шести доменов<br/>10 сценариев"]
   V["34 normal + 34 ASan/UBSan<br/>68 executions"]
   C --> S --> V

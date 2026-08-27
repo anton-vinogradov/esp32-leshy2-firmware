@@ -6,7 +6,7 @@
   "inputs": {
     "f0_review": {
       "path": "config/f0_r2_review.json",
-      "sha256": "e486b85f2cfdf1eddd32bff24078371023fbacca1dd62a5dbd1bc536284ac99a"
+      "sha256": "051bc97f1b37c6399e81159fa6797ffbc374633417ae210afe316b327cb78aac"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
@@ -42,7 +42,7 @@
     },
     {
       "id": "HUB_FAILURE_BOUNDARY",
-      "output": "Hub loss closes Hub-owned receiver/storage/audio and both downstream radio paths without weakening Safety watchdog or FAULT_KILL",
+      "output": "Hub loss closes the front-owned nRF/storage domain and isolates the rear-owned receiver/audio/radio domain without weakening Safety watchdog or FAULT_KILL",
       "forbidden_shortcut": "treating an IPC hop as safety authority"
     },
     {
@@ -58,7 +58,7 @@
   ],
   "planned_substeps": [
     {"stage": "F1-R2.1", "output": "six-domain identities and exact update activation model"},
-    {"stage": "F1-R2.2", "output": "Hub/Airband receive-only portable state machine"},
+    {"stage": "F1-R2.2", "output": "rear-RP Airband receive-only portable state machine"},
     {"stage": "F1-R2.3", "output": "integrated Hub, Pack, Safety and six-domain fault scenarios"},
     {"stage": "F1-R2.4", "output": "normal plus sanitizer closure review and bilingual F1 report"}
   ],

@@ -133,7 +133,7 @@ def create_review() -> dict:
         "schema_version": 1,
         "stage": STAGE,
         "status": "reviewed",
-        "reviewed_on": "2026-08-26",
+        "reviewed_on": "2026-08-27",
         "locked_inputs": {
             "endpoint_review_sha256": sha256(ENDPOINT_PATH),
             "qemu_plan_sha256": sha256(PLAN_PATH),

@@ -2,10 +2,10 @@
   "schema_version": 1,
   "stage": "F4.1.2",
   "status": "reviewed",
-  "reviewed_on": "2026-08-26",
+  "reviewed_on": "2026-08-27",
   "locked_inputs": {
     "adapter_contract_sha256": "d27a8de18ef58f06628b102ccca5dcb4a7ec8af6acc45635ae7063c9176392aa",
-    "hardware_contract_sha256": "3604889fbf94c28fd0b110b16596c63fa56927df7ff3ff49d0cdfff9d6e7b014",
+    "hardware_contract_sha256": "5459b4365af26f37eacab760fc29ed8276508b943f1740e8eb729e5102b6983a",
     "essl_vendor_lock_sha256": "4de40edf538d359ab9d2a16460dbcbf346898b1fdaf475149f503b06f018066d"
   },
   "sources": [
@@ -19,7 +19,7 @@
     },
     {
       "path": "targets/s3/components/leshy2_portable/CMakeLists.txt",
-      "sha256": "ccbf89f336c3426d352eb7affd1a6c3d4d5280a37b82bdd25adae7cfd6cb5eee"
+      "sha256": "ec1c2fc3b6631f85438603179ba1725a5bc394917ffef9996d22583b0389509b"
     },
     {
       "path": "targets/s3/components/leshy2_s3_c5/CMakeLists.txt",
@@ -39,7 +39,7 @@
     },
     {
       "path": "targets/c5/components/leshy2_portable/CMakeLists.txt",
-      "sha256": "ff22445efa988db919c4ae53d2da55cd34c5e1792814874eb1a7b2c99477dbab"
+      "sha256": "333a5ba7d99954c510111b43b40b3404d6ff650bb103a80475a99c9a40db5141"
     },
     {
       "path": "targets/c5/components/leshy2_s3_c5/CMakeLists.txt",

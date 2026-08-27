@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "FW-H0-R2",
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "e3ac657d4a6ac19974affd3053f2e5258143c3ce8dd631a752d9db179c5eb77e",
-  "hardware_status": "reviewed_functional_architecture",
+  "hardware_source_sha256": "d3ebf9aeb381dae48393816082d3d648dad6052c1c24aff7e77fff25b5223a21",
+  "hardware_status": "reviewed_functional_architecture_repartitioned",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -19,12 +19,12 @@
     {
       "id": "rf_rp",
       "mpn": "SC1512-A4",
-      "role": "three fully concurrent nRF24 paths, CC1101, independent VHF/UHF voice radios and U214/LoRa Cap"
+      "role": "rear RF/I/O domain: CC1101, independent VHF/UHF voice radios, FM/AM/SW/LW/Airband, audio, FPV control, M5 Unit and U214/LoRa Cap"
     },
     {
       "id": "hub_rp",
       "mpn": "SC1512-A4",
-      "role": "dedicated high-speed fan-out for C5, RF RP, microSD, audio, FM/AM/SW/LW plus converted Airband receiver and generic M5 Unit port"
+      "role": "front UI/radio domain: dedicated fan-out for S3, C5 and rear RP, microSD plus three fully concurrent local nRF24 paths"
     },
     {
       "id": "pack",
@@ -60,7 +60,7 @@
       "clock_hz": 20000000,
       "raw_payload_mb_s": 2.5,
       "qualified_payload_floor_mb_s": 1.5,
-      "reason": "The worst accepted simultaneous three-nRF/CC payload remains below this floor and never shares its peripheral with storage or C5."
+      "reason": "Three nRF paths are now front-local and do not consume this link. Worst-case full-duplex 48-kHz audio is below 0.4 MB/s; rear radio control, activity and recording metadata remain bounded below the remaining floor."
     },
     {
       "id": "HUB_MICROSD",
@@ -328,69 +328,49 @@
         19,
         20,
         21,
-        22
+        22,
+        23
       ],
-      "role": "full-duplex audio BCLK/WS/DOUT/DIN/ARM"
+      "role": "nRF24 #0 dedicated SPI SCK/MOSI/MISO/CS plus CE and IRQ"
     },
     {
       "gpios": [
-        23,
-        24
-      ],
-      "role": "Hub-local I2C for codec, Si4732, headset, video decoder and slow controls"
-    },
-    {
-      "gpios": [
+        24,
         25,
-        26
-      ],
-      "role": "isolated M5 Unit I2C/UART/GPIO"
-    },
-    {
-      "gpios": [
+        26,
         27,
         28,
-        29,
-        30,
-        31,
-        32
+        29
       ],
-      "role": "dedicated microSD SPI SCK/MOSI/MISO/CS plus power and detect"
+      "role": "nRF24 #1 dedicated SPI SCK/MOSI/MISO/CS plus CE and IRQ"
     },
     {
       "gpios": [
+        30,
+        31,
+        32,
         33,
         34,
         35
       ],
-      "role": "FPV RSSI ADC, receiver power and lock/evidence"
+      "role": "nRF24 #2 dedicated SPI SCK/MOSI/MISO/CS plus CE and IRQ"
     },
     {
       "gpios": [
-        36,
+        36
+      ],
+      "role": "FAULT_KILL-qualified common nRF24 switched-rail request"
+    },
+    {
+      "gpios": [
         37,
-        38
-      ],
-      "role": "receiver channel-control reserve for the selected exact serial module"
-    },
-    {
-      "gpios": [
+        38,
         39,
-        40
-      ],
-      "role": "Hub diagnostic UART reserve"
-    },
-    {
-      "gpios": [
-        41
-      ],
-      "role": "AIR_RX_EN fail-low switched-domain and LT5560 enable control"
-    },
-    {
-      "gpios": [
+        40,
+        41,
         42
       ],
-      "role": "AIR_RX_MODE direct-FM/SW versus converted-Airband RF selector; reset default is direct FM/SW"
+      "role": "dedicated microSD SPI SCK/MOSI/MISO/CS plus power and detect"
     },
     {
       "gpios": [
@@ -408,6 +388,139 @@
       "role": "uncommitted electrical reserve"
     }
   ],
+  "rear_gpio_budget": {
+    "available": 48,
+    "used": 46,
+    "free": 2
+  },
+  "rear_pin_groups": [
+    {
+      "gpios": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "role": "full-duplex codec/audio BCLK/WS/DOUT/DIN/ARM"
+    },
+    {
+      "gpios": [
+        5,
+        6
+      ],
+      "role": "rear-local I2C for codec, Si4732, Airband LO, headset and slow controls"
+    },
+    {
+      "gpios": [
+        7,
+        8
+      ],
+      "role": "rear-local isolated M5 Unit I2C/UART/GPIO"
+    },
+    {
+      "gpios": [
+        9,
+        10,
+        11,
+        23,
+        39,
+        42,
+        43
+      ],
+      "role": "CC1101 CS/GDO0/GDO2/power plus dedicated PIO SPI"
+    },
+    {
+      "gpios": [
+        12,
+        13,
+        14,
+        28,
+        29,
+        40,
+        41,
+        44,
+        45,
+        46,
+        47
+      ],
+      "role": "U214 busy/IRQ/reset, I2C, GNSS UART and dedicated SPI"
+    },
+    {
+      "gpios": [
+        15,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "role": "FPV RSSI, receiver power, lock/evidence and three channel-select outputs"
+    },
+    {
+      "gpios": [
+        16,
+        17,
+        18,
+        20,
+        21,
+        22
+      ],
+      "role": "voice UART/PTT/audio-on, direct PTT input and ANY_TX diagnostic"
+    },
+    {
+      "gpios": [
+        19,
+        24,
+        25,
+        26,
+        27
+      ],
+      "role": "dedicated SPI plus ALERT to front RP"
+    },
+    {
+      "gpios": [
+        35
+      ],
+      "role": "AIR_RX_EN fail-low switched-domain and LT5560 enable control"
+    },
+    {
+      "gpios": [
+        36
+      ],
+      "role": "AIR_RX_MODE direct-FM/SW versus converted-Airband selector; reset default direct"
+    },
+    {
+      "gpios": [
+        37,
+        38
+      ],
+      "role": "uncommitted electrical reserve"
+    }
+  ],
+  "interboard": {
+    "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
+    "video": "K331 remains rear-local; one 75-ohm FPV_CVBS net crosses M1 beside a dedicated return. TVP5150 and all eight data lines plus PCLK/VSYNC/HREF remain UI-local beside S3.",
+    "released_legacy_nets": [
+      "UNIT_5V_REQ",
+      "UNIT_READY",
+      "UNIT_HOST_SIG0",
+      "UNIT_HOST_SIG1",
+      "RX_VOICE_AFOUT_SELECTED",
+      "VOICE_MIC_SELECTED_MAIN",
+      "SPEAKER_SELECTED_P",
+      "SPEAKER_SELECTED_N",
+      "MIC_RAW"
+    ],
+    "retained_safety_crossings": [
+      "EV_N2_NRF0",
+      "EV_N3_NRF1",
+      "EV_N4_NRF2",
+      "RUN_PERMIT",
+      "FAULT_ASSERT_N"
+    ],
+    "result": "one released audio contact with an adjacent ground becomes FPV_CVBS; eight released signal contacts remain available to H1 pin reconciliation"
+  },
   "display": {
     "panel": "HMX035CTFT-001 with ST77922",
     "interface": "dedicated direct QSPI on S3 SPI2 with GDMA and TE",
@@ -425,13 +538,13 @@
     "rf": "replaceable exact serial analog 5.8-GHz receiver module; generic RX5808 is evidence input, not an accepted MPN",
     "external_connector": "MMCX, DC to at least 6 GHz, user-facing and labelled FPV RX 5.8G",
     "decoder": "Texas Instruments TVP5150AM1PBS or industrial-temperature TVP5150AM1IPBS after factory-route confirmation",
-    "capture": "8-bit BT.601/BT.656-compatible YUV422 plus PCLK/VSYNC/HREF into S3 LCD_CAM and GDMA; hardware YUV422-to-RGB565 conversion is required",
+    "capture": "Rear K331 CVBS crosses one M1 signal beside ground into UI-local TVP5150; its 8-bit BT.601/BT.656-compatible YUV422 plus PCLK/VSYNC/HREF then enters S3 LCD_CAM and GDMA without crossing M1",
     "first_acceptance_mode": "NTSC/PAL source to centered 320x240 live view at source frame rate with UI overlay/remaining portrait area; uncompressed full-source recording is not promised",
     "coexistence": "Entering FPV mode powers the receiver/decoder group, disables C5 5-GHz RF and all unused transmit groups, and preserves the one-active-signal-group rule.",
     "power_thermal_gate": "Receiver, decoder, regulator and local shielding are added to the unattended thermal and battery budgets before H1 acceptance."
   },
   "airband": {
-    "owner": "hub_rp",
+    "owner": "rf_rp",
     "signal_group": "BROADCAST_RX remains the exclusive top-level receive group; FM, SW, AM/LW and AIR are mutually exclusive submodes",
     "user_range_mhz": [
       118.0,
@@ -446,9 +559,9 @@
       87.0,
       106.0
     ],
-    "i2c": "SI5351A-B-GTR joins the isolated Hub-local I2C bus at address 0x60; it does not share S3 UI I2C",
-    "gp41": "AIR_RX_EN is pulled low and removes the Airband RF/LO domain when unused",
-    "gp42": "AIR_RX_MODE defaults to the direct FM/SW path before Hub firmware starts",
+    "i2c": "SI5351A-B-GTR joins the isolated rear-RP-local I2C bus at address 0x60; it does not share S3 UI I2C",
+    "gp35": "AIR_RX_EN is pulled low and removes the Airband RF/LO domain when unused",
+    "gp36": "AIR_RX_MODE defaults to the direct FM/SW path before rear-RP firmware starts",
     "included": [
       "AM voice reception",
       "25-kHz and 8.33-kHz channel plans",
@@ -486,7 +599,8 @@
     "required_work": [
       "replace direct S3-C5 and S3-RF links with S3-Hub, Hub-C5 and Hub-RF transports",
       "route Pack status and Safety heartbeat/lease/fault mailboxes through the dedicated Hub GP43/44 I2C bus without weakening local watchdog or FAULT_KILL ownership",
-      "move storage, audio and BROADCAST_RX ownership from S3 to Hub RP",
+      "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, FPV control, M5 and U214 to the rear RF RP",
+      "carry only one 75-ohm FPV_CVBS signal across M1 while TVP5150 and its 11-line LCD_CAM bus remain front-local",
       "add fail-low Airband mode control, Si5351 setup, scan/record and ACARS receive pipeline",
       "preserve direct S3 UI/display/FPV scheduling and all existing safety/quiet-state semantics",
       "regenerate six-target build, memory, update, emulator/dev-board and HIL matrices before resuming F4"
