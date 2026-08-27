@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F1-R2.3 — выполняются integrated faults шести доменов.** Работа
+> **Статус прошивки: F1-R2.4 — выполняется closure review portable core.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -17,7 +17,7 @@
 | Этап | Статус | Результат |
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
-| **F1 · Portable cores** | **▶️ Сейчас: F1-R2.3**; [отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md) | receive model Hub/Airband проведён ревью; интегрировать failure paths Hub, Pack и Safety |
+| **F1 · Portable cores** | **▶️ Сейчас: F1-R2.4**; [отчёт R1 сохранён](docs/f1-portable-cores-report.ru.md) | всё behavior R2 реализовано и проведено ревью; выполнить closure и опубликовать итог F1-R2 |
 | F2 · Target-проекты и build system | ⏳ [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md); ожидает F1-R2 | шесть production-SDK projects и воспроизводимая six-image matrix |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F1-R2.3.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
+**Прошивка находится на F1-R2.4.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
@@ -103,15 +103,14 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 
 ### Текущая фаза F1-R2 — детальная позиция
 
-<!-- current-substep: F1-R2.3 -->
+<!-- current-substep: F1-R2.4 -->
 
-▶️ **`F1-R2.3` — сейчас.** [Receive model Hub/Airband](config/f1_r2_receiver_review.json),
-проведённый ревью, имеет пять receive-only states и шесть normal+sanitizer
-scenarios. Airband не становится active без отдельных evidence LO-lock и
-RF-settle; потеря link/evidence фиксирует безопасные outputs, TX-state отсутствует.
-Подэтап объединяет выключение receiver, изоляцию downstream-доменов и локальную
-authority Safety при отказах Hub, Pack и Safety. R2 target builds, RF runs и
-физические transitions не заявляются.
+▶️ **`F1-R2.4` — сейчас.** [Integrated fault review](config/f1_r2_integrated_fault_review.json)
+теперь покрывает loss Hub, Pack и Safety через boundaries receiver, downstream
+domains, heartbeat, `FAULT_KILL` и external watchdog. Тридцать четыре F1
+scenarios проходят normal и ASan/UBSan. Остались единый closure audit и
+двуязычный итог F1-R2. R2 target builds, RF runs и физические transitions не
+заявляются.
 
 <details>
 <summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>

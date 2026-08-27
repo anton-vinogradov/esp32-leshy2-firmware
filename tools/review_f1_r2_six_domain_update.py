@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -41,17 +42,18 @@ def main() -> int:
     if "L2_UPDATE_GLOBAL_DEADLINE_MS = 16700" not in header:
         errors.append("portable TBYB upper bound changed")
 
-    required_markers = [
-        "host update core: 6 scenarios passed",
-        "host six-domain model: 7 scenarios passed",
-    ]
+    latest_system_scenarios = 0
     for target in ("host-test", "host-sanitize"):
         returncode, output = run_make(target)
         if returncode != 0:
             errors.append(f"{target} failed")
-        for marker in required_markers:
-            if marker not in output:
-                errors.append(f"{target} missed marker: {marker}")
+        if "host update core: 6 scenarios passed" not in output:
+            errors.append(f"{target} missed six-target update marker")
+        match = re.search(r"host six-domain model: (\d+) scenarios passed", output)
+        if match is None or int(match.group(1)) < 7:
+            errors.append(f"{target} lost the seven reviewed system scenarios")
+        elif int(match.group(1)) > latest_system_scenarios:
+            latest_system_scenarios = int(match.group(1))
     claims = review.get("claims", {})
     if not all(claims.get(name) is True for name in (
         "six_portable_domain_identities_implemented",
@@ -72,7 +74,7 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
     print(
-        "F1-R2.1 review OK: 6 independent domains, 6 update and 7 system "
+        f"F1-R2.1 review OK: 6 independent domains, 6 update and {latest_system_scenarios} system "
         "scenarios pass normal plus ASan/UBSan; 0 target/physical runs claimed"
     )
     return 0

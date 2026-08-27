@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F1-R2.3 — integrated six-domain faults are current.** The R1
+> **Firmware status: F1-R2.4 — portable-core closure review is current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -16,7 +16,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | Stage | Status | Result |
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
-| **F1 · Portable cores** | **▶️ Current: F1-R2.3**; R1 [report retained](docs/f1-portable-cores-report.md) | Hub/Airband receive model reviewed; integrate Hub, Pack and Safety failure paths |
+| **F1 · Portable cores** | **▶️ Current: F1-R2.4**; R1 [report retained](docs/f1-portable-cores-report.md) | all R2 behavior implemented and reviewed; run integrated closure and publish the F1-R2 report |
 | F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F1-R2.3.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F1-R2.4.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
@@ -101,15 +101,15 @@ authorization remain open.
 
 ### Current phase F1-R2 — detailed position
 
-<!-- current-substep: F1-R2.3 -->
+<!-- current-substep: F1-R2.4 -->
 
-▶️ **`F1-R2.3` — current.** The reviewed [Hub/Airband receive
-model](config/f1_r2_receiver_review.json) has five receive-only states and six
-normal plus sanitizer scenarios. Airband cannot become active without separate
-LO-lock and RF-settle evidence; link/evidence loss latches safe outputs and no
-TX state exists. This substep integrates receiver shutdown, downstream domain
-isolation and Safety-local authority under Hub, Pack and Safety failures. Zero
-R2 target builds, RF runs or physical transitions are claimed.
+▶️ **`F1-R2.4` — current.** The [integrated fault
+review](config/f1_r2_integrated_fault_review.json) now covers Hub loss, Pack
+loss and Safety loss across the receiver, downstream domains, heartbeat,
+`FAULT_KILL` and external-watchdog boundaries. Thirty-four F1 scenarios pass
+normal and ASan/UBSan runs. The remaining work is one closure audit plus the
+bilingual F1-R2 report. Zero R2 target builds, RF runs or physical transitions
+are claimed.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>

@@ -52,6 +52,19 @@ class F1R2PortableTests(unittest.TestCase):
         self.assertIn("5 receive-only states", result.stdout)
         self.assertIn("0 target/RF runs claimed", result.stdout)
 
+    def test_integrated_fault_review_passes_without_physical_claim(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f1_r2_integrated_faults.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("34 scenarios", result.stdout)
+        self.assertIn("0 target/physical runs claimed", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

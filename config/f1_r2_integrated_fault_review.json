@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "stage": "F1-R2.3",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-27",
+  "inputs": [
+    "config/f1_r2_six_domain_update_review.json",
+    "config/f1_r2_receiver_review.json",
+    "config/h0_r2_hardware_contract.json"
+  ],
+  "fault_paths": [
+    {
+      "id": "HUB_LOSS",
+      "result": "receiver latches safe, C5 and RF RP become unreachable, heartbeat cannot cross Hub and Safety independently reaches HEARTBEAT_LOST"
+    },
+    {
+      "id": "PACK_LOSS",
+      "result": "missing Pack state becomes a local power fault, FAULT_KILL remains asserted and receiver is disabled"
+    },
+    {
+      "id": "SAFETY_LOSS",
+      "result": "receiver disables immediately and the external 1600-ms watchdog is no longer serviced"
+    }
+  ],
+  "scenario_counts_per_run": {
+    "safety": 8,
+    "l2ip": 4,
+    "update": 6,
+    "receiver": 6,
+    "integrated_system": 10,
+    "f1_total": 34
+  },
+  "executions": {
+    "strict_c17_normal": 34,
+    "asan_ubsan": 34,
+    "target_builds": 0,
+    "target_or_emulator_runs": 0,
+    "physical_or_rf_runs": 0
+  },
+  "claims": {
+    "hub_pack_safety_fault_paths_reviewed": true,
+    "safety_authority_remains_local": true,
+    "host_fault_suite_passed": true,
+    "physical_watchdog_or_fault_kill_proven": false,
+    "transport_or_receiver_hardware_proven": false
+  },
+  "checker": "tools/review_f1_r2_integrated_faults.py"
+}

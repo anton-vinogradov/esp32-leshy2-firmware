@@ -2,6 +2,7 @@
 #define LESHY2_SYSTEM_MODEL_H
 
 #include "leshy2/safety_core.h"
+#include "leshy2/receiver_core.h"
 #include "leshy2/update_core.h"
 
 #include <stdbool.h>
@@ -32,6 +33,7 @@ typedef struct {
 
 typedef struct {
     l2_safety_t safety;
+    l2_receiver_t receiver;
     l2_update_t update;
     l2_scheduler_t scheduler;
     bool domain_online[L2_UPDATE_DOMAIN_COUNT];
@@ -64,6 +66,16 @@ bool l2_system_model_heartbeat(
     l2_system_model_t *model,
     uint32_t sequence,
     uint32_t now_ms
+);
+bool l2_system_model_request_receiver(
+    l2_system_model_t *model,
+    l2_receiver_mode_t mode,
+    uint32_t frequency_khz
+);
+void l2_system_model_observe_receiver(
+    l2_system_model_t *model,
+    bool lo_locked,
+    bool rf_path_settled
 );
 void l2_system_model_set_domain_online(
     l2_system_model_t *model,

@@ -122,6 +122,55 @@ static void test_dead_safety_controller_releases_external_watchdog(void)
     assert(model.rf_domains_held_in_reset);
 }
 
+static void test_hub_loss_closes_receiver_and_isolates_downstream_domains(void)
+{
+    l2_system_model_t model = running_model();
+    assert(l2_system_model_request_receiver(
+        &model, L2_RECEIVER_MODE_AIRBAND, 125000
+    ));
+    l2_system_model_observe_receiver(&model, true, true);
+    assert(model.receiver.state == L2_RECEIVER_AIRBAND_ACTIVE);
+
+    l2_system_model_set_domain_online(&model, L2_UPDATE_HUB_RP, false);
+    l2_system_model_tick(&model, 5);
+    assert(model.receiver.state == L2_RECEIVER_FAULT);
+    assert(model.receiver.first_fault == L2_RECEIVER_FAULT_HUB_LINK);
+    assert(!model.domain_online[L2_UPDATE_C5]);
+    assert(!model.domain_online[L2_UPDATE_RF_RP]);
+    assert(!l2_system_model_heartbeat(&model, 2, 50));
+    tick_to(&model, 205);
+    assert(model.safety.first_fault == L2_FAULT_HEARTBEAT_LOST);
+}
+
+static void test_pack_loss_becomes_local_power_fault(void)
+{
+    l2_system_model_t model = running_model();
+    assert(l2_system_model_request_receiver(
+        &model, L2_RECEIVER_MODE_DIRECT_FM_SW, 101700
+    ));
+    l2_system_model_set_domain_online(&model, L2_UPDATE_PACK, false);
+    l2_system_model_tick(&model, 5);
+    assert(model.safety.first_fault == L2_FAULT_POWER);
+    assert(model.safety.fault_kill_asserted);
+    assert(model.receiver.state == L2_RECEIVER_DISABLED);
+    assert(!model.fault_viewer_available);
+}
+
+static void test_safety_loss_disables_receiver_before_watchdog_trip(void)
+{
+    l2_system_model_t model = running_model();
+    assert(l2_system_model_request_receiver(
+        &model, L2_RECEIVER_MODE_DIRECT_FM_SW, 101700
+    ));
+    l2_system_model_set_domain_online(&model, L2_UPDATE_SAFETY, false);
+    l2_system_model_tick(&model, 5);
+    assert(model.receiver.state == L2_RECEIVER_DISABLED);
+    assert(!model.receiver.receiver_enabled);
+    assert(!model.external_watchdog_tripped);
+    l2_system_model_tick(&model, 1600);
+    assert(model.external_watchdog_tripped);
+}
+
 static void test_six_domain_update_rolls_back_as_one_bundle(void)
 {
     l2_system_model_t model;
@@ -151,7 +200,10 @@ int main(void)
     test_ui_thermal_fault_suppresses_screen();
     test_controlled_kill_is_not_reported_as_a_fault();
     test_dead_safety_controller_releases_external_watchdog();
+    test_hub_loss_closes_receiver_and_isolates_downstream_domains();
+    test_pack_loss_becomes_local_power_fault();
+    test_safety_loss_disables_receiver_before_watchdog_trip();
     test_six_domain_update_rolls_back_as_one_bundle();
-    puts("host six-domain model: 7 scenarios passed");
+    puts("host six-domain model: 10 scenarios passed");
     return 0;
 }

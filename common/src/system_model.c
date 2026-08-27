@@ -64,6 +64,7 @@ void l2_system_model_init(
 {
     *model = (l2_system_model_t){0};
     l2_safety_init(&model->safety, maximum_temperature_deci_c);
+    l2_receiver_init(&model->receiver);
     l2_update_init(&model->update, initial_build);
     l2_scheduler_init(&model->scheduler);
     for (size_t index = 0; index < L2_UPDATE_DOMAIN_COUNT; ++index) {
@@ -75,6 +76,7 @@ void l2_system_model_init(
 bool l2_system_model_set_run(l2_system_model_t *model, bool run, uint32_t now_ms)
 {
     if (run && (!model->domain_online[L2_UPDATE_S3] ||
+                !model->domain_online[L2_UPDATE_HUB_RP] ||
                 !model->domain_online[L2_UPDATE_PACK] ||
                 !model->domain_online[L2_UPDATE_SAFETY])) {
         return false;
@@ -94,10 +96,40 @@ bool l2_system_model_heartbeat(
 )
 {
     if (!model->domain_online[L2_UPDATE_S3] ||
+        !model->domain_online[L2_UPDATE_HUB_RP] ||
         !model->domain_online[L2_UPDATE_SAFETY]) {
         return false;
     }
     return l2_safety_heartbeat(&model->safety, sequence, now_ms);
+}
+
+bool l2_system_model_request_receiver(
+    l2_system_model_t *model,
+    l2_receiver_mode_t mode,
+    uint32_t frequency_khz
+)
+{
+    if (!model->domain_online[L2_UPDATE_HUB_RP] ||
+        !model->domain_online[L2_UPDATE_PACK] ||
+        !model->domain_online[L2_UPDATE_SAFETY] ||
+        model->safety.fault_kill_asserted) {
+        return false;
+    }
+    return l2_receiver_request(&model->receiver, mode, frequency_khz);
+}
+
+void l2_system_model_observe_receiver(
+    l2_system_model_t *model,
+    bool lo_locked,
+    bool rf_path_settled
+)
+{
+    l2_receiver_observe(
+        &model->receiver,
+        model->domain_online[L2_UPDATE_HUB_RP],
+        lo_locked,
+        rf_path_settled
+    );
 }
 
 void l2_system_model_set_domain_online(
@@ -113,7 +145,18 @@ void l2_system_model_set_domain_online(
 
 void l2_system_model_tick(l2_system_model_t *model, uint32_t now_ms)
 {
+    if (!model->domain_online[L2_UPDATE_HUB_RP]) {
+        model->domain_online[L2_UPDATE_C5] = false;
+        model->domain_online[L2_UPDATE_RF_RP] = false;
+        l2_receiver_observe(&model->receiver, false, false, false);
+    }
+    if (!model->domain_online[L2_UPDATE_PACK]) {
+        l2_safety_set_power_fault(&model->safety, true);
+    }
     if (!model->domain_online[L2_UPDATE_SAFETY]) {
+        (void)l2_receiver_request(
+            &model->receiver, L2_RECEIVER_MODE_DISABLED, 0
+        );
         model->rf_domains_held_in_reset = true;
         model->fault_viewer_available = false;
         if (l2_safety_watchdog_must_trip(&model->safety, now_ms)) {
@@ -130,6 +173,9 @@ void l2_system_model_tick(l2_system_model_t *model, uint32_t now_ms)
     model->domain_online[L2_UPDATE_C5] = false;
     model->domain_online[L2_UPDATE_RF_RP] = false;
     model->domain_online[L2_UPDATE_HUB_RP] = false;
+    (void)l2_receiver_request(
+        &model->receiver, L2_RECEIVER_MODE_DISABLED, 0
+    );
     if (!model->safety.run_requested || model->safety.first_fault == L2_FAULT_NONE) {
         model->fault_viewer_available = false;
         return;
