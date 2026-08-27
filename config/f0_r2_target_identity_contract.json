@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "stage": "F0-R2.1",
+  "status": "reviewed_contract",
+  "source_contract": "config/h0_r2_hardware_contract.json",
+  "configurations": ["debug", "release"],
+  "targets": [
+    {
+      "id": "s3",
+      "hardware_domain": "s3",
+      "mpn": "ESP32-S3-WROOM-1U-N16R8",
+      "family": "esp_idf",
+      "sdk_target": "esp32s3",
+      "project_name": "leshy2_s3",
+      "project_dir": "targets/s3",
+      "application_image": "leshy2_s3",
+      "migration": "retain the R1 project identity; regenerate its BSP and Hub transport boundary in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    },
+    {
+      "id": "c5",
+      "hardware_domain": "c5",
+      "mpn": "ESP32-C5-WROOM-1U-N8R8",
+      "family": "esp_idf",
+      "sdk_target": "esp32c5",
+      "project_name": "leshy2_c5",
+      "project_dir": "targets/c5",
+      "application_image": "leshy2_c5",
+      "migration": "retain the R1 project identity; replace the direct S3 boundary with Hub SDIO in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    },
+    {
+      "id": "rf_rp",
+      "hardware_domain": "rf_rp",
+      "mpn": "SC1512-A4",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_name": "leshy2_rf_rp",
+      "project_dir": "targets/rf_rp",
+      "application_image": "leshy2_rf_rp",
+      "migration": "split and rename the R1 RP radio project; bind only the RF RP hardware domain in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    },
+    {
+      "id": "hub_rp",
+      "hardware_domain": "hub_rp",
+      "mpn": "SC1512-A4",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_name": "leshy2_hub_rp",
+      "project_dir": "targets/hub_rp",
+      "application_image": "leshy2_hub_rp",
+      "migration": "create the new Hub project and bind storage, audio, broadcast/Airband receive and fan-out ownership in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    },
+    {
+      "id": "pack",
+      "hardware_domain": "pack",
+      "mpn": "MSPM0C1106SDGS20R",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_name": "leshy2_pack",
+      "project_dir": "targets/pack",
+      "boot_image": "leshy2_pack_boot",
+      "application_image": "leshy2_pack",
+      "migration": "retain the R1 project identity; replace the direct S3 mailbox boundary with Hub I2C in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    },
+    {
+      "id": "safety",
+      "hardware_domain": "safety",
+      "mpn": "MSPM0C1106SDGS20R",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_name": "leshy2_safety",
+      "project_dir": "targets/safety",
+      "boot_image": "leshy2_safety_boot",
+      "application_image": "leshy2_safety",
+      "migration": "retain independent watchdog and FAULT_KILL ownership; replace only the supervisory mailbox route in F2-R2",
+      "r2_project_created": false,
+      "r2_build_run": false
+    }
+  ],
+  "claims": {
+    "target_identities_reviewed": true,
+    "target_count": 6,
+    "application_image_count": 6,
+    "boot_image_count": 2,
+    "new_project_identities": ["rf_rp", "hub_rp"],
+    "r1_target_build_evidence_is_historical_only": true,
+    "r2_target_projects_created": false,
+    "r2_target_builds_run": false,
+    "memory_or_partition_layout_reviewed_here": false,
+    "update_activation_order_reviewed_here": false,
+    "emulator_or_devboard_gate_reviewed_here": false
+  },
+  "checker": "tools/check_f0_r2_target_identities.py"
+}

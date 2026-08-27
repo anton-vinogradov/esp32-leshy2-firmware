@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -51,6 +52,18 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(40_000_000, self.actual["display"]["selected_clock_hz"])
         s3_nets = {row["net"] for row in self.actual["s3_pin_map"]}
         self.assertTrue({"LCD_QSPI_SCK", "LCD_QSPI_D0", "LCD_QSPI_D1_DC", "LCD_QSPI_D2", "LCD_QSPI_D3"}.issubset(s3_nets))
+
+    def test_six_target_identity_contract_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f0_r2_target_identities.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("6 application images", result.stdout)
 
 
 if __name__ == "__main__":

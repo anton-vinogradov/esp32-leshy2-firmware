@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F0-R2.0 — six-domain contract rebaseline.** R1 F0–F4
+> **▶️ Current boundary: F0-R2.1 — six-domain target identities reviewed.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.13; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -35,9 +35,9 @@ duplicated or given a second status here.
 
 | Area | Actual state |
 |---|---|
-| Six-domain HW↔FW projection | ▶️ Generated from H0-R2 with a bound hardware SHA-256; memory/update/build/HIL portions remain open |
+| Six-domain HW↔FW projection | ▶️ Generated from H0-R2 with a bound hardware SHA-256; target/image identities are reviewed while memory/update/HIL portions remain open |
 | Portable safety, L2IP and update model | ⏳ R1 [F1 result](f1-portable-cores-report.md) retained: 24 deterministic C scenarios; Hub/Airband and six-target rerun waits for F0-R2 closure |
-| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ⏳ Five R1 structures retained; the Hub target and six-image matrix are not built yet |
+| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ Six project/image identities reviewed; five R1 structures are historical, while the two RP splits and all R2 builds remain F2-R2 work |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
 | Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.13 is current; complete current physical views are generated, all four compute chips now have independent USB/RESET/BOOT/DBG10 recovery, and the K331/Airband/MMCX/power boundaries pass their present checks; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
@@ -50,14 +50,14 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F0-R2 breakdown
 
-<!-- current-substep: F0-R2.0 -->
+<!-- current-substep: F0-R2.1 -->
 
-▶️ **`F0-R2.0` — current.** Regenerate the complete firmware contract around
-six targets and the Hub-centered physical topology. This exact marker's checked-in projection
-already covers domain ownership, S3 and Hub pin budgets, transports, direct
-display/FPV, receive-only Airband and the power rebaseline. F0-R2 still must
-close memory/rollback ownership, six-image update order, target identities and
-emulator/dev-board gates. The marker and evidence update together in every
+▶️ **`F0-R2.1` — current.** The reviewed
+[target identity contract](../config/f0_r2_target_identity_contract.json) binds
+six hardware domains to six unique projects and application images, plus the
+Pack and Safety boot images. It does not claim R2 project creation or builds.
+F0-R2 still must close memory/rollback ownership, six-image activation order
+and emulator/dev-board gates. The marker and evidence update together in every
 commit.
 
 <details>
@@ -214,7 +214,7 @@ flowchart TD
 
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
-| **F0. Product contracts** | ▶️ Current: F0-R2.0 | Six domains, Hub-centered transports, ownership, pins, memory/partition, safety, update and HW↔FW boundary | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
+| **F0. Product contracts** | ▶️ Current: F0-R2.1 | Six domains, Hub-centered transports and six target/image identities reviewed; memory/partition, safety, update and execution gates remain | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
 | **F1. Portable cores** | ⏳ Waiting for F0-R2 | Reuse the [R1 F1 result](f1-portable-cores-report.md), add Hub/Airband states and a six-domain fault model | Normal and ASan/UBSan scenarios cover the new heartbeat, lease, receiver-mode and update ownership |
 | **F2. Target projects and build system** | ⏳ Waiting for F1-R2 and hardware H2-R2 | Six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
@@ -244,8 +244,9 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F0-R2.0`. Complete the machine-readable memory,
+The current boundary is `F0-R2.1`. Complete the machine-readable memory,
 rollback, six-image activation and execution-gate portions of the R2 contract,
-then regenerate portable/build work in strict F1→F2→F3 order. The R1 target
+then regenerate portable/build work in strict F1→F2→F3 order. The reviewed
+target identities do not claim that those projects have been created. The R1 target
 matrix and S3 QEMU runs remain useful regression evidence but cannot qualify
 the added Hub or changed transports.
