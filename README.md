@@ -37,7 +37,7 @@ firmware repository to the reviewed hardware source by SHA-256. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and analog
 FPV remain direct to S3; storage, audio and `BROADCAST_RX` move to Hub RP.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.10`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.11`:
 Hub/Airband/K331-reserve bodies have an incremental collision-tested placement, the
 Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
@@ -53,6 +53,12 @@ route remain open; exact evidence requests were sent to AKK and JLCPCB on
 Manufacturer-documented `AWM666V RX` fits the same physical and power reserve,
 but remains a degraded contingency: seven 5725–5875-MHz channels instead of
 K331's 24-channel 5645–5945-MHz plan, and no exact public JLCPCB result.
+The full-coverage fallback search found no production replacement: controlled
+`SP166RX` is 42.418×29.46 mm before height and its RF summary contradicts its
+channel table, while `MM238R-MCU` fits function and space but has only
+reseller-hosted evidence, no controlled current manufacturer route and only
+out-of-stock/discontinued sellers. Exact JLCPCB searches return zero results
+for both.
 Those two external items are the only present H1 blockers. Assembled RF/video
 proof and the Taoglas fallback stay mandatory at downstream H3/H5/H6/H8.
 Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
