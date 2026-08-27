@@ -23,7 +23,7 @@ def build() -> dict:
         "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
         "hardware_source_sha256": hashlib.sha256(raw).hexdigest(),
         "hardware_status": hw["status"],
-        "firmware_marker": "F1-R2.4",
+        "firmware_marker": "F2-R2.0",
         "domains": [
             {"id": item["id"], "mpn": item["mpn"], "role": item["role"]}
             for item in hw["compute_domains"]

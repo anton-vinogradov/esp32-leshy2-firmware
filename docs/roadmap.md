@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F1-R2.4 — portable-core closure review.** R1 F0–F4
+> **▶️ Current boundary: F2-R2.0 — six-target build rebaseline.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.13; its complete current Hub/Airband/K331-reserve placement views, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -36,8 +36,8 @@ duplicated or given a second status here.
 | Area | Actual state |
 |---|---|
 | Six-domain HW↔FW projection | ✅ [F0-R2 reviewed](f0-product-contracts-report.md): H0-R2 source is hash-bound; identities, local rollback, S3-last update and five-layer execution gates are coherent |
-| Portable safety, L2IP and update model | ▶️ F1-R2.4: [integrated faults](../config/f1_r2_integrated_fault_review.json) reviewed; 34 R2 scenarios pass normal plus sanitizer runs, while the [R1 result](f1-portable-cores-report.md) retains 24 deterministic C scenarios; closure audit/report remains |
-| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ Six project/image identities reviewed; five R1 structures are historical, while the two RP splits and all R2 builds remain F2-R2 work |
+| Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, Hub/Airband receiver and integrated faults are current |
+| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ F2-R2.0: six project/image identities are reviewed; five R1 structures are historical while the exact six-project/toolchain/artifact rebaseline is current |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
 | Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.13 is current; complete current physical views are generated, all four compute chips now have independent USB/RESET/BOOT/DBG10 recovery, and the K331/Airband/MMCX/power boundaries pass their present checks; only one AKK-controlled K331 production package blocks H1, while Consigned Parts/DFM/function-test review follows in H5/H6/H7 and H3/H5/H6/H8 retain physical RF proof |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
@@ -48,16 +48,15 @@ duplicated or given a second status here.
 The host model verifies portable logic. It is not instruction-set, peripheral
 or board emulation and is never presented as finished firmware.
 
-## Current F1-R2 breakdown
+## Current F2-R2 breakdown
 
-<!-- current-substep: F1-R2.4 -->
+<!-- current-substep: F2-R2.0 -->
 
-▶️ **`F1-R2.4` — current.** The [integrated fault
-review](../config/f1_r2_integrated_fault_review.json) covers Hub, Pack and Safety
-loss across receiver, downstream-domain, heartbeat, `FAULT_KILL` and external
-watchdog boundaries. Thirty-four R2 scenarios pass normal plus ASan/UBSan. Only
-the integrated closure audit and bilingual F1-R2 report remain. The marker and
-evidence update together in every commit.
+▶️ **`F2-R2.0` — current.** The [reviewed F1-R2 result](f1-portable-cores-report.md)
+is the fixed portable input. This substep inventories the retained R1 projects,
+toolchains, artifacts and generated BSP boundaries, then defines the exact
+six-target delta: S3, C5, RF RP, Hub RP, Pack and Safety. It creates no project
+and runs no R2 build. The marker and evidence update together in every commit.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>
@@ -189,8 +188,8 @@ flowchart TD
   H7["hardware H7<br/>prototype"]
   H8["hardware H8<br/>physical qualification"]
   F0["✅ F0-R2<br/>six-domain contracts"]
-  F1["▶️ F1-R2<br/>portable cores"]
-  F2["F2-R2<br/>six target projects"]
+  F1["✅ F1-R2<br/>portable cores"]
+  F2["▶️ F2-R2<br/>six target projects"]
   F3["F3-R2<br/>boot and emulation"]
   F4["F4-R2<br/>IPC and scheduler"]
   F5["F5<br/>BSP and drivers"]
@@ -214,8 +213,8 @@ flowchart TD
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
 | **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
-| **F1. Portable cores** | ▶️ Current: F1-R2.4 | All R2 portable behavior and 34 scenarios reviewed; closure audit/report remains | Normal and ASan/UBSan scenarios cover the new heartbeat, lease, receiver-mode and update ownership |
-| **F2. Target projects and build system** | ⏳ Waiting for F1-R2 and hardware H2-R2 | Six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
+| **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only Hub/Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
+| **F2. Target projects and build system** | ▶️ Current: F2-R2.0 | Inventory and rebaseline six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP follows accepted hardware | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, CTIA jack detect, `0x39` headset-source control, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; reset/off/no-back-power/quiet transitions are explicit; P02 remains input-only, selector reset/readback and seven reserve pins are checked; unmodeled peripherals have dev-board tests |
@@ -243,7 +242,7 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F1-R2.4`. Run one integrated closure audit over the
-plan, six-target update, Hub/Airband receiver and Hub/Pack/Safety fault evidence,
-then publish the bilingual F1-R2 result. Host evidence does not claim target
-projects, RF reception or physical transport behavior.
+The current boundary is `F2-R2.0`. Inventory the retained five-target R1 build
+system and publish the exact six-target project/toolchain/artifact delta without
+creating or building an R2 target yet. Generated R2 BSP work remains dependent
+on the accepted hardware source; retained R1 build/QEMU evidence is historical.

@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F1-R2.4 — closure review portable core.**
+> **▶️ Текущая граница: F2-R2.0 — rebaseline build для шести targets.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.13; полные текущие виды размещения Hub/Airband/резерва K331,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -37,8 +37,8 @@ firmware-репозитория. Пересечения с железом ука
 | Область | Фактическое состояние |
 |---|---|
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
-| Portable safety, L2IP и update model | ▶️ F1-R2.4: [integrated faults](../config/f1_r2_integrated_fault_review.json) проведены ревью; 34 сценария R2 проходят normal+sanitizer runs, а [итог R1](f1-portable-cores-report.ru.md) сохраняет 24 детерминированных C-сценария; остаётся closure audit/report |
-| Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ Проведено ревью шести identities projects/images; пять структур R1 исторические, а разделение двух RP и все R2 builds остаются работой F2-R2 |
+| Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, receiver Hub/Airband и integrated faults актуальны |
+| Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ F2-R2.0: шесть identities projects/images проведены ревью; пять структур R1 исторические, сейчас формируется точный rebaseline шести projects/toolchains/artifacts |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.13 сейчас; полные текущие физические виды сгенерированы, все четыре вычислителя получили независимые USB/RESET/BOOT/DBG10, а границы K331/Airband/MMCX/power проходят свои текущие проверки; H1 блокирует один production-пакет AKK K331, Consigned Parts/DFM/function-test следуют в H5/H6/H7, а физическое RF-доказательство остаётся у H3/H5/H6/H8 |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
@@ -49,15 +49,16 @@ firmware-репозитория. Пересечения с железом ука
 Host-модель проверяет переносимую логику, но не заменяет instruction-set,
 peripheral или board emulation и никогда не показывается как готовая прошивка.
 
-## Детальный состав текущей F1-R2
+## Детальный состав текущей F2-R2
 
-<!-- current-substep: F1-R2.4 -->
+<!-- current-substep: F2-R2.0 -->
 
-▶️ **`F1-R2.4` — сейчас.** [Integrated fault review](../config/f1_r2_integrated_fault_review.json)
-покрывает loss Hub, Pack и Safety через boundaries receiver, downstream domains,
-heartbeat, `FAULT_KILL` и external watchdog. Тридцать четыре сценария R2 проходят
-normal и ASan/UBSan. Остались только integrated closure audit и двуязычный итог
-F1-R2. Маркер и evidence меняются вместе в каждом commit.
+▶️ **`F2-R2.0` — сейчас.** Фиксированный portable input — [итог F1-R2,
+проведённый ревью](f1-portable-cores-report.ru.md). Подэтап инвентаризирует
+сохранённые projects, toolchains, artifacts и generated BSP boundaries R1, затем
+задаёт точную delta шести targets: S3, C5, RF RP, Hub RP, Pack и Safety. Он не
+создаёт project и не запускает R2 build. Маркер и evidence меняются вместе в
+каждом commit.
 
 <details>
 <summary><strong>Сохранённый состав F2–F4 R1 — не текущая топология</strong></summary>
@@ -189,8 +190,8 @@ flowchart TD
   H7["hardware H7<br/>прототип"]
   H8["hardware H8<br/>physical qualification"]
   F0["✅ F0-R2<br/>контракты шести доменов"]
-  F1["▶️ F1-R2<br/>portable cores"]
-  F2["F2-R2<br/>шесть target projects"]
+  F1["✅ F1-R2<br/>portable cores"]
+  F2["▶️ F2-R2<br/>шесть target projects"]
   F3["F3-R2<br/>boot и emulation"]
   F4["F4-R2<br/>IPC и scheduler"]
   F5["F5<br/>BSP и drivers"]
@@ -214,8 +215,8 @@ flowchart TD
 | Этап | Статус | Результат | Критерий выхода |
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
-| **F1. Portable cores** | ▶️ Сейчас: F1-R2.4 | Всё portable behavior R2 и 34 сценария проведены ревью; остаётся closure audit/report | Normal и ASan/UBSan сценарии покрывают новые heartbeat, lease, receiver-mode и update ownership |
-| **F2. Target-проекты и build system** | ⏳ Ожидает F1-R2 и hardware H2-R2 | Шесть projects на production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
+| **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Hub/Airband и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
+| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.0 | Инвентаризировать и перевести на R2 шесть projects production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 следует принятому hardware | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; reset/off/no-back-power/quiet transitions явны; P02 остаётся только входом, проверены reset/readback селектора и семь резервных pins; неподдерживаемая эмулятором периферия имеет dev-board test |
@@ -243,7 +244,7 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F1-R2.4`. Нужно выполнить единый closure audit плана,
-six-target update, receiver Hub/Airband и fault evidence Hub/Pack/Safety, затем
-опубликовать двуязычный итог F1-R2. Host evidence не заявляет target projects,
-реальный RF-приём или поведение физических transports.
+Текущая граница — `F2-R2.0`. Нужно инвентаризировать сохранённый build system
+пяти targets R1 и опубликовать точную delta projects/toolchains/artifacts шести
+targets без создания или сборки R2 target. Generated BSP R2 зависит от принятого
+hardware source; сохранённые build/QEMU evidence R1 остаются историческими.

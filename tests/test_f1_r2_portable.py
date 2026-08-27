@@ -65,6 +65,19 @@ class F1R2PortableTests(unittest.TestCase):
         self.assertIn("34 scenarios", result.stdout)
         self.assertIn("0 target/physical runs claimed", result.stdout)
 
+    def test_f1_r2_closure_review_passes(self):
+        result = subprocess.run(
+            ["python3", "tools/review_f1_r2.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("F1-R2 closure review OK", result.stdout)
+        self.assertIn("68 normal+sanitizer executions", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

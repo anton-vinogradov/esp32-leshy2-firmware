@@ -45,7 +45,8 @@ Pack state and the Safety heartbeat/lease/fault mailboxes use dedicated Hub
 GP43/44 I²C. Safety still owns watchdog service and asynchronous `FAULT_KILL`;
 an IPC hop cannot create permission or suppress a local fault. The complete
 [F0-R2 contract foundation is reviewed](f0-product-contracts-report.md);
-F1-R2 now rebaselines the portable behavior against it.
+the [F1-R2 portable behavior is also reviewed](f1-portable-cores-report.md).
+F2-R2 now rebaselines the six target projects and generated BSP boundary.
 
 <details>
 <summary><strong>Retained R1 architecture — not the current physical topology</strong></summary>

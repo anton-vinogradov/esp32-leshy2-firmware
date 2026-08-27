@@ -1,57 +1,67 @@
-# F1 result · Portable cores
+# F1-R2 result · Six-domain portable cores
 
 [Русский](f1-portable-cores-report.ru.md) · [Home](../README.md) ·
 [Roadmap](roadmap.md)
 
-**Status:** ✅ reviewed. Leshy2's shared portable logic is implemented in strict
-C17 and passes `24 of 24` deterministic host scenarios in both the normal build
-and AddressSanitizer/UndefinedBehaviorSanitizer builds.
+F1-R2 is **reviewed**. The target-neutral strict-C17 core now distinguishes all
+six hardware domains, models the S3-last six-image transaction, owns a
+receive-only Hub/Airband state machine and fails closed across Hub, Pack and
+Safety loss. All `34` F1 scenarios pass both normal and ASan/UBSan host runs:
+`68` scenario executions in total.
 
 ```mermaid
 flowchart TB
-  C["Shared portable C17 core"]
-  S["Safety state machine<br/>8 scenarios"]
-  L["L2IP, CRC and replay guard<br/>4 scenarios"]
-  U["Atomic update and rollback<br/>5 scenarios"]
-  M["Five-domain model<br/>7 scenarios"]
-  V["24/24<br/>normal build + ASan/UBSan"]
+  C["Portable strict C17 core"]
+  S["Safety<br/>8 scenarios"]
+  L["L2IP<br/>4 scenarios"]
+  U["Six-target update<br/>6 scenarios"]
+  R["Hub/Airband RX<br/>5 states · 6 scenarios"]
+  M["Six-domain faults<br/>10 scenarios"]
+  V["34 normal + 34 ASan/UBSan<br/>68 executions"]
   C --> S --> V
   C --> L --> V
   C --> U --> V
+  C --> R --> V
   C --> M --> V
-  V --> F2["F2: integrate five targets"]
-  V --> F9["F9: signed update"]
+  V --> F2["▶ F2-R2.0<br/>six target projects"]
 ```
 
 ## Product result
 
-| Block | Verified result | Scenarios |
+| Block | Reviewed behavior | Scenarios per run |
 |---|---|---:|
-| Safety | heartbeat, lease, priorities and fail-safe transition | 8 |
-| L2IP | framing, CRC and duplicate/replay rejection | 4 |
-| Update | preparation, atomic activation and rollback | 5 |
-| Five-domain model | S3, C5, RP, Pack and Safety in nominal and fault paths | 7 |
-| **Total** | **one shared implementation with no target-specific GPIO** | **24** |
+| Safety | advancing heartbeat, bounded TX lease/evidence, thermal/power faults and watchdog service | 8 |
+| L2IP | framing, CRC and duplicate/replay rejection retained from R1 | 4 |
+| Update | independent Pack/Safety/C5/RF-RP/Hub-RP/S3 state and exact S3-last activation/rollback | 6 |
+| Receiver | disabled, direct FM/SW, Airband settling, Airband active and latched fault; no Airband TX API | 6 |
+| Integrated system | scheduler plus Hub/Pack/Safety loss, receiver shutdown, downstream isolation and retained first fault | 10 |
+| **Total** | **one target-neutral implementation; normal and ASan/UBSan clean** | **34** |
 
-Regression tests retain the previously found heartbeat-loss, lease-boundary,
-late-update and invalid-enum cases. F2 target projects consume these portable
-cores, while the update/rollback model becomes an input to F9.
+Airband maps 118–137 MHz to 6–25 MHz using the reviewed fixed 112-MHz LO. It
+cannot enter active state until both LO-lock and RF-path-settle evidence are
+present. Loss of either proof or the Hub link latches disabled outputs and needs
+an explicit clear. There is no Airband transmit state or function.
+
+The update model stages six independent images and orders Pack → Safety → C5 →
+RF RP → Hub RP → S3. RF RP and Hub RP share neither identity nor state. The
+portable upper bound follows the unqualified 16,700-ms RP TBYB window; actual
+boot/commit timing remains a downstream measurement.
 
 ## Evidence
 
-- Implementation: [`common/src`](../common/src) and public contracts in
+- Machine closure: [`f1_r2_review.json`](../config/f1_r2_review.json), executed
+  by [`review_f1_r2.py`](../tools/review_f1_r2.py).
+- Implementation: [`common/src`](../common/src) and public interfaces in
   [`common/include/leshy2`](../common/include/leshy2).
 - Scenarios: [`host/tests`](../host/tests).
-- Normal run: `make host-test`.
-- Repeatable sanitizer run: `make host-sanitize`.
-- Pre-order verification contract:
-  [`config/preorder_verification_contract.json`](../config/preorder_verification_contract.json).
-- The original review ran on 22 August 2026; normal and sanitizer runs were
-  reconfirmed on 25 August 2026.
+- Repeatable commands: `make host-test`, `make host-sanitize`, `make test`.
 
 ## Evidence boundary
 
-F1 proves portable product logic on a host machine. It does **not** prove target
-image boot, instruction-set/peripheral emulation, real GPIO, radio paths, the
-display or an assembled board. F2–F10 and hardware H4–H8 close those layers;
-F2 builds are now reviewed and F3 is the current firmware phase.
+This result does **not** claim an R2 target project or build, target instruction
+or peripheral execution, real transport timing, Airband reception, a physical
+watchdog/`FAULT_KILL`, flash rollback or Leshy2 HIL. F2-R2 creates and builds
+the six target projects; F3-R2 and H7/F10 close emulator, dev-board and physical
+evidence.
+
+The exact next marker is `F2-R2.0`.

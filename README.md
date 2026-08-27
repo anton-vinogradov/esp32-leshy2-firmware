@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F1-R2.4 — portable-core closure review is current.** The R1
+> **Firmware status: F2-R2.0 — six-target project rebaseline is current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -16,8 +16,8 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | Stage | Status | Result |
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
-| **F1 · Portable cores** | **▶️ Current: F1-R2.4**; R1 [report retained](docs/f1-portable-cores-report.md) | all R2 behavior implemented and reviewed; run integrated closure and publish the F1-R2 report |
-| F2 · Target projects and build system | ⏳ R1 [report retained](docs/f2-target-build-system-report.md); waiting for F1-R2 | six production-SDK projects and a reproducible six-image matrix |
+| F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, Hub/Airband and integrated faults |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.0**; R1 [report retained](docs/f2-target-build-system-report.md) | rebaseline the project/build plan for six production-SDK targets and current generated BSP |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F1-R2.4.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F2-R2.0.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
@@ -53,6 +53,10 @@ five evidence layers distinct. Only S3 has an exact official QEMU machine. S3,
 C5, Pack and Safety have exact selected-module/MCU development-board paths;
 Pico 2 is explicitly only a non-exact RP2350A surrogate for both RP2354B
 targets. No R2 build, dev-board or Leshy2 HIL run is claimed.
+The [reviewed F1-R2 result](docs/f1-portable-cores-report.md) adds independent
+RF-RP/Hub-RP update state, five Hub/Airband receive-only states and integrated
+Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
+that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses Hub GP41/42, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.13`:
 Hub/Airband/K331-reserve bodies have a collision-tested placement, and the
@@ -99,17 +103,16 @@ the VNA-qualified fitted/DNP state. The current R2 mockup remains in progress
 until the K331 reserve becomes a controlled fixed body; BSP, KiCad layout and order
 authorization remain open.
 
-### Current phase F1-R2 — detailed position
+### Current phase F2-R2 — detailed position
 
-<!-- current-substep: F1-R2.4 -->
+<!-- current-substep: F2-R2.0 -->
 
-▶️ **`F1-R2.4` — current.** The [integrated fault
-review](config/f1_r2_integrated_fault_review.json) now covers Hub loss, Pack
-loss and Safety loss across the receiver, downstream domains, heartbeat,
-`FAULT_KILL` and external-watchdog boundaries. Thirty-four F1 scenarios pass
-normal and ASan/UBSan runs. The remaining work is one closure audit plus the
-bilingual F1-R2 report. Zero R2 target builds, RF runs or physical transitions
-are claimed.
+▶️ **`F2-R2.0` — current.** Inventory and rebaseline the retained five-project
+R1 build system against six reviewed identities: keep S3/C5/Pack/Safety,
+split the former RP project into RF RP and Hub RP, and replace every imported
+R1 pin/BSP input with the current R2 hardware boundary. The output is a reviewed
+project/toolchain/artifact plan before any R2 target project is created or built.
+Zero R2 target builds or target executions are claimed.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>
