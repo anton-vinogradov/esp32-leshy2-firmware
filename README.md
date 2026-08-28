@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F2-R2.4 — target build qualification is next.** The R1
+> **Firmware status: F2-R2.5 — reproducibility qualification is next.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.4**; R2 [plan](config/f2_r2_target_rebaseline.json), [matrix](config/f2_r2_build_matrix.json), [six project roots](config/f2_r2_target_projects.json) and [generated BSP ownership](config/f2_r2_bsp_consumption.json) reviewed, R1 [report retained](docs/f2-target-build-system-report.md) | qualify the 12 locked debug/release configurations, artifacts, maps and size gates |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; all 12 R2 debug/release builds, 60 artifacts, 16 maps and 16 size gates [passed F2-R2.4](config/f2_r2_build_qualification.json), R1 [report retained](docs/f2-target-build-system-report.md) | prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F2-R2.4.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F2-R2.5.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository by SHA-256 to the functional source, exact C5 service mux
@@ -54,7 +54,10 @@ protected-controller boot images. RF RP and Hub RP have separate Pico SDK
 trees, entry sources and image identities. The hash-bound
 [R2 BSP](config/f2_r2_bsp_generation.json) now generates six deterministic
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
-SDK project. No R2 target configure or build is claimed yet.
+SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
+records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
+size gates. It proves compilation, linkage and static image fit, not boot,
+peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
 share geometry only, never target identity, state or flash contents. No physical
@@ -130,29 +133,29 @@ the VNA-qualified fitted/DNP state. The current R2 mockup passes its structural
 body/courtyard audit, but four explicit H1 blockers remain: the legacy Cap-body
 register, U219 support-passive MPN/courtyards, NFC pickup geometry and installed
 antenna swept volume. After those close, the complete exterior, true-view inner
-faces and sandwich sections still require explicit acceptance; R2 target-build
-qualification, KiCad layout and order authorization remain open.
+faces and sandwich sections still require explicit acceptance; R2 byte
+reproducibility, KiCad layout and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position
 
-<!-- current-substep: F2-R2.4 -->
+<!-- current-substep: F2-R2.5 -->
 
-▶️ **`F2-R2.4` — current.** [F2-R2.3](config/f2_r2_bsp_generation.json)
-generates six deterministic H1-R2.31 domain descriptors and
-[proved one-owner consumption](config/f2_r2_bsp_consumption.json) by the six SDK
-projects. The model preserves exact S3 pins, both exact 48-GPIO RP maps, the six
-official fixed C5 SDIO contacts and identity-only Pack/Safety boundaries; it
-invented no unpublished pin. C5 starts at 20 MHz, targets 40 MHz and may claim
-the 7.5 MB/s payload floor only at 40 MHz. Service USB ownership is an always-on
-hardware latch, not firmware policy. The retained five-domain BSP is historical and no
-longer an active R2 input. Its
-[strict R2 policy](config/f2_r2_build_policy.json) now covers the generated R2
-tree and isolated build roots, and the
-[shell-free dispatcher](tools/build_f2_r2_targets.py) renders all 24
-configure/build argv calls and publishes evidence only after the complete
-12-job artifact/map/size verification passes. Preparation ran zero R2
-configure/build, artifact-verification or target-execution jobs; qualification
-remains the next operation.
+▶️ **`F2-R2.5` — current.** The atomic
+[F2-R2.4 qualification](config/f2_r2_build_qualification.json) ran the locked
+[shell-free dispatcher](tools/build_f2_r2_targets.py) against all six SDK
+projects in debug and release. Its inputs remain the reviewed
+[R2 plan](config/f2_r2_target_rebaseline.json),
+[matrix](config/f2_r2_build_matrix.json),
+[project roots](config/f2_r2_target_projects.json),
+[BSP ownership](config/f2_r2_bsp_consumption.json) and
+[build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
+artifacts and 16 maps exist, and all 16 image-size gates pass without warnings.
+The record remains bound to the reviewed matrix and build policy and preserves
+the exact S3, C5, dual-RP and Pack/Safety boundaries. No target boot, peripheral,
+emulator, development-board or physical run occurred, and byte reproducibility
+is not yet proven. F2-R2.5 must now run two clean passes, compare every declared
+artifact byte-for-byte and publish the bilingual F2-R2 closure report only if
+that comparison passes.
 The exact marker and its evidence move together in every commit.
 
 <details>

@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F2-R2.4 — следующая квалификация target builds.** Работа
+> **Статус прошивки: F2-R2.5 — следующая квалификация воспроизводимости.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.4**; [план](config/f2_r2_target_rebaseline.json), [matrix](config/f2_r2_build_matrix.json), [шесть project roots](config/f2_r2_target_projects.json) и [владение generated BSP](config/f2_r2_bsp_consumption.json) R2 проведены ревью, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | квалифицировать 12 locked debug/release configurations, artifacts, maps и size gates |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; все 12 debug/release builds R2, 60 artifacts, 16 maps и 16 size gates [прошли F2-R2.4](config/f2_r2_build_qualification.json), [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F2-R2.4.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
+**Прошивка находится на F2-R2.5.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки по SHA-256 с функциональным source, точным C5 service mux
@@ -55,7 +55,11 @@ boot images защитных контроллеров. RF RP и Hub RP имею�
 entry sources и image identities. Связанный hash
 [BSP R2](config/f2_r2_bsp_generation.json) генерирует шесть детерминированных
 domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
-к одному SDK project. R2 target configure и build пока не заявлены.
+к одному SDK project. Атомарная [квалификация F2-R2.4](config/f2_r2_build_qualification.json)
+зафиксировала 12 успешных configure/build jobs, 60 artifacts, 16 maps и 16
+пройденных size gates. Она доказывает компиляцию, линковку и статическую
+помещаемость образов, но не boot, peripheral execution, воспроизводимость,
+эмуляцию или физическое железо.
 [Контракт memory и rollback](config/f0_r2_memory_rollback_contract.json),
 прошедший ревью, сохраняет шесть независимых dual-slot доменов: оба RP2354B и
 оба MSPM0 имеют общую только геометрию, но не target identity, state или flash.
@@ -133,27 +137,28 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 явных H1-блокера: регистр прежних Cap-корпусов, MPN/courtyards вспомогательных
 пассивов U219, геометрию NFC pickup и swept volume установленной антенны. После
 их закрытия ещё требуется явное принятие полного внешнего вида, прямых внутренних сторон и разрезов;
-Квалификация target builds R2, KiCad layout и разрешение заказа остаются открыты.
+Проверка byte reproducibility R2, KiCad layout и разрешение заказа остаются открыты.
 
 ### Текущая фаза F2-R2 — детальная позиция
 
-<!-- current-substep: F2-R2.4 -->
+<!-- current-substep: F2-R2.5 -->
 
-▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](config/f2_r2_bsp_generation.json)
-генерирует шесть детерминированных descriptors H1-R2.31, а
-[one-owner проверка](config/f2_r2_bsp_consumption.json) связала каждый с одним
-из шести SDK projects. Модель сохраняет точные pins S3, обе точные 48-GPIO
-карты RP, шесть официальных фиксированных C5 SDIO contacts и identity-only
-границы Pack/Safety; неопубликованный pin не придуман. C5 стартует на 20 МГц,
-целится в 40 МГц, а floor 7,5 МБ/с можно принять только на 40 МГц. Service USB
-принадлежит always-on аппаратной защёлке, а не firmware policy. Старый BSP пяти доменов
-остаётся историческим и больше не является активным R2 input.
-[Строгая policy R2](config/f2_r2_build_policy.json) теперь охватывает generated
-tree R2 и изолированные build roots, а
-[shell-free dispatcher](tools/build_f2_r2_targets.py) формирует все 24 argv-вызова
-configure/build и публикует evidence только после успешной полной проверки 12
-jobs, artifacts, maps и size gates. Подготовка выполнила ноль R2 configure/build,
-artifact verification и target execution; квалификация остаётся следующей.
+▶️ **`F2-R2.5` — сейчас.** Атомарная
+[квалификация F2-R2.4](config/f2_r2_build_qualification.json) запустила locked
+[shell-free dispatcher](tools/build_f2_r2_targets.py) для всех шести SDK
+projects в debug и release. Её inputs — прошедшие ревью
+[план R2](config/f2_r2_target_rebaseline.json),
+[matrix](config/f2_r2_build_matrix.json),
+[project roots](config/f2_r2_target_projects.json),
+[владение BSP](config/f2_r2_bsp_consumption.json) и
+[build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
+artifacts и 16 maps присутствуют, а все 16 size gates прошли без warnings.
+Evidence остаётся связанным с прошедшими ревью matrix и build policy и сохраняет
+точные границы S3, C5, двух RP и Pack/Safety. Target boot, peripheral, emulator,
+development-board и physical runs не выполнялись, а byte reproducibility ещё не
+доказана. Теперь F2-R2.5 должен выполнить два чистых прохода, побайтно сравнить
+каждый объявленный artifact и опубликовать двуязычный итог F2-R2 только при
+успешном сравнении.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>

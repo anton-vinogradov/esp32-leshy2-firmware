@@ -62,13 +62,14 @@ class F2R2DispatcherTest(unittest.TestCase):
 
     def test_full_qualification_dry_run_is_24_shell_free_argv_commands(self):
         evidence = ROOT / "config/f2_r2_build_qualification.json"
-        self.assertFalse(evidence.exists())
+        self.assertTrue(evidence.exists())
+        before = evidence.read_bytes()
         result = self.run_tool("qualify", "--dry-run")
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertEqual(12, result.stdout.count('"action": "configure"'))
         self.assertEqual(12, result.stdout.count('"action": "build"'))
         self.assertIn("0 executions; 0 evidence writes", result.stdout)
-        self.assertFalse(evidence.exists())
+        self.assertEqual(before, evidence.read_bytes())
 
     def test_evidence_check_fails_closed_when_no_complete_record_exists(self):
         with tempfile.TemporaryDirectory() as temporary:

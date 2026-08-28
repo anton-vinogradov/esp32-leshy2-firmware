@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F2-R2.4 — квалификация target builds.**
+> **▶️ Текущая граница: F2-R2.5 — квалификация воспроизводимости.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.31; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -53,7 +53,7 @@ firmware-репозитория. Пересечения с железом ука
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
 | Владение generated BSP R2 | ✅ F2-R2.3 обновлён на F2-R2.4: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат точные карты S3 и двух RP плюс шесть фиксированных C5 SDIO pins; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): точные рабочие карты двух RP и C5 4-bit mux импортированы как pre-H2 authority, но сохранённый H2.0.3 — исторический R1 и не авторизует R2; открыть только после six-domain H2 export и закрытия production gates mux/latch |
-| Target builds, maps и S3 QEMU | ▶️ F2-R2.4: квалифицировать 12 locked debug/release configurations, artifacts, maps и size gates; evidence F2/F3 R1 не квалифицирует R2 |
+| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) прошёл все 12 locked debug/release builds, 60 artifacts, 16 maps и 16 size gates; остаются два чистых побайтно идентичных прохода, а S3 QEMU остаётся F3-R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.31 сейчас; точная легальная fixed-mux карта двух RP даёт задний I2C0 на GP4/5, независимый Cap I2C1 на GP30/31 и M5-профиль PIO2 на GP7/8; стабильная внешняя шелкография указывает роль каждой платы, `R2-EVT1` и `REV A`, а `H1-R2.xx` остаётся только в документации; десять SMA разделены 5+5, задний FPV MMCX не имеет хвоста в межплатный просвет, прямые i8080-8 32 МГц и camera RX остаются локальны S3, а шлейф экрана направлен к антенному торцу, поэтому F5/F6 разворачивают память ST77922 и touch-координаты на 180°; TVP5150 остаётся спереди, а точный M1 на 80 контактов несёт один CVBS, 14 настоящих NC-резервов и не принимает механическую нагрузку корпуса; U219 структурно помещается в общий слот, но до принятия полного мокапа остаются четыре geometry/evidence gate; H5/H7 отвечают за квалификацию полученного модуля и пайки |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
@@ -65,22 +65,16 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2-R2
 
-<!-- current-substep: F2-R2.4 -->
+<!-- current-substep: F2-R2.5 -->
 
-▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](../config/f2_r2_bsp_generation.json)
-генерирует шесть побайтно воспроизводимых descriptors из связанной hash
-проекции H1-R2.31 и [доказал](../config/f2_r2_bsp_consumption.json) ровно одного
-SDK owner для каждого. Точные pins S3, обе точные 48-GPIO карты RP, шесть
-фиксированных C5 SDIO contacts и identity-only границы Pack/Safety различаются
-явно; неопубликованный pin не придуман. C5 link четырёхбитный: 20 МГц —
-bring-up, 40 МГц — target, а ≥7,5 МБ/с принимается только на 40 МГц. Старое tree пяти доменов исключено из активных R2
-inputs. [Policy R2](../config/f2_r2_build_policy.json) теперь охватывает активное
-generated tree и изолированные roots R2; у
-[shell-free dispatcher](../tools/build_f2_r2_targets.py) есть полный dry plan из
-24 команд, fail-closed проверки artifacts/maps/size и атомарная публикация
-evidence. Теперь нужно квалифицировать 12 locked debug/release configurations.
-Подготовка выполнила ноль R2 target configure/build, artifact verification и
-execution jobs.
+▶️ **`F2-R2.5` — сейчас.** Атомарный
+[evidence F2-R2.4](../config/f2_r2_build_qualification.json) фиксирует 12
+успешных configure/build jobs шести production-SDK roots, 60 проверенных
+artifacts, 16 maps и 16 пройденных size gates без warnings. Результат доказывает
+компиляцию, линковку и статическую помещаемость с точным BSP R2; он не доказывает
+byte reproducibility, target boot, peripherals, emulation или физическое железо.
+Теперь нужно выполнить два чистых прохода и побайтно сравнить каждый объявленный
+artifact. Двуязычный итог F2-R2 публикуется только после прохождения этого gate.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>
@@ -239,7 +233,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Firmware согласована с hash-bound source H0; прежний single-RP export H2 исторический, а отдельный production gate R2/H2 остаётся закрытым |
 | **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Airband заднего RP и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
-| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.4 | Квалифицировать 12 locked debug/release configurations для шести project roots и one-owner generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target выдаёт named artifact/map и проходит size gate |
+| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.5 | Повторить квалифицированную 12-job matrix двумя чистыми проходами и побайтно сравнить все объявленные artifacts | 12 debug/release configurations воспроизводятся; каждый target выдаёт named artifact/map и проходит size gate |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, взаимоисключающие U214/U219, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; Cap reset/unknown безопасен для U214 и выключен, sequence контактов 8/10 и общей SPI точна, U219 остаётся RX плюс NFC poll/read, а непредставленная периферия сохраняет dev-board/HIL gate |
@@ -267,8 +261,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F2-R2.4`. Шесть production-SDK roots потребляют шесть
-детерминированных descriptors H1-R2.31 с одним owner каждый. Нужно выполнить
-названные locked configure/build commands всех 12 debug/release configurations,
-затем проверить artifacts, maps и size gates. Сохранённые BSP/build/QEMU evidence
-R1 остаются историческими; F2-R2.3 не заявляет ни одного R2 target configure/build.
+Текущая граница — `F2-R2.5`. F2-R2.4 прошёл locked 12-job matrix, проверил все
+60 artifacts и 16 maps и прошёл все 16 size gates. Теперь нужно выполнить два
+чистых прохода и побайтно сравнить каждый объявленный artifact. Runtime и S3
+QEMU остаются gates F3-R2; F2-R2.4 не заявляет emulator, development-board или
+hardware execution.

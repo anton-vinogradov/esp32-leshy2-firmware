@@ -66,11 +66,11 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("docs/f1-portable-cores-report.ru.md", self.read("README.ru.md"))
         landing_pages = {
             "README.md": (
-                "Firmware roadmap and current position", "Firmware is at F2-R2.4",
+                "Firmware roadmap and current position", "Firmware is at F2-R2.5",
                 "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
-                "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.4",
+                "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.5",
                 "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
@@ -84,7 +84,7 @@ class ProductSiteTests(unittest.TestCase):
     def test_firmware_roadmap_is_complete_and_honest(self):
         required = {
             "docs/roadmap.md": (
-                "Current boundary: F2-R2.4",
+                "Current boundary: F2-R2.5",
                 "34 R2 scenarios",
                 "not instruction-set, peripheral",
                 "hardware H2-R2",
@@ -92,7 +92,7 @@ class ProductSiteTests(unittest.TestCase):
                 "hardware H8",
             ),
             "docs/roadmap.ru.md": (
-                "Текущая граница: F2-R2.4",
+                "Текущая граница: F2-R2.5",
                 "34 сценария R2",
                 "не заменяет instruction-set",
                 "hardware H2-R2",
@@ -206,7 +206,7 @@ class ProductSiteTests(unittest.TestCase):
             self.assertEqual(1, page.count(f"▶️ **`{found[0]}`"), name)
             self.assertIn("commit", page, name)
 
-        self.assertEqual({"F2-R2.4"}, set(markers.values()))
+        self.assertEqual({"F2-R2.5"}, set(markers.values()))
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertEqual("R2", state["baseline"])
         self.assertEqual("F2", state["phase"])
@@ -237,9 +237,15 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["current_claims"]["f2_r2_one_owner_bsp_consumption_reviewed"])
         self.assertTrue(state["current_claims"]["f2_r2_build_policy_reviewed"])
         self.assertTrue(state["current_claims"]["f2_r2_shell_free_dispatcher_reviewed"])
-        self.assertEqual(0, state["current_claims"]["r2_target_configure_runs"])
-        self.assertEqual(0, state["current_claims"]["r2_target_build_runs"])
-        self.assertEqual(0, state["current_claims"]["r2_artifact_verify_runs"])
+        self.assertTrue(state["current_claims"]["f2_r2_target_build_qualification_reviewed"])
+        self.assertEqual(12, state["current_claims"]["r2_target_configure_runs"])
+        self.assertEqual(12, state["current_claims"]["r2_target_build_runs"])
+        self.assertEqual(12, state["current_claims"]["r2_artifact_verify_runs"])
+        self.assertEqual(60, state["current_claims"]["r2_artifacts_verified"])
+        self.assertEqual(16, state["current_claims"]["r2_maps_verified"])
+        self.assertEqual(16, state["current_claims"]["r2_size_gates_passed"])
+        self.assertFalse(state["current_claims"]["r2_runtime_boot_proven"])
+        self.assertFalse(state["current_claims"]["r2_byte_reproducibility_proven"])
         self.assertIn("F2-R2.0", state["completed"])
         self.assertIn("F2-R2.0", state["reviewed"])
         self.assertIn("F2-R2.1", state["completed"])
@@ -248,6 +254,8 @@ class ProductSiteTests(unittest.TestCase):
         self.assertIn("F2-R2.2", state["reviewed"])
         self.assertIn("F2-R2.3", state["completed"])
         self.assertIn("F2-R2.3", state["reviewed"])
+        self.assertIn("F2-R2.4", state["completed"])
+        self.assertIn("F2-R2.4", state["reviewed"])
         self.assertIn("config/f2_r2_target_rebaseline.json", self.read("README.md"))
         self.assertIn("config/f2_r2_target_rebaseline.json", self.read("README.ru.md"))
         self.assertIn("config/f2_r2_build_matrix.json", self.read("README.md"))

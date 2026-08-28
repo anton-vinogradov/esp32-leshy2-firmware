@@ -14,7 +14,8 @@ evidence R1 ниже остаётся regression history и не квалифи�
 | F2-R2.1 | Проведено ревью | точная offline argv matrix 6 targets × 2 configurations в [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 путей artifacts, 16 maps и 16 size gates; заявлено ноль R2 projects и executions |
 | F2-R2.2 | Проведено ревью | шесть production-SDK roots в [`config/f2_r2_target_projects.json`](../config/f2_r2_target_projects.json): четыре сохранённые структуры и отдельные offline pin-free Pico SDK trees RF-RP и Hub-RP; разные entries/images/state; заявлено ноль BSP/configure/build/execution |
 | F2-R2.3 | Проведено ревью | шесть детерминированных доменов BSP R2 сгенерированы и каждый привязан ровно к одному project без запуска R2 build |
-| F2-R2.4 | Сейчас, подготовлено | строгая [`config/f2_r2_build_policy.json`](../config/f2_r2_build_policy.json) и shell-free [`tools/build_f2_r2_targets.py`](../tools/build_f2_r2_targets.py) охватывают все 12 jobs, 60 artifacts, 16 maps и 16 size gates; выполнен только dry plan, R2 configure/build/verify runs — ноль |
+| F2-R2.4 | Проведено ревью | атомарный [`config/f2_r2_build_qualification.json`](../config/f2_r2_build_qualification.json) фиксирует прохождение всех 12 configure/build jobs, 60 проверенных artifacts, 16 maps и 16 size gates без warnings; runtime и reproducibility остаются недоказанными |
+| F2-R2.5 | Сейчас | выполнить два чистых прохода, побайтно сравнить каждый объявленный artifact и опубликовать двуязычный итог F2-R2 только после успешного сравнения |
 
 Matrix закрепляет каждую команду configure/build/clean за отдельным root
 `build/r2/targets/<target>/<configuration>`, требует SHA-verified archives,
@@ -37,11 +38,12 @@ development-board и Leshy2 HIL остаётся нулём.
 .toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py verify-evidence
 ```
 
-Только вторая команда исполняет 12 jobs. Qualification record записывается
-атомарно лишь после прохождения всех 12 пар configure/build и всех объявленных
+Только вторая команда исполняет 12 jobs. Qualification record был записан
+атомарно после прохождения всех 12 пар configure/build и всех объявленных
 artifacts, maps и size gates. Для неё обязательны clean Git commit и пустые R2
-build roots, поэтому stale objects не могут стать evidence. Первая команда и
-текущее состояние репозитория заявляют ноль target executions.
+build roots, поэтому stale objects не могут стать evidence. Record заявляет 12
+target builds и ноль target runtime, emulator, development-board или physical
+executions.
 
 ## Исторические результаты R1
 

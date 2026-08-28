@@ -1,0 +1,1058 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.4",
+  "status": "reviewed_target_build_qualification",
+  "inputs": {
+    "matrix": {
+      "path": "config/f2_r2_build_matrix.json",
+      "sha256": "890639b812416b012bd41601d755d4c0fa8ed895f436c1aa06ec71249850fcfe"
+    },
+    "build_policy": {
+      "path": "config/f2_r2_build_policy.json",
+      "sha256": "e3f6bfd58d7e69845f79cdc1b16aa597778cff25b844ad20b0ac955aaa7d7e94"
+    }
+  },
+  "repo_commit": "96d0bfb71d6e316d60315561704842f9024377f1",
+  "source_date_epoch": "1787953067",
+  "jobs": [
+    {
+      "target": "s3",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/s3/debug/leshy2_s3.bin",
+          "bytes": 153904,
+          "sha256": "982d5e939575637dc5d8cfbb96d44b45e98918fa56a0ddfb3b6c9c308c4ec665"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/s3/debug/leshy2_s3.elf",
+          "bytes": 3144116,
+          "sha256": "d212d4bc5394702218d18f621f56b1e7cf7ed4ba2e2489c7d97706f5e5919567"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/s3/debug/leshy2_s3.map",
+          "bytes": 3002069,
+          "sha256": "96f38d4449a982f007078b72d829e9f213ecb5d2296bedbc2811af13a3d18df8"
+        },
+        {
+          "kind": "bootloader_bin",
+          "path": "build/r2/targets/s3/debug/bootloader/bootloader.bin",
+          "bytes": 21072,
+          "sha256": "d4d0b0db81dcd9c14b3fe64b2e350b21be3c3b8438415deed069d23fbf15f0ee"
+        },
+        {
+          "kind": "partition_table_bin",
+          "path": "build/r2/targets/s3/debug/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "6fe85507c0dfe8fe7fcf857b0e18a473c1865cfe8de1896893082951a8a0287d"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/s3/debug/leshy2_s3.bin",
+          "bytes": 153904,
+          "warning_bytes": 6291456,
+          "maximum_bytes": 7077888,
+          "status": "passed",
+          "source": "config/s3_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "s3",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/s3/release/leshy2_s3.bin",
+          "bytes": 117136,
+          "sha256": "f7c969c0105d0d4259248b6cfd54040a93c5a5346d4785bc2083290691b9859c"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/s3/release/leshy2_s3.elf",
+          "bytes": 3029712,
+          "sha256": "4129791aa78b33bb04189cb559959d05049224f0caec84e5b8bb31d9a5404c80"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/s3/release/leshy2_s3.map",
+          "bytes": 2806318,
+          "sha256": "297bca7e097b4a3f683d72a6ca47f5217046021424bfe3557f899681c2982d8d"
+        },
+        {
+          "kind": "bootloader_bin",
+          "path": "build/r2/targets/s3/release/bootloader/bootloader.bin",
+          "bytes": 19728,
+          "sha256": "0722a3143c2c040aa97a92d81fa87f39ef223dd7b677597edc26059f8efb9bfc"
+        },
+        {
+          "kind": "partition_table_bin",
+          "path": "build/r2/targets/s3/release/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "6fe85507c0dfe8fe7fcf857b0e18a473c1865cfe8de1896893082951a8a0287d"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/s3/release/leshy2_s3.bin",
+          "bytes": 117136,
+          "warning_bytes": 6291456,
+          "maximum_bytes": 7077888,
+          "status": "passed",
+          "source": "config/s3_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "c5",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/c5/debug/leshy2_c5.bin",
+          "bytes": 135232,
+          "sha256": "16ce45e65a86c3dbefeb0397640cc1999438401ef12289927389e5dd39b14c47"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/c5/debug/leshy2_c5.elf",
+          "bytes": 3506576,
+          "sha256": "3c1e872a86064e55803ebb731986d7a2a43cfc90f0d6ec2820764e1d38a4e749"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/c5/debug/leshy2_c5.map",
+          "bytes": 2468308,
+          "sha256": "5feabd71e9e65e13374b27ef881d907adec980f7a69a48b5655ab169b78150a2"
+        },
+        {
+          "kind": "bootloader_bin",
+          "path": "build/r2/targets/c5/debug/bootloader/bootloader.bin",
+          "bytes": 22336,
+          "sha256": "3fef67d3954bb554135449925294dc79b158068d4950ad78f03f87dcc3a1d00f"
+        },
+        {
+          "kind": "partition_table_bin",
+          "path": "build/r2/targets/c5/debug/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "0dbd1b753321e2d7f507bebeee3ce73c7b32d13b1e29716f66a5b6f8af3c05df"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/c5/debug/leshy2_c5.bin",
+          "bytes": 135232,
+          "warning_bytes": 3145728,
+          "maximum_bytes": 3538944,
+          "status": "passed",
+          "source": "config/c5_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "c5",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/c5/release/leshy2_c5.bin",
+          "bytes": 111984,
+          "sha256": "d907af46e8bc77c6c2aa64cf10ce23bebf408d0e7051d195e56c8dcb6eac2a81"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/c5/release/leshy2_c5.elf",
+          "bytes": 3399692,
+          "sha256": "a1e9d17ab603387c2aa164fcde1388d6ed2df80c01f4c718394d4b657596c7e3"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/c5/release/leshy2_c5.map",
+          "bytes": 2296337,
+          "sha256": "28b2f918d7181ac94da837fef430fc94cdb42f7bcea47f816569b617876fcc4c"
+        },
+        {
+          "kind": "bootloader_bin",
+          "path": "build/r2/targets/c5/release/bootloader/bootloader.bin",
+          "bytes": 20064,
+          "sha256": "ff8e083fd9e8a4d84d0622441bfc7c76d3fad58ca9e57b0bf0f525cba7eff7fd"
+        },
+        {
+          "kind": "partition_table_bin",
+          "path": "build/r2/targets/c5/release/partition_table/partition-table.bin",
+          "bytes": 3072,
+          "sha256": "0dbd1b753321e2d7f507bebeee3ce73c7b32d13b1e29716f66a5b6f8af3c05df"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/c5/release/leshy2_c5.bin",
+          "bytes": 111984,
+          "warning_bytes": 3145728,
+          "maximum_bytes": 3538944,
+          "status": "passed",
+          "source": "config/c5_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/rf_rp/debug/leshy2_rf_rp.elf",
+          "bytes": 1736740,
+          "sha256": "04eff280b1730f7fb0bc23e4b86813ce5e0dc37f6ff562409bc7a4b75b7d731a"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/rf_rp/debug/leshy2_rf_rp.bin",
+          "bytes": 18372,
+          "sha256": "000a04b9a5e2052a987f04d41ac34041b0c4c855c17adb016d79cc2e8cdaf5b7"
+        },
+        {
+          "kind": "uf2",
+          "path": "build/r2/targets/rf_rp/debug/leshy2_rf_rp.uf2",
+          "bytes": 37376,
+          "sha256": "f5e4f4eec905ccb8ec7c0fb298e47a7612276fb931e5a946c870c7ddac845127"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/rf_rp/debug/leshy2_rf_rp.elf.map",
+          "bytes": 889148,
+          "sha256": "0c991face0b6d616dc618cfcac6bb0cfc2a6df9babf024b912180997405211bd"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/rf_rp/debug/leshy2_rf_rp.bin",
+          "bytes": 18372,
+          "warning_bytes": 786432,
+          "maximum_bytes": 884736,
+          "status": "passed",
+          "source": "config/rp2354b_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/rf_rp/release/leshy2_rf_rp.elf",
+          "bytes": 345856,
+          "sha256": "dfeb17e887f292cf473314b92c1a12270b11ba355d4bc180613138dbbb0f36c5"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/rf_rp/release/leshy2_rf_rp.bin",
+          "bytes": 10400,
+          "sha256": "8d305222d7a9d112e80a16b8842f963c9f9fc38b8c0ce7e57321256303451037"
+        },
+        {
+          "kind": "uf2",
+          "path": "build/r2/targets/rf_rp/release/leshy2_rf_rp.uf2",
+          "bytes": 21504,
+          "sha256": "593482144ed3b366ebe55bf6a066adf002ac2bd92596ea094ca38a5f329e028b"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/rf_rp/release/leshy2_rf_rp.elf.map",
+          "bytes": 840555,
+          "sha256": "e1590bd0d0573b64e11b48e8fd02249296cc6fc36f9c2bb5ddee9975da11a083"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/rf_rp/release/leshy2_rf_rp.bin",
+          "bytes": 10400,
+          "warning_bytes": 786432,
+          "maximum_bytes": 884736,
+          "status": "passed",
+          "source": "config/rp2354b_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/hub_rp/debug/leshy2_hub_rp.elf",
+          "bytes": 1735616,
+          "sha256": "df83342ebdf1ec7a824bfab0206fd43ea28f2278c9efea9ddc94d49e5c95e749"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/hub_rp/debug/leshy2_hub_rp.bin",
+          "bytes": 17244,
+          "sha256": "f1bf0dfd6ee6c0f9c4dd4c50bcb63023ddc47f2c51110e3ecf9d19a08a0b2afb"
+        },
+        {
+          "kind": "uf2",
+          "path": "build/r2/targets/hub_rp/debug/leshy2_hub_rp.uf2",
+          "bytes": 35328,
+          "sha256": "d68d659e670ca82a3582a9c3d701431ce8dffa2bea8d0269cfc795f610c687dd"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/hub_rp/debug/leshy2_hub_rp.elf.map",
+          "bytes": 891739,
+          "sha256": "e505106bebdf1174b6a52087f6c00ff395918539020a8e3bbd08467157f6e284"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/hub_rp/debug/leshy2_hub_rp.bin",
+          "bytes": 17244,
+          "warning_bytes": 786432,
+          "maximum_bytes": 884736,
+          "status": "passed",
+          "source": "config/rp2354b_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/hub_rp/release/leshy2_hub_rp.elf",
+          "bytes": 344768,
+          "sha256": "a6207cb4f929ffd28430d406712118371903a22cd06ef5d6408a2f742c3cccad"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/hub_rp/release/leshy2_hub_rp.bin",
+          "bytes": 9296,
+          "sha256": "d7eaa40cd9b0897a4c8d3c5e0a848472a2cea0b9a0b6cf34cf073e64062da8cb"
+        },
+        {
+          "kind": "uf2",
+          "path": "build/r2/targets/hub_rp/release/leshy2_hub_rp.uf2",
+          "bytes": 19456,
+          "sha256": "6b96304c00f23454bf4f70f9ee4627491315c3a6bc3aed19d870149a5b9fbf9a"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/hub_rp/release/leshy2_hub_rp.elf.map",
+          "bytes": 842880,
+          "sha256": "23eeb5b6d5c2c62f2957a32e1160aa774bffb4996cf09572798daae5171977c0"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/hub_rp/release/leshy2_hub_rp.bin",
+          "bytes": 9296,
+          "warning_bytes": 786432,
+          "maximum_bytes": 884736,
+          "status": "passed",
+          "source": "config/rp2354b_image_limits.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "pack",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "boot_elf",
+          "path": "build/r2/targets/pack/debug/leshy2_pack_boot.out",
+          "bytes": 12188,
+          "sha256": "2e09c6760f7b6f65183a2b47d0b9f832e39d92dcb7981b7bde07411d7903e5f3"
+        },
+        {
+          "kind": "boot_bin",
+          "path": "build/r2/targets/pack/debug/leshy2_pack_boot.bin",
+          "bytes": 256,
+          "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+        },
+        {
+          "kind": "boot_map",
+          "path": "build/r2/targets/pack/debug/leshy2_pack_boot.map",
+          "bytes": 8927,
+          "sha256": "fd49e362c371a5f2c59d21586a81cd9e07be982d55471ec29c5e3de1efb289d9"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/pack/debug/leshy2_pack.out",
+          "bytes": 38368,
+          "sha256": "957959fbb91e1925d00bb255656eee5707954d032ac56787ded59e4164fce457"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/pack/debug/leshy2_pack.bin",
+          "bytes": 664,
+          "sha256": "5c6069db86f93d48868591be946e54fe0a2b60edee3e0d055ec1cc74a0374e75"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/pack/debug/leshy2_pack.map",
+          "bytes": 14630,
+          "sha256": "97f5c4bb160e5cb005df5731cd82103b7c1ac058154e3a6698dc0050d06439d4"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/pack/debug/leshy2_pack_boot.bin",
+          "bytes": 256,
+          "warning_bytes": 14336,
+          "maximum_bytes": 16384,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"
+        },
+        {
+          "artifact": "build/r2/targets/pack/debug/leshy2_pack.bin",
+          "bytes": 664,
+          "warning_bytes": 20480,
+          "maximum_bytes": 22528,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "pack",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "boot_elf",
+          "path": "build/r2/targets/pack/release/leshy2_pack_boot.out",
+          "bytes": 11120,
+          "sha256": "c01d7a81bfdd170f970259d8506623c3bc806592f51b31bde5ee64f3c42b2a8d"
+        },
+        {
+          "kind": "boot_bin",
+          "path": "build/r2/targets/pack/release/leshy2_pack_boot.bin",
+          "bytes": 256,
+          "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+        },
+        {
+          "kind": "boot_map",
+          "path": "build/r2/targets/pack/release/leshy2_pack_boot.map",
+          "bytes": 8931,
+          "sha256": "7d229204b944206a16eecfecdd78bf1ed47a85553d51b1964730850a4294cb07"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/pack/release/leshy2_pack.out",
+          "bytes": 22032,
+          "sha256": "cb1f0eec19fcf746a1d3d1f8eea120cedab1b8a7d322eb7235da75163a4943e8"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/pack/release/leshy2_pack.bin",
+          "bytes": 664,
+          "sha256": "5c6069db86f93d48868591be946e54fe0a2b60edee3e0d055ec1cc74a0374e75"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/pack/release/leshy2_pack.map",
+          "bytes": 14634,
+          "sha256": "e7d382979056f95d41c6dbd0d3404a3ad0ff462f14f00e3dec895b15675b5b6e"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/pack/release/leshy2_pack_boot.bin",
+          "bytes": 256,
+          "warning_bytes": 14336,
+          "maximum_bytes": 16384,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"
+        },
+        {
+          "artifact": "build/r2/targets/pack/release/leshy2_pack.bin",
+          "bytes": 664,
+          "warning_bytes": 20480,
+          "maximum_bytes": 22528,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "safety",
+      "configuration": "debug",
+      "artifacts": [
+        {
+          "kind": "boot_elf",
+          "path": "build/r2/targets/safety/debug/leshy2_safety_boot.out",
+          "bytes": 12192,
+          "sha256": "23c4eaba6187e177cd5a2f8ce704a8e09cd62ece892a5c0a144f39ddde630293"
+        },
+        {
+          "kind": "boot_bin",
+          "path": "build/r2/targets/safety/debug/leshy2_safety_boot.bin",
+          "bytes": 256,
+          "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+        },
+        {
+          "kind": "boot_map",
+          "path": "build/r2/targets/safety/debug/leshy2_safety_boot.map",
+          "bytes": 8955,
+          "sha256": "faf4c23b0bfdc0957bbb55eb04239ec6211ff74ed6eb8f866f00ec7161a466cc"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/safety/debug/leshy2_safety.out",
+          "bytes": 38480,
+          "sha256": "2e4791e0af35e1807f73289080a5eb3dff291d51a7e7250397f32c28a976b4d3"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/safety/debug/leshy2_safety.bin",
+          "bytes": 688,
+          "sha256": "9af0ac0b1311af6d729538ab006918015f7f11e1ecbb6f5c80ce4252a610ec26"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/safety/debug/leshy2_safety.map",
+          "bytes": 14653,
+          "sha256": "e625b528a1abca9d766f8b64f6327d37d1eecb6772d95410efdcd062bdabcfbd"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/safety/debug/leshy2_safety_boot.bin",
+          "bytes": 256,
+          "warning_bytes": 14336,
+          "maximum_bytes": 16384,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"
+        },
+        {
+          "artifact": "build/r2/targets/safety/debug/leshy2_safety.bin",
+          "bytes": 688,
+          "warning_bytes": 20480,
+          "maximum_bytes": 22528,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "target": "safety",
+      "configuration": "release",
+      "artifacts": [
+        {
+          "kind": "boot_elf",
+          "path": "build/r2/targets/safety/release/leshy2_safety_boot.out",
+          "bytes": 11124,
+          "sha256": "0af230b11095dfbc0a6a96d3a9f80d6b82fdcce8f264d113ffad4c77a32da0e5"
+        },
+        {
+          "kind": "boot_bin",
+          "path": "build/r2/targets/safety/release/leshy2_safety_boot.bin",
+          "bytes": 256,
+          "sha256": "9a715392b96103cd20d213c842c3060cb98462e11d8ef2b57fbb5d743ac5ed8e"
+        },
+        {
+          "kind": "boot_map",
+          "path": "build/r2/targets/safety/release/leshy2_safety_boot.map",
+          "bytes": 8959,
+          "sha256": "6a706535488bc54997f235400446b8eb4220c81ee4382052f6d7ef05b7398886"
+        },
+        {
+          "kind": "elf",
+          "path": "build/r2/targets/safety/release/leshy2_safety.out",
+          "bytes": 22068,
+          "sha256": "1ea98e8bb4ba3bb22b5e4e4b7f1f5be6817d8e348028c7027aaa1eea043dd1c6"
+        },
+        {
+          "kind": "application_bin",
+          "path": "build/r2/targets/safety/release/leshy2_safety.bin",
+          "bytes": 688,
+          "sha256": "9af0ac0b1311af6d729538ab006918015f7f11e1ecbb6f5c80ce4252a610ec26"
+        },
+        {
+          "kind": "map",
+          "path": "build/r2/targets/safety/release/leshy2_safety.map",
+          "bytes": 14657,
+          "sha256": "8cbac53717182b2b09823416f4d23e0f8bd45c38b8f1a04a9c0de35eaac739ce"
+        }
+      ],
+      "size_gates": [
+        {
+          "artifact": "build/r2/targets/safety/release/leshy2_safety_boot.bin",
+          "bytes": 256,
+          "warning_bytes": 14336,
+          "maximum_bytes": 16384,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"
+        },
+        {
+          "artifact": "build/r2/targets/safety/release/leshy2_safety.bin",
+          "bytes": 688,
+          "warning_bytes": 20480,
+          "maximum_bytes": 22528,
+          "status": "passed",
+          "source": "config/mspm0c1106_memory.json"
+        }
+      ],
+      "warnings": []
+    }
+  ],
+  "commands": [
+    {
+      "target": "s3",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/s3",
+        "-B",
+        "{build}",
+        "-DIDF_TARGET=esp32s3",
+        "-DSDKCONFIG={build}/sdkconfig",
+        "-DSDKCONFIG_DEFAULTS={repo}/targets/s3/sdkconfig.defaults;{repo}/targets/s3/sdkconfig.{configuration}",
+        "reconfigure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "s3",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/s3",
+        "-B",
+        "{build}",
+        "build"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "s3",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/s3",
+        "-B",
+        "{build}",
+        "-DIDF_TARGET=esp32s3",
+        "-DSDKCONFIG={build}/sdkconfig",
+        "-DSDKCONFIG_DEFAULTS={repo}/targets/s3/sdkconfig.defaults;{repo}/targets/s3/sdkconfig.{configuration}",
+        "reconfigure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "s3",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/s3",
+        "-B",
+        "{build}",
+        "build"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/c5",
+        "-B",
+        "{build}",
+        "-DIDF_TARGET=esp32c5",
+        "-DSDKCONFIG={build}/sdkconfig",
+        "-DSDKCONFIG_DEFAULTS={repo}/targets/c5/sdkconfig.defaults;{repo}/targets/c5/sdkconfig.{configuration}",
+        "reconfigure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/c5",
+        "-B",
+        "{build}",
+        "build"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/c5",
+        "-B",
+        "{build}",
+        "-DIDF_TARGET=esp32c5",
+        "-DSDKCONFIG={build}/sdkconfig",
+        "-DSDKCONFIG_DEFAULTS={repo}/targets/c5/sdkconfig.defaults;{repo}/targets/c5/sdkconfig.{configuration}",
+        "reconfigure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "c5",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "{python}",
+        "{env:IDF_PATH}/tools/idf.py",
+        "-C",
+        "{repo}/targets/c5",
+        "-B",
+        "{build}",
+        "build"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "{repo}/targets/rf_rp",
+        "-B",
+        "{build}",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE={cmake_build_type}",
+        "-DPICO_SDK_PATH={env:PICO_SDK_PATH}",
+        "-DPICO_PLATFORM=rp2350-arm-s",
+        "-DPICO_BOARD=leshy2_rp2354b",
+        "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}",
+        "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}",
+        "-DPython3_EXECUTABLE={python}",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "{build}",
+        "--parallel"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "{repo}/targets/rf_rp",
+        "-B",
+        "{build}",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE={cmake_build_type}",
+        "-DPICO_SDK_PATH={env:PICO_SDK_PATH}",
+        "-DPICO_PLATFORM=rp2350-arm-s",
+        "-DPICO_BOARD=leshy2_rp2354b",
+        "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}",
+        "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}",
+        "-DPython3_EXECUTABLE={python}",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "rf_rp",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "{build}",
+        "--parallel"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "{repo}/targets/hub_rp",
+        "-B",
+        "{build}",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE={cmake_build_type}",
+        "-DPICO_SDK_PATH={env:PICO_SDK_PATH}",
+        "-DPICO_PLATFORM=rp2350-arm-s",
+        "-DPICO_BOARD=leshy2_rp2354b",
+        "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}",
+        "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}",
+        "-DPython3_EXECUTABLE={python}",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "{build}",
+        "--parallel"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "{repo}/targets/hub_rp",
+        "-B",
+        "{build}",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE={cmake_build_type}",
+        "-DPICO_SDK_PATH={env:PICO_SDK_PATH}",
+        "-DPICO_PLATFORM=rp2350-arm-s",
+        "-DPICO_BOARD=leshy2_rp2354b",
+        "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}",
+        "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}",
+        "-DPython3_EXECUTABLE={python}",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "hub_rp",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "{build}",
+        "--parallel"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "pack",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/pack",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "configure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "pack",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/pack",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "all"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "pack",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/pack",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "configure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "pack",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/pack",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "all"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "safety",
+      "configuration": "debug",
+      "action": "configure",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/safety",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "configure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "safety",
+      "configuration": "debug",
+      "action": "build",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/safety",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "all"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "safety",
+      "configuration": "release",
+      "action": "configure",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/safety",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "configure"
+      ],
+      "status": "passed"
+    },
+    {
+      "target": "safety",
+      "configuration": "release",
+      "action": "build",
+      "argv": [
+        "make",
+        "-C",
+        "{repo}/targets/safety",
+        "CONFIG={configuration}",
+        "BUILD_DIR={build}",
+        "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}",
+        "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}",
+        "SYSCONFIG_PATH={env:SYSCONFIG_PATH}",
+        "PYTHON={python}",
+        "all"
+      ],
+      "status": "passed"
+    }
+  ],
+  "totals": {
+    "targets": 6,
+    "configurations": 12,
+    "configure_runs": 12,
+    "build_runs": 12,
+    "artifact_verify_runs": 12,
+    "artifacts": 60,
+    "maps": 16,
+    "size_gates": 16,
+    "emulator_runs": 0,
+    "devboard_runs": 0,
+    "physical_runs": 0
+  },
+  "claims": {
+    "all_target_compilation_and_link_passed": true,
+    "all_declared_artifacts_present": true,
+    "all_image_size_gates_passed": true,
+    "network_during_configure_or_build": false,
+    "runtime_boot_proven": false,
+    "byte_reproducibility_proven": false,
+    "emulator_execution_proven": false,
+    "physical_hardware_proven": false
+  },
+  "runner": "tools/build_f2_r2_targets.py",
+  "next": "F2-R2.5"
+}
