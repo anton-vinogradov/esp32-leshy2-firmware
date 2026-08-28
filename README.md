@@ -132,9 +132,14 @@ generated six deterministic H1-R2.27 domain descriptors and
 projects. The model preserves exact S3 pins, exact Hub/RF-RP GPIO group masks and
 explicit identity-only boundaries where H1 has not published per-pin mappings;
 it invents no production pin. The retained five-domain BSP is historical and no
-longer an active R2 input. This substep qualifies the 12 locked debug/release
-configurations, their artifacts, maps and size gates. No R2 configure/build or
-target execution is claimed by the completed BSP substep.
+longer an active R2 input. Its
+[strict R2 policy](config/f2_r2_build_policy.json) now covers the generated R2
+tree and isolated build roots, and the
+[shell-free dispatcher](tools/build_f2_r2_targets.py) renders all 24
+configure/build argv calls and publishes evidence only after the complete
+12-job artifact/map/size verification passes. Preparation ran zero R2
+configure/build, artifact-verification or target-execution jobs; qualification
+remains the next operation.
 The exact marker and its evidence move together in every commit.
 
 <details>

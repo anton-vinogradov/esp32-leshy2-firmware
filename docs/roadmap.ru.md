@@ -68,9 +68,13 @@ peripheral или board emulation и никогда не показываетс�
 SDK owner для каждого. Точные pins S3, точный состав GPIO groups Hub/RF-RP и
 identity-only boundaries неопубликованных per-pin maps различаются явно; порядок
 сигналов не выдумывался. Старое tree пяти доменов исключено из активных R2
-inputs. Теперь нужно квалифицировать 12 locked debug/release configurations,
-artifacts, maps и size gates. F2-R2.3 выполнил только host generation/syntax
-checks: target configure/build и execution не запускались.
+inputs. [Policy R2](../config/f2_r2_build_policy.json) теперь охватывает активное
+generated tree и изолированные roots R2; у
+[shell-free dispatcher](../tools/build_f2_r2_targets.py) есть полный dry plan из
+24 команд, fail-closed проверки artifacts/maps/size и атомарная публикация
+evidence. Теперь нужно квалифицировать 12 locked debug/release configurations.
+Подготовка выполнила ноль R2 target configure/build, artifact verification и
+execution jobs.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>

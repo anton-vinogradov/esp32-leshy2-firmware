@@ -55,6 +55,38 @@ def main() -> int:
 
     if list(matrix.get("configurations", {})) != CONFIGURATIONS:
         errors.append("debug/release configuration order changed")
+    policy_record = matrix.get("inputs", {}).get("build_policy", {})
+    if policy_record.get("path") != "config/f2_r2_build_policy.json":
+        errors.append("R2 matrix does not use its isolated R2 build policy")
+    policy = load("config/f2_r2_build_policy.json")
+    if policy.get("stage") != "F2-R2.4" or policy.get("status") != "reviewed_pre_execution":
+        errors.append("R2 build policy is not reviewed before execution")
+    if policy.get("scope", {}).get("strict_warnings_apply_to") != [
+        "common/**",
+        "targets/**",
+        "generated/r2/hardware/**",
+    ]:
+        errors.append("R2 build policy does not cover the generated R2 BSP")
+    if policy.get("scope", {}).get("historical_generated_tree_is_active_input") is not False:
+        errors.append("R2 build policy admits the historical generated tree")
+    if policy.get("reproducibility", {}).get("build_root") != matrix.get("build_root"):
+        errors.append("R2 policy and matrix build roots differ")
+    if policy.get("language", {}).get("c_extensions") is not False:
+        errors.append("R2 target C must remain strict C17")
+    if policy.get("execution") != {
+        "r2_configure_runs": 0,
+        "r2_build_runs": 0,
+        "r2_artifact_verify_runs": 0,
+        "r2_emulator_runs": 0,
+        "r2_devboard_runs": 0,
+        "r2_physical_runs": 0,
+    }:
+        errors.append("R2 pre-execution policy claims target execution")
+    for configuration in CONFIGURATIONS:
+        if matrix["configurations"][configuration].get("policy") != (
+            f"config/f2_r2_build_policy.json#/configurations/{configuration}"
+        ):
+            errors.append(f"{configuration}: R2 configuration policy reference changed")
     expected_jobs = [
         {
             "target": target,
@@ -97,6 +129,12 @@ def main() -> int:
             errors.append(f"{target_id}: development-board execution is not explicit")
         if gate.get("leshy2_hil") != "not_run":
             errors.append(f"{target_id}: HIL execution is not explicit")
+        if target_id in {"rf_rp", "hub_rp"}:
+            cmake = (ROOT / target["project_dir"] / "CMakeLists.txt").read_text(
+                encoding="utf-8"
+            )
+            if "set(CMAKE_C_EXTENSIONS OFF)" not in cmake:
+                errors.append(f"{target_id}: Pico project does not enforce strict C17")
 
     memory = {row["id"]: row for row in load(
         "config/f0_r2_memory_rollback_contract.json"

@@ -12,7 +12,8 @@ R1 evidence below remains regression history and does not qualify R2 binaries.
 | F2-R2.0 | Reviewed | hash-locked five-target R1 inventory and exact six-target migration plan in [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
 | F2-R2.1 | Reviewed | exact 6-target × 2-configuration offline argv matrix in [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 artifact paths, 16 maps and 16 size gates; zero R2 projects or executions claimed |
 | F2-R2.2 | Reviewed | six production-SDK roots in [`config/f2_r2_target_projects.json`](../config/f2_r2_target_projects.json): four retained structures plus separate offline, pin-free RF-RP and Hub-RP Pico SDK trees; distinct entries/images/state; zero BSP/configure/build/execution claims |
-| F2-R2.3 | Current | generate six deterministic R2 BSP domains and bind each to exactly one project without running an R2 build |
+| F2-R2.3 | Reviewed | six deterministic R2 BSP domains generated and bound to exactly one project each without running an R2 build |
+| F2-R2.4 | Current, prepared | strict [`config/f2_r2_build_policy.json`](../config/f2_r2_build_policy.json) and shell-free [`tools/build_f2_r2_targets.py`](../tools/build_f2_r2_targets.py) cover all 12 jobs, 60 artifacts, 16 maps and 16 size gates; dry planning only, zero R2 configure/build/verify runs |
 
 The matrix locks every configure/build/clean command to a separate
 `build/r2/targets/<target>/<configuration>` root, requires SHA-verified archives,
@@ -26,6 +27,20 @@ The existing `generated/hardware` tree is still the locked five-domain R1
 artifact and is not an R2 build input. F2-R2.3 replaces that boundary from the
 hash-bound six-domain hardware projection; no project may substitute handwritten
 production pins.
+
+The qualification command is deliberately atomic and all-or-nothing:
+
+```sh
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py qualify --dry-run
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py qualify --write-evidence
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py verify-evidence
+```
+
+Only the second command executes the 12 jobs. It writes the qualification record
+atomically after all 12 configure/build pairs and every declared artifact, map
+and size gate pass. It requires a clean Git commit and empty R2 build roots, so
+stale objects cannot become evidence. The first command and current repository
+state claim zero target executions.
 
 ## Historical R1 results
 

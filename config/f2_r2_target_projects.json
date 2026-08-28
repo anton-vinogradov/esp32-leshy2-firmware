@@ -6,7 +6,7 @@
   "inputs": {
     "build_matrix": {
       "path": "config/f2_r2_build_matrix.json",
-      "sha256": "d0851eccfb977ecdf796bbcd4d0bd152e0a00716f9f1ee8082eb34f0bedd2255"
+      "sha256": "877a2179b1040471f43eb8143f780da8269fe8efb097373387549bf988a2df97"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",

@@ -66,9 +66,12 @@ projection and [proved](../config/f2_r2_bsp_consumption.json) exactly one SDK
 owner per descriptor. Exact S3 pins, exact Hub/RF-RP group membership and
 identity-only boundaries for unpublished per-pin maps remain distinguishable;
 no pin order was invented. The old five-domain tree is excluded from active R2
-inputs. Qualify the 12 locked debug/release configurations, artifacts, maps and
-size gates now. F2-R2.3 ran host generation/syntax checks only: zero target
-configure/build or execution runs.
+inputs. The [R2 policy](../config/f2_r2_build_policy.json) now covers the active
+generated tree and isolated R2 roots; the
+[shell-free dispatcher](../tools/build_f2_r2_targets.py) has a complete 24-command
+dry plan plus fail-closed artifact/map/size and atomic evidence checks. Qualify
+the 12 locked debug/release configurations now. Preparation ran zero R2 target
+configure/build, artifact-verification or execution jobs.
 The exact marker and its evidence move together in every commit.
 
 <details>

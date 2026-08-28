@@ -13,7 +13,8 @@ evidence R1 ниже остаётся regression history и не квалифи�
 | F2-R2.0 | Проведено ревью | hash-locked инвентаризация пяти targets R1 и точный план миграции шести targets в [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
 | F2-R2.1 | Проведено ревью | точная offline argv matrix 6 targets × 2 configurations в [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 путей artifacts, 16 maps и 16 size gates; заявлено ноль R2 projects и executions |
 | F2-R2.2 | Проведено ревью | шесть production-SDK roots в [`config/f2_r2_target_projects.json`](../config/f2_r2_target_projects.json): четыре сохранённые структуры и отдельные offline pin-free Pico SDK trees RF-RP и Hub-RP; разные entries/images/state; заявлено ноль BSP/configure/build/execution |
-| F2-R2.3 | Сейчас | сгенерировать шесть детерминированных доменов BSP R2 и привязать каждый ровно к одному project без запуска R2 build |
+| F2-R2.3 | Проведено ревью | шесть детерминированных доменов BSP R2 сгенерированы и каждый привязан ровно к одному project без запуска R2 build |
+| F2-R2.4 | Сейчас, подготовлено | строгая [`config/f2_r2_build_policy.json`](../config/f2_r2_build_policy.json) и shell-free [`tools/build_f2_r2_targets.py`](../tools/build_f2_r2_targets.py) охватывают все 12 jobs, 60 artifacts, 16 maps и 16 size gates; выполнен только dry plan, R2 configure/build/verify runs — ноль |
 
 Matrix закрепляет каждую команду configure/build/clean за отдельным root
 `build/r2/targets/<target>/<configuration>`, требует SHA-verified archives,
@@ -27,6 +28,20 @@ development-board и Leshy2 HIL остаётся нулём.
 пяти доменов и не является build input R2. F2-R2.3 заменяет эту границу из
 связанной hash аппаратной проекции шести доменов; ни один project не может
 подменить её handwritten production pins.
+
+Команда квалификации намеренно атомарна и работает только целиком:
+
+```sh
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py qualify --dry-run
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py qualify --write-evidence
+.toolchains/python/idf6_py3.12_env/bin/python tools/build_f2_r2_targets.py verify-evidence
+```
+
+Только вторая команда исполняет 12 jobs. Qualification record записывается
+атомарно лишь после прохождения всех 12 пар configure/build и всех объявленных
+artifacts, maps и size gates. Для неё обязательны clean Git commit и пустые R2
+build roots, поэтому stale objects не могут стать evidence. Первая команда и
+текущее состояние репозитория заявляют ноль target executions.
 
 ## Исторические результаты R1
 

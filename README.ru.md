@@ -133,9 +133,13 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 из шести SDK projects. Модель сохраняет точные pins S3, точные GPIO group masks
 Hub/RF-RP и явные identity-only boundaries там, где H1 ещё не публиковал
 per-pin mapping; production pins не выдумываются. Старый BSP пяти доменов
-остаётся историческим и больше не является активным R2 input. Сейчас нужно
-квалифицировать 12 locked debug/release configurations, artifacts, maps и size
-gates. Завершённый BSP-подэтап не заявляет configure/build или target execution.
+остаётся историческим и больше не является активным R2 input.
+[Строгая policy R2](config/f2_r2_build_policy.json) теперь охватывает generated
+tree R2 и изолированные build roots, а
+[shell-free dispatcher](tools/build_f2_r2_targets.py) формирует все 24 argv-вызова
+configure/build и публикует evidence только после успешной полной проверки 12
+jobs, artifacts, maps и size gates. Подготовка выполнила ноль R2 configure/build,
+artifact verification и target execution; квалификация остаётся следующей.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>

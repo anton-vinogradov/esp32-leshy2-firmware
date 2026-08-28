@@ -29,8 +29,8 @@
       "sha256": "2193c7703e47ef2f41c96edf072805d97aea7093659635c99d24b6884ce68604"
     },
     "build_policy": {
-      "path": "config/build_policy.json",
-      "sha256": "ed86c9cf3e0b2447e82d309455e192eb3e790bcb029a39eac0f401256ec82dee"
+      "path": "config/f2_r2_build_policy.json",
+      "sha256": "e3f6bfd58d7e69845f79cdc1b16aa597778cff25b844ad20b0ac955aaa7d7e94"
     }
   },
   "size_gate_sources": {
@@ -55,11 +55,11 @@
   "configurations": {
     "debug": {
       "cmake_build_type": "Debug",
-      "policy": "config/build_policy.json#/configurations/debug"
+      "policy": "config/f2_r2_build_policy.json#/configurations/debug"
     },
     "release": {
       "cmake_build_type": "Release",
-      "policy": "config/build_policy.json#/configurations/release"
+      "policy": "config/f2_r2_build_policy.json#/configurations/release"
     }
   },
   "build_root": "build/r2/targets/{target}/{configuration}",
