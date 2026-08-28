@@ -33,6 +33,9 @@ BUILDS = [
     {"target": "s3", "config": "debug"},
     {"target": "c5", "config": "debug"},
 ]
+HISTORICAL_R1_HARDWARE_CONTRACT_SHA256 = (
+    "9d451d0db45535d43971bd3e1feccbc8624302afb26f0a101b5bb3ed552d9ac8"
+)
 
 
 def sha256(path: Path) -> str:
@@ -62,6 +65,19 @@ def valid_historical_sources(records: object) -> bool:
         isinstance(row.get("sha256"), str) and len(row["sha256"]) == 64
         for row in records
     )
+
+
+def expected_locked_inputs() -> dict[str, str]:
+    hardware_hash = (
+        HISTORICAL_R1_HARDWARE_CONTRACT_SHA256
+        if current_baseline_is_r2()
+        else sha256(HARDWARE_CONTRACT_PATH)
+    )
+    return {
+        "adapter_contract_sha256": sha256(CONTRACT_PATH),
+        "hardware_contract_sha256": hardware_hash,
+        "essl_vendor_lock_sha256": sha256(VENDOR_LOCK_PATH),
+    }
 
 
 def build_records() -> list[dict]:
@@ -159,21 +175,21 @@ def check_review() -> list[str]:
     errors: list[str] = []
     if record.get("stage") != "F4.1.2" or record.get("status") != "reviewed":
         errors.append("F4.1.2 endpoints are not reviewed")
-    expected_inputs = {
-        "adapter_contract_sha256": sha256(CONTRACT_PATH),
-        "hardware_contract_sha256": sha256(HARDWARE_CONTRACT_PATH),
-        "essl_vendor_lock_sha256": sha256(VENDOR_LOCK_PATH),
-    }
-    if record.get("locked_inputs") != expected_inputs:
-        errors.append("F4.1.2 locked input hash changed")
+    expected_inputs = expected_locked_inputs()
     # F4.1.2 is immutable R1 evidence after the R2 topology rebaseline. Its
-    # recorded source inventory remains reviewable, but current R2 SDK inputs
-    # must not be compared with (or relabelled as) the former SDIO endpoint.
+    # recorded inputs and source inventory remain reviewable, but current R2
+    # hardware/SDK inputs must not be compared with (or relabelled as) the
+    # former SDIO endpoint.
     if current_baseline_is_r2():
+        if record.get("locked_inputs") != expected_inputs:
+            errors.append("F4.1.2 historical locked inputs changed")
         if not valid_historical_sources(record.get("sources")):
             errors.append("F4.1.2 historical endpoint source record is invalid")
-    elif record.get("sources") != source_records():
-        errors.append("F4.1.2 endpoint source hash changed")
+    else:
+        if record.get("locked_inputs") != expected_inputs:
+            errors.append("F4.1.2 locked input hash changed")
+        if record.get("sources") != source_records():
+            errors.append("F4.1.2 endpoint source hash changed")
     expected_builds = [
         {
             **build,
