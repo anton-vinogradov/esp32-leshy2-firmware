@@ -133,8 +133,21 @@ def main() -> int:
             cmake = (ROOT / target["project_dir"] / "CMakeLists.txt").read_text(
                 encoding="utf-8"
             )
-            if "set(CMAKE_C_EXTENSIONS OFF)" not in cmake:
-                errors.append(f"{target_id}: Pico project does not enforce strict C17")
+            if "set(CMAKE_C_EXTENSIONS ON)" not in cmake:
+                errors.append(
+                    f"{target_id}: Pico SDK sources are not allowed required GNU C"
+                )
+            target_name = f"leshy2_{target_id}"
+            if "set_source_files_properties(" not in cmake:
+                errors.append(
+                    f"{target_id}: strict project warnings are not source-scoped"
+                )
+            if "-std=c17" not in cmake:
+                errors.append(f"{target_id}: Leshy2 sources do not enforce ISO C17")
+            if f"target_compile_options({target_name} PRIVATE" in cmake:
+                errors.append(
+                    f"{target_id}: project warnings leak into Pico SDK interface sources"
+                )
 
     memory = {row["id"]: row for row in load(
         "config/f0_r2_memory_rollback_contract.json"

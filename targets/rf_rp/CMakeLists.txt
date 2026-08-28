@@ -13,7 +13,9 @@ include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
 project(leshy2_rf_rp C CXX ASM)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS OFF)
+# Pico SDK interface sources use GNU C constructs such as `asm`.  The Leshy2
+# sources below still receive an explicit -std=c17 through source properties.
+set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -21,16 +23,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 pico_sdk_init()
 
 set(LESHY2_GENERATED_R2_HW_DIR "${LESHY2_REPO_ROOT}/generated/r2/hardware")
-add_executable(
-    leshy2_rf_rp
+set(LESHY2_RF_RP_PROJECT_SOURCES
     main.c
     "${LESHY2_GENERATED_R2_HW_DIR}/src/rf_rp_bsp.c"
 )
+add_executable(leshy2_rf_rp ${LESHY2_RF_RP_PROJECT_SOURCES})
 target_include_directories(
     leshy2_rf_rp PRIVATE "${LESHY2_GENERATED_R2_HW_DIR}/include"
 )
 target_compile_definitions(leshy2_rf_rp PRIVATE LESHY2_TARGET_RF_RP=1)
-target_compile_options(leshy2_rf_rp PRIVATE
+set(LESHY2_RF_RP_PROJECT_COMPILE_OPTIONS
     -std=c17
     -Wall
     -Wextra
@@ -52,6 +54,10 @@ target_compile_options(leshy2_rf_rp PRIVATE
     "$<$<CONFIG:Debug>:-g3>"
     "$<$<CONFIG:Release>:-Os>"
     "$<$<CONFIG:Release>:-g1>"
+)
+set_source_files_properties(
+    ${LESHY2_RF_RP_PROJECT_SOURCES}
+    PROPERTIES COMPILE_OPTIONS "${LESHY2_RF_RP_PROJECT_COMPILE_OPTIONS}"
 )
 target_compile_definitions(leshy2_rf_rp PRIVATE "$<$<CONFIG:Release>:NDEBUG=1>")
 target_link_options(leshy2_rf_rp PRIVATE
