@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.4",
-                "H1-R2.27", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.4",
-                "H1-R2.27", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():
@@ -106,6 +106,36 @@ class ProductSiteTests(unittest.TestCase):
                 self.assertIn(token, page, f"{name}: {token}")
             for stage in range(12):
                 self.assertIn(f"F{stage}.", page, f"{name}: missing F{stage}")
+
+    def test_public_r2_transport_boundary_does_not_reactivate_r1_f4(self):
+        required_cap_routes = {
+            "docs/architecture.md": ("contact 3", "contact 4"),
+            "docs/architecture.ru.md": ("контакт 3", "контакт 4"),
+        }
+        for name, contacts in required_cap_routes.items():
+            current = self.read(name).split("<details>", 1)[0]
+            self.assertIn("4-bit SDIO", current, name)
+            self.assertIn("40", current, name)
+            self.assertIn(contacts[0], current, name)
+            self.assertIn("SCL", current, name)
+            self.assertIn("GP31", current, name)
+            self.assertIn(contacts[1], current, name)
+            self.assertIn("SDA", current, name)
+            self.assertIn("GP30", current, name)
+            self.assertNotIn("S3↔C5", current, name)
+            self.assertNotIn("1-bit SDIO", current, name)
+
+        progress = json.loads(self.read("config/f4_progress.json"))
+        self.assertEqual("R1", progress["authority"]["baseline"])
+        self.assertFalse(progress["authority"]["allowed_as_r2_current_progress"])
+        self.assertEqual("historical_superseded_by_r2", progress["status"])
+        self.assertNotIn("current_substep", progress)
+        self.assertIsNone(progress["next"])
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        self.assertFalse(state["claims"]["f4_r1_direct_s3_c5_is_current_r2_authority"])
+        self.assertEqual(4, state["claims"]["r2_hub_c5_bus_width_bits"])
+        self.assertEqual(40000, state["claims"]["r2_hub_c5_target_frequency_khz"])
+        self.assertFalse(state["claims"]["r2_hub_c5_target_endpoint_implemented"])
 
     def test_completed_global_phase_has_bilingual_result_report(self):
         reports = {
@@ -292,7 +322,9 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(0, state["claims"]["f4_qemu_phy_paths"])
         self.assertEqual(0, state["claims"]["f4_physical_transport_runs"])
         progress = json.loads(self.read("config/f4_progress.json"))
-        self.assertEqual("F4.1.4", progress["current_substep"])
+        self.assertEqual("historical_superseded_by_r2", progress["status"])
+        self.assertEqual("F4.1.3", progress["historical_last_reviewed_substep"])
+        self.assertNotIn("current_substep", progress)
         self.assertEqual("reviewed", progress["substeps"]["F4.0.0"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.0.1"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.0.2"]["status"])
@@ -301,7 +333,11 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("reviewed", progress["substeps"]["F4.1.1"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.1.2"]["status"])
         self.assertEqual("reviewed", progress["substeps"]["F4.1.3"]["status"])
-        self.assertEqual("current", progress["substeps"]["F4.1.4"]["status"])
+        self.assertEqual(
+            "not_run_superseded_by_r2", progress["substeps"]["F4.1.4"]["status"]
+        )
+        self.assertEqual(0, progress["reviewed_claims"]["physical_transport_runs"])
+        self.assertIsNone(progress["next"])
         for configuration in ("debug", "release"):
             self.assertTrue(
                 (REPO_ROOT / f"config/f3_1_s3_{configuration}_runtime_review.json").is_file()
@@ -1152,7 +1188,17 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual([], nfc["compile_gate"]["target_definitions"])
         self.assertFalse(policy["dependency_policy"]["st_driver_integrated"])
         self.assertFalse(policy["implementation"]["target_adapter_integrated"])
-        self.assertFalse(policy["implementation"]["hardware_contract_imported"])
+        self.assertTrue(policy["implementation"]["hardware_contract_imported"])
+        self.assertFalse(policy["implementation"]["target_adapter_integrated"])
+        boundary = policy["imported_hardware_boundary"]
+        self.assertEqual("H1-R2.31", boundary["marker"])
+        contacts = {row["contact"]: row for row in boundary["contacts"]}
+        self.assertEqual(("SCL", 31, "CAP_I2C_SCL"),
+                         (contacts[3]["role"], contacts[3]["rf_gpio"], contacts[3]["net"]))
+        self.assertEqual(("SDA", 30, "CAP_I2C_SDA"),
+                         (contacts[4]["role"], contacts[4]["rf_gpio"], contacts[4]["net"]))
+        self.assertEqual(("profile-neutral IRQ", 13, "CAP_IRQ"),
+                         (contacts[9]["role"], contacts[9]["rf_gpio"], contacts[9]["net"]))
 
     def test_exact_lora_cap_profiles_preserve_regional_and_evidence_bounds(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))

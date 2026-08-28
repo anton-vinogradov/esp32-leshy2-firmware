@@ -13,7 +13,7 @@
     {
       "id": "M5_U219_PINMAP",
       "url": "https://docs.m5stack.com/en/cap/Cap_CC1101",
-      "supports": "work-in-progress U219 pin map: pin 8 POWER_EN, pin 10 NFC_CS, shared SPI, CC1101 and ST25R3916"
+      "supports": "current official U219 pin map: pin 3 SCL, pin 4 SDA, pin 8 POWER_EN, pin 10 NFC_CS, shared SPI, CC1101 and ST25R3916; pin 7 remains blank/ambiguous"
     },
     {
       "id": "M5_U219_NFC_SPI",
@@ -60,7 +60,9 @@
       "scope": "unchanged stock U214 receive/GNSS policy",
       "pin8_active_role": "LORA_RST_N output",
       "pin10_active_role": "LORA_BUSY input",
-      "spi_targets": ["SX1262_MODE0"],
+      "spi_targets": [
+        "SX1262_MODE0"
+      ],
       "tx_policy": "unchanged: stock U214 remains receive/GNSS-only because it has no qualified physical TX evidence"
     },
     {
@@ -69,7 +71,10 @@
       "scope": "optional CC1101 receive plus NFC reader/poller",
       "pin8_active_role": "POWER_EN output active high",
       "pin10_active_role": "NFC_CS output active low",
-      "spi_targets": ["CC1101_MODE0", "ST25R3916_MODE1"],
+      "spi_targets": [
+        "CC1101_MODE0",
+        "ST25R3916_MODE1"
+      ],
       "cc1101_policy": "hard RX-only command firewall",
       "nfc_policy": "poll and read only; write and card emulation are forbidden",
       "tx_policy": "CC1101 TX is forbidden; the NFC reader field requires its own physical-field lease and evidence"
@@ -86,16 +91,78 @@
   "shared_spi": {
     "rule": "both chip selects must be high before a target or SPI mode changes; exactly one target may be selected",
     "contracts": [
-      {"target": "U214_SX1262", "mode": 0, "frequency_hz": null, "status": "existing target adapter ceiling remains unchanged"},
-      {"target": "U219_CC1101", "mode": 0, "frequency_hz": 10000000, "status": "datasheet-bound ceiling"},
-      {"target": "U219_ST25R3916", "mode": 1, "frequency_hz": 10000000, "status": "official M5 example contract"}
+      {
+        "target": "U214_SX1262",
+        "mode": 0,
+        "frequency_hz": null,
+        "status": "existing target adapter ceiling remains unchanged"
+      },
+      {
+        "target": "U219_CC1101",
+        "mode": 0,
+        "frequency_hz": 10000000,
+        "status": "datasheet-bound ceiling"
+      },
+      {
+        "target": "U219_ST25R3916",
+        "mode": 1,
+        "frequency_hz": 10000000,
+        "status": "official M5 example contract"
+      }
     ]
+  },
+  "imported_hardware_boundary": {
+    "source": "config/h0_r2_hardware_contract.json",
+    "marker": "H1-R2.31",
+    "u219_source": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
+    "u219_source_sha256": "acbc1e3b596aac16bcaf1c4dfb721293b97677cd32d61fb1c5dbbf6c3a6a581b",
+    "cap_profile_sha256": "3f95f4dd899be93036c452473fea1c73c543218b5a9dde4d4ef958ebb3defcca",
+    "authority": "pre-H2 working hardware contract; not ECAD, target adapter or HIL closure",
+    "contacts": [
+      {
+        "contact": 3,
+        "role": "SCL",
+        "rf_gpio": 31,
+        "net": "CAP_I2C_SCL",
+        "boundary": "TCA4307DGKR"
+      },
+      {
+        "contact": 4,
+        "role": "SDA",
+        "rf_gpio": 30,
+        "net": "CAP_I2C_SDA",
+        "boundary": "TCA4307DGKR"
+      },
+      {
+        "contact": 9,
+        "role": "profile-neutral IRQ",
+        "rf_gpio": 13,
+        "net": "CAP_IRQ",
+        "boundary": "return buffer; U214 active-high, U219 polarity remains received-unit HIL"
+      }
+    ],
+    "contact_7": "official-source ambiguity; no usable firmware signal and accessory power remains a received-unit gate"
   },
   "cc1101_rx_firewall": {
     "raw_spi_access_outside_firewall": false,
-    "allowed_strobes": ["SRES", "SXOFF", "SCAL", "SRX", "SIDLE", "SPWD", "SFRX", "SNOP"],
-    "forbidden_strobes": ["SFSTXON", "STX"],
-    "forbidden_write_targets": ["PATABLE", "TX_FIFO"],
+    "allowed_strobes": [
+      "SRES",
+      "SXOFF",
+      "SCAL",
+      "SRX",
+      "SIDLE",
+      "SPWD",
+      "SFRX",
+      "SNOP"
+    ],
+    "forbidden_strobes": [
+      "SFSTXON",
+      "STX"
+    ],
+    "forbidden_write_targets": [
+      "PATABLE",
+      "TX_FIFO"
+    ],
     "register_write_rules": [
       "MCSM0.PIN_CTRL_EN must remain zero so a CS edge cannot synthesize STX",
       "MCSM1.RXOFF_MODE may select IDLE or RX only; FSTXON and TX are rejected",
@@ -103,8 +170,14 @@
     ]
   },
   "nfc_reader": {
-    "allowed_operations": ["POLL", "READ"],
-    "forbidden_operations": ["WRITE", "CARD_EMULATION"],
+    "allowed_operations": [
+      "POLL",
+      "READ"
+    ],
+    "forbidden_operations": [
+      "WRITE",
+      "CARD_EMULATION"
+    ],
     "evidence": {
       "name": "EV_N9_U219_NFC",
       "register": "TCA9535PWR",
@@ -132,21 +205,33 @@
   "dependency_policy": {
     "rule": "retain the existing permissive-license-only product dependency policy",
     "evaluated_not_integrated": [
-      {"name": "M5Unit-NFC", "license": "MIT", "status": "reference only, not integrated; no source vendored or linked"},
-      {"name": "RadioLib", "license": "MIT", "status": "candidate only, not integrated; no source vendored or linked"}
+      {
+        "name": "M5Unit-NFC",
+        "license": "MIT",
+        "status": "reference only, not integrated; no source vendored or linked"
+      },
+      {
+        "name": "RadioLib",
+        "license": "MIT",
+        "status": "candidate only, not integrated; no source vendored or linked"
+      }
     ],
     "st_driver_integrated": false
   },
   "known_open_hardware_gates": [
     "the official U219 page is work in progress and its public pin table exposes RF_SW0 while its band truth table also names RF_SW1",
-    "the exact production U219 revision, signed identity binding and final pin-direction hardware are not yet imported into the firmware BSP",
+    "the exact production U219 revision, signed identity binding, contact-7 power continuity and RF_SW1 implementation remain received-unit gates",
     "EV_N9 pickup geometry, tuning, threshold and physical timing remain VNA/HIL evidence",
     "no target, dev-board or Leshy2 HIL run is claimed by this host policy"
   ],
   "implementation": {
     "portable_state_machine": "common/include/leshy2/system_model.h and common/src/system_model.c",
-    "host_tests": ["host/tests/test_system_model.c", "host/tests/test_safety_core.c"],
+    "host_tests": [
+      "host/tests/test_system_model.c",
+      "host/tests/test_safety_core.c"
+    ],
     "target_adapter_integrated": false,
-    "hardware_contract_imported": false
+    "hardware_contract_imported": true,
+    "hardware_contract_scope": "H1-R2.31 exact pre-H2 pins only; no target/HIL claim"
   }
 }

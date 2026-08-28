@@ -5,8 +5,8 @@
   "producer": "tools/generate_f2_r2_bsp.py",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
-    "sha256": "a62d0f30d6f429ecd7441cd04d434c04bba4ba391ad3ac72b4a35cce2c40924c",
-    "hardware_marker": "H1-R2.27"
+    "sha256": "7b39046aeb76bf9a86faeed16ff642668d255f74e336eb45ec5363c5584c7f3d",
+    "hardware_marker": "H1-R2.31"
   },
   "generation_model": "config/f2_r2_bsp_generation.json",
   "domains": [
@@ -21,8 +21,8 @@
     },
     {
       "id": "c5",
-      "mapping": "identity_only",
-      "pins": 0,
+      "mapping": "partial_exact_pins",
+      "pins": 6,
       "groups": 0,
       "header": "generated/r2/hardware/include/leshy2/r2/hardware/c5_bsp.h",
       "source": "generated/r2/hardware/src/c5_bsp.c",
@@ -30,18 +30,18 @@
     },
     {
       "id": "rf_rp",
-      "mapping": "gpio_groups",
-      "pins": 0,
-      "groups": 11,
+      "mapping": "exact_pins",
+      "pins": 48,
+      "groups": 0,
       "header": "generated/r2/hardware/include/leshy2/r2/hardware/rf_rp_bsp.h",
       "source": "generated/r2/hardware/src/rf_rp_bsp.c",
       "symbol": "l2_r2_rf_rp_domain"
     },
     {
       "id": "hub_rp",
-      "mapping": "gpio_groups",
-      "pins": 0,
-      "groups": 12,
+      "mapping": "exact_pins",
+      "pins": 48,
+      "groups": 0,
       "header": "generated/r2/hardware/include/leshy2/r2/hardware/hub_rp_bsp.h",
       "source": "generated/r2/hardware/src/hub_rp_bsp.c",
       "symbol": "l2_r2_hub_rp_domain"
@@ -68,18 +68,18 @@
   "files": [
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/bsp_types.h",
-      "bytes": 1037,
-      "sha256": "285acf8c1aa93273c7306fda5d303d48bc953b555a47e296b42f56bc70d9646b"
+      "bytes": 1175,
+      "sha256": "a29472a5c9e6b62490ca98f02591c145be926309eea9a6fe91f598ddc7599e4b"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/c5_bsp.h",
-      "bytes": 359,
-      "sha256": "1a7292a026e419e74ffc996dd419f009aeb8fd0fcfb2d95e6b121c7c95ae7c68"
+      "bytes": 542,
+      "sha256": "9e737e0710ad68442219056c47bc811ecd5f43593aa3a0fbb0bd8a2a20e3f9df"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/hub_rp_bsp.h",
-      "bytes": 380,
-      "sha256": "0729056021a7ae697471c79424bbc80d90ffe5820a1fe3a514b3e7c0aaafbed8"
+      "bytes": 2010,
+      "sha256": "552b4828d7f3cb2998e77cc57072a6e624483491538cd231345ee61a64c3bc43"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/pack_bsp.h",
@@ -88,8 +88,8 @@
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/rf_rp_bsp.h",
-      "bytes": 375,
-      "sha256": "7a3508ca6bb9914d7f80bed14093fe1848f251bd36df9868e789cab8b290f720"
+      "bytes": 2033,
+      "sha256": "bf067b8cabf22a13bc2cc782ce66c2bbb21185ab01ce1fc9f408e0d8c9e7cda4"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/s3_bsp.h",
@@ -103,13 +103,13 @@
     },
     {
       "path": "generated/r2/hardware/src/c5_bsp.c",
-      "bytes": 438,
-      "sha256": "f54b4c34b17436bb92ee36c1350233d6d69e90f36c83fb1101f384db4fb6cf0d"
+      "bytes": 2322,
+      "sha256": "f716cf193bf0b7904834d8b13283ed663b0b67748c9be4cf7ef1eedb872a39f2"
     },
     {
       "path": "generated/r2/hardware/src/hub_rp_bsp.c",
-      "bytes": 2758,
-      "sha256": "e5323eb15e1b8bbee378208adc007f7150c2fdc8907da38787bf7780ef32ea2f"
+      "bytes": 13248,
+      "sha256": "8d9e40a282f1e0094c3bdc4cca26a88b94a7fd84064381781b9991ceac88424b"
     },
     {
       "path": "generated/r2/hardware/src/pack_bsp.c",
@@ -118,13 +118,13 @@
     },
     {
       "path": "generated/r2/hardware/src/rf_rp_bsp.c",
-      "bytes": 2511,
-      "sha256": "2295493a40ce3daaa8d26034c762ce6768d2b34c24363a4d07d5e6a5af168593"
+      "bytes": 13992,
+      "sha256": "2b08e20651c81ecad5afa8c91de4a478c33f09997a66245355daaa63930c168d"
     },
     {
       "path": "generated/r2/hardware/src/s3_bsp.c",
-      "bytes": 6542,
-      "sha256": "94b032a9334dd922f17f4dcaf51a692f4236976a2c5be977c70114d5cc1fb8c4"
+      "bytes": 7423,
+      "sha256": "d29a55e19005baa5bdb3cae9f80d71263a67c83c8d04477c81f1c30ea5256bc3"
     },
     {
       "path": "generated/r2/hardware/src/safety_bsp.c",

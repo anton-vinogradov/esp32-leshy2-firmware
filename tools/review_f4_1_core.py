@@ -53,6 +53,15 @@ def source_records() -> list[dict]:
     ]
 
 
+def current_baseline_is_r2() -> bool:
+    state = json.loads(
+        (REPO_ROOT / "config" / "firmware_roadmap_state.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    return state.get("baseline") == "R2"
+
+
 def create_review() -> dict:
     command = ["make", "host-sanitize"]
     result = subprocess.run(
@@ -151,6 +160,12 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.run:
+        if current_baseline_is_r2():
+            print(
+                "ERROR: historical R1 F4.1.1 is superseded by R2; its evidence is immutable",
+                file=sys.stderr,
+            )
+            return 1
         if not args.write:
             print("ERROR: F4.1.1 run requires --write evidence", file=sys.stderr)
             return 1

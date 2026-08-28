@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import subprocess
 import unittest
@@ -27,6 +28,25 @@ class H0R2FirmwareContractTest(unittest.TestCase):
     def test_generated_contract_is_current(self):
         self.assertEqual(self.module.build(), self.actual)
 
+    def test_sync_cli_is_fail_safe_and_rejects_unknown_modes(self):
+        checked = subprocess.run(
+            ["python3", str(SCRIPT), "--check"],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, checked.returncode, checked.stdout)
+        self.assertIn("current:", checked.stdout)
+        unknown = subprocess.run(
+            ["python3", str(SCRIPT), "--not-a-real-mode"],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertNotEqual(0, unknown.returncode, unknown.stdout)
+
     def test_six_targets_and_hub_owner_are_explicit(self):
         self.assertEqual(6, len(self.actual["domains"]))
         self.assertEqual("hub_rp", self.actual["firmware_rebaseline"]["new_target"])
@@ -44,12 +64,21 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         transports = {row["id"]: row for row in self.actual["transports"]}
         self.assertIn("HUB_PACK_SAFETY", transports)
         self.assertEqual(400_000, transports["HUB_PACK_SAFETY"]["clock_hz"])
-        groups = {tuple(row["gpios"]): row["role"] for row in self.actual["hub_pin_groups"]}
-        self.assertIn("Pack and Safety", groups[(43, 44)])
-        self.assertEqual(2, self.actual["hub_gpio_budget"]["free"])
-        self.assertEqual(3, self.actual["rear_gpio_budget"]["free"])
-        rear_roles = " ".join(row["role"] for row in self.actual["rear_pin_groups"])
-        self.assertIn("K331 RSSI is NC", rear_roles)
+        hub = {row["gpio"]: row for row in self.actual["hub_pin_map"]}
+        self.assertEqual("HUB_SAFE_I2C_SDA", hub[42]["net"])
+        self.assertEqual("HUB_SAFE_I2C_SCL", hub[43]["net"])
+        self.assertEqual("SD_DETECT_N", hub[44]["net"])
+        self.assertEqual(2, self.actual["hub_gpio_budget"]["reserve"])
+        rear_reserve = {
+            row["gpio"]
+            for row in self.actual["rear_pin_map"]
+            if row["direction"] == "reserve"
+        }
+        self.assertEqual(self.actual["rear_gpio_budget"]["reserve"], len(rear_reserve))
+        self.assertEqual(
+            set(self.actual["rear_gpio_budget"]["reserve_gpios"]), rear_reserve
+        )
+        self.assertEqual("RF_RESERVE_15", self.actual["rear_pin_map"][15]["net"])
 
     def test_locality_first_repartition_is_explicit(self):
         domains = {row["id"]: row["role"] for row in self.actual["domains"]}
@@ -60,6 +89,60 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(14, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
         self.assertEqual(80, len(self.actual["interboard"]["pin_map"]))
         self.assertIn("fourteen true NC reserve contacts", self.actual["interboard"]["result"])
+
+    def test_current_sources_are_hash_bound_and_pre_h2(self):
+        self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
+        for source in self.actual["hardware_sources"].values():
+            path = ROOT.parent / source["path"]
+            self.assertTrue(path.is_file(), source["path"])
+            self.assertEqual(source["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
+        self.assertEqual(48, len(self.actual["hub_pin_map"]))
+        self.assertEqual(48, len(self.actual["rear_pin_map"]))
+        self.assertFalse(self.actual["claims"]["h2_closed"])
+        self.assertFalse(self.actual["claims"]["kicad_authorized"])
+        self.assertFalse(self.actual["claims"]["physical_or_hil_execution"])
+        self.assertEqual(
+            self.module.build()["physical_h1"]["pre_r2_h2_gates"],
+            self.actual["physical_h1"]["pre_r2_h2_gates"],
+        )
+        self.assertGreater(len(self.actual["physical_h1"]["pre_r2_h2_gates"]), 0)
+
+    def test_c5_transport_is_quad_and_40mhz_qualification_only(self):
+        transport = {row["id"]: row for row in self.actual["transports"]}["HUB_C5"]
+        self.assertEqual(20_000_000, transport["bringup_clock_hz"])
+        self.assertEqual(40_000_000, transport["clock_hz"])
+        self.assertEqual(40_000_000, transport["qualification_frequency_hz"])
+        self.assertEqual(7.5, transport["qualified_payload_floor_mb_s"])
+        self.assertEqual(6, len(self.actual["c5_sdio_pin_map"]))
+        self.assertEqual(
+            {"SDIO_DAT0", "SDIO_DAT1", "SDIO_DAT2_USB_DP", "SDIO_DAT3_USB_DM", "SDIO_CLK", "SDIO_CMD"},
+            {row["net"] for row in self.actual["c5_sdio_pin_map"]},
+        )
+        ownership = self.actual["c5_sdio_service_mux"]["ownership"]
+        self.assertTrue(ownership["latch"]["firmware_cannot_override"])
+        self.assertFalse(self.actual["claims"]["r1_f4_1_2_is_current_authority"])
+
+    def test_all_six_domains_have_exact_hardware_pin_maps(self):
+        contracts = self.actual["domain_contracts"]
+        self.assertEqual(
+            ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+            [row["id"] for row in contracts],
+        )
+        self.assertTrue(all(row.get("pin_map") for row in contracts))
+        c5 = {row["contact"]: row for row in contracts[1]["pin_map"]}
+        self.assertEqual("IR_RX_DEMOD", c5["GPIO0"]["net"])
+        self.assertEqual("C5_SDIO_D3_USB_DM", c5["GPIO13"]["net"])
+        self.assertTrue(c5["GPIO13"]["muxed_with_usb"])
+        self.assertEqual(13, len(contracts[4]["pin_map"]))
+        self.assertEqual(17, len(contracts[5]["pin_map"]))
+
+    def test_dual_rp_exact_m1_binding_is_consistent(self):
+        hub = {row["gpio"]: row for row in self.actual["hub_pin_map"]}
+        rear = {row["gpio"]: row for row in self.actual["rear_pin_map"]}
+        self.assertEqual(5, len(self.actual["hub_rf_m1_binding"]))
+        for binding in self.actual["hub_rf_m1_binding"]:
+            self.assertEqual(binding["net"], hub[binding["hub_gpio"]]["net"])
+            self.assertEqual(binding["net"], rear[binding["rf_gpio"]]["net"])
 
     def test_direct_ui_and_display_contract_survives_rebaseline(self):
         self.assertEqual(32_000_000, self.actual["display"]["selected_clock_hz"])

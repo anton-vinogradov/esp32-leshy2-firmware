@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -11,16 +12,60 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "config/u219_cap_policy.json"
 PROTOCOL_PATH = ROOT / "config/interdomain_protocol.json"
+HARDWARE_PATH = ROOT / "config/h0_r2_hardware_contract.json"
 
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def canonical_sha256(value: object) -> str:
+    payload = json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def hardware_binding_errors(policy: dict, hardware: dict) -> list[str]:
+    """Require the firmware policy to bind the complete accepted HW boundary."""
+    errors: list[str] = []
+    imported = policy.get("imported_hardware_boundary", {})
+    u219_source = hardware.get("hardware_sources", {}).get("u219_cap_profile", {})
+    if imported.get("u219_source") != u219_source.get("path"):
+        errors.append("U219 policy lost the exact hardware source path")
+    if imported.get("u219_source_sha256") != u219_source.get("sha256"):
+        errors.append("U219 policy lost the exact hardware source hash")
+    cap_profile = hardware.get("cap_profile", {})
+    if imported.get("cap_profile_sha256") != canonical_sha256(cap_profile):
+        errors.append("U219 policy is not bound to the complete projected Cap security boundary")
+    if cap_profile.get("slot_population") != "exactly_one":
+        errors.append("projected Cap slot is no longer mutually exclusive")
+    cc1101 = cap_profile.get("radio_policy", {}).get("cc1101", {})
+    if cc1101.get("hardware_tx_evidence") != \
+            "absent for U219 CC1101; therefore TX is unconditionally forbidden":
+        errors.append("projected U219 CC1101 boundary is no longer hard RX-only")
+    if set(cc1101.get("forbidden_commands", [])) != {
+        "SFSTXON", "STX", "PATABLE write", "TX FIFO write"
+    }:
+        errors.append("projected U219 CC1101 forbidden-command set changed")
+    nfc = cap_profile.get("radio_policy", {}).get("nfc", {})
+    if set(nfc.get("forbidden", [])) != {
+        "tag write", "card emulation", "field-on without EV_N9 lease"
+    }:
+        errors.append("projected U219 NFC write/emulation boundary changed")
+    if not cap_profile.get("acceptance_gates") or any(
+        row.get("closed") is not False for row in cap_profile.get("acceptance_gates", [])
+    ):
+        errors.append("projected U219 physical acceptance gates are missing or overclaimed")
+    return errors
+
+
 def main() -> int:
     policy = load(POLICY_PATH)
     protocol = load(PROTOCOL_PATH)
+    hardware = load(HARDWARE_PATH)
     errors: list[str] = []
+    errors.extend(hardware_binding_errors(policy, hardware))
 
     if policy.get("policy_id") != "LESHY2-CAP-PROFILES-01":
         errors.append("unexpected Cap policy identity")
@@ -66,6 +111,30 @@ def main() -> int:
     if spi.get("U219_ST25R3916", {}).get("frequency_hz") != 10_000_000:
         errors.append("U219 ST25R3916 SPI rate must remain 10 MHz")
 
+    imported = policy.get("imported_hardware_boundary", {})
+    if imported.get("source") != str(HARDWARE_PATH.relative_to(ROOT)):
+        errors.append("U219 policy lost the imported R2 hardware-contract path")
+    if imported.get("marker") != hardware.get("hardware_marker") or imported.get("marker") != "H1-R2.31":
+        errors.append("U219 policy is not bound to the current H1-R2.31 marker")
+    expected_contacts = {
+        3: ("SCL", 31, "CAP_I2C_SCL", "TCA4307DGKR"),
+        4: ("SDA", 30, "CAP_I2C_SDA", "TCA4307DGKR"),
+        9: ("profile-neutral IRQ", 13, "CAP_IRQ", "polarity remains received-unit HIL"),
+    }
+    contacts = {row.get("contact"): row for row in imported.get("contacts", [])}
+    rear = {row.get("gpio"): row for row in hardware.get("rear_pin_map", [])}
+    for contact, (role, gpio, net, boundary) in expected_contacts.items():
+        row = contacts.get(contact, {})
+        if (row.get("role"), row.get("rf_gpio"), row.get("net")) != (role, gpio, net) \
+                or boundary not in row.get("boundary", ""):
+            errors.append(f"U219 contact {contact} imported boundary is wrong")
+        hw_row = rear.get(gpio, {})
+        if hw_row.get("net") != net or boundary not in hw_row.get("endpoint", ""):
+            if contact != 9 or hw_row.get("net") != net or "polarity interpreted only by the signed profile" not in hw_row.get("endpoint", ""):
+                errors.append(f"U219 contact {contact} does not match the generated RF-RP BSP")
+    if "ambiguity" not in imported.get("contact_7", ""):
+        errors.append("U219 contact 7 must remain an explicit hardware ambiguity")
+
     firewall = policy.get("cc1101_rx_firewall", {})
     if firewall.get("raw_spi_access_outside_firewall") is not False:
         errors.append("raw CC1101 SPI bypass is enabled")
@@ -97,6 +166,11 @@ def main() -> int:
         errors.append("policy falsely claims an ST driver integration")
     if any(row.get("status", "").find("not integrated") < 0 for row in dependencies.get("evaluated_not_integrated", [])):
         errors.append("reference dependency is presented as integrated")
+    implementation = policy.get("implementation", {})
+    if implementation.get("hardware_contract_imported") is not True:
+        errors.append("current exact H1-R2.31 hardware contract is not acknowledged")
+    if implementation.get("target_adapter_integrated") is not False:
+        errors.append("policy falsely claims a target adapter")
 
     groups = {row["name"]: row for row in protocol.get("signal_groups", [])}
     if groups.get("U219_NFC", {}).get("evidence_bits") != [12]:

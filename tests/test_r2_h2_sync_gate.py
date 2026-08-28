@@ -32,6 +32,33 @@ class R2H2SyncGateTests(unittest.TestCase):
             (ROOT / "config/hardware_integration_contract.json").read_text()
         )
 
+    def current_candidate(self):
+        h0 = copy.deepcopy(self.h0)
+        h0["pre_h2_gates"] = []
+        h0["physical_h1"]["status"] = "reviewed"
+        h0["physical_h1"]["current_h1_blockers"] = []
+        h0["physical_h1"]["pre_r2_h2_gates"] = []
+        bsp = copy.deepcopy(self.bsp)
+        integration = copy.deepcopy(self.integration)
+        bsp["authority"] = {"baseline": "R2", "allowed_as_r2_authority": True}
+        integration["authority"] = {"baseline": "R2", "allowed_as_r2_authority": True}
+        domains = []
+        for row in h0["domains"]:
+            domain = {"id": row["id"], "mpn": row["mpn"]}
+            exact = next(
+                contract for contract in h0["domain_contracts"]
+                if contract["id"] == row["id"]
+            )
+            domain["pin_map"] = copy.deepcopy(exact["pin_map"])
+            domains.append(domain)
+        bsp["bsp"]["domains"] = domains
+        integration["controllers"] = copy.deepcopy(domains)
+        reconciliation = self.checker.expected_reconciliation(h0)
+        bsp["r2_reconciliation"] = copy.deepcopy(reconciliation)
+        integration["r2_reconciliation"] = copy.deepcopy(reconciliation)
+        bsp["integration_contract"] = copy.deepcopy(integration)
+        return h0, bsp, integration
+
     def test_current_single_rp_h2_import_keeps_the_gate_closed(self):
         result = subprocess.run(
             [sys.executable, str(CHECKER_PATH)],
@@ -69,28 +96,57 @@ class R2H2SyncGateTests(unittest.TestCase):
             errors,
         )
 
-    def test_future_export_requires_six_domains_two_rps_and_exact_h0_m1(self):
-        bsp = copy.deepcopy(self.bsp)
-        integration = copy.deepcopy(self.integration)
-        bsp["authority"] = {"baseline": "R2", "allowed_as_r2_authority": True}
-        integration["authority"] = {"baseline": "R2", "allowed_as_r2_authority": True}
-        domains = [
-            {"id": row["id"], "mpn": row["mpn"]}
-            for row in self.h0["domains"]
-        ]
-        bsp["bsp"]["domains"] = domains
-        integration["controllers"] = copy.deepcopy(domains)
-        bsp["integration_contract"] = copy.deepcopy(integration)
-        bsp["r2_reconciliation"] = {
-            "source_contract": "config/h0_r2_hardware_contract.json",
-            "hardware_source_sha256": self.h0["hardware_source_sha256"],
-            "domain_ids": self.checker.DOMAIN_IDS,
-            "rp_domains": self.checker.RP_DOMAINS,
-            "interboard": self.checker.expected_m1(self.h0),
+    def test_future_export_requires_exact_current_boundary_and_zero_gates(self):
+        h0, bsp, integration = self.current_candidate()
+        self.assertTrue(self.checker.export_ready_for_r2(h0, bsp, integration))
+
+        mutations = {
+            "S3 MPN": lambda h0, bsp, integration: bsp["bsp"]["domains"][0].update(mpn="WRONG"),
+            "C5 MPN": lambda h0, bsp, integration: bsp["bsp"]["domains"][1].update(mpn="WRONG"),
+            "Pack MPN": lambda h0, bsp, integration: bsp["bsp"]["domains"][4].update(mpn="WRONG"),
+            "Safety MPN": lambda h0, bsp, integration: bsp["bsp"]["domains"][5].update(mpn="WRONG"),
+            "S3 map": lambda h0, bsp, integration: bsp["bsp"]["domains"][0]["pin_map"].pop(),
+            "C5 map": lambda h0, bsp, integration: bsp["bsp"]["domains"][1]["pin_map"].pop(),
+            "hub map": lambda h0, bsp, integration: bsp["bsp"]["domains"][3]["pin_map"].pop(),
+            "RF map": lambda h0, bsp, integration: bsp["r2_reconciliation"]["rear_pin_map"].pop(),
+            "integration S3 map": lambda h0, bsp, integration: integration["controllers"][0]["pin_map"].pop(),
+            "integration C5 MPN": lambda h0, bsp, integration: integration["controllers"][1].update(mpn="WRONG"),
+            "integration hub map": lambda h0, bsp, integration: integration["controllers"][3]["pin_map"].pop(),
+            "Pack map": lambda h0, bsp, integration: bsp["bsp"]["domains"][4]["pin_map"].pop(),
+            "Safety map": lambda h0, bsp, integration: integration["controllers"][5]["pin_map"].pop(),
+            "C5 mux": lambda h0, bsp, integration: bsp["r2_reconciliation"]["c5_sdio_service_mux"].clear(),
+            "source hash": lambda h0, bsp, integration: bsp["r2_reconciliation"]["hardware_sources"].clear(),
+            "M1": lambda h0, bsp, integration: bsp["r2_reconciliation"]["interboard"]["pin_map"].pop(),
+            "open gate": lambda h0, bsp, integration: h0["pre_h2_gates"].append("open"),
+            "physical H1 in progress": lambda h0, bsp, integration: h0["physical_h1"].update(status="in_progress"),
+            "physical H1 blocker": lambda h0, bsp, integration: h0["physical_h1"]["current_h1_blockers"].append("open"),
+            "physical pre-H2 gate": lambda h0, bsp, integration: h0["physical_h1"]["pre_r2_h2_gates"].append("open"),
         }
-        self.assertTrue(self.checker.export_ready_for_r2(self.h0, bsp, integration))
-        bsp["r2_reconciliation"]["interboard"]["pin_map"] = []
-        self.assertFalse(self.checker.export_ready_for_r2(self.h0, bsp, integration))
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                candidate_h0, candidate_bsp, candidate_integration = self.current_candidate()
+                mutate(candidate_h0, candidate_bsp, candidate_integration)
+                self.assertFalse(
+                    self.checker.export_ready_for_r2(
+                        candidate_h0, candidate_bsp, candidate_integration
+                    )
+                )
+
+    def test_integration_controllers_must_match_all_six_exact_domains(self):
+        h0, bsp, integration = self.current_candidate()
+        integration["controllers"][0]["pin_map"].pop()
+        integration["controllers"][1]["mpn"] = "WRONG"
+        bsp["integration_contract"] = copy.deepcopy(integration)
+        self.assertFalse(self.checker.export_ready_for_r2(h0, bsp, integration))
+
+    def test_exact_future_export_can_open_the_full_gate(self):
+        h0, bsp, integration = self.current_candidate()
+        gate = copy.deepcopy(self.gate)
+        gate["status"] = "reviewed_six_domain_h2_export"
+        gate["r2_h2_synchronized"] = True
+        gate["claims"]["six_domain_h2_export_available"] = True
+        gate["claims"]["r2_h2_ecad_and_firmware_synchronized"] = True
+        self.assertEqual([], self.checker.check(gate, h0, bsp, integration))
 
 
 if __name__ == "__main__":

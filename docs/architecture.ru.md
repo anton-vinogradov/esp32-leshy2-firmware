@@ -6,18 +6,21 @@
 
 Machine projection
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
-генерируется из принятого аппаратного source H0-R2 и фиксирует его SHA-256.
+генерируется из четырёх hardware sources с SHA-256: функционального H0-R2,
+точного C5 service mux, точной рабочей карты двух RP H1-R2.31 и принятой
+границы Cap-профилей U214/U219.
 Это текущий вход прошивки; контракт R1 ниже сохранён как regression evidence.
 Сохранённые BSP и integration JSON H2.0.3 явно помечены как исторический
 single-RP import и не могут быть authority для R2. [Машинный gate R2/H2](../config/r2_h2_sync_gate.json)
-остаётся закрытым, пока новый hardware export не содержит шесть доменов, оба RP
-и точную карту M1 из H0; gate не выдумывает порядок сигналов на GPIO обоих RP.
+остаётся закрытым, пока новый hardware export не содержит шесть доменов, оба RP,
+обе точные RP-карты и точную карту M1 из H0. Импортированные карты — рабочая
+pre-H2 authority; они не заявляют ECAD, target execution или HIL closure.
 
 | Образ | Физический владелец | Текущая ответственность R2 |
 |---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder/USB, прямой i8080-8 TX 32 МГц и независимый camera RX analog FPV |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native Wi-Fi 2,4/5 ГГц, IEEE 802.15.4 и IR |
-| RF RP · задний | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 и U214/LoRa Cap |
+| RF RP · задний | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 и ровно один подписанный Cap-профиль U214/U219 |
 | Hub RP · передний | второй `SC1512-A4` | fan-out S3/C5/заднего RP, microSD и три полных одновременных nRF24 |
 | Pack | `MSPM0C1106SDGS20R` | допуск элементов и защищённое выключение |
 | Safety | второй `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases и `FAULT_KILL` |
@@ -25,7 +28,7 @@ single-RP import и не могут быть authority для R2. [Машинн�
 ```mermaid
 flowchart TD
   S3["S3 · прямые UI/display/video"] <-->|"40-МГц quad-SPI + alert"| HUB["передний Hub RP · fan-out/storage/nRF24"]
-  HUB <-->|"20-МГц 4-bit SDIO"| C5["C5 · native radio/IR"]
+  HUB <-->|"4-bit SDIO · старт 20 МГц · цель 40 МГц"| C5["C5 · native radio/IR"]
   HUB <-->|"20-МГц SPI + alert"| RF["задний RF RP · RF/audio/expansion"]
   HUB <-->|"400-кГц fail-closed I²C"| PACK["Pack MSPM0"]
   HUB <-->|"400-кГц fail-closed I²C"| SAFE["Safety MSPM0"]
@@ -39,7 +42,7 @@ display или кадры analog video. Локальные для Hub microSD и
 квалифицированной одновременной нагрузкой.
 
 Display и camera одновременно используют раздельные узлы LCD TX и camera RX.
-В H1-R2.27 шлейф экрана физически направлен к антенному торцу, поэтому S3-драйвер
+В H1-R2.31 шлейф экрана физически направлен к антенному торцу, поэтому S3-драйвер
 display/touch применяет единый разворот на 180° и к адресации памяти ST77922,
 и к touch-координатам.
 Точная карта M1 определяет все 80 контактов: 25 сигналов, 14 main-power, 2 AON,
@@ -55,11 +58,33 @@ direct FM/SW или converted Airband и после reset остаётся в di
 сертифицированные VOR/ILS не заявляются.
 
 Состояние Pack и mailboxes heartbeat/lease/fault Safety используют выделенную
-I²C переднего Hub GP43/44. Safety по-прежнему локально владеет watchdog и асинхронным
+I²C1 переднего Hub GP42/43. Обязательная powered-off-Ioff граница и раздельные
+подтяжки доменов `3V3_MAIN`/AON остаются gate H2, чтобы AON mailbox не мог
+подпитать выключенный watchdog-автоматикой Hub. Safety по-прежнему локально владеет watchdog и асинхронным
 `FAULT_KILL`: IPC-hop не может создать разрешение или подавить fault. Полная
 [контрактная основа F0-R2 проведена ревью](f0-product-contracts-report.ru.md);
 [portable behavior F1-R2 также проведено ревью](f1-portable-cores-report.ru.md).
 Теперь F2-R2 переводит на R2 шесть target projects и generated BSP boundary.
+
+## Текущие транспорты R2
+
+`L2IP v1` остаётся типизированным прикладным контрактом; физические владельцы
+и маршруты R2 теперь центрированы на Hub.
+
+| Канал | Физический транспорт | Единица передачи | Обязательный результат |
+|---|---|---|---|
+| S3↔Hub RP | отдельный 40-МГц half-duplex link с четырьмя data lines + alert | bounded DMA-cell | ≥14 МБ/с qualified payload; UI/display/video остаются локальны S3 |
+| Hub RP↔C5 | native 4-bit SDIO: старт 20 МГц, цель 40 МГц | пакет до 512 байт | ≥7,5 МБ/с принимается только на 40 МГц; reset/recovery и priority остаются HIL-gates |
+| Hub RP↔RF RP | отдельный 20-МГц full-duplex SPI + alert | один full-duplex 512-байтный DMA-cell | ≥1,5 МБ/с payload, alert-to-read ≤250 мкс и control RTT ≤2 мс |
+| Hub RP↔Pack/Safety | отдельный fail-closed I²C 400 кГц | bounded command/status mailboxes | Hub не выдаёт допуск батареи и не отменяет локальные watchdog/`FAULT_KILL` |
+
+Канал C5 использует штатный Espressif FIFO/register/interrupt transport. В
+реальном модуле должен быть **ESP32-C5 revision v1.2 или новее**. GPIO7–10 идут
+напрямую; GPIO13/14 проходят через fail-safe hardware-owned mux между runtime
+DAT3/DAT2 и data-only service USB. Service VBUS асинхронно захватывает владение,
+держит Hub в reset/high-Z и переключает break-before-make; firmware не может
+обойти эту защёлку. Hub-RF использует hardware SPI1 slave DMA RP2354B. Это
+рабочие pre-H2 цели, а не реализованные или физически квалифицированные связи.
 
 ## Опциональные Cap-профили U214/U219
 
@@ -73,6 +98,13 @@ reset, при неизвестной identity или неверной подпи
 
 Поведение штатного U214 не меняется: контакт 8 — `LORA_RST_N`, контакт 10 —
 вход `BUSY`, SPI работает в mode 0, а штатный модуль остаётся только RX/GNSS.
+Общий I²C-тракт Cap задан точно, а не выведен из старой карты резервов:
+контакт 3 — SCL, через существующий `TCA4307DGKR` он приходит на GP31
+заднего RF RP как `CAP_I2C_SCL`; контакт 4 — SDA и так же приходит на
+GP30 как `CAP_I2C_SDA`. Контакт 9 приходит на нейтральную по полярности сеть
+`CAP_IRQ` GP13: DIO1 U214 активен высоким уровнем, а полярность `NFC_IRQ` U219
+остаётся HIL-gate по полученному образцу. Контакт 7 остаётся неназначенным/неоднозначным и не даёт
+firmware доступного сигнала.
 Для опционального U219 firmware сначала предустанавливает высокий уровень
 контакта 10 за отключённой I/O-границей, подаёт питание защищённой ветви при
 fail-low контакте 8, подключает I/O только после power-good и последним поднимает
@@ -132,12 +164,12 @@ CRC-32C заголовка и payload. Повтор state-changing запрос�
 | S3↔Pack | target `SYS_I2C` `0x2A` | команда 32 байта, read-only status 64 байта | S3 не управляет допуском ячеек; update-запись только в физическом KILL |
 | S3↔Safety | target `SYS_I2C` `0x2B` | команда 32 байта, read-only status 64 байта | записываются только heartbeat сессии, одна ограниченная lease группы и KILL-only update |
 
-Канал C5 использует штатный Espressif FIFO/register/interrupt transport. В
-реальном модуле должен быть **ESP32-C5 revision v1.0 или новее**: Espressif
-прямо указывает, что SDIO не поддерживается revision v0.1. Четыре выбранные
-линии сохраняют GPIO13/14 для native recovery USB. Канал RP использует SPI1
-slave DMA RP2354B; когда нужны только исходящие данные RP, S3 тактирует
-не имеющий side effect `NOP`.
+Исторический канал C5 использовал штатный Espressif FIFO/register/interrupt
+transport. Для R1 требовался **ESP32-C5 revision v1.0 или новее**, потому что
+revision v0.1 не поддерживал SDIO. Четыре выбранные линии оставляли GPIO13/14
+для native recovery USB. Исторический RP link использовал SPI1 slave DMA
+RP2354B; S3 тактировал не имеющий side effect `NOP`, когда нужны были только
+исходящие данные RP.
 [SDIO slave Espressif](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c5/api-reference/peripherals/sdio_slave.html) ·
 [требование к C5](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c5/schematic-checklist.html) ·
 [SPI/DMA API RP](https://www.raspberrypi.com/documentation/pico-sdk/hardware.html)

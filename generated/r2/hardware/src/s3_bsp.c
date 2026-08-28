@@ -5,6 +5,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D0",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = "decoder data output must be high-Z through strap sampling",
         .gpio = UINT8_C(0),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -12,6 +13,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "SYS_UI_I2C_SDA",
         .peripheral = "I2C0",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(1),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -19,6 +21,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "SYS_UI_I2C_SCL",
         .peripheral = "I2C0",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(2),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -26,6 +29,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "UI_HUB_ALERT_N",
         .peripheral = "GPIO_IRQ",
+        .endpoint = NULL,
         .gate = "wired-OR open-drain UI/touch/fault sources plus Hub RP; Hub held reset/high-Z through strap sampling",
         .gpio = UINT8_C(3),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -33,6 +37,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB0",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(4),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -40,6 +45,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D1",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(5),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -47,6 +53,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D2",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(6),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -54,6 +61,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D3",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(7),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -61,6 +69,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D4",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(8),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -68,6 +77,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB1",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(9),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -75,6 +85,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D5",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(10),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -82,6 +93,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D6",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(11),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -89,6 +101,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_D7",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(12),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -96,6 +109,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_PCLK",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(13),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -103,6 +117,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_HUB_D1",
         .peripheral = "SPI3",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(14),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -110,6 +125,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_VSYNC",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(15),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -117,6 +133,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "VIDEO_HREF",
         .peripheral = "LCD_CAM",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(16),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -124,6 +141,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_WR_N",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(17),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -131,6 +149,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB2",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(18),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -138,6 +157,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_USB_DM",
         .peripheral = "USB_SERIAL_JTAG",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(19),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -145,6 +165,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_USB_DP",
         .peripheral = "USB_SERIAL_JTAG",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(20),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -152,6 +173,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_HUB_D0",
         .peripheral = "SPI3",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(21),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -159,6 +181,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB3",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(38),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -166,6 +189,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "ENCODER_A",
         .peripheral = "PCNT0",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(39),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -173,6 +197,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB4",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(40),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -180,6 +205,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB5",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(41),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -187,6 +213,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB6",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(42),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -194,6 +221,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_HUB_D2",
         .peripheral = "SPI3",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(43),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -201,6 +229,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_HUB_D3",
         .peripheral = "SPI3",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(44),
         .direction = L2_R2_DIRECTION_INPUT_OUTPUT,
@@ -208,6 +237,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DC",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = "panel stays reset and an external strap pull preserves GPIO45 through boot sampling",
         .gpio = UINT8_C(45),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -215,6 +245,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "LCD_DB7",
         .peripheral = "LCD_CAM_TX",
+        .endpoint = NULL,
         .gate = "panel stays reset and an external strap pull preserves GPIO46 through boot sampling",
         .gpio = UINT8_C(46),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -222,6 +253,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "ENCODER_B",
         .peripheral = "PCNT0",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(47),
         .direction = L2_R2_DIRECTION_INPUT,
@@ -229,6 +261,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
     {
         .net = "S3_HUB_SCK",
         .peripheral = "SPI3",
+        .endpoint = NULL,
         .gate = NULL,
         .gpio = UINT8_C(48),
         .direction = L2_R2_DIRECTION_OUTPUT,
@@ -238,7 +271,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
 const l2_r2_domain_t l2_r2_s3_domain = {
     .id = "s3",
     .mpn = "ESP32-S3-WROOM-1U-N16R8",
-    .role = "application, direct UI, touch, encoder, direct 8-bit i8080 display path, simultaneous analog-video capture and native 2.4-GHz Wi-Fi/BLE",
+    .role = "application, S3-local UI-expander path, touch, direct encoder, direct 8-bit i8080 display path, simultaneous analog-video capture and native 2.4-GHz Wi-Fi/BLE",
     .pins = l2_r2_s3_pins,
     .groups = NULL,
     .pin_count = UINT16_C(L2_R2_S3_PIN_COUNT),

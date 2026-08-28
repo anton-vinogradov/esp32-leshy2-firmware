@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F2-R2.4 — target build qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.27; its locality-first two-board placement, Airband filter feasibility
+> H1-R2.31; its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
 > 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
 > K331 pin/power fit, exact TBS FPV antenna and independent
@@ -29,8 +29,11 @@
 > solder qualification move to H5/H7; a manufacturer package may simplify the footprint.
 > Final DFM and optional Consigned Parts/function-test review belong to H5/H6/H7;
 > RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
-> No H1 engineering blocker remains; explicit acceptance of the complete mock-up
-> is the final H1 action.
+> The structural placement audit passes with all five active U219 source-backed
+> courtyards, but four explicit H1 geometry gates remain: the complete legacy
+> Cap/evidence body register, exact support-passive values/MPNs and courtyards,
+> measured NFC-loop geometry and the installed
+> antenna swept volume. Mock-up acceptance follows those closures.
 > Live RTC6715/RX5808 cards have zero stock and no purchasable drop-in route;
 > a bare-chip receiver would add undocumented RF/IF implementation risk.
 
@@ -46,10 +49,10 @@ duplicated or given a second status here.
 | Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, rear-RP Airband receiver and integrated faults are current |
 | Optional U219 Cap policy | 🧪 [Host policy implemented](../config/u219_cap_policy.json): signed mutually exclusive U214/U219 profiles, fail-low power/direction sequencing, shared-SPI modes, CC1101 RX-only firewall and NFC poll/read allowlist are executable; `EV_N9` field generation remains compile- and runtime-blocked until VNA/HIL |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ✅ F2-R2.2: [six production-SDK roots are reviewed](../config/f2_r2_target_projects.json); RF-RP and Hub-RP use separate pin-free Pico SDK trees, entries and image identities |
-| Generated R2 BSP ownership | ✅ F2-R2.3: [six deterministic H1-R2.27 domains](../config/f2_r2_bsp_generation.json) are generated and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
-| R2 authority versus production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): retained H2.0.3 JSON is historical R1 single-RP evidence and cannot authorize R2; reopen only on six domains, two `SC1512-A4` instances and exact H0 M1 |
+| Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
+| R2 authority versus production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): exact dual-RP working maps and the C5 4-bit mux are imported as pre-H2 authority, but retained H2.0.3 JSON is historical R1 and cannot authorize R2; reopen only on a six-domain H2 export plus closed production mux/latch gates |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.4: qualify the 12 locked debug/release configurations, artifacts, maps and size gates; R1 F2/F3 evidence cannot qualify R2 |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.27 is current; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; the 30×24×8-mm dual post-PCBA K331/AWM666V bay installs exactly one receiver, retains 1.05 mm opposing clearance and leaves firmware controls/CVBS unchanged; five buffer footprints, two Schmitt-inverter footprints, 147 bypass capacitors and six ordinary 0402 resistor identities now use stocked exact or parametrically equivalent production parts without changing the BSP contract; H5/H7 own received-module/solder qualification, while explicit mock-up acceptance is the final H1 action |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.31 is current; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; U219 fits the shared slot structurally, but four geometry/evidence gates remain before complete mock-up acceptance; H5/H7 own received-module/solder qualification |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
@@ -63,11 +66,12 @@ or board emulation and is never presented as finished firmware.
 <!-- current-substep: F2-R2.4 -->
 
 ▶️ **`F2-R2.4` — current.** [F2-R2.3](../config/f2_r2_bsp_generation.json)
-generated six byte-reproducible domain descriptors from the hash-bound H1-R2.27
+generates six byte-reproducible domain descriptors from the hash-bound H1-R2.31
 projection and [proved](../config/f2_r2_bsp_consumption.json) exactly one SDK
-owner per descriptor. Exact S3 pins, exact Hub/RF-RP group membership and
-identity-only boundaries for unpublished per-pin maps remain distinguishable;
-no pin order was invented. The old five-domain tree is excluded from active R2
+owner per descriptor. Exact S3 pins, both exact 48-GPIO RP maps, the six fixed
+C5 SDIO contacts and identity-only Pack/Safety boundaries remain distinguishable;
+no unpublished pin was invented. The C5 link is four-bit: 20 MHz is bring-up,
+40 MHz is the target and ≥7.5 MB/s is accepted only at 40 MHz. The old five-domain tree is excluded from active R2
 inputs. The [R2 policy](../config/f2_r2_build_policy.json) now covers the active
 generated tree and isolated R2 roots; the
 [shell-free dispatcher](../tools/build_f2_r2_targets.py) has a complete 24-command
@@ -185,7 +189,7 @@ The exact marker and its evidence move together in every commit.
   - ✅ `F4.1.1` — [common high-speed core reviewed](../config/f4_1_1_high_speed_core_review.json): 19 ASan/UBSan scenarios; cumulative duplicate-safe bulk grants replace the unsafe absolute-credit draft.
   - ✅ `F4.1.2` — [S3 host and C5 SDIO slave endpoints reviewed](../config/f4_1_2_s3_c5_endpoint_review.json): generated pins, one-bit 20-MHz SDIO, exact ESSL and two locked debug builds; zero QEMU/PHY claims.
   - ✅ `F4.1.3` — [exact builds and fake-SDIO QEMU reviewed](../config/f4_1_3_s3_c5_qemu_review.json): four target builds, two S3 QEMU runs, six scenarios per run and zero PHY claims.
-  - ▶️ **`F4.1.4` — current:** run and review the named S3-C5 dev-board physical gate.
+  - ⛔ `F4.1.4` — not run; superseded by the R2 Hub↔C5 4-bit path.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
 - `F4.4` — inject saturation, duplicate, deadline, reset and link-loss faults.
@@ -221,7 +225,7 @@ flowchart TD
   F0 --> F1 --> F2 --> F3 --> F4 --> F5 --> F6 --> F7 --> F8 --> F10 --> F11
   F1 --> F9
   F3 --> F9 --> F10
-  H2 --> F2
+  H2 --> F5
   H7 --> F10
   H8 --> F11
 ```
@@ -261,7 +265,7 @@ flowchart TD
 ## Next action
 
 The current boundary is `F2-R2.4`. Six production-SDK roots consume six
-deterministic, H1-R2.27-bound descriptors with one owner each. Run the named
+deterministic, H1-R2.31-bound descriptors with one owner each. Run the named
 locked configure/build commands for all 12 debug/release configurations, then
 review artifacts, maps and size gates. Retained R1 BSP/build/QEMU evidence is
 historical and zero R2 target configure/build runs are claimed by F2-R2.3.

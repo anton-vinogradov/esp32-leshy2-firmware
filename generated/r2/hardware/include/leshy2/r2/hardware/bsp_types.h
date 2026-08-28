@@ -9,17 +9,21 @@ typedef enum {
     L2_R2_DIRECTION_INPUT = 0,
     L2_R2_DIRECTION_OUTPUT = 1,
     L2_R2_DIRECTION_INPUT_OUTPUT = 2,
+    L2_R2_DIRECTION_OPEN_DRAIN = 3,
+    L2_R2_DIRECTION_RESERVED = 4,
 } l2_r2_direction_t;
 
 typedef enum {
     L2_R2_MAPPING_EXACT_PINS = 0,
-    L2_R2_MAPPING_GPIO_GROUPS = 1,
-    L2_R2_MAPPING_IDENTITY_ONLY = 2,
+    L2_R2_MAPPING_PARTIAL_EXACT_PINS = 1,
+    L2_R2_MAPPING_GPIO_GROUPS = 2,
+    L2_R2_MAPPING_IDENTITY_ONLY = 3,
 } l2_r2_mapping_t;
 
 typedef struct {
     const char *net;
     const char *peripheral;
+    const char *endpoint;
     const char *gate;
     uint8_t gpio;
     l2_r2_direction_t direction;

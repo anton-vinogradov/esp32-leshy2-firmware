@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "FW-R2-H2-AUTHORITY-GATE",
-  "status": "blocked_pending_six_domain_h2_export",
+  "status": "blocked_pending_six_domain_h2_export_and_open_factory_gates",
   "checked_on": "2026-08-28",
   "active_firmware_hardware_authority": "config/h0_r2_hardware_contract.json",
   "candidate_h2_export": "config/hardware_bsp_contract.json",
@@ -11,6 +11,7 @@
   ],
   "required_h2_export": {
     "domain_ids": ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+    "all_domain_mpns_source": "config/h0_r2_hardware_contract.json#/domains",
     "rp_domains": ["rf_rp", "hub_rp"],
     "rp_mpn": "SC1512-A4",
     "interboard_source": "config/h0_r2_hardware_contract.json#/interboard",
@@ -22,15 +23,28 @@
       "returns": 25,
       "no_connect_reserve": 14
     },
-    "exact_rp_pin_map_required_here": false
+    "exact_rp_pin_map_required_here": true,
+    "working_pin_map_source": "config/h0_r2_hardware_contract.json#/hub_pin_map and #/rear_pin_map",
+    "working_pin_map_marker": "H1-R2.31",
+    "six_domain_pin_maps_source": "config/h0_r2_hardware_contract.json#/domain_contracts",
+    "integration_controllers_required_exact": true,
+    "c5_mux_source": "config/h0_r2_hardware_contract.json#/c5_sdio_service_mux",
+    "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
+    "unresolved_pre_h2_gates_required": 0,
+    "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
+    "physical_h1_status_required": "reviewed",
+    "physical_h1_blockers_required": 0,
+    "physical_pre_r2_h2_gates_required": 0
   },
   "r2_h2_synchronized": false,
-  "blocker": "The retained H2.0.3 export is the historical five-domain, single-RP G2F-3I contract and does not contain the H0-R2 M1 map.",
+  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the exact pre-H2 H1-R2.31 dual-RP map and C5 mux contract, but no six-domain H2/ECAD export; physical H1 is still in progress with explicit blockers, while live FSUSB42 routing and the service-VBUS detector/latch production implementation also remain open.",
   "claims": {
     "h0_r2_projection_is_current_firmware_authority": true,
     "historical_single_rp_import_can_authorize_r2": false,
     "six_domain_h2_export_available": false,
     "r2_h2_ecad_and_firmware_synchronized": false,
+    "exact_dual_rp_working_map_imported": true,
+    "c5_quad_sdio_mux_contract_imported": true,
     "exact_rp_pin_order_invented": false,
     "qualification_or_execution_evidence_created": false
   },

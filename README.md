@@ -34,17 +34,20 @@ from this table; internal substeps only move the exact marker.
 **Firmware is at F2-R2.4.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
-firmware repository to the reviewed hardware source by SHA-256. R2 has six
+firmware repository by SHA-256 to the functional source, exact C5 service mux
+and exact dual-RP working pin map. R2 has six
 targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and the
 TVP5150 video decoder remain front-local. Hub RP owns microSD and all three
 nRF24 paths; rear RF RP owns CC1101, voice, audio, `BROADCAST_RX`, FPV control,
-M5 and U214.
+M5 and exactly one signed U214/U219 Cap profile.
 The retained [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json)
 and [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
 are explicitly historical R1 single-RP imports and cannot authorize R2. The
 [R2/H2 authority gate](config/r2_h2_sync_gate.json) remains fail-closed until a
-new H2 export contains all six domains, both `SC1512-A4` instances and the exact
-H0-R2 M1 map; this gate does not invent either RP's per-signal pin order.
+new H2 export contains all six domains, both `SC1512-A4` instances, the exact
+H1-R2.31 RP maps and the exact H0-R2 M1 map. The working BSP contains all 48
+GPIO positions for each RP and the six fixed C5 SDIO contacts, but this is
+pre-H2 authority, not ECAD, target-build, emulator or HIL closure.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK
@@ -70,7 +73,7 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.27`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.31`:
 the locality-first two-board placement, matched outer/turned-over inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
 direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
@@ -123,9 +126,11 @@ The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
 pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
-the VNA-qualified fitted/DNP state. The current R2 mockup has no engineering
-blocker and remains in progress only until the complete exterior, true-view
-inner faces and sandwich sections are explicitly accepted; R2 target-build
+the VNA-qualified fitted/DNP state. The current R2 mockup passes its structural
+body/courtyard audit, but four explicit H1 blockers remain: the legacy Cap-body
+register, U219 support-passive MPN/courtyards, NFC pickup geometry and installed
+antenna swept volume. After those close, the complete exterior, true-view inner
+faces and sandwich sections still require explicit acceptance; R2 target-build
 qualification, KiCad layout and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position
@@ -133,11 +138,13 @@ qualification, KiCad layout and order authorization remain open.
 <!-- current-substep: F2-R2.4 -->
 
 ▶️ **`F2-R2.4` — current.** [F2-R2.3](config/f2_r2_bsp_generation.json)
-generated six deterministic H1-R2.27 domain descriptors and
+generates six deterministic H1-R2.31 domain descriptors and
 [proved one-owner consumption](config/f2_r2_bsp_consumption.json) by the six SDK
-projects. The model preserves exact S3 pins, exact Hub/RF-RP GPIO group masks and
-explicit identity-only boundaries where H1 has not published per-pin mappings;
-it invents no production pin. The retained five-domain BSP is historical and no
+projects. The model preserves exact S3 pins, both exact 48-GPIO RP maps, the six
+official fixed C5 SDIO contacts and identity-only Pack/Safety boundaries; it
+invented no unpublished pin. C5 starts at 20 MHz, targets 40 MHz and may claim
+the 7.5 MB/s payload floor only at 40 MHz. Service USB ownership is an always-on
+hardware latch, not firmware policy. The retained five-domain BSP is historical and no
 longer an active R2 input. Its
 [strict R2 policy](config/f2_r2_build_policy.json) now covers the generated R2
 tree and isolated build roots, and the
@@ -155,7 +162,8 @@ The exact marker and its evidence move together in every commit.
 
 <!-- historical-substep: F4.1.4 -->
 
-**Exact marker: `F4.1.4`** — run the named S3-C5 dev-board physical gate. Four
+**Last R1 marker: `F4.1.4` (cancelled by R2).** The planned direct S3-C5
+dev-board gate was not run. Four
 locked S3/C5 debug/release builds pass, and exact S3 QEMU executes six
 fake-SDIO traffic/fault scenarios in both configurations. Those runs prove
 application behavior above the fake boundary, not SDIO signaling, throughput,
@@ -265,7 +273,7 @@ each commit.
   - ✅ `F4.1.1` — [common high-speed core reviewed](config/f4_1_1_high_speed_core_review.json): 19 ASan/UBSan scenarios; cumulative duplicate-safe bulk grants replace the unsafe absolute-credit draft.
   - ✅ `F4.1.2` — [S3 host and C5 SDIO slave endpoints reviewed](config/f4_1_2_s3_c5_endpoint_review.json): generated pins, one-bit 20-MHz SDIO, exact ESSL and two locked debug builds; zero QEMU/PHY claims.
   - ✅ `F4.1.3` — [exact builds and fake-SDIO QEMU reviewed](config/f4_1_3_s3_c5_qemu_review.json): four target builds, two S3 QEMU runs, six scenarios per run and zero PHY claims.
-  - ▶️ **`F4.1.4` — current:** run and review the named S3-C5 dev-board physical gate.
+  - ⛔ `F4.1.4` — not run; superseded by the R2 Hub↔C5 4-bit path.
 - `F4.2` — implement and exercise S3↔RP SPI+alert.
 - `F4.3` — implement and exercise Pack/Safety I²C mailboxes.
 - `F4.4` — inject saturation, duplicate, deadline, reset and link-loss faults.
@@ -331,7 +339,7 @@ flowchart TB
   SAFE["safety MSPM0 image<br/>watchdog, thermal zones and TX leases"]
   WDG["TPS3435<br/>independent 1.6 s timeout"]
   S3 <-->|"40-MHz quad-SPI + alert"| HUB
-  HUB <-->|"20-MHz 4-bit SDIO"| C5
+  HUB <-->|"4-bit SDIO · 20-MHz bring-up · 40-MHz target"| C5
   HUB <-->|"20-MHz SPI + alert"| RP
   HUB -->|"bounded commands"| PACK
   PACK -->|"read-only state/fault"| HUB

@@ -19,7 +19,7 @@ class F2R2BspTest(unittest.TestCase):
             stderr=subprocess.STDOUT,
         )
         self.assertEqual(0, result.returncode, result.stdout)
-        self.assertIn("6 deterministic H1-R2.27 domains", result.stdout)
+        self.assertIn("6 deterministic H1-R2.31 domains", result.stdout)
         self.assertIn("0 target configure/build runs", result.stdout)
 
     def test_manifest_preserves_mapping_completeness(self):
@@ -28,9 +28,10 @@ class F2R2BspTest(unittest.TestCase):
         )
         by_id = {row["id"]: row for row in manifest["domains"]}
         self.assertEqual(("exact_pins", 33), (by_id["s3"]["mapping"], by_id["s3"]["pins"]))
-        self.assertEqual(("gpio_groups", 11), (by_id["rf_rp"]["mapping"], by_id["rf_rp"]["groups"]))
-        self.assertEqual(("gpio_groups", 12), (by_id["hub_rp"]["mapping"], by_id["hub_rp"]["groups"]))
-        for target_id in ("c5", "pack", "safety"):
+        self.assertEqual(("partial_exact_pins", 6), (by_id["c5"]["mapping"], by_id["c5"]["pins"]))
+        self.assertEqual(("exact_pins", 48), (by_id["rf_rp"]["mapping"], by_id["rf_rp"]["pins"]))
+        self.assertEqual(("exact_pins", 48), (by_id["hub_rp"]["mapping"], by_id["hub_rp"]["pins"]))
+        for target_id in ("pack", "safety"):
             self.assertEqual("identity_only", by_id[target_id]["mapping"])
             self.assertEqual(0, by_id[target_id]["pins"])
 

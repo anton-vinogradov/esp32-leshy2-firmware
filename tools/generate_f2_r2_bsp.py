@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the deterministic six-domain R2 BSP boundary from H1-R2.27."""
+"""Generate the deterministic six-domain R2 BSP boundary from H1-R2.31."""
 
 from __future__ import annotations
 
@@ -17,9 +17,12 @@ DIRECTION = {
     "in": "L2_R2_DIRECTION_INPUT",
     "out": "L2_R2_DIRECTION_OUTPUT",
     "io": "L2_R2_DIRECTION_INPUT_OUTPUT",
+    "od": "L2_R2_DIRECTION_OPEN_DRAIN",
+    "reserve": "L2_R2_DIRECTION_RESERVED",
 }
 MAPPING = {
     "exact_pins": "L2_R2_MAPPING_EXACT_PINS",
+    "partial_exact_pins": "L2_R2_MAPPING_PARTIAL_EXACT_PINS",
     "gpio_groups": "L2_R2_MAPPING_GPIO_GROUPS",
     "identity_only": "L2_R2_MAPPING_IDENTITY_ONLY",
 }
@@ -54,17 +57,21 @@ typedef enum {{
     L2_R2_DIRECTION_INPUT = 0,
     L2_R2_DIRECTION_OUTPUT = 1,
     L2_R2_DIRECTION_INPUT_OUTPUT = 2,
+    L2_R2_DIRECTION_OPEN_DRAIN = 3,
+    L2_R2_DIRECTION_RESERVED = 4,
 }} l2_r2_direction_t;
 
 typedef enum {{
     L2_R2_MAPPING_EXACT_PINS = 0,
-    L2_R2_MAPPING_GPIO_GROUPS = 1,
-    L2_R2_MAPPING_IDENTITY_ONLY = 2,
+    L2_R2_MAPPING_PARTIAL_EXACT_PINS = 1,
+    L2_R2_MAPPING_GPIO_GROUPS = 2,
+    L2_R2_MAPPING_IDENTITY_ONLY = 3,
 }} l2_r2_mapping_t;
 
 typedef struct {{
     const char *net;
     const char *peripheral;
+    const char *endpoint;
     const char *gate;
     uint8_t gpio;
     l2_r2_direction_t direction;
@@ -137,6 +144,7 @@ def render_source(planned: dict, identity: dict, pins: list[dict], groups: list[
                 "    {\n"
                 f"        .net = {c_string(pin['net'])},\n"
                 f"        .peripheral = {c_string(pin['peripheral'])},\n"
+                f"        .endpoint = {c_string(pin.get('endpoint'))},\n"
                 f"        .gate = {c_string(pin.get('gate'))},\n"
                 f"        .gpio = UINT8_C({pin['gpio']}),\n"
                 f"        .direction = {DIRECTION[pin['direction']]},\n"
@@ -199,7 +207,11 @@ def render_all(model: dict, hardware: dict) -> dict[str, str]:
 
     for planned in model["domains"]:
         domain_id = planned["id"]
-        pins = hardware.get(planned.get("source_key", ""), []) if planned["mapping"] == "exact_pins" else []
+        pins = (
+            hardware.get(planned.get("source_key", ""), [])
+            if planned["mapping"] in {"exact_pins", "partial_exact_pins"}
+            else []
+        )
         groups = hardware.get(planned.get("source_key", ""), []) if planned["mapping"] == "gpio_groups" else []
         header = f"{include_root}/leshy2/r2/hardware/{domain_id}_bsp.h"
         source = f"{source_root}/{domain_id}_bsp.c"
@@ -284,7 +296,7 @@ def main() -> int:
         for relative in stale:
             print(f"stale: {relative}", file=sys.stderr)
         return 1
-    print("F2-R2.3 generated BSP OK: 6 domains, 13 C/header files, H1-R2.27 hash locked")
+    print("F2-R2.3 generated BSP OK: 6 domains, 13 C/header files, H1-R2.31 hash locked")
     return 0
 
 

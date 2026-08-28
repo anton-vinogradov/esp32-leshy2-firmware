@@ -255,6 +255,12 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.run:
+        if current_baseline_is_r2():
+            print(
+                "ERROR: historical R1 F4.1.2 is superseded by R2; its evidence is immutable",
+                file=sys.stderr,
+            )
+            return 1
         if not args.write:
             print("ERROR: F4.1.2 run requires --write evidence", file=sys.stderr)
             return 1

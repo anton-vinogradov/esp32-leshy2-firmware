@@ -6,18 +6,22 @@
 
 The machine projection in
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
-is generated from the reviewed hardware H0-R2 source and binds its SHA-256.
+is generated from four hash-bound hardware sources: functional H0-R2, the
+exact C5 service mux, the exact H1-R2.31 dual-RP working map and the accepted
+U214/U219 Cap profile boundary.
 It is the current firmware input; the R1 contract below is regression evidence.
 The retained H2.0.3 BSP and integration JSON files are explicitly historical
 single-RP imports and are forbidden as R2 authority. The
 [machine R2/H2 gate](../config/r2_h2_sync_gate.json) stays closed until a new
-hardware export carries six domains, both RP instances and the exact H0 M1 map.
+hardware export carries six domains, both RP instances, both exact RP maps and
+the exact H0 M1 map. The imported maps are pre-H2 working authority; they do
+not claim ECAD, target execution or HIL closure.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
 | S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB, direct 32-MHz i8080-8 display TX and independent analog-FPV camera RX |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
-| RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and U214/LoRa Cap |
+| RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and exactly one signed U214/U219 Cap profile |
 | Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |
 | Pack | `MSPM0C1106SDGS20R` | cell admission and protected shutdown |
 | Safety | second `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases and `FAULT_KILL` |
@@ -25,7 +29,7 @@ hardware export carries six domains, both RP instances and the exact H0 M1 map.
 ```mermaid
 flowchart TD
   S3["S3 · direct UI/display/video"] <-->|"40-MHz quad-SPI + alert"| HUB["front Hub RP · fan-out/storage/nRF24"]
-  HUB <-->|"20-MHz 4-bit SDIO"| C5["C5 · native radio/IR"]
+  HUB <-->|"4-bit SDIO · 20-MHz bring-up · 40-MHz target"| C5["C5 · native radio/IR"]
   HUB <-->|"20-MHz SPI + alert"| RF["rear RF RP · RF/audio/expansion"]
   HUB <-->|"400-kHz fail-closed I²C"| PACK["Pack MSPM0"]
   HUB <-->|"400-kHz fail-closed I²C"| SAFE["Safety MSPM0"]
@@ -39,7 +43,7 @@ Button edges terminate on the S3-local
 target remains 20 ms under qualified concurrent load.
 
 The display and camera use the separate LCD TX and camera RX units concurrently.
-The H1-R2.27 physical orientation points the display flex toward the antenna edge;
+The H1-R2.31 physical orientation points the display flex toward the antenna edge;
 the S3 display/touch driver therefore applies one 180-degree transform to both
 ST77922 memory addressing and touch coordinates.
 The exact M1 map defines all 80 contacts: 25 live signals, 14 main-power, 2 AON,
@@ -55,11 +59,33 @@ ACARS 2400 decode. Airband TX, VDL2, wideband spectrum capture and certified
 VOR/ILS are not claimed.
 
 Pack state and the Safety heartbeat/lease/fault mailboxes use dedicated front-Hub
-GP43/44 I²C. Safety still owns watchdog service and asynchronous `FAULT_KILL`;
+GP42/43 I²C1. The required powered-off-Ioff boundary and separate
+`3V3_MAIN`/AON pull-up domains remain an H2 gate, so an AON mailbox cannot
+back-power a watchdog-shut-down Hub. Safety still owns watchdog service and asynchronous `FAULT_KILL`;
 an IPC hop cannot create permission or suppress a local fault. The complete
 [F0-R2 contract foundation is reviewed](f0-product-contracts-report.md);
 the [F1-R2 portable behavior is also reviewed](f1-portable-cores-report.md).
 F2-R2 now rebaselines the six target projects and generated BSP boundary.
+
+## Current R2 transports
+
+`L2IP v1` remains the typed application contract; the R2 physical owners and
+routes are now Hub-centered.
+
+| Link | Physical transport | Wire unit | Required behaviour |
+|---|---|---|---|
+| S3↔Hub RP | dedicated 40-MHz four-data-line half-duplex link + alert | bounded DMA cell | ≥14 MB/s qualified payload; UI/display/video remain S3-local |
+| Hub RP↔C5 | native 4-bit SDIO: 20-MHz bring-up, 40-MHz target | up to one 512-byte packet | ≥7.5 MB/s payload is accepted only at 40 MHz; reset/recovery and priority are HIL gates |
+| Hub RP↔RF RP | dedicated 20-MHz full-duplex SPI + alert | one full-duplex 512-byte DMA cell | ≥1.5 MB/s payload, ≤250 µs alert-to-read and ≤2 ms control RTT |
+| Hub RP↔Pack/Safety | dedicated fail-closed 400-kHz I²C | bounded command/status mailboxes | Hub cannot grant battery admission or override local watchdog/`FAULT_KILL` |
+
+The C5 link uses Espressif's FIFO/register/interrupt slave transport. The exact
+module lot must contain **ESP32-C5 revision v1.2 or later**. GPIO7–10 are direct;
+GPIO13/14 pass through a fail-safe hardware-owned mux between runtime DAT3/DAT2
+and data-only service USB. Service VBUS asynchronously seizes ownership, holds
+Hub reset/high-Z and uses break-before-make switching; firmware cannot override
+that latch. The Hub-RF link uses RP2354B hardware SPI1 slave DMA. These are
+working pre-H2 targets, not implemented or physically qualified links.
 
 ## Optional U214/U219 Cap profiles
 
@@ -72,6 +98,12 @@ hot in-place reinterpretation of the pins. The machine contract is
 
 The stock U214 behavior is unchanged: contact 8 is `LORA_RST_N`, contact 10 is
 the `BUSY` input, SPI uses mode 0, and the stock module remains receive/GNSS-only.
+The shared Cap I²C route is exact rather than inferred from the old reserve map:
+contact 3 is SCL and reaches rear RF RP GP31 as `CAP_I2C_SCL`; contact 4 is SDA
+and reaches GP30 as `CAP_I2C_SDA`, both through the existing `TCA4307DGKR`.
+Contact 9 reaches the profile-neutral `CAP_IRQ` on GP13: U214 DIO1 is active
+high, while U219 `NFC_IRQ` polarity remains a received-unit HIL gate.
+Contact 7 remains unassigned/ambiguous and gives firmware no usable signal.
 The optional U219 profile first preloads contact 10 high behind disabled I/O,
 powers the protected branch with contact 8 still fail-low, connects I/O only
 after power-good, and raises contact 8 `POWER_EN` last. U219 shares one SPI bus:
@@ -128,11 +160,11 @@ bus transfer or queue insertion.
 | S3↔Pack | `SYS_I2C` target `0x2A` | 32-byte command, 64-byte read-only status | S3 cannot command battery admission; update writes require physical KILL |
 | S3↔Safety | `SYS_I2C` target `0x2B` | 32-byte command, 64-byte read-only status | only session heartbeat, one bounded group lease and KILL-only update are writable |
 
-The C5 link uses Espressif's FIFO/register/interrupt slave transport. The exact
-module lot must contain **ESP32-C5 revision v1.0 or later**: Espressif documents
-SDIO as unsupported on revision v0.1. The selected four wires keep GPIO13/14
-available for native recovery USB. The RP link uses the RP2354B SPI1 slave DMA;
-S3 clocks a side-effect-free `NOP` whenever only upstream data is pending.
+The historical C5 link used Espressif's FIFO/register/interrupt slave transport.
+The R1 module lot required **ESP32-C5 revision v1.0 or later** because revision
+v0.1 did not support SDIO. Its four selected wires left GPIO13/14 to native
+recovery USB. The historical RP link used RP2354B SPI1 slave DMA; S3 clocked a
+side-effect-free `NOP` whenever only upstream data was pending.
 [Espressif SDIO slave](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c5/api-reference/peripherals/sdio_slave.html) ·
 [C5 hardware requirement](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c5/schematic-checklist.html) ·
 [RP SPI/DMA API](https://www.raspberrypi.com/documentation/pico-sdk/hardware.html)

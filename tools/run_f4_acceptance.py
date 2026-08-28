@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and progressively execute the integrated F4 evidence plan."""
+"""Validate the retained, superseded R1 F4 evidence without advancing it."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = REPO_ROOT / "config" / "f4_0_2_acceptance_matrix.json"
 SNAPSHOT_PATH = REPO_ROOT / "config" / "f4_0_2_acceptance_snapshot.json"
-CURRENT_EVIDENCE_PATH = REPO_ROOT / "config" / "f4_acceptance_current.json"
+HISTORICAL_EVIDENCE_PATH = REPO_ROOT / "config" / "f4_acceptance_current.json"
 
 
 def load(path: Path) -> dict:
@@ -258,13 +258,19 @@ def dry_run_plan() -> dict:
             )
     return {
         "stage": matrix["stage"],
+        "status": "historical_superseded_by_r2",
+        "authority": {
+            "baseline": "R1",
+            "allowed_as_r2_current_progress": False,
+        },
         "tracks": rows,
         "prototype_order_gate": matrix["prototype_order_gate"]["name"],
         "authorized_purchase": False,
+        "next": None,
     }
 
 
-def create_current_evidence() -> dict:
+def create_historical_evidence() -> dict:
     provider_specs = [
         {
             "stage": "F4.1.1",
@@ -318,8 +324,14 @@ def create_current_evidence() -> dict:
     return {
         "schema_version": 1,
         "phase": "F4",
-        "current_substep": "F4.1.4",
-        "status": "in_progress",
+        "historical_last_reviewed_substep": "F4.1.3",
+        "status": "historical_superseded_by_r2",
+        "authority": {
+            "baseline": "R1",
+            "lifecycle": "historical_integrated_evidence",
+            "allowed_as_r2_physical_authority": False,
+            "superseded_by": "config/h0_r2_hardware_contract.json",
+        },
         "matrix_sha256": sha256(MATRIX_PATH),
         "providers": providers,
         "accepted_claims": (
@@ -334,23 +346,31 @@ def create_current_evidence() -> dict:
             "s3_qemu_fake_runs": 2,
             "physical_transport_runs": 0,
         },
-        "next": "F4.1.4",
+        "superseded_physical_gate": {
+            "stage": "F4.1.4",
+            "status": "not_run_superseded_by_r2",
+            "physical_transport_runs": 0,
+        },
+        "next": None,
         "runner": "tools/run_f4_acceptance.py",
     }
 
 
-def check_current_evidence() -> list[str]:
-    if not CURRENT_EVIDENCE_PATH.is_file():
-        return ["current integrated F4 evidence does not exist"]
-    record = load(CURRENT_EVIDENCE_PATH)
+def check_historical_evidence() -> list[str]:
+    if not HISTORICAL_EVIDENCE_PATH.is_file():
+        return ["historical integrated R1 F4 evidence does not exist"]
+    record = load(HISTORICAL_EVIDENCE_PATH)
     core_path = REPO_ROOT / "config" / "f4_1_1_high_speed_core_review.json"
     endpoint_path = REPO_ROOT / "config" / "f4_1_2_s3_c5_endpoint_review.json"
     qemu_path = REPO_ROOT / "config" / "f4_1_3_s3_c5_qemu_review.json"
     errors: list[str] = []
-    if record.get("phase") != "F4" or record.get("current_substep") != "F4.1.4":
-        errors.append("integrated F4 marker changed")
-    if record.get("status") != "in_progress":
-        errors.append("partial F4 evidence may not close the top-level phase")
+    if (
+        record.get("phase") != "F4"
+        or record.get("historical_last_reviewed_substep") != "F4.1.3"
+    ):
+        errors.append("historical integrated F4 marker changed")
+    if record.get("status") != "historical_superseded_by_r2":
+        errors.append("R1 F4 evidence is not explicitly historical and superseded")
     if record.get("matrix_sha256") != sha256(MATRIX_PATH):
         errors.append("integrated F4 matrix hash changed")
     if not core_path.is_file() or not endpoint_path.is_file() or not qemu_path.is_file():
@@ -402,8 +422,14 @@ def check_current_evidence() -> list[str]:
         "physical_transport_runs": 0,
     }:
         errors.append("integrated F4 execution counts changed")
-    if record.get("next") != "F4.1.4":
-        errors.append("integrated F4 next marker changed")
+    if record.get("superseded_physical_gate") != {
+        "stage": "F4.1.4",
+        "status": "not_run_superseded_by_r2",
+        "physical_transport_runs": 0,
+    }:
+        errors.append("historical F4.1.4 non-execution boundary changed")
+    if record.get("next") is not None:
+        errors.append("superseded R1 F4 evidence may not name a next action")
     return errors
 
 
@@ -430,7 +456,7 @@ def main() -> int:
         return print_errors(errors)
     if args.check_plan:
         print(
-            "F4.0.2 acceptance plan OK: 4 transports, 6 non-substitutable "
+            "Historical R1 F4.0.2 acceptance plan OK: 4 transports, 6 non-substitutable "
             "evidence classes, 37 scenarios, 0 PHY/QEMU runs"
         )
         return 0
@@ -444,36 +470,18 @@ def main() -> int:
         print("F4.0.2 acceptance snapshot OK: 2 static checks; all execution gates remain explicit")
         return 0
     if args.snapshot:
-        if not args.write:
-            return print_errors(["snapshot execution requires --write evidence"])
-        try:
-            snapshot = create_snapshot()
-        except (OSError, RuntimeError, subprocess.SubprocessError) as error:
-            return print_errors([str(error)])
-        SNAPSHOT_PATH.write_text(
-            json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
+        return print_errors(
+            ["R1 F4 is superseded by R2; its reviewed snapshot is immutable"]
         )
-        print("F4.0.2 acceptance snapshot written: 2 static checks; 0 execution claims")
-        return 0
     if args.check_evidence:
-        errors = check_current_evidence()
+        errors = check_historical_evidence()
         if errors:
             return print_errors(errors)
-        print("F4 integrated evidence OK: F4.1.1 core, F4.1.2 endpoints and F4.1.3 fake-SDIO QEMU reviewed; PHY remains deferred")
+        print("Historical R1 F4 evidence OK: F4.1.1 core, F4.1.2 endpoints and F4.1.3 fake-SDIO QEMU reviewed; F4.1.4 was not run and R2 supersedes this lifecycle")
         return 0
-    if not args.write:
-        return print_errors(["integrated execution requires --write evidence"])
-    try:
-        record = create_current_evidence()
-    except (OSError, RuntimeError, subprocess.SubprocessError) as error:
-        return print_errors([str(error)])
-    CURRENT_EVIDENCE_PATH.write_text(
-        json.dumps(record, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
+    return print_errors(
+        ["R1 F4 is superseded by R2; F4.1.1-F4.1.3 evidence is immutable"]
     )
-    print("F4 integrated evidence written: core, endpoints and fake-SDIO QEMU reviewed; phase remains in progress")
-    return 0
 
 
 if __name__ == "__main__":

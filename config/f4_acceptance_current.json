@@ -1,9 +1,15 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "current_substep": "F4.1.4",
-  "status": "in_progress",
-  "matrix_sha256": "1c1b5db5f283a92174d525b9c937a3be0f0bfbfec7adfeec649a096639e635d2",
+  "historical_last_reviewed_substep": "F4.1.3",
+  "status": "historical_superseded_by_r2",
+  "authority": {
+    "baseline": "R1",
+    "lifecycle": "historical_integrated_evidence",
+    "allowed_as_r2_physical_authority": false,
+    "superseded_by": "config/h0_r2_hardware_contract.json"
+  },
+  "matrix_sha256": "3459cb97d10ad209682d819477bc5d16b5f4c9459e5aae2980369f72ac2d0b42",
   "providers": [
     {
       "stage": "F4.1.1",
@@ -70,6 +76,11 @@
     "s3_qemu_fake_runs": 2,
     "physical_transport_runs": 0
   },
-  "next": "F4.1.4",
+  "superseded_physical_gate": {
+    "stage": "F4.1.4",
+    "status": "not_run_superseded_by_r2",
+    "physical_transport_runs": 0
+  },
+  "next": null,
   "runner": "tools/run_f4_acceptance.py"
 }

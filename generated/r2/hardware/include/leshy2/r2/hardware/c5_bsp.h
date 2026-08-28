@@ -5,7 +5,13 @@
 #include "leshy2/r2/hardware/bsp_types.h"
 
 enum {
-    L2_R2_C5_PIN_COUNT = 0,
+    L2_R2_C5_SDIO_DAT1 = 7,
+    L2_R2_C5_SDIO_DAT0 = 8,
+    L2_R2_C5_SDIO_CLK = 9,
+    L2_R2_C5_SDIO_CMD = 10,
+    L2_R2_C5_SDIO_DAT3_USB_DM = 13,
+    L2_R2_C5_SDIO_DAT2_USB_DP = 14,
+    L2_R2_C5_PIN_COUNT = 6,
     L2_R2_C5_GROUP_COUNT = 0,
 };
 

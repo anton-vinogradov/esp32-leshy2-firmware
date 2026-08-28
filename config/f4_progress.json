@@ -1,8 +1,15 @@
 {
   "schema_version": 1,
   "phase": "F4",
-  "status": "in_progress",
-  "current_substep": "F4.1.4",
+  "status": "historical_superseded_by_r2",
+  "authority": {
+    "baseline": "R1",
+    "historical_last_reviewed_substep": "F4.1.3",
+    "superseded_planned_substep": "F4.1.4",
+    "allowed_as_r2_current_progress": false,
+    "superseded_by": "config/firmware_roadmap_state.json"
+  },
+  "historical_last_reviewed_substep": "F4.1.3",
   "updated_on": "2026-08-26",
   "substeps": {
     "F4.0.0": {
@@ -53,11 +60,11 @@
       "result": "four locked S3/C5 debug/release builds pass and exact S3 QEMU executes six deterministic fake-SDIO traffic/fault scenarios in both configurations without claiming PHY behavior",
       "artifact": "config/f4_1_3_s3_c5_qemu_review.json"
     },
-    "F4.1.4": {"status": "current", "goal": "run and review the named S3-C5 dev-board physical gate"},
-    "F4.2": {"status": "waiting_for_F4.0", "goal": "implement and exercise S3-RP SPI plus alert"},
-    "F4.3": {"status": "waiting_for_F4.0", "goal": "implement and exercise Pack/Safety I2C mailboxes"},
-    "F4.4": {"status": "waiting", "goal": "inject saturation, duplicate, deadline, reset and link-loss faults"},
-    "F4.5": {"status": "waiting", "goal": "reconcile target evidence and publish the global F4 result"}
+    "F4.1.4": {"status": "not_run_superseded_by_r2", "goal": "historical direct S3-C5 dev-board physical gate; never executed"},
+    "F4.2": {"status": "superseded_before_execution", "goal": "historical R1 S3-RP SPI plus alert plan"},
+    "F4.3": {"status": "superseded_before_execution", "goal": "historical R1 Pack/Safety I2C mailbox plan"},
+    "F4.4": {"status": "superseded_before_execution", "goal": "historical R1 transport fault-injection plan"},
+    "F4.5": {"status": "superseded_before_execution", "goal": "historical R1 global F4 closure plan"}
   },
   "reviewed_claims": {
     "production_transports": 4,
@@ -82,5 +89,5 @@
     "qemu_phy_paths": 0,
     "physical_transport_runs": 0
   },
-  "next": "execute the named S3-C5 development-board fixture and capture physical SDIO signaling, throughput, timing margin, reset/interrupt recovery and C5 USB coexistence without substituting QEMU evidence"
+  "next": null
 }

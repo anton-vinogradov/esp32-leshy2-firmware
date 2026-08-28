@@ -5,7 +5,7 @@
 
 > **▶️ Текущая граница: F2-R2.4 — квалификация target builds.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
-> Железо находится на H1-R2.27; актуальное locality-first размещение двух плат,
+> Железо находится на H1-R2.31; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
 > архитектура 3V3_MAIN 3,75 А continuous / 4,25 А step, официальные схема
 > включения K331/функции 14 контактов/таблица 24 каналов, пиновая/силовая
@@ -31,8 +31,11 @@
 > пакет производителя может только упростить footprint.
 > Финальный DFM, необязательные Consigned Parts и фабричный function test относятся к H5/H6/H7;
 > квалификация RF/video и запасной антенны остаётся работой H3/H5/H6/H8.
-> Инженерных блокеров H1 больше нет; последнее действие H1 — явное принятие
-> полного мокапа.
+> Структурный аудит компоновки проходит со всеми пятью source-backed courtyard
+> активных U219-компонентов, но остаются четыре явных geometry-gate H1: полный
+> регистр прежних корпусов Cap/evidence, точные значения/MPN и courtyards
+> вспомогательных пассивов, измеренная геометрия NFC-петли и swept volume
+> установленной антенны. Принятие полного мокапа следует после их закрытия.
 > Живые карточки RTC6715/RX5808 имеют нулевой склад и не дают доступной drop-in
 > замены; bare-chip-приёмник добавил бы недокументированный RF/IF-риск.
 
@@ -48,10 +51,10 @@ firmware-репозитория. Пересечения с железом ука
 | Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, Airband заднего RP и integrated faults актуальны |
 | Политика опционального U219 Cap | 🧪 [Host policy реализована](../config/u219_cap_policy.json): исполняются подписанные взаимоисключающие профили U214/U219, fail-low power/direction sequence, режимы общей SPI, RX-only firewall CC1101 и allowlist NFC poll/read; генерация поля `EV_N9` остаётся заблокированной compile/runtime до VNA/HIL |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
-| Владение generated BSP R2 | ✅ F2-R2.3: [шесть детерминированных доменов H1-R2.27](../config/f2_r2_bsp_generation.json) сгенерированы, и [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json); сохранённый BSP пяти доменов только исторический |
-| Authority R2 и production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): сохранённый JSON H2.0.3 — историческое single-RP evidence R1 и не может авторизовать R2; открыть gate можно только при шести доменах, двух `SC1512-A4` и точной M1 из H0 |
+| Владение generated BSP R2 | ✅ F2-R2.3 обновлён на F2-R2.4: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат точные карты S3 и двух RP плюс шесть фиксированных C5 SDIO pins; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
+| Authority R2 и production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): точные рабочие карты двух RP и C5 4-bit mux импортированы как pre-H2 authority, но сохранённый H2.0.3 — исторический R1 и не авторизует R2; открыть только после six-domain H2 export и закрытия production gates mux/latch |
 | Target builds, maps и S3 QEMU | ▶️ F2-R2.4: квалифицировать 12 locked debug/release configurations, artifacts, maps и size gates; evidence F2/F3 R1 не квалифицирует R2 |
-| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.27 сейчас; стабильная внешняя шелкография указывает роль каждой платы, `R2-EVT1` и `REV A`, а `H1-R2.xx` остаётся только в документации; десять SMA разделены 5+5, задний FPV MMCX не имеет хвоста в межплатный просвет, прямые i8080-8 32 МГц и camera RX остаются локальны S3, а шлейф экрана направлен к антенному торцу, поэтому F5/F6 разворачивают память ST77922 и touch-координаты на 180°; TVP5150 остаётся спереди, а точный M1 на 80 контактов несёт один CVBS, 14 настоящих NC-резервов и не принимает механическую нагрузку корпуса; двойная post-PCBA-зона K331/AWM666V 30×24×8 мм принимает ровно один приёмник, сохраняет 1,05 мм встречного зазора и не меняет firmware controls/CVBS; пять корпусов буферов, два корпуса Schmitt-инверторов, 147 развязывающих конденсаторов и шесть номиналов обычных 0402-резисторов теперь используют складские точные либо параметрически равноценные серийные детали без изменения BSP-контракта; H5/H7 отвечают за квалификацию полученного модуля и пайки, а явное принятие мокапа — последнее действие H1 |
+| Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.31 сейчас; точная легальная fixed-mux карта двух RP даёт задний I2C0 на GP4/5, независимый Cap I2C1 на GP30/31 и M5-профиль PIO2 на GP7/8; стабильная внешняя шелкография указывает роль каждой платы, `R2-EVT1` и `REV A`, а `H1-R2.xx` остаётся только в документации; десять SMA разделены 5+5, задний FPV MMCX не имеет хвоста в межплатный просвет, прямые i8080-8 32 МГц и camera RX остаются локальны S3, а шлейф экрана направлен к антенному торцу, поэтому F5/F6 разворачивают память ST77922 и touch-координаты на 180°; TVP5150 остаётся спереди, а точный M1 на 80 контактов несёт один CVBS, 14 настоящих NC-резервов и не принимает механическую нагрузку корпуса; U219 структурно помещается в общий слот, но до принятия полного мокапа остаются четыре geometry/evidence gate; H5/H7 отвечают за квалификацию полученного модуля и пайки |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
@@ -65,11 +68,12 @@ peripheral или board emulation и никогда не показываетс�
 <!-- current-substep: F2-R2.4 -->
 
 ▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](../config/f2_r2_bsp_generation.json)
-сгенерировал шесть побайтно воспроизводимых descriptors из связанной hash
-проекции H1-R2.27 и [доказал](../config/f2_r2_bsp_consumption.json) ровно одного
-SDK owner для каждого. Точные pins S3, точный состав GPIO groups Hub/RF-RP и
-identity-only boundaries неопубликованных per-pin maps различаются явно; порядок
-сигналов не выдумывался. Старое tree пяти доменов исключено из активных R2
+генерирует шесть побайтно воспроизводимых descriptors из связанной hash
+проекции H1-R2.31 и [доказал](../config/f2_r2_bsp_consumption.json) ровно одного
+SDK owner для каждого. Точные pins S3, обе точные 48-GPIO карты RP, шесть
+фиксированных C5 SDIO contacts и identity-only границы Pack/Safety различаются
+явно; неопубликованный pin не придуман. C5 link четырёхбитный: 20 МГц —
+bring-up, 40 МГц — target, а ≥7,5 МБ/с принимается только на 40 МГц. Старое tree пяти доменов исключено из активных R2
 inputs. [Policy R2](../config/f2_r2_build_policy.json) теперь охватывает активное
 generated tree и изолированные roots R2; у
 [shell-free dispatcher](../tools/build_f2_r2_targets.py) есть полный dry plan из
@@ -188,7 +192,7 @@ execution jobs.
   - ✅ `F4.1.1` — [проведён общий high-speed core](../config/f4_1_1_high_speed_core_review.json): 19 сценариев ASan/UBSan; unsafe absolute-credit draft заменён накопительными duplicate-safe grants.
   - ✅ `F4.1.2` — [проведены endpoints S3 host и C5 SDIO slave](../config/f4_1_2_s3_c5_endpoint_review.json): generated pins, однобитный SDIO 20 МГц, точный ESSL и две locked debug builds; QEMU/PHY claims — ноль.
   - ✅ `F4.1.3` — [проведены exact builds и fake-SDIO QEMU](../config/f4_1_3_s3_c5_qemu_review.json): четыре target builds, два S3 QEMU runs, по шесть сценариев и ноль PHY claims.
-  - ▶️ **`F4.1.4` — сейчас:** выполнить и провести ревью физического dev-board gate S3-C5.
+  - ⛔ `F4.1.4` — не выполнен; заменён R2-трактом Hub↔C5 4-bit.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
 - `F4.4` — внедрить saturation, duplicate, deadline, reset и link-loss faults.
@@ -224,7 +228,7 @@ flowchart TD
   F0 --> F1 --> F2 --> F3 --> F4 --> F5 --> F6 --> F7 --> F8 --> F10 --> F11
   F1 --> F9
   F3 --> F9 --> F10
-  H2 --> F2
+  H2 --> F5
   H7 --> F10
   H8 --> F11
 ```
@@ -264,7 +268,7 @@ flowchart TD
 ## Следующее действие
 
 Текущая граница — `F2-R2.4`. Шесть production-SDK roots потребляют шесть
-детерминированных descriptors H1-R2.27 с одним owner каждый. Нужно выполнить
+детерминированных descriptors H1-R2.31 с одним owner каждый. Нужно выполнить
 названные locked configure/build commands всех 12 debug/release configurations,
 затем проверить artifacts, maps и size gates. Сохранённые BSP/build/QEMU evidence
 R1 остаются историческими; F2-R2.3 не заявляет ни одного R2 target configure/build.

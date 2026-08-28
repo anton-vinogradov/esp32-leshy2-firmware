@@ -35,16 +35,20 @@
 **Прошивка находится на F2-R2.4.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
-репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
+репозиторий прошивки по SHA-256 с функциональным source, точным C5 service mux
+и точной рабочей распиновкой двух RP. В R2 шесть
 targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и декодер
 TVP5150 остаются локальными на передней плате. Hub RP владеет microSD и всеми
-тремя nRF24; задний RF RP — CC1101, voice, audio, `BROADCAST_RX`, FPV, M5 и U214.
+тремя nRF24; задний RF RP — CC1101, voice, audio, `BROADCAST_RX`, FPV, M5 и
+ровно один подписанный профиль Cap U214/U219.
 Сохранённые [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json) и
 [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
 явно помечены как исторический single-RP import R1 и не могут авторизовать R2.
 [Gate authority R2/H2](config/r2_h2_sync_gate.json) остаётся fail-closed, пока
-новый export H2 не содержит шесть доменов, оба `SC1512-A4` и точную M1 из H0-R2;
-при этом gate не выдумывает порядок сигналов на GPIO обоих RP.
+новый export H2 не содержит шесть доменов, оба `SC1512-A4`, точные RP-карты
+H1-R2.31 и точную M1 из H0-R2. Рабочий BSP уже содержит все 48 GPIO каждого
+RP и шесть фиксированных C5 SDIO contacts, но это pre-H2 authority, а не
+закрытие ECAD, target-build, emulator или HIL.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,
@@ -72,7 +76,7 @@ integrated faults Hub/Pack/Safety. Его 34 сценария проходят n
 host runs; это portable evidence, а не target build.
 Обязательный receive-only Airband использует GP35/36 заднего RP, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Железо
-находится на `H1-R2.27`: сгенерированы locality-first размещение двух плат,
+находится на `H1-R2.31`: сгенерированы locality-first размещение двух плат,
 согласованные внешние и прямые внутренние стороны после переворота плат, сервисный доступ и проверка
 вертикального FPV-разъёма. S3 сохраняет прямые i8080-8 32 МГц, camera RX,
 обычные UI, энкодер и USB; M1 имеет точную карту 80 контактов, 14 NC-резервов и отдельную
@@ -125,8 +129,10 @@ H5-проверка доступа пальцев.
 группах сигналов; динамическое доказательство и проверка в корпусе остаются
 gate H3. Для фильтра Airband H3 использует bounded pre-layout-паразитики, H6
 повторяет routed extraction до заказа, а H8 выбирает VNA-qualified fitted/DNP-state.
-У текущего мокапа R2 нет инженерных блокеров; он остаётся in progress только до
-явного принятия полного внешнего вида, прямых внутренних сторон и разрезов;
+Текущий мокап R2 проходит structural body/courtyard audit, но сохраняет четыре
+явных H1-блокера: регистр прежних Cap-корпусов, MPN/courtyards вспомогательных
+пассивов U219, геометрию NFC pickup и swept volume установленной антенны. После
+их закрытия ещё требуется явное принятие полного внешнего вида, прямых внутренних сторон и разрезов;
 Квалификация target builds R2, KiCad layout и разрешение заказа остаются открыты.
 
 ### Текущая фаза F2-R2 — детальная позиция
@@ -134,11 +140,13 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 <!-- current-substep: F2-R2.4 -->
 
 ▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](config/f2_r2_bsp_generation.json)
-сгенерировал шесть детерминированных descriptors H1-R2.27, а
+генерирует шесть детерминированных descriptors H1-R2.31, а
 [one-owner проверка](config/f2_r2_bsp_consumption.json) связала каждый с одним
-из шести SDK projects. Модель сохраняет точные pins S3, точные GPIO group masks
-Hub/RF-RP и явные identity-only boundaries там, где H1 ещё не публиковал
-per-pin mapping; production pins не выдумываются. Старый BSP пяти доменов
+из шести SDK projects. Модель сохраняет точные pins S3, обе точные 48-GPIO
+карты RP, шесть официальных фиксированных C5 SDIO contacts и identity-only
+границы Pack/Safety; неопубликованный pin не придуман. C5 стартует на 20 МГц,
+целится в 40 МГц, а floor 7,5 МБ/с можно принять только на 40 МГц. Service USB
+принадлежит always-on аппаратной защёлке, а не firmware policy. Старый BSP пяти доменов
 остаётся историческим и больше не является активным R2 input.
 [Строгая policy R2](config/f2_r2_build_policy.json) теперь охватывает generated
 tree R2 и изолированные build roots, а
@@ -155,8 +163,8 @@ artifact verification и target execution; квалификация остаёт
 
 <!-- historical-substep: F4.1.4 -->
 
-**Точный маркер: `F4.1.4`** — выполнить названный физический dev-board gate
-S3-C5. Четыре locked debug/release builds S3/C5 проходят, а точный S3 QEMU
+**Последний R1-маркер: `F4.1.4` (отменён R2).** Запланированный физический
+dev-board gate прямого S3-C5 не выполнялся. Четыре locked debug/release builds S3/C5 проходят, а точный S3 QEMU
 исполняет шесть fake-SDIO traffic/fault сценариев в обеих конфигурациях. Эти
 прогоны доказывают поведение приложения над fake boundary, но не SDIO signal,
 throughput, timing или сосуществование с C5 USB. Маркер и evidence меняются
@@ -265,7 +273,7 @@ throughput, timing или сосуществование с C5 USB. Маркер
   - ✅ `F4.1.1` — [проведён общий high-speed core](config/f4_1_1_high_speed_core_review.json): 19 сценариев ASan/UBSan; unsafe absolute-credit draft заменён накопительными duplicate-safe grants.
   - ✅ `F4.1.2` — [проведены endpoints S3 host и C5 SDIO slave](config/f4_1_2_s3_c5_endpoint_review.json): generated pins, однобитный SDIO 20 МГц, точный ESSL и две locked debug builds; QEMU/PHY claims — ноль.
   - ✅ `F4.1.3` — [проведены exact builds и fake-SDIO QEMU](config/f4_1_3_s3_c5_qemu_review.json): четыре target builds, два S3 QEMU runs, по шесть сценариев и ноль PHY claims.
-  - ▶️ **`F4.1.4` — сейчас:** выполнить и провести ревью физического dev-board gate S3-C5.
+  - ⛔ `F4.1.4` — не выполнен; заменён R2-трактом Hub↔C5 4-bit.
 - `F4.2` — реализовать и исполнить SPI+alert S3↔RP.
 - `F4.3` — реализовать и исполнить I²C mailboxes Pack/Safety.
 - `F4.4` — внедрить saturation, duplicate, deadline, reset и link-loss faults.
@@ -333,7 +341,7 @@ flowchart TB
   SAFE["safety MSPM0 image<br/>watchdog, температурные зоны и TX lease"]
   WDG["TPS3435<br/>независимый timeout 1,6 с"]
   S3 <-->|"40-МГц quad-SPI + alert"| HUB
-  HUB <-->|"20-МГц 4-bit SDIO"| C5
+  HUB <-->|"4-bit SDIO · старт 20 МГц · цель 40 МГц"| C5
   HUB <-->|"20-МГц SPI + alert"| RP
   HUB -->|"bounded commands"| PACK
   PACK -->|"read-only state/fault"| HUB
