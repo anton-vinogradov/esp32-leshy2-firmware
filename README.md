@@ -300,6 +300,9 @@ describes the resulting product and its implementation.
 - 2.4/5-GHz Wi-Fi, BLE, ESP-NOW, IEEE 802.15.4, Sub-GHz, broadcast RX,
   VHF/UHF voice, IR, stock U214 LoRa RX/GNSS and exact evidence-qualified
   `LESHY2-LORA-CAP-01-EU868/US915` RX/TX profiles.
+- An optional signed U219 profile: CC1101 is hard RX-only and NFC is limited to
+  reader/poller read operations. Its 13.56-MHz field remains disabled until the
+  independent `EV_N9` detector passes VNA and HIL qualification.
 - Import, export and backup of owner profiles; a locally paired phone may supply
   occasional long-form text.
 

@@ -47,8 +47,19 @@ def render(data: dict) -> str:
 def validate(data: dict) -> None:
     if data.get("export_id") != "LESHY2-H2-HWFW-1":
         raise ValueError("unexpected hardware export identity")
-    if data.get("stage") != "H2.0.3" or data.get("status") != "reviewed_hwfw_export":
-        raise ValueError("firmware may consume only the reviewed H2.0.3 export")
+    if (
+        data.get("stage") != "H2.0.3"
+        or data.get("status") != "reviewed_historical_r1_hwfw_export"
+    ):
+        raise ValueError(
+            "firmware may retain only the reviewed historical R1 H2.0.3 export"
+        )
+    authority = data.get("authority", {})
+    if (
+        authority.get("generation") != "historical_single_rp_r1"
+        or authority.get("current_r2_authority") is not False
+    ):
+        raise ValueError("historical H2 export must remain forbidden as R2 authority")
     integration = data.get("integration_contract", {})
     if integration.get("contract_id") != "LESHY2-HWFW-1":
         raise ValueError("unexpected integration-contract identity")
@@ -80,16 +91,12 @@ def validate(data: dict) -> None:
 def historical_outputs(data: dict) -> tuple[dict, dict]:
     """Return stable firmware copies with an explicit non-R2 authority marker."""
 
-    bsp: dict = {}
-    for key, value in data.items():
-        bsp[key] = copy.deepcopy(value)
-        if key == "export_id":
-            bsp["authority"] = copy.deepcopy(HISTORICAL_BSP_AUTHORITY)
-    integration: dict = {}
-    for key, value in bsp["integration_contract"].items():
-        integration[key] = copy.deepcopy(value)
-        if key == "review_status":
-            integration["authority"] = copy.deepcopy(HISTORICAL_INTEGRATION_AUTHORITY)
+    bsp = copy.deepcopy(data)
+    # Never trust an authority marker copied from the hardware-side evidence.
+    # The firmware import has its own explicit, fail-closed lifecycle contract.
+    bsp["authority"] = copy.deepcopy(HISTORICAL_BSP_AUTHORITY)
+    integration = copy.deepcopy(bsp["integration_contract"])
+    integration["authority"] = copy.deepcopy(HISTORICAL_INTEGRATION_AUTHORITY)
     bsp["integration_contract"] = copy.deepcopy(integration)
     return bsp, integration
 

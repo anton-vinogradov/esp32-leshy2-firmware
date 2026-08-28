@@ -32,6 +32,9 @@
     "f2_r2_one_owner_bsp_consumption_reviewed": true,
     "f2_r2_build_policy_reviewed": true,
     "f2_r2_shell_free_dispatcher_reviewed": true,
+    "u219_cap_host_policy_implemented": true,
+    "u219_cap_target_adapter_integrated": false,
+    "u219_nfc_field_vna_hil_gate_closed": false,
     "r2_target_configure_runs": 0,
     "r2_target_build_runs": 0,
     "r2_artifact_verify_runs": 0

@@ -7,11 +7,11 @@
   "source_identity": {
     "export_id": "LESHY2-H2-HWFW-1",
     "hardware_stage": "H2.0.3",
-    "hardware_status": "reviewed_hwfw_export",
+    "hardware_status": "reviewed_historical_r1_hwfw_export",
     "contract_id": "LESHY2-HWFW-1",
     "review_status": "h2_0_3_reviewed",
-    "source_sha256": "9d451d0db45535d43971bd3e1feccbc8624302afb26f0a101b5bb3ed552d9ac8",
-    "integration_sha256": "7f0fb4904a81851e3aa2a21ac15181b49245ca96a4608cdb9e9bd2ca735fcab0"
+    "source_sha256": "50b47bfde47d1e4e803a68a163364c09905638ffc68408841f51ae3c1e8b05c7",
+    "integration_sha256": "aaabff93c89531afb97f81c431df5a6a5720e644b95ec28c4c74a7c4eacf5755"
   },
   "domains": [
     {

@@ -2,12 +2,12 @@
   "schema_version": 1,
   "stage": "F4.0.2",
   "status": "reviewed_plan",
-  "matrix_sha256": "1c1b5db5f283a92174d525b9c937a3be0f0bfbfec7adfeec649a096639e635d2",
+  "matrix_sha256": "3459cb97d10ad209682d819477bc5d16b5f4c9459e5aae2980369f72ac2d0b42",
   "locked_inputs": [
     {
       "id": "L2IP",
       "path": "config/interdomain_protocol.json",
-      "sha256": "dd28de59520c7822bd74fb88d9b52960ec27a1c369e474eb566cd97b58e14f53"
+      "sha256": "75b780f477cf26e959364608692c3810be06e63c64e6146220b4046f38120d88"
     },
     {
       "id": "F4_CAPABILITY",

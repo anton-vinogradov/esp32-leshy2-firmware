@@ -48,7 +48,7 @@ static void test_reset_and_physical_rearm(void)
     assert(state.first_fault == L2_FAULT_NONE);
 }
 
-static void test_full_nrf_mix_and_foreign_evidence(void)
+static void test_full_nrf_mix_and_u219_field_evidence(void)
 {
     l2_safety_t state = running_state();
     assert(l2_safety_grant_lease(&state, L2_GROUP_NRF24, 100, 0));
@@ -65,6 +65,17 @@ static void test_full_nrf_mix_and_foreign_evidence(void)
     assert(state.first_fault == L2_FAULT_UNEXPECTED_EVIDENCE);
     assert(strcmp(l2_fault_text(state.first_fault),
                   "Unexpected physical transmission detected") == 0);
+
+    state = running_state();
+    assert(l2_group_evidence_mask(L2_GROUP_U219_NFC) == 0x1000);
+    assert(l2_safety_grant_lease(&state, L2_GROUP_U219_NFC, 100, 0));
+    l2_safety_set_evidence(&state, 0x1000);
+    tick_to(&state, 40);
+    assert(!state.fault_kill_asserted);
+    l2_safety_revoke_lease(&state, 40);
+    l2_safety_set_evidence(&state, 0);
+    tick_to(&state, 60);
+    assert(!state.fault_kill_asserted);
 }
 
 static void test_duplicate_or_stale_heartbeat_does_not_extend_session(void)
@@ -137,7 +148,7 @@ static void test_loop_deadline_is_fail_closed(void)
 int main(void)
 {
     test_reset_and_physical_rearm();
-    test_full_nrf_mix_and_foreign_evidence();
+    test_full_nrf_mix_and_u219_field_evidence();
     test_duplicate_or_stale_heartbeat_does_not_extend_session();
     test_lease_expiry_is_fail_closed();
     test_revoke_grace_and_stuck_rf();

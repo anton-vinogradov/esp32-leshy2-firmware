@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "policy_id": "LESHY2-CAP-PROFILES-01",
+  "status": "host_policy_implemented_hardware_gate_open",
+  "updated_on": "2026-08-28",
+  "owner": "rf_rp",
+  "sources": [
+    {
+      "id": "M5_U214_PINMAP",
+      "url": "https://docs.m5stack.com/en/cap/Cap_LoRa-1262",
+      "supports": "U214 Cap-Bus pin 8 is LoRa reset, pin 10 is BUSY input and the shared radio uses SPI"
+    },
+    {
+      "id": "M5_U219_PINMAP",
+      "url": "https://docs.m5stack.com/en/cap/Cap_CC1101",
+      "supports": "work-in-progress U219 pin map: pin 8 POWER_EN, pin 10 NFC_CS, shared SPI, CC1101 and ST25R3916"
+    },
+    {
+      "id": "M5_U219_NFC_SPI",
+      "url": "https://docs.m5stack.com/en/arduino/projects/cap/cap_cc1101",
+      "supports": "M5 example selects ST25R3916 SPI mode 1 at 10 MHz"
+    },
+    {
+      "id": "TI_CC1101",
+      "url": "https://www.ti.com/lit/ds/symlink/cc1101.pdf",
+      "supports": "CC1101 SPI commands, strobes, MCSM0 pin control and MCSM1 automatic post-RX states"
+    },
+    {
+      "id": "ST_ST25R3916",
+      "url": "https://www.st.com/resource/en/datasheet/st25r3916.pdf",
+      "supports": "ST25R3916 SPI and 13.56-MHz reader field behavior"
+    },
+    {
+      "id": "M5_UNIT_NFC_SOURCE",
+      "url": "https://github.com/m5stack/M5Unit-NFC",
+      "supports": "MIT-licensed reference API; U219 support is marked for future use and is not integrated here"
+    }
+  ],
+  "reset_and_unknown": {
+    "profile": "UNKNOWN",
+    "cap_branch_power": false,
+    "io_connected": false,
+    "pin8_level": "low",
+    "pin10_direction": "input",
+    "pin10_output_preload": "high",
+    "pin14_chip_select": "high",
+    "reason": "the same defaults hold U214 in reset, keep U219 POWER_EN fail-low and prevent back-power before a signed profile is verified"
+  },
+  "selection": {
+    "mutually_exclusive": true,
+    "signature_required": true,
+    "unknown_or_invalid_result": "remain off in U214-safe reset defaults",
+    "hot_profile_change": false,
+    "profile_change_requires": "full shutdown, I/O isolation and a fresh signed-profile verification"
+  },
+  "profiles": [
+    {
+      "id": "U214",
+      "signed_profile": "LESHY2-CAP-U214-01",
+      "scope": "unchanged stock U214 receive/GNSS policy",
+      "pin8_active_role": "LORA_RST_N output",
+      "pin10_active_role": "LORA_BUSY input",
+      "spi_targets": ["SX1262_MODE0"],
+      "tx_policy": "unchanged: stock U214 remains receive/GNSS-only because it has no qualified physical TX evidence"
+    },
+    {
+      "id": "U219",
+      "signed_profile": "LESHY2-CAP-U219-RX-NFC-01",
+      "scope": "optional CC1101 receive plus NFC reader/poller",
+      "pin8_active_role": "POWER_EN output active high",
+      "pin10_active_role": "NFC_CS output active low",
+      "spi_targets": ["CC1101_MODE0", "ST25R3916_MODE1"],
+      "cc1101_policy": "hard RX-only command firewall",
+      "nfc_policy": "poll and read only; write and card emulation are forbidden",
+      "tx_policy": "CC1101 TX is forbidden; the NFC reader field requires its own physical-field lease and evidence"
+    }
+  ],
+  "power_and_direction_sequence": [
+    "verify exactly one signed profile while branch power and I/O connection remain off",
+    "preload both chip selects high; keep pin 8 low; set pin 10 input for U214 or output-high behind disabled isolation for U219",
+    "enable the protected Cap power branch while all external I/O remains isolated",
+    "after qualified power-good, connect the no-back-power I/O boundary while pin 8 remains low",
+    "raise pin 8 to release U214 reset or enable U219 only after the previous steps",
+    "on reset, fault, profile mismatch or shutdown: lower pin 8, deselect SPI, isolate I/O and remove branch power"
+  ],
+  "shared_spi": {
+    "rule": "both chip selects must be high before a target or SPI mode changes; exactly one target may be selected",
+    "contracts": [
+      {"target": "U214_SX1262", "mode": 0, "frequency_hz": null, "status": "existing target adapter ceiling remains unchanged"},
+      {"target": "U219_CC1101", "mode": 0, "frequency_hz": 10000000, "status": "datasheet-bound ceiling"},
+      {"target": "U219_ST25R3916", "mode": 1, "frequency_hz": 10000000, "status": "official M5 example contract"}
+    ]
+  },
+  "cc1101_rx_firewall": {
+    "raw_spi_access_outside_firewall": false,
+    "allowed_strobes": ["SRES", "SXOFF", "SCAL", "SRX", "SIDLE", "SPWD", "SFRX", "SNOP"],
+    "forbidden_strobes": ["SFSTXON", "STX"],
+    "forbidden_write_targets": ["PATABLE", "TX_FIFO"],
+    "register_write_rules": [
+      "MCSM0.PIN_CTRL_EN must remain zero so a CS edge cannot synthesize STX",
+      "MCSM1.RXOFF_MODE may select IDLE or RX only; FSTXON and TX are rejected",
+      "every byte of a burst must pass the same address/value filter before the transaction starts"
+    ]
+  },
+  "nfc_reader": {
+    "allowed_operations": ["POLL", "READ"],
+    "forbidden_operations": ["WRITE", "CARD_EMULATION"],
+    "evidence": {
+      "name": "EV_N9_U219_NFC",
+      "register": "TCA9535PWR",
+      "input": "P12",
+      "bit": 12,
+      "polarity": "active_low",
+      "aggregate": "ANY_TX_AON_N",
+      "lease_group": "U219_NFC"
+    },
+    "compile_gate": {
+      "macro": "L2_U219_NFC_FIELD_HIL_CLOSED",
+      "default": 0,
+      "target_definitions": [],
+      "result": "no current target build can enable the 13.56-MHz field"
+    },
+    "runtime_gate": "a reviewed VNA/HIL capability attestation plus an active physical-evidence lease are both mandatory",
+    "gate_closure_requires": [
+      "actual U219 sample and final enclosure",
+      "pickup-loop VNA tuning and detector threshold closure",
+      "assert/clear latency and no-false-negative field evidence",
+      "read-range and detuning comparison",
+      "off-state false-positive and fault-injection runs"
+    ]
+  },
+  "dependency_policy": {
+    "rule": "retain the existing permissive-license-only product dependency policy",
+    "evaluated_not_integrated": [
+      {"name": "M5Unit-NFC", "license": "MIT", "status": "reference only, not integrated; no source vendored or linked"},
+      {"name": "RadioLib", "license": "MIT", "status": "candidate only, not integrated; no source vendored or linked"}
+    ],
+    "st_driver_integrated": false
+  },
+  "known_open_hardware_gates": [
+    "the official U219 page is work in progress and its public pin table exposes RF_SW0 while its band truth table also names RF_SW1",
+    "the exact production U219 revision, signed identity binding and final pin-direction hardware are not yet imported into the firmware BSP",
+    "EV_N9 pickup geometry, tuning, threshold and physical timing remain VNA/HIL evidence",
+    "no target, dev-board or Leshy2 HIL run is claimed by this host policy"
+  ],
+  "implementation": {
+    "portable_state_machine": "common/include/leshy2/system_model.h and common/src/system_model.c",
+    "host_tests": ["host/tests/test_system_model.c", "host/tests/test_safety_core.c"],
+    "target_adapter_integrated": false,
+    "hardware_contract_imported": false
+  }
+}

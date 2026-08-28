@@ -55,6 +55,21 @@ def main() -> int:
         errors.append("reviewed hardware source identity or digest changed")
     if contract.get("integration_contract") != integration:
         errors.append("standalone integration contract differs from the H2 export")
+    authority = contract.get("authority", {})
+    integration_authority = integration.get("authority", {})
+    if (
+        authority.get("baseline") != "R1"
+        or authority.get("lifecycle") != "historical_single_rp_import"
+        or authority.get("allowed_as_r2_authority") is not False
+    ):
+        errors.append("legacy BSP input is not fail-closed as historical single-RP R1")
+    if (
+        integration_authority.get("baseline") != "R1"
+        or integration_authority.get("lifecycle")
+        != "historical_single_rp_integration_contract"
+        or integration_authority.get("allowed_as_r2_authority") is not False
+    ):
+        errors.append("legacy integration input is not fail-closed as historical R1")
     if contract.get("bsp", {}).get("temporary_pin_assignments_allowed") is not False:
         errors.append("temporary pin assignments must remain forbidden")
 

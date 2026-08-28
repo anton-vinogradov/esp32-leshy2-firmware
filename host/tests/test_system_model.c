@@ -171,7 +171,122 @@ static void test_safety_loss_disables_receiver_before_watchdog_trip(void)
     assert(model.external_watchdog_tripped);
 }
 
-static void test_six_domain_update_rolls_back_as_one_bundle(void)
+static void verify_u219_cap_policy_is_fail_closed(void)
+{
+    l2_cap_state_t cap;
+    l2_cap_init(&cap);
+    assert(cap.profile == L2_CAP_PROFILE_UNKNOWN);
+    assert(cap.phase == L2_CAP_OFF);
+    assert(!cap.branch_power_enabled);
+    assert(!cap.io_connected);
+    assert(!cap.contact8_high);
+    assert(!cap.contact10_is_output);
+    assert(cap.contact10_high);
+    assert(cap.contact14_high);
+    assert(!l2_cap_select_profile(&cap, L2_CAP_PROFILE_UNKNOWN, true));
+    assert(!l2_cap_select_profile(&cap, L2_CAP_PROFILE_U219, false));
+
+    assert(l2_cap_select_profile(&cap, L2_CAP_PROFILE_U219, true));
+    assert(l2_cap_start_power(&cap));
+    assert(!l2_cap_observe_power_good(&cap, false));
+    assert(cap.phase == L2_CAP_FAULT);
+    assert(cap.profile == L2_CAP_PROFILE_UNKNOWN);
+    assert(!cap.branch_power_enabled);
+    assert(!cap.io_connected);
+    assert(!cap.contact8_high);
+    l2_cap_shutdown(&cap);
+
+    assert(l2_cap_select_profile(&cap, L2_CAP_PROFILE_U214, true));
+    assert(!l2_cap_select_profile(&cap, L2_CAP_PROFILE_U219, true));
+    assert(l2_cap_start_power(&cap));
+    assert(cap.branch_power_enabled);
+    assert(!cap.io_connected);
+    assert(!cap.contact8_high);
+    assert(!cap.contact10_is_output);
+    assert(l2_cap_observe_power_good(&cap, true));
+    assert(cap.io_connected);
+    assert(!cap.contact8_high);
+    assert(l2_cap_release_device(&cap));
+    assert(cap.phase == L2_CAP_ACTIVE);
+    assert(cap.contact8_high);
+    assert(l2_cap_spi_select(&cap, L2_CAP_SPI_U214_SX1262));
+    assert(l2_cap_spi_mode(cap.spi_target) == 0);
+    assert(!cap.contact14_high);
+    assert(cap.contact10_high);
+    l2_cap_spi_deselect(&cap);
+    l2_cap_shutdown(&cap);
+
+    assert(l2_cap_select_profile(&cap, L2_CAP_PROFILE_U219, true));
+    assert(l2_cap_start_power(&cap));
+    assert(cap.contact10_is_output);
+    assert(cap.contact10_high);
+    assert(!cap.io_connected);
+    assert(l2_cap_observe_power_good(&cap, true));
+    assert(cap.io_connected);
+    assert(!cap.contact8_high);
+    assert(l2_cap_release_device(&cap));
+
+    assert(l2_cap_spi_select(&cap, L2_CAP_SPI_U219_CC1101));
+    assert(l2_cap_spi_mode(cap.spi_target) == 0);
+    const uint8_t allowed_strobes[] = {
+        0x30, 0x32, 0x33, 0x34, 0x36, 0x39, 0x3a, 0x3d,
+    };
+    for (unsigned strobe = 0; strobe <= UINT8_MAX; ++strobe) {
+        bool expected = false;
+        for (unsigned index = 0;
+             index < sizeof(allowed_strobes) / sizeof(allowed_strobes[0]);
+             ++index) {
+            if (strobe == allowed_strobes[index]) {
+                expected = true;
+            }
+        }
+        assert(l2_cap_cc1101_access_allowed(
+            &cap, L2_CC1101_STROBE, (uint8_t)strobe, 0
+        ) == expected);
+    }
+    assert(l2_cap_cc1101_access_allowed(
+        &cap, L2_CC1101_WRITE_REGISTER, 0x17, 0x0c
+    ));
+    assert(!l2_cap_cc1101_access_allowed(
+        &cap, L2_CC1101_WRITE_REGISTER, 0x17, 0x08
+    ));
+    assert(!l2_cap_cc1101_access_allowed(
+        &cap, L2_CC1101_WRITE_REGISTER, 0x18, 0x02
+    ));
+    assert(!l2_cap_cc1101_access_allowed(
+        &cap, L2_CC1101_WRITE_PATABLE, 0x3e, 0
+    ));
+    assert(!l2_cap_cc1101_access_allowed(
+        &cap, L2_CC1101_WRITE_TX_FIFO, 0x3f, 0
+    ));
+    l2_cap_spi_deselect(&cap);
+
+    assert(l2_cap_spi_select(&cap, L2_CAP_SPI_U219_NFC));
+    assert(l2_cap_spi_mode(cap.spi_target) == 1);
+    assert(cap.contact10_is_output);
+    assert(!cap.contact10_high);
+    assert(cap.contact14_high);
+    assert(l2_cap_nfc_operation_supported(L2_CAP_NFC_POLL));
+    assert(l2_cap_nfc_operation_supported(L2_CAP_NFC_READ));
+    assert(!l2_cap_nfc_operation_supported(L2_CAP_NFC_WRITE));
+    assert(!l2_cap_nfc_operation_supported(L2_CAP_NFC_CARD_EMULATION));
+    assert(!l2_cap_nfc_begin_field(
+        &cap, L2_CAP_NFC_READ, true, true
+    ));
+    assert(!cap.nfc_field_active);
+    l2_cap_spi_deselect(&cap);
+    cap.nfc_field_active = true;
+    assert(!l2_cap_spi_select(&cap, L2_CAP_SPI_U219_CC1101));
+    cap.nfc_field_active = false;
+    l2_cap_shutdown(&cap);
+    assert(cap.profile == L2_CAP_PROFILE_UNKNOWN);
+    assert(!cap.branch_power_enabled);
+    assert(!cap.io_connected);
+    assert(!cap.contact8_high);
+    assert(!cap.contact10_is_output);
+}
+
+static void test_six_domain_update_and_cap_policy_are_fail_closed(void)
 {
     l2_system_model_t model;
     l2_system_model_init(&model, 700, 100);
@@ -190,6 +305,7 @@ static void test_six_domain_update_rolls_back_as_one_bundle(void)
     for (int domain = 0; domain < L2_UPDATE_DOMAIN_COUNT; ++domain) {
         assert(model.update.active_build[domain] == 100);
     }
+    verify_u219_cap_policy_is_fail_closed();
 }
 
 int main(void)
@@ -203,7 +319,7 @@ int main(void)
     test_hub_loss_closes_receiver_and_isolates_downstream_domains();
     test_pack_loss_becomes_local_power_fault();
     test_safety_loss_disables_receiver_before_watchdog_trip();
-    test_six_domain_update_rolls_back_as_one_bundle();
+    test_six_domain_update_and_cap_policy_are_fail_closed();
     puts("host six-domain model: 10 scenarios passed");
     return 0;
 }

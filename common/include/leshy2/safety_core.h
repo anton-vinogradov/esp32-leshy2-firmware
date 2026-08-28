@@ -15,6 +15,7 @@ typedef enum {
     L2_GROUP_LORA_CAP = 7,
     L2_GROUP_M5_UNIT = 8,
     L2_GROUP_BROADCAST_RX = 9,
+    L2_GROUP_U219_NFC = 10,
 } l2_group_t;
 
 typedef enum {

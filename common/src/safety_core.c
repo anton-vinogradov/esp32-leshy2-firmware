@@ -31,6 +31,7 @@ uint16_t l2_group_evidence_mask(l2_group_t group)
     case L2_GROUP_VOICE: return UINT16_C(1) << 6;
     case L2_GROUP_IR: return UINT16_C(1) << 7;
     case L2_GROUP_LORA_CAP: return UINT16_C(1) << 8;
+    case L2_GROUP_U219_NFC: return UINT16_C(1) << 12;
     case L2_GROUP_NONE:
     case L2_GROUP_M5_UNIT:
     case L2_GROUP_BROADCAST_RX:
@@ -129,7 +130,7 @@ void l2_safety_revoke_lease(l2_safety_t *state, uint32_t now_ms)
 
 void l2_safety_set_evidence(l2_safety_t *state, uint16_t evidence_mask)
 {
-    state->observed_evidence_mask = evidence_mask & UINT16_C(0x01ff);
+    state->observed_evidence_mask = evidence_mask & UINT16_C(0x11ff);
     if (!state->evidence_grace_active &&
         (state->observed_evidence_mask & (uint16_t)~state->allowed_evidence_mask) != 0) {
         state->evidence_mismatch_pending = true;

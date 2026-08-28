@@ -2,13 +2,6 @@
   "schema": 2,
   "contract_id": "LESHY2-HWFW-1",
   "review_status": "h2_0_3_reviewed",
-  "authority": {
-    "baseline": "R1",
-    "lifecycle": "historical_single_rp_integration_contract",
-    "allowed_as_r2_authority": false,
-    "superseded_by": "config/h0_r2_hardware_contract.json",
-    "r2_sync_gate": "config/r2_h2_sync_gate.json"
-  },
   "hardware_architecture": "G2F-3I",
   "protocol": {
     "name": "L2IP",
@@ -412,5 +405,12 @@
         940
       ]
     }
-  ]
+  ],
+  "authority": {
+    "baseline": "R1",
+    "lifecycle": "historical_single_rp_integration_contract",
+    "allowed_as_r2_authority": false,
+    "superseded_by": "config/h0_r2_hardware_contract.json",
+    "r2_sync_gate": "config/r2_h2_sync_gate.json"
+  }
 }

@@ -907,6 +907,10 @@ class ProductSiteTests(unittest.TestCase):
                 "TCA9535_EVIDENCE_MASK",
                 "SN74LVC1G07_EXT_EVIDENCE",
                 "LESHY_LORA_CAP_01",
+                "M5_U219_PINMAP",
+                "M5_U219_NFC_SPI",
+                "TI_CC1101_RX_ONLY",
+                "ST25R3916_FIELD",
             },
             set(sources),
         )
@@ -942,7 +946,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(2, boundary["schema"])
         self.assertEqual("h2_0_3_reviewed", boundary["review_status"])
         self.assertEqual("LESHY2-H2-HWFW-1", bsp["export_id"])
-        self.assertEqual("reviewed_hwfw_export", bsp["status"])
+        self.assertEqual("reviewed_historical_r1_hwfw_export", bsp["status"])
         self.assertEqual("R1", bsp["authority"]["baseline"])
         self.assertEqual("historical_single_rp_import", bsp["authority"]["lifecycle"])
         self.assertFalse(bsp["authority"]["allowed_as_r2_authority"])
@@ -1102,7 +1106,53 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("TCA9535PWR", evidence["device"])
         self.assertEqual("0x20", evidence["i2c_7bit_address"])
         self.assertEqual(16, evidence["width_bits"])
-        self.assertEqual(9, evidence["used_bits"])
+        self.assertEqual(10, evidence["used_bits"])
+        self.assertEqual("EV_N9_U219_NFC", evidence["bit_names"][12])
+        self.assertNotIn(12, evidence["unused_bits"])
+        self.assertEqual([12], groups["U219_NFC"]["evidence_bits"])
+        self.assertIn("reader/poller", groups["U219_NFC"]["tx_policy"])
+
+    def test_u219_cap_policy_is_signed_rx_only_and_physically_gated(self):
+        policy = json.loads(self.read("config/u219_cap_policy.json"))
+        self.assertEqual("LESHY2-CAP-PROFILES-01", policy["policy_id"])
+        self.assertEqual(
+            "host_policy_implemented_hardware_gate_open", policy["status"]
+        )
+        self.assertTrue(policy["selection"]["mutually_exclusive"])
+        self.assertTrue(policy["selection"]["signature_required"])
+        self.assertFalse(policy["selection"]["hot_profile_change"])
+        reset = policy["reset_and_unknown"]
+        self.assertFalse(reset["cap_branch_power"])
+        self.assertFalse(reset["io_connected"])
+        self.assertEqual("low", reset["pin8_level"])
+        self.assertEqual("input", reset["pin10_direction"])
+
+        profiles = {row["id"]: row for row in policy["profiles"]}
+        self.assertEqual({"U214", "U219"}, set(profiles))
+        self.assertIn("receive/GNSS-only", profiles["U214"]["tx_policy"])
+        self.assertEqual("hard RX-only command firewall", profiles["U219"]["cc1101_policy"])
+        self.assertIn("poll and read only", profiles["U219"]["nfc_policy"])
+
+        spi = {row["target"]: row for row in policy["shared_spi"]["contracts"]}
+        self.assertEqual(0, spi["U219_CC1101"]["mode"])
+        self.assertEqual(1, spi["U219_ST25R3916"]["mode"])
+        self.assertEqual(10_000_000, spi["U219_ST25R3916"]["frequency_hz"])
+        firewall = policy["cc1101_rx_firewall"]
+        self.assertFalse(firewall["raw_spi_access_outside_firewall"])
+        self.assertTrue({"SFSTXON", "STX"}.issubset(firewall["forbidden_strobes"]))
+        self.assertTrue({"PATABLE", "TX_FIFO"}.issubset(firewall["forbidden_write_targets"]))
+
+        nfc = policy["nfc_reader"]
+        self.assertEqual(["POLL", "READ"], nfc["allowed_operations"])
+        self.assertEqual({"WRITE", "CARD_EMULATION"}, set(nfc["forbidden_operations"]))
+        self.assertEqual("P12", nfc["evidence"]["input"])
+        self.assertEqual(12, nfc["evidence"]["bit"])
+        self.assertEqual("ANY_TX_AON_N", nfc["evidence"]["aggregate"])
+        self.assertEqual(0, nfc["compile_gate"]["default"])
+        self.assertEqual([], nfc["compile_gate"]["target_definitions"])
+        self.assertFalse(policy["dependency_policy"]["st_driver_integrated"])
+        self.assertFalse(policy["implementation"]["target_adapter_integrated"])
+        self.assertFalse(policy["implementation"]["hardware_contract_imported"])
 
     def test_exact_lora_cap_profiles_preserve_regional_and_evidence_bounds(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))

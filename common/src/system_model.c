@@ -4,6 +4,208 @@
 
 static const uint8_t queue_capacities[L2_PRIORITY_COUNT] = {4, 8, 8, 16, 16};
 
+enum {
+    L2_CC1101_STROBE_RESET = 0x30,
+    L2_CC1101_STROBE_XOFF = 0x32,
+    L2_CC1101_STROBE_CALIBRATE = 0x33,
+    L2_CC1101_STROBE_RX = 0x34,
+    L2_CC1101_STROBE_IDLE = 0x36,
+    L2_CC1101_STROBE_POWER_DOWN = 0x39,
+    L2_CC1101_STROBE_FLUSH_RX = 0x3a,
+    L2_CC1101_STROBE_NOP = 0x3d,
+    L2_CC1101_REGISTER_MCSM1 = 0x17,
+    L2_CC1101_REGISTER_MCSM0 = 0x18,
+    L2_CC1101_REGISTER_LAST_CONFIGURATION = 0x2e,
+    L2_CC1101_MCSM1_RXOFF_MASK = 0x0c,
+    L2_CC1101_MCSM1_RXOFF_IDLE = 0x00,
+    L2_CC1101_MCSM1_RXOFF_RX = 0x0c,
+    L2_CC1101_MCSM0_PIN_CTRL_EN = 0x02,
+};
+
+void l2_cap_init(l2_cap_state_t *state)
+{
+    *state = (l2_cap_state_t){0};
+    state->profile = L2_CAP_PROFILE_UNKNOWN;
+    state->phase = L2_CAP_OFF;
+    state->spi_target = L2_CAP_SPI_NONE;
+    state->contact10_high = true;
+    state->contact14_high = true;
+}
+
+bool l2_cap_select_profile(
+    l2_cap_state_t *state,
+    l2_cap_profile_t profile,
+    bool signed_profile_verified
+)
+{
+    if (state->phase != L2_CAP_OFF || !signed_profile_verified ||
+        (profile != L2_CAP_PROFILE_U214 && profile != L2_CAP_PROFILE_U219)) {
+        return false;
+    }
+    state->profile = profile;
+    state->signed_profile_verified = true;
+    state->phase = L2_CAP_PROFILE_SELECTED;
+    return true;
+}
+
+bool l2_cap_start_power(l2_cap_state_t *state)
+{
+    if (state->phase != L2_CAP_PROFILE_SELECTED ||
+        !state->signed_profile_verified) {
+        return false;
+    }
+    state->branch_power_enabled = true;
+    state->io_connected = false;
+    state->contact8_high = false;
+    state->contact10_is_output = state->profile == L2_CAP_PROFILE_U219;
+    state->contact10_high = true;
+    state->contact14_high = true;
+    state->phase = L2_CAP_POWERING;
+    return true;
+}
+
+bool l2_cap_observe_power_good(l2_cap_state_t *state, bool power_good)
+{
+    if (state->phase != L2_CAP_POWERING) {
+        return false;
+    }
+    if (!power_good) {
+        l2_cap_init(state);
+        state->phase = L2_CAP_FAULT;
+        return false;
+    }
+    state->io_connected = true;
+    state->phase = L2_CAP_IO_READY;
+    return true;
+}
+
+bool l2_cap_release_device(l2_cap_state_t *state)
+{
+    if (state->phase != L2_CAP_IO_READY || !state->io_connected ||
+        !state->branch_power_enabled) {
+        return false;
+    }
+    state->contact8_high = true;
+    state->phase = L2_CAP_ACTIVE;
+    return true;
+}
+
+void l2_cap_shutdown(l2_cap_state_t *state)
+{
+    l2_cap_init(state);
+}
+
+bool l2_cap_spi_select(l2_cap_state_t *state, l2_cap_spi_target_t target)
+{
+    if (state->phase != L2_CAP_ACTIVE || state->spi_target != L2_CAP_SPI_NONE ||
+        !state->io_connected || !state->contact8_high || state->nfc_field_active) {
+        return false;
+    }
+    const bool u214_target = state->profile == L2_CAP_PROFILE_U214 &&
+        target == L2_CAP_SPI_U214_SX1262;
+    const bool u219_target = state->profile == L2_CAP_PROFILE_U219 &&
+        (target == L2_CAP_SPI_U219_CC1101 || target == L2_CAP_SPI_U219_NFC);
+    if (!u214_target && !u219_target) {
+        return false;
+    }
+    state->spi_target = target;
+    if (target == L2_CAP_SPI_U219_NFC) {
+        state->contact10_high = false;
+    } else {
+        state->contact14_high = false;
+    }
+    return true;
+}
+
+void l2_cap_spi_deselect(l2_cap_state_t *state)
+{
+    state->spi_target = L2_CAP_SPI_NONE;
+    state->contact10_high = true;
+    state->contact14_high = true;
+}
+
+uint8_t l2_cap_spi_mode(l2_cap_spi_target_t target)
+{
+    if (target == L2_CAP_SPI_U219_NFC) {
+        return 1;
+    }
+    return 0;
+}
+
+bool l2_cap_nfc_operation_supported(l2_cap_nfc_operation_t operation)
+{
+    return operation == L2_CAP_NFC_POLL || operation == L2_CAP_NFC_READ;
+}
+
+bool l2_cap_nfc_begin_field(
+    l2_cap_state_t *state,
+    l2_cap_nfc_operation_t operation,
+    bool runtime_hil_gate_closed,
+    bool physical_evidence_lease_active
+)
+{
+    if (L2_U219_NFC_FIELD_HIL_CLOSED == 0 || !runtime_hil_gate_closed ||
+        !physical_evidence_lease_active || !l2_cap_nfc_operation_supported(operation) ||
+        state->profile != L2_CAP_PROFILE_U219 || state->phase != L2_CAP_ACTIVE ||
+        state->spi_target != L2_CAP_SPI_U219_NFC) {
+        return false;
+    }
+    state->nfc_field_active = true;
+    return true;
+}
+
+void l2_cap_nfc_end_field(l2_cap_state_t *state)
+{
+    state->nfc_field_active = false;
+}
+
+bool l2_cap_cc1101_access_allowed(
+    const l2_cap_state_t *state,
+    l2_cc1101_access_t access,
+    uint8_t address,
+    uint8_t value
+)
+{
+    if (state->profile != L2_CAP_PROFILE_U219 || state->phase != L2_CAP_ACTIVE ||
+        state->spi_target != L2_CAP_SPI_U219_CC1101) {
+        return false;
+    }
+    if (access == L2_CC1101_READ) {
+        return true;
+    }
+    if (access == L2_CC1101_STROBE) {
+        switch (address) {
+        case L2_CC1101_STROBE_RESET:
+        case L2_CC1101_STROBE_XOFF:
+        case L2_CC1101_STROBE_CALIBRATE:
+        case L2_CC1101_STROBE_RX:
+        case L2_CC1101_STROBE_IDLE:
+        case L2_CC1101_STROBE_POWER_DOWN:
+        case L2_CC1101_STROBE_FLUSH_RX:
+        case L2_CC1101_STROBE_NOP:
+            return true;
+        default:
+            return false;
+        }
+    }
+    if (access != L2_CC1101_WRITE_REGISTER ||
+        address > L2_CC1101_REGISTER_LAST_CONFIGURATION) {
+        return false;
+    }
+    if (address == L2_CC1101_REGISTER_MCSM0 &&
+        (value & L2_CC1101_MCSM0_PIN_CTRL_EN) != 0) {
+        return false;
+    }
+    if (address == L2_CC1101_REGISTER_MCSM1) {
+        const uint8_t rxoff = value & L2_CC1101_MCSM1_RXOFF_MASK;
+        if (rxoff != L2_CC1101_MCSM1_RXOFF_IDLE &&
+            rxoff != L2_CC1101_MCSM1_RXOFF_RX) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void l2_scheduler_init(l2_scheduler_t *scheduler)
 {
     *scheduler = (l2_scheduler_t){0};
@@ -67,6 +269,7 @@ void l2_system_model_init(
     l2_receiver_init(&model->receiver);
     l2_update_init(&model->update, initial_build);
     l2_scheduler_init(&model->scheduler);
+    l2_cap_init(&model->cap);
     for (size_t index = 0; index < L2_UPDATE_DOMAIN_COUNT; ++index) {
         model->domain_online[index] = true;
     }

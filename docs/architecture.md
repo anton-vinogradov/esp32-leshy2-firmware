@@ -61,6 +61,36 @@ an IPC hop cannot create permission or suppress a local fault. The complete
 the [F1-R2 portable behavior is also reviewed](f1-portable-cores-report.md).
 F2-R2 now rebaselines the six target projects and generated BSP boundary.
 
+## Optional U214/U219 Cap profiles
+
+The rear Cap Bus accepts exactly one signed profile at a time. Reset, an
+unknown identity or a failed signature keeps the protected branch off, external
+I/O isolated, contact 8 low and contact 10 in its U214-safe input state. A
+profile change always repeats a full shutdown and identity check; it is not a
+hot in-place reinterpretation of the pins. The machine contract is
+[`config/u219_cap_policy.json`](../config/u219_cap_policy.json).
+
+The stock U214 behavior is unchanged: contact 8 is `LORA_RST_N`, contact 10 is
+the `BUSY` input, SPI uses mode 0, and the stock module remains receive/GNSS-only.
+The optional U219 profile first preloads contact 10 high behind disabled I/O,
+powers the protected branch with contact 8 still fail-low, connects I/O only
+after power-good, and raises contact 8 `POWER_EN` last. U219 shares one SPI bus:
+CC1101 uses mode 0 and ST25R3916 uses the official M5 mode-1/10-MHz contract;
+both chip selects are high before the mode changes.
+
+U219 CC1101 is hard RX-only. Every raw transaction crosses an allowlist that
+rejects `SFSTXON`, `STX`, PATABLE/TX-FIFO writes, `MCSM0.PIN_CTRL_EN=1` and
+post-RX `FSTXON/TX` states. NFC exposes poll/read only; write and card emulation
+are absent from the accepted policy. Its intentional 13.56-MHz reader field is
+a separate `U219_NFC` signal group: active-low `EV_N9_U219_NFC` on evidence
+register P12 also reaches `ANY_TX_AON_N` and must match a bounded physical-field
+lease. The compile gate defaults to zero and no target defines it, so field
+generation remains disabled until a real U219, final enclosure, VNA tuning and
+HIL fault/latency/range tests close the hardware gate. Host tests prove only the
+state machine, command firewall and fail-closed gate—not target, RF or HIL
+operation. M5Unit-NFC and RadioLib are MIT reference candidates; neither an ST
+driver nor either library is integrated yet.
+
 <details>
 <summary><strong>Retained R1 architecture — not the current physical topology</strong></summary>
 

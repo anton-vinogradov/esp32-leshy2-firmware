@@ -43,6 +43,30 @@
       "document": "LESHY2-LORA-CAP-01 machine-readable hardware contract",
       "url": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/hardware/accessories/leshy2-lora-cap-01.json",
       "supports": "exact EU868/US915 assemblies, Cap-Bus pin map, 24AA02UID identity, final-feed RF evidence and 10-18-ms active-low pulse contract"
+    },
+    {
+      "id": "M5_U219_PINMAP",
+      "document": "M5Stack Cap CC1101 U219 product and Cap-Bus pin map",
+      "url": "https://docs.m5stack.com/en/cap/Cap_CC1101",
+      "supports": "work-in-progress U219 pin 8 POWER_EN, pin 10 NFC_CS, shared SPI, CC1101 and ST25R3916 boundary"
+    },
+    {
+      "id": "M5_U219_NFC_SPI",
+      "document": "M5Stack Cap CC1101 Arduino NFC example",
+      "url": "https://docs.m5stack.com/en/arduino/projects/cap/cap_cc1101",
+      "supports": "ST25R3916 mode-1 SPI at 10 MHz; library API is reference evidence, not an integrated dependency"
+    },
+    {
+      "id": "TI_CC1101_RX_ONLY",
+      "document": "Texas Instruments CC1101 datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/cc1101.pdf",
+      "supports": "command strobes, MCSM0 pin control and MCSM1 automatic post-RX states needed by the hard RX-only firewall"
+    },
+    {
+      "id": "ST25R3916_FIELD",
+      "document": "STMicroelectronics ST25R3916 datasheet",
+      "url": "https://www.st.com/resource/en/datasheet/st25r3916.pdf",
+      "supports": "mode-1 SPI and the physical 13.56-MHz reader field that requires independent evidence"
     }
   ],
   "protocol": {
@@ -224,11 +248,12 @@
     "i2c_7bit_address": "0x20",
     "width_bits": 16,
     "polarity": "active_low",
-    "used_bits": 9,
-    "bit_names": ["S3_RF", "C5_RF", "NRF0_RF", "NRF1_RF", "NRF2_RF", "CC_RF", "VOICE_RF", "IR_OPTICAL", "LORA_EXT_RF"],
-    "unused_bits": [9, 10, 11, 12, 13, 14, 15],
+    "used_bits": 10,
+    "bit_names": ["S3_RF", "C5_RF", "NRF0_RF", "NRF1_RF", "NRF2_RF", "CC_RF", "VOICE_RF", "IR_OPTICAL", "LORA_EXT_RF", null, null, null, "EV_N9_U219_NFC"],
+    "unused_bits": [9, 10, 11, 13, 14, 15],
     "read_rule": "read both input-port bytes; ANY_TX_AON_N is the direct fail-safe aggregate, so a changing two-byte localization read may delay diagnosis but can never authorize TX",
-    "external_bit_rule": "bit 8 comes from the 5-V-tolerant contact-5 boundary; stock U214 5V_OUT is inactive high, while only a signed and qualified evidence-aware Cap may assert open-drain low from measured final-feed RF"
+    "external_bit_rule": "bit 8 comes from the 5-V-tolerant contact-5 boundary; stock U214 5V_OUT is inactive high, while only a signed and qualified evidence-aware Cap may assert open-drain low from measured final-feed RF",
+    "u219_nfc_rule": "active-low P12 is EV_N9_U219_NFC and also reaches ANY_TX_AON_N; it may match only a bounded U219_NFC physical-field lease after the compile-time and runtime VNA/HIL gates close"
   },
   "signal_groups": [
     {"id": 0, "name": "NONE", "owner": "S3", "evidence_bits": [], "tx_policy": "off"},
@@ -240,8 +265,16 @@
     {"id": 6, "name": "IR", "owner": "C5", "evidence_bits": [7], "tx_policy": "lease_required"},
     {"id": 7, "name": "LORA_CAP", "owner": "RP", "evidence_bits": [8], "tx_policy": "stock U214 receive and GNSS only; TX is available only to the exact signed LESHY2-LORA-CAP-01-EU868 or LESHY2-LORA-CAP-01-US915 profile with qualified final-feed physical bit 8"},
     {"id": 8, "name": "M5_UNIT", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only by default; transmit requires a qualified module profile with an independent evidence contract"},
-    {"id": 9, "name": "BROADCAST_RX", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only Si4732 FM/AM/SW/LW plus the selected audio path; this is an exclusive top-level signal group even though it needs no TX lease"}
+    {"id": 9, "name": "BROADCAST_RX", "owner": "S3", "evidence_bits": [], "tx_policy": "receive-only Si4732 FM/AM/SW/LW plus the selected audio path; this is an exclusive top-level signal group even though it needs no TX lease"},
+    {"id": 10, "name": "U219_NFC", "owner": "RP", "evidence_bits": [12], "tx_policy": "reader/poller field only after signed U219 profile, compile-time VNA/HIL closure, runtime qualification and bounded EV_N9/ANY_TX physical-field lease; NFC write and card emulation are forbidden"}
   ],
+  "cap_profile_policy": {
+    "canonical_contract": "config/u219_cap_policy.json",
+    "mutually_exclusive_profiles": ["U214", "U219"],
+    "reset_default": "UNKNOWN with the Cap branch off, pin 8 low, pin 10 input and both SPI targets deselected",
+    "u214": "unchanged stock U214 receive/GNSS-only behavior",
+    "u219": "signed explicit profile; CC1101 hard RX-only plus NFC reader/poller-only behind the open VNA/HIL gate"
+  },
   "lora_cap_profiles": {
     "identity_device": "24AA02UIDT-I/OT",
     "identity_bus": "Cap-Bus I2C contacts 3/4 at 3.3 V",

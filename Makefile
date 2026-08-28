@@ -13,10 +13,13 @@ CONFIG ?= debug
 TARGET_PYTHON ?= python3.12
 LOCKED_PYTHON ?= .toolchains/python/idf6_py3.12_env/bin/python
 
-.PHONY: test r2-h2-sync-review f0-r2-review f1-r2-plan-review f1-r2-update-review f1-r2-receiver-review f1-r2-fault-review f1-r2-review f2-r2-plan-review f2-r2-matrix-review f2-r2-project-review f2-r2-bsp-review f2-r2-dispatcher-review host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review f4-1-source-review f4-1-core-review f4-1-endpoint-review f4-1-qemu-review f3-s3-run f3-s3-evidence-check f3-s3-scenario-run f3-s3-scenario-check capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
+.PHONY: test u219-cap-policy-review r2-h2-sync-review f0-r2-review f1-r2-plan-review f1-r2-update-review f1-r2-receiver-review f1-r2-fault-review f1-r2-review f2-r2-plan-review f2-r2-matrix-review f2-r2-project-review f2-r2-bsp-review f2-r2-dispatcher-review host-test host-sanitize matrix-check source-layout-check build-policy-check f2-1-review f2-2-review f2-3-review f2-4-preflight-review f2-4-build-review f2-5-reproducibility-review f3-0-capability-review f3-0-runtime-plan-review f3-0-acceptance-plan-review f3-1-runtime-review f3-2-runtime-review f3-3-boundary-review f3-4-closure-review f4-0-capability-review f4-0-adapter-review f4-0-acceptance-review f4-1-source-review f4-1-core-review f4-1-endpoint-review f4-1-qemu-review f3-s3-run f3-s3-evidence-check f3-s3-scenario-run f3-s3-scenario-check capture-target-build locked-target-configure locked-target-build locked-target-clean locked-target-verify bsp-input-check bsp-generate bsp-check bsp-target-check target-projects-check targets-list target-preflight target-configure target-build target-verify target-artifacts target-clean clean
 
-test: r2-h2-sync-review f0-r2-review f1-r2-review f2-r2-plan-review f2-r2-matrix-review f2-r2-project-review f2-r2-bsp-review f2-r2-dispatcher-review
+test: u219-cap-policy-review r2-h2-sync-review f0-r2-review f1-r2-review f2-r2-plan-review f2-r2-matrix-review f2-r2-project-review f2-r2-bsp-review f2-r2-dispatcher-review
 	python3 -m unittest tests.test_h0_r2_contract tests.test_r2_h2_sync_gate tests.test_f1_r2_portable tests.test_f2_r2_rebaseline tests.test_f2_r2_bsp tests.test_f2_r2_dispatcher tests.test_product_site tests.test_host_core
+
+u219-cap-policy-review:
+	python3 tools/check_u219_cap_policy.py
 
 r2-h2-sync-review:
 	python3 tools/check_r2_h2_sync_gate.py
