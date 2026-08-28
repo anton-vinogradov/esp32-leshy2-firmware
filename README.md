@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F2-R2.1 — six-target build matrix is current.** The R1
+> **Firmware status: F2-R2.2 — six target projects are current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.1**; [R2 plan reviewed](config/f2_r2_target_rebaseline.json), R1 [report retained](docs/f2-target-build-system-report.md) | define the exact toolchain/command/artifact matrix for six production-SDK targets and current generated BSP |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.2**; R2 [plan](config/f2_r2_target_rebaseline.json) and [matrix](config/f2_r2_build_matrix.json) reviewed, R1 [report retained](docs/f2-target-build-system-report.md) | create six independent production-SDK project trees without running target builds |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F2-R2.1.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F2-R2.2.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
@@ -120,14 +120,14 @@ and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position
 
-<!-- current-substep: F2-R2.1 -->
+<!-- current-substep: F2-R2.2 -->
 
-▶️ **`F2-R2.1` — current.** The [F2-R2.0 rebaseline plan](config/f2_r2_target_rebaseline.json)
-has reviewed the retained five-project R1 inventory, the exact six-target delta
-and five ordered implementation gates. This substep now defines the exact
-toolchain, command, artifact and size-gate matrix for S3, C5, RF RP, Hub RP,
-Pack and Safety. It creates no R2 target project and runs no target build; the
-marker and evidence update together in every commit.
+▶️ **`F2-R2.2` — current.** The [F2-R2.1 build matrix](config/f2_r2_build_matrix.json)
+has reviewed 12 shell-free offline command sets, 60 artifact paths, 16 map paths
+and 16 image-size gates for S3, C5, RF RP, Hub RP, Pack and Safety. This substep
+creates six independent minimal production-SDK project trees, including separate
+RF-RP and Hub-RP identities, but does not run an R2 target build. The marker and
+evidence update together in every commit.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>

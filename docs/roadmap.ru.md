@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F2-R2.1 — build matrix шести targets.**
+> **▶️ Текущая граница: F2-R2.2 — шесть target projects.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.26; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -46,7 +46,7 @@ firmware-репозитория. Пересечения с железом ука
 |---|---|
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
 | Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, Airband заднего RP и integrated faults актуальны |
-| Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ F2-R2.1: [план rebaseline шести targets проведён ревью](../config/f2_r2_target_rebaseline.json); пять структур R1 исторические, сейчас формируется точная matrix commands/artifacts шести targets |
+| Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ▶️ F2-R2.2: [точная build matrix шести targets проведена ревью](../config/f2_r2_build_matrix.json); пять структур R1 исторические, сейчас создаются шесть независимых project trees R2 |
 | Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.26 сейчас; стабильная внешняя шелкография указывает роль каждой платы, `R2-EVT1` и `REV A`, а `H1-R2.xx` остаётся только в документации; десять SMA разделены 5+5, задний FPV MMCX не имеет хвоста в межплатный просвет, прямые i8080-8 32 МГц и camera RX остаются локальны S3, а шлейф экрана направлен к антенному торцу, поэтому F5/F6 разворачивают память ST77922 и touch-координаты на 180°; TVP5150 остаётся спереди, а точный M1 на 80 контактов несёт один CVBS, 14 настоящих NC-резервов и не принимает механическую нагрузку корпуса; двойная post-PCBA-зона K331/AWM666V 30×24×8 мм принимает ровно один приёмник, сохраняет 1,05 мм встречного зазора и не меняет firmware controls/CVBS; пять корпусов буферов, два корпуса Schmitt-инверторов, 147 развязывающих конденсаторов и шесть номиналов обычных 0402-резисторов теперь используют складские точные либо параметрически равноценные серийные детали без изменения BSP-контракта; H5/H7 отвечают за квалификацию полученного модуля и пайки, а явное принятие мокапа — последнее действие H1 |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
@@ -59,13 +59,13 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2-R2
 
-<!-- current-substep: F2-R2.1 -->
+<!-- current-substep: F2-R2.2 -->
 
-▶️ **`F2-R2.1` — сейчас.** [План F2-R2.0, проведённый ревью](../config/f2_r2_target_rebaseline.json),
-связывает hash сохранённой инвентаризации R1 и задаёт точную delta шести targets
-и пять последовательных gates. Этот подэтап публикует matrix toolchains,
-commands, artifacts и size gates шести targets до создания project или запуска
-R2 build. Маркер и evidence меняются вместе в каждом commit.
+▶️ **`F2-R2.2` — сейчас.** [Matrix F2-R2.1, проведённая ревью](../config/f2_r2_build_matrix.json),
+задаёт 12 locked offline argv-only jobs, 60 путей artifacts, 16 map paths и 16
+size gates. Этот подэтап создаёт шесть независимых минимальных production-SDK
+project trees, включая разные identities RF-RP и Hub-RP, без запуска R2 target
+build. Маркер и evidence меняются вместе в каждом commit.
 
 <details>
 <summary><strong>Сохранённый состав F2–F4 R1 — не текущая топология</strong></summary>
@@ -223,7 +223,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
 | **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Airband заднего RP и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
-| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.1 | Опубликовать точную matrix шести projects production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2; generated BSP R2 следует принятому hardware | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
+| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.2 | Создать из проведённой ревью matrix шесть независимых projects production SDK: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; reset/off/no-back-power/quiet transitions явны; P02 остаётся только входом, проверены reset/readback селектора и семь резервных pins; неподдерживаемая эмулятором периферия имеет dev-board test |
@@ -251,8 +251,7 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F2-R2.1`. Инвентаризация пяти targets R1 и порядок реализации
-шести targets проведены ревью. Нужно опубликовать точную matrix toolchains,
-commands, artifacts и size gates без создания или сборки R2 target. Generated
-BSP R2 зависит от принятого hardware source; сохранённые build/QEMU evidence R1
-остаются историческими.
+Текущая граница — `F2-R2.2`. Matrix toolchains, commands, artifacts и size gates
+шести targets проведена ревью. Нужно создать шесть независимых минимальных target
+project trees без запуска R2 build. Generated BSP R2 зависит от принятого
+hardware source; сохранённые build/QEMU evidence R1 остаются историческими.

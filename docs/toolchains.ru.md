@@ -1,12 +1,30 @@
-# Система сборки пяти прошивок
+# Система сборки шести firmware targets
 
 [English](toolchains.md) · [На главную](../README.ru.md) ·
 [Роадмап](roadmap.ru.md)
 
-Эта страница собирает принятые результаты завершённой фазы F2: официальные
-toolchains, неизменяемые environment locks, общие команды и владение исходниками.
+В текущем build plan R2 шесть независимых targets. Сохранённое завершённое
+evidence R1 ниже остаётся regression history и не квалифицирует binaries R2.
 
-## Результаты F2, прошедшие ревью
+## Текущий результат R2
+
+| Подэтап | Статус | Результат |
+|---|---|---|
+| F2-R2.0 | Проведено ревью | hash-locked инвентаризация пяти targets R1 и точный план миграции шести targets в [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
+| F2-R2.1 | Проведено ревью | точная offline argv matrix 6 targets × 2 configurations в [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 путей artifacts, 16 maps и 16 size gates; заявлено ноль R2 projects и executions |
+| F2-R2.2 | Сейчас | создать шесть независимых минимальных production-SDK project trees без запуска R2 build |
+
+Matrix закрепляет каждую команду configure/build/clean за отдельным root
+`build/r2/targets/<target>/<configuration>`, требует SHA-verified archives,
+точные source commits, Python 3.12 с hashed requirements, `SOURCE_DATE_EPOCH`,
+offline ESP Component Manager и disconnected Pico FetchContent. S3 QEMU остаётся
+gate F3-R2; у C5 нет официальной QEMU machine, Pico host не является эмуляцией
+RP2350, а для MSPM0C1106 нет принятого официального simulator. Число прогонов
+development-board и Leshy2 HIL остаётся нулём.
+
+## Исторические результаты R1
+
+### Результаты F2, прошедшие ревью
 
 | Подэтап | Статус | Результат |
 |---|---|---|

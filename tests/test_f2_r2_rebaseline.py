@@ -33,6 +33,27 @@ class F2R2RebaselineTests(unittest.TestCase):
         self.assertEqual("rp2350-arm-s", projects["hub_rp"]["sdk_target"])
         self.assertEqual("F2-R2.1", plan["next"])
 
+    def test_six_target_build_matrix_is_exact_and_non_executed(self):
+        result = subprocess.run(
+            ["python3", "tools/check_f2_r2_build_matrix.py"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertIn("6 targets x 2 configurations", result.stdout)
+        self.assertIn("0 projects/builds/executions claimed", result.stdout)
+        matrix = json.loads(
+            (ROOT / "config/f2_r2_build_matrix.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(12, len(matrix["jobs"]))
+        self.assertEqual(60, matrix["evidence"]["artifact_paths_per_complete_pass"])
+        self.assertEqual(16, matrix["evidence"]["map_paths_per_complete_pass"])
+        self.assertFalse(matrix["locked_environment"]["network_during_configure_or_build"])
+        self.assertEqual("F2-R2.2", matrix["next"])
+
 
 if __name__ == "__main__":
     unittest.main()

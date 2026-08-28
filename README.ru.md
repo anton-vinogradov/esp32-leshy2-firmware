@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F2-R2.1 — формируется build matrix шести targets.** Работа
+> **Статус прошивки: F2-R2.2 — создаются шесть target projects.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.1**; [план R2 проведён ревью](config/f2_r2_target_rebaseline.json), [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | задать точную matrix toolchain/commands/artifacts для шести production-SDK targets и текущего generated BSP |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.2**; [план](config/f2_r2_target_rebaseline.json) и [matrix](config/f2_r2_build_matrix.json) R2 проведены ревью, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | создать шесть независимых production-SDK project trees без запуска target builds |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F2-R2.1.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
+**Прошивка находится на F2-R2.2.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
@@ -121,14 +121,14 @@ BSP, KiCad layout и разрешение заказа остаются откр
 
 ### Текущая фаза F2-R2 — детальная позиция
 
-<!-- current-substep: F2-R2.1 -->
+<!-- current-substep: F2-R2.2 -->
 
-▶️ **`F2-R2.1` — сейчас.** [План rebaseline F2-R2.0](config/f2_r2_target_rebaseline.json)
-провёл ревью сохранённой инвентаризации пяти projects R1, точной delta шести
-targets и пяти последовательных gates реализации. Теперь подэтап задаёт точную
-matrix toolchains, commands, artifacts и size gates для S3, C5, RF RP, Hub RP,
-Pack и Safety. Он не создаёт R2 target project и не запускает target build;
-маркер и evidence меняются вместе в каждом commit.
+▶️ **`F2-R2.2` — сейчас.** [Build matrix F2-R2.1](config/f2_r2_build_matrix.json)
+провела ревью 12 shell-free offline command sets, 60 путей artifacts, 16 map
+paths и 16 image-size gates для S3, C5, RF RP, Hub RP, Pack и Safety. Этот
+подэтап создаёт шесть независимых минимальных production-SDK project trees,
+включая разные identities RF-RP и Hub-RP, но не запускает R2 target build.
+Маркер и evidence меняются вместе в каждом commit.
 
 <details>
 <summary><strong>Сохранённое evidence F0–F4 R1 — не текущая топология</strong></summary>

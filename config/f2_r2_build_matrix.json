@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.1",
+  "status": "reviewed_matrix",
+  "reviewed_on": "2026-08-28",
+  "inputs": {
+    "rebaseline_plan": {
+      "path": "config/f2_r2_target_rebaseline.json",
+      "sha256": "26933cb22939992cee891f7e7ebf82c001fa799291def1b7c72fb33a93d95944"
+    },
+    "target_identities": {
+      "path": "config/f0_r2_target_identity_contract.json",
+      "sha256": "7700df169bbf22d5071ee9661157bda03e03260c32f9001d20bb8772b77a1a00"
+    },
+    "memory_rollback": {
+      "path": "config/f0_r2_memory_rollback_contract.json",
+      "sha256": "8de1a75699992eed4f2aa00ff2f3741db3bb9d3c4303dbef6ce869b322cc768c"
+    },
+    "execution_gates": {
+      "path": "config/f0_r2_execution_gate_matrix.json",
+      "sha256": "2539dcf6033cde86b504d01a1eb2147f59d948956c0ebe8dac0f103878167c84"
+    },
+    "toolchain_identity": {
+      "path": "config/toolchain_matrix.json",
+      "sha256": "aa13491a8b13c0d9f19d7160f23d53f421f76cee971374ff77d64c8c49516d47"
+    },
+    "toolchain_lock": {
+      "path": "environment/toolchains.lock.json",
+      "sha256": "2193c7703e47ef2f41c96edf072805d97aea7093659635c99d24b6884ce68604"
+    },
+    "build_policy": {
+      "path": "config/build_policy.json",
+      "sha256": "ed86c9cf3e0b2447e82d309455e192eb3e790bcb029a39eac0f401256ec82dee"
+    }
+  },
+  "size_gate_sources": {
+    "s3": {
+      "path": "config/s3_image_limits.json",
+      "sha256": "178235a2174b5baa6ed610e08703a0c437b627249893b2b92892dd95cc84d513"
+    },
+    "c5": {
+      "path": "config/c5_image_limits.json",
+      "sha256": "32ef900ff75cbed7b49ab61b44449a176ef240fe54850a33f34eeb735013673c"
+    },
+    "rp2354b": {
+      "path": "config/rp2354b_image_limits.json",
+      "sha256": "1c1f086a6f89c7d72cf291b823798d27c676c29f7fff532d33d42447681a2f2f"
+    },
+    "mspm0c1106": {
+      "path": "config/mspm0c1106_memory.json",
+      "sha256": "bdc77fe069ec841cac725761d918092e11dd73a52eb6e0a8cc71e586c1ce7744"
+    }
+  },
+  "host_profiles": ["linux_x86_64", "macos_arm64"],
+  "configurations": {
+    "debug": {
+      "cmake_build_type": "Debug",
+      "policy": "config/build_policy.json#/configurations/debug"
+    },
+    "release": {
+      "cmake_build_type": "Release",
+      "policy": "config/build_policy.json#/configurations/release"
+    }
+  },
+  "build_root": "build/r2/targets/{target}/{configuration}",
+  "locked_environment": {
+    "python": "3.12",
+    "source_date_epoch": "required_from_git_commit_timestamp",
+    "network_during_configure_or_build": false,
+    "floating_versions_allowed": false,
+    "archive_sha256_before_use": true,
+    "source_revision_verification": "exact_commit_and_recursive_locked_submodules",
+    "environment": {
+      "IDF_COMPONENT_MANAGER": "0",
+      "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+      "SOURCE_DATE_EPOCH": "{git_commit_timestamp}",
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "python_lock": "environment/requirements/esp-idf-core.lock.txt",
+    "python_install_flags": ["--require-hashes", "--only-binary=cryptography"],
+    "command_form": "argv_only_no_shell"
+  },
+  "toolchain_families": {
+    "esp_idf": {
+      "sdk": "ESP-IDF",
+      "version": "v6.0.2",
+      "commit": "7101770dc6db2667b3c477cc31365dd1acd6db4e",
+      "source_lock_id": "esp-idf",
+      "target_compilers": {
+        "s3": {
+          "name": "xtensa-esp-elf",
+          "version": "esp-15.2.0_20251204",
+          "archive_lock_ids": ["esp-xtensa-gcc-linux_x86_64", "esp-xtensa-gcc-macos_arm64"]
+        },
+        "c5": {
+          "name": "riscv32-esp-elf",
+          "version": "esp-15.2.0_20251204",
+          "archive_lock_ids": ["esp-riscv-gcc-linux_x86_64", "esp-riscv-gcc-macos_arm64"]
+        }
+      }
+    },
+    "pico_sdk": {
+      "sdk": "Raspberry Pi Pico SDK",
+      "version": "2.3.0",
+      "commit": "98a542c1a62fb549ffb5d66a3e5892b06276b670",
+      "source_lock_id": "pico-sdk",
+      "packaging_tool": {
+        "name": "picotool",
+        "version": "2.3.0",
+        "commit": "6f6458d792b93685a11423b244a585eaa99eafcf",
+        "source_lock_id": "picotool"
+      },
+      "compiler": {
+        "name": "arm-none-eabi",
+        "version": "15.2.Rel1",
+        "archive_lock_ids": ["arm-gnu-linux_x86_64", "arm-gnu-macos_arm64"]
+      }
+    },
+    "ti_mspm0_sdk": {
+      "sdk": "TI MSPM0 SDK",
+      "version": "2.11.00.07",
+      "commit": "20807db79aa17b49f87ab8ec87f6b6d63ee2cb32",
+      "source_lock_id": "mspm0-sdk",
+      "compiler": {
+        "name": "ti-arm-clang",
+        "version": "4.0.5.LTS",
+        "archive_lock_ids": ["ti-arm-clang-linux_x86_64", "ti-arm-clang-macos_arm64"]
+      },
+      "sysconfig": {
+        "version": "1.28.0.4712",
+        "archive_lock_ids": ["ti-sysconfig-linux_x86_64", "ti-sysconfig-macos_arm64"]
+      },
+      "sdk_archive_lock_ids": ["ti-mspm0-sdk-linux_x86_64", "ti-mspm0-sdk-macos_arm64"]
+    }
+  },
+  "targets": [
+    {
+      "id": "s3",
+      "family": "esp_idf",
+      "sdk_target": "esp32s3",
+      "project_dir": "targets/s3",
+      "project_name": "leshy2_s3",
+      "required_environment": ["IDF_PATH", "IDF_TOOLS_PATH", "IDF_PYTHON_ENV_PATH"],
+      "commands": {
+        "configure": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/s3", "-B", "{build}", "-DIDF_TARGET=esp32s3", "-DSDKCONFIG={build}/sdkconfig", "-DSDKCONFIG_DEFAULTS={repo}/targets/s3/sdkconfig.defaults;{repo}/targets/s3/sdkconfig.{configuration}", "reconfigure"],
+        "build": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/s3", "-B", "{build}", "build"],
+        "clean": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/s3", "-B", "{build}", "fullclean"]
+      },
+      "artifacts": [
+        {"kind": "application_bin", "path": "{build}/leshy2_s3.bin"},
+        {"kind": "elf", "path": "{build}/leshy2_s3.elf"},
+        {"kind": "map", "path": "{build}/leshy2_s3.map"},
+        {"kind": "bootloader_bin", "path": "{build}/bootloader/bootloader.bin"},
+        {"kind": "partition_table_bin", "path": "{build}/partition_table/partition-table.bin"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_s3.bin", "warning_bytes": 6291456, "maximum_bytes": 7077888, "source": "config/s3_image_limits.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "esp32s3_supported_but_deferred_to_F3-R2", "development_board": "not_run", "leshy2_hil": "not_run"}
+    },
+    {
+      "id": "c5",
+      "family": "esp_idf",
+      "sdk_target": "esp32c5",
+      "project_dir": "targets/c5",
+      "project_name": "leshy2_c5",
+      "required_environment": ["IDF_PATH", "IDF_TOOLS_PATH", "IDF_PYTHON_ENV_PATH"],
+      "commands": {
+        "configure": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/c5", "-B", "{build}", "-DIDF_TARGET=esp32c5", "-DSDKCONFIG={build}/sdkconfig", "-DSDKCONFIG_DEFAULTS={repo}/targets/c5/sdkconfig.defaults;{repo}/targets/c5/sdkconfig.{configuration}", "reconfigure"],
+        "build": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/c5", "-B", "{build}", "build"],
+        "clean": ["{python}", "{env:IDF_PATH}/tools/idf.py", "-C", "{repo}/targets/c5", "-B", "{build}", "fullclean"]
+      },
+      "artifacts": [
+        {"kind": "application_bin", "path": "{build}/leshy2_c5.bin"},
+        {"kind": "elf", "path": "{build}/leshy2_c5.elf"},
+        {"kind": "map", "path": "{build}/leshy2_c5.map"},
+        {"kind": "bootloader_bin", "path": "{build}/bootloader/bootloader.bin"},
+        {"kind": "partition_table_bin", "path": "{build}/partition_table/partition-table.bin"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_c5.bin", "warning_bytes": 3145728, "maximum_bytes": 3538944, "source": "config/c5_image_limits.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "unsupported_no_official_esp32c5_machine", "development_board": "not_run", "leshy2_hil": "not_run"}
+    },
+    {
+      "id": "rf_rp",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_dir": "targets/rf_rp",
+      "project_name": "leshy2_rf_rp",
+      "required_environment": ["PICO_SDK_PATH", "ARM_GNU_TOOLCHAIN_PATH", "PICOTOOL_FETCH_FROM_GIT_PATH"],
+      "commands": {
+        "configure": ["cmake", "-S", "{repo}/targets/rf_rp", "-B", "{build}", "-G", "Ninja", "-DCMAKE_BUILD_TYPE={cmake_build_type}", "-DPICO_SDK_PATH={env:PICO_SDK_PATH}", "-DPICO_PLATFORM=rp2350-arm-s", "-DPICO_BOARD=leshy2_rp2354b", "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}", "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}", "-DPython3_EXECUTABLE={python}", "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"],
+        "build": ["cmake", "--build", "{build}", "--parallel"],
+        "clean": ["cmake", "--build", "{build}", "--target", "clean"]
+      },
+      "artifacts": [
+        {"kind": "elf", "path": "{build}/leshy2_rf_rp.elf"},
+        {"kind": "application_bin", "path": "{build}/leshy2_rf_rp.bin"},
+        {"kind": "uf2", "path": "{build}/leshy2_rf_rp.uf2"},
+        {"kind": "map", "path": "{build}/leshy2_rf_rp.elf.map"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_rf_rp.bin", "warning_bytes": 786432, "maximum_bytes": 884736, "source": "config/rp2354b_image_limits.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "unsupported_pico_host_is_not_rp2350_emulation", "development_board": "Pico_2_is_non_exact_surrogate_not_run", "leshy2_hil": "not_run"}
+    },
+    {
+      "id": "hub_rp",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_dir": "targets/hub_rp",
+      "project_name": "leshy2_hub_rp",
+      "required_environment": ["PICO_SDK_PATH", "ARM_GNU_TOOLCHAIN_PATH", "PICOTOOL_FETCH_FROM_GIT_PATH"],
+      "commands": {
+        "configure": ["cmake", "-S", "{repo}/targets/hub_rp", "-B", "{build}", "-G", "Ninja", "-DCMAKE_BUILD_TYPE={cmake_build_type}", "-DPICO_SDK_PATH={env:PICO_SDK_PATH}", "-DPICO_PLATFORM=rp2350-arm-s", "-DPICO_BOARD=leshy2_rp2354b", "-DPICO_TOOLCHAIN_PATH={env:ARM_GNU_TOOLCHAIN_PATH}", "-DPICOTOOL_FETCH_FROM_GIT_PATH={env:PICOTOOL_FETCH_FROM_GIT_PATH}", "-DPython3_EXECUTABLE={python}", "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"],
+        "build": ["cmake", "--build", "{build}", "--parallel"],
+        "clean": ["cmake", "--build", "{build}", "--target", "clean"]
+      },
+      "artifacts": [
+        {"kind": "elf", "path": "{build}/leshy2_hub_rp.elf"},
+        {"kind": "application_bin", "path": "{build}/leshy2_hub_rp.bin"},
+        {"kind": "uf2", "path": "{build}/leshy2_hub_rp.uf2"},
+        {"kind": "map", "path": "{build}/leshy2_hub_rp.elf.map"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_hub_rp.bin", "warning_bytes": 786432, "maximum_bytes": 884736, "source": "config/rp2354b_image_limits.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "unsupported_pico_host_is_not_rp2350_emulation", "development_board": "Pico_2_is_non_exact_surrogate_not_run", "leshy2_hil": "not_run"}
+    },
+    {
+      "id": "pack",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_dir": "targets/pack",
+      "project_name": "leshy2_pack",
+      "required_environment": ["MSPM0_SDK_PATH", "TI_ARM_CLANG_PATH", "SYSCONFIG_PATH"],
+      "commands": {
+        "configure": ["make", "-C", "{repo}/targets/pack", "CONFIG={configuration}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "configure"],
+        "build": ["make", "-C", "{repo}/targets/pack", "CONFIG={configuration}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "all"],
+        "clean": ["make", "-C", "{repo}/targets/pack", "CONFIG={configuration}", "BUILD_DIR={build}", "PYTHON={python}", "clean"]
+      },
+      "artifacts": [
+        {"kind": "boot_elf", "path": "{build}/leshy2_pack_boot.out"},
+        {"kind": "boot_bin", "path": "{build}/leshy2_pack_boot.bin"},
+        {"kind": "boot_map", "path": "{build}/leshy2_pack_boot.map"},
+        {"kind": "elf", "path": "{build}/leshy2_pack.out"},
+        {"kind": "application_bin", "path": "{build}/leshy2_pack.bin"},
+        {"kind": "map", "path": "{build}/leshy2_pack.map"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_pack_boot.bin", "warning_bytes": 14336, "maximum_bytes": 16384, "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"},
+        {"artifact": "{build}/leshy2_pack.bin", "warning_bytes": 20480, "maximum_bytes": 22528, "source": "config/mspm0c1106_memory.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "unsupported_no_official_mspm0c1106_simulator", "development_board": "LP-MSPM0C1106_not_run", "leshy2_hil": "not_run"}
+    },
+    {
+      "id": "safety",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_dir": "targets/safety",
+      "project_name": "leshy2_safety",
+      "required_environment": ["MSPM0_SDK_PATH", "TI_ARM_CLANG_PATH", "SYSCONFIG_PATH"],
+      "commands": {
+        "configure": ["make", "-C", "{repo}/targets/safety", "CONFIG={configuration}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "configure"],
+        "build": ["make", "-C", "{repo}/targets/safety", "CONFIG={configuration}", "BUILD_DIR={build}", "MSPM0_SDK_PATH={env:MSPM0_SDK_PATH}", "TI_ARM_CLANG_PATH={env:TI_ARM_CLANG_PATH}", "SYSCONFIG_PATH={env:SYSCONFIG_PATH}", "PYTHON={python}", "all"],
+        "clean": ["make", "-C", "{repo}/targets/safety", "CONFIG={configuration}", "BUILD_DIR={build}", "PYTHON={python}", "clean"]
+      },
+      "artifacts": [
+        {"kind": "boot_elf", "path": "{build}/leshy2_safety_boot.out"},
+        {"kind": "boot_bin", "path": "{build}/leshy2_safety_boot.bin"},
+        {"kind": "boot_map", "path": "{build}/leshy2_safety_boot.map"},
+        {"kind": "elf", "path": "{build}/leshy2_safety.out"},
+        {"kind": "application_bin", "path": "{build}/leshy2_safety.bin"},
+        {"kind": "map", "path": "{build}/leshy2_safety.map"}
+      ],
+      "size_gates": [
+        {"artifact": "{build}/leshy2_safety_boot.bin", "warning_bytes": 14336, "maximum_bytes": 16384, "source": "config/mspm0c1106_memory.json#/regions/protected_boot_manager"},
+        {"artifact": "{build}/leshy2_safety.bin", "warning_bytes": 20480, "maximum_bytes": 22528, "source": "config/mspm0c1106_memory.json"}
+      ],
+      "execution_gate": {"target_build": "not_run_until_F2-R2.4", "official_emulator": "unsupported_no_official_mspm0c1106_simulator", "development_board": "LP-MSPM0C1106_not_run", "leshy2_hil": "not_run"}
+    }
+  ],
+  "jobs": [
+    {"target": "s3", "configuration": "debug", "build_dir": "build/r2/targets/s3/debug"},
+    {"target": "s3", "configuration": "release", "build_dir": "build/r2/targets/s3/release"},
+    {"target": "c5", "configuration": "debug", "build_dir": "build/r2/targets/c5/debug"},
+    {"target": "c5", "configuration": "release", "build_dir": "build/r2/targets/c5/release"},
+    {"target": "rf_rp", "configuration": "debug", "build_dir": "build/r2/targets/rf_rp/debug"},
+    {"target": "rf_rp", "configuration": "release", "build_dir": "build/r2/targets/rf_rp/release"},
+    {"target": "hub_rp", "configuration": "debug", "build_dir": "build/r2/targets/hub_rp/debug"},
+    {"target": "hub_rp", "configuration": "release", "build_dir": "build/r2/targets/hub_rp/release"},
+    {"target": "pack", "configuration": "debug", "build_dir": "build/r2/targets/pack/debug"},
+    {"target": "pack", "configuration": "release", "build_dir": "build/r2/targets/pack/release"},
+    {"target": "safety", "configuration": "debug", "build_dir": "build/r2/targets/safety/debug"},
+    {"target": "safety", "configuration": "release", "build_dir": "build/r2/targets/safety/release"}
+  ],
+  "evidence": {
+    "target_count": 6,
+    "configuration_count": 12,
+    "artifact_paths_per_complete_pass": 60,
+    "map_paths_per_complete_pass": 16,
+    "size_gates_per_complete_pass": 16,
+    "r2_target_projects_created": 0,
+    "r2_configures_run": 0,
+    "r2_builds_run": 0,
+    "r2_emulator_runs": 0,
+    "r2_devboard_runs": 0,
+    "r2_physical_runs": 0
+  },
+  "next": "F2-R2.2",
+  "checker": "tools/check_f2_r2_build_matrix.py"
+}

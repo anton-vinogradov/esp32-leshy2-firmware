@@ -1,11 +1,29 @@
-# Build system for five firmware images
+# Build system for six firmware targets
 
 [Русский](toolchains.ru.md) · [Home](../README.md) · [Roadmap](roadmap.md)
 
-This page collects the accepted results of the completed F2 phase: first-party
-toolchains, immutable environment locks, common commands and source ownership.
+The current R2 build plan has six independent targets. The retained completed
+R1 evidence below remains regression history and does not qualify R2 binaries.
 
-## Reviewed F2 results
+## Current R2 result
+
+| Step | Status | Result |
+|---|---|---|
+| F2-R2.0 | Reviewed | hash-locked five-target R1 inventory and exact six-target migration plan in [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
+| F2-R2.1 | Reviewed | exact 6-target × 2-configuration offline argv matrix in [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 artifact paths, 16 maps and 16 size gates; zero R2 projects or executions claimed |
+| F2-R2.2 | Current | create six independent minimal production-SDK project trees without running an R2 build |
+
+The matrix locks every configure/build/clean command to a separate
+`build/r2/targets/<target>/<configuration>` root, requires SHA-verified archives,
+exact source commits, Python 3.12 with hashed requirements,
+`SOURCE_DATE_EPOCH`, offline ESP Component Manager and disconnected Pico
+FetchContent. S3 QEMU remains an F3-R2 gate; C5 has no official QEMU machine,
+Pico host is not RP2350 emulation, and MSPM0C1106 has no accepted official
+simulator. Development-board and Leshy2 HIL runs remain zero.
+
+## Historical R1 results
+
+### Reviewed F2 results
 
 | Step | Status | Result |
 |---|---|---|
