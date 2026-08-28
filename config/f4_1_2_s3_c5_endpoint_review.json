@@ -5,7 +5,7 @@
   "reviewed_on": "2026-08-27",
   "locked_inputs": {
     "adapter_contract_sha256": "d27a8de18ef58f06628b102ccca5dcb4a7ec8af6acc45635ae7063c9176392aa",
-    "hardware_contract_sha256": "34826d0acbd76ba086932a4b4f2e5ed8daa6f5100e771cf593f4e0f74547ea67",
+    "hardware_contract_sha256": "9d451d0db45535d43971bd3e1feccbc8624302afb26f0a101b5bb3ed552d9ac8",
     "essl_vendor_lock_sha256": "4de40edf538d359ab9d2a16460dbcbf346898b1fdaf475149f503b06f018066d"
   },
   "sources": [

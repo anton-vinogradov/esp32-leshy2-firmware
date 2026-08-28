@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.3",
-                "H1-R2.26", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.27", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.3",
-                "H1-R2.26", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.27", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():

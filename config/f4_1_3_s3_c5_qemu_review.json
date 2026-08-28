@@ -4,7 +4,7 @@
   "status": "reviewed",
   "reviewed_on": "2026-08-27",
   "locked_inputs": {
-    "endpoint_review_sha256": "19834757d4d260e974ca7b3d7b8579e872a70e1aea63101d7e95574417d55f35",
+    "endpoint_review_sha256": "056d6bf94230fc5e42d7fb078f0fb1de955d89670c2a6291c67c6b4c289b90bd",
     "qemu_plan_sha256": "a50f404da95379350fa24755a4be67d6d702c1c7620846eee982166317c3abdd"
   },
   "fake_sources": [

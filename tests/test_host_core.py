@@ -363,7 +363,7 @@ class HostCoreExecutionTests(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        self.assertIn("source layout OK: 10 portable files", result.stdout)
+        self.assertIn("source layout OK: 12 portable files", result.stdout)
 
         layout = json.loads(
             (REPO_ROOT / "config/source_layout.json").read_text(encoding="utf-8")
