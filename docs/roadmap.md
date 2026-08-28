@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F2-R2.0 — six-target build rebaseline.** R1 F0–F4
+> **▶️ Current boundary: F2-R2.1 — six-target build matrix.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.26; its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -44,7 +44,7 @@ duplicated or given a second status here.
 |---|---|
 | Six-domain HW↔FW projection | ✅ [F0-R2 reviewed](f0-product-contracts-report.md): H0-R2 source is hash-bound; identities, local rollback, S3-last update and five-layer execution gates are coherent |
 | Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, rear-RP Airband receiver and integrated faults are current |
-| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ F2-R2.0: six project/image identities are reviewed; five R1 structures are historical while the exact six-project/toolchain/artifact rebaseline is current |
+| S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ▶️ F2-R2.1: the [six-target rebaseline plan is reviewed](../config/f2_r2_target_rebaseline.json); five R1 structures are historical while the exact six-target command/artifact matrix is current |
 | Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
 | Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.26 is current; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; the 30×24×8-mm dual post-PCBA K331/AWM666V bay installs exactly one receiver, retains 1.05 mm opposing clearance and leaves firmware controls/CVBS unchanged; five buffer footprints, two Schmitt-inverter footprints, 147 bypass capacitors and six ordinary 0402 resistor identities now use stocked exact or parametrically equivalent production parts without changing the BSP contract; H5/H7 own received-module/solder qualification, while explicit mock-up acceptance is the final H1 action |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
@@ -57,13 +57,13 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2-R2 breakdown
 
-<!-- current-substep: F2-R2.0 -->
+<!-- current-substep: F2-R2.1 -->
 
-▶️ **`F2-R2.0` — current.** The [reviewed F1-R2 result](f1-portable-cores-report.md)
-is the fixed portable input. This substep inventories the retained R1 projects,
-toolchains, artifacts and generated BSP boundaries, then defines the exact
-six-target delta: S3, C5, RF RP, Hub RP, Pack and Safety. It creates no project
-and runs no R2 build. The marker and evidence update together in every commit.
+▶️ **`F2-R2.1` — current.** The [reviewed F2-R2.0 plan](../config/f2_r2_target_rebaseline.json)
+hash-locks the retained R1 inventory and defines the exact six-target delta and
+five ordered gates. This substep publishes the six-target toolchain, command,
+artifact and size-gate matrix before creating a project or running an R2 build.
+The marker and evidence update together in every commit.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>
@@ -221,7 +221,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
 | **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only rear-RP Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
-| **F2. Target projects and build system** | ▶️ Current: F2-R2.0 | Inventory and rebaseline six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP follows accepted hardware | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
+| **F2. Target projects and build system** | ▶️ Current: F2-R2.1 | Publish the exact matrix for six production-SDK projects: ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2; generated R2 BSP follows accepted hardware | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, CTIA jack detect, `0x39` headset-source control, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; reset/off/no-back-power/quiet transitions are explicit; P02 remains input-only, selector reset/readback and seven reserve pins are checked; unmodeled peripherals have dev-board tests |
@@ -249,7 +249,8 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F2-R2.0`. Inventory the retained five-target R1 build
-system and publish the exact six-target project/toolchain/artifact delta without
-creating or building an R2 target yet. Generated R2 BSP work remains dependent
-on the accepted hardware source; retained R1 build/QEMU evidence is historical.
+The current boundary is `F2-R2.1`. The retained five-target R1 inventory and
+six-target implementation order are reviewed. Publish the exact toolchain,
+command, artifact and size-gate matrix without creating or building an R2 target
+yet. Generated R2 BSP work remains dependent on the accepted hardware source;
+retained R1 build/QEMU evidence is historical.
