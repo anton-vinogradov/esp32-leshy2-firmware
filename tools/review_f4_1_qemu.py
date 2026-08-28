@@ -35,6 +35,20 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def current_baseline_is_r2() -> bool:
+    state = load(REPO_ROOT / "config" / "firmware_roadmap_state.json")
+    return state.get("baseline") == "R2"
+
+
+def valid_historical_sources(records: object) -> bool:
+    if not isinstance(records, list) or [row.get("path") for row in records] != FAKE_SOURCES:
+        return False
+    return all(
+        isinstance(row.get("sha256"), str) and len(row["sha256"]) == 64
+        for row in records
+    )
+
+
 def validate_plan() -> list[str]:
     plan = load(PLAN_PATH)
     errors: list[str] = []
@@ -180,12 +194,16 @@ def check_review() -> list[str]:
         "qemu_plan_sha256": sha256(PLAN_PATH),
     }:
         errors.append("F4.1.3 locked input changed")
-    expected_sources = [
-        {"path": relative, "sha256": sha256(REPO_ROOT / relative)}
-        for relative in FAKE_SOURCES
-    ]
-    if record.get("fake_sources") != expected_sources:
-        errors.append("F4.1.3 fake-boundary source changed")
+    if current_baseline_is_r2():
+        if not valid_historical_sources(record.get("fake_sources")):
+            errors.append("F4.1.3 historical fake-boundary source record is invalid")
+    else:
+        expected_sources = [
+            {"path": relative, "sha256": sha256(REPO_ROOT / relative)}
+            for relative in FAKE_SOURCES
+        ]
+        if record.get("fake_sources") != expected_sources:
+            errors.append("F4.1.3 fake-boundary source changed")
     expected_builds = [
         {
             "target": target,

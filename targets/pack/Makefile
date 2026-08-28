@@ -12,11 +12,11 @@ SYSCONFIG_CLI := $(SYSCONFIG_PATH)/sysconfig_cli.sh
 STARTUP := $(MSPM0_SDK_PATH)/source/ti/devices/msp/m0p/startup_system_files/ticlang/startup_mspm0c1105_c1106_ticlang.c
 DRIVERLIB := $(MSPM0_SDK_PATH)/source/ti/driverlib/lib/ticlang/m0p/mspm0c1105_c1106/driverlib.a
 COMMON := $(PROJECT_ROOT)/common
-GENERATED_HW := $(PROJECT_ROOT)/generated/hardware
+GENERATED_R2_HW := $(PROJECT_ROOT)/generated/r2/hardware
 SYSCONFIG_STAMP := $(BUILD_DIR)/sysconfig.stamp
 
 ARCH_FLAGS := -D__MSPM0C1106__ -mcpu=cortex-m0plus -march=thumbv6m -mfloat-abi=soft -mthumb
-INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(GENERATED_HW)/include -isystem $(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -isystem $(MSPM0_SDK_PATH)/source
+INCLUDE_FLAGS := -I$(BUILD_DIR) -I$(COMMON)/include -I$(GENERATED_R2_HW)/include -isystem $(MSPM0_SDK_PATH)/source/third_party/CMSIS/Core/Include -isystem $(MSPM0_SDK_PATH)/source
 PROJECT_WARNINGS := -Wall -Wextra -Werror -Wformat=2 -Wshadow -Wundef -Wconversion -Wdouble-promotion -Wmissing-prototypes -Wpedantic -Wstrict-prototypes
 PROJECT_CODEGEN := -std=c17 -ffunction-sections -fdata-sections -fstack-usage -ffile-prefix-map=$(PROJECT_ROOT)=. -fdebug-prefix-map=$(PROJECT_ROOT)=.
 
@@ -60,7 +60,7 @@ $(BUILD_DIR)/pack_main.obj: main.c $(SYSCONFIG_STAMP)
 $(BUILD_DIR)/safety_core.obj: $(COMMON)/src/safety_core.c $(COMMON)/include/leshy2/safety_core.h | $(BUILD_DIR)
 	$(CC) $(PROJECT_CFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/pack_bsp.obj: $(GENERATED_HW)/src/pack_bsp.c $(GENERATED_HW)/include/leshy2/hardware/pack_bsp.h $(GENERATED_HW)/include/leshy2/hardware/bsp_types.h | $(BUILD_DIR)
+$(BUILD_DIR)/pack_bsp.obj: $(GENERATED_R2_HW)/src/pack_bsp.c $(GENERATED_R2_HW)/include/leshy2/r2/hardware/pack_bsp.h $(GENERATED_R2_HW)/include/leshy2/r2/hardware/bsp_types.h | $(BUILD_DIR)
 	$(CC) $(PROJECT_CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/ti_msp_dl_config.obj: $(SYSCONFIG_STAMP)

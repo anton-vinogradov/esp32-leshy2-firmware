@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.3",
+  "status": "reviewed",
+  "reviewed_on": "2026-08-28",
+  "source_manifest": "generated/r2/source_manifest.json",
+  "projects": [
+    {
+      "id": "s3",
+      "domain": "s3",
+      "build_input": "targets/s3/components/leshy2_portable/CMakeLists.txt",
+      "entrypoint": "targets/s3/main/app_main.c",
+      "source": "generated/r2/hardware/src/s3_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/s3_bsp.h",
+      "symbol": "l2_r2_s3_domain"
+    },
+    {
+      "id": "c5",
+      "domain": "c5",
+      "build_input": "targets/c5/components/leshy2_portable/CMakeLists.txt",
+      "entrypoint": "targets/c5/main/app_main.c",
+      "source": "generated/r2/hardware/src/c5_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/c5_bsp.h",
+      "symbol": "l2_r2_c5_domain"
+    },
+    {
+      "id": "rf_rp",
+      "domain": "rf_rp",
+      "build_input": "targets/rf_rp/CMakeLists.txt",
+      "entrypoint": "targets/rf_rp/main.c",
+      "source": "generated/r2/hardware/src/rf_rp_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/rf_rp_bsp.h",
+      "symbol": "l2_r2_rf_rp_domain"
+    },
+    {
+      "id": "hub_rp",
+      "domain": "hub_rp",
+      "build_input": "targets/hub_rp/CMakeLists.txt",
+      "entrypoint": "targets/hub_rp/main.c",
+      "source": "generated/r2/hardware/src/hub_rp_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/hub_rp_bsp.h",
+      "symbol": "l2_r2_hub_rp_domain"
+    },
+    {
+      "id": "pack",
+      "domain": "pack",
+      "build_input": "targets/pack/Makefile",
+      "entrypoint": "targets/pack/main.c",
+      "source": "generated/r2/hardware/src/pack_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/pack_bsp.h",
+      "symbol": "l2_r2_pack_domain"
+    },
+    {
+      "id": "safety",
+      "domain": "safety",
+      "build_input": "targets/safety/Makefile",
+      "entrypoint": "targets/safety/main.c",
+      "source": "generated/r2/hardware/src/safety_bsp.c",
+      "include_root": "generated/r2/hardware/include",
+      "header": "leshy2/r2/hardware/safety_bsp.h",
+      "symbol": "l2_r2_safety_domain"
+    }
+  ],
+  "claims": {
+    "one_generated_domain_per_project": true,
+    "historical_r1_bsp_is_active_input": false,
+    "generated_sources_copied_into_targets": false,
+    "handwritten_production_pins": false,
+    "target_configure_run": false,
+    "target_build_run": false
+  },
+  "next": "F2-R2.4",
+  "checker": "tools/check_f2_r2_bsp.py"
+}

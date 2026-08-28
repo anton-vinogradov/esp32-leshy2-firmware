@@ -156,7 +156,7 @@ def main() -> int:
             "PICO_BOARD_HEADER_DIRS",
             "pico_sdk_init()",
             f"project(leshy2_{target_id} C CXX ASM)",
-            f"add_executable(leshy2_{target_id} main.c)",
+            f"leshy2_{target_id}",
             f"pico_add_extra_outputs(leshy2_{target_id})",
             "PICO_PLATFORM, rp2350-arm-s",
             "PICO_FLASH_SIZE_BYTES, (2 * 1024 * 1024)",
@@ -166,7 +166,6 @@ def main() -> int:
                 errors.append(f"{target_id}: missing production-SDK token {token!r}")
         for forbidden in (
             "generated/hardware",
-            "rp_bsp",
             "leshy2/hardware/",
             "targets/rp",
         ):

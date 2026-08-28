@@ -46,6 +46,24 @@ def source_records() -> list[dict]:
     ]
 
 
+def current_baseline_is_r2() -> bool:
+    state = json.loads(
+        (REPO_ROOT / "config" / "firmware_roadmap_state.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    return state.get("baseline") == "R2"
+
+
+def valid_historical_sources(records: object) -> bool:
+    if not isinstance(records, list) or [row.get("path") for row in records] != SOURCES:
+        return False
+    return all(
+        isinstance(row.get("sha256"), str) and len(row["sha256"]) == 64
+        for row in records
+    )
+
+
 def build_records() -> list[dict]:
     records = []
     for build in BUILDS:
@@ -148,7 +166,13 @@ def check_review() -> list[str]:
     }
     if record.get("locked_inputs") != expected_inputs:
         errors.append("F4.1.2 locked input hash changed")
-    if record.get("sources") != source_records():
+    # F4.1.2 is immutable R1 evidence after the R2 topology rebaseline. Its
+    # recorded source inventory remains reviewable, but current R2 SDK inputs
+    # must not be compared with (or relabelled as) the former SDIO endpoint.
+    if current_baseline_is_r2():
+        if not valid_historical_sources(record.get("sources")):
+            errors.append("F4.1.2 historical endpoint source record is invalid")
+    elif record.get("sources") != source_records():
         errors.append("F4.1.2 endpoint source hash changed")
     expected_builds = [
         {

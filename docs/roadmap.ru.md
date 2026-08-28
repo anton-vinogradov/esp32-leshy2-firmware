@@ -3,7 +3,7 @@
 [English](roadmap.md) · [На главную](../README.ru.md) ·
 [Аппаратный роадмап](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.ru.md)
 
-> **▶️ Текущая граница: F2-R2.3 — generated BSP шести доменов.**
+> **▶️ Текущая граница: F2-R2.4 — квалификация target builds.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Железо находится на H1-R2.27; актуальное locality-first размещение двух плат,
 > проверка реализуемости/резерв настройки фильтра Airband, точные MMCX/LDO и
@@ -47,8 +47,8 @@ firmware-репозитория. Пересечения с железом ука
 | HW↔FW projection шести доменов | ✅ [F0-R2 проведено ревью](f0-product-contracts-report.ru.md): source H0-R2 связан hash; identities, local rollback, S3-last update и пять слоёв execution gates согласованы |
 | Portable safety, L2IP и update model | ✅ [F1-R2 проведено ревью](f1-portable-cores-report.ru.md): 34 сценария R2 проходят normal+sanitizer runs; six-domain update, Airband заднего RP и integrated faults актуальны |
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
-| Владение generated BSP R2 | ▶️ F2-R2.3: сгенерировать шесть детерминированных доменов из текущей аппаратной проекции и привязать каждый ровно к одному project; сохранённый BSP пяти доменов только исторический |
-| Target builds, maps и S3 QEMU | ⏳ Evidence F2/F3 R1 сохранено, но не квалифицирует топологию R2 |
+| Владение generated BSP R2 | ✅ F2-R2.3: [шесть детерминированных доменов H1-R2.27](../config/f2_r2_bsp_generation.json) сгенерированы, и [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json); сохранённый BSP пяти доменов только исторический |
+| Target builds, maps и S3 QEMU | ▶️ F2-R2.4: квалифицировать 12 locked debug/release configurations, artifacts, maps и size gates; evidence F2/F3 R1 не квалифицирует R2 |
 | Пересечение с железом | ▶️ H0-R2 проведено ревью, H1-R2.27 сейчас; стабильная внешняя шелкография указывает роль каждой платы, `R2-EVT1` и `REV A`, а `H1-R2.xx` остаётся только в документации; десять SMA разделены 5+5, задний FPV MMCX не имеет хвоста в межплатный просвет, прямые i8080-8 32 МГц и camera RX остаются локальны S3, а шлейф экрана направлен к антенному торцу, поэтому F5/F6 разворачивают память ST77922 и touch-координаты на 180°; TVP5150 остаётся спереди, а точный M1 на 80 контактов несёт один CVBS, 14 настоящих NC-резервов и не принимает механическую нагрузку корпуса; двойная post-PCBA-зона K331/AWM666V 30×24×8 мм принимает ровно один приёмник, сохраняет 1,05 мм встречного зазора и не меняет firmware controls/CVBS; пять корпусов буферов, два корпуса Schmitt-инверторов, 147 развязывающих конденсаторов и шесть номиналов обычных 0402-резисторов теперь используют складские точные либо параметрически равноценные серийные детали без изменения BSP-контракта; H5/H7 отвечают за квалификацию полученного модуля и пайки, а явное принятие мокапа — последнее действие H1 |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
@@ -60,15 +60,17 @@ peripheral или board emulation и никогда не показываетс�
 
 ## Детальный состав текущей F2-R2
 
-<!-- current-substep: F2-R2.3 -->
+<!-- current-substep: F2-R2.4 -->
 
-▶️ **`F2-R2.3` — сейчас.** [F2-R2.2](../config/f2_r2_target_projects.json)
-провёл ревью шести production-SDK roots: четырёх сохранённых структур и новых
-независимых Pico SDK trees RF-RP и Hub-RP. У RP разные entries, images и
-target-local identities; trees работают offline и не содержат production pins.
-Старое generated tree пяти доменов явно исключено из build R2. Теперь нужно
-сгенерировать BSP шести доменов и доказать one-owner consumption; configure/build
-закрыты до названных следующих gates.
+▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](../config/f2_r2_bsp_generation.json)
+сгенерировал шесть побайтно воспроизводимых descriptors из связанной hash
+проекции H1-R2.27 и [доказал](../config/f2_r2_bsp_consumption.json) ровно одного
+SDK owner для каждого. Точные pins S3, точный состав GPIO groups Hub/RF-RP и
+identity-only boundaries неопубликованных per-pin maps различаются явно; порядок
+сигналов не выдумывался. Старое tree пяти доменов исключено из активных R2
+inputs. Теперь нужно квалифицировать 12 locked debug/release configurations,
+artifacts, maps и size gates. F2-R2.3 выполнил только host generation/syntax
+checks: target configure/build и execution не запускались.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>
@@ -227,7 +229,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Оба репозитория согласованы; нет неизвестного target, transport, recovery path или обязательного state; evidence R1 явно историческое |
 | **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Airband заднего RP и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
-| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.3 | Сгенерировать шесть детерминированных доменов BSP R2 для проведённых ревью project roots ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B и TI MSPM0 SDK ×2 | 12 debug/release configurations воспроизводятся; каждый target потребляет только свои generated R2 pins |
+| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.4 | Квалифицировать 12 locked debug/release configurations для шести project roots и one-owner generated BSP R2 | 12 debug/release configurations воспроизводятся; каждый target выдаёт named artifact/map и проходит size gate |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; reset/off/no-back-power/quiet transitions явны; P02 остаётся только входом, проверены reset/readback селектора и семь резервных pins; неподдерживаемая эмулятором периферия имеет dev-board test |
@@ -255,8 +257,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F2-R2.3`. Шесть production-SDK roots и независимые image
-identities RF-RP/Hub-RP проведены ревью при нуле R2 configure/build runs. Нужно
-сгенерировать шесть доменов BSP R2 из принятой аппаратной проекции и привязать
-каждый ровно к одному project. Сохранённые BSP/build/QEMU evidence R1 остаются
-историческими.
+Текущая граница — `F2-R2.4`. Шесть production-SDK roots потребляют шесть
+детерминированных descriptors H1-R2.27 с одним owner каждый. Нужно выполнить
+названные locked configure/build commands всех 12 debug/release configurations,
+затем проверить artifacts, maps и size gates. Сохранённые BSP/build/QEMU evidence
+R1 остаются историческими; F2-R2.3 не заявляет ни одного R2 target configure/build.

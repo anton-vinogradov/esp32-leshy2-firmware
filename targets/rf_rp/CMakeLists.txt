@@ -20,7 +20,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 pico_sdk_init()
 
-add_executable(leshy2_rf_rp main.c)
+set(LESHY2_GENERATED_R2_HW_DIR "${LESHY2_REPO_ROOT}/generated/r2/hardware")
+add_executable(
+    leshy2_rf_rp
+    main.c
+    "${LESHY2_GENERATED_R2_HW_DIR}/src/rf_rp_bsp.c"
+)
+target_include_directories(
+    leshy2_rf_rp PRIVATE "${LESHY2_GENERATED_R2_HW_DIR}/include"
+)
 target_compile_definitions(leshy2_rf_rp PRIVATE LESHY2_TARGET_RF_RP=1)
 target_compile_options(leshy2_rf_rp PRIVATE
     -std=c17

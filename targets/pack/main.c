@@ -1,5 +1,5 @@
 #include "leshy2/safety_core.h"
-#include "leshy2/hardware/pack_bsp.h"
+#include "leshy2/r2/hardware/pack_bsp.h"
 #include "ti_msp_dl_config.h"
 
 #include <stdint.h>
@@ -10,7 +10,7 @@ static l2_safety_t pack_admission;
 int main(void)
 {
     SYSCFG_DL_init();
-    if (l2_hw_pack_domain.pin_count != (uint16_t)L2_HW_PACK_PIN_COUNT) {
+    if (l2_r2_pack_domain.mapping != L2_R2_MAPPING_IDENTITY_ONLY) {
         __disable_irq();
         for (;;) {
             __WFI();

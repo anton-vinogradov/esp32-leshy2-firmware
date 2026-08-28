@@ -1,11 +1,11 @@
 #include "leshy2/safety_core.h"
-#include "leshy2/hardware/safety_bsp.h"
+#include "leshy2/r2/hardware/safety_bsp.h"
 #include "ti_msp_dl_config.h"
 
 #include <stdint.h>
 #include <ti/devices/msp/msp.h>
 
-/* F2.3 replaces this fail-closed placeholder with the generated H2 limit. */
+/* Keep the target fail-closed until a reviewed target safety limit is published. */
 enum {
     L2_UNCONFIGURED_TEMPERATURE_LIMIT_DECI_C = 0,
 };
@@ -15,7 +15,7 @@ static l2_safety_t safety_supervisor;
 int main(void)
 {
     SYSCFG_DL_init();
-    if (l2_hw_safety_domain.pin_count != (uint16_t)L2_HW_SAFETY_PIN_COUNT) {
+    if (l2_r2_safety_domain.mapping != L2_R2_MAPPING_IDENTITY_ONLY) {
         __disable_irq();
         for (;;) {
             __WFI();

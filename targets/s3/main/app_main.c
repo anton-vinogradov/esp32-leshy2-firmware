@@ -1,5 +1,5 @@
 #include "leshy2/system_model.h"
-#include "leshy2/hardware/s3_bsp.h"
+#include "leshy2/r2/hardware/s3_bsp.h"
 #include "leshy2/s3_c5_fake.h"
 
 #pragma GCC diagnostic push
@@ -162,8 +162,8 @@ void app_main(void)
     l2_system_model_init(&system_model, INT16_C(700), UINT32_C(0));
     ESP_LOGI(
         TAG,
-        "skeleton ready: %u cores, %u reviewed contacts; RF domains remain held",
+        "skeleton ready: %u cores, %u exact R2 GPIO rows; RF domains remain held",
         (unsigned int)chip.cores,
-        (unsigned int)l2_hw_s3_domain.pin_count
+        (unsigned int)l2_r2_s3_domain.pin_count
     );
 }

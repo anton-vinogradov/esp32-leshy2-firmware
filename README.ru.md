@@ -2,7 +2,7 @@
 
 [English](README.md) · [Аппаратная часть](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/README.ru.md)
 
-> **Статус прошивки: F2-R2.3 — создаётся generated BSP шести доменов.** Работа
+> **Статус прошивки: F2-R2.4 — следующая квалификация target builds.** Работа
 > F0–F4 для R1 сохранена как regression evidence, но её топология из пяти
 > доменов больше не является текущей. Подробности — в
 > [роадмапе прошивки](docs/roadmap.ru.md).
@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.3**; [план](config/f2_r2_target_rebaseline.json), [matrix](config/f2_r2_build_matrix.json) и [шесть project roots](config/f2_r2_target_projects.json) R2 проведены ревью, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | сгенерировать шесть доменов BSP R2 и привязать каждый ровно к одному project без запуска target builds |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.4**; [план](config/f2_r2_target_rebaseline.json), [matrix](config/f2_r2_build_matrix.json), [шесть project roots](config/f2_r2_target_projects.json) и [владение generated BSP](config/f2_r2_bsp_consumption.json) R2 проведены ревью, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | квалифицировать 12 locked debug/release configurations, artifacts, maps и size gates |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -32,7 +32,7 @@
 Каждая завершённая глобальная фаза `F*` получает отдельный итоговый отчёт,
 связанный с этой таблицей; внутренние подэтапы меняют только точный маркер.
 
-**Прошивка находится на F2-R2.3.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
+**Прошивка находится на F2-R2.4.** [Проведённое ревью F0-R2](docs/f0-product-contracts-report.ru.md)
 закрывает контрактную основу, не заявляя реализованные targets. Сгенерированный
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) связывает
 репозиторий прошивки с принятым аппаратным source через SHA-256. В R2 шесть
@@ -42,8 +42,10 @@ TVP5150 остаются локальными на передней плате. 
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,
-entry sources и image identities. Generated BSP R2, target configure и build
-пока не заявлены.
+entry sources и image identities. Связанный hash
+[BSP R2](config/f2_r2_bsp_generation.json) генерирует шесть детерминированных
+domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
+к одному SDK project. R2 target configure и build пока не заявлены.
 [Контракт memory и rollback](config/f0_r2_memory_rollback_contract.json),
 прошедший ревью, сохраняет шесть независимых dual-slot доменов: оба RP2354B и
 оба MSPM0 имеют общую только геометрию, но не target identity, state или flash.
@@ -119,21 +121,21 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 повторяет routed extraction до заказа, а H8 выбирает VNA-qualified fitted/DNP-state.
 У текущего мокапа R2 нет инженерных блокеров; он остаётся in progress только до
 явного принятия полного внешнего вида, прямых внутренних сторон и разрезов;
-BSP, KiCad layout и разрешение заказа остаются открыты.
+Квалификация target builds R2, KiCad layout и разрешение заказа остаются открыты.
 
 ### Текущая фаза F2-R2 — детальная позиция
 
-<!-- current-substep: F2-R2.3 -->
+<!-- current-substep: F2-R2.4 -->
 
-▶️ **`F2-R2.3` — сейчас.** [F2-R2.2](config/f2_r2_target_projects.json)
-провёл ревью шести production-SDK roots: четырёх сохранённых SDK-структур и
-двух новых независимых Pico SDK trees для RF RP и Hub RP. У обоих RP разные
-entry sources и image identities; их trees работают offline и не содержат
-production pins. Сохранённый generated BSP пяти доменов явно исторический и
-не является build input R2. Теперь генерируются шесть детерминированных BSP
-доменов R2 из связанной hash аппаратной проекции и каждый домен привязывается
-ровно к одному project. До следующих gates R2 configure и target build не
-запускаются.
+▶️ **`F2-R2.4` — сейчас.** [F2-R2.3](config/f2_r2_bsp_generation.json)
+сгенерировал шесть детерминированных descriptors H1-R2.27, а
+[one-owner проверка](config/f2_r2_bsp_consumption.json) связала каждый с одним
+из шести SDK projects. Модель сохраняет точные pins S3, точные GPIO group masks
+Hub/RF-RP и явные identity-only boundaries там, где H1 ещё не публиковал
+per-pin mapping; production pins не выдумываются. Старый BSP пяти доменов
+остаётся историческим и больше не является активным R2 input. Сейчас нужно
+квалифицировать 12 locked debug/release configurations, artifacts, maps и size
+gates. Завершённый BSP-подэтап не заявляет configure/build или target execution.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
 <details>

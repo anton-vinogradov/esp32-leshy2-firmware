@@ -3,7 +3,7 @@
 [Русский](roadmap.ru.md) · [Home](../README.md) ·
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
-> **▶️ Current boundary: F2-R2.3 — generated six-domain BSP.** R1 F0–F4
+> **▶️ Current boundary: F2-R2.4 — target build qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
 > H1-R2.27; its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
@@ -45,8 +45,8 @@ duplicated or given a second status here.
 | Six-domain HW↔FW projection | ✅ [F0-R2 reviewed](f0-product-contracts-report.md): H0-R2 source is hash-bound; identities, local rollback, S3-last update and five-layer execution gates are coherent |
 | Portable safety, L2IP and update model | ✅ [F1-R2 reviewed](f1-portable-cores-report.md): 34 R2 scenarios pass normal plus sanitizer runs; six-domain update, rear-RP Airband receiver and integrated faults are current |
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ✅ F2-R2.2: [six production-SDK roots are reviewed](../config/f2_r2_target_projects.json); RF-RP and Hub-RP use separate pin-free Pico SDK trees, entries and image identities |
-| Generated R2 BSP ownership | ▶️ F2-R2.3: generate six deterministic domains from the current hardware projection and bind each to exactly one project; the retained five-domain BSP is historical only |
-| Target builds, maps and S3 QEMU | ⏳ R1 F2/F3 evidence retained; it cannot qualify the R2 topology |
+| Generated R2 BSP ownership | ✅ F2-R2.3: [six deterministic H1-R2.27 domains](../config/f2_r2_bsp_generation.json) are generated and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
+| Target builds, maps and S3 QEMU | ▶️ F2-R2.4: qualify the 12 locked debug/release configurations, artifacts, maps and size gates; R1 F2/F3 evidence cannot qualify R2 |
 | Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.27 is current; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; the 30×24×8-mm dual post-PCBA K331/AWM666V bay installs exactly one receiver, retains 1.05 mm opposing clearance and leaves firmware controls/CVBS unchanged; five buffer footprints, two Schmitt-inverter footprints, 147 bypass capacitors and six ordinary 0402 resistor identities now use stocked exact or parametrically equivalent production parts without changing the BSP contract; H5/H7 own received-module/solder qualification, while explicit mock-up acceptance is the final H1 action |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
@@ -58,15 +58,17 @@ or board emulation and is never presented as finished firmware.
 
 ## Current F2-R2 breakdown
 
-<!-- current-substep: F2-R2.3 -->
+<!-- current-substep: F2-R2.4 -->
 
-▶️ **`F2-R2.3` — current.** [F2-R2.2](../config/f2_r2_target_projects.json)
-reviewed six production-SDK roots: four retained structures plus new independent
-RF-RP and Hub-RP Pico SDK trees. The RP trees have separate entries, images and
-target-local identities, stay offline and contain no production pins. The old
-five-domain generated tree is explicitly excluded from R2 builds. Generate the
-six-domain R2 BSP now and prove one-owner project consumption; configure/build
-remain closed until their named later gates.
+▶️ **`F2-R2.4` — current.** [F2-R2.3](../config/f2_r2_bsp_generation.json)
+generated six byte-reproducible domain descriptors from the hash-bound H1-R2.27
+projection and [proved](../config/f2_r2_bsp_consumption.json) exactly one SDK
+owner per descriptor. Exact S3 pins, exact Hub/RF-RP group membership and
+identity-only boundaries for unpublished per-pin maps remain distinguishable;
+no pin order was invented. The old five-domain tree is excluded from active R2
+inputs. Qualify the 12 locked debug/release configurations, artifacts, maps and
+size gates now. F2-R2.3 ran host generation/syntax checks only: zero target
+configure/build or execution runs.
 The exact marker and its evidence move together in every commit.
 
 <details>
@@ -225,7 +227,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Both repositories agree; no target, transport, recovery path or required state is unknown; R1 evidence is explicitly historical |
 | **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only rear-RP Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
-| **F2. Target projects and build system** | ▶️ Current: F2-R2.3 | Generate six deterministic R2 BSP domains for the reviewed ESP-IDF S3/C5, Pico SDK RF/Hub RP2354B and TI MSPM0 SDK ×2 project roots | 12 debug/release configurations reproduce; every target consumes only its generated R2 pins |
+| **F2. Target projects and build system** | ▶️ Current: F2-R2.4 | Qualify 12 locked debug/release configurations for the reviewed six project roots and one-owner generated R2 BSP | 12 debug/release configurations reproduce; every target emits its named artifact/map and passes its size gate |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, CTIA jack detect, `0x39` headset-source control, IR, 3×nRF24, CC, voice, U214, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; reset/off/no-back-power/quiet transitions are explicit; P02 remains input-only, selector reset/readback and seven reserve pins are checked; unmodeled peripherals have dev-board tests |
@@ -253,7 +255,8 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F2-R2.3`. Six production-SDK roots and independent
-RF-RP/Hub-RP image identities are reviewed with zero R2 configure/build runs.
-Generate the six R2 BSP domains from the accepted hardware projection and bind
-each to exactly one project. Retained R1 BSP/build/QEMU evidence is historical.
+The current boundary is `F2-R2.4`. Six production-SDK roots consume six
+deterministic, H1-R2.27-bound descriptors with one owner each. Run the named
+locked configure/build commands for all 12 debug/release configurations, then
+review artifacts, maps and size gates. Retained R1 BSP/build/QEMU evidence is
+historical and zero R2 target configure/build runs are claimed by F2-R2.3.

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "baseline": "R2",
   "phase": "F2",
-  "current_substep": "F2-R2.3",
+  "current_substep": "F2-R2.4",
   "updated_on": "2026-08-28",
   "current_claims": {
     "hardware_contract_projection_generated": true,
@@ -27,7 +27,9 @@
     "f1_r2_reviewed": true,
     "f2_r2_target_rebaseline_started": true,
     "f2_r2_rebaseline_plan_reviewed": true,
-    "f2_r2_project_structures_reviewed": true
+    "f2_r2_project_structures_reviewed": true,
+    "f2_r2_six_domain_bsp_generated": true,
+    "f2_r2_one_owner_bsp_consumption_reviewed": true
   },
   "historical_evidence_baseline": "R1",
   "completed": [
@@ -46,6 +48,7 @@
     "F2-R2.0",
     "F2-R2.1",
     "F2-R2.2",
+    "F2-R2.3",
     "F2.0.0",
     "F2.0.1",
     "F2.0.2",
@@ -111,6 +114,7 @@
     "F2-R2.0",
     "F2-R2.1",
     "F2-R2.2",
+    "F2-R2.3",
     "F0",
     "F1",
     "F2.0.0",

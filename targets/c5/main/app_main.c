@@ -1,5 +1,5 @@
 #include "leshy2/l2ip.h"
-#include "leshy2/hardware/c5_bsp.h"
+#include "leshy2/r2/hardware/c5_bsp.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundef"
@@ -19,8 +19,8 @@ void app_main(void)
     l2ip_replay_guard_reset(&replay_guard, UINT32_C(0));
     ESP_LOGI(
         TAG,
-        "skeleton ready: %u cores, %u reviewed contacts; native RF/IR remain unconfigured",
+        "skeleton ready: %u cores, R2 mapping kind %u; native RF/IR remain unconfigured",
         (unsigned int)chip.cores,
-        (unsigned int)l2_hw_c5_domain.pin_count
+        (unsigned int)l2_r2_c5_domain.mapping
     );
 }

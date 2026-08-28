@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.3",
+  "status": "reviewed_generated_boundary",
+  "reviewed_on": "2026-08-28",
+  "source": {
+    "path": "config/h0_r2_hardware_contract.json",
+    "sha256": "a62d0f30d6f429ecd7441cd04d434c04bba4ba391ad3ac72b4a35cce2c40924c",
+    "hardware_marker": "H1-R2.27"
+  },
+  "domains": [
+    {
+      "id": "s3",
+      "mapping": "exact_pins",
+      "source_key": "s3_pin_map"
+    },
+    {
+      "id": "c5",
+      "mapping": "identity_only"
+    },
+    {
+      "id": "rf_rp",
+      "mapping": "gpio_groups",
+      "source_key": "rear_pin_groups"
+    },
+    {
+      "id": "hub_rp",
+      "mapping": "gpio_groups",
+      "source_key": "hub_pin_groups"
+    },
+    {
+      "id": "pack",
+      "mapping": "identity_only"
+    },
+    {
+      "id": "safety",
+      "mapping": "identity_only"
+    }
+  ],
+  "outputs": {
+    "root": "generated/r2/hardware",
+    "include_root": "generated/r2/hardware/include",
+    "source_root": "generated/r2/hardware/src",
+    "manifest": "generated/r2/source_manifest.json"
+  },
+  "contract_boundary": {
+    "exact_gpio_assignments_are_generated_only_when_explicit_in_source": true,
+    "gpio_groups_preserve_membership_without_inventing_signal_order": true,
+    "identity_only_domains_do_not_claim_unpublished_pin_assignments": true,
+    "handwritten_production_pins_allowed": false,
+    "historical_r1_tree_is_r2_input": false
+  },
+  "execution": {
+    "generator_run": true,
+    "host_syntax_check": true,
+    "target_configure_run": false,
+    "target_build_run": false,
+    "emulator_run": false,
+    "devboard_run": false,
+    "physical_run": false
+  },
+  "next": "F2-R2.4",
+  "generator": "tools/generate_f2_r2_bsp.py",
+  "checker": "tools/check_f2_r2_bsp.py"
+}

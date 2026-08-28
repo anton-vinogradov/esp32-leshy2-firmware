@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.3",
+  "status": "generated",
+  "producer": "tools/generate_f2_r2_bsp.py",
+  "source": {
+    "path": "config/h0_r2_hardware_contract.json",
+    "sha256": "a62d0f30d6f429ecd7441cd04d434c04bba4ba391ad3ac72b4a35cce2c40924c",
+    "hardware_marker": "H1-R2.27"
+  },
+  "generation_model": "config/f2_r2_bsp_generation.json",
+  "domains": [
+    {
+      "id": "s3",
+      "mapping": "exact_pins",
+      "pins": 33,
+      "groups": 0,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/s3_bsp.h",
+      "source": "generated/r2/hardware/src/s3_bsp.c",
+      "symbol": "l2_r2_s3_domain"
+    },
+    {
+      "id": "c5",
+      "mapping": "identity_only",
+      "pins": 0,
+      "groups": 0,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/c5_bsp.h",
+      "source": "generated/r2/hardware/src/c5_bsp.c",
+      "symbol": "l2_r2_c5_domain"
+    },
+    {
+      "id": "rf_rp",
+      "mapping": "gpio_groups",
+      "pins": 0,
+      "groups": 11,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/rf_rp_bsp.h",
+      "source": "generated/r2/hardware/src/rf_rp_bsp.c",
+      "symbol": "l2_r2_rf_rp_domain"
+    },
+    {
+      "id": "hub_rp",
+      "mapping": "gpio_groups",
+      "pins": 0,
+      "groups": 12,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/hub_rp_bsp.h",
+      "source": "generated/r2/hardware/src/hub_rp_bsp.c",
+      "symbol": "l2_r2_hub_rp_domain"
+    },
+    {
+      "id": "pack",
+      "mapping": "identity_only",
+      "pins": 0,
+      "groups": 0,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/pack_bsp.h",
+      "source": "generated/r2/hardware/src/pack_bsp.c",
+      "symbol": "l2_r2_pack_domain"
+    },
+    {
+      "id": "safety",
+      "mapping": "identity_only",
+      "pins": 0,
+      "groups": 0,
+      "header": "generated/r2/hardware/include/leshy2/r2/hardware/safety_bsp.h",
+      "source": "generated/r2/hardware/src/safety_bsp.c",
+      "symbol": "l2_r2_safety_domain"
+    }
+  ],
+  "files": [
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/bsp_types.h",
+      "bytes": 1037,
+      "sha256": "285acf8c1aa93273c7306fda5d303d48bc953b555a47e296b42f56bc70d9646b"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/c5_bsp.h",
+      "bytes": 359,
+      "sha256": "1a7292a026e419e74ffc996dd419f009aeb8fd0fcfb2d95e6b121c7c95ae7c68"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/hub_rp_bsp.h",
+      "bytes": 380,
+      "sha256": "0729056021a7ae697471c79424bbc80d90ffe5820a1fe3a514b3e7c0aaafbed8"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/pack_bsp.h",
+      "bytes": 369,
+      "sha256": "e034cd4fa8843276c38370cd954fe92c3c8090fd91e9ac923d314fe22bcf5a42"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/rf_rp_bsp.h",
+      "bytes": 375,
+      "sha256": "7a3508ca6bb9914d7f80bed14093fe1848f251bd36df9868e789cab8b290f720"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/s3_bsp.h",
+      "bytes": 1299,
+      "sha256": "f21916793359b32660586ca2bf5bb35c2c99baf27cf3ca468b5a5b54c79a6156"
+    },
+    {
+      "path": "generated/r2/hardware/include/leshy2/r2/hardware/safety_bsp.h",
+      "bytes": 379,
+      "sha256": "a03f62e423438cd373ef88cfd6a061b63d70e74e9a3680d7c3814afdfa33f418"
+    },
+    {
+      "path": "generated/r2/hardware/src/c5_bsp.c",
+      "bytes": 438,
+      "sha256": "f54b4c34b17436bb92ee36c1350233d6d69e90f36c83fb1101f384db4fb6cf0d"
+    },
+    {
+      "path": "generated/r2/hardware/src/hub_rp_bsp.c",
+      "bytes": 2758,
+      "sha256": "e5323eb15e1b8bbee378208adc007f7150c2fdc8907da38787bf7780ef32ea2f"
+    },
+    {
+      "path": "generated/r2/hardware/src/pack_bsp.c",
+      "bytes": 454,
+      "sha256": "26133b68aaca3cae40d50f27bf68325c48d1a2931ae8ab63606faacf21e9a383"
+    },
+    {
+      "path": "generated/r2/hardware/src/rf_rp_bsp.c",
+      "bytes": 2511,
+      "sha256": "2295493a40ce3daaa8d26034c762ce6768d2b34c24363a4d07d5e6a5af168593"
+    },
+    {
+      "path": "generated/r2/hardware/src/s3_bsp.c",
+      "bytes": 6542,
+      "sha256": "94b032a9334dd922f17f4dcaf51a692f4236976a2c5be977c70114d5cc1fb8c4"
+    },
+    {
+      "path": "generated/r2/hardware/src/safety_bsp.c",
+      "bytes": 484,
+      "sha256": "de263f3a43798a9b56559d70759f378ea7eb7ebecfdd688881b2972703406cdb"
+    }
+  ],
+  "claims": {
+    "deterministic": true,
+    "one_descriptor_per_domain": true,
+    "unpublished_pin_assignments_invented": false,
+    "target_configure_run": false,
+    "target_build_run": false
+  }
+}

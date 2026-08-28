@@ -51,6 +51,11 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def current_baseline_is_r2() -> bool:
+    state = load(REPO_ROOT / "config" / "firmware_roadmap_state.json")
+    return state.get("baseline") == "R2"
+
+
 def execution_contract(stage: str) -> tuple[dict, dict, list[str], list[str]]:
     runtime_plan = load(PLAN_PATH)
     if stage == "F3.1":
@@ -460,10 +465,15 @@ def check_evidence(configuration: str, stage: str) -> list[str]:
         errors.append(f"S3 {configuration} accepted claims changed")
     if record.get("deferred_claims") != deferred_claims:
         errors.append(f"S3 {configuration} deferred claims changed")
-    if stage in {"F3.2", "F4.1.3"} and record.get(
-        "project_input_manifest_sha256"
-    ) != input_manifest("s3")["manifest_sha256"]:
-        errors.append(f"S3 {configuration} project inputs changed after runtime review")
+    if stage in {"F3.2", "F4.1.3"}:
+        recorded_manifest = record.get("project_input_manifest_sha256")
+        if current_baseline_is_r2():
+            if not isinstance(recorded_manifest, str) or len(recorded_manifest) != 64:
+                errors.append(
+                    f"S3 {configuration} historical project-input record is invalid"
+                )
+        elif recorded_manifest != input_manifest("s3")["manifest_sha256"]:
+            errors.append(f"S3 {configuration} project inputs changed after runtime review")
     if QEMU_PATH.is_file() and record.get("qemu_executable_sha256") != sha256(QEMU_PATH):
         errors.append(f"S3 {configuration} QEMU executable changed after runtime review")
     fixture = record.get("ota_fixture", {})

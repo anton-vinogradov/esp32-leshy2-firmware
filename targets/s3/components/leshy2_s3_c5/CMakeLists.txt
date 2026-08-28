@@ -1,13 +1,7 @@
 idf_component_register(
-    SRCS
-        "s3_c5_fake.c"
-        "s3_c5_host.c"
+    SRCS "s3_c5_fake.c"
     INCLUDE_DIRS "include"
-    REQUIRES
-        esp_driver_sdmmc
-        esp_serial_slave_link
-        leshy2_portable
-        sdmmc
+    REQUIRES leshy2_portable
 )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE
