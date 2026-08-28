@@ -35,6 +35,9 @@ Button edges terminate on the S3-local
 target remains 20 ms under qualified concurrent load.
 
 The display and camera use the separate LCD TX and camera RX units concurrently.
+The H1-R2.22 physical orientation points the display flex toward the antenna edge;
+the S3 display/touch driver therefore applies one 180-degree transform to both
+ST77922 memory addressing and touch coordinates.
 The exact M1 map defines all 80 contacts: 25 live signals, 14 main-power, 2 AON,
 25 returns and 14 NC reserves. M1 is electrical/alignment-only; enclosure stops,
 anti-shear datums and PCB capture carry impact and bending loads.

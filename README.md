@@ -60,11 +60,14 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.21`:
+existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.22`:
 the locality-first two-board placement, matched outer/turned-over inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
 direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
 M1 has an exact 80-contact map with 14 NC reserves and a separate enclosure load path.
+The display is physically oriented with its flex toward the antenna edge; F5/F6
+must rotate ST77922 memory orientation and touch coordinates by 180 degrees.
+That transform is required target behavior, not an implemented-driver claim.
 Stable outer silkscreen identifies the UI and RF/power PCB roles, `R2-EVT1` and
 `REV A`; the changing `H1-R2.xx` work marker remains documentation-only.
 S3, C5, RF RP and Hub RP each retain USB, RESET/BOOT and internal DBG10.
