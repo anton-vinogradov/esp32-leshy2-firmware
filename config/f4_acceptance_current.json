@@ -23,7 +23,7 @@
         "S3_C5"
       ],
       "path": "config/f4_1_2_s3_c5_endpoint_review.json",
-      "sha256": "fa6451c626269713643064f1e5a4215d7de94edc01a8fc7215df0b72b89fbba1",
+      "sha256": "19834757d4d260e974ca7b3d7b8579e872a70e1aea63101d7e95574417d55f35",
       "status": "reviewed"
     },
     {
@@ -33,7 +33,7 @@
         "S3_C5"
       ],
       "path": "config/f4_1_3_s3_c5_qemu_review.json",
-      "sha256": "15715011c24d2dde7ff31f1177cb86e2e26ccf0d0bf20ffc6cfdebafb99edf85",
+      "sha256": "9f57180a90a68981cd8f71e1a4e616a1f7208d43beddc395dbdea936dac17f32",
       "status": "reviewed"
     }
   ],

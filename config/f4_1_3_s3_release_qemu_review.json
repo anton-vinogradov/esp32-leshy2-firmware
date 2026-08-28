@@ -4,7 +4,7 @@
   "status": "reviewed",
   "target": "s3",
   "configuration": "release",
-  "target_elf_sha256": "83c9362c0b90098c3bd4387756491022b111aa900f4986c4b1d5e72d6cf02ef2",
+  "target_elf_sha256": "3ee018c2968404070ad682bb405e19e64b3f11d906e1b2f91db52ec47660025b",
   "project_input_manifest_sha256": "3ffb3c379a3cab4c50a4078856cf0b07794121051b2e3b9b3be7ec0bb361c733",
   "qemu_version": "QEMU emulator version 9.2.2 (esp_develop_9.2.2_20250817)",
   "qemu_executable_sha256": "3a8eb6c4343087885c22750aab4ea3297be70382868b5688dbef7affd504b8d5",
@@ -78,7 +78,7 @@
     "physical_c5_usb_sdio_coexistence",
     "physical_board"
   ],
-  "qemu_flash_sha256": "eeacca406c1f30380bb5386935e81b4500444163a37f38d8862e0ab1a42868c7",
+  "qemu_flash_sha256": "ed33ad41aaf9b817b237a88eddd413e6457c0f8e1bb050c112e20b29a7acc53c",
   "qemu_efuse_sha256": "2054600a17c72426ac024ae851e7ea26f9cf612f31140b445ff713ba15ac09c8",
   "ota_fixture": {
     "offset": 61440,
