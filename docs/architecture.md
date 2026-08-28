@@ -8,6 +8,10 @@ The machine projection in
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
 is generated from the reviewed hardware H0-R2 source and binds its SHA-256.
 It is the current firmware input; the R1 contract below is regression evidence.
+The retained H2.0.3 BSP and integration JSON files are explicitly historical
+single-RP imports and are forbidden as R2 authority. The
+[machine R2/H2 gate](../config/r2_h2_sync_gate.json) stays closed until a new
+hardware export carries six domains, both RP instances and the exact H0 M1 map.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
@@ -117,9 +121,10 @@ within 10 ms. Only a healthy safety loop services the independent 1.6-second
 watchdog. Exact layouts, message IDs, mailbox fields, update messages and test
 vectors are machine-readable in
 [`config/interdomain_protocol.json`](../config/interdomain_protocol.json).
-The cross-repository controller, transport, pin, signal-group, safety-timing
-and LoRa-profile boundary is frozen in
+This historical R1 controller, transport, pin, signal-group, safety-timing and
+LoRa-profile boundary is retained only as regression evidence in
 [`config/hardware_integration_contract.json`](../config/hardware_integration_contract.json).
+It is explicitly forbidden as an R2 authority.
 
 ## Scheduling and quiet states
 

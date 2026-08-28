@@ -6,11 +6,11 @@
   "inputs": {
     "rebaseline_plan": {
       "path": "config/f2_r2_target_rebaseline.json",
-      "sha256": "26933cb22939992cee891f7e7ebf82c001fa799291def1b7c72fb33a93d95944"
+      "sha256": "c09240addd70901542cf251802657d03f2c01d0579e2fc382775ea9439a08d06"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
-      "sha256": "7700df169bbf22d5071ee9661157bda03e03260c32f9001d20bb8772b77a1a00"
+      "sha256": "a5407ce74a9513879344e446970c728f11fd558df74f121204843b8e1d9f5a6e"
     },
     "memory_rollback": {
       "path": "config/f0_r2_memory_rollback_contract.json",

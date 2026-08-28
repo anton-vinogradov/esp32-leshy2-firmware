@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Import and verify the generated Leshy2 H2 hardware/BSP contract."""
+"""Retain the reviewed single-RP H2 export as historical R1 evidence.
+
+The current R2 firmware authority is ``config/h0_r2_hardware_contract.json``.
+This importer deliberately decorates the former five-domain H2 export as
+historical on every write so a routine hardware hash refresh cannot silently
+promote it back into an R2 hardware authority.
+"""
 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 from pathlib import Path
 
@@ -16,6 +23,21 @@ DEFAULT_SOURCE = (
 )
 BSP_OUTPUT = REPO / "config/hardware_bsp_contract.json"
 INTEGRATION_OUTPUT = REPO / "config/hardware_integration_contract.json"
+
+HISTORICAL_BSP_AUTHORITY = {
+    "baseline": "R1",
+    "lifecycle": "historical_single_rp_import",
+    "allowed_as_r2_authority": False,
+    "superseded_by": "config/h0_r2_hardware_contract.json",
+    "r2_sync_gate": "config/r2_h2_sync_gate.json",
+}
+HISTORICAL_INTEGRATION_AUTHORITY = {
+    "baseline": "R1",
+    "lifecycle": "historical_single_rp_integration_contract",
+    "allowed_as_r2_authority": False,
+    "superseded_by": "config/h0_r2_hardware_contract.json",
+    "r2_sync_gate": "config/r2_h2_sync_gate.json",
+}
 
 
 def render(data: dict) -> str:
@@ -55,6 +77,23 @@ def validate(data: dict) -> None:
         raise ValueError("physical service boundary must remain 3 USB / 6 buttons / 3 internal DBG10")
 
 
+def historical_outputs(data: dict) -> tuple[dict, dict]:
+    """Return stable firmware copies with an explicit non-R2 authority marker."""
+
+    bsp: dict = {}
+    for key, value in data.items():
+        bsp[key] = copy.deepcopy(value)
+        if key == "export_id":
+            bsp["authority"] = copy.deepcopy(HISTORICAL_BSP_AUTHORITY)
+    integration: dict = {}
+    for key, value in bsp["integration_contract"].items():
+        integration[key] = copy.deepcopy(value)
+        if key == "review_status":
+            integration["authority"] = copy.deepcopy(HISTORICAL_INTEGRATION_AUTHORITY)
+    bsp["integration_contract"] = copy.deepcopy(integration)
+    return bsp, integration
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
@@ -66,9 +105,10 @@ def main() -> int:
     source = args.source.resolve()
     data = json.loads(source.read_text(encoding="utf-8"))
     validate(data)
+    bsp, integration = historical_outputs(data)
     expected = {
-        BSP_OUTPUT: render(data),
-        INTEGRATION_OUTPUT: render(data["integration_contract"]),
+        BSP_OUTPUT: render(bsp),
+        INTEGRATION_OUTPUT: render(integration),
     }
     if args.write:
         for path, content in expected.items():
@@ -85,7 +125,10 @@ def main() -> int:
         for path in stale:
             print(f"stale: {path.relative_to(REPO)}")
         return 1
-    print("ok: firmware HW/FW and BSP contracts match the reviewed hardware H2.0.3 export")
+    print(
+        "ok: historical R1 HW/FW and BSP contracts match the reviewed "
+        "single-RP hardware H2.0.3 export and remain forbidden as R2 authority"
+    )
     return 0
 
 

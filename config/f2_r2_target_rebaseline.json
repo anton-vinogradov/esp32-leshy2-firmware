@@ -10,7 +10,7 @@
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
-      "sha256": "7700df169bbf22d5071ee9661157bda03e03260c32f9001d20bb8772b77a1a00"
+      "sha256": "a5407ce74a9513879344e446970c728f11fd558df74f121204843b8e1d9f5a6e"
     },
     "memory_rollback": {
       "path": "config/f0_r2_memory_rollback_contract.json",

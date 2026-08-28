@@ -66,6 +66,19 @@ def main() -> int:
         target = target_by_id[rp_id]
         if target.get("family") != "pico_sdk" or target.get("sdk_target") != "rp2350-arm-s":
             return fail(f"{rp_id}: RP2354B SDK identity changed")
+    expected_hub_migration = (
+        "create the front Hub project and bind only S3/C5/rear-RP fan-out, "
+        "three complete concurrent nRF24 paths and microSD; audio and "
+        "broadcast/Airband remain rear RF-RP-owned"
+    )
+    if target_by_id["hub_rp"].get("migration") != expected_hub_migration:
+        return fail("hub_rp: migration must not claim rear audio or broadcast ownership")
+    hub_role = hardware_domains["hub_rp"].get("role", "")
+    rf_role = hardware_domains["rf_rp"].get("role", "")
+    if "three fully concurrent local nRF24" not in hub_role or "microSD" not in hub_role:
+        return fail("hub_rp: front fan-out, nRF24 and microSD ownership changed")
+    if "audio" not in rf_role or "FM/AM/SW/LW/Airband" not in rf_role:
+        return fail("rf_rp: rear audio and broadcast/Airband ownership changed")
     for target_id in ("pack", "safety"):
         target = target_by_id[target_id]
         if target.get("family") != "ti_mspm0_sdk" or target.get("sdk_target") != "MSPM0C1106":

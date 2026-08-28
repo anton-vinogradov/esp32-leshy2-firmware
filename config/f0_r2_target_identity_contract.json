@@ -53,7 +53,7 @@
       "project_name": "leshy2_hub_rp",
       "project_dir": "targets/hub_rp",
       "application_image": "leshy2_hub_rp",
-      "migration": "create the new Hub project and bind storage, audio, broadcast/Airband receive and fan-out ownership in F2-R2",
+      "migration": "create the front Hub project and bind only S3/C5/rear-RP fan-out, three complete concurrent nRF24 paths and microSD; audio and broadcast/Airband remain rear RF-RP-owned",
       "r2_project_created": false,
       "r2_build_run": false
     },

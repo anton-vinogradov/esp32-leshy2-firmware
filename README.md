@@ -39,6 +39,12 @@ targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and the
 TVP5150 video decoder remain front-local. Hub RP owns microSD and all three
 nRF24 paths; rear RF RP owns CC1101, voice, audio, `BROADCAST_RX`, FPV control,
 M5 and U214.
+The retained [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json)
+and [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
+are explicitly historical R1 single-RP imports and cannot authorize R2. The
+[R2/H2 authority gate](config/r2_h2_sync_gate.json) remains fail-closed until a
+new H2 export contains all six domains, both `SC1512-A4` instances and the exact
+H0-R2 M1 map; this gate does not invent either RP's per-signal pin order.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK

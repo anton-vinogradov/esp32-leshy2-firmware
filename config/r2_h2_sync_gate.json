@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "FW-R2-H2-AUTHORITY-GATE",
+  "status": "blocked_pending_six_domain_h2_export",
+  "checked_on": "2026-08-28",
+  "active_firmware_hardware_authority": "config/h0_r2_hardware_contract.json",
+  "candidate_h2_export": "config/hardware_bsp_contract.json",
+  "historical_imports": [
+    "config/hardware_bsp_contract.json",
+    "config/hardware_integration_contract.json"
+  ],
+  "required_h2_export": {
+    "domain_ids": ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+    "rp_domains": ["rf_rp", "hub_rp"],
+    "rp_mpn": "SC1512-A4",
+    "interboard_source": "config/h0_r2_hardware_contract.json#/interboard",
+    "interboard_positions": 80,
+    "interboard_counts": {
+      "live_signals": 25,
+      "main_power": 14,
+      "aon_power": 2,
+      "returns": 25,
+      "no_connect_reserve": 14
+    },
+    "exact_rp_pin_map_required_here": false
+  },
+  "r2_h2_synchronized": false,
+  "blocker": "The retained H2.0.3 export is the historical five-domain, single-RP G2F-3I contract and does not contain the H0-R2 M1 map.",
+  "claims": {
+    "h0_r2_projection_is_current_firmware_authority": true,
+    "historical_single_rp_import_can_authorize_r2": false,
+    "six_domain_h2_export_available": false,
+    "r2_h2_ecad_and_firmware_synchronized": false,
+    "exact_rp_pin_order_invented": false,
+    "qualification_or_execution_evidence_created": false
+  },
+  "checker": "tools/check_r2_h2_sync_gate.py"
+}

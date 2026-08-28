@@ -8,6 +8,10 @@ Machine projection
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
 генерируется из принятого аппаратного source H0-R2 и фиксирует его SHA-256.
 Это текущий вход прошивки; контракт R1 ниже сохранён как regression evidence.
+Сохранённые BSP и integration JSON H2.0.3 явно помечены как исторический
+single-RP import и не могут быть authority для R2. [Машинный gate R2/H2](../config/r2_h2_sync_gate.json)
+остаётся закрытым, пока новый hardware export не содержит шесть доменов, оба RP
+и точную карту M1 из H0; gate не выдумывает порядок сигналов на GPIO обоих RP.
 
 | Образ | Физический владелец | Текущая ответственность R2 |
 |---|---|---|
@@ -119,9 +123,10 @@ safety занимает до 5 мс, а неожиданное физическ�
 safety-циклом. Точные layout, ID сообщений, поля mailbox, update-команды и
 набор проверок находятся в машинном контракте
 [`config/interdomain_protocol.json`](../config/interdomain_protocol.json).
-Сквозная граница контроллеров, транспортов, контактов, сигнальных групп,
-safety timing и LoRa-профилей зафиксирована в
+Эта историческая R1-граница контроллеров, транспортов, контактов, сигнальных
+групп, safety timing и LoRa-профилей сохраняется только как regression evidence в
 [`config/hardware_integration_contract.json`](../config/hardware_integration_contract.json).
+Она явно запрещена как authority для R2.
 
 ## Планировщик и тихие состояния
 

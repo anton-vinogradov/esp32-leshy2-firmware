@@ -39,6 +39,12 @@
 targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки, display и декодер
 TVP5150 остаются локальными на передней плате. Hub RP владеет microSD и всеми
 тремя nRF24; задний RF RP — CC1101, voice, audio, `BROADCAST_RX`, FPV, M5 и U214.
+Сохранённые [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json) и
+[`hardware_integration_contract.json`](config/hardware_integration_contract.json)
+явно помечены как исторический single-RP import R1 и не могут авторизовать R2.
+[Gate authority R2/H2](config/r2_h2_sync_gate.json) остаётся fail-closed, пока
+новый export H2 не содержит шесть доменов, оба `SC1512-A4` и точную M1 из H0-R2;
+при этом gate не выдумывает порядок сигналов на GPIO обоих RP.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,

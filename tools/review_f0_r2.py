@@ -58,6 +58,7 @@ def main() -> int:
         return fail("F0-R2 artifact or checker is missing")
 
     checks = [
+        ("tools/check_r2_h2_sync_gate.py", "R2/H2 sync gate CLOSED"),
         ("tools/check_f0_r2_target_identities.py", "6 application images"),
         ("tools/check_f0_r2_memory_rollback.py", "6 independent dual-slot domains"),
         ("tools/check_f0_r2_update_policy.py", "6 staged/pending/commit targets"),
