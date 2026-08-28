@@ -155,6 +155,7 @@ def build() -> dict:
         "pre_h2_gates": dual_rp["authority_chain"]["remaining_h2_gates"],
         "physical_h1": {
             "marker": physical_h1["marker"],
+            "pin_authority_marker": physical_h1["pin_authority_marker"],
             "status": physical_h1["status"],
             "current_h1_blockers": physical_h1["current_h1_blockers"],
             "pre_r2_h2_gates": physical_h1["pre_r2_h2_gates"],

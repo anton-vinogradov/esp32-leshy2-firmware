@@ -5,7 +5,8 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.31; its locality-first two-board placement, Airband filter feasibility
+> H1-R2.32; its exact imported pin/config authority remains the reviewed
+> H1-R2.31 artifact, while its locality-first two-board placement, Airband filter feasibility
 > audit/tuning cell, exact MMCX/LDO closure and 3.75-A continuous / 4.25-A step
 > 3V3_MAIN architecture, official K331 application/14-pin/24-channel evidence,
 > K331 pin/power fit, exact TBS FPV antenna and independent
@@ -30,9 +31,8 @@
 > Final DFM and optional Consigned Parts/function-test review belong to H5/H6/H7;
 > RF/video and fallback-antenna qualification remain downstream H3/H5/H6/H8 work.
 > The structural placement audit passes with all five active U219 source-backed
-> courtyards, but four explicit H1 geometry gates remain: the complete legacy
-> Cap/evidence body register, exact support-passive values/MPNs and courtyards,
-> measured NFC-loop geometry and the installed
+> courtyards, but three explicit H1 geometry gates remain: exact support-passive
+> values/MPNs and courtyards, controlled or measured NFC-loop geometry and the installed
 > antenna swept volume. Mock-up acceptance follows those closures.
 > Live RTC6715/RX5808 cards have zero stock and no purchasable drop-in route;
 > a bare-chip receiver would add undocumented RF/IF implementation risk.
@@ -52,7 +52,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): exact dual-RP working maps and the C5 4-bit mux are imported as pre-H2 authority, but retained H2.0.3 JSON is historical R1 and cannot authorize R2; reopen only on a six-domain H2 export plus closed production mux/latch gates |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and H1-R2.31 is current; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; U219 fits the shared slot structurally, but four geometry/evidence gates remain before complete mock-up acceptance; H5/H7 own received-module/solder qualification |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and physical H1-R2.32 is current, while the imported machine pin/config authority remains H1-R2.31; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; stable outer silk identifies each PCB role, `R2-EVT1` and `REV A`, while `H1-R2.xx` stays documentation-only; ten SMA ports are split 5+5, the rear FPV MMCX has no interboard tail, direct 32-MHz i8080-8 TX and camera RX remain S3-local, and the display flex points toward the antenna edge so F5/F6 rotate ST77922 memory and touch coordinates by 180°; TVP5150 stays front-local and exact 80-contact M1 carries one CVBS signal with 14 true NC reserves and a separate enclosure load path; U219 fits the shared slot structurally, but exact support-passive MPN/courtyards, NFC pickup geometry and installed-antenna swept volume remain the three blockers before complete mock-up acceptance; H5/H7 own received-module/solder qualification |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

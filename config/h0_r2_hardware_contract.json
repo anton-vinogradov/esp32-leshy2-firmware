@@ -22,7 +22,7 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "61d25b79f0c6a440155cfdb3989f735abd91b64e60dbdc0c8551f0677eb37737"
+      "sha256": "a5e74d85f7fb47dd5a9f2a8a8038fe9bec1fbba3330ddc839a59bb6c622641d3"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
@@ -3042,10 +3042,10 @@
     "exact factory-placeable service-VBUS detector/latch MPN and implementation"
   ],
   "physical_h1": {
-    "marker": "H1-R2.31",
+    "marker": "H1-R2.32",
+    "pin_authority_marker": "H1-R2.31",
     "status": "in_progress",
     "current_h1_blockers": [
-      "complete the canonical coordinate register for the existing Cap-Bus ESD, series, supervisor, bypass and evidence-aggregate bodies before claiming a complete physical placement",
       "complete exact support-passive values/MPNs and prove their courtyards inside the two bounded U219 placement islands",
       "obtain controlled U219 field-structure geometry or measure a received unit before locating the weak printed NFC pickup loop and its DNP C0G bank",
       "measure the installed U219 RP-SMA antenna swept volume against the rear connector bank, FPV plug, enclosure and user hand access"

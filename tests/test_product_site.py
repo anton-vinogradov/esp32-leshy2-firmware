@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.5",
-                "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.32", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.5",
-                "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.32", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():
@@ -106,6 +106,34 @@ class ProductSiteTests(unittest.TestCase):
                 self.assertIn(token, page, f"{name}: {token}")
             for stage in range(12):
                 self.assertIn(f"F{stage}.", page, f"{name}: missing F{stage}")
+
+    def test_public_hardware_marker_separates_physical_and_machine_authority(self):
+        pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
+        for name in pages:
+            page = self.read(name)
+            self.assertIn("H1-R2.32", page, name)
+            self.assertIn("H1-R2.31", page, name)
+            self.assertNotIn("four explicit H1", page, name)
+            self.assertNotIn("четыре явных", page, name)
+
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        boundary = state["hardware_boundary"]
+        self.assertEqual("H1-R2.32", boundary["physical_design_marker"])
+        self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
+        self.assertEqual("in_progress", boundary["physical_h1_status"])
+        self.assertEqual(
+            [
+                "complete exact support-passive values/MPNs and prove their "
+                "courtyards inside the two bounded U219 placement islands",
+                "obtain controlled U219 field-structure geometry or measure a "
+                "received unit before locating the weak printed NFC pickup loop "
+                "and its DNP C0G bank",
+                "measure the installed U219 RP-SMA antenna swept volume against "
+                "the rear connector bank, FPV plug, enclosure and user hand access",
+            ],
+            boundary["current_h1_blockers"],
+        )
+        self.assertTrue(boundary["mockup_acceptance_required_after_blockers"])
 
     def test_public_r2_transport_boundary_does_not_reactivate_r1_f4(self):
         required_cap_routes = {

@@ -4,6 +4,17 @@
   "phase": "F2",
   "current_substep": "F2-R2.5",
   "updated_on": "2026-08-29",
+  "hardware_boundary": {
+    "physical_design_marker": "H1-R2.32",
+    "machine_pin_config_marker": "H1-R2.31",
+    "physical_h1_status": "in_progress",
+    "current_h1_blockers": [
+      "complete exact support-passive values/MPNs and prove their courtyards inside the two bounded U219 placement islands",
+      "obtain controlled U219 field-structure geometry or measure a received unit before locating the weak printed NFC pickup loop and its DNP C0G bank",
+      "measure the installed U219 RP-SMA antenna swept volume against the rear connector bank, FPV plug, enclosure and user hand access"
+    ],
+    "mockup_acceptance_required_after_blockers": true
+  },
   "current_claims": {
     "hardware_contract_projection_generated": true,
     "hardware_source_sha256_bound": true,

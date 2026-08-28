@@ -76,7 +76,9 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Hardware is at `H1-R2.31`:
+existing Si4732 audio path. Airband TX is absent. Physical hardware is at
+`H1-R2.32`, while the exact imported pin/config authority remains the reviewed
+`H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
 direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
@@ -130,9 +132,10 @@ admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
 pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
 the VNA-qualified fitted/DNP state. The current R2 mockup passes its structural
-body/courtyard audit, but four explicit H1 blockers remain: the legacy Cap-body
-register, U219 support-passive MPN/courtyards, NFC pickup geometry and installed
-antenna swept volume. After those close, the complete exterior, true-view inner
+body/courtyard audit, but three explicit H1 blockers remain: exact U219
+support-passive values/MPNs and courtyards, controlled or measured NFC pickup
+geometry, and installed U219 RP-SMA antenna swept volume. After those close,
+the complete exterior, true-view inner
 faces and sandwich sections still require explicit acceptance; R2 byte
 reproducibility, KiCad layout and order authorization remain open.
 

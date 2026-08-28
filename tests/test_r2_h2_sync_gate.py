@@ -72,6 +72,11 @@ class R2H2SyncGateTests(unittest.TestCase):
         self.assertIn("R2/H2 sync gate CLOSED", result.stdout)
         self.assertFalse(self.gate["r2_h2_synchronized"])
         self.assertEqual([], self.checker.check(self.gate, self.h0, self.bsp, self.integration))
+        self.assertEqual("H1-R2.32", self.h0["physical_h1"]["marker"])
+        self.assertEqual(
+            self.h0["hardware_marker"],
+            self.h0["physical_h1"]["pin_authority_marker"],
+        )
 
     def test_historical_markers_survive_every_import_write(self):
         raw = copy.deepcopy(self.bsp)

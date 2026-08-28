@@ -203,8 +203,10 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
                                    for row in hardware_sources.values()):
         errors.append("current pre-H2 authority lost its exact hardware source hashes")
     physical_h1 = h0.get("physical_h1", {})
-    if physical_h1.get("marker") != h0.get("hardware_marker"):
-        errors.append("physical H1 marker differs from the exact pin authority")
+    if physical_h1.get("pin_authority_marker") != h0.get("hardware_marker"):
+        errors.append("physical H1 lost its exact pin-authority marker")
+    if physical_h1.get("marker") != "H1-R2.32":
+        errors.append("physical H1 projection is not the current H1-R2.32 design")
     if "pre_r2_h2_gates" not in physical_h1:
         errors.append("physical H1 projection lost its pre-R2/H2 factory gates")
 
