@@ -2,7 +2,7 @@
   "schema_version": 1,
   "baseline": "R2",
   "phase": "F2",
-  "current_substep": "F2-R2.2",
+  "current_substep": "F2-R2.3",
   "updated_on": "2026-08-28",
   "current_claims": {
     "hardware_contract_projection_generated": true,
@@ -10,7 +10,8 @@
     "six_domains_named": true,
     "six_target_identity_contract_reviewed": true,
     "six_target_memory_rollback_contract_reviewed": true,
-    "hub_target_project_created": false,
+    "hub_target_project_created": true,
+    "six_target_project_trees_reviewed": true,
     "six_target_memory_update_contract_reviewed": true,
     "six_target_activation_order_reviewed": true,
     "six_target_build_matrix_reviewed": true,
@@ -25,7 +26,8 @@
     "f1_r2_closure_report_published": true,
     "f1_r2_reviewed": true,
     "f2_r2_target_rebaseline_started": true,
-    "f2_r2_rebaseline_plan_reviewed": true
+    "f2_r2_rebaseline_plan_reviewed": true,
+    "f2_r2_project_structures_reviewed": true
   },
   "historical_evidence_baseline": "R1",
   "completed": [
@@ -43,6 +45,7 @@
     "F1-R2",
     "F2-R2.0",
     "F2-R2.1",
+    "F2-R2.2",
     "F2.0.0",
     "F2.0.1",
     "F2.0.2",
@@ -107,6 +110,7 @@
     "F1-R2",
     "F2-R2.0",
     "F2-R2.1",
+    "F2-R2.2",
     "F0",
     "F1",
     "F2.0.0",

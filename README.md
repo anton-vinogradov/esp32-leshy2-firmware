@@ -2,7 +2,7 @@
 
 [Русский](README.ru.md) · [Hardware](https://github.com/anton-vinogradov/esp32-leshy2)
 
-> **Firmware status: F2-R2.2 — six target projects are current.** The R1
+> **Firmware status: F2-R2.3 — generated six-domain BSP is current.** The R1
 > F0–F4 work remains regression evidence, but its five-domain topology is no
 > longer current. Follow the [firmware roadmap](docs/roadmap.md).
 
@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.2**; R2 [plan](config/f2_r2_target_rebaseline.json) and [matrix](config/f2_r2_build_matrix.json) reviewed, R1 [report retained](docs/f2-target-build-system-report.md) | create six independent production-SDK project trees without running target builds |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.3**; R2 [plan](config/f2_r2_target_rebaseline.json), [matrix](config/f2_r2_build_matrix.json) and [six project roots](config/f2_r2_target_projects.json) reviewed, R1 [report retained](docs/f2-target-build-system-report.md) | generate six R2 BSP domains and bind each to exactly one project without running target builds |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -31,7 +31,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
 
-**Firmware is at F2-R2.2.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
+**Firmware is at F2-R2.3.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository to the reviewed hardware source by SHA-256. R2 has six
@@ -39,9 +39,11 @@ targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and the
 TVP5150 video decoder remain front-local. Hub RP owns microSD and all three
 nRF24 paths; rear RF RP owns CC1101, voice, audio, `BROADCAST_RX`, FPV control,
 M5 and U214.
-The reviewed [target identity contract](config/f0_r2_target_identity_contract.json)
-names six unique application images and the two protected-controller boot
-images without claiming that R2 projects or builds already exist.
+The reviewed [target-project structure](config/f2_r2_target_projects.json)
+establishes six production-SDK roots, six unique application images and two
+protected-controller boot images. RF RP and Hub RP have separate Pico SDK
+trees, entry sources and image identities. No generated R2 BSP, target configure
+or build is claimed yet.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
 share geometry only, never target identity, state or flash contents. No physical
@@ -120,14 +122,17 @@ and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position
 
-<!-- current-substep: F2-R2.2 -->
+<!-- current-substep: F2-R2.3 -->
 
-▶️ **`F2-R2.2` — current.** The [F2-R2.1 build matrix](config/f2_r2_build_matrix.json)
-has reviewed 12 shell-free offline command sets, 60 artifact paths, 16 map paths
-and 16 image-size gates for S3, C5, RF RP, Hub RP, Pack and Safety. This substep
-creates six independent minimal production-SDK project trees, including separate
-RF-RP and Hub-RP identities, but does not run an R2 target build. The marker and
-evidence update together in every commit.
+▶️ **`F2-R2.3` — current.** [F2-R2.2](config/f2_r2_target_projects.json)
+reviewed six production-SDK roots: four retained SDK structures and two new,
+independent Pico SDK trees for RF RP and Hub RP. Both RP projects are offline,
+pin-free, have different entry sources and emit different image identities.
+The retained five-domain generated BSP remains explicitly historical and is not
+an R2 build input. This substep now generates six deterministic R2 BSP domains
+from the hash-bound hardware projection and binds each domain to one project.
+No R2 configure or target build runs before the later gates.
+The exact marker and its evidence move together in every commit.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>

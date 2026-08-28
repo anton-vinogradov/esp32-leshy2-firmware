@@ -11,7 +11,8 @@ R1 evidence below remains regression history and does not qualify R2 binaries.
 |---|---|---|
 | F2-R2.0 | Reviewed | hash-locked five-target R1 inventory and exact six-target migration plan in [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
 | F2-R2.1 | Reviewed | exact 6-target × 2-configuration offline argv matrix in [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 artifact paths, 16 maps and 16 size gates; zero R2 projects or executions claimed |
-| F2-R2.2 | Current | create six independent minimal production-SDK project trees without running an R2 build |
+| F2-R2.2 | Reviewed | six production-SDK roots in [`config/f2_r2_target_projects.json`](../config/f2_r2_target_projects.json): four retained structures plus separate offline, pin-free RF-RP and Hub-RP Pico SDK trees; distinct entries/images/state; zero BSP/configure/build/execution claims |
+| F2-R2.3 | Current | generate six deterministic R2 BSP domains and bind each to exactly one project without running an R2 build |
 
 The matrix locks every configure/build/clean command to a separate
 `build/r2/targets/<target>/<configuration>` root, requires SHA-verified archives,
@@ -20,6 +21,11 @@ exact source commits, Python 3.12 with hashed requirements,
 FetchContent. S3 QEMU remains an F3-R2 gate; C5 has no official QEMU machine,
 Pico host is not RP2350 emulation, and MSPM0C1106 has no accepted official
 simulator. Development-board and Leshy2 HIL runs remain zero.
+
+The existing `generated/hardware` tree is still the locked five-domain R1
+artifact and is not an R2 build input. F2-R2.3 replaces that boundary from the
+hash-bound six-domain hardware projection; no project may substitute handwritten
+production pins.
 
 ## Historical R1 results
 

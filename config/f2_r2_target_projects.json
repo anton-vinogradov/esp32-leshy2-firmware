@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "stage": "F2-R2.2",
+  "status": "reviewed_structure",
+  "reviewed_on": "2026-08-28",
+  "inputs": {
+    "build_matrix": {
+      "path": "config/f2_r2_build_matrix.json",
+      "sha256": "d0851eccfb977ecdf796bbcd4d0bd152e0a00716f9f1ee8082eb34f0bedd2255"
+    },
+    "target_identities": {
+      "path": "config/f0_r2_target_identity_contract.json",
+      "sha256": "7700df169bbf22d5071ee9661157bda03e03260c32f9001d20bb8772b77a1a00"
+    },
+    "memory_rollback": {
+      "path": "config/f0_r2_memory_rollback_contract.json",
+      "sha256": "8de1a75699992eed4f2aa00ff2f3741db3bb9d3c4303dbef6ce869b322cc768c"
+    },
+    "r2_hardware_projection": {
+      "path": "config/h0_r2_hardware_contract.json",
+      "sha256": "a62d0f30d6f429ecd7441cd04d434c04bba4ba391ad3ac72b4a35cce2c40924c"
+    },
+    "historical_r1_project_registry": {
+      "path": "config/target_projects.json",
+      "sha256": "bbeb4c9a4921e0ff9b034fd14b48dad30994229dcbe1ceb4f71fd744ef1a15ea"
+    },
+    "historical_r1_generated_manifest": {
+      "path": "generated/source_manifest.json",
+      "sha256": "cafc99ef074cc8b76ebb1055905e2e4107103b863625b1291d071fd54396cae2"
+    }
+  },
+  "bsp_boundary": {
+    "current_contract": "config/h0_r2_hardware_contract.json",
+    "current_domains": ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+    "generated_r2_bsp_status": "pending_F2-R2.3",
+    "historical_generated_tree": "generated/hardware",
+    "historical_generated_domains": ["S3", "C5", "RP", "PACK", "SAFETY"],
+    "historical_generated_tree_is_r2_build_input": false,
+    "handwritten_production_pins_allowed": false
+  },
+  "projects": [
+    {
+      "id": "s3",
+      "family": "esp_idf",
+      "sdk_target": "esp32s3",
+      "project_dir": "targets/s3",
+      "project_name": "leshy2_s3",
+      "application_image": "leshy2_s3",
+      "tree_origin": "retained_sdk_tree",
+      "identity_file": "targets/s3/CMakeLists.txt",
+      "entry_file": "targets/s3/main/app_main.c",
+      "r2_bsp_domain": "s3",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    },
+    {
+      "id": "c5",
+      "family": "esp_idf",
+      "sdk_target": "esp32c5",
+      "project_dir": "targets/c5",
+      "project_name": "leshy2_c5",
+      "application_image": "leshy2_c5",
+      "tree_origin": "retained_sdk_tree",
+      "identity_file": "targets/c5/CMakeLists.txt",
+      "entry_file": "targets/c5/main/app_main.c",
+      "r2_bsp_domain": "c5",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    },
+    {
+      "id": "rf_rp",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_dir": "targets/rf_rp",
+      "project_name": "leshy2_rf_rp",
+      "application_image": "leshy2_rf_rp",
+      "tree_origin": "new_independent_sdk_tree",
+      "identity_file": "targets/rf_rp/CMakeLists.txt",
+      "entry_file": "targets/rf_rp/main.c",
+      "board_file": "targets/rf_rp/boards/leshy2_rp2354b.h",
+      "image_identity_symbol": "L2_RF_RP_IMAGE_IDENTITY",
+      "r2_bsp_domain": "rf_rp",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    },
+    {
+      "id": "hub_rp",
+      "family": "pico_sdk",
+      "sdk_target": "rp2350-arm-s",
+      "project_dir": "targets/hub_rp",
+      "project_name": "leshy2_hub_rp",
+      "application_image": "leshy2_hub_rp",
+      "tree_origin": "new_independent_sdk_tree",
+      "identity_file": "targets/hub_rp/CMakeLists.txt",
+      "entry_file": "targets/hub_rp/main.c",
+      "board_file": "targets/hub_rp/boards/leshy2_rp2354b.h",
+      "image_identity_symbol": "L2_HUB_RP_IMAGE_IDENTITY",
+      "r2_bsp_domain": "hub_rp",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    },
+    {
+      "id": "pack",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_dir": "targets/pack",
+      "project_name": "leshy2_pack",
+      "application_image": "leshy2_pack",
+      "boot_image": "leshy2_pack_boot",
+      "tree_origin": "retained_sdk_tree",
+      "identity_file": "targets/pack/Makefile",
+      "entry_file": "targets/pack/main.c",
+      "r2_bsp_domain": "pack",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    },
+    {
+      "id": "safety",
+      "family": "ti_mspm0_sdk",
+      "sdk_target": "MSPM0C1106",
+      "project_dir": "targets/safety",
+      "project_name": "leshy2_safety",
+      "application_image": "leshy2_safety",
+      "boot_image": "leshy2_safety_boot",
+      "tree_origin": "retained_sdk_tree",
+      "identity_file": "targets/safety/Makefile",
+      "entry_file": "targets/safety/main.c",
+      "r2_bsp_domain": "safety",
+      "r2_bsp_binding": "pending_F2-R2.3",
+      "configure_or_build_eligible": false
+    }
+  ],
+  "claims": {
+    "six_production_sdk_project_roots_reviewed": true,
+    "retained_sdk_project_roots": 4,
+    "new_independent_sdk_project_roots": 2,
+    "independent_application_image_identities": 6,
+    "independent_protected_boot_image_identities": 2,
+    "rf_and_hub_share_project_tree": false,
+    "rf_and_hub_share_entry_source": false,
+    "rf_and_hub_share_application_image": false,
+    "rf_and_hub_share_target_local_state": false,
+    "r2_bsp_generated": false,
+    "r2_bsp_consumed": false,
+    "r2_configure_run": false,
+    "r2_build_run": false,
+    "r2_emulator_run": false,
+    "r2_devboard_run": false,
+    "r2_physical_run": false
+  },
+  "next": "F2-R2.3",
+  "checker": "tools/check_f2_r2_target_projects.py"
+}

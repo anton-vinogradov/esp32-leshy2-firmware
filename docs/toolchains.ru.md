@@ -12,7 +12,8 @@ evidence R1 ниже остаётся regression history и не квалифи�
 |---|---|---|
 | F2-R2.0 | Проведено ревью | hash-locked инвентаризация пяти targets R1 и точный план миграции шести targets в [`config/f2_r2_target_rebaseline.json`](../config/f2_r2_target_rebaseline.json) |
 | F2-R2.1 | Проведено ревью | точная offline argv matrix 6 targets × 2 configurations в [`config/f2_r2_build_matrix.json`](../config/f2_r2_build_matrix.json): ESP-IDF `v6.0.2`, Pico SDK/picotool `2.3.0`, MSPM0 SDK `2.11.00.07`; 60 путей artifacts, 16 maps и 16 size gates; заявлено ноль R2 projects и executions |
-| F2-R2.2 | Сейчас | создать шесть независимых минимальных production-SDK project trees без запуска R2 build |
+| F2-R2.2 | Проведено ревью | шесть production-SDK roots в [`config/f2_r2_target_projects.json`](../config/f2_r2_target_projects.json): четыре сохранённые структуры и отдельные offline pin-free Pico SDK trees RF-RP и Hub-RP; разные entries/images/state; заявлено ноль BSP/configure/build/execution |
+| F2-R2.3 | Сейчас | сгенерировать шесть детерминированных доменов BSP R2 и привязать каждый ровно к одному project без запуска R2 build |
 
 Matrix закрепляет каждую команду configure/build/clean за отдельным root
 `build/r2/targets/<target>/<configuration>`, требует SHA-verified archives,
@@ -21,6 +22,11 @@ offline ESP Component Manager и disconnected Pico FetchContent. S3 QEMU ост�
 gate F3-R2; у C5 нет официальной QEMU machine, Pico host не является эмуляцией
 RP2350, а для MSPM0C1106 нет принятого официального simulator. Число прогонов
 development-board и Leshy2 HIL остаётся нулём.
+
+Существующее tree `generated/hardware` остаётся закреплённым артефактом R1 из
+пяти доменов и не является build input R2. F2-R2.3 заменяет эту границу из
+связанной hash аппаратной проекции шести доменов; ни один project не может
+подменить её handwritten production pins.
 
 ## Исторические результаты R1
 
