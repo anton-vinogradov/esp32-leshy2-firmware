@@ -22,11 +22,11 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "b02ea620f62f7e086db36a62e9d894a03d4cdaa729ca4da583a07c5f58a561e2"
+      "sha256": "62edc85c1c159c05d2d892c1a8a431987f7e82b02166e7c7d49ad468b1bc6708"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "91f17223669bd2c35035d046baf137716ffa4200a1505711ea617e4a7c07fac5"
+      "sha256": "65afec5583721629539398d5cbe339dcf7a0130871b85815fafe5a54c5ae0434"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -3066,7 +3066,7 @@
     "exact factory-placeable service-VBUS detector/latch MPN and implementation"
   ],
   "physical_h1": {
-    "marker": "H1-R2.36",
+    "marker": "H1-R2.37",
     "pin_authority_marker": "H1-R2.31",
     "status": "ready_for_user_layout_acceptance",
     "current_h1_blockers": [],

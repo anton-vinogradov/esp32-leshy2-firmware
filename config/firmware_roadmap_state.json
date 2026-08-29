@@ -5,7 +5,7 @@
   "current_substep": "F2-R2.5",
   "updated_on": "2026-08-29",
   "hardware_boundary": {
-    "physical_design_marker": "H1-R2.36",
+    "physical_design_marker": "H1-R2.37",
     "machine_pin_config_marker": "H1-R2.31",
     "physical_h1_status": "in_progress",
     "current_h1_blockers": [],

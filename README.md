@@ -94,12 +94,12 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware is at
-`H1-R2.36` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
+`H1-R2.37` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
 and service access are generated. The 226-body physical register includes all
 eight exact TX detectors, five required couplers and eight bounded local
-evidence islands; the accepted AD8314 package change does not alter any
+evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-route changes save hardware cost without altering any
 firmware-visible net or behavior. S3 keeps the direct 24-MHz i8080-8 path to
 exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Eleven
 former video GPIOs remain reserves. M1 has an exact 80-contact map with 16 NC

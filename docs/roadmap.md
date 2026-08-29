@@ -5,18 +5,18 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware is at
-> H1-R2.36 and is ready for visual placement acceptance; its exact imported pin/config authority remains the reviewed
+> H1-R2.37 and is ready for visual placement acceptance; its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
 > 3.75-A continuous / 4.25-A step 3V3_MAIN architecture, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
 > contains all eight exact TX detectors, five couplers and eight bounded local
-> evidence islands without a firmware-visible contract change. The onboard video receiver,
+> evidence islands; the accepted AD8314 and exact Hirose U.FL packaging-route changes have no firmware-visible contract effect. The onboard video receiver,
 > decoder, connector and owner-soldered module bay are removed; eleven S3 GPIOs,
 > eight rear-RP GPIOs and two M1 contacts remain reserves. Current exterior,
 > turned-over inner faces and service views are generated. H1 still requires
 > explicit mock-up acceptance and does not authorize ECAD or ordering.
 
-Status last reconciled: **28 August 2026**. This is the firmware repository's
+Status last reconciled: **29 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -31,7 +31,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): exact dual-RP working maps and the C5 4-bit mux are imported as pre-H2 authority, but retained H2.0.3 JSON is historical R1 and cannot authorize R2; reopen only on a six-domain H2 export plus closed production mux/latch gates |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and physical H1-R2.36 is geometry-complete pending visual acceptance, while the imported machine pin/config authority remains H1-R2.31; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; ten SMA ports are split 5+5; direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` remains S3-local, the flex points toward the antenna edge and F5/F6 rotate ILI9488 memory and FT6236 touch coordinates by 180°; eleven S3 GPIOs are reserves and exact 80-contact M1 carries 24 signals, 24 returns and 16 true NC contacts; the 226-body model includes all 18 U219 support bodies, the NFC loop, supplied-antenna swept volume, eight exact TX detectors, five couplers and eight bounded evidence islands |
+| Hardware intersection | ▶️ Hardware H0-R2 is reviewed and physical H1-R2.37 is geometry-complete pending visual acceptance, while the imported machine pin/config authority remains H1-R2.31; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; ten SMA ports are split 5+5; direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` remains S3-local, the flex points toward the antenna edge and F5/F6 rotate ILI9488 memory and FT6236 touch coordinates by 180°; eleven S3 GPIOs are reserves and exact 80-contact M1 carries 24 signals, 24 returns and 16 true NC contacts; the 226-body model includes all 18 U219 support bodies, the NFC loop, supplied-antenna swept volume, eight exact TX detectors, five couplers and eight bounded evidence islands |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

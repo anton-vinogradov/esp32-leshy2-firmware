@@ -37,7 +37,7 @@
     "physical_pre_r2_h2_gates_required": 0
   },
   "r2_h2_synchronized": false,
-  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the exact pre-H2 H1-R2.31 dual-RP map and C5 mux contract, but no six-domain H2/ECAD export. Physical H1-R2.36 is geometry-complete and awaits explicit visual acceptance; live FSUSB42 routing, the exact service-VBUS detector/latch and the Pack/Safety I2C powered-off-Ioff boundary also remain open before R2 H2.",
+  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the exact pre-H2 H1-R2.31 dual-RP map and C5 mux contract, but no six-domain H2/ECAD export. Physical H1-R2.37 is geometry-complete and awaits explicit visual acceptance; live FSUSB42 routing, the exact service-VBUS detector/latch and the Pack/Safety I2C powered-off-Ioff boundary also remain open before R2 H2.",
   "claims": {
     "h0_r2_projection_is_current_firmware_authority": true,
     "historical_single_rp_import_can_authorize_r2": false,
