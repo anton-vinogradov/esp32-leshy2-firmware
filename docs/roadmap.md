@@ -10,7 +10,7 @@
 > 3.75-A continuous / 4.25-A step 3V3_MAIN architecture, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
 > contains all eight exact TX detectors, five couplers and eight bounded local
-> evidence islands; the accepted AD8314 and exact Hirose U.FL packaging-route changes have no firmware-visible contract effect. The onboard video receiver,
+> evidence islands; the accepted AD8314 and exact Hirose U.FL packaging-route changes have no firmware-visible contract effect. All current top-20 hardware groups are retained, and separate `ANT-433-CW-QW-SMA` units remain permanently assigned to SUB-GHz and UHF VOICE rather than becoming a firmware-visible shared antenna. The onboard video receiver,
 > decoder, connector and owner-soldered module bay are removed; eleven S3 GPIOs,
 > eight rear-RP GPIOs and two M1 contacts remain reserves. Current exterior,
 > turned-over inner faces and service views are generated. H1 still requires

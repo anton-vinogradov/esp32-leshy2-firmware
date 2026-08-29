@@ -100,7 +100,8 @@ the locality-first two-board placement, matched outer/turned-over inner faces
 and service access are generated. The 226-body physical register includes all
 eight exact TX detectors, five required couplers and eight bounded local
 evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-route changes save hardware cost without altering any
-firmware-visible net or behavior. S3 keeps the direct 24-MHz i8080-8 path to
+firmware-visible net or behavior. The 2026-08-30 cost decision retains every current top-20 hardware group and permanently assigns separate
+`ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct 24-MHz i8080-8 path to
 exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Eleven
 former video GPIOs remain reserves. M1 has an exact 80-contact map with 16 NC
 reserves and a separate enclosure load path.
