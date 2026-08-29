@@ -173,7 +173,6 @@ def build() -> dict:
         },
         "interboard": hw["interboard_rebaseline"],
         "display": hw["display_contract"],
-        "fpv": hw["video_contract"],
         "airband": {
             "owner": air["owner"],
             "signal_group": air["signal_group"],
@@ -195,10 +194,10 @@ def build() -> dict:
             "required_work": [
                 "implement S3-Hub quad, Hub-C5 native 4-bit SDIO and Hub-RF SPI+alert; never reactivate the historical direct S3-C5 endpoint",
                 "route Pack status and Safety heartbeat/lease/fault mailboxes through the dedicated Hub GPIO42/43 I2C1 bus and an exact powered-off-Ioff 3V3_MAIN/AON boundary without weakening local watchdog or FAULT_KILL ownership",
-                "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, FPV control, M5 and exactly one signed U214/U219 Cap profile to the rear RF RP",
-                "carry only one 75-ohm FPV_CVBS signal across M1 while TVP5150 and its 11-line LCD_CAM bus remain front-local",
+                "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, M5 and exactly one signed U214/U219 Cap profile to the rear RF RP",
+                "keep all display traffic front-local and preserve the eleven released S3 GPIOs plus M1 contacts 35-36 as true reserves",
                 "add fail-low Airband mode control, Si5351 setup, scan/record and ACARS receive pipeline",
-                "preserve direct S3 UI/display/FPV scheduling and all existing safety/quiet-state semantics",
+                "preserve direct S3 UI/display scheduling and all existing safety/quiet-state semantics",
                 "qualify the six target builds before implementing R2 F4 transports, then run emulator/dev-board and HIL gates without reusing R1 physical claims",
             ],
         },

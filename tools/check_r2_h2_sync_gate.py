@@ -33,11 +33,11 @@ HISTORICAL_INTEGRATION_AUTHORITY = {
     "r2_sync_gate": "config/r2_h2_sync_gate.json",
 }
 M1_COUNTS = {
-    "live_signals": 25,
+    "live_signals": 24,
     "main_power": 14,
     "aon_power": 2,
-    "returns": 25,
-    "no_connect_reserve": 14,
+    "returns": 24,
+    "no_connect_reserve": 16,
 }
 
 
@@ -205,8 +205,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     physical_h1 = h0.get("physical_h1", {})
     if physical_h1.get("pin_authority_marker") != h0.get("hardware_marker"):
         errors.append("physical H1 lost its exact pin-authority marker")
-    if physical_h1.get("marker") != "H1-R2.33":
-        errors.append("physical H1 projection is not the current H1-R2.33 design")
+    if physical_h1.get("marker") != "H1-R2.35":
+        errors.append("physical H1 projection is not the current H1-R2.35 design")
     if "pre_r2_h2_gates" not in physical_h1:
         errors.append("physical H1 projection lost its pre-R2/H2 factory gates")
 

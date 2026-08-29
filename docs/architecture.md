@@ -19,36 +19,35 @@ not claim ECAD, target execution or HIL closure.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB, direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` and independent analog-FPV camera RX |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB and direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
-| RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and exactly one signed U214/U219 Cap profile |
+| RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, M5 and exactly one signed U214/U219 Cap profile |
 | Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |
 | Pack | `MSPM0C1106SDGS20R` | cell admission and protected shutdown |
 | Safety | second `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases and `FAULT_KILL` |
 
 ```mermaid
 flowchart TD
-  S3["S3 · direct UI/display/video"] <-->|"40-MHz quad-SPI + alert"| HUB["front Hub RP · fan-out/storage/nRF24"]
+  S3["S3 · direct UI/display"] <-->|"40-MHz quad-SPI + alert"| HUB["front Hub RP · fan-out/storage/nRF24"]
   HUB <-->|"4-bit SDIO · 20-MHz bring-up · 40-MHz target"| C5["C5 · native radio/IR"]
   HUB <-->|"20-MHz SPI + alert"| RF["rear RF RP · RF/audio/expansion"]
   HUB <-->|"400-kHz fail-closed I²C"| PACK["Pack MSPM0"]
   HUB <-->|"400-kHz fail-closed I²C"| SAFE["Safety MSPM0"]
 ```
 
-The S3-Hub link carries control and selected data, never display pixels or
-analog-video frames. Hub-local microSD and three nRF24 islands do not contend
+The S3-Hub link carries control and selected data, never display pixels.
+Hub-local microSD and three nRF24 islands do not contend
 with the display; rear audio uses bounded full-duplex transport below 0.4 MB/s.
 Button edges terminate on the S3-local
 `TCA9539PWR`; encoder A/B remain direct PCNT inputs. The first visible response
 target remains 20 ms under qualified concurrent load.
 
-The display and camera use the separate LCD TX and camera RX units concurrently.
-The H1-R2.33 physical orientation points the display flex toward the antenna edge;
+The H1-R2.35 physical orientation points the display flex toward the antenna edge;
 the S3 display/touch driver therefore applies one 180-degree transform to both
 ILI9488 memory addressing and FT6236 touch coordinates. Normal display traffic
 uses i8080-8; ordinary 4-wire serial is a recovery strap, not QSPI.
-The exact M1 map defines all 80 contacts: 25 live signals, 14 main-power, 2 AON,
-25 returns and 14 NC reserves. M1 is electrical/alignment-only; enclosure stops,
+The exact M1 map defines all 80 contacts: 24 live signals, 14 main-power, 2 AON,
+24 returns and 16 NC reserves. M1 is electrical/alignment-only; enclosure stops,
 anti-shear datums and PCB capture carry impact and bending loads.
 
 `BROADCAST_RX` is rear-RP-owned and mutually exclusive with other top-level signal
@@ -75,7 +74,7 @@ routes are now Hub-centered.
 
 | Link | Physical transport | Wire unit | Required behaviour |
 |---|---|---|---|
-| S3↔Hub RP | dedicated 40-MHz four-data-line half-duplex link + alert | bounded DMA cell | ≥14 MB/s qualified payload; UI/display/video remain S3-local |
+| S3↔Hub RP | dedicated 40-MHz four-data-line half-duplex link + alert | bounded DMA cell | ≥14 MB/s qualified payload; UI/display remain S3-local |
 | Hub RP↔C5 | native 4-bit SDIO: 20-MHz bring-up, 40-MHz target | up to one 512-byte packet | ≥7.5 MB/s payload is accepted only at 40 MHz; reset/recovery and priority are HIL gates |
 | Hub RP↔RF RP | dedicated 20-MHz full-duplex SPI + alert | one full-duplex 512-byte DMA cell | ≥1.5 MB/s payload, ≤250 µs alert-to-read and ≤2 ms control RTT |
 | Hub RP↔Pack/Safety | dedicated fail-closed 400-kHz I²C | bounded command/status mailboxes | Hub cannot grant battery admission or override local watchdog/`FAULT_KILL` |

@@ -53,9 +53,9 @@ closes the contract foundation without claiming an implemented target. The gener
 [`h0_r2_hardware_contract.json`](config/h0_r2_hardware_contract.json) binds the
 firmware repository by SHA-256 to the functional source, exact C5 service mux
 and exact dual-RP working pin map. R2 has six
-targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons, display and the
-TVP5150 video decoder remain front-local. Hub RP owns microSD and all three
-nRF24 paths; rear RF RP owns CC1101, voice, audio, `BROADCAST_RX`, FPV control,
+targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons and display remain
+front-local. Hub RP owns microSD and all three nRF24 paths; rear RF RP owns
+CC1101, voice, audio, `BROADCAST_RX`,
 M5 and exactly one signed U214/U219 Cap profile.
 The retained [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json)
 and [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
@@ -94,12 +94,13 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware is at
-`H1-R2.33` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
+`H1-R2.35` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
-the locality-first two-board placement, matched outer/turned-over inner faces,
-service access and vertical FPV-connector proof are generated. S3 now keeps the
-direct 24-MHz i8080-8 path to exact `ER-TFT035IPS-6` + `ER-TPC035-6`, camera RX, ordinary UI, encoder and USB;
-M1 has an exact 80-contact map with 14 NC reserves and a separate enclosure load path.
+the locality-first two-board placement, matched outer/turned-over inner faces
+and service access are generated. S3 keeps the direct 24-MHz i8080-8 path to
+exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Eleven
+former video GPIOs remain reserves. M1 has an exact 80-contact map with 16 NC
+reserves and a separate enclosure load path.
 The display is physically oriented with its flex toward the antenna edge; F5/F6
 must rotate ILI9488 memory orientation and FT6236 touch coordinates by 180 degrees.
 That transform is required target behavior, not an implemented-driver claim.
@@ -107,43 +108,9 @@ Stable outer silkscreen identifies the UI and RF/power PCB roles, `R2-EVT1` and
 `REV A`; the changing `H1-R2.xx` work marker remains documentation-only.
 S3, C5, RF RP and Hub RP each retain USB, RESET/BOOT and internal DBG10.
 The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
-cell, and port/antenna kit codes are synchronized. Official AKK-hosted media
-confirms the K331 application circuit, all 14 pin functions and the 24-channel
-table. The official Sinopine SP331RX manual controls 28.7×23.1 mm nominal XY,
-2.54-mm contact pitch and 1.4-mm edge offset for the matching 331RX family;
-hardware now accepts a dual mutually exclusive post-PCBA receiver land inside
-a 30×24×8-mm reserve and retains 1.05 mm opposing clearance against 0.70 mm
-required after relocating C5 DBG10. K331 fits the reserved rear-RP
-controls and 5-V budget; exact linear `TBS5G8MMCXA` is the FPV kit
-antenna for the keyed `FPV RX 5.8G` MMCX, with independent Taoglas
-`FXP831.09.0100C` selected as a backorder-only paper fallback. JLCPCB confirmed
-that K331 is absent from Parts Library and Global Sourcing, found no direct
-replacement. The normal PCBA BOM omits the receiver: exactly one module is
-installed after reflow. K331 is primary on a tolerant 14-pad direct-solder
-land; manufacturer-documented `AWM666V RX` uses its exact nested land as a
-degraded seven-channel fallback. The selected 50-ohm branch is completed at
-the MMCX launch and the unused branch is isolated there, without U.FL, cable
-or live stub. Received body, hand soldering, actual Z and durability move to
-H5/H7; Consigned Parts and a later AKK/Sinopine package are optional footprint simplifications.
-The full-coverage fallback search found no production replacement: controlled
-`SP166RX` is 42.418×29.46 mm before height and its RF summary contradicts its
-channel table, while `MM238R-MCU` fits function and space but has only
-reseller-hosted evidence, no controlled current manufacturer route and only
-out-of-stock/discontinued sellers. Exact JLCPCB searches return zero results
-for both.
-Optional Consigned Parts approval, final Gerber/BOM/CPL DFM and factory function-test
-review are assigned to H5/H6/H7. Assembled RF/video proof and the Taoglas
-fallback stay mandatory at downstream H3/H5/H6/H8.
-Live JLCPCB cards for `RichWave RTC6715` and generic `RX5808` have zero stock,
-MOQ 442 and no purchasable module route; the bare RTC6715 also lacks a public
-reference RF/IF application, so firmware keeps the K331 module boundary.
-The exact connector is vertical SMT Molex `73415-2063` (`C588480`) on the rear
-face below the evenly pitched five-SMA row. Its body stays 2.07 mm from SMA;
-the controlled right-angle plug stays 2.40 mm from SMA and 4.80 mm from U214,
-clears both mounting holes, and no tail enters the sandwich. Ø12 is only the
-temporary H5 finger-access check.
-Received mating,
-retention, final enclosure tolerance and strain remain H5 evidence.
+cell, and port/antenna kit codes are synchronized. The onboard analog-video
+receiver, decoder, connector and all firmware contracts are removed: no
+post-PCBA active module or owner soldering remains in the product boundary.
 The exact 3V3_MAIN cell
 admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
 dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
@@ -354,10 +321,10 @@ fault. A latched fault requires a physical `KILL`→`RUN` cycle.
 
 ```mermaid
 flowchart TB
-  S3["S3 image<br/>application, direct UI/display and analog FPV"]
+  S3["S3 image<br/>application and direct UI/display"]
   HUB["Hub RP2354B image<br/>front fan-out, storage, nRF24 ×3"]
   C5["C5 image<br/>native 2.4/5 GHz, 802.15.4, IR"]
-  RP["RF RP2354B image<br/>broadcast/Airband, audio, FPV, Sub-GHz, voice, Cap Bus"]
+  RP["RF RP2354B image<br/>broadcast/Airband, audio, Sub-GHz, voice, Cap Bus"]
   PACK["pack MSPM0 image<br/>local battery-pack admission"]
   SAFE["safety MSPM0 image<br/>watchdog, thermal zones and TX leases"]
   WDG["TPS3435<br/>independent 1.6 s timeout"]

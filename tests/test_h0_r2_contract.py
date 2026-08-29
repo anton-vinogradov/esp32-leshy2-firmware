@@ -84,15 +84,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         domains = {row["id"]: row["role"] for row in self.actual["domains"]}
         self.assertIn("three fully concurrent local nRF24", domains["hub_rp"])
         self.assertIn("CC1101", domains["rf_rp"])
-        self.assertIn("one 75-ohm FPV_CVBS", self.actual["interboard"]["video"])
+        self.assertNotIn("video", self.actual["interboard"])
         self.assertEqual(9, len(self.actual["interboard"]["released_legacy_nets"]))
-        self.assertEqual(14, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
+        self.assertEqual(16, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
         self.assertEqual(80, len(self.actual["interboard"]["pin_map"]))
-        self.assertIn("fourteen true NC reserve contacts", self.actual["interboard"]["result"])
+        self.assertIn("sixteen true NC reserve contacts", self.actual["interboard"]["result"])
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
-        self.assertEqual("H1-R2.33", self.actual["physical_h1"]["marker"])
+        self.assertEqual("H1-R2.35", self.actual["physical_h1"]["marker"])
         self.assertEqual(
             self.actual["hardware_marker"],
             self.actual["physical_h1"]["pin_authority_marker"],

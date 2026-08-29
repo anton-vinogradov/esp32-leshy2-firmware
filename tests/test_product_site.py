@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.5",
-                "H1-R2.33", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.35", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.5",
-                "H1-R2.33", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.35", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():
@@ -111,14 +111,14 @@ class ProductSiteTests(unittest.TestCase):
         pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
         for name in pages:
             page = self.read(name)
-            self.assertIn("H1-R2.33", page, name)
+            self.assertIn("H1-R2.35", page, name)
             self.assertIn("H1-R2.31", page, name)
             self.assertNotIn("four explicit H1", page, name)
             self.assertNotIn("четыре явных", page, name)
 
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         boundary = state["hardware_boundary"]
-        self.assertEqual("H1-R2.33", boundary["physical_design_marker"])
+        self.assertEqual("H1-R2.35", boundary["physical_design_marker"])
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
         self.assertEqual("in_progress", boundary["physical_h1_status"])
         self.assertEqual([], boundary["current_h1_blockers"])

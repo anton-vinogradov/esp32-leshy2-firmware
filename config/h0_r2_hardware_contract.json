@@ -6,7 +6,7 @@
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "d72cc8f47e6ed60529820218237595e1ed4ceea8f59eff3e8f2860881886be7e"
+      "sha256": "c5fbe59d64c223d8918ebdeffca1723f0e939e47ce11fc360e1231572af9da10"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -14,29 +14,29 @@
     },
     "dual_rp_pinout": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-      "sha256": "7907e4283cd4083e326ab6d28cd819a98ac8ad917c6d3a2de9f13dbf1afa7072"
+      "sha256": "f21b6d33f771fc522ed654489c16ff57d756f604b9fc4f3515babdc9c145555a"
     },
     "u219_cap_profile": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
-      "sha256": "14a1ded6b42204a40290207ec718b5b73a34798e5693a2ba880a40195ad401e9"
+      "sha256": "01f01f750ceedaa9818b59968962a3484f4660057137e6ef43431a54b71c98fa"
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "21c324e6e98a8c1cb02d848cb30aeaa96d905474f0f47790773308cd779379f4"
+      "sha256": "5938175cd074699a246f5cfbe1ff7e89c288bedc0baa91d9d9c4c498530cbc52"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "f53f58ad7650daa9fb26069f136fba8debdd0508e35f2ec036a54a97b6df078b"
+      "sha256": "47e8c977934b1bef665080a3d19ee45e29abc0156e4b89b3ab7a7945ddde83c3"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "d72cc8f47e6ed60529820218237595e1ed4ceea8f59eff3e8f2860881886be7e",
+  "hardware_source_sha256": "c5fbe59d64c223d8918ebdeffca1723f0e939e47ce11fc360e1231572af9da10",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
       "id": "s3",
       "mpn": "ESP32-S3-WROOM-1U-N16R8",
-      "role": "application, S3-local UI-expander path, touch, direct encoder, direct 8-bit i8080 display path, simultaneous analog-video capture and native 2.4-GHz Wi-Fi/BLE"
+      "role": "application, S3-local UI-expander path, touch, direct encoder, direct 8-bit i8080 display path and native 2.4-GHz Wi-Fi/BLE"
     },
     {
       "id": "c5",
@@ -46,7 +46,7 @@
     {
       "id": "rf_rp",
       "mpn": "SC1512-A4",
-      "role": "Rear CC1101, voice, FM/AM/SW/LW/Airband RX, audio, FPV control, M5 Unit and exactly one signed U214/U219 Cap profile owner; no nRF24 or microSD ownership."
+      "role": "Rear CC1101, voice, FM/AM/SW/LW/Airband RX, audio, M5 Unit and exactly one signed U214/U219 Cap profile owner; no nRF24 or microSD ownership."
     },
     {
       "id": "hub_rp",
@@ -71,10 +71,10 @@
       "pin_map": [
         {
           "gpio": 0,
-          "net": "VIDEO_D0",
-          "peripheral": "LCD_CAM",
-          "direction": "in",
-          "gate": "decoder data output must be high-Z through strap sampling"
+          "net": "S3_RESERVE_0",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "input/high-Z through strap sampling; test pad only"
         },
         {
           "gpio": 1,
@@ -103,27 +103,31 @@
         },
         {
           "gpio": 5,
-          "net": "VIDEO_D1",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_5",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 6,
-          "net": "VIDEO_D2",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_6",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 7,
-          "net": "VIDEO_D3",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_7",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 8,
-          "net": "VIDEO_D4",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_8",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 9,
@@ -133,27 +137,31 @@
         },
         {
           "gpio": 10,
-          "net": "VIDEO_D5",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_10",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 11,
-          "net": "VIDEO_D6",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_11",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 12,
-          "net": "VIDEO_D7",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_12",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 13,
-          "net": "VIDEO_PCLK",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_13",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 14,
@@ -163,15 +171,17 @@
         },
         {
           "gpio": 15,
-          "net": "VIDEO_VSYNC",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_15",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 16,
-          "net": "VIDEO_HREF",
-          "peripheral": "LCD_CAM",
-          "direction": "in"
+          "net": "S3_RESERVE_16",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
         },
         {
           "gpio": 17,
@@ -570,7 +580,7 @@
           "net": "RF_RESERVE_15",
           "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "test pad only; K331 RSSI remains NC",
+          "endpoint": "test pad only",
           "reset": "input/high-Z; external pull-down; DNP"
         },
         {
@@ -671,18 +681,18 @@
         },
         {
           "gpio": 28,
-          "net": "FPV_RX_PWR_EN",
-          "direction": "out",
+          "net": "RF_RESERVE_28",
+          "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "post-PCBA K331/AWM666V receiver bay",
-          "reset": "input/high-Z; external pull-down"
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
         },
         {
           "gpio": 29,
           "net": "RF_RESERVE_29",
           "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "test pad only; UI-local TVP5150 lock is read by S3 and reported over the existing S3-Hub-RF IPC chain",
+          "endpoint": "test pad only",
           "reset": "input/high-Z; external pull-down; DNP"
         },
         {
@@ -703,27 +713,27 @@
         },
         {
           "gpio": 32,
-          "net": "FPV_CH1",
-          "direction": "out",
+          "net": "RF_RESERVE_32",
+          "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "receiver channel select",
-          "reset": "input/high-Z; external pull-down"
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
         },
         {
           "gpio": 33,
-          "net": "FPV_CH2",
-          "direction": "out",
+          "net": "RF_RESERVE_33",
+          "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "receiver channel select",
-          "reset": "input/high-Z; external pull-down"
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
         },
         {
           "gpio": 34,
-          "net": "FPV_CH3",
-          "direction": "out",
+          "net": "RF_RESERVE_34",
+          "direction": "reserve",
           "controller": "GPIO",
-          "endpoint": "receiver channel select",
-          "reset": "input/high-Z; external pull-down"
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
         },
         {
           "gpio": 35,
@@ -1587,7 +1597,7 @@
       "clock_hz": 40000000,
       "raw_payload_mb_s": 20.0,
       "qualified_payload_floor_mb_s": 14.0,
-      "reason": "Carries control and selected data only; display and analog video never traverse IPC."
+      "reason": "Carries control and selected data only; display pixels never traverse IPC."
     },
     {
       "id": "HUB_C5",
@@ -1627,10 +1637,10 @@
   "s3_pin_map": [
     {
       "gpio": 0,
-      "net": "VIDEO_D0",
-      "peripheral": "LCD_CAM",
-      "direction": "in",
-      "gate": "decoder data output must be high-Z through strap sampling"
+      "net": "S3_RESERVE_0",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "input/high-Z through strap sampling; test pad only"
     },
     {
       "gpio": 1,
@@ -1659,27 +1669,31 @@
     },
     {
       "gpio": 5,
-      "net": "VIDEO_D1",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_5",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 6,
-      "net": "VIDEO_D2",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_6",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 7,
-      "net": "VIDEO_D3",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_7",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 8,
-      "net": "VIDEO_D4",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_8",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 9,
@@ -1689,27 +1703,31 @@
     },
     {
       "gpio": 10,
-      "net": "VIDEO_D5",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_10",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 11,
-      "net": "VIDEO_D6",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_11",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 12,
-      "net": "VIDEO_D7",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_12",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 13,
-      "net": "VIDEO_PCLK",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_13",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 14,
@@ -1719,15 +1737,17 @@
     },
     {
       "gpio": 15,
-      "net": "VIDEO_VSYNC",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_15",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 16,
-      "net": "VIDEO_HREF",
-      "peripheral": "LCD_CAM",
-      "direction": "in"
+      "net": "S3_RESERVE_16",
+      "peripheral": "GPIO",
+      "direction": "reserve",
+      "gate": "test pad only"
     },
     {
       "gpio": 17,
@@ -2506,11 +2526,15 @@
   },
   "rear_gpio_budget": {
     "available": 48,
-    "used": 44,
-    "reserve": 4,
+    "used": 40,
+    "reserve": 8,
     "reserve_gpios": [
       15,
+      28,
       29,
+      32,
+      33,
+      34,
       37,
       38
     ]
@@ -2641,7 +2665,7 @@
       "net": "RF_RESERVE_15",
       "peripheral": "GPIO",
       "direction": "reserve",
-      "endpoint": "test pad only; K331 RSSI remains NC",
+      "endpoint": "test pad only",
       "gate": "input/high-Z; external pull-down; DNP"
     },
     {
@@ -2742,18 +2766,18 @@
     },
     {
       "gpio": 28,
-      "net": "FPV_RX_PWR_EN",
+      "net": "RF_RESERVE_28",
       "peripheral": "GPIO",
-      "direction": "out",
-      "endpoint": "post-PCBA K331/AWM666V receiver bay",
-      "gate": "input/high-Z; external pull-down"
+      "direction": "reserve",
+      "endpoint": "test pad only",
+      "gate": "input/high-Z; external pull-down; DNP"
     },
     {
       "gpio": 29,
       "net": "RF_RESERVE_29",
       "peripheral": "GPIO",
       "direction": "reserve",
-      "endpoint": "test pad only; UI-local TVP5150 lock is read by S3 and reported over the existing S3-Hub-RF IPC chain",
+      "endpoint": "test pad only",
       "gate": "input/high-Z; external pull-down; DNP"
     },
     {
@@ -2774,27 +2798,27 @@
     },
     {
       "gpio": 32,
-      "net": "FPV_CH1",
+      "net": "RF_RESERVE_32",
       "peripheral": "GPIO",
-      "direction": "out",
-      "endpoint": "receiver channel select",
-      "gate": "input/high-Z; external pull-down"
+      "direction": "reserve",
+      "endpoint": "test pad only",
+      "gate": "input/high-Z; external pull-down; DNP"
     },
     {
       "gpio": 33,
-      "net": "FPV_CH2",
+      "net": "RF_RESERVE_33",
       "peripheral": "GPIO",
-      "direction": "out",
-      "endpoint": "receiver channel select",
-      "gate": "input/high-Z; external pull-down"
+      "direction": "reserve",
+      "endpoint": "test pad only",
+      "gate": "input/high-Z; external pull-down; DNP"
     },
     {
       "gpio": 34,
-      "net": "FPV_CH3",
+      "net": "RF_RESERVE_34",
       "peripheral": "GPIO",
-      "direction": "out",
-      "endpoint": "receiver channel select",
-      "gate": "input/high-Z; external pull-down"
+      "direction": "reserve",
+      "endpoint": "test pad only",
+      "gate": "input/high-Z; external pull-down; DNP"
     },
     {
       "gpio": 35,
@@ -3042,7 +3066,7 @@
     "exact factory-placeable service-VBUS detector/latch MPN and implementation"
   ],
   "physical_h1": {
-    "marker": "H1-R2.33",
+    "marker": "H1-R2.35",
     "pin_authority_marker": "H1-R2.31",
     "status": "ready_for_user_layout_acceptance",
     "current_h1_blockers": [],
@@ -3156,23 +3180,17 @@
   },
   "interboard": {
     "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
-    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 25 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and fourteen NC contacts.",
-    "video": "K331 remains rear-local; one 75-ohm FPV_CVBS net crosses M1 beside a dedicated return. TVP5150 and all eight data lines plus PCLK/VSYNC/HREF remain UI-local beside S3.",
+    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 24 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and sixteen NC contacts.",
     "locality_contract": {
-      "rule": "Every payload endpoint stays on the board that owns its controller. M1 carries no display bus, camera parallel bus, nRF/SPI payload, microSD payload, main RF trace or audio stream.",
+      "rule": "Every payload endpoint stays on the board that owns its controller. M1 carries no display bus, nRF/SPI payload, microSD payload, main RF trace or audio stream.",
       "intentional_crossings": {
         "hub_rf_ipc": "five point-to-point Hub-RF control/data wires are the sole compute-domain message path",
-        "fpv_cvbs": "one rear-receiver analog CVBS feed crosses to the front-local decoder beside its dedicated return",
         "s3_usb": "the rear/bottom power-and-service receptacle reaches the front S3 native USB pair directly",
         "encoder": "the externally reachable rear encoder remains direct to S3 PCNT plus one local-expander push input",
         "safety_and_evidence": "AON safety, thermal and TX-evidence nets cross to the rear safety controller by design"
       },
       "forbidden_payload_prefixes": [
         "LCD_",
-        "VIDEO_D",
-        "VIDEO_PCLK",
-        "VIDEO_VSYNC",
-        "VIDEO_HREF",
         "NRF",
         "MICROSD",
         "SD_SPI",
@@ -3202,11 +3220,11 @@
     ],
     "current_budget": {
       "positions": 80,
-      "live_signals": 25,
+      "live_signals": 24,
       "main_power": 14,
       "aon_power": 2,
-      "returns": 25,
-      "no_connect_reserve": 14
+      "returns": 24,
+      "no_connect_reserve": 16
     },
     "main_current": {
       "continuous_a": 3.75,
@@ -3389,13 +3407,13 @@
       },
       {
         "contact": 35,
-        "net": "FPV_CVBS",
-        "class": "video_75ohm"
+        "net": "NC_35",
+        "class": "reserve"
       },
       {
         "contact": 36,
-        "net": "VIDEO_GROUND",
-        "class": "video_return"
+        "net": "NC_36",
+        "class": "reserve"
       },
       {
         "contact": 37,
@@ -3619,32 +3637,22 @@
       }
     ],
     "mechanical_load_path": "M1 is electrical/alignment only. Four 11.00-mm compression stops, two anti-shear enclosure datums and independent front/rear PCB capture lips constrain the boards when one screw is loose; no drop, installation or enclosure-bending load is accepted through the SMT joints.",
-    "result": "R2 uses 25 live signals, fourteen 3V3_MAIN contacts, twenty-five defined returns, two AON contacts and fourteen true NC reserve contacts; no obsolete audio or M5 signal remains assigned."
+    "result": "R2 uses 24 live signals, fourteen 3V3_MAIN contacts, twenty-four defined returns, two AON contacts and sixteen true NC reserve contacts; no obsolete audio, video or M5 signal remains assigned."
   },
   "display": {
     "panel": "EastRising ER-TFT035IPS-6 configured with ER-TPC035-6 capacitive touch; ILI9488 + FT6236",
     "interface": "dedicated direct i8080-8 (Intel 8080) on S3 LCD_CAM TX with GDMA; D0..D7, WR and DC are direct, CS is hard-low because the bus is exclusive, RD is hard-high, IM[2:0]=011, reset remains on the local slow-I/O output, and front Hub captures TE plus drives reset-off backlight PWM",
     "controller_limit_hz": 25000000,
     "controller_limit_basis": "ILI9488 v1.00 section 17.4.1 specifies a 40-ns minimum DBI Type-B write cycle and 15-ns minimum WR high/low widths; 24 MHz gives a 41.667-ns cycle and 20.833-ns nominal half-period.",
-    "s3_supported_sources": "ESP32-S3 LCD_CAM has separate LCD TX and camera RX control units, supports simultaneous external LCD and camera connection, an 8-bit i8080 output and GDMA. The selected 24-MHz write clock is below both the S3 8-bit-i80 capability and the exact ILI9488 timing limit.",
+    "s3_supported_sources": "ESP32-S3 LCD_CAM supports an 8-bit i8080 output and GDMA. The selected 24-MHz write clock is below both the S3 8-bit-i80 capability and the exact ILI9488 timing limit.",
     "selected_clock_hz": 24000000,
     "payload_mb_s": 24.0,
     "full_frame_bytes": 307200,
     "full_frame_wire_ms": 12.8,
-    "video_window": "320x240 RGB565 at 30 fps is 4.608 MB/s and 19.2% of the selected i8080 payload",
-    "gpio_closure": "All 33 exposed S3 GPIO are assigned: 11 camera RX, 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder and 1 wired-OR UI/Hub alert. TE and backlight PWM consume Hub GPIO45/46 instead of S3 pins.",
-    "fallback": "The exact 50-contact panel also exposes ILI9488 4-wire serial mode. A deliberate adapter strap revision can select it only as first-prototype recovery if simultaneous LCD_CAM TX/RX or the i8080 timing gate fails; it is ordinary serial SPI, not QSPI, and is not the preferred interface.",
+    "gpio_closure": "Twenty-two of 33 exposed S3 GPIO are assigned: 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder and 1 wired-OR UI/Hub alert. Eleven former video-capture pins are uncommitted reserves. TE and backlight PWM consume Hub GPIO45/46 instead of S3 pins.",
+    "fallback": "The exact 50-contact panel also exposes ILI9488 4-wire serial mode. A deliberate adapter strap revision can select it only as first-prototype recovery if the i8080 timing gate fails; it is ordinary serial SPI, not QSPI, and is not the preferred interface.",
     "maximality_result": "Direct i8080-8 at the exact panel-safe 24 MHz is 1.2x faster than the former 40-MHz four-lane QSPI wire rate without adding a processor, moving buttons off S3 or sharing display traffic with storage/radio IPC.",
-    "hil": "Before fabrication, compile and run the simultaneous LCD_TX/CAM_RX DMA harness on the emulator-supported register model. H5 then proves ILI9488 IM straps, 24-MHz edges, TE timestamp latency, full-frame/dirty-region timing and live BT.656 capture; 25 MHz is the controller limit and never assumed as a production clock."
-  },
-  "fpv": {
-    "rf": "replaceable exact serial analog 5.8-GHz receiver module; generic RX5808 is evidence input, not an accepted MPN",
-    "external_connector": "MMCX, DC to at least 6 GHz, user-facing and labelled FPV RX 5.8G",
-    "decoder": "Texas Instruments TVP5150AM1PBS or industrial-temperature TVP5150AM1IPBS after factory-route confirmation",
-    "capture": "Rear K331 CVBS crosses one M1 signal beside ground into UI-local TVP5150; its 8-bit YUV422 plus PCLK/VSYNC/HREF enters the independent S3 LCD_CAM camera RX/GDMA path while the LCD TX unit drives i8080 concurrently",
-    "first_acceptance_mode": "NTSC/PAL source to centered 320x240 live view at source frame rate with UI overlay/remaining portrait area; uncompressed full-source recording is not promised",
-    "coexistence": "Entering FPV mode powers the receiver/decoder group, disables C5 5-GHz RF and all unused transmit groups, and preserves the one-active-signal-group rule.",
-    "power_thermal_gate": "Receiver, decoder, regulator and local shielding are added to the unattended thermal and battery budgets before H1 acceptance."
+    "hil": "Before fabrication, compile and run the LCD_TX DMA harness on the emulator-supported register model. H5 then proves ILI9488 IM straps, 24-MHz edges, TE timestamp latency and full-frame/dirty-region timing; 25 MHz is the controller limit and never assumed as a production clock."
   },
   "airband": {
     "owner": "rf_rp",
@@ -3681,14 +3689,14 @@
     ]
   },
   "power": {
-    "r1_status": "The reviewed R1 2.493-A worst state and 2.5-A continuous rail are historical only because R2 adds an always-present Hub RP plus FPV and Airband domains.",
+    "r1_status": "The reviewed R1 2.493-A worst state and 2.5-A continuous rail are historical only because R2 adds an always-present Hub RP and Airband domain.",
     "airband_increment": {
       "rail": "switched low-noise 3.0-V RF domain plus Hub-local 3.3-V control",
       "reserved_current_ma": 150,
       "reserved_power_w": 0.5,
       "basis": "PGA-103+ 60 mA at 3 V; LT5560 up to 12 mA at 3 V; SI5351 core plus one output up to 40.6 mA; selector/control/filter margin included"
     },
-    "coexistence": "FPV and Airband are never powered together; both remain mutually exclusive with unused transmit groups under the one-active-signal-group rule.",
+    "coexistence": "Airband remains mutually exclusive with unused transmit groups under the one-active-signal-group rule.",
     "h1_required_envelope": {
       "continuous_3v3_main_a_min": 3.75,
       "step_a_min": 4.25,
@@ -3702,10 +3710,10 @@
     "required_work": [
       "implement S3-Hub quad, Hub-C5 native 4-bit SDIO and Hub-RF SPI+alert; never reactivate the historical direct S3-C5 endpoint",
       "route Pack status and Safety heartbeat/lease/fault mailboxes through the dedicated Hub GPIO42/43 I2C1 bus and an exact powered-off-Ioff 3V3_MAIN/AON boundary without weakening local watchdog or FAULT_KILL ownership",
-      "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, FPV control, M5 and exactly one signed U214/U219 Cap profile to the rear RF RP",
-      "carry only one 75-ohm FPV_CVBS signal across M1 while TVP5150 and its 11-line LCD_CAM bus remain front-local",
+      "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, M5 and exactly one signed U214/U219 Cap profile to the rear RF RP",
+      "keep all display traffic front-local and preserve the eleven released S3 GPIOs plus M1 contacts 35-36 as true reserves",
       "add fail-low Airband mode control, Si5351 setup, scan/record and ACARS receive pipeline",
-      "preserve direct S3 UI/display/FPV scheduling and all existing safety/quiet-state semantics",
+      "preserve direct S3 UI/display scheduling and all existing safety/quiet-state semantics",
       "qualify the six target builds before implementing R2 F4 transports, then run emulator/dev-board and HIL gates without reusing R1 physical claims"
     ]
   },

@@ -18,16 +18,16 @@ pre-H2 authority; они не заявляют ECAD, target execution или HIL
 
 | Образ | Физический владелец | Текущая ответственность R2 |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder/USB, прямой i8080-8 TX 24 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` и независимый camera RX analog FPV |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder/USB и прямой i8080-8 TX 24 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native Wi-Fi 2,4/5 ГГц, IEEE 802.15.4 и IR |
-| RF RP · задний | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 и ровно один подписанный Cap-профиль U214/U219 |
+| RF RP · задний | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, M5 и ровно один подписанный Cap-профиль U214/U219 |
 | Hub RP · передний | второй `SC1512-A4` | fan-out S3/C5/заднего RP, microSD и три полных одновременных nRF24 |
 | Pack | `MSPM0C1106SDGS20R` | допуск элементов и защищённое выключение |
 | Safety | второй `MSPM0C1106SDGS20R` | watchdog, thermal supervision, TX evidence/leases и `FAULT_KILL` |
 
 ```mermaid
 flowchart TD
-  S3["S3 · прямые UI/display/video"] <-->|"40-МГц quad-SPI + alert"| HUB["передний Hub RP · fan-out/storage/nRF24"]
+  S3["S3 · прямые UI/display"] <-->|"40-МГц quad-SPI + alert"| HUB["передний Hub RP · fan-out/storage/nRF24"]
   HUB <-->|"4-bit SDIO · старт 20 МГц · цель 40 МГц"| C5["C5 · native radio/IR"]
   HUB <-->|"20-МГц SPI + alert"| RF["задний RF RP · RF/audio/expansion"]
   HUB <-->|"400-кГц fail-closed I²C"| PACK["Pack MSPM0"]
@@ -35,19 +35,18 @@ flowchart TD
 ```
 
 Связь S3-Hub переносит команды и выбранные данные, но никогда не пиксели
-display или кадры analog video. Локальные для Hub microSD и три nRF24 не спорят
+display. Локальные для Hub microSD и три nRF24 не спорят
 с экраном; заднее audio использует bounded full-duplex transport менее 0,4 МБ/с.
 Кнопки заканчиваются на локальном для S3 `TCA9539PWR`; A/B энкодера
 остаются прямыми входами PCNT. Цель первого видимого отклика — 20 мс под
 квалифицированной одновременной нагрузкой.
 
-Display и camera одновременно используют раздельные узлы LCD TX и camera RX.
-В H1-R2.33 шлейф экрана физически направлен к антенному торцу, поэтому S3-драйвер
+В H1-R2.35 шлейф экрана физически направлен к антенному торцу, поэтому S3-драйвер
 display/touch применяет единый разворот на 180° к адресации памяти ILI9488 и
 touch-координатам FT6236. Обычный режим дисплея — i8080-8; 4-wire serial остаётся
 recovery-strap, а не QSPI.
-Точная карта M1 определяет все 80 контактов: 25 сигналов, 14 main-power, 2 AON,
-25 возвратов и 14 NC-резервов. M1 выполняет только электрическую функцию и совмещение;
+Точная карта M1 определяет все 80 контактов: 24 сигнала, 14 main-power, 2 AON,
+24 возврата и 16 NC-резервов. M1 выполняет только электрическую функцию и совмещение;
 ударную и изгибающую нагрузку несут упоры корпуса, anti-shear datums и захваты PCB.
 
 `BROADCAST_RX` принадлежит заднему RP и взаимоисключается с остальными верхнеуровневыми
@@ -74,7 +73,7 @@ I²C1 переднего Hub GP42/43. Обязательная powered-off-Ioff 
 
 | Канал | Физический транспорт | Единица передачи | Обязательный результат |
 |---|---|---|---|
-| S3↔Hub RP | отдельный 40-МГц half-duplex link с четырьмя data lines + alert | bounded DMA-cell | ≥14 МБ/с qualified payload; UI/display/video остаются локальны S3 |
+| S3↔Hub RP | отдельный 40-МГц half-duplex link с четырьмя data lines + alert | bounded DMA-cell | ≥14 МБ/с qualified payload; UI/display остаются локальны S3 |
 | Hub RP↔C5 | native 4-bit SDIO: старт 20 МГц, цель 40 МГц | пакет до 512 байт | ≥7,5 МБ/с принимается только на 40 МГц; reset/recovery и priority остаются HIL-gates |
 | Hub RP↔RF RP | отдельный 20-МГц full-duplex SPI + alert | один full-duplex 512-байтный DMA-cell | ≥1,5 МБ/с payload, alert-to-read ≤250 мкс и control RTT ≤2 мс |
 | Hub RP↔Pack/Safety | отдельный fail-closed I²C 400 кГц | bounded command/status mailboxes | Hub не выдаёт допуск батареи и не отменяет локальные watchdog/`FAULT_KILL` |

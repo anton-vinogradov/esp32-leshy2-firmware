@@ -5,7 +5,7 @@
   "producer": "tools/generate_f2_r2_bsp.py",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
-    "sha256": "3dd0368a8e59330fc8bc80f337e58c596258e3c14422984734a90db1865e971a",
+    "sha256": "bd1599a94af3c93150284987ff220121bca9f1159e33e9b4b78935220d4e77a3",
     "hardware_marker": "H1-R2.31"
   },
   "generation_model": "config/f2_r2_bsp_generation.json",
@@ -88,13 +88,13 @@
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/rf_rp_bsp.h",
-      "bytes": 2033,
-      "sha256": "bf067b8cabf22a13bc2cc782ce66c2bbb21185ab01ce1fc9f408e0d8c9e7cda4"
+      "bytes": 2051,
+      "sha256": "16983730d55e017aa9bf3bfbfb6250bb171ec716deda5f7946c21955c3d541bc"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/s3_bsp.h",
-      "bytes": 1299,
-      "sha256": "f21916793359b32660586ca2bf5bb35c2c99baf27cf3ca468b5a5b54c79a6156"
+      "bytes": 1342,
+      "sha256": "a7b3b99c77ef1db29b727eaf5fbed9f1451e1d0d9b31b2b90a284757e2577057"
     },
     {
       "path": "generated/r2/hardware/include/leshy2/r2/hardware/safety_bsp.h",
@@ -118,13 +118,13 @@
     },
     {
       "path": "generated/r2/hardware/src/rf_rp_bsp.c",
-      "bytes": 13992,
-      "sha256": "2b08e20651c81ecad5afa8c91de4a478c33f09997a66245355daaa63930c168d"
+      "bytes": 13863,
+      "sha256": "b3947eda7f9dd625c684701196332427ab00e2ad195799a6b34867836279ea8c"
     },
     {
       "path": "generated/r2/hardware/src/s3_bsp.c",
-      "bytes": 7423,
-      "sha256": "d29a55e19005baa5bdb3cae9f80d71263a67c83c8d04477c81f1c30ea5256bc3"
+      "bytes": 7534,
+      "sha256": "2380bbe444d6ab7e71b4fc55375b116c80490250709089b81fd0f1eb3443daa9"
     },
     {
       "path": "generated/r2/hardware/src/safety_bsp.c",
