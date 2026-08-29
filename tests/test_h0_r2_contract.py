@@ -92,7 +92,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
-        self.assertEqual("H1-R2.35", self.actual["physical_h1"]["marker"])
+        self.assertEqual("H1-R2.36", self.actual["physical_h1"]["marker"])
         self.assertEqual(
             self.actual["hardware_marker"],
             self.actual["physical_h1"]["pin_authority_marker"],
