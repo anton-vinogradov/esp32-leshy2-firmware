@@ -25,11 +25,28 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 | F7 · Radio, IR and expansion | ⏳ Waiting for F5/F6 | receive/TX profiles, full 3×nRF24 operation and quiet inactive paths |
 | F8 · Functional levels and safety UX | ⏳ Waiting for F7 | Normal, Laboratory and Controlled Zone workflows |
 | F9 · Signed update and recovery | ⏳ Waiting for F1/F3 | owner-controlled six-target bundle, rollback and physical recovery |
+| **F-PO · First-unit order gate** | 🔒 [Planned and locked](config/first_spin_preorder_gate.json) until current H2/H6 and diagnostic evidence exist | reproducible six-domain images, S3 QEMU, host/fake HAL, available development-board runs, recovery bundle and first-power-on script |
 | F10 · HIL and system qualification | 🔒 Waiting for F4–F9 and hardware H7 | prototype fault, RF, power, thermal and endurance evidence |
 | F11 · Firmware release | 🔒 Waiting for F10 and hardware H8 | reproducible signed images, installer, recovery kit and release tag |
 
 Every completed top-level `F*` phase receives a separate result report linked
 from this table; internal substeps only move the exact marker.
+
+The project may order **exactly one** fully assembled `R2-EVT1` only after the
+[F-PO gate](config/first_spin_preorder_gate.json) is bound to the final H2/H6
+hashes and all seven `FPO1`–`FPO7` diagnostic evidence gates pass. The routed H6
+release candidate becomes the immutable order release only after that gate
+closes. Complete F6–F8 product features are not an order prerequisite, but the
+order-critical F5 diagnostic-driver slice must cover every fitted endpoint from
+the exact H2 manifest, including present/missing fake-HAL behavior and smoke
+evidence on every available target-development-board path. The remaining
+pre-order package is six reproducible diagnostic images, S3 QEMU, one
+flash/recovery bundle and a reviewed safe bring-up script. Factory powered
+Function Test is optional and is
+considered only when the final quote makes it near-free. The factory
+deterministically manufactures and assembles that single unit, including the
+exact production display; the owner performs the first full power-on after
+delivery under the reviewed procedure.
 
 **Firmware is at F2-R2.5.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated

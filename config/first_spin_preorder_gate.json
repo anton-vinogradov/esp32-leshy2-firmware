@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "gate_id": "F-PO-R2",
+  "title": "first-spin diagnostic and recovery gate",
+  "status": "planned_locked",
+  "purpose": "block ordering the single R2-EVT1 prototype until the reviewed H2/H6 release candidate and a recoverable six-domain diagnostic firmware package have exhausted the inexpensive pre-order evidence and are locked together as P8",
+  "procurement_boundary": {
+    "assembled_device_quantity": 1,
+    "factory_role": "deterministically manufacture, populate and assemble the released package, including the exact production display and specified final-assembly parts",
+    "factory_powered_function_test": "optional only when the final quote makes it near-free; never a release prerequisite",
+    "first_full_power_on_owner": "owner after delivery using the reviewed current-limited bring-up procedure",
+    "full_product_f6_f8_required_before_order": false
+  },
+  "hard_dependencies": [
+    {
+      "id": "H2_R2_PRODUCTION_ECAD",
+      "status": "blocked",
+      "required": "reviewed six-domain production schematic and machine-readable HW/FW export"
+    },
+    {
+      "id": "H6_R2_ROUTED_RELEASE_CANDIDATE",
+      "status": "blocked",
+      "required": "reviewed routed release candidate with fabrication, BOM, CPL, assembly and DFM outputs ready to become the immutable order release after F-PO closes"
+    },
+    {
+      "id": "F2_R2_REPRODUCIBLE_TARGETS",
+      "status": "in_progress",
+      "required": "reproducible production-SDK build roots for all six domains"
+    },
+    {
+      "id": "F3_R2_EXECUTION_BOUNDARY",
+      "status": "blocked",
+      "required": "current R2 S3 QEMU and named target-development-board evidence without converting unavailable emulation into a false claim"
+    },
+    {
+      "id": "F5_FIRST_SPIN_DIAGNOSTIC_DRIVERS",
+      "status": "blocked",
+      "required": "the order-critical F5 diagnostic-driver slice covers every endpoint fitted by the exact H2 manifest, with present/missing identity behavior in fake-HAL and diagnostic smoke evidence on every available target-development-board path; complete product behavior is not required"
+    }
+  ],
+  "evidence_gates": [
+    {
+      "id": "FPO1_FINAL_HARDWARE_AUTHORITY",
+      "status": "blocked",
+      "pass_rule": "the firmware imports the exact reviewed H2/H6 candidate six-domain BSP, pin, polarity, rail, recovery and fitted-option manifests by content hash; no pre-H2 working map or historical R1 export remains authoritative"
+    },
+    {
+      "id": "FPO2_SIX_DIAGNOSTIC_IMAGES",
+      "status": "planned",
+      "pass_rule": "S3, C5, Hub-RP, RF-RP, Pack and Safety first-spin diagnostic images integrate the order-critical F5 diagnostic-driver slice for every endpoint fitted by the exact H2 manifest, build from locked toolchains, fit their released partitions and reproduce byte-for-byte"
+    },
+    {
+      "id": "FPO3_S3_QEMU_DIAGNOSTIC",
+      "status": "planned",
+      "pass_rule": "the exact ESP32-S3 image boots in official S3 QEMU and executes memory, retained-fault, diagnostic-menu and framebuffer test-pattern scenarios; the result makes no display, touch, USB or board-electrical claim"
+    },
+    {
+      "id": "FPO4_HOST_FAKE_HAL",
+      "status": "planned",
+      "pass_rule": "normal and sanitizer host runs exercise an explicit fake-HAL model for every endpoint fitted by the exact H2 manifest, including present/missing identity behavior, diagnostic UI, controls, inter-domain link faults, power and thermal faults, display orientation, touch transform and fail-closed stop paths"
+    },
+    {
+      "id": "FPO5_TARGET_DEVELOPMENT_BOARDS",
+      "status": "planned",
+      "pass_rule": "the order-critical diagnostic-driver slice has smoke evidence on every available target-development-board path: S3, C5, Pack and Safety boot, flash, recover and exercise their available endpoint paths on exact selected-module or selected-MCU development boards; both RP images run their available endpoint paths on the documented non-exact RP2350 surrogate, while unavailable peripherals, RP2354B package, stacked-flash and Leshy2 wiring remain explicit first-board gates"
+    },
+    {
+      "id": "FPO6_FLASH_RECOVERY_BUNDLE",
+      "status": "planned",
+      "pass_rule": "one hash-manifested owner-controlled bundle names every USB, UART and SWD entry path, target identity, image order, expected readback, retry and unbrick procedure for all six domains"
+    },
+    {
+      "id": "FPO7_OWNER_BRINGUP_SCRIPT",
+      "status": "planned",
+      "pass_rule": "a deterministic current-limited first-power-on script checks rails and faults before enabling loads, then programming/recovery, all four transports, display test patterns and touch grid, controls and LEDs, storage, audio, installed device identities and IRQs; every failed step defines a safe stop and retained diagnostic"
+    }
+  ],
+  "order_authorization": {
+    "status": "blocked",
+    "pass_rule": "every hard dependency and FPO1-FPO7 is reviewed against the same H2/H6 candidate hashes; P8 then locks hardware, firmware and assembly files into one immutable order release before the owner explicitly approves the exact-one quote",
+    "non_dependencies": [
+      "complete product UI polish and waterfall features in F6",
+      "complete radio feature catalogue in F7",
+      "complete three-level safety UX in F8",
+      "paid factory power-on or function test"
+    ]
+  },
+  "evidence_boundary": {
+    "preorder_can_prove": [
+      "build, partition fit and byte reproducibility",
+      "S3 CPU, memory and application control flow represented by the official emulator",
+      "portable protocol, scheduler, diagnostic UI and fault behavior through deterministic host/fake-HAL tests",
+      "target boot, flash and recovery only on each explicitly named development-board path",
+      "completeness and reproducibility of the owner bring-up package"
+    ],
+    "first_physical_prototype_still_proves": [
+      "PCB connectivity, footprints, soldering and final-assembly correctness",
+      "actual rails, transients, current, thermal behavior and watchdog cut-off",
+      "USB, SDIO, SPI, I2C and inter-board signal integrity on Leshy2",
+      "display flex, backlight, touch and real peripheral timing",
+      "RF matching, isolation, coexistence, range and antenna installation",
+      "audio and IR analog performance plus final mechanical fit"
+    ]
+  }
+}

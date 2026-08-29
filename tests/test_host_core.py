@@ -619,26 +619,22 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertIn("host six-domain model: 10 scenarios passed", result.stdout)
         self.assertIn("host receiver core: 6 scenarios passed", result.stdout)
 
-    def test_preorder_contract_tracks_reviewed_f3_without_physical_overclaim(self):
+    def test_preorder_contract_fail_closes_current_r2_first_spin(self):
         contract_path = REPO_ROOT / "config/preorder_verification_contract.json"
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
-        self.assertEqual("LESHY2-PREORDER-1", contract["contract_id"])
-        self.assertIn(
-            "52/52 artifacts reproduce byte-for-byte",
-            contract["current_truth"]["executable_firmware"],
-        )
-        self.assertIn("ESP32-S3 exact debug/release images boot", contract["current_truth"]["instruction_emulation"])
-        self.assertIn("remains explicitly assigned to dev-board and HIL gates", contract["current_truth"]["instruction_emulation"])
-        self.assertIn("H4 reviewed", contract["current_truth"]["joined_pre_layout"])
+        self.assertEqual("LESHY2-PREORDER-R2", contract["contract_id"])
+        self.assertIn("F2-R2.5 is in progress", contract["current_truth"]["executable_firmware"])
+        self.assertIn("F3-R2 and F-PO remain blocked", contract["current_truth"]["instruction_emulation"])
+        self.assertFalse(contract["current_truth"]["order_authorized"])
         gates = {gate["id"]: gate["status"] for gate in contract["gates"]}
-        self.assertEqual("reviewed", gates["P3_VIRTUAL_ELECTRICAL"])
-        self.assertEqual(
-            "reviewed",
-            gates["P4_EXECUTABLE_FIRMWARE_MODEL"],
-        )
-        self.assertEqual("reviewed", gates["P5_TARGET_BUILDS_EMULATION"])
-        self.assertEqual("reviewed", gates["P6_PRE_LAYOUT_REVIEW"])
-        self.assertEqual("not_authorized", gates["P7_ENGINEERING_SAMPLE_ORDER"])
+        self.assertEqual("reviewed", gates["P0_REQUIREMENTS_ARCHITECTURE"])
+        self.assertEqual("in_progress", gates["P1_CURRENT_PHYSICAL_DESIGN"])
+        self.assertEqual("blocked", gates["P6_ROUTED_PRODUCTION_PACKAGE"])
+        self.assertEqual("blocked", gates["P7_FIRST_SPIN_DIAGNOSTIC"])
+        self.assertEqual("not_authorized", gates["P8_IMMUTABLE_EXACT_ONE_RELEASE"])
+        boundary = contract["procurement_boundary"]
+        self.assertEqual(1, boundary["assembled_device_quantity"])
+        self.assertIn("optional", boundary["factory_powered_function_test"])
 
         hardware_copy = (
             REPO_ROOT.parent

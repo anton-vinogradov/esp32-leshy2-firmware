@@ -22,7 +22,7 @@
     },
     "r2_hardware_projection": {
       "path": "config/h0_r2_hardware_contract.json",
-      "sha256": "782bf2766d96ade619ad5a9d965a737e7c78e70991d37f17367389e92762b440"
+      "sha256": "e5ff63477ecad454b5929ae41f43e6731b2b2a33f30588420be4283abcf182d3"
     },
     "historical_r1_build_matrix": {
       "path": "config/build_matrix.json",

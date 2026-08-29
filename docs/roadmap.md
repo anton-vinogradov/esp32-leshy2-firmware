@@ -56,10 +56,47 @@ duplicated or given a second status here.
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
+| First-unit order gate `F-PO` | 🔒 [Machine gate is planned and locked](../config/first_spin_preorder_gate.json): waits for final H2/H6 hashes and `FPO1`–`FPO7`; complete F6–F8 is not an order prerequisite |
 | HIL and release | 🔒 Waiting for hardware prototype H7 |
 
 The host model verifies portable logic. It is not instruction-set, peripheral
 or board emulation and is never presented as finished firmware.
+
+## Exactly-one first-unit order gate · `F-PO`
+
+`F-PO-R2` is a separate fail-closed join between the hardware and firmware
+roadmaps, not a new readiness claim. The factory must deterministically
+manufacture and assemble **exactly one** `R2-EVT1` from an immutable production
+package, including the exact production display and every explicitly assigned
+final-assembly operation. Paid powered Function Test is not a prerequisite; it
+may be added only as optional insurance when the final quote makes it near-free.
+The owner performs the first full power-on after delivery.
+
+F-PO has a hard dependency on an order-critical subset of F5, not on completion
+of every product feature: the diagnostic-driver slice must cover every fitted
+endpoint in the exact H2 manifest. Each endpoint needs explicit present/missing
+fake-HAL behavior and diagnostic smoke evidence on every available target or
+development-board path. An unavailable real peripheral remains a named
+first-unit gate; emulation never silently closes it.
+
+| Gate | Evidence required before order authorization |
+|---|---|
+| `FPO1` | Final H2/H6 hashes and imported six-domain BSP for pins, polarity, rails, fitted options and recovery; neither the working pre-H2 map nor R1 is authority |
+| `FPO2` | Reproducible S3, C5, Hub-RP, RF-RP, Pack and Safety diagnostic images integrate the order-critical F5 slice for every fitted endpoint and have verified partition fit |
+| `FPO3` | The exact S3 diagnostic image boots in official QEMU and passes memory, retained-fault, diagnostic-menu and framebuffer test-pattern scenarios without false real-display/touch/USB claims |
+| `FPO4` | Normal and sanitizer host/fake-HAL runs cover every fitted endpoint, UI, controls, display/touch orientation, present/missing identities, link/power/thermal faults and fail-closed stops |
+| `FPO5` | The diagnostic slice has smoke evidence on every available path: S3, C5, Pack and Safety use exact development boards, both RP images use the explicitly non-exact RP2350 surrogate, and unavailable peripherals plus RP2354B/package/flash/PCB stay first-physical-unit gates |
+| `FPO6` | One hash-manifested flash/recovery bundle defines USB/UART/SWD entry, identity, image order, readback, retry and unbrick for all six domains |
+| `FPO7` | The first-power-on script checks rails/faults under current limit before programming/recovery, all four transports, display pattern/touch grid, controls/LEDs, storage, audio and installed-device identity/IRQ; every failure has a safe stop |
+
+Complete menu/waterfall polish, the radio feature catalogue and all three F6–F8
+UX levels may continue after the order. The pre-order requirement is the
+diagnostic slice that distinguishes power, assembly, bus, peripheral and
+firmware faults. Emulation proves builds, S3 CPU/memory/control flow, UI/state
+machines, protocol/fault behavior and bring-up-package completeness. It cannot
+prove PCB soldering, real-board power and thermal behavior, USB/SDIO/SPI/I²C
+electrical margins, display/flex/touch, RF and antennas, analog audio/IR or
+mechanical fit; those boundaries honestly remain for the first physical unit.
 
 ## Current F2-R2 breakdown
 
@@ -202,6 +239,7 @@ this exact marker and both language pages in the same commit.
 ```mermaid
 flowchart TD
   H2["hardware H2-R2<br/>production ECAD"]
+  H6["hardware H6-R2<br/>routed release candidate"]
   H7["hardware H7<br/>prototype"]
   H8["hardware H8<br/>physical qualification"]
   F0["✅ F0-R2<br/>six-domain contracts"]
@@ -214,6 +252,7 @@ flowchart TD
   F7["F7<br/>radio, IR and expansion"]
   F8["F8<br/>safety UX and functional levels"]
   F9["F9<br/>signed update and recovery"]
+  FPO["F-PO<br/>first-spin diagnostic gate"]
   F10["F10<br/>HIL and system qualification"]
   F11["F11<br/>firmware release"]
 
@@ -221,6 +260,9 @@ flowchart TD
   F1 --> F9
   F3 --> F9 --> F10
   H2 --> F5
+  H6 --> FPO --> H7
+  F3 --> FPO
+  F5 --> FPO
   H7 --> F10
   H8 --> F11
 ```
@@ -239,6 +281,7 @@ flowchart TD
 | **F7. Radio, IR and expansion features** | ⏳ Waiting for F5/F6 | Normal receive/scan/record, full `3R/1T2R/2T1R/3T`, Wi-Fi/BLE/802.15.4, Sub-GHz, voice, IR and expansion profiles | One signal group is active; U219 CC1101 cannot emit through any API or raw command; NFC is poll/read-only and its field stays unavailable until signed profile, VNA/HIL closure and an `EV_N9` physical lease all agree |
 | **F8. Three functional levels and safety UX** | ⏳ Waiting for F7 | Normal, Laboratory and Laboratory → Controlled Zone behavior; local full-self-test interval setting | Every Controlled Zone entry shows a fresh banner; action requires preview, separate arm, authorized target/isolated environment and bounded lease; setup requires non-aggression agreement acceptance; 24-hour/default-48-hour/startup-only proof selection cannot weaken watchdog, thermal, power-fault or TX-lease enforcement |
 | **F9. Signed bundle, update and recovery** | ⏳ Waiting for F1/F3 | One owner/release-signed six-target bundle with local owner roots, readback, ordered activation and rollback | Substituted/incompatible bundles fail; Pack→Safety→C5→RF-RP→Hub-RP→S3 self-test; failure restores a compatible set; USB/UART/SWD recovery remains owner-accessible |
+| **F-PO. First-unit order gate** | 🔒 [Planned and locked](../config/first_spin_preorder_gate.json) | Diagnostic and recovery package bound to the reviewed H2/H6 candidate for exactly one assembled `R2-EVT1`, including the order-critical F5 driver slice for every fitted endpoint | `FPO1`–`FPO7` are reviewed against the same candidate hashes; P8 then locks one immutable order release; fake-HAL and every available target smoke path pass; full F6–F8 is not required; factory powered FCT is optional; the owner approved the exact-one quote |
 | **F10. HIL and system qualification** | 🔒 Waiting for F4–F9 and hardware H7 | Automated prototype tests, fault injection and RF/power/thermal/endurance evidence | Real transports/peripherals, 3×nRF concurrency, quiet state, watchdog, thermal, brownout and interrupted update pass; U219 pickup VNA tuning, field evidence timing, false-negative/positive, detuning and read-range gates pass before its compile gate can close |
 | **F11. Firmware release** | 🔒 Waiting for F10 and hardware H8 | Reproducible images, installer, release notes, recovery kit and compatible tag | Zero blocker; target binaries are reproducible and signed; SBOM/licenses/tests are published; site matches implementation; firmware tag matches hardware release |
 
@@ -256,6 +299,9 @@ flowchart TD
 6. Closing each top-level `F*` phase publishes a bilingual result report and a
    link from the roadmap tables and landing page. An internal substep updates
    the exact current marker but does not receive a separate global report.
+7. Neither H6 nor the order may treat F-PO as complete from one build or one
+   emulator screenshot: all seven evidence gates bind to one H2/H6 candidate hash;
+   only the subsequent P8 lock is the immutable order release.
 
 ## Next action
 

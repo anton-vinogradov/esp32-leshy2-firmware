@@ -59,10 +59,47 @@ firmware-репозитория. Пересечения с железом ука
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
+| Допуск первого экземпляра `F-PO` | 🔒 [Machine gate запланирован и заблокирован](../config/first_spin_preorder_gate.json): ждёт финальные H2/H6 hash и `FPO1`–`FPO7`; полные F6–F8 не являются условием заказа |
 | HIL и release | 🔒 Ожидают аппаратный прототип H7 |
 
 Host-модель проверяет переносимую логику, но не заменяет instruction-set,
 peripheral или board emulation и никогда не показывается как готовая прошивка.
+
+## Допуск ровно одного первого экземпляра · `F-PO`
+
+`F-PO-R2` — отдельный fail-closed стык аппаратного и firmware-роадмапов, а не
+новая заявка о готовности. Фабрика должна детерминированно изготовить и собрать
+**ровно одного** `R2-EVT1` по неизменяемому production package, включая точный
+серийный дисплей и явно назначенные операции финальной сборки. Платный powered
+Function Test не является пререквизитом; его можно добавить только как
+необязательную страховку, если итоговая смета делает его почти бесплатным.
+Первое полное включение выполняет владелец после доставки.
+
+У F-PO есть жёсткая зависимость от предзаказного подмножества F5, а не от
+завершения всех пользовательских функций: диагностический срез драйверов должен
+покрывать каждого установленного endpoint из точного H2 manifest. Для каждого
+нужны явные present/missing behavior в fake-HAL и diagnostic smoke evidence на
+каждом доступном target или dev-board path. Недоступная реальная периферия
+остаётся именованным gate первого экземпляра; эмуляция не закрывает его молча.
+
+| Gate | Что обязано существовать до разрешения заказа |
+|---|---|
+| `FPO1` | Финальные hash H2/H6 и импортированный six-domain BSP: pins, polarity, rails, fitted options и recovery; ни рабочая pre-H2 карта, ни R1 не являются authority |
+| `FPO2` | Воспроизводимые диагностические образы S3, C5, Hub-RP, RF-RP, Pack и Safety включают предзаказный срез F5 для каждого установленного endpoint и имеют проверенный partition fit |
+| `FPO3` | Точный S3 diagnostic image загружается в официальный QEMU и проходит memory, retained-fault, diagnostic-menu и framebuffer test-pattern сценарии без ложных claims о реальном display/touch/USB |
+| `FPO4` | Normal+sanitizer host/fake-HAL проверяет каждый установленный endpoint, UI, controls, ориентацию display/touch, present/missing identities, link/power/thermal faults и fail-closed останов |
+| `FPO5` | Диагностический срез имеет smoke evidence на каждом доступном пути: S3, C5, Pack и Safety используют exact dev boards, оба RP — явно неточный RP2350 surrogate, а недоступная периферия и RP2354B/package/flash/PCB остаются gates первого экземпляра |
+| `FPO6` | Один hash-manifested flash/recovery bundle описывает USB/UART/SWD, identity, порядок образов, readback, retry и unbrick для всех шести доменов |
+| `FPO7` | Скрипт первого включения сначала проверяет rails/faults при ограниченном токе, затем programming/recovery, четыре transport, display pattern/touch grid, controls/LEDs, storage, audio и identity/IRQ установленных устройств; у каждого сбоя есть безопасный stop |
+
+Полные menu/waterfall, каталог radio-функций и три уровня UX из F6–F8 могут
+развиваться после заказа. До заказа обязательны именно диагностические срезы,
+которые позволяют отличить ошибку питания, монтажа, шины, периферии и прошивки.
+Эмуляция доказывает builds, S3 CPU/memory/control flow, UI/state machines,
+protocol/fault behavior и полноту bring-up package. Она не доказывает пайку,
+питание и тепло реальной платы, electrical margins USB/SDIO/SPI/I²C,
+display/flex/touch, RF/антенны, analog audio/IR или механический fit — эти
+границы честно остаются первому физическому экземпляру.
 
 ## Детальный состав текущей F2-R2
 
@@ -205,6 +242,7 @@ safety/control под waterfall и bulk traffic. Каждый подэтап о�
 ```mermaid
 flowchart TD
   H2["hardware H2-R2<br/>production ECAD"]
+  H6["hardware H6-R2<br/>routed release candidate"]
   H7["hardware H7<br/>прототип"]
   H8["hardware H8<br/>physical qualification"]
   F0["✅ F0-R2<br/>контракты шести доменов"]
@@ -217,6 +255,7 @@ flowchart TD
   F7["F7<br/>radio, IR и expansion"]
   F8["F8<br/>safety UX и уровни функций"]
   F9["F9<br/>signed update и recovery"]
+  FPO["F-PO<br/>first-spin diagnostic gate"]
   F10["F10<br/>HIL и system qualification"]
   F11["F11<br/>firmware release"]
 
@@ -224,6 +263,9 @@ flowchart TD
   F1 --> F9
   F3 --> F9 --> F10
   H2 --> F5
+  H6 --> FPO --> H7
+  F3 --> FPO
+  F5 --> FPO
   H7 --> F10
   H8 --> F11
 ```
@@ -242,6 +284,7 @@ flowchart TD
 | **F7. Radio, IR и expansion features** | ⏳ Ожидает F5/F6 | Normal-mode receive/scan/record, полноценные `3R/1T2R/2T1R/3T`, Wi-Fi/BLE/802.15.4, Sub-GHz, voice, IR и профили расширений | Одна signal group активна; CC1101 U219 не может передавать ни через API, ни raw command; NFC ограничен poll/read, а его поле недоступно, пока не совпали signed profile, VNA/HIL closure и physical lease `EV_N9` |
 | **F8. Три уровня функций и safety UX** | ⏳ Ожидает F7 | Основной режим, Лаборатория и Лаборатория → Контролируемая зона; локальная настройка интервала полной самопроверки | Каждый вход в Controlled Zone показывает новый обязательный баннер; действие требует preview, separate arm, разрешённую цель/изолированную среду и bounded lease; установка требует принятия акта о ненападении; выбор 24 ч/48 ч по умолчанию/только при старте не может ослабить watchdog, thermal, power-fault или TX-lease enforcement |
 | **F9. Signed bundle, update и recovery** | ⏳ Ожидает F1/F3 | Один owner/release-signed bundle для шести targets с local owner roots, readback, activation order и rollback | Подмена и несовместимый bundle отвергаются; Pack→Safety→C5→RF-RP→Hub-RP→S3 подтверждаются self-test; сбой возвращает совместимый комплект; USB/UART/SWD recovery остаётся открытым владельцу |
+| **F-PO. Допуск первого экземпляра** | 🔒 [Запланирован и заблокирован](../config/first_spin_preorder_gate.json) | Диагностический и recovery package, связанный с проведённым H2/H6 candidate review для ровно одного собранного `R2-EVT1`, включая предзаказный срез F5 для каждого установленного endpoint | `FPO1`–`FPO7` проведены ревью на одинаковых candidate hash; затем P8 фиксирует один immutable order release; fake-HAL и каждый доступный target smoke path пройдены; полный F6–F8 не нужен; factory powered FCT необязателен; владелец одобрил exact-one quote |
 | **F10. HIL и системная квалификация** | 🔒 Ожидает F4–F9 и hardware H7 | Автоматизированные тесты на собранном прототипе, fault injection, RF/power/thermal/endurance | Пройдены реальные transports/peripherals, 3×nRF concurrency, quiet-state, watchdog, thermal, brownout и update interruption; compile-gate U219 нельзя закрыть до VNA-настройки pickup, timing evidence, false-negative/positive, detuning и read-range tests |
 | **F11. Firmware release** | 🔒 Ожидает F10 и hardware H8 | Воспроизводимые образы, installer, release notes, recovery kit и совместимый тег | Ноль blocker; target binaries воспроизводимы и подписаны; SBOM/licenses/tests опубликованы; сайт описывает реализованные возможности; firmware tag совместим с hardware release |
 
@@ -259,6 +302,9 @@ flowchart TD
 6. Закрытие каждой глобальной фазы `F*` публикует двуязычный итоговый отчёт и
    ссылку из таблиц roadmap и стартовой страницы. Внутренний подэтап обновляет
    точный текущий маркер, но отдельным глобальным отчётом не считается.
+7. Ни H6, ни заказ не могут считать F-PO выполненным по одному build или
+   скриншоту эмулятора: все семь evidence относятся к одному H2/H6 candidate hash;
+   immutable order release появляется только после последующего P8 lock.
 
 ## Следующее действие
 

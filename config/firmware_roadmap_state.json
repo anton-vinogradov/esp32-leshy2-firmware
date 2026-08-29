@@ -57,7 +57,16 @@
     "r2_maps_verified": 16,
     "r2_size_gates_passed": 16,
     "r2_runtime_boot_proven": false,
-    "r2_byte_reproducibility_proven": false
+    "r2_byte_reproducibility_proven": false,
+    "first_spin_preorder_gate_defined": true,
+    "first_spin_preorder_gate_status": "planned_locked",
+    "first_spin_preorder_order_authorized": false,
+    "first_spin_factory_powered_fct_required": false,
+    "first_spin_exact_assembled_quantity": 1,
+    "first_spin_f5_diagnostic_slice_required": true,
+    "first_spin_f5_diagnostic_slice_reviewed": false,
+    "first_spin_every_fitted_endpoint_fake_hal_reviewed": false,
+    "first_spin_available_target_smoke_reviewed": false
   },
   "historical_evidence_baseline": "R1",
   "completed": [
