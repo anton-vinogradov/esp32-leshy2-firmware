@@ -92,7 +92,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
-        self.assertEqual("H1-R2.32", self.actual["physical_h1"]["marker"])
+        self.assertEqual("H1-R2.33", self.actual["physical_h1"]["marker"])
         self.assertEqual(
             self.actual["hardware_marker"],
             self.actual["physical_h1"]["pin_authority_marker"],
@@ -150,10 +150,10 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             self.assertEqual(binding["net"], rear[binding["rf_gpio"]]["net"])
 
     def test_direct_ui_and_display_contract_survives_rebaseline(self):
-        self.assertEqual(32_000_000, self.actual["display"]["selected_clock_hz"])
+        self.assertEqual(24_000_000, self.actual["display"]["selected_clock_hz"])
         s3_nets = {row["net"] for row in self.actual["s3_pin_map"]}
         self.assertTrue({"LCD_WR_N", "LCD_DC", *(f"LCD_DB{i}" for i in range(8))}.issubset(s3_nets))
-        self.assertIn("QSPI", self.actual["display"]["fallback"])
+        self.assertIn("ordinary serial SPI, not QSPI", self.actual["display"]["fallback"])
 
     def test_six_target_identity_contract_passes(self):
         result = subprocess.run(

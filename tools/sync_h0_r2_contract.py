@@ -20,6 +20,8 @@ PHYSICAL_H1_SOURCE = HW_REPO / "hardware/product-design/h1-r2-placement.json"
 R2_AUTHORITY_SOURCE = HW_ROOT / "generated/H0-R2-authority-gate.json"
 OUTPUT = ROOT / "config/h0_r2_hardware_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
+PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
+PREORDER_OUTPUT = ROOT / "config/preorder_verification_contract.json"
 
 
 def source_record(path: Path) -> dict:
@@ -248,6 +250,7 @@ def main(argv: list[str] | None = None) -> int:
     outputs = {
         OUTPUT: json.dumps(hardware_contract, ensure_ascii=False, indent=2) + "\n",
         U219_POLICY_OUTPUT: render_u219_policy(hardware_contract),
+        PREORDER_OUTPUT: PREORDER_SOURCE.read_text(encoding="utf-8"),
     }
     if args.write:
         for path, expected in outputs.items():

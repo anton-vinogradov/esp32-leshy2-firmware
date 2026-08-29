@@ -84,7 +84,7 @@
         "exact_selected_module": true,
         "required": ["native USB/UART recovery", "PSRAM ECC", "GPIO strap sampling", "display/video peripheral smoke fixtures"]
       },
-      "leshy2_hil": ["direct UI latency", "32-MHz i8080 display occupancy", "simultaneous analog FPV capture", "S3-Hub 4-data SPI", "product USB power and recovery"]
+      "leshy2_hil": ["direct UI latency", "24-MHz i8080 display occupancy", "simultaneous analog FPV capture", "S3-Hub 4-data SPI", "product USB power and recovery"]
     },
     {
       "id": "c5",

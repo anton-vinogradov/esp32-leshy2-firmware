@@ -19,7 +19,7 @@ not claim ECAD, target execution or HIL closure.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB, direct 32-MHz i8080-8 display TX and independent analog-FPV camera RX |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB, direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` and independent analog-FPV camera RX |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
 | RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, FPV, M5 and exactly one signed U214/U219 Cap profile |
 | Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |
@@ -43,9 +43,10 @@ Button edges terminate on the S3-local
 target remains 20 ms under qualified concurrent load.
 
 The display and camera use the separate LCD TX and camera RX units concurrently.
-The H1-R2.31 physical orientation points the display flex toward the antenna edge;
+The H1-R2.33 physical orientation points the display flex toward the antenna edge;
 the S3 display/touch driver therefore applies one 180-degree transform to both
-ST77922 memory addressing and touch coordinates.
+ILI9488 memory addressing and FT6236 touch coordinates. Normal display traffic
+uses i8080-8; ordinary 4-wire serial is a recovery strap, not QSPI.
 The exact M1 map defines all 80 contacts: 25 live signals, 14 main-power, 2 AON,
 25 returns and 14 NC reserves. M1 is electrical/alignment-only; enclosure stops,
 anti-shear datums and PCB capture carry impact and bending loads.

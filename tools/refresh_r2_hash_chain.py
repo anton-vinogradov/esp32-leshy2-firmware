@@ -23,6 +23,7 @@ GENERATOR_PATH = ROOT / "tools" / "generate_f2_r2_bsp.py"
 
 PROJECTION = "config/h0_r2_hardware_contract.json"
 F0_REVIEW = "config/f0_r2_review.json"
+F0_EXECUTION_GATES = "config/f0_r2_execution_gate_matrix.json"
 F1_PORTABLE = "config/f1_r2_portable_rebaseline.json"
 F2_REBASELINE = "config/f2_r2_target_rebaseline.json"
 F2_MATRIX = "config/f2_r2_build_matrix.json"
@@ -193,6 +194,8 @@ def expected_outputs(
     if functional.get("sha256") != hardware_source_digest:
         raise ChainError("projection functional source and compatibility source hashes differ")
     projection_digest = digest_text(projection_text)
+    execution_gates_text = read_text(root, F0_EXECUTION_GATES)
+    execution_gates_digest = digest_text(execution_gates_text)
 
     original_f0_text = read_text(root, F0_REVIEW)
     original_f0 = load_json(original_f0_text, F0_REVIEW)
@@ -236,6 +239,13 @@ def expected_outputs(
         expected_path=PROJECTION,
         expected_digest=projection_digest,
     )
+    rebaseline_text = replace_locked_digest(
+        rebaseline_text,
+        relative=F2_REBASELINE,
+        keys=("inputs", "execution_gates"),
+        expected_path=F0_EXECUTION_GATES,
+        expected_digest=execution_gates_digest,
+    )
     rebaseline_digest = digest_text(rebaseline_text)
 
     original_matrix_text = read_text(root, F2_MATRIX)
@@ -251,6 +261,13 @@ def expected_outputs(
         keys=("inputs", "rebaseline_plan"),
         expected_path=F2_REBASELINE,
         expected_digest=rebaseline_digest,
+    )
+    matrix_text = replace_locked_digest(
+        matrix_text,
+        relative=F2_MATRIX,
+        keys=("inputs", "execution_gates"),
+        expected_path=F0_EXECUTION_GATES,
+        expected_digest=execution_gates_digest,
     )
     matrix_digest = digest_text(matrix_text)
 

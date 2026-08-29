@@ -94,14 +94,14 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware is at
-`H1-R2.32`, while the exact imported pin/config authority remains the reviewed
+`H1-R2.33` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces,
 service access and vertical FPV-connector proof are generated. S3 now keeps the
-direct 32-MHz i8080-8 display path, camera RX, ordinary UI, encoder and USB;
+direct 24-MHz i8080-8 path to exact `ER-TFT035IPS-6` + `ER-TPC035-6`, camera RX, ordinary UI, encoder and USB;
 M1 has an exact 80-contact map with 14 NC reserves and a separate enclosure load path.
 The display is physically oriented with its flex toward the antenna edge; F5/F6
-must rotate ST77922 memory orientation and touch coordinates by 180 degrees.
+must rotate ILI9488 memory orientation and FT6236 touch coordinates by 180 degrees.
 That transform is required target behavior, not an implemented-driver claim.
 Stable outer silkscreen identifies the UI and RF/power PCB roles, `R2-EVT1` and
 `REV A`; the changing `H1-R2.xx` work marker remains documentation-only.

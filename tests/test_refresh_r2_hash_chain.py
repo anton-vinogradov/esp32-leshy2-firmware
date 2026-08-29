@@ -52,6 +52,10 @@ class RefreshR2HashChainTest(unittest.TestCase):
         }
         self.write_json(self.module.PROJECTION, self.projection)
         self.write_json(
+            self.module.F0_EXECUTION_GATES,
+            {"stage": "F0-R2.4", "display_clock_mhz": 24},
+        )
+        self.write_json(
             self.module.F0_REVIEW,
             {
                 "stage": "F0-R2",
@@ -71,7 +75,8 @@ class RefreshR2HashChainTest(unittest.TestCase):
             {
                 "stage": "F2-R2.0",
                 "inputs": {
-                    "r2_hardware_projection": self.lock(self.module.PROJECTION)
+                    "r2_hardware_projection": self.lock(self.module.PROJECTION),
+                    "execution_gates": self.lock(self.module.F0_EXECUTION_GATES),
                 }
             },
         )
@@ -80,7 +85,8 @@ class RefreshR2HashChainTest(unittest.TestCase):
             {
                 "stage": "F2-R2.1",
                 "inputs": {
-                    "rebaseline_plan": self.lock(self.module.F2_REBASELINE)
+                    "rebaseline_plan": self.lock(self.module.F2_REBASELINE),
+                    "execution_gates": self.lock(self.module.F0_EXECUTION_GATES),
                 },
             },
         )
@@ -156,6 +162,9 @@ class RefreshR2HashChainTest(unittest.TestCase):
             ),
         )
         projection_text = (self.root / self.module.PROJECTION).read_text()
+        execution_gates_text = (
+            self.root / self.module.F0_EXECUTION_GATES
+        ).read_text()
         f0_text = (self.root / self.module.F0_REVIEW).read_text()
         rebaseline_text = (self.root / self.module.F2_REBASELINE).read_text()
         matrix_text = (self.root / self.module.F2_MATRIX).read_text()
@@ -174,7 +183,15 @@ class RefreshR2HashChainTest(unittest.TestCase):
             rebaseline["inputs"]["r2_hardware_projection"]["sha256"],
         )
         self.assertEqual(
+            sha(execution_gates_text),
+            rebaseline["inputs"]["execution_gates"]["sha256"],
+        )
+        self.assertEqual(
             sha(rebaseline_text), matrix["inputs"]["rebaseline_plan"]["sha256"]
+        )
+        self.assertEqual(
+            sha(execution_gates_text),
+            matrix["inputs"]["execution_gates"]["sha256"],
         )
         self.assertEqual(
             sha(matrix_text), projects["inputs"]["build_matrix"]["sha256"]
