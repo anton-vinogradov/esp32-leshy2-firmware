@@ -19,8 +19,10 @@
 > сопоставлены реальным площадкам или трём RF-интерфейсам на модулях; каждая
 > именованная площадка учтена. Controlled R2 library теперь содержит 208 symbols
 > и 1 518 уникальных PCB-pad pins и проходит KiCad 10. Все 1 096 устанавливаемых
-> экземпляров распределены по трём native-проектам без импорта nets или
-> designators R1; сейчас соединяются native nets. Schematic export/KiCad
+> экземпляров распределены по трём native-проектам без импорта designators R1.
+> Все 4 053 контакта устанавливаемых экземпляров теперь сведены в 3 814
+> подключённых endpoints, 239 явных board no-connects и 908 канонических nets
+> без незакрытых endpoints; сейчас создаются native-проекты KiCad. Schematic export/KiCad
 > placement ещё не начинались,
 > заказ не разрешён.
 
@@ -39,7 +41,7 @@ firmware-репозитория. Пересечения с железом ука
 | Владение generated BSP R2 | ✅ F2-R2.3 обновлён на F2-R2.4: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат точные карты S3 и двух RP плюс шесть фиксированных C5 SDIO pins; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): точные карты двух RP и все три прошедших ревью electrical prerequisite, включая TCA9803 Pack/Safety, связаны hash; сохранённый H2.0.3 — исторический R1 и не авторизует R2; открыть только после появления native six-domain H2 export |
 | Target builds, maps и S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) прошёл все 12 locked debug/release builds, 60 artifacts, 16 maps и 16 size gates; остаются два чистых побайтно идентичных прохода, а S3 QEMU остаётся F3-R2 |
-| Пересечение с железом | ▶️ H0-R2 и физический H1-R2.37 прошли ревью; аппаратная точка — H2-R2.1.3 после net-free inventory H2-R2.1.1 из 3 проектов, 23 sheets, 6 владельцев доменов и 213 точных MPN-групп и exact ledger H2-R2.1.2 из 208 board groups, 5 non-PCBA groups и 1 561 контакта; импортированной machine pin/config authority остаётся H1-R2.31; mailbox Pack/Safety имеет точный тракт Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 и не является зависимостью hard-kill; точная легальная fixed-mux карта двух RP даёт задний I2C0 на GP4/5, независимый Cap I2C1 на GP30/31 и M5-профиль PIO2 на GP7/8; десять SMA разделены 5+5; прямой i8080-8 24 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` остаётся локален S3, шлейф направлен к антенному торцу, поэтому F5/F6 разворачивают память ILI9488 и touch-координаты FT6236 на 180°; 11 GPIO S3 остаются резервами, а точный M1 на 80 контактов содержит 24 сигнала, 24 возврата и 16 настоящих NC; модель из 226 тел включает все 18 компонентов U219, NFC-loop, swept volume штатной антенны, восемь точных TX-детекторов, пять coupler и восемь локальных evidence-островов |
+| Пересечение с железом | ▶️ H0-R2 и физический H1-R2.37 прошли ревью; аппаратная точка — H2-R2.1.3 после inventory H2-R2.1.1, exact identity ledger H2-R2.1.2 и проверенной сверки 4 053 endpoints в 908 канонических nets плюс 239 явных NC; сейчас создаются native-проекты KiCad, а импортированной machine pin/config authority остаётся H1-R2.31; mailbox Pack/Safety имеет точный тракт Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 и не является зависимостью hard-kill; точная легальная fixed-mux карта двух RP даёт задний I2C0 на GP4/5, независимый Cap I2C1 на GP30/31 и M5-профиль PIO2 на GP7/8; десять SMA разделены 5+5; прямой i8080-8 24 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` остаётся локален S3, шлейф направлен к антенному торцу, поэтому F5/F6 разворачивают память ILI9488 и touch-координаты FT6236 на 180°; 11 GPIO S3 остаются резервами, а точный M1 на 80 контактов содержит 24 сигнала, 24 возврата и 16 настоящих NC; модель из 226 тел включает все 18 компонентов U219, NFC-loop, swept volume штатной антенны, восемь точных TX-детекторов, пять coupler и восемь локальных evidence-островов |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |

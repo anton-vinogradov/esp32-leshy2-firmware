@@ -132,8 +132,10 @@ now maps all 1,504 board contacts to real footprint pads or three explicit
 on-module RF interfaces with every named pad accounted for. Controlled R2
 library generation has now produced 208 symbols and 1,518 unique PCB-pad pins
 and passes KiCad 10. All 1,096 fitted instances are allocated across the three
-native projects without importing R1 nets or designators; joining native nets
-is current. Schematic export/KiCad placement
+native projects without importing R1 designators. Hardware has now reconciled
+all 4,053 fitted-instance contacts to 3,814 connected endpoints, 239 explicit
+board no-connects and 908 canonical nets with zero unresolved endpoints;
+creating the three native KiCad projects is current. Schematic export/KiCad placement
 has not started, and R2 byte reproducibility
 and order authorization remain open.
 
