@@ -98,7 +98,7 @@ host runs; это portable evidence, а не target build.
 Обязательный receive-only Airband использует GP35/36 заднего RP, фиксированный LO
 112 МГц и существующий audio path Si4732. Airband TX отсутствует. Физическое
 железо завершило `H1-R2.37`, принято и прошло ревью; текущая аппаратная точка —
-закрытие prerequisites `H2-R2.0`, а точной импортированной pin/config authority
+`H2-R2.0.2`, а точной импортированной pin/config authority
 остаётся прошедший ревью артефакт `H1-R2.31`: сгенерированы locality-first размещение двух плат,
 согласованные внешние и прямые внутренние стороны после переворота плат и сервисный доступ.
 Физический реестр из 226 тел включает все восемь точных TX-детекторов, пять
@@ -123,9 +123,9 @@ RESET/BOOT и внутренний DBG10. Экран физически орие
 gate H3. Для фильтра Airband H3 использует bounded pre-layout-паразитики, H6
 повторяет routed extraction до заказа, а H8 выбирает VNA-qualified fitted/DNP-state.
 Полный мокап R2 проходит structural body/courtyard audit и принят 2026-08-30.
-Аппаратный `H2-R2.0` проверяет live-route `FSUSB42MUX/C11355`, после чего
-закрываются точный service-VBUS detector/latch и powered-off-Ioff-граница
-Pack/Safety. Native R2 ECAD/KiCad ещё не начинался; проверка byte reproducibility
+Аппаратный `H2-R2.0.1` провёл ревью live-route `FSUSB42MUX/C11355`. Текущий
+`H2-R2.0.2` закрывает точный service-VBUS detector/latch перед powered-off-Ioff
+границей Pack/Safety. Native R2 ECAD/KiCad ещё не начинался; проверка byte reproducibility
 R2 и разрешение заказа остаются открыты.
 
 ### Текущая фаза F2-R2 — детальная позиция

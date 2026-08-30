@@ -6,15 +6,15 @@
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "c5fbe59d64c223d8918ebdeffca1723f0e939e47ce11fc360e1231572af9da10"
+      "sha256": "6a3e3ae9d58f9cb5b26e4d87377d9a629191a95a004158063870f6b25a839ec3"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
-      "sha256": "a15c9e674b6ea51b7fde5dd92754a27fe8fd284766a3558d2cd5fb5181a81da3"
+      "sha256": "35682775b06ae21feb19c0976ec09890d3d1e4bed3f2006d1c9b692ad7e547f6"
     },
     "dual_rp_pinout": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-      "sha256": "f21b6d33f771fc522ed654489c16ff57d756f604b9fc4f3515babdc9c145555a"
+      "sha256": "5f547dd3ab1b86618885f3a1fcb7956bffc02c99b1ca3d740d60fff1b7e955af"
     },
     "u219_cap_profile": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -26,11 +26,11 @@
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "958be7452f5f5cd1ba42bb24b07e26e9ec5182c9024dc6a7680efc2113728000"
+      "sha256": "ba5c6ce7f3569d7514d5446e3dc12f713b316e649190bd22a029e374212894dd"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "c5fbe59d64c223d8918ebdeffca1723f0e939e47ce11fc360e1231572af9da10",
+  "hardware_source_sha256": "6a3e3ae9d58f9cb5b26e4d87377d9a629191a95a004158063870f6b25a839ec3",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -1603,11 +1603,11 @@
       "id": "HUB_C5",
       "transport": "native C5 4-bit SDIO through fail-safe service mux",
       "clock_hz": 40000000,
+      "bringup_clock_hz": 20000000,
       "raw_payload_mb_s": 20.0,
       "qualified_payload_floor_mb_s": 7.5,
-      "service_mux": "FSUSB42 reference switches C5 GPIO13/14 between data-only service USB and runtime SDIO D3/D2; an always-on latch owns reset, high-Z and break-before-make sequencing",
-      "bringup_clock_hz": 20000000,
-      "qualification_frequency_hz": 40000000
+      "qualification_frequency_hz": 40000000,
+      "service_mux": "FSUSB42 reference switches C5 GPIO13/14 between data-only service USB and runtime SDIO D3/D2; an always-on latch owns reset, high-Z and break-before-make sequencing"
     },
     {
       "id": "HUB_RF_RP",
@@ -1900,7 +1900,7 @@
   ],
   "c5_sdio_service_mux": {
     "contract_id": "C5-SDIO-SERVICE-MUX-1",
-    "status": "machine_contract_defined_factory_inventory_gate_open",
+    "status": "machine_contract_defined_factory_mux_route_accepted",
     "module": "ESP32-C5-WROOM-1U-N8R8",
     "mux_reference": {
       "manufacturer": "onsemi",
@@ -1912,7 +1912,7 @@
       "power_off_isolation_required": true
     },
     "production_route": {
-      "selection_status": "unresolved_live_inventory_gate",
+      "selection_status": "accepted",
       "candidate": {
         "manufacturer": "onsemi",
         "mpn": "FSUSB42MUX",
@@ -1924,16 +1924,48 @@
           "Standard"
         ],
         "catalog_identity_url": "https://jlcpcb.com/partdetail/onsemi-FSUSB42MUX/C11355",
-        "identity_checked_on": "2026-08-28"
+        "identity_checked_on": "2026-08-30",
+        "source": "JLCPCB",
+        "part_class": "Extended",
+        "msl_level": "MSL 1"
       },
       "live_inventory": {
-        "stock": null,
-        "available_order_quantity": null,
-        "moq": null,
-        "price_tiers_usd": null,
-        "reason_open": "The current JLC catalogue page proves exact identity, package and Standard-PCBA eligibility, but its live inventory, MOQ and price fields were not available through the unauthenticated machine-readable response. Recheck the live BOM/Parts surface before production selection."
+        "checked_at": "2026-08-30T13:08:13+03:00",
+        "surface": "JLCPCB live part-detail browser surface",
+        "stock": 66698,
+        "available_order_quantity": 66045,
+        "moq": 1,
+        "full_reel_quantity": 4000,
+        "currency": "USD",
+        "price_tiers_usd": [
+          {
+            "minimum_quantity": 1,
+            "unit_price": 0.3179
+          },
+          {
+            "minimum_quantity": 50,
+            "unit_price": 0.2458
+          },
+          {
+            "minimum_quantity": 150,
+            "unit_price": 0.2106
+          },
+          {
+            "minimum_quantity": 500,
+            "unit_price": 0.1748
+          },
+          {
+            "minimum_quantity": 2500,
+            "unit_price": 0.1662
+          },
+          {
+            "minimum_quantity": 4000,
+            "unit_price": 0.1611
+          }
+        ],
+        "route": "public JLCPCB stock"
       },
-      "release_rule": "The candidate is an electrical reference only until exact live stock or an explicit pre-order/private-library/global-sourcing route, MOQ and price are timestamped together."
+      "release_rule": "Accepted for H2 schematic use because exact identity, Standard-PCBA eligibility, public live stock, MOQ and price were timestamped together. Recheck at architecture freeze and immediately before the exact-one order."
     },
     "ownership": {
       "service_vbus": {
@@ -3062,8 +3094,15 @@
     "h2_gate": "The new R2 schematic must instantiate the exact isolator/OE pull and prove powered-off Ioff; this working GPIO authority does not authorize KiCad by itself."
   },
   "pre_h2_gates": [
-    "live JLC stock-or-explicit-route, MOQ and price for exact onsemi FSUSB42MUX / C11355",
-    "exact factory-placeable service-VBUS detector/latch MPN and implementation"
+    "exact factory-placeable service-VBUS detector/latch MPN and implementation",
+    "exact powered-off-Ioff Pack/Safety I2C boundary with separate 3V3_MAIN/AON pull-up domains on Hub GPIO42/43"
+  ],
+  "review_time_pre_h2_gates": [
+    "exact factory-placeable service-VBUS detector/latch MPN and implementation",
+    "exact powered-off-Ioff Pack/Safety I2C boundary with separate 3V3_MAIN/AON pull-up domains on Hub GPIO42/43"
+  ],
+  "resolved_post_h1_gates": [
+    "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"
   ],
   "physical_h1": {
     "marker": "H1-R2.37",
@@ -3071,9 +3110,16 @@
     "status": "reviewed",
     "current_h1_blockers": [],
     "pre_r2_h2_gates": [
+      "select and factory-validate the exact service-VBUS detector/latch MPN used by the closed C5 electrical ownership contract",
+      "instantiate and prove the exact powered-off-Ioff isolation boundary and separate 3V3_MAIN/AON pull-up domains for Hub GPIO42/43 Pack/Safety I2C"
+    ],
+    "review_time_pre_r2_h2_gates": [
       "timestamp an exact live JLC stock-or-explicit-route, MOQ and price for onsemi FSUSB42MUX / C11355",
       "select and factory-validate the exact service-VBUS detector/latch MPN used by the closed C5 electrical ownership contract",
       "instantiate and prove the exact powered-off-Ioff isolation boundary and separate 3V3_MAIN/AON pull-up domains for Hub GPIO42/43 Pack/Safety I2C"
+    ],
+    "resolved_post_h1_gates": [
+      "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"
     ]
   },
   "execution_gates": [
@@ -3081,7 +3127,7 @@
     "Simultaneous three-nRF RX/TX/mix, microSD, S3-Hub, Hub-C5 and Hub-RF traffic must pass emulator/dev-board timing before fabrication and HIL after assembly.",
     "Reset-state voltage and no-back-power behavior must be measured for every switched/isolated branch.",
     "Hub GPIO42/43 Pack/Safety I2C requires an exact powered-off-Ioff boundary and separate 3V3_MAIN/AON pull-up domains before schematic authorization.",
-    "The C5 electrical pad/mux contract is joined; exact live production route for FSUSB42MUX/C11355 and an exact service-VBUS detector/latch MPN remain fail-closed before R2 H2.",
+    "The C5 electrical pad/mux contract and exact live production route for FSUSB42MUX/C11355 are closed; an exact service-VBUS detector/latch MPN remains fail-closed before R2 H2.",
     "The exact-one signed U214/U219 profile must pass received-unit pin continuity, protected-power, RF-switch, VNA and RX/NFC HIL before the U219 branch can be enabled."
   ],
   "cap_profile": {
@@ -3721,6 +3767,7 @@
     "exact_dual_rp_gpio_maps_imported": true,
     "c5_fixed_sdio_contacts_imported": true,
     "c5_service_mux_hardware_owned": true,
+    "c5_production_mux_route_accepted": true,
     "r1_f4_1_2_is_current_authority": false,
     "h2_closed": false,
     "kicad_authorized": false,

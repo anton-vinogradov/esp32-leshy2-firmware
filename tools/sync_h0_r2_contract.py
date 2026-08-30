@@ -72,6 +72,30 @@ def build() -> dict:
     physical_h1 = json.loads(physical_h1_raw)
     r2_authority = json.loads(R2_AUTHORITY_SOURCE.read_bytes())
     air = hw["airband_contract"]
+    mux_route = c5_mux["production_mux_route"]
+    mux_inventory = mux_route["live_inventory"]
+    mux_route_closed = (
+        mux_route["selection_status"] == "accepted"
+        and all(
+            mux_inventory.get(key) is not None
+            for key in ("stock", "available_order_quantity", "moq", "price_tiers_usd")
+        )
+    )
+    review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
+    review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
+    current_pin_gates = [
+        gate for gate in review_time_pin_gates
+        if not (mux_route_closed and "FSUSB42MUX" in gate)
+    ]
+    current_physical_gates = [
+        gate for gate in review_time_physical_gates
+        if not (mux_route_closed and "FSUSB42MUX" in gate)
+    ]
+    resolved_post_h1_gates = (
+        ["exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"]
+        if mux_route_closed
+        else []
+    )
     transports = []
     for transport in hw["transport_contracts"]:
         row = dict(transport)
@@ -154,13 +178,17 @@ def build() -> dict:
         },
         "hub_rf_m1_binding": dual_rp["m1_binding"],
         "s3_rom_uart_isolation": dual_rp["s3_rom_uart_isolation"],
-        "pre_h2_gates": dual_rp["authority_chain"]["remaining_h2_gates"],
+        "pre_h2_gates": current_pin_gates,
+        "review_time_pre_h2_gates": review_time_pin_gates,
+        "resolved_post_h1_gates": resolved_post_h1_gates,
         "physical_h1": {
             "marker": physical_h1["marker"],
             "pin_authority_marker": physical_h1["pin_authority_marker"],
             "status": physical_h1["status"],
             "current_h1_blockers": physical_h1["current_h1_blockers"],
-            "pre_r2_h2_gates": physical_h1["pre_r2_h2_gates"],
+            "pre_r2_h2_gates": current_physical_gates,
+            "review_time_pre_r2_h2_gates": review_time_physical_gates,
+            "resolved_post_h1_gates": resolved_post_h1_gates,
         },
         "execution_gates": dual_rp["execution_gates"],
         "cap_profile": {
@@ -205,6 +233,7 @@ def build() -> dict:
             "exact_dual_rp_gpio_maps_imported": True,
             "c5_fixed_sdio_contacts_imported": True,
             "c5_service_mux_hardware_owned": True,
+            "c5_production_mux_route_accepted": mux_route_closed,
             "r1_f4_1_2_is_current_authority": False,
             "h2_closed": False,
             "kicad_authorized": False,
