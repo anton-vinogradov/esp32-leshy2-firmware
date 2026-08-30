@@ -93,8 +93,9 @@ RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrat
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Physical hardware is at
-`H1-R2.37` and ready for visual placement acceptance, while the exact imported pin/config authority remains the reviewed
+existing Si4732 audio path. Airband TX is absent. Physical hardware completed
+and reviewed `H1-R2.37`; its current point is `H2-R2.0` prerequisite closure,
+while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
 and service access are generated. The 226-body physical register includes all
@@ -115,17 +116,15 @@ The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. The onboard analog-video
 receiver, decoder, connector and all firmware contracts are removed: no
 post-PCBA active module or owner soldering remains in the product boundary.
-The exact 3V3_MAIN cell
-admits 3.75 A continuous / 4.25 A step across all 12 allowed signal groups;
-dynamic and enclosure proof remains an H3 gate. Airband filter H3 uses bounded
-pre-layout parasitics, H6 repeats routed extraction before order and H8 selects
-the VNA-qualified fitted/DNP state. The current R2 mockup passes its structural
-body/courtyard audit, but three explicit H1 blockers remain: exact U219
-support-passive values/MPNs and courtyards, controlled or measured NFC pickup
-geometry, and installed U219 RP-SMA antenna swept volume. After those close,
-the complete exterior, true-view inner
-faces and sandwich sections still require explicit acceptance; R2 byte
-reproducibility, KiCad layout and order authorization remain open.
+The exact 3V3_MAIN cell admits 3.75 A continuous / 4.25 A step across all 12
+allowed signal groups; dynamic and enclosure proof remains an H3 gate. Airband
+filter H3 uses bounded pre-layout parasitics, H6 repeats routed extraction
+before order and H8 selects the VNA-qualified fitted/DNP state. The complete R2
+mockup passes its structural audit and was accepted on 2026-08-30. Hardware
+`H2-R2.0` now checks the live `FSUSB42MUX/C11355` route before the exact
+service-VBUS detector/latch and Pack/Safety powered-off-Ioff boundary. Native R2
+ECAD/KiCad has not started; R2 byte reproducibility and order authorization
+remain open.
 
 ### Current phase F2-R2 — detailed position
 

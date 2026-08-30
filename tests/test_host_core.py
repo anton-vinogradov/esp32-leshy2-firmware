@@ -628,7 +628,8 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertFalse(contract["current_truth"]["order_authorized"])
         gates = {gate["id"]: gate["status"] for gate in contract["gates"]}
         self.assertEqual("reviewed", gates["P0_REQUIREMENTS_ARCHITECTURE"])
-        self.assertEqual("in_progress", gates["P1_CURRENT_PHYSICAL_DESIGN"])
+        self.assertEqual("reviewed", gates["P1_CURRENT_PHYSICAL_DESIGN"])
+        self.assertEqual("in_progress", gates["P2_R2_PRODUCTION_SCHEMATIC"])
         self.assertEqual("blocked", gates["P6_ROUTED_PRODUCTION_PACKAGE"])
         self.assertEqual("blocked", gates["P7_FIRST_SPIN_DIAGNOSTIC"])
         self.assertEqual("not_authorized", gates["P8_IMMUTABLE_EXACT_ONE_RELEASE"])

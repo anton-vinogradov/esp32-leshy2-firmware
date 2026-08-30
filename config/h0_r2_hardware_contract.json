@@ -22,11 +22,11 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "62edc85c1c159c05d2d892c1a8a431987f7e82b02166e7c7d49ad468b1bc6708"
+      "sha256": "5b29b55a62e3b8b3fe78742856ed70e8a83b0d46160ad5d5e93920c0a42b20e3"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "65afec5583721629539398d5cbe339dcf7a0130871b85815fafe5a54c5ae0434"
+      "sha256": "958be7452f5f5cd1ba42bb24b07e26e9ec5182c9024dc6a7680efc2113728000"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -3068,7 +3068,7 @@
   "physical_h1": {
     "marker": "H1-R2.37",
     "pin_authority_marker": "H1-R2.31",
-    "status": "ready_for_user_layout_acceptance",
+    "status": "reviewed",
     "current_h1_blockers": [],
     "pre_r2_h2_gates": [
       "timestamp an exact live JLC stock-or-explicit-route, MOQ and price for onsemi FSUSB42MUX / C11355",

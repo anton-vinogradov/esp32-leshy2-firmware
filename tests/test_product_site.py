@@ -120,9 +120,11 @@ class ProductSiteTests(unittest.TestCase):
         boundary = state["hardware_boundary"]
         self.assertEqual("H1-R2.37", boundary["physical_design_marker"])
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
-        self.assertEqual("in_progress", boundary["physical_h1_status"])
+        self.assertEqual("reviewed", boundary["physical_h1_status"])
+        self.assertEqual("H2", boundary["current_hardware_stage"])
+        self.assertEqual("H2-R2.0", boundary["current_hardware_substep"])
         self.assertEqual([], boundary["current_h1_blockers"])
-        self.assertTrue(boundary["mockup_acceptance_required_after_blockers"])
+        self.assertFalse(boundary["mockup_acceptance_required_after_blockers"])
 
     def test_public_r2_transport_boundary_does_not_reactivate_r1_f4(self):
         required_cap_routes = {

@@ -5,7 +5,7 @@
   "producer": "tools/generate_f2_r2_bsp.py",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
-    "sha256": "f803ae9c30e45e57621ee1f0858d8892b9a5356607bcfa6d46f516b556c73264",
+    "sha256": "3b3ad5b23c0b841a1324dc92693407c01db655219174b90253e81cf4a392fc73",
     "hardware_marker": "H1-R2.31"
   },
   "generation_model": "config/f2_r2_bsp_generation.json",
