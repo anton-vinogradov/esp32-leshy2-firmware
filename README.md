@@ -127,7 +127,7 @@ reviewed the exact service-VBUS detector/latch/release implementation. Current
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed three native projects, 23 sheets,
 six domain owners and 213 exact MPN groups without creating symbols or nets.
 `H2-R2.1.2` reviewed exact identities for 208 board groups, five explicit
-non-PCBA groups and 1,555 logical contacts. `H2-R2.1.3` now materializes
+non-PCBA groups and 1,561 logical contacts. `H2-R2.1.3` now materializes
 controlled definitions and joined native nets; schematic export/KiCad placement
 has not started, and R2 byte reproducibility
 and order authorization remain open.

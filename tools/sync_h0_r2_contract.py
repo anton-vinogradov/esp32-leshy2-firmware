@@ -139,7 +139,7 @@ def build() -> dict:
         and exact_ledger.get("summary", {}).get("component_group_count") == 213
         and exact_ledger.get("summary", {}).get("board_component_group_count") == 208
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 5
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1555
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1561
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False

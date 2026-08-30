@@ -35,11 +35,11 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "4d6af3780d3d3a699e7a69a97933519c3eafc743e89960b084fe188ecafdd841"
+      "sha256": "1765aaa1952ef1b5fedefcd23c524e4af3799061b3c4f555724fccad397a8e5f"
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "5d96818a20a116861963b570c02dd9df8a2265b5a48d97846b13ddaa3604cf02"
+      "sha256": "77084de45cf548a21d13c9c60bd41231a25d3b53950bf6e3064101fdfb48050e"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -2839,7 +2839,7 @@
       "explicit_non_pcba_group_count": 5,
       "symbol_identity_count": 208,
       "footprint_identity_count": 208,
-      "logical_contact_count": 1555,
+      "logical_contact_count": 1561,
       "historical_package_hints_reconciled": 196,
       "historical_package_conflicts_resolved": 5,
       "explicit_current_footprint_overrides": 12,
