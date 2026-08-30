@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "id": "FW-R2-H2-AUTHORITY-GATE",
-  "status": "blocked_pending_six_domain_h2_export",
-  "checked_on": "2026-08-30",
+  "status": "reviewed_six_domain_h2_export",
+  "checked_on": "2026-08-31",
   "active_firmware_hardware_authority": "config/h0_r2_hardware_contract.json",
   "candidate_h2_export": "config/hardware_bsp_contract.json",
   "historical_imports": [
@@ -17,11 +17,11 @@
     "interboard_source": "config/h0_r2_hardware_contract.json#/interboard",
     "interboard_positions": 80,
     "interboard_counts": {
-      "live_signals": 24,
+      "live_signals": 29,
       "main_power": 14,
       "aon_power": 2,
       "returns": 24,
-      "no_connect_reserve": 16
+      "no_connect_reserve": 11
     },
     "exact_rp_pin_map_required_here": true,
     "working_pin_map_source": "config/h0_r2_hardware_contract.json#/hub_pin_map and #/rear_pin_map",
@@ -32,6 +32,8 @@
     "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
     "native_inventory_source": "config/h0_r2_hardware_contract.json#/native_r2_inventory",
     "exact_component_ledger_source": "config/h0_r2_hardware_contract.json#/exact_component_ledger",
+    "native_kicad_source": "config/h0_r2_hardware_contract.json#/native_kicad",
+    "h2_hwfw_reconciliation_source": "config/h0_r2_hardware_contract.json#/h2_hwfw_reconciliation",
     "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
     "unresolved_pre_h2_gates_required": 0,
     "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
@@ -39,13 +41,13 @@
     "physical_h1_blockers_required": 0,
     "physical_pre_r2_h2_gates_required": 0
   },
-  "r2_h2_synchronized": false,
-  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the reviewed H1-R2.31 dual-RP map, all three reviewed pre-ECAD electrical prerequisites and the reviewed H2-R2.1.2 exact component ledger, but no native six-domain H2/ECAD export yet.",
+  "r2_h2_synchronized": true,
+  "blocker": null,
   "claims": {
     "h0_r2_projection_is_current_firmware_authority": true,
     "historical_single_rp_import_can_authorize_r2": false,
-    "six_domain_h2_export_available": false,
-    "r2_h2_ecad_and_firmware_synchronized": false,
+    "six_domain_h2_export_available": true,
+    "r2_h2_ecad_and_firmware_synchronized": true,
     "exact_dual_rp_working_map_imported": true,
     "c5_quad_sdio_mux_contract_imported": true,
     "pack_safety_powered_off_boundary_imported": true,

@@ -2,12 +2,12 @@
   "schema_version": 1,
   "id": "FW-H0-R2",
   "hardware_marker": "H1-R2.31",
-  "hardware_status": "current_working_authority_h2_r2_1_2_exact_ledger_reviewed_h2_r2_1_3_not_kicad_or_hil",
-  "current_hardware_substep": "H2-R2.1.3",
+  "hardware_status": "reviewed_h2_r2_1_5_six_domain_hwfw_reconciled_not_layout_or_hil",
+  "current_hardware_substep": "H2-R2.1.5",
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "6a3e3ae9d58f9cb5b26e4d87377d9a629191a95a004158063870f6b25a839ec3"
+      "sha256": "f46b4a95d9e76b910c5df8e5141bfea782ae550e3d5ad4badec4f2af4178c06e"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -15,7 +15,7 @@
     },
     "dual_rp_pinout": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-      "sha256": "44658cf8169ddbfab365aebe6e88a96658d3d75900d754cdfa08731d35a29af0"
+      "sha256": "45d7b02e86a626c5be841fef4d249fd304e98ce1715776e79d073ca9bc144753"
     },
     "u219_cap_profile": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -23,11 +23,11 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "09dabb192d4e013cdfab318a1d3f3f5a0516f1e6ca60006d93379d3a39933fea"
+      "sha256": "5c87457efa793572df1ff699f499b58437590e0b5b4655492552015dac8ccadc"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "c28145492d691f633aa887050eb8ced81ddd941b4f8c9c504cafefae416b8471"
+      "sha256": "996a373d803dfe5b8fd1ba6b1baab094749e82b7061cbd2fea5547505a7fab21"
     },
     "pack_safety_i2c_boundary": {
       "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -35,15 +35,27 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "1765aaa1952ef1b5fedefcd23c524e4af3799061b3c4f555724fccad397a8e5f"
+      "sha256": "ae48e1145603db59a05d87f326d2f708d5484c8fb4177d7c54e39aeb74d49f2f"
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "77084de45cf548a21d13c9c60bd41231a25d3b53950bf6e3064101fdfb48050e"
+      "sha256": "c891b92bc78ac00bc5f2e1cecf7980d40f9dcb41b4e5357ca87294f7329076c8"
+    },
+    "native_kicad": {
+      "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
+      "sha256": "a5fa0f31755e1969f16a67dab94436a26880affc5d993b54aedfbf935b6815f5"
+    },
+    "h2_hwfw_reconciliation": {
+      "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
+      "sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157"
+    },
+    "h2_interboard_m1": {
+      "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
+      "sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "6a3e3ae9d58f9cb5b26e4d87377d9a629191a95a004158063870f6b25a839ec3",
+  "hardware_source_sha256": "f46b4a95d9e76b910c5df8e5141bfea782ae550e3d5ad4badec4f2af4178c06e",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -84,10 +96,10 @@
       "pin_map": [
         {
           "gpio": 0,
-          "net": "S3_RESERVE_0",
-          "peripheral": "GPIO",
-          "direction": "reserve",
-          "gate": "input/high-Z through strap sampling; test pad only"
+          "net": "S3_BOOT_N",
+          "peripheral": "BOOT_STRAP",
+          "direction": "in",
+          "gate": "10-kohm pull-up plus recessed BOOT control and DBG10 series path"
         },
         {
           "gpio": 1,
@@ -116,31 +128,31 @@
         },
         {
           "gpio": 5,
-          "net": "S3_RESERVE_5",
+          "net": "LCD_RST_N",
           "peripheral": "GPIO",
-          "direction": "reserve",
-          "gate": "test pad only"
+          "direction": "out",
+          "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
         },
         {
           "gpio": 6,
-          "net": "S3_RESERVE_6",
+          "net": "TOUCH_RST_N",
           "peripheral": "GPIO",
-          "direction": "reserve",
-          "gate": "test pad only"
+          "direction": "out",
+          "gate": "direct touch-controller reset; reset-time pull-down keeps touch disabled"
         },
         {
           "gpio": 7,
-          "net": "S3_RESERVE_7",
-          "peripheral": "GPIO",
-          "direction": "reserve",
-          "gate": "test pad only"
+          "net": "S3_UART_SERVICE_TX",
+          "peripheral": "UART1_TX",
+          "direction": "out",
+          "gate": "DBG10 series path; idle high only after strap sampling"
         },
         {
           "gpio": 8,
-          "net": "S3_RESERVE_8",
-          "peripheral": "GPIO",
-          "direction": "reserve",
-          "gate": "test pad only"
+          "net": "S3_UART_SERVICE_RX",
+          "peripheral": "UART1_RX",
+          "direction": "in",
+          "gate": "DBG10 series path with fixture-side protection"
         },
         {
           "gpio": 9,
@@ -210,13 +222,13 @@
         },
         {
           "gpio": 19,
-          "net": "S3_USB_DM",
+          "net": "S3_USB_DM_LOCAL",
           "peripheral": "USB_SERIAL_JTAG",
           "direction": "io"
         },
         {
           "gpio": 20,
-          "net": "S3_USB_DP",
+          "net": "S3_USB_DP_LOCAL",
           "peripheral": "USB_SERIAL_JTAG",
           "direction": "io"
         },
@@ -505,7 +517,7 @@
           "net": "REAR_I2C_SDA",
           "direction": "io",
           "controller": "I2C0",
-          "endpoint": "codec/Si4732/Airband/headset slow-control bus",
+          "endpoint": "codec/Si4732/headset slow-control bus",
           "reset": "input/open-drain released; external pull-up"
         },
         {
@@ -513,7 +525,7 @@
           "net": "REAR_I2C_SCL",
           "direction": "od",
           "controller": "I2C0",
-          "endpoint": "codec/Si4732/Airband/headset slow-control bus",
+          "endpoint": "codec/Si4732/headset slow-control bus",
           "reset": "input/open-drain released; external pull-up"
         },
         {
@@ -590,11 +602,11 @@
         },
         {
           "gpio": 15,
-          "net": "RF_RESERVE_15",
-          "direction": "reserve",
-          "controller": "GPIO",
-          "endpoint": "test pad only",
-          "reset": "input/high-Z; external pull-down; DNP"
+          "net": "RF_SLOW_IO_ALERT",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "Schmitt-conditioned rear-local shared interrupt from TCA6424/voice/headset",
+          "reset": "input; raw wired interrupt has a 10-kohm 3V3_MAIN pull-up"
         },
         {
           "gpio": 16,
@@ -694,19 +706,19 @@
         },
         {
           "gpio": 28,
-          "net": "RF_RESERVE_28",
-          "direction": "reserve",
-          "controller": "GPIO",
-          "endpoint": "test pad only",
-          "reset": "input/high-Z; external pull-down; DNP"
+          "net": "AIR_LO_I2C_SDA",
+          "direction": "io",
+          "controller": "PIO2_SM2_AIR_I2C",
+          "endpoint": "power-coherent private Si5351 SDA",
+          "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
         },
         {
           "gpio": 29,
-          "net": "RF_RESERVE_29",
-          "direction": "reserve",
-          "controller": "GPIO",
-          "endpoint": "test pad only",
-          "reset": "input/high-Z; external pull-down; DNP"
+          "net": "AIR_LO_I2C_SCL",
+          "direction": "od",
+          "controller": "PIO2_SM2_AIR_I2C",
+          "endpoint": "power-coherent private Si5351 SCL",
+          "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
         },
         {
           "gpio": 30,
@@ -908,11 +920,11 @@
         },
         {
           "gpio": 6,
-          "net": "HUB_RESERVE_6",
-          "direction": "reserve",
-          "controller": "GPIO",
-          "endpoint": "test pad only",
-          "reset": "input/high-Z; external pull-down; DNP"
+          "net": "HUB_AON_ALERT_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+          "reset": "input; AON-local 10-kohm pull-up"
         },
         {
           "gpio": 7,
@@ -1650,10 +1662,10 @@
   "s3_pin_map": [
     {
       "gpio": 0,
-      "net": "S3_RESERVE_0",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "gate": "input/high-Z through strap sampling; test pad only"
+      "net": "S3_BOOT_N",
+      "peripheral": "BOOT_STRAP",
+      "direction": "in",
+      "gate": "10-kohm pull-up plus recessed BOOT control and DBG10 series path"
     },
     {
       "gpio": 1,
@@ -1682,31 +1694,31 @@
     },
     {
       "gpio": 5,
-      "net": "S3_RESERVE_5",
+      "net": "LCD_RST_N",
       "peripheral": "GPIO",
-      "direction": "reserve",
-      "gate": "test pad only"
+      "direction": "out",
+      "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
     },
     {
       "gpio": 6,
-      "net": "S3_RESERVE_6",
+      "net": "TOUCH_RST_N",
       "peripheral": "GPIO",
-      "direction": "reserve",
-      "gate": "test pad only"
+      "direction": "out",
+      "gate": "direct touch-controller reset; reset-time pull-down keeps touch disabled"
     },
     {
       "gpio": 7,
-      "net": "S3_RESERVE_7",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "gate": "test pad only"
+      "net": "S3_UART_SERVICE_TX",
+      "peripheral": "UART1_TX",
+      "direction": "out",
+      "gate": "DBG10 series path; idle high only after strap sampling"
     },
     {
       "gpio": 8,
-      "net": "S3_RESERVE_8",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "gate": "test pad only"
+      "net": "S3_UART_SERVICE_RX",
+      "peripheral": "UART1_RX",
+      "direction": "in",
+      "gate": "DBG10 series path with fixture-side protection"
     },
     {
       "gpio": 9,
@@ -1776,13 +1788,13 @@
     },
     {
       "gpio": 19,
-      "net": "S3_USB_DM",
+      "net": "S3_USB_DM_LOCAL",
       "peripheral": "USB_SERIAL_JTAG",
       "direction": "io"
     },
     {
       "gpio": 20,
-      "net": "S3_USB_DP",
+      "net": "S3_USB_DP_LOCAL",
       "peripheral": "USB_SERIAL_JTAG",
       "direction": "io"
     },
@@ -2799,8 +2811,8 @@
       "project_count": 3,
       "sheet_count": 23,
       "domain_count": 6,
-      "component_group_count": 213,
-      "component_quantity_per_product": 1106,
+      "component_group_count": 242,
+      "component_quantity_per_product": 1197,
       "external_antenna_group_count": 8,
       "external_antenna_count": 12,
       "unresolved_pre_ecad_prerequisites": 0,
@@ -2834,18 +2846,18 @@
     "marker": "H2-R2.1.2",
     "status": "pass",
     "summary": {
-      "component_group_count": 213,
-      "board_component_group_count": 208,
+      "component_group_count": 242,
+      "board_component_group_count": 237,
       "explicit_non_pcba_group_count": 5,
-      "symbol_identity_count": 208,
-      "footprint_identity_count": 208,
-      "logical_contact_count": 1561,
+      "symbol_identity_count": 237,
+      "footprint_identity_count": 237,
+      "logical_contact_count": 1662,
       "historical_package_hints_reconciled": 196,
       "historical_package_conflicts_resolved": 5,
-      "explicit_current_footprint_overrides": 12,
-      "standard_kicad_footprint_identities": 175,
+      "explicit_current_footprint_overrides": 41,
+      "standard_kicad_footprint_identities": 202,
       "reconciled_local_footprint_definitions": 32,
-      "new_exact_footprint_geometries_pending_materialization": 1,
+      "new_exact_footprint_geometries_pending_materialization": 3,
       "schematic_symbols_or_footprint_files_created": 0,
       "native_schematic_nets_created": 0,
       "unresolved_groups": 0
@@ -2860,12 +2872,86 @@
       "ordering": false
     }
   },
+  "native_kicad": {
+    "marker": "H2-R2.1.3",
+    "status": "pass",
+    "projects": [
+      {
+        "id": "LESHY2-UI-R2",
+        "root": "UI_00_ROOT",
+        "sheet_count": 9,
+        "populated_sheet_count": 7,
+        "instance_count": 428,
+        "physical_symbol_pin_count": 1588,
+        "external_module_interface_count": 5,
+        "canonical_net_count": 325,
+        "cross_sheet_net_count": 109
+      },
+      {
+        "id": "LESHY2-RF-R2",
+        "root": "RF_00_ROOT",
+        "sheet_count": 13,
+        "populated_sheet_count": 11,
+        "instance_count": 757,
+        "physical_symbol_pin_count": 2649,
+        "external_module_interface_count": 0,
+        "canonical_net_count": 526,
+        "cross_sheet_net_count": 124
+      },
+      {
+        "id": "L2-DISP-ADP-001-B",
+        "root": "ADP_00_DISPLAY_ADAPTER",
+        "sheet_count": 1,
+        "populated_sheet_count": 1,
+        "instance_count": 2,
+        "physical_symbol_pin_count": 90,
+        "external_module_interface_count": 0,
+        "canonical_net_count": 27,
+        "cross_sheet_net_count": 0
+      }
+    ],
+    "summary": {
+      "project_count": 3,
+      "project_graph_sheet_count": 23,
+      "populated_sheet_count": 19,
+      "fitted_symbol_instance_count": 1187,
+      "physical_symbol_pin_count": 4327,
+      "connected_physical_pin_count": 4067,
+      "explicit_no_connect_physical_pin_count": 260,
+      "external_module_interface_annotation_count": 5,
+      "canonical_net_count": 827,
+      "generated_file_count": 32,
+      "pcb_file_count": 0
+    },
+    "authorization": {
+      "native_kicad_project_creation": true,
+      "native_schematic_symbols_and_nets": true,
+      "pcb_placement_or_routing": false,
+      "fabrication": false,
+      "ordering": false
+    }
+  },
+  "h2_hwfw_reconciliation": {
+    "stage": "H2-R2.1.4",
+    "status": "pass",
+    "summary": {
+      "domain_count": 6,
+      "controller_pin_rows": 173,
+      "exact_pin_rows": 147,
+      "conditioned_boundary_rows": 14,
+      "explicit_reserve_no_connect_rows": 12,
+      "cross_project_net_count": 50,
+      "cross_sheet_net_count": 233,
+      "errors": 0
+    },
+    "source_sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157",
+    "m1_source_sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
+  },
   "hub_gpio_budget": {
     "available": 48,
-    "used": 46,
-    "reserve": 2,
+    "used": 47,
+    "reserve": 1,
     "reserve_gpios": [
-      6,
       47
     ]
   },
@@ -2920,11 +3006,11 @@
     },
     {
       "gpio": 6,
-      "net": "HUB_RESERVE_6",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "endpoint": "test pad only",
-      "gate": "input/high-Z; external pull-down; DNP"
+      "net": "HUB_AON_ALERT_N",
+      "peripheral": "GPIO_IRQ",
+      "direction": "in",
+      "endpoint": "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+      "gate": "input; AON-local 10-kohm pull-up"
     },
     {
       "gpio": 7,
@@ -3350,12 +3436,9 @@
   },
   "rear_gpio_budget": {
     "available": 48,
-    "used": 40,
-    "reserve": 8,
+    "used": 43,
+    "reserve": 5,
     "reserve_gpios": [
-      15,
-      28,
-      29,
       32,
       33,
       34,
@@ -3401,7 +3484,7 @@
       "net": "REAR_I2C_SDA",
       "peripheral": "I2C0",
       "direction": "io",
-      "endpoint": "codec/Si4732/Airband/headset slow-control bus",
+      "endpoint": "codec/Si4732/headset slow-control bus",
       "gate": "input/open-drain released; external pull-up"
     },
     {
@@ -3409,7 +3492,7 @@
       "net": "REAR_I2C_SCL",
       "peripheral": "I2C0",
       "direction": "od",
-      "endpoint": "codec/Si4732/Airband/headset slow-control bus",
+      "endpoint": "codec/Si4732/headset slow-control bus",
       "gate": "input/open-drain released; external pull-up"
     },
     {
@@ -3486,11 +3569,11 @@
     },
     {
       "gpio": 15,
-      "net": "RF_RESERVE_15",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "endpoint": "test pad only",
-      "gate": "input/high-Z; external pull-down; DNP"
+      "net": "RF_SLOW_IO_ALERT",
+      "peripheral": "GPIO_IRQ",
+      "direction": "in",
+      "endpoint": "Schmitt-conditioned rear-local shared interrupt from TCA6424/voice/headset",
+      "gate": "input; raw wired interrupt has a 10-kohm 3V3_MAIN pull-up"
     },
     {
       "gpio": 16,
@@ -3590,19 +3673,19 @@
     },
     {
       "gpio": 28,
-      "net": "RF_RESERVE_28",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "endpoint": "test pad only",
-      "gate": "input/high-Z; external pull-down; DNP"
+      "net": "AIR_LO_I2C_SDA",
+      "peripheral": "PIO2_SM2_AIR_I2C",
+      "direction": "io",
+      "endpoint": "power-coherent private Si5351 SDA",
+      "gate": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
     },
     {
       "gpio": 29,
-      "net": "RF_RESERVE_29",
-      "peripheral": "GPIO",
-      "direction": "reserve",
-      "endpoint": "test pad only",
-      "gate": "input/high-Z; external pull-down; DNP"
+      "net": "AIR_LO_I2C_SCL",
+      "peripheral": "PIO2_SM2_AIR_I2C",
+      "direction": "od",
+      "endpoint": "power-coherent private Si5351 SCL",
+      "gate": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
     },
     {
       "gpio": 30,
@@ -3752,8 +3835,8 @@
   "rear_resource_budget": {
     "pio": {
       "available_state_machines": 12,
-      "used_state_machines": 6,
-      "reserve_state_machines": 6,
+      "used_state_machines": 7,
+      "reserve_state_machines": 5,
       "allocations": [
         {
           "resource": "PIO0_SM0",
@@ -3778,6 +3861,10 @@
         {
           "resource": "PIO2_SM1",
           "consumer": "isolated M5 Unit UART receive profile; idle in I2C/GPIO profiles"
+        },
+        {
+          "resource": "PIO2_SM2",
+          "consumer": "power-coherent private Airband Si5351 I2C"
         }
       ],
       "gpio_windows": [
@@ -4009,7 +4096,7 @@
   },
   "interboard": {
     "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
-    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 24 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and sixteen NC contacts.",
+    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 29 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and eleven true NC contacts.",
     "locality_contract": {
       "rule": "Every payload endpoint stays on the board that owns its controller. M1 carries no display bus, nRF/SPI payload, microSD payload, main RF trace or audio stream.",
       "intentional_crossings": {
@@ -4049,11 +4136,11 @@
     ],
     "current_budget": {
       "positions": 80,
-      "live_signals": 24,
+      "live_signals": 29,
       "main_power": 14,
       "aon_power": 2,
       "returns": 24,
-      "no_connect_reserve": 16
+      "no_connect_reserve": 11
     },
     "main_current": {
       "continuous_a": 3.75,
@@ -4336,28 +4423,28 @@
       },
       {
         "contact": 55,
-        "net": "NC_55",
-        "class": "reserve"
+        "net": "C5_MUX_SEL_REQUEST",
+        "class": "aon_service_control"
       },
       {
         "contact": 56,
-        "net": "NC_56",
-        "class": "reserve"
+        "net": "C5_SERVICE_PATH_ACK",
+        "class": "aon_service_control"
       },
       {
         "contact": 57,
-        "net": "NC_57",
-        "class": "reserve"
+        "net": "AON_SERVICE_RELEASE_REQ",
+        "class": "aon_service_control"
       },
       {
         "contact": 58,
-        "net": "NC_58",
-        "class": "reserve"
+        "net": "C5_SERVICE_OWNED",
+        "class": "aon_service_status"
       },
       {
         "contact": 59,
-        "net": "NC_59",
-        "class": "reserve"
+        "net": "HUB_AON_ALERT_N",
+        "class": "aon_status"
       },
       {
         "contact": 60,
@@ -4466,7 +4553,7 @@
       }
     ],
     "mechanical_load_path": "M1 is electrical/alignment only. Four 11.00-mm compression stops, two anti-shear enclosure datums and independent front/rear PCB capture lips constrain the boards when one screw is loose; no drop, installation or enclosure-bending load is accepted through the SMT joints.",
-    "result": "R2 uses 24 live signals, fourteen 3V3_MAIN contacts, twenty-four defined returns, two AON contacts and sixteen true NC reserve contacts; no obsolete audio, video or M5 signal remains assigned."
+    "result": "R2 uses 29 live signals, fourteen 3V3_MAIN contacts, twenty-four defined returns, two AON contacts and eleven true NC reserve contacts; five former reserves now carry only low-speed AON service/alert state, and no obsolete audio, video or M5 signal remains assigned."
   },
   "display": {
     "panel": "EastRising ER-TFT035IPS-6 configured with ER-TPC035-6 capacitive touch; ILI9488 + FT6236",
@@ -4478,7 +4565,7 @@
     "payload_mb_s": 24.0,
     "full_frame_bytes": 307200,
     "full_frame_wire_ms": 12.8,
-    "gpio_closure": "Twenty-two of 33 exposed S3 GPIO are assigned: 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder and 1 wired-OR UI/Hub alert. Eleven former video-capture pins are uncommitted reserves. TE and backlight PWM consume Hub GPIO45/46 instead of S3 pins.",
+    "gpio_closure": "Twenty-seven of 33 exposed S3 GPIO are assigned: 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder, 1 wired-OR UI/Hub alert, BOOT, display reset, touch reset and 2 service-UART lines. Six GPIO remain uncommitted reserves. TE and backlight PWM consume Hub GPIO45/46 instead of S3 pins.",
     "fallback": "The exact 50-contact panel also exposes ILI9488 4-wire serial mode. A deliberate adapter strap revision can select it only as first-prototype recovery if the i8080 timing gate fails; it is ordinary serial SPI, not QSPI, and is not the preferred interface.",
     "maximality_result": "Direct i8080-8 at the exact panel-safe 24 MHz is 1.2x faster than the former 40-MHz four-lane QSPI wire rate without adding a processor, moving buttons off S3 or sharing display traffic with storage/radio IPC.",
     "hil": "Before fabrication, compile and run the LCD_TX DMA harness on the emulator-supported register model. H5 then proves ILI9488 IM straps, 24-MHz edges, TE timestamp latency and full-frame/dirty-region timing; 25 MHz is the controller limit and never assumed as a production clock."
@@ -4499,7 +4586,7 @@
       87.0,
       106.0
     ],
-    "i2c": "SI5351A-B-GTR joins the isolated rear-RP-local I2C bus at address 0x60; it does not share S3 UI I2C",
+    "i2c": "SI5351A-B-GTR uses a private PIO-I2C pair on RF-RP GPIO28/29 with pull-ups powered only by 3V3_AIR_SWITCHED; it cannot back-power from the common rear or S3 UI buses",
     "gp35": "AIR_RX_EN is pulled low and removes the Airband RF/LO domain when unused",
     "gp36": "AIR_RX_MODE defaults to the direct FM/SW path before rear-RP firmware starts",
     "included": [
@@ -4555,9 +4642,11 @@
     "pack_safety_powered_off_boundary_accepted": true,
     "native_r2_inventory_imported": true,
     "exact_component_ledger_imported": true,
+    "native_kicad_imported": true,
+    "h2_hwfw_reconciliation_imported": true,
     "r1_f4_1_2_is_current_authority": false,
-    "h2_closed": false,
-    "kicad_authorized": false,
+    "h2_closed": true,
+    "kicad_authorized": true,
     "target_transport_implemented": false,
     "physical_or_hil_execution": false
   }

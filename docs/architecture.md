@@ -46,8 +46,8 @@ The H1-R2.37 physical orientation points the display flex toward the antenna edg
 the S3 display/touch driver therefore applies one 180-degree transform to both
 ILI9488 memory addressing and FT6236 touch coordinates. Normal display traffic
 uses i8080-8; ordinary 4-wire serial is a recovery strap, not QSPI.
-The exact M1 map defines all 80 contacts: 24 live signals, 14 main-power, 2 AON,
-24 returns and 16 NC reserves. M1 is electrical/alignment-only; enclosure stops,
+The exact M1 map defines all 80 contacts: 29 live signals, 14 main-power, 2 AON,
+24 returns and 11 true NC reserves. M1 is electrical/alignment-only; enclosure stops,
 anti-shear datums and PCB capture carry impact and bending loads.
 
 `BROADCAST_RX` is rear-RP-owned and mutually exclusive with other top-level signal

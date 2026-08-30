@@ -51,12 +51,12 @@ static const l2_r2_pin_t l2_r2_hub_rp_pins[] = {
         .direction = L2_R2_DIRECTION_OPEN_DRAIN,
     },
     {
-        .net = "HUB_RESERVE_6",
-        .peripheral = "GPIO",
-        .endpoint = "test pad only",
-        .gate = "input/high-Z; external pull-down; DNP",
+        .net = "HUB_AON_ALERT_N",
+        .peripheral = "GPIO_IRQ",
+        .endpoint = "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+        .gate = "input; AON-local 10-kohm pull-up",
         .gpio = UINT8_C(6),
-        .direction = L2_R2_DIRECTION_RESERVED,
+        .direction = L2_R2_DIRECTION_INPUT,
     },
     {
         .net = "C5_SDIO_CLK",

@@ -94,7 +94,8 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
-and reviewed `H1-R2.37`; its current point is `H2-R2.1.3`,
+and reviewed `H1-R2.37`; H2 is reviewed at `H2-R2.1.5` and the current hardware
+point is `H3-R2.0.1`,
 while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
@@ -103,8 +104,8 @@ eight exact TX detectors, five required couplers and eight bounded local
 evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-route changes save hardware cost without altering any
 firmware-visible net or behavior. The 2026-08-30 cost decision retains every current top-20 hardware group and permanently assigns separate
 `ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct 24-MHz i8080-8 path to
-exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Eleven
-former video GPIOs remain reserves. M1 has an exact 80-contact map with 16 NC
+exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Six S3
+GPIOs remain uncommitted after reset/service closure. M1 has an exact 80-contact map with 11 true NC
 reserves and a separate enclosure load path.
 The display is physically oriented with its flex toward the antenna edge; F5/F6
 must rotate ILI9488 memory orientation and FT6236 touch coordinates by 180 degrees.
@@ -125,18 +126,17 @@ mockup passes its structural audit and was accepted on 2026-08-30. Hardware
 reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed three native projects, 23 sheets,
-six domain owners and 213 exact MPN groups without creating symbols or nets.
-`H2-R2.1.2` reviewed exact identities for 208 board groups, five explicit
-non-PCBA groups and 1,561 logical contacts. The `H2-R2.1.3` contact checkpoint
-now maps all 1,504 board contacts to real footprint pads or three explicit
-on-module RF interfaces with every named pad accounted for. Controlled R2
-library generation has now produced 208 symbols and 1,518 unique PCB-pad pins
-and passes KiCad 10. All 1,096 fitted instances are allocated across the three
-native projects without importing R1 designators. Hardware has now reconciled
-all 4,053 fitted-instance contacts to 3,814 connected endpoints, 239 explicit
-board no-connects and 908 canonical nets with zero unresolved endpoints;
-creating the three native KiCad projects is current. Schematic export/KiCad placement
-has not started, and R2 byte reproducibility
+six domain owners, 242 exact MPN groups and 1,197 product positions.
+`H2-R2.1.2` reviewed exact identities for 237 board groups, five explicit
+non-PCBA groups and 1,662 logical contacts. `H2-R2.1.3` materialized 1,187
+fitted positions and 4,327 physical pins in the three native KiCad projects.
+All 4,323 logical contacts reconcile into 4,063 connected endpoints, 260
+explicit no-connects and 827 canonical nets; all three projects pass KiCad ERC
+with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
+173 controller pins, 50 cross-project nets and 233 cross-sheet nets; the
+reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
+inputs. Placement/routing has not started,
+and R2 byte reproducibility
 and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position

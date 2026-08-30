@@ -59,7 +59,7 @@ class R2H2SyncGateTests(unittest.TestCase):
         bsp["integration_contract"] = copy.deepcopy(integration)
         return h0, bsp, integration
 
-    def test_current_single_rp_h2_import_keeps_the_gate_closed(self):
+    def test_current_six_domain_h2_import_keeps_the_gate_open(self):
         result = subprocess.run(
             [sys.executable, str(CHECKER_PATH)],
             cwd=ROOT,
@@ -69,8 +69,8 @@ class R2H2SyncGateTests(unittest.TestCase):
             stderr=subprocess.STDOUT,
         )
         self.assertEqual(0, result.returncode, result.stdout)
-        self.assertIn("R2/H2 sync gate CLOSED", result.stdout)
-        self.assertFalse(self.gate["r2_h2_synchronized"])
+        self.assertIn("R2/H2 sync gate OPEN", result.stdout)
+        self.assertTrue(self.gate["r2_h2_synchronized"])
         self.assertEqual([], self.checker.check(self.gate, self.h0, self.bsp, self.integration))
         self.assertEqual("H1-R2.37", self.h0["physical_h1"]["marker"])
         self.assertEqual(
@@ -95,7 +95,9 @@ class R2H2SyncGateTests(unittest.TestCase):
         gate["r2_h2_synchronized"] = True
         gate["claims"]["six_domain_h2_export_available"] = True
         gate["claims"]["r2_h2_ecad_and_firmware_synchronized"] = True
-        errors = self.checker.check(gate, self.h0, self.bsp, self.integration)
+        bsp = copy.deepcopy(self.bsp)
+        bsp["bsp"]["domains"].pop()
+        errors = self.checker.check(gate, self.h0, bsp, self.integration)
         self.assertIn(
             "R2/H2 synchronization claim does not match the candidate H2 export",
             errors,

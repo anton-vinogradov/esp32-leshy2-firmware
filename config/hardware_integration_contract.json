@@ -1,416 +1,5354 @@
 {
-  "schema": 2,
-  "contract_id": "LESHY2-HWFW-1",
-  "review_status": "h2_0_3_reviewed",
-  "hardware_architecture": "G2F-3I",
-  "protocol": {
-    "name": "L2IP",
-    "major": 1,
-    "minor": 0
+  "schema_version": 3,
+  "contract_id": "LESHY2-HWFW-R2",
+  "status": "reviewed_native_h2_r2",
+  "authority": {
+    "baseline": "R2",
+    "lifecycle": "current_native_six_domain_h2",
+    "allowed_as_r2_authority": true,
+    "source": "config/h0_r2_hardware_contract.json",
+    "r2_sync_gate": "config/r2_h2_sync_gate.json"
   },
   "controllers": [
     {
-      "domain": "S3",
-      "instance": "s3",
-      "mpn": "ESP32-S3-WROOM-1U-N16R8"
+      "id": "s3",
+      "mpn": "ESP32-S3-WROOM-1U-N16R8",
+      "pin_map": [
+        {
+          "gpio": 0,
+          "net": "S3_BOOT_N",
+          "peripheral": "BOOT_STRAP",
+          "direction": "in",
+          "gate": "10-kohm pull-up plus recessed BOOT control and DBG10 series path"
+        },
+        {
+          "gpio": 1,
+          "net": "SYS_UI_I2C_SDA",
+          "peripheral": "I2C0",
+          "direction": "io"
+        },
+        {
+          "gpio": 2,
+          "net": "SYS_UI_I2C_SCL",
+          "peripheral": "I2C0",
+          "direction": "out"
+        },
+        {
+          "gpio": 3,
+          "net": "UI_HUB_ALERT_N",
+          "peripheral": "GPIO_IRQ",
+          "direction": "in",
+          "gate": "wired-OR open-drain UI/touch/fault sources plus Hub RP; Hub held reset/high-Z through strap sampling"
+        },
+        {
+          "gpio": 4,
+          "net": "LCD_DB0",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 5,
+          "net": "LCD_RST_N",
+          "peripheral": "GPIO",
+          "direction": "out",
+          "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
+        },
+        {
+          "gpio": 6,
+          "net": "TOUCH_RST_N",
+          "peripheral": "GPIO",
+          "direction": "out",
+          "gate": "direct touch-controller reset; reset-time pull-down keeps touch disabled"
+        },
+        {
+          "gpio": 7,
+          "net": "S3_UART_SERVICE_TX",
+          "peripheral": "UART1_TX",
+          "direction": "out",
+          "gate": "DBG10 series path; idle high only after strap sampling"
+        },
+        {
+          "gpio": 8,
+          "net": "S3_UART_SERVICE_RX",
+          "peripheral": "UART1_RX",
+          "direction": "in",
+          "gate": "DBG10 series path with fixture-side protection"
+        },
+        {
+          "gpio": 9,
+          "net": "LCD_DB1",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 10,
+          "net": "S3_RESERVE_10",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 11,
+          "net": "S3_RESERVE_11",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 12,
+          "net": "S3_RESERVE_12",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 13,
+          "net": "S3_RESERVE_13",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 14,
+          "net": "S3_HUB_D1",
+          "peripheral": "SPI3",
+          "direction": "io"
+        },
+        {
+          "gpio": 15,
+          "net": "S3_RESERVE_15",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 16,
+          "net": "S3_RESERVE_16",
+          "peripheral": "GPIO",
+          "direction": "reserve",
+          "gate": "test pad only"
+        },
+        {
+          "gpio": 17,
+          "net": "LCD_WR_N",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 18,
+          "net": "LCD_DB2",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 19,
+          "net": "S3_USB_DM_LOCAL",
+          "peripheral": "USB_SERIAL_JTAG",
+          "direction": "io"
+        },
+        {
+          "gpio": 20,
+          "net": "S3_USB_DP_LOCAL",
+          "peripheral": "USB_SERIAL_JTAG",
+          "direction": "io"
+        },
+        {
+          "gpio": 21,
+          "net": "S3_HUB_D0",
+          "peripheral": "SPI3",
+          "direction": "io"
+        },
+        {
+          "gpio": 38,
+          "net": "LCD_DB3",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 39,
+          "net": "ENCODER_A",
+          "peripheral": "PCNT0",
+          "direction": "in"
+        },
+        {
+          "gpio": 40,
+          "net": "LCD_DB4",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 41,
+          "net": "LCD_DB5",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 42,
+          "net": "LCD_DB6",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out"
+        },
+        {
+          "gpio": 43,
+          "net": "S3_HUB_D2",
+          "peripheral": "SPI3",
+          "direction": "io"
+        },
+        {
+          "gpio": 44,
+          "net": "S3_HUB_D3",
+          "peripheral": "SPI3",
+          "direction": "io"
+        },
+        {
+          "gpio": 45,
+          "net": "LCD_DC",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out",
+          "gate": "panel stays reset and an external strap pull preserves GPIO45 through boot sampling"
+        },
+        {
+          "gpio": 46,
+          "net": "LCD_DB7",
+          "peripheral": "LCD_CAM_TX",
+          "direction": "out",
+          "gate": "panel stays reset and an external strap pull preserves GPIO46 through boot sampling"
+        },
+        {
+          "gpio": 47,
+          "net": "ENCODER_B",
+          "peripheral": "PCNT0",
+          "direction": "in"
+        },
+        {
+          "gpio": 48,
+          "net": "S3_HUB_SCK",
+          "peripheral": "SPI3",
+          "direction": "out"
+        }
+      ]
     },
     {
-      "domain": "C5",
-      "instance": "c5",
-      "mpn": "ESP32-C5-WROOM-1U-N8R8"
+      "id": "c5",
+      "mpn": "ESP32-C5-WROOM-1U-N8R8",
+      "pin_map": [
+        {
+          "instance": "c5",
+          "contact": "GPIO0",
+          "net": "IR_RX_DEMOD",
+          "direction": "i",
+          "controller": "RMT_RX0",
+          "peers": [
+            "ir_demod_series.END_2",
+            "ir_demod_host_pullup.END_1"
+          ],
+          "sharing_proof": "dedicated active-low demodulated-envelope input remains idle-high behind an Ioff buffer when the receive rail is off"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO1",
+          "net": "IR_RX_CARRIER",
+          "direction": "i",
+          "controller": "RMT_RX1",
+          "peers": [
+            "ir_carrier_series.END_2",
+            "ir_carrier_host_pullup.END_1"
+          ],
+          "sharing_proof": "dedicated active-low carrier-cycle input remains idle-high behind a separate Ioff-buffer channel when the receive rail is off"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO4",
+          "net": "IR_FRONTEND_PWR_EN",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "ir_power_switch.ON",
+            "ir_power_on_pulldown.END_1"
+          ],
+          "reset_proof": "external 10-kOhm pull-down and TPS22919 QOD keep both receive paths discharged until explicit admission"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO6",
+          "net": "IR_TX_CARRIER",
+          "direction": "o",
+          "controller": "RMT_TX0",
+          "peers": [
+            "ir_safe_gate.A"
+          ]
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO7",
+          "net": "C5_SDIO_D1",
+          "signal": "SDIO_DAT1",
+          "direction": "io",
+          "controller": "SDIO_SLAVE",
+          "module_pad": 9,
+          "muxed_with_usb": false,
+          "strap_role": "JTAG source",
+          "endpoint": "Hub RP native 4-bit SDIO"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO8",
+          "net": "C5_SDIO_D0",
+          "signal": "SDIO_DAT0",
+          "direction": "io",
+          "controller": "SDIO_SLAVE",
+          "module_pad": 10,
+          "muxed_with_usb": false,
+          "strap_role": null,
+          "endpoint": "Hub RP native 4-bit SDIO"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO9",
+          "net": "C5_SDIO_CLK",
+          "signal": "SDIO_CLK",
+          "direction": "i",
+          "controller": "SDIO_SLAVE",
+          "module_pad": 11,
+          "muxed_with_usb": false,
+          "strap_role": null,
+          "endpoint": "Hub RP native 4-bit SDIO"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO10",
+          "net": "C5_SDIO_CMD",
+          "signal": "SDIO_CMD",
+          "direction": "io",
+          "controller": "SDIO_SLAVE",
+          "module_pad": 12,
+          "muxed_with_usb": false,
+          "strap_role": null,
+          "endpoint": "Hub RP native 4-bit SDIO"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO11",
+          "net": "C5_UART_SERVICE_TX",
+          "direction": "o",
+          "controller": "UART0",
+          "peers": [
+            "c5_dbg0_series.END_2"
+          ]
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO12",
+          "net": "C5_UART_SERVICE_RX",
+          "direction": "i",
+          "controller": "UART0",
+          "peers": [
+            "c5_dbg1_series.END_2"
+          ]
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO13",
+          "net": "C5_SDIO_D3_USB_DM",
+          "signal": "SDIO_DAT3_USB_DM",
+          "direction": "io",
+          "controller": "SDIO_SLAVE_OR_USB_SERIAL_JTAG",
+          "module_pad": 13,
+          "muxed_with_usb": true,
+          "strap_role": null,
+          "endpoint": "Hub RP native 4-bit SDIO through FSUSB42 service mux"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO14",
+          "net": "C5_SDIO_D2_USB_DP",
+          "signal": "SDIO_DAT2_USB_DP",
+          "direction": "io",
+          "controller": "SDIO_SLAVE_OR_USB_SERIAL_JTAG",
+          "module_pad": 14,
+          "muxed_with_usb": true,
+          "strap_role": null,
+          "endpoint": "Hub RP native 4-bit SDIO through FSUSB42 service mux"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO23",
+          "net": "C5_RF_TX_EVIDENCE_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "evidence_main_isolator.1Y",
+            "c5_evidence_main_pullup.END_2"
+          ],
+          "sharing_proof": "AON-powered open-drain isolator preserves active-low evidence while the separate 3V3_MAIN pull-up prevents positive injection when C5 is unpowered"
+        },
+        {
+          "instance": "c5",
+          "contact": "GPIO24",
+          "net": "IR_TX_EVIDENCE_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "evidence_main_isolator.2Y",
+            "ir_evidence_main_pullup.END_2"
+          ],
+          "sharing_proof": "AON-powered open-drain isolator preserves active-low evidence while the separate 3V3_MAIN pull-up prevents positive injection when C5 is unpowered"
+        }
+      ]
     },
     {
-      "domain": "RP",
-      "instance": "rp",
-      "mpn": "SC1512-A4"
+      "id": "rf_rp",
+      "mpn": "SC1512-A4",
+      "pin_map": [
+        {
+          "gpio": 0,
+          "net": "AUDIO_BCLK",
+          "direction": "out",
+          "controller": "PIO1_SM0_I2S_TX",
+          "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 BCLK",
+          "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+        },
+        {
+          "gpio": 1,
+          "net": "AUDIO_WS",
+          "direction": "out",
+          "controller": "PIO1_SM0_I2S_TX",
+          "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 LRCK",
+          "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+        },
+        {
+          "gpio": 2,
+          "net": "AUDIO_DOUT",
+          "direction": "out",
+          "controller": "PIO1_SM0_I2S_TX",
+          "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 SDIN",
+          "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+        },
+        {
+          "gpio": 3,
+          "net": "AUDIO_DIN",
+          "direction": "in",
+          "controller": "PIO1_SM1_I2S_RX",
+          "endpoint": "ES8311 SDOUT -> SN74LVC1G126DCKR Ioff isolation",
+          "reset": "input; external pull-down; host-side isolation OE low"
+        },
+        {
+          "gpio": 4,
+          "net": "REAR_I2C_SDA",
+          "direction": "io",
+          "controller": "I2C0",
+          "endpoint": "codec/Si4732/headset slow-control bus",
+          "reset": "input/open-drain released; external pull-up"
+        },
+        {
+          "gpio": 5,
+          "net": "REAR_I2C_SCL",
+          "direction": "od",
+          "controller": "I2C0",
+          "endpoint": "codec/Si4732/headset slow-control bus",
+          "reset": "input/open-drain released; external pull-up"
+        },
+        {
+          "gpio": 6,
+          "net": "AUDIO_ARM",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "audio reset-safe selector gate",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 7,
+          "net": "M5_UNIT_SIG0",
+          "direction": "io",
+          "controller": "PIO2_SM0_1_M5_PROFILE",
+          "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+          "reset": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+        },
+        {
+          "gpio": 8,
+          "net": "M5_UNIT_SIG1",
+          "direction": "io",
+          "controller": "PIO2_SM0_1_M5_PROFILE",
+          "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+          "reset": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+        },
+        {
+          "gpio": 9,
+          "net": "CC_CSN_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "CC1101 command buffer",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 10,
+          "net": "CC_GDO0",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "CC1101 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 11,
+          "net": "CC_GDO2",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "CC1101 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 12,
+          "net": "CAP_PIN10_BUSY_OR_NFC_CS_N",
+          "direction": "io",
+          "controller": "GPIO_IRQ_OR_OUTPUT_PROFILE",
+          "endpoint": "SN74CBTLV1G125: U214 BUSY input or U219 NFC_CS_N output",
+          "reset": "input/high-Z; AON /OE pull-up disconnects pin 10; U219 profile drives inactive high before POWER_EN"
+        },
+        {
+          "gpio": 13,
+          "net": "CAP_IRQ",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "exact-one profile return buffer: U214 DIO1 or U219 NFC_IRQ; polarity interpreted only by the signed profile",
+          "reset": "input; external pull-down; accessory branch remains off"
+        },
+        {
+          "gpio": 14,
+          "net": "CAP_RESET_N_OR_POWER_EN",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "exact-one profile command buffer: U214 RESET_N or U219 POWER_EN",
+          "reset": "input/high-Z; external pull-down holds U214 reset and U219 power disabled"
+        },
+        {
+          "gpio": 15,
+          "net": "RF_SLOW_IO_ALERT",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "Schmitt-conditioned rear-local shared interrupt from TCA6424/voice/headset",
+          "reset": "input; raw wired interrupt has a 10-kohm 3V3_MAIN pull-up"
+        },
+        {
+          "gpio": 16,
+          "net": "VOICE_UART_TX",
+          "direction": "out",
+          "controller": "UART0",
+          "endpoint": "SA818S-U/V selected command path",
+          "reset": "input/high-Z; external pull-up keeps UART idle"
+        },
+        {
+          "gpio": 17,
+          "net": "VOICE_UART_RX",
+          "direction": "in",
+          "controller": "UART0",
+          "endpoint": "SA818S-U/V selected response path",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 18,
+          "net": "VOICE_PTT_REQ_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "FAULT_KILL-dominant voice PTT gate",
+          "reset": "input/high-Z; external pull-up inhibits TX"
+        },
+        {
+          "gpio": 19,
+          "net": "HUB_RF_ALERT_N",
+          "direction": "od",
+          "controller": "GPIO_IRQ",
+          "endpoint": "M1.22 -> Hub RP GPIO17",
+          "reset": "released/high-Z; external pull-up"
+        },
+        {
+          "gpio": 20,
+          "net": "VOICE_AUDIO_ON_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "voice audio activity selector",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 21,
+          "net": "PTT_BUTTON_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "direct user PTT",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 22,
+          "net": "RF_ANY_TX_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "wired actual-TX evidence",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 23,
+          "net": "CC_PWR_EN",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "CC1101 rail switch",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 24,
+          "net": "HUB_RF_MOSI",
+          "direction": "in",
+          "controller": "SPI1",
+          "endpoint": "M1.26 <- Hub RP GPIO14",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 25,
+          "net": "HUB_RF_CS_N",
+          "direction": "in",
+          "controller": "SPI1",
+          "endpoint": "M1.23 <- Hub RP GPIO16",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 26,
+          "net": "HUB_RF_SCK",
+          "direction": "in",
+          "controller": "SPI1",
+          "endpoint": "M1.24 <- Hub RP GPIO13",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 27,
+          "net": "HUB_RF_MISO",
+          "direction": "out",
+          "controller": "SPI1",
+          "endpoint": "M1.27 -> Hub RP GPIO15",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 28,
+          "net": "AIR_LO_I2C_SDA",
+          "direction": "io",
+          "controller": "PIO2_SM2_AIR_I2C",
+          "endpoint": "power-coherent private Si5351 SDA",
+          "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+        },
+        {
+          "gpio": 29,
+          "net": "AIR_LO_I2C_SCL",
+          "direction": "od",
+          "controller": "PIO2_SM2_AIR_I2C",
+          "endpoint": "power-coherent private Si5351 SCL",
+          "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+        },
+        {
+          "gpio": 30,
+          "net": "CAP_I2C_SDA",
+          "direction": "io",
+          "controller": "I2C1",
+          "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 4 SDA",
+          "reset": "input/open-drain released; external pull-up; isolator disabled"
+        },
+        {
+          "gpio": 31,
+          "net": "CAP_I2C_SCL",
+          "direction": "od",
+          "controller": "I2C1",
+          "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 3 SCL",
+          "reset": "input/open-drain released; external pull-up; isolator disabled"
+        },
+        {
+          "gpio": 32,
+          "net": "RF_RESERVE_32",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        },
+        {
+          "gpio": 33,
+          "net": "RF_RESERVE_33",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        },
+        {
+          "gpio": 34,
+          "net": "RF_RESERVE_34",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        },
+        {
+          "gpio": 35,
+          "net": "AIR_RX_EN",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "Airband switched rail and LT5560 enable",
+          "reset": "input/high-Z; external pull-down disables converted path"
+        },
+        {
+          "gpio": 36,
+          "net": "AIR_RX_MODE",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "direct FM/SW versus converted-Airband selector",
+          "reset": "input/high-Z; external pull-down selects direct FM/SW"
+        },
+        {
+          "gpio": 37,
+          "net": "RF_RESERVE_37",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        },
+        {
+          "gpio": 38,
+          "net": "RF_RESERVE_38",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        },
+        {
+          "gpio": 39,
+          "net": "CC_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM0_CC_SPI",
+          "endpoint": "CC1101 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 40,
+          "net": "CAP_GNSS_TX_OR_RF_SW0",
+          "direction": "out",
+          "controller": "UART1_OR_GPIO_PROFILE",
+          "endpoint": "exact-one profile: U214 GNSS RX or U219 RF_SW0",
+          "reset": "input/high-Z; external pull-down until signed profile admission"
+        },
+        {
+          "gpio": 41,
+          "net": "CAP_GNSS_RX_OR_CC_GDO0",
+          "direction": "in",
+          "controller": "UART1_OR_GPIO_IRQ_PROFILE",
+          "endpoint": "exact-one profile return: U214 GNSS TX or U219 CC1101 GDO0",
+          "reset": "input; external pull-down; accessory branch remains off"
+        },
+        {
+          "gpio": 42,
+          "net": "CC_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM0_CC_SPI",
+          "endpoint": "CC1101 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 43,
+          "net": "CC_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM0_CC_SPI",
+          "endpoint": "CC1101 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 44,
+          "net": "CAP_SPI_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM1_CAP_SPI",
+          "endpoint": "exact-one profile return: U214 MISO or U219 shared MISO",
+          "reset": "input; external pull-down; accessory branch remains off"
+        },
+        {
+          "gpio": 45,
+          "net": "CAP_SPI_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM1_CAP_SPI",
+          "endpoint": "exact-one profile command: U214 SCK or U219 shared SCLK",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 46,
+          "net": "CAP_SPI_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM1_CAP_SPI",
+          "endpoint": "exact-one profile command: U214 MOSI or U219 shared MOSI",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 47,
+          "net": "CAP_SPI_PRIMARY_CS_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "exact-one profile command: U214 NSS_N or U219 CC1101_CS_N",
+          "reset": "input/high-Z; external pull-up keeps either profile deselected"
+        }
+      ]
     },
     {
-      "domain": "PACK",
-      "instance": "pack_admission",
-      "mpn": "Texas Instruments MSPM0C1106SDGS20R"
+      "id": "hub_rp",
+      "mpn": "SC1512-A4",
+      "pin_map": [
+        {
+          "gpio": 0,
+          "net": "S3_HUB_D0",
+          "direction": "io",
+          "controller": "PIO1_SM0_S3_QUAD",
+          "endpoint": "S3 GPIO21",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 1,
+          "net": "S3_HUB_D1",
+          "direction": "io",
+          "controller": "PIO1_SM0_S3_QUAD",
+          "endpoint": "S3 GPIO14",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 2,
+          "net": "S3_HUB_D2",
+          "direction": "io",
+          "controller": "PIO1_SM0_S3_QUAD",
+          "endpoint": "S3 GPIO43 through ROM-UART isolation",
+          "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+        },
+        {
+          "gpio": 3,
+          "net": "S3_HUB_D3",
+          "direction": "io",
+          "controller": "PIO1_SM0_S3_QUAD",
+          "endpoint": "S3 GPIO44 through ROM-UART isolation",
+          "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+        },
+        {
+          "gpio": 4,
+          "net": "S3_HUB_SCK",
+          "direction": "in",
+          "controller": "PIO1_SM0_S3_QUAD",
+          "endpoint": "S3 GPIO48",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 5,
+          "net": "UI_HUB_ALERT_N",
+          "direction": "od",
+          "controller": "GPIO_IRQ",
+          "endpoint": "S3 GPIO3 wired-OR",
+          "reset": "released/high-Z; external pull-up"
+        },
+        {
+          "gpio": 6,
+          "net": "HUB_AON_ALERT_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+          "reset": "input; AON-local 10-kohm pull-up"
+        },
+        {
+          "gpio": 7,
+          "net": "C5_SDIO_CLK",
+          "direction": "out",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "direct series footprint -> C5 GPIO9 / module pad 11",
+          "reset": "input/high-Z; no fitted pull; C5 and Hub held reset until ownership is established"
+        },
+        {
+          "gpio": 8,
+          "net": "C5_SDIO_CMD",
+          "direction": "io",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "direct pull-up/series branch -> C5 GPIO10 / module pad 12",
+          "reset": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+        },
+        {
+          "gpio": 9,
+          "net": "C5_SDIO_D0",
+          "direction": "io",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "direct pull-up/series branch -> C5 GPIO8 / module pad 10",
+          "reset": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+        },
+        {
+          "gpio": 10,
+          "net": "C5_SDIO_D1",
+          "direction": "io",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "direct pull-up/series branch -> C5 GPIO7 / module pad 9",
+          "reset": "input/high-Z; branch-local 10-kohm pull-up also fixes the JTAG-source strap; C5 and Hub held reset"
+        },
+        {
+          "gpio": 11,
+          "net": "C5_SDIO_D2",
+          "direction": "io",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "FSUSB42 HSD2+ -> D+ common -> C5 GPIO14 / module pad 14",
+          "reset": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+        },
+        {
+          "gpio": 12,
+          "net": "C5_SDIO_D3",
+          "direction": "io",
+          "controller": "PIO1_SM1_2_C5_SDIO",
+          "endpoint": "FSUSB42 HSD2- -> D- common -> C5 GPIO13 / module pad 13",
+          "reset": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+        },
+        {
+          "gpio": 13,
+          "net": "HUB_RF_SCK",
+          "direction": "out",
+          "controller": "PIO2_SM0_RF_SPI",
+          "endpoint": "M1.24 -> RF RP GPIO26",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 14,
+          "net": "HUB_RF_MOSI",
+          "direction": "out",
+          "controller": "PIO2_SM0_RF_SPI",
+          "endpoint": "M1.26 -> RF RP GPIO24",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 15,
+          "net": "HUB_RF_MISO",
+          "direction": "in",
+          "controller": "PIO2_SM0_RF_SPI",
+          "endpoint": "M1.27 <- RF RP GPIO27",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 16,
+          "net": "HUB_RF_CS_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "M1.23 -> RF RP GPIO25",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 17,
+          "net": "HUB_RF_ALERT_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "M1.22 <- RF RP GPIO19",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 18,
+          "net": "NRF0_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM0_NRF0_SPI",
+          "endpoint": "nRF24 #0 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 19,
+          "net": "NRF0_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM0_NRF0_SPI",
+          "endpoint": "nRF24 #0 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 20,
+          "net": "NRF0_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM0_NRF0_SPI",
+          "endpoint": "nRF24 #0 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 21,
+          "net": "NRF0_CSN_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #0 command buffer",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 22,
+          "net": "NRF0_CE_REQ",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #0 safety gate",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 23,
+          "net": "NRF0_IRQ_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "nRF24 #0 return buffer",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 24,
+          "net": "NRF1_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM1_NRF1_SPI",
+          "endpoint": "nRF24 #1 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 25,
+          "net": "NRF1_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM1_NRF1_SPI",
+          "endpoint": "nRF24 #1 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 26,
+          "net": "NRF1_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM1_NRF1_SPI",
+          "endpoint": "nRF24 #1 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 27,
+          "net": "NRF1_CSN_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #1 command buffer",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 28,
+          "net": "NRF1_CE_REQ",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #1 safety gate",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 29,
+          "net": "NRF1_IRQ_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "nRF24 #1 return buffer",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 30,
+          "net": "NRF2_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM2_NRF2_SPI",
+          "endpoint": "nRF24 #2 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 31,
+          "net": "NRF2_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM2_NRF2_SPI",
+          "endpoint": "nRF24 #2 command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 32,
+          "net": "NRF2_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM2_NRF2_SPI",
+          "endpoint": "nRF24 #2 return buffer",
+          "reset": "input; external pull-down"
+        },
+        {
+          "gpio": 33,
+          "net": "NRF2_CSN_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #2 command buffer",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 34,
+          "net": "NRF2_CE_REQ",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "nRF24 #2 safety gate",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 35,
+          "net": "NRF2_IRQ_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "nRF24 #2 return buffer",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 36,
+          "net": "NRF_GROUP_PWR_EN",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "FAULT_KILL-dominant nRF rail switch",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 37,
+          "net": "SD_SCK",
+          "direction": "out",
+          "controller": "PIO0_SM3_SD_SPI",
+          "endpoint": "microSD command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 38,
+          "net": "SD_MOSI",
+          "direction": "out",
+          "controller": "PIO0_SM3_SD_SPI",
+          "endpoint": "microSD command buffer",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 39,
+          "net": "SD_MISO",
+          "direction": "in",
+          "controller": "PIO0_SM3_SD_SPI",
+          "endpoint": "microSD return buffer",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 40,
+          "net": "SD_CS_N",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "microSD command buffer",
+          "reset": "input/high-Z; external pull-up"
+        },
+        {
+          "gpio": 41,
+          "net": "SD_PWR_EN",
+          "direction": "out",
+          "controller": "GPIO",
+          "endpoint": "microSD load switch",
+          "reset": "input/high-Z; external pull-down"
+        },
+        {
+          "gpio": 42,
+          "net": "HUB_SAFE_I2C_SDA",
+          "direction": "io",
+          "controller": "I2C1",
+          "endpoint": "TCA9803DGKR SDAA on 3V3_MAIN -> powered-off-Ioff boundary -> SDAB on AON_SAFE_3V3 -> M1.32 -> Pack/Safety mailboxes",
+          "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+        },
+        {
+          "gpio": 43,
+          "net": "HUB_SAFE_I2C_SCL",
+          "direction": "od",
+          "controller": "I2C1",
+          "endpoint": "TCA9803DGKR SCLA on 3V3_MAIN -> powered-off-Ioff boundary -> SCLB on AON_SAFE_3V3 -> M1.33 -> Pack/Safety mailboxes",
+          "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+        },
+        {
+          "gpio": 44,
+          "net": "SD_DETECT_N",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "microSD socket detect",
+          "reset": "input; external pull-up"
+        },
+        {
+          "gpio": 45,
+          "net": "LCD_TE",
+          "direction": "in",
+          "controller": "GPIO_IRQ",
+          "endpoint": "HMX035CTFT-001 TE",
+          "reset": "input; external pull-down while panel reset is asserted"
+        },
+        {
+          "gpio": 46,
+          "net": "LCD_BL_PWM",
+          "direction": "out",
+          "controller": "PWM",
+          "endpoint": "backlight hardware gate",
+          "reset": "input/high-Z; external pull-down keeps backlight off"
+        },
+        {
+          "gpio": 47,
+          "net": "HUB_RESERVE_47",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "test pad only",
+          "reset": "input/high-Z; external pull-down; DNP"
+        }
+      ]
     },
     {
-      "domain": "SAFETY",
-      "instance": "safety_controller",
-      "mpn": "Texas Instruments MSPM0C1106SDGS20R"
+      "id": "pack",
+      "mpn": "MSPM0C1106SDGS20R",
+      "pin_map": [
+        {
+          "instance": "pack_admission",
+          "contact": "PA0",
+          "net": "HUB_SAFE_I2C_SDA",
+          "direction": "io",
+          "controller": "I2C_TARGET",
+          "peers": [
+            "hub_rp.GPIO42",
+            "M1.32"
+          ],
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA2",
+          "net": "PACK_GAUGE_I2C_SCL",
+          "direction": "io",
+          "controller": "BITBANG_I2C",
+          "peers": [
+            "pack_gauge.SCL_OD",
+            "pack_gauge_scl_pullup.END_2"
+          ]
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA4",
+          "net": "PACK_GAUGE_I2C_SDA",
+          "direction": "io",
+          "controller": "BITBANG_I2C",
+          "peers": [
+            "pack_gauge.SDA_DQ",
+            "pack_gauge_sda_pullup.END_2"
+          ]
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA6",
+          "net": "PACK_FET_HOLD_RELEASE",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "pack_hold.G2",
+            "pack_hold_release_pulldown.END_1"
+          ],
+          "reset_proof": "2N7002DW-7-F Q1 asserts ALRT low independently of MCU reset; exact 10-kOhm PA6/Q2-gate pull-down prevents release until complete admission"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA11",
+          "net": "HUB_SAFE_I2C_SCL",
+          "direction": "i",
+          "controller": "I2C_TARGET",
+          "peers": [
+            "hub_rp.GPIO43",
+            "M1.33"
+          ],
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA16",
+          "net": "PACK_PFAIL_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "pack_status_buffer.D1",
+            "pack_pfail_pullup.END_2"
+          ],
+          "reset_proof": "exact 2N7002DW Q1 converts REG3-referenced push-pull PFAIL into an admission-VDD-referenced active-low input without overdriving the standard GPIO"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA17",
+          "net": "PACK_ADMISSION_UART_TX",
+          "direction": "o",
+          "controller": "UART1",
+          "peers": [
+            "abstract:pack service fixture"
+          ]
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA18",
+          "net": "PACK_ADMISSION_UART_RX",
+          "direction": "i",
+          "controller": "UART1",
+          "peers": [
+            "abstract:pack service fixture"
+          ]
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA22",
+          "net": "PACK_DIAG_TRIGGER",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "pack_diag_timer.CH1_T",
+            "pack_diag_trigger_pulldown.END_1"
+          ],
+          "reset_proof": "external pull-down prevents a reset or fixture transition from triggering the non-retriggerable hardware one-shot"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA23",
+          "net": "PACK_SYS_INT_REQ",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "pack_status_buffer.G2",
+            "pack_irq_gate_pulldown.END_1"
+          ],
+          "reset_proof": "exact 10-kOhm gate pull-down keeps 2N7002DW Q2 off through reset; firmware drives PA23 high only to assert the passive-drain shared interrupt"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA24",
+          "net": "POWER_COMMAND_OFF_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "power_command_pullup.END_2",
+            "power_command_filter.END_1",
+            "power_command_switch.THROW_B"
+          ],
+          "reset_proof": "exact 47-kOhm admission-VDD pull-up means ON/open; OFF grounds the filtered low-current command through the maintained switch; no cell, SYS, charge or load current crosses the switch"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA25",
+          "net": "PACK_CELL0_ADC",
+          "direction": "i",
+          "controller": "ADC",
+          "peers": [
+            "pack_mid_adc_top1.END_2",
+            "pack_mid_adc_bottom.END_1",
+            "pack_mid_adc_filter.END_1"
+          ],
+          "reset_proof": "read-only divided midpoint evidence remains below the internal 1.4-V reference at the defined 4.3-V screen corner"
+        },
+        {
+          "instance": "pack_admission",
+          "contact": "PA26",
+          "net": "PACK_STACK_ADC",
+          "direction": "i",
+          "controller": "ADC",
+          "peers": [
+            "pack_stack_adc_top4.END_2",
+            "pack_stack_adc_bottom.END_1",
+            "pack_stack_adc_filter.END_1"
+          ],
+          "reset_proof": "read-only divided stack evidence remains below the internal 1.4-V reference at the defined 8.6-V screen corner; upper-cell evidence is stack minus midpoint"
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "mpn": "MSPM0C1106SDGS20R",
+      "pin_map": [
+        {
+          "instance": "safety_controller",
+          "contact": "PA0",
+          "net": "HUB_SAFE_I2C_SDA",
+          "direction": "io",
+          "controller": "I2C_TARGET",
+          "peers": [
+            "hub_rp.GPIO42",
+            "M1.32"
+          ],
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA2",
+          "net": "SAFETY_EVIDENCE_I2C_SCL",
+          "direction": "io",
+          "controller": "BITBANG_I2C",
+          "peers": [
+            "evidence_mask.SCL",
+            "evidence_mask_scl_pullup.END_2"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA4",
+          "net": "SAFETY_EVIDENCE_I2C_SDA",
+          "direction": "io",
+          "controller": "BITBANG_I2C",
+          "peers": [
+            "evidence_mask.SDA",
+            "evidence_mask_sda_pullup.END_2"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA6",
+          "net": "SAFETY_WATCHDOG_WDI",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "safety_watchdog.WDI",
+            "safety_watchdog_wdi_pulldown.END_1"
+          ],
+          "reset_proof": "exact external pull-down prevents a floating or resetting safety controller from accidentally servicing the independent timeout watchdog"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA11",
+          "net": "HUB_SAFE_I2C_SCL",
+          "direction": "i",
+          "controller": "I2C_TARGET",
+          "peers": [
+            "hub_rp.GPIO43",
+            "M1.33"
+          ],
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA30",
+          "net": "POWER_FAULT_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "abstract:power-current-thermal-fault"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA17",
+          "net": "SAFETY_SERVICE_UART_TX",
+          "direction": "o",
+          "controller": "UART1",
+          "peers": [
+            "abstract:safety service fixture"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA18",
+          "net": "SAFETY_SERVICE_UART_RX",
+          "direction": "i",
+          "controller": "UART1",
+          "peers": [
+            "abstract:safety service fixture"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA19_SWDIO",
+          "net": "SAFETY_SWDIO",
+          "direction": "io",
+          "controller": "SWD",
+          "peers": [
+            "abstract:safety SWD fixture"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA20_SWCLK",
+          "net": "SAFETY_SWCLK",
+          "direction": "i",
+          "controller": "SWD",
+          "peers": [
+            "abstract:safety SWD fixture"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA22",
+          "net": "ANY_TX_AON_N",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "any_tx_aon_pullup.END_2",
+            "evidence_or_4.A_COMMON"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA23",
+          "net": "S3_FAULT_RESET_REQUEST",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "safety_s3_reset_iso.A"
+          ],
+          "reset_proof": "default-low GPIO plus open-drain isolation asserts S3 reset while the safety controller is starting or failed"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA24",
+          "net": "RUN_EDGE",
+          "direction": "i",
+          "controller": "GPIO_IRQ",
+          "peers": [
+            "safe_conditioner.1Y",
+            "safe_rearm_delay_res.END_1",
+            "safe_run_fault_iso.A"
+          ]
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA25",
+          "net": "SAFETY_FAULT_REQUEST",
+          "direction": "o",
+          "controller": "GPIO",
+          "peers": [
+            "safety_fault_request_iso.A",
+            "safety_fault_request_pulldown.END_1"
+          ],
+          "reset_proof": "external pull-down makes controller reset or absence request FAULT_KILL; healthy firmware must drive high continuously"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA26",
+          "net": "POWER_ZONE_TEMP_ADC",
+          "direction": "i",
+          "controller": "ADC",
+          "peers": [
+            "power_zone_ntc.END_1",
+            "power_zone_temp_pullup.END_2",
+            "power_zone_temp_filter.END_1"
+          ],
+          "reset_proof": "actual DGS20 pin 1 exposes ADC0_1; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA27",
+          "net": "RF_ZONE_TEMP_ADC",
+          "direction": "i",
+          "controller": "ADC",
+          "peers": [
+            "rf_zone_ntc.END_1",
+            "rf_zone_temp_pullup.END_2",
+            "rf_zone_temp_filter.END_1"
+          ],
+          "reset_proof": "actual DGS20 pin 2 exposes ADC0_0; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+        },
+        {
+          "instance": "safety_controller",
+          "contact": "PA16",
+          "net": "UI_ZONE_TEMP_ADC",
+          "direction": "i",
+          "controller": "ADC",
+          "peers": [
+            "ui_zone_ntc.END_1",
+            "ui_zone_temp_pullup.END_2",
+            "ui_zone_temp_filter.END_1"
+          ],
+          "reset_proof": "actual DGS20 pin 12 exposes ADC0_14; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+        }
+      ]
     }
   ],
-  "transports": [
-    {
-      "id": "S3_C5",
-      "hardware_resource": "S3_C5_IPC",
-      "kind": "SDIO_1BIT",
-      "clock_hz": 20000000,
-      "raw_bytes_per_second": 2500000,
-      "qualified_payload_bytes_per_second_min": 1500000,
-      "control_round_trip_ms_max": 2,
-      "pins": {
-        "CLK": [
-          "s3.GPIO10",
-          "c5.GPIO9"
-        ],
-        "CMD": [
-          "s3.GPIO11",
-          "c5.GPIO10"
-        ],
-        "D0": [
-          "s3.GPIO12",
-          "c5.GPIO8"
-        ],
-        "D1_IRQ": [
-          "s3.GPIO13",
-          "c5.GPIO7"
-        ]
+  "r2_reconciliation": {
+    "source_contract": "config/h0_r2_hardware_contract.json",
+    "hardware_contract_sha256": "bf639a4e2b1a1aaae4c6d87de555106ce3ba31c881786a90c7f61df9b7d5fbca",
+    "hardware_marker": "H1-R2.31",
+    "hardware_sources": {
+      "functional": {
+        "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
+        "sha256": "f46b4a95d9e76b910c5df8e5141bfea782ae550e3d5ad4badec4f2af4178c06e"
+      },
+      "c5_sdio_service_mux": {
+        "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
+        "sha256": "4bd88ffed2e8ac0b5f6e8856d6ebc21e7cc29aa38045d4a10e068b870e51c7f3"
+      },
+      "dual_rp_pinout": {
+        "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
+        "sha256": "45d7b02e86a626c5be841fef4d249fd304e98ce1715776e79d073ca9bc144753"
+      },
+      "u219_cap_profile": {
+        "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
+        "sha256": "01f01f750ceedaa9818b59968962a3484f4660057137e6ef43431a54b71c98fa"
+      },
+      "physical_h1": {
+        "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
+        "sha256": "5c87457efa793572df1ff699f499b58437590e0b5b4655492552015dac8ccadc"
+      },
+      "r2_authority_gate": {
+        "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
+        "sha256": "996a373d803dfe5b8fd1ba6b1baab094749e82b7061cbd2fea5547505a7fab21"
+      },
+      "pack_safety_i2c_boundary": {
+        "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
+        "sha256": "5460c97ab81e9f58c41a042a5f024f5f83e5913099e11743b9ad72414eb5782c"
+      },
+      "native_r2_inventory": {
+        "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
+        "sha256": "ae48e1145603db59a05d87f326d2f708d5484c8fb4177d7c54e39aeb74d49f2f"
+      },
+      "exact_component_ledger": {
+        "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
+        "sha256": "c891b92bc78ac00bc5f2e1cecf7980d40f9dcb41b4e5357ca87294f7329076c8"
+      },
+      "native_kicad": {
+        "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
+        "sha256": "a5fa0f31755e1969f16a67dab94436a26880affc5d993b54aedfbf935b6815f5"
+      },
+      "h2_hwfw_reconciliation": {
+        "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
+        "sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157"
+      },
+      "h2_interboard_m1": {
+        "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
+        "sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
       }
     },
-    {
-      "id": "S3_RP",
-      "hardware_resource": "S3_RP_IPC",
-      "kind": "SPI_FULL_DUPLEX",
-      "clock_hz": 20000000,
-      "raw_bytes_per_second": 2500000,
-      "qualified_payload_bytes_per_second_min": 1500000,
-      "control_round_trip_ms_max": 2,
-      "alert_to_read_us_max": 250,
-      "pins": {
-        "CS_N": [
-          "s3.GPIO9",
-          "rp.GPIO25"
-        ],
-        "SCK": [
-          "s3.GPIO48",
-          "rp.GPIO26"
-        ],
-        "MOSI": [
-          "s3.GPIO21",
-          "rp.GPIO24"
-        ],
-        "MISO": [
-          "s3.GPIO14",
-          "rp.GPIO27"
-        ],
-        "ALERT_N": [
-          "s3.GPIO3",
-          "rp.GPIO19"
-        ]
-      }
-    },
-    {
-      "id": "S3_PACK",
-      "kind": "I2C_TARGET",
-      "bus_hz": 400000,
-      "address_7bit": "0x2A",
-      "pins": {
-        "SDA": [
-          "s3.GPIO1",
-          "pack_admission.PA0"
-        ],
-        "SCL": [
-          "s3.GPIO2",
-          "pack_admission.PA11"
-        ]
-      }
-    },
-    {
-      "id": "S3_SAFETY",
-      "kind": "I2C_TARGET",
-      "bus_hz": 400000,
-      "address_7bit": "0x2B",
-      "pins": {
-        "SDA": [
-          "s3.GPIO1",
-          "safety_controller.PA0"
-        ],
-        "SCL": [
-          "s3.GPIO2",
-          "safety_controller.PA11"
-        ]
-      }
-    }
-  ],
-  "signal_groups": [
-    {
-      "firmware": "NONE",
-      "hardware": null,
-      "owner": "S3",
-      "tx_evidence_bits": []
-    },
-    {
-      "firmware": "S3_RF",
-      "hardware": "SG-S3-24",
-      "owner": "S3",
-      "tx_evidence_bits": [
-        0
-      ]
-    },
-    {
-      "firmware": "C5_RF",
-      "hardware": "SG-C5-NATIVE",
-      "owner": "C5",
-      "tx_evidence_bits": [
-        1
-      ]
-    },
-    {
-      "firmware": "NRF24",
-      "hardware": "SG-N24",
-      "owner": "RP",
-      "tx_evidence_bits": [
-        2,
-        3,
-        4
-      ]
-    },
-    {
-      "firmware": "CC1101",
-      "hardware": "SG-CC",
-      "owner": "RP",
-      "tx_evidence_bits": [
-        5
-      ]
-    },
-    {
-      "firmware": "VOICE",
-      "hardware": "SG-VOICE",
-      "owner": "RP",
-      "tx_evidence_bits": [
-        6
-      ]
-    },
-    {
-      "firmware": "IR",
-      "hardware": "SG-IR",
-      "owner": "C5",
-      "tx_evidence_bits": [
-        7
-      ]
-    },
-    {
-      "firmware": "LORA_CAP",
-      "hardware": "SG-U214",
-      "owner": "RP",
-      "tx_evidence_bits": [
-        8
-      ]
-    },
-    {
-      "firmware": "M5_UNIT",
-      "hardware": "SG-EXT-*",
-      "owner": "S3",
-      "tx_evidence_bits": []
-    },
-    {
-      "firmware": "BROADCAST_RX",
-      "hardware": "SG-BROADCAST",
-      "owner": "S3",
-      "tx_evidence_bits": []
-    }
-  ],
-  "safety_timing_ms": {
-    "heartbeat_period": 50,
-    "heartbeat_gap_max": 200,
-    "tx_lease_lifetime_max": 100,
-    "tx_lease_renew_period_max": 40,
-    "unexpected_evidence_fault_max": 10,
-    "post_revoke_evidence_clear_grace": 20,
-    "safety_loop_period_max": 5,
-    "external_watchdog_timeout": 1600,
-    "external_watchdog_service_period_max": 400
-  },
-  "physical_service": {
-    "external_usb": [
+    "domain_ids": [
+      "s3",
+      "c5",
+      "rf_rp",
+      "hub_rp",
+      "pack",
+      "safety"
+    ],
+    "domain_contracts": [
       {
-        "domain": "S3",
-        "instance": "product_usb_connector",
-        "label": "USB / POWER",
-        "power_role": "product_power_and_native_usb"
+        "id": "s3",
+        "mpn": "ESP32-S3-WROOM-1U-N16R8",
+        "pin_map": [
+          {
+            "gpio": 0,
+            "net": "S3_BOOT_N",
+            "peripheral": "BOOT_STRAP",
+            "direction": "in",
+            "gate": "10-kohm pull-up plus recessed BOOT control and DBG10 series path"
+          },
+          {
+            "gpio": 1,
+            "net": "SYS_UI_I2C_SDA",
+            "peripheral": "I2C0",
+            "direction": "io"
+          },
+          {
+            "gpio": 2,
+            "net": "SYS_UI_I2C_SCL",
+            "peripheral": "I2C0",
+            "direction": "out"
+          },
+          {
+            "gpio": 3,
+            "net": "UI_HUB_ALERT_N",
+            "peripheral": "GPIO_IRQ",
+            "direction": "in",
+            "gate": "wired-OR open-drain UI/touch/fault sources plus Hub RP; Hub held reset/high-Z through strap sampling"
+          },
+          {
+            "gpio": 4,
+            "net": "LCD_DB0",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 5,
+            "net": "LCD_RST_N",
+            "peripheral": "GPIO",
+            "direction": "out",
+            "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
+          },
+          {
+            "gpio": 6,
+            "net": "TOUCH_RST_N",
+            "peripheral": "GPIO",
+            "direction": "out",
+            "gate": "direct touch-controller reset; reset-time pull-down keeps touch disabled"
+          },
+          {
+            "gpio": 7,
+            "net": "S3_UART_SERVICE_TX",
+            "peripheral": "UART1_TX",
+            "direction": "out",
+            "gate": "DBG10 series path; idle high only after strap sampling"
+          },
+          {
+            "gpio": 8,
+            "net": "S3_UART_SERVICE_RX",
+            "peripheral": "UART1_RX",
+            "direction": "in",
+            "gate": "DBG10 series path with fixture-side protection"
+          },
+          {
+            "gpio": 9,
+            "net": "LCD_DB1",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 10,
+            "net": "S3_RESERVE_10",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 11,
+            "net": "S3_RESERVE_11",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 12,
+            "net": "S3_RESERVE_12",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 13,
+            "net": "S3_RESERVE_13",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 14,
+            "net": "S3_HUB_D1",
+            "peripheral": "SPI3",
+            "direction": "io"
+          },
+          {
+            "gpio": 15,
+            "net": "S3_RESERVE_15",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 16,
+            "net": "S3_RESERVE_16",
+            "peripheral": "GPIO",
+            "direction": "reserve",
+            "gate": "test pad only"
+          },
+          {
+            "gpio": 17,
+            "net": "LCD_WR_N",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 18,
+            "net": "LCD_DB2",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 19,
+            "net": "S3_USB_DM_LOCAL",
+            "peripheral": "USB_SERIAL_JTAG",
+            "direction": "io"
+          },
+          {
+            "gpio": 20,
+            "net": "S3_USB_DP_LOCAL",
+            "peripheral": "USB_SERIAL_JTAG",
+            "direction": "io"
+          },
+          {
+            "gpio": 21,
+            "net": "S3_HUB_D0",
+            "peripheral": "SPI3",
+            "direction": "io"
+          },
+          {
+            "gpio": 38,
+            "net": "LCD_DB3",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 39,
+            "net": "ENCODER_A",
+            "peripheral": "PCNT0",
+            "direction": "in"
+          },
+          {
+            "gpio": 40,
+            "net": "LCD_DB4",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 41,
+            "net": "LCD_DB5",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 42,
+            "net": "LCD_DB6",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out"
+          },
+          {
+            "gpio": 43,
+            "net": "S3_HUB_D2",
+            "peripheral": "SPI3",
+            "direction": "io"
+          },
+          {
+            "gpio": 44,
+            "net": "S3_HUB_D3",
+            "peripheral": "SPI3",
+            "direction": "io"
+          },
+          {
+            "gpio": 45,
+            "net": "LCD_DC",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out",
+            "gate": "panel stays reset and an external strap pull preserves GPIO45 through boot sampling"
+          },
+          {
+            "gpio": 46,
+            "net": "LCD_DB7",
+            "peripheral": "LCD_CAM_TX",
+            "direction": "out",
+            "gate": "panel stays reset and an external strap pull preserves GPIO46 through boot sampling"
+          },
+          {
+            "gpio": 47,
+            "net": "ENCODER_B",
+            "peripheral": "PCNT0",
+            "direction": "in"
+          },
+          {
+            "gpio": 48,
+            "net": "S3_HUB_SCK",
+            "peripheral": "SPI3",
+            "direction": "out"
+          }
+        ]
       },
       {
-        "domain": "C5",
-        "instance": "c5_service_usb_connector",
-        "label": "C5 SERVICE USB",
-        "power_role": "data_only_no_target_power"
+        "id": "c5",
+        "mpn": "ESP32-C5-WROOM-1U-N8R8",
+        "pin_map": [
+          {
+            "instance": "c5",
+            "contact": "GPIO0",
+            "net": "IR_RX_DEMOD",
+            "direction": "i",
+            "controller": "RMT_RX0",
+            "peers": [
+              "ir_demod_series.END_2",
+              "ir_demod_host_pullup.END_1"
+            ],
+            "sharing_proof": "dedicated active-low demodulated-envelope input remains idle-high behind an Ioff buffer when the receive rail is off"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO1",
+            "net": "IR_RX_CARRIER",
+            "direction": "i",
+            "controller": "RMT_RX1",
+            "peers": [
+              "ir_carrier_series.END_2",
+              "ir_carrier_host_pullup.END_1"
+            ],
+            "sharing_proof": "dedicated active-low carrier-cycle input remains idle-high behind a separate Ioff-buffer channel when the receive rail is off"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO4",
+            "net": "IR_FRONTEND_PWR_EN",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "ir_power_switch.ON",
+              "ir_power_on_pulldown.END_1"
+            ],
+            "reset_proof": "external 10-kOhm pull-down and TPS22919 QOD keep both receive paths discharged until explicit admission"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO6",
+            "net": "IR_TX_CARRIER",
+            "direction": "o",
+            "controller": "RMT_TX0",
+            "peers": [
+              "ir_safe_gate.A"
+            ]
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO7",
+            "net": "C5_SDIO_D1",
+            "signal": "SDIO_DAT1",
+            "direction": "io",
+            "controller": "SDIO_SLAVE",
+            "module_pad": 9,
+            "muxed_with_usb": false,
+            "strap_role": "JTAG source",
+            "endpoint": "Hub RP native 4-bit SDIO"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO8",
+            "net": "C5_SDIO_D0",
+            "signal": "SDIO_DAT0",
+            "direction": "io",
+            "controller": "SDIO_SLAVE",
+            "module_pad": 10,
+            "muxed_with_usb": false,
+            "strap_role": null,
+            "endpoint": "Hub RP native 4-bit SDIO"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO9",
+            "net": "C5_SDIO_CLK",
+            "signal": "SDIO_CLK",
+            "direction": "i",
+            "controller": "SDIO_SLAVE",
+            "module_pad": 11,
+            "muxed_with_usb": false,
+            "strap_role": null,
+            "endpoint": "Hub RP native 4-bit SDIO"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO10",
+            "net": "C5_SDIO_CMD",
+            "signal": "SDIO_CMD",
+            "direction": "io",
+            "controller": "SDIO_SLAVE",
+            "module_pad": 12,
+            "muxed_with_usb": false,
+            "strap_role": null,
+            "endpoint": "Hub RP native 4-bit SDIO"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO11",
+            "net": "C5_UART_SERVICE_TX",
+            "direction": "o",
+            "controller": "UART0",
+            "peers": [
+              "c5_dbg0_series.END_2"
+            ]
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO12",
+            "net": "C5_UART_SERVICE_RX",
+            "direction": "i",
+            "controller": "UART0",
+            "peers": [
+              "c5_dbg1_series.END_2"
+            ]
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO13",
+            "net": "C5_SDIO_D3_USB_DM",
+            "signal": "SDIO_DAT3_USB_DM",
+            "direction": "io",
+            "controller": "SDIO_SLAVE_OR_USB_SERIAL_JTAG",
+            "module_pad": 13,
+            "muxed_with_usb": true,
+            "strap_role": null,
+            "endpoint": "Hub RP native 4-bit SDIO through FSUSB42 service mux"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO14",
+            "net": "C5_SDIO_D2_USB_DP",
+            "signal": "SDIO_DAT2_USB_DP",
+            "direction": "io",
+            "controller": "SDIO_SLAVE_OR_USB_SERIAL_JTAG",
+            "module_pad": 14,
+            "muxed_with_usb": true,
+            "strap_role": null,
+            "endpoint": "Hub RP native 4-bit SDIO through FSUSB42 service mux"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO23",
+            "net": "C5_RF_TX_EVIDENCE_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "evidence_main_isolator.1Y",
+              "c5_evidence_main_pullup.END_2"
+            ],
+            "sharing_proof": "AON-powered open-drain isolator preserves active-low evidence while the separate 3V3_MAIN pull-up prevents positive injection when C5 is unpowered"
+          },
+          {
+            "instance": "c5",
+            "contact": "GPIO24",
+            "net": "IR_TX_EVIDENCE_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "evidence_main_isolator.2Y",
+              "ir_evidence_main_pullup.END_2"
+            ],
+            "sharing_proof": "AON-powered open-drain isolator preserves active-low evidence while the separate 3V3_MAIN pull-up prevents positive injection when C5 is unpowered"
+          }
+        ]
       },
       {
-        "domain": "RP",
-        "instance": "rp_service_usb_connector",
-        "label": "RP SERVICE USB",
-        "power_role": "data_only_no_target_power"
+        "id": "rf_rp",
+        "mpn": "SC1512-A4",
+        "pin_map": [
+          {
+            "gpio": 0,
+            "net": "AUDIO_BCLK",
+            "direction": "out",
+            "controller": "PIO1_SM0_I2S_TX",
+            "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 BCLK",
+            "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+          },
+          {
+            "gpio": 1,
+            "net": "AUDIO_WS",
+            "direction": "out",
+            "controller": "PIO1_SM0_I2S_TX",
+            "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 LRCK",
+            "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+          },
+          {
+            "gpio": 2,
+            "net": "AUDIO_DOUT",
+            "direction": "out",
+            "controller": "PIO1_SM0_I2S_TX",
+            "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 SDIN",
+            "reset": "input/high-Z; external pull-down; codec-side isolation OE low"
+          },
+          {
+            "gpio": 3,
+            "net": "AUDIO_DIN",
+            "direction": "in",
+            "controller": "PIO1_SM1_I2S_RX",
+            "endpoint": "ES8311 SDOUT -> SN74LVC1G126DCKR Ioff isolation",
+            "reset": "input; external pull-down; host-side isolation OE low"
+          },
+          {
+            "gpio": 4,
+            "net": "REAR_I2C_SDA",
+            "direction": "io",
+            "controller": "I2C0",
+            "endpoint": "codec/Si4732/headset slow-control bus",
+            "reset": "input/open-drain released; external pull-up"
+          },
+          {
+            "gpio": 5,
+            "net": "REAR_I2C_SCL",
+            "direction": "od",
+            "controller": "I2C0",
+            "endpoint": "codec/Si4732/headset slow-control bus",
+            "reset": "input/open-drain released; external pull-up"
+          },
+          {
+            "gpio": 6,
+            "net": "AUDIO_ARM",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "audio reset-safe selector gate",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 7,
+            "net": "M5_UNIT_SIG0",
+            "direction": "io",
+            "controller": "PIO2_SM0_1_M5_PROFILE",
+            "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+            "reset": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+          },
+          {
+            "gpio": 8,
+            "net": "M5_UNIT_SIG1",
+            "direction": "io",
+            "controller": "PIO2_SM0_1_M5_PROFILE",
+            "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+            "reset": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+          },
+          {
+            "gpio": 9,
+            "net": "CC_CSN_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "CC1101 command buffer",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 10,
+            "net": "CC_GDO0",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "CC1101 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 11,
+            "net": "CC_GDO2",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "CC1101 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 12,
+            "net": "CAP_PIN10_BUSY_OR_NFC_CS_N",
+            "direction": "io",
+            "controller": "GPIO_IRQ_OR_OUTPUT_PROFILE",
+            "endpoint": "SN74CBTLV1G125: U214 BUSY input or U219 NFC_CS_N output",
+            "reset": "input/high-Z; AON /OE pull-up disconnects pin 10; U219 profile drives inactive high before POWER_EN"
+          },
+          {
+            "gpio": 13,
+            "net": "CAP_IRQ",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "exact-one profile return buffer: U214 DIO1 or U219 NFC_IRQ; polarity interpreted only by the signed profile",
+            "reset": "input; external pull-down; accessory branch remains off"
+          },
+          {
+            "gpio": 14,
+            "net": "CAP_RESET_N_OR_POWER_EN",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "exact-one profile command buffer: U214 RESET_N or U219 POWER_EN",
+            "reset": "input/high-Z; external pull-down holds U214 reset and U219 power disabled"
+          },
+          {
+            "gpio": 15,
+            "net": "RF_SLOW_IO_ALERT",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "Schmitt-conditioned rear-local shared interrupt from TCA6424/voice/headset",
+            "reset": "input; raw wired interrupt has a 10-kohm 3V3_MAIN pull-up"
+          },
+          {
+            "gpio": 16,
+            "net": "VOICE_UART_TX",
+            "direction": "out",
+            "controller": "UART0",
+            "endpoint": "SA818S-U/V selected command path",
+            "reset": "input/high-Z; external pull-up keeps UART idle"
+          },
+          {
+            "gpio": 17,
+            "net": "VOICE_UART_RX",
+            "direction": "in",
+            "controller": "UART0",
+            "endpoint": "SA818S-U/V selected response path",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 18,
+            "net": "VOICE_PTT_REQ_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "FAULT_KILL-dominant voice PTT gate",
+            "reset": "input/high-Z; external pull-up inhibits TX"
+          },
+          {
+            "gpio": 19,
+            "net": "HUB_RF_ALERT_N",
+            "direction": "od",
+            "controller": "GPIO_IRQ",
+            "endpoint": "M1.22 -> Hub RP GPIO17",
+            "reset": "released/high-Z; external pull-up"
+          },
+          {
+            "gpio": 20,
+            "net": "VOICE_AUDIO_ON_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "voice audio activity selector",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 21,
+            "net": "PTT_BUTTON_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "direct user PTT",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 22,
+            "net": "RF_ANY_TX_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "wired actual-TX evidence",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 23,
+            "net": "CC_PWR_EN",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "CC1101 rail switch",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 24,
+            "net": "HUB_RF_MOSI",
+            "direction": "in",
+            "controller": "SPI1",
+            "endpoint": "M1.26 <- Hub RP GPIO14",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 25,
+            "net": "HUB_RF_CS_N",
+            "direction": "in",
+            "controller": "SPI1",
+            "endpoint": "M1.23 <- Hub RP GPIO16",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 26,
+            "net": "HUB_RF_SCK",
+            "direction": "in",
+            "controller": "SPI1",
+            "endpoint": "M1.24 <- Hub RP GPIO13",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 27,
+            "net": "HUB_RF_MISO",
+            "direction": "out",
+            "controller": "SPI1",
+            "endpoint": "M1.27 -> Hub RP GPIO15",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 28,
+            "net": "AIR_LO_I2C_SDA",
+            "direction": "io",
+            "controller": "PIO2_SM2_AIR_I2C",
+            "endpoint": "power-coherent private Si5351 SDA",
+            "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+          },
+          {
+            "gpio": 29,
+            "net": "AIR_LO_I2C_SCL",
+            "direction": "od",
+            "controller": "PIO2_SM2_AIR_I2C",
+            "endpoint": "power-coherent private Si5351 SCL",
+            "reset": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+          },
+          {
+            "gpio": 30,
+            "net": "CAP_I2C_SDA",
+            "direction": "io",
+            "controller": "I2C1",
+            "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 4 SDA",
+            "reset": "input/open-drain released; external pull-up; isolator disabled"
+          },
+          {
+            "gpio": 31,
+            "net": "CAP_I2C_SCL",
+            "direction": "od",
+            "controller": "I2C1",
+            "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 3 SCL",
+            "reset": "input/open-drain released; external pull-up; isolator disabled"
+          },
+          {
+            "gpio": 32,
+            "net": "RF_RESERVE_32",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          },
+          {
+            "gpio": 33,
+            "net": "RF_RESERVE_33",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          },
+          {
+            "gpio": 34,
+            "net": "RF_RESERVE_34",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          },
+          {
+            "gpio": 35,
+            "net": "AIR_RX_EN",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "Airband switched rail and LT5560 enable",
+            "reset": "input/high-Z; external pull-down disables converted path"
+          },
+          {
+            "gpio": 36,
+            "net": "AIR_RX_MODE",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "direct FM/SW versus converted-Airband selector",
+            "reset": "input/high-Z; external pull-down selects direct FM/SW"
+          },
+          {
+            "gpio": 37,
+            "net": "RF_RESERVE_37",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          },
+          {
+            "gpio": 38,
+            "net": "RF_RESERVE_38",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          },
+          {
+            "gpio": 39,
+            "net": "CC_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM0_CC_SPI",
+            "endpoint": "CC1101 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 40,
+            "net": "CAP_GNSS_TX_OR_RF_SW0",
+            "direction": "out",
+            "controller": "UART1_OR_GPIO_PROFILE",
+            "endpoint": "exact-one profile: U214 GNSS RX or U219 RF_SW0",
+            "reset": "input/high-Z; external pull-down until signed profile admission"
+          },
+          {
+            "gpio": 41,
+            "net": "CAP_GNSS_RX_OR_CC_GDO0",
+            "direction": "in",
+            "controller": "UART1_OR_GPIO_IRQ_PROFILE",
+            "endpoint": "exact-one profile return: U214 GNSS TX or U219 CC1101 GDO0",
+            "reset": "input; external pull-down; accessory branch remains off"
+          },
+          {
+            "gpio": 42,
+            "net": "CC_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM0_CC_SPI",
+            "endpoint": "CC1101 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 43,
+            "net": "CC_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM0_CC_SPI",
+            "endpoint": "CC1101 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 44,
+            "net": "CAP_SPI_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM1_CAP_SPI",
+            "endpoint": "exact-one profile return: U214 MISO or U219 shared MISO",
+            "reset": "input; external pull-down; accessory branch remains off"
+          },
+          {
+            "gpio": 45,
+            "net": "CAP_SPI_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM1_CAP_SPI",
+            "endpoint": "exact-one profile command: U214 SCK or U219 shared SCLK",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 46,
+            "net": "CAP_SPI_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM1_CAP_SPI",
+            "endpoint": "exact-one profile command: U214 MOSI or U219 shared MOSI",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 47,
+            "net": "CAP_SPI_PRIMARY_CS_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "exact-one profile command: U214 NSS_N or U219 CC1101_CS_N",
+            "reset": "input/high-Z; external pull-up keeps either profile deselected"
+          }
+        ]
+      },
+      {
+        "id": "hub_rp",
+        "mpn": "SC1512-A4",
+        "pin_map": [
+          {
+            "gpio": 0,
+            "net": "S3_HUB_D0",
+            "direction": "io",
+            "controller": "PIO1_SM0_S3_QUAD",
+            "endpoint": "S3 GPIO21",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 1,
+            "net": "S3_HUB_D1",
+            "direction": "io",
+            "controller": "PIO1_SM0_S3_QUAD",
+            "endpoint": "S3 GPIO14",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 2,
+            "net": "S3_HUB_D2",
+            "direction": "io",
+            "controller": "PIO1_SM0_S3_QUAD",
+            "endpoint": "S3 GPIO43 through ROM-UART isolation",
+            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+          },
+          {
+            "gpio": 3,
+            "net": "S3_HUB_D3",
+            "direction": "io",
+            "controller": "PIO1_SM0_S3_QUAD",
+            "endpoint": "S3 GPIO44 through ROM-UART isolation",
+            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+          },
+          {
+            "gpio": 4,
+            "net": "S3_HUB_SCK",
+            "direction": "in",
+            "controller": "PIO1_SM0_S3_QUAD",
+            "endpoint": "S3 GPIO48",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 5,
+            "net": "UI_HUB_ALERT_N",
+            "direction": "od",
+            "controller": "GPIO_IRQ",
+            "endpoint": "S3 GPIO3 wired-OR",
+            "reset": "released/high-Z; external pull-up"
+          },
+          {
+            "gpio": 6,
+            "net": "HUB_AON_ALERT_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+            "reset": "input; AON-local 10-kohm pull-up"
+          },
+          {
+            "gpio": 7,
+            "net": "C5_SDIO_CLK",
+            "direction": "out",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "direct series footprint -> C5 GPIO9 / module pad 11",
+            "reset": "input/high-Z; no fitted pull; C5 and Hub held reset until ownership is established"
+          },
+          {
+            "gpio": 8,
+            "net": "C5_SDIO_CMD",
+            "direction": "io",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "direct pull-up/series branch -> C5 GPIO10 / module pad 12",
+            "reset": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+          },
+          {
+            "gpio": 9,
+            "net": "C5_SDIO_D0",
+            "direction": "io",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "direct pull-up/series branch -> C5 GPIO8 / module pad 10",
+            "reset": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+          },
+          {
+            "gpio": 10,
+            "net": "C5_SDIO_D1",
+            "direction": "io",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "direct pull-up/series branch -> C5 GPIO7 / module pad 9",
+            "reset": "input/high-Z; branch-local 10-kohm pull-up also fixes the JTAG-source strap; C5 and Hub held reset"
+          },
+          {
+            "gpio": 11,
+            "net": "C5_SDIO_D2",
+            "direction": "io",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "FSUSB42 HSD2+ -> D+ common -> C5 GPIO14 / module pad 14",
+            "reset": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+          },
+          {
+            "gpio": 12,
+            "net": "C5_SDIO_D3",
+            "direction": "io",
+            "controller": "PIO1_SM1_2_C5_SDIO",
+            "endpoint": "FSUSB42 HSD2- -> D- common -> C5 GPIO13 / module pad 13",
+            "reset": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+          },
+          {
+            "gpio": 13,
+            "net": "HUB_RF_SCK",
+            "direction": "out",
+            "controller": "PIO2_SM0_RF_SPI",
+            "endpoint": "M1.24 -> RF RP GPIO26",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 14,
+            "net": "HUB_RF_MOSI",
+            "direction": "out",
+            "controller": "PIO2_SM0_RF_SPI",
+            "endpoint": "M1.26 -> RF RP GPIO24",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 15,
+            "net": "HUB_RF_MISO",
+            "direction": "in",
+            "controller": "PIO2_SM0_RF_SPI",
+            "endpoint": "M1.27 <- RF RP GPIO27",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 16,
+            "net": "HUB_RF_CS_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "M1.23 -> RF RP GPIO25",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 17,
+            "net": "HUB_RF_ALERT_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "M1.22 <- RF RP GPIO19",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 18,
+            "net": "NRF0_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM0_NRF0_SPI",
+            "endpoint": "nRF24 #0 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 19,
+            "net": "NRF0_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM0_NRF0_SPI",
+            "endpoint": "nRF24 #0 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 20,
+            "net": "NRF0_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM0_NRF0_SPI",
+            "endpoint": "nRF24 #0 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 21,
+            "net": "NRF0_CSN_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #0 command buffer",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 22,
+            "net": "NRF0_CE_REQ",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #0 safety gate",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 23,
+            "net": "NRF0_IRQ_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "nRF24 #0 return buffer",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 24,
+            "net": "NRF1_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM1_NRF1_SPI",
+            "endpoint": "nRF24 #1 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 25,
+            "net": "NRF1_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM1_NRF1_SPI",
+            "endpoint": "nRF24 #1 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 26,
+            "net": "NRF1_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM1_NRF1_SPI",
+            "endpoint": "nRF24 #1 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 27,
+            "net": "NRF1_CSN_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #1 command buffer",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 28,
+            "net": "NRF1_CE_REQ",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #1 safety gate",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 29,
+            "net": "NRF1_IRQ_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "nRF24 #1 return buffer",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 30,
+            "net": "NRF2_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM2_NRF2_SPI",
+            "endpoint": "nRF24 #2 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 31,
+            "net": "NRF2_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM2_NRF2_SPI",
+            "endpoint": "nRF24 #2 command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 32,
+            "net": "NRF2_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM2_NRF2_SPI",
+            "endpoint": "nRF24 #2 return buffer",
+            "reset": "input; external pull-down"
+          },
+          {
+            "gpio": 33,
+            "net": "NRF2_CSN_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #2 command buffer",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 34,
+            "net": "NRF2_CE_REQ",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "nRF24 #2 safety gate",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 35,
+            "net": "NRF2_IRQ_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "nRF24 #2 return buffer",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 36,
+            "net": "NRF_GROUP_PWR_EN",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "FAULT_KILL-dominant nRF rail switch",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 37,
+            "net": "SD_SCK",
+            "direction": "out",
+            "controller": "PIO0_SM3_SD_SPI",
+            "endpoint": "microSD command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 38,
+            "net": "SD_MOSI",
+            "direction": "out",
+            "controller": "PIO0_SM3_SD_SPI",
+            "endpoint": "microSD command buffer",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 39,
+            "net": "SD_MISO",
+            "direction": "in",
+            "controller": "PIO0_SM3_SD_SPI",
+            "endpoint": "microSD return buffer",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 40,
+            "net": "SD_CS_N",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "microSD command buffer",
+            "reset": "input/high-Z; external pull-up"
+          },
+          {
+            "gpio": 41,
+            "net": "SD_PWR_EN",
+            "direction": "out",
+            "controller": "GPIO",
+            "endpoint": "microSD load switch",
+            "reset": "input/high-Z; external pull-down"
+          },
+          {
+            "gpio": 42,
+            "net": "HUB_SAFE_I2C_SDA",
+            "direction": "io",
+            "controller": "I2C1",
+            "endpoint": "TCA9803DGKR SDAA on 3V3_MAIN -> powered-off-Ioff boundary -> SDAB on AON_SAFE_3V3 -> M1.32 -> Pack/Safety mailboxes",
+            "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+          },
+          {
+            "gpio": 43,
+            "net": "HUB_SAFE_I2C_SCL",
+            "direction": "od",
+            "controller": "I2C1",
+            "endpoint": "TCA9803DGKR SCLA on 3V3_MAIN -> powered-off-Ioff boundary -> SCLB on AON_SAFE_3V3 -> M1.33 -> Pack/Safety mailboxes",
+            "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+          },
+          {
+            "gpio": 44,
+            "net": "SD_DETECT_N",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "microSD socket detect",
+            "reset": "input; external pull-up"
+          },
+          {
+            "gpio": 45,
+            "net": "LCD_TE",
+            "direction": "in",
+            "controller": "GPIO_IRQ",
+            "endpoint": "HMX035CTFT-001 TE",
+            "reset": "input; external pull-down while panel reset is asserted"
+          },
+          {
+            "gpio": 46,
+            "net": "LCD_BL_PWM",
+            "direction": "out",
+            "controller": "PWM",
+            "endpoint": "backlight hardware gate",
+            "reset": "input/high-Z; external pull-down keeps backlight off"
+          },
+          {
+            "gpio": 47,
+            "net": "HUB_RESERVE_47",
+            "direction": "reserve",
+            "controller": "GPIO",
+            "endpoint": "test pad only",
+            "reset": "input/high-Z; external pull-down; DNP"
+          }
+        ]
+      },
+      {
+        "id": "pack",
+        "mpn": "MSPM0C1106SDGS20R",
+        "pin_map": [
+          {
+            "instance": "pack_admission",
+            "contact": "PA0",
+            "net": "HUB_SAFE_I2C_SDA",
+            "direction": "io",
+            "controller": "I2C_TARGET",
+            "peers": [
+              "hub_rp.GPIO42",
+              "M1.32"
+            ],
+            "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA2",
+            "net": "PACK_GAUGE_I2C_SCL",
+            "direction": "io",
+            "controller": "BITBANG_I2C",
+            "peers": [
+              "pack_gauge.SCL_OD",
+              "pack_gauge_scl_pullup.END_2"
+            ]
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA4",
+            "net": "PACK_GAUGE_I2C_SDA",
+            "direction": "io",
+            "controller": "BITBANG_I2C",
+            "peers": [
+              "pack_gauge.SDA_DQ",
+              "pack_gauge_sda_pullup.END_2"
+            ]
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA6",
+            "net": "PACK_FET_HOLD_RELEASE",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "pack_hold.G2",
+              "pack_hold_release_pulldown.END_1"
+            ],
+            "reset_proof": "2N7002DW-7-F Q1 asserts ALRT low independently of MCU reset; exact 10-kOhm PA6/Q2-gate pull-down prevents release until complete admission"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA11",
+            "net": "HUB_SAFE_I2C_SCL",
+            "direction": "i",
+            "controller": "I2C_TARGET",
+            "peers": [
+              "hub_rp.GPIO43",
+              "M1.33"
+            ],
+            "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA16",
+            "net": "PACK_PFAIL_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "pack_status_buffer.D1",
+              "pack_pfail_pullup.END_2"
+            ],
+            "reset_proof": "exact 2N7002DW Q1 converts REG3-referenced push-pull PFAIL into an admission-VDD-referenced active-low input without overdriving the standard GPIO"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA17",
+            "net": "PACK_ADMISSION_UART_TX",
+            "direction": "o",
+            "controller": "UART1",
+            "peers": [
+              "abstract:pack service fixture"
+            ]
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA18",
+            "net": "PACK_ADMISSION_UART_RX",
+            "direction": "i",
+            "controller": "UART1",
+            "peers": [
+              "abstract:pack service fixture"
+            ]
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA22",
+            "net": "PACK_DIAG_TRIGGER",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "pack_diag_timer.CH1_T",
+              "pack_diag_trigger_pulldown.END_1"
+            ],
+            "reset_proof": "external pull-down prevents a reset or fixture transition from triggering the non-retriggerable hardware one-shot"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA23",
+            "net": "PACK_SYS_INT_REQ",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "pack_status_buffer.G2",
+              "pack_irq_gate_pulldown.END_1"
+            ],
+            "reset_proof": "exact 10-kOhm gate pull-down keeps 2N7002DW Q2 off through reset; firmware drives PA23 high only to assert the passive-drain shared interrupt"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA24",
+            "net": "POWER_COMMAND_OFF_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "power_command_pullup.END_2",
+              "power_command_filter.END_1",
+              "power_command_switch.THROW_B"
+            ],
+            "reset_proof": "exact 47-kOhm admission-VDD pull-up means ON/open; OFF grounds the filtered low-current command through the maintained switch; no cell, SYS, charge or load current crosses the switch"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA25",
+            "net": "PACK_CELL0_ADC",
+            "direction": "i",
+            "controller": "ADC",
+            "peers": [
+              "pack_mid_adc_top1.END_2",
+              "pack_mid_adc_bottom.END_1",
+              "pack_mid_adc_filter.END_1"
+            ],
+            "reset_proof": "read-only divided midpoint evidence remains below the internal 1.4-V reference at the defined 4.3-V screen corner"
+          },
+          {
+            "instance": "pack_admission",
+            "contact": "PA26",
+            "net": "PACK_STACK_ADC",
+            "direction": "i",
+            "controller": "ADC",
+            "peers": [
+              "pack_stack_adc_top4.END_2",
+              "pack_stack_adc_bottom.END_1",
+              "pack_stack_adc_filter.END_1"
+            ],
+            "reset_proof": "read-only divided stack evidence remains below the internal 1.4-V reference at the defined 8.6-V screen corner; upper-cell evidence is stack minus midpoint"
+          }
+        ]
+      },
+      {
+        "id": "safety",
+        "mpn": "MSPM0C1106SDGS20R",
+        "pin_map": [
+          {
+            "instance": "safety_controller",
+            "contact": "PA0",
+            "net": "HUB_SAFE_I2C_SDA",
+            "direction": "io",
+            "controller": "I2C_TARGET",
+            "peers": [
+              "hub_rp.GPIO42",
+              "M1.32"
+            ],
+            "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA2",
+            "net": "SAFETY_EVIDENCE_I2C_SCL",
+            "direction": "io",
+            "controller": "BITBANG_I2C",
+            "peers": [
+              "evidence_mask.SCL",
+              "evidence_mask_scl_pullup.END_2"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA4",
+            "net": "SAFETY_EVIDENCE_I2C_SDA",
+            "direction": "io",
+            "controller": "BITBANG_I2C",
+            "peers": [
+              "evidence_mask.SDA",
+              "evidence_mask_sda_pullup.END_2"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA6",
+            "net": "SAFETY_WATCHDOG_WDI",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "safety_watchdog.WDI",
+              "safety_watchdog_wdi_pulldown.END_1"
+            ],
+            "reset_proof": "exact external pull-down prevents a floating or resetting safety controller from accidentally servicing the independent timeout watchdog"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA11",
+            "net": "HUB_SAFE_I2C_SCL",
+            "direction": "i",
+            "controller": "I2C_TARGET",
+            "peers": [
+              "hub_rp.GPIO43",
+              "M1.33"
+            ],
+            "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA30",
+            "net": "POWER_FAULT_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "abstract:power-current-thermal-fault"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA17",
+            "net": "SAFETY_SERVICE_UART_TX",
+            "direction": "o",
+            "controller": "UART1",
+            "peers": [
+              "abstract:safety service fixture"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA18",
+            "net": "SAFETY_SERVICE_UART_RX",
+            "direction": "i",
+            "controller": "UART1",
+            "peers": [
+              "abstract:safety service fixture"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA19_SWDIO",
+            "net": "SAFETY_SWDIO",
+            "direction": "io",
+            "controller": "SWD",
+            "peers": [
+              "abstract:safety SWD fixture"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA20_SWCLK",
+            "net": "SAFETY_SWCLK",
+            "direction": "i",
+            "controller": "SWD",
+            "peers": [
+              "abstract:safety SWD fixture"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA22",
+            "net": "ANY_TX_AON_N",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "any_tx_aon_pullup.END_2",
+              "evidence_or_4.A_COMMON"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA23",
+            "net": "S3_FAULT_RESET_REQUEST",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "safety_s3_reset_iso.A"
+            ],
+            "reset_proof": "default-low GPIO plus open-drain isolation asserts S3 reset while the safety controller is starting or failed"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA24",
+            "net": "RUN_EDGE",
+            "direction": "i",
+            "controller": "GPIO_IRQ",
+            "peers": [
+              "safe_conditioner.1Y",
+              "safe_rearm_delay_res.END_1",
+              "safe_run_fault_iso.A"
+            ]
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA25",
+            "net": "SAFETY_FAULT_REQUEST",
+            "direction": "o",
+            "controller": "GPIO",
+            "peers": [
+              "safety_fault_request_iso.A",
+              "safety_fault_request_pulldown.END_1"
+            ],
+            "reset_proof": "external pull-down makes controller reset or absence request FAULT_KILL; healthy firmware must drive high continuously"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA26",
+            "net": "POWER_ZONE_TEMP_ADC",
+            "direction": "i",
+            "controller": "ADC",
+            "peers": [
+              "power_zone_ntc.END_1",
+              "power_zone_temp_pullup.END_2",
+              "power_zone_temp_filter.END_1"
+            ],
+            "reset_proof": "actual DGS20 pin 1 exposes ADC0_1; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA27",
+            "net": "RF_ZONE_TEMP_ADC",
+            "direction": "i",
+            "controller": "ADC",
+            "peers": [
+              "rf_zone_ntc.END_1",
+              "rf_zone_temp_pullup.END_2",
+              "rf_zone_temp_filter.END_1"
+            ],
+            "reset_proof": "actual DGS20 pin 2 exposes ADC0_0; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+          },
+          {
+            "instance": "safety_controller",
+            "contact": "PA16",
+            "net": "UI_ZONE_TEMP_ADC",
+            "direction": "i",
+            "controller": "ADC",
+            "peers": [
+              "ui_zone_ntc.END_1",
+              "ui_zone_temp_pullup.END_2",
+              "ui_zone_temp_filter.END_1"
+            ],
+            "reset_proof": "actual DGS20 pin 12 exposes ADC0_14; VDD-reference ratiometric conversion preserves room/cold range and open detection"
+          }
+        ]
       }
     ],
-    "external_side_controls": [
+    "rp_domains": [
+      "rf_rp",
+      "hub_rp"
+    ],
+    "hub_pin_map": [
       {
-        "domain": "S3",
-        "instance": "s3_reset_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "S3 RST",
-        "function": "RESET"
+        "gpio": 0,
+        "net": "S3_HUB_D0",
+        "peripheral": "PIO1_SM0_S3_QUAD",
+        "direction": "io",
+        "endpoint": "S3 GPIO21",
+        "gate": "input/high-Z; external pull-down"
       },
       {
-        "domain": "S3",
-        "instance": "s3_boot_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "S3 BOOT",
-        "function": "BOOT"
+        "gpio": 1,
+        "net": "S3_HUB_D1",
+        "peripheral": "PIO1_SM0_S3_QUAD",
+        "direction": "io",
+        "endpoint": "S3 GPIO14",
+        "gate": "input/high-Z; external pull-down"
       },
       {
-        "domain": "C5",
-        "instance": "c5_reset_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "C5 RST",
-        "function": "RESET"
+        "gpio": 2,
+        "net": "S3_HUB_D2",
+        "peripheral": "PIO1_SM0_S3_QUAD",
+        "direction": "io",
+        "endpoint": "S3 GPIO43 through ROM-UART isolation",
+        "gate": "input/high-Z; Hub-side external pull-down; isolation open"
       },
       {
-        "domain": "C5",
-        "instance": "c5_boot_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "C5 BOOT",
-        "function": "BOOT"
+        "gpio": 3,
+        "net": "S3_HUB_D3",
+        "peripheral": "PIO1_SM0_S3_QUAD",
+        "direction": "io",
+        "endpoint": "S3 GPIO44 through ROM-UART isolation",
+        "gate": "input/high-Z; Hub-side external pull-down; isolation open"
       },
       {
-        "domain": "RP",
-        "instance": "rp_reset_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "RP RST",
-        "function": "RUN_RESET"
+        "gpio": 4,
+        "net": "S3_HUB_SCK",
+        "peripheral": "PIO1_SM0_S3_QUAD",
+        "direction": "in",
+        "endpoint": "S3 GPIO48",
+        "gate": "input; external pull-down"
       },
       {
-        "domain": "RP",
-        "instance": "rp_boot_button",
-        "mpn": "Alps Alpine SKRTLAE010",
-        "label": "RP BOOT",
-        "function": "USB_BOOT"
+        "gpio": 5,
+        "net": "UI_HUB_ALERT_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "od",
+        "endpoint": "S3 GPIO3 wired-OR",
+        "gate": "released/high-Z; external pull-up"
+      },
+      {
+        "gpio": 6,
+        "net": "HUB_AON_ALERT_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "M1.59 <- wired-open-drain PD/Pack mailbox alert",
+        "gate": "input; AON-local 10-kohm pull-up"
+      },
+      {
+        "gpio": 7,
+        "net": "C5_SDIO_CLK",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "out",
+        "endpoint": "direct series footprint -> C5 GPIO9 / module pad 11",
+        "gate": "input/high-Z; no fitted pull; C5 and Hub held reset until ownership is established"
+      },
+      {
+        "gpio": 8,
+        "net": "C5_SDIO_CMD",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "io",
+        "endpoint": "direct pull-up/series branch -> C5 GPIO10 / module pad 12",
+        "gate": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+      },
+      {
+        "gpio": 9,
+        "net": "C5_SDIO_D0",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "io",
+        "endpoint": "direct pull-up/series branch -> C5 GPIO8 / module pad 10",
+        "gate": "input/high-Z; branch-local 10-kohm pull-up; C5 and Hub held reset"
+      },
+      {
+        "gpio": 10,
+        "net": "C5_SDIO_D1",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "io",
+        "endpoint": "direct pull-up/series branch -> C5 GPIO7 / module pad 9",
+        "gate": "input/high-Z; branch-local 10-kohm pull-up also fixes the JTAG-source strap; C5 and Hub held reset"
+      },
+      {
+        "gpio": 11,
+        "net": "C5_SDIO_D2",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "io",
+        "endpoint": "FSUSB42 HSD2+ -> D+ common -> C5 GPIO14 / module pad 14",
+        "gate": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+      },
+      {
+        "gpio": 12,
+        "net": "C5_SDIO_D3",
+        "peripheral": "PIO1_SM1_2_C5_SDIO",
+        "direction": "io",
+        "endpoint": "FSUSB42 HSD2- -> D- common -> C5 GPIO13 / module pad 13",
+        "gate": "input/high-Z; 10-kohm HSD2 branch pull-up disconnected from C5 in service mode"
+      },
+      {
+        "gpio": 13,
+        "net": "HUB_RF_SCK",
+        "peripheral": "PIO2_SM0_RF_SPI",
+        "direction": "out",
+        "endpoint": "M1.24 -> RF RP GPIO26",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 14,
+        "net": "HUB_RF_MOSI",
+        "peripheral": "PIO2_SM0_RF_SPI",
+        "direction": "out",
+        "endpoint": "M1.26 -> RF RP GPIO24",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 15,
+        "net": "HUB_RF_MISO",
+        "peripheral": "PIO2_SM0_RF_SPI",
+        "direction": "in",
+        "endpoint": "M1.27 <- RF RP GPIO27",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 16,
+        "net": "HUB_RF_CS_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "M1.23 -> RF RP GPIO25",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 17,
+        "net": "HUB_RF_ALERT_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "M1.22 <- RF RP GPIO19",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 18,
+        "net": "NRF0_SCK",
+        "peripheral": "PIO0_SM0_NRF0_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #0 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 19,
+        "net": "NRF0_MOSI",
+        "peripheral": "PIO0_SM0_NRF0_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #0 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 20,
+        "net": "NRF0_MISO",
+        "peripheral": "PIO0_SM0_NRF0_SPI",
+        "direction": "in",
+        "endpoint": "nRF24 #0 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 21,
+        "net": "NRF0_CSN_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #0 command buffer",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 22,
+        "net": "NRF0_CE_REQ",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #0 safety gate",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 23,
+        "net": "NRF0_IRQ_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "nRF24 #0 return buffer",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 24,
+        "net": "NRF1_SCK",
+        "peripheral": "PIO0_SM1_NRF1_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #1 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 25,
+        "net": "NRF1_MOSI",
+        "peripheral": "PIO0_SM1_NRF1_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #1 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 26,
+        "net": "NRF1_MISO",
+        "peripheral": "PIO0_SM1_NRF1_SPI",
+        "direction": "in",
+        "endpoint": "nRF24 #1 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 27,
+        "net": "NRF1_CSN_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #1 command buffer",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 28,
+        "net": "NRF1_CE_REQ",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #1 safety gate",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 29,
+        "net": "NRF1_IRQ_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "nRF24 #1 return buffer",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 30,
+        "net": "NRF2_SCK",
+        "peripheral": "PIO0_SM2_NRF2_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #2 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 31,
+        "net": "NRF2_MOSI",
+        "peripheral": "PIO0_SM2_NRF2_SPI",
+        "direction": "out",
+        "endpoint": "nRF24 #2 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 32,
+        "net": "NRF2_MISO",
+        "peripheral": "PIO0_SM2_NRF2_SPI",
+        "direction": "in",
+        "endpoint": "nRF24 #2 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 33,
+        "net": "NRF2_CSN_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #2 command buffer",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 34,
+        "net": "NRF2_CE_REQ",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "nRF24 #2 safety gate",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 35,
+        "net": "NRF2_IRQ_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "nRF24 #2 return buffer",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 36,
+        "net": "NRF_GROUP_PWR_EN",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "FAULT_KILL-dominant nRF rail switch",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 37,
+        "net": "SD_SCK",
+        "peripheral": "PIO0_SM3_SD_SPI",
+        "direction": "out",
+        "endpoint": "microSD command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 38,
+        "net": "SD_MOSI",
+        "peripheral": "PIO0_SM3_SD_SPI",
+        "direction": "out",
+        "endpoint": "microSD command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 39,
+        "net": "SD_MISO",
+        "peripheral": "PIO0_SM3_SD_SPI",
+        "direction": "in",
+        "endpoint": "microSD return buffer",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 40,
+        "net": "SD_CS_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "microSD command buffer",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 41,
+        "net": "SD_PWR_EN",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "microSD load switch",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 42,
+        "net": "HUB_SAFE_I2C_SDA",
+        "peripheral": "I2C1",
+        "direction": "io",
+        "endpoint": "TCA9803DGKR SDAA on 3V3_MAIN -> powered-off-Ioff boundary -> SDAB on AON_SAFE_3V3 -> M1.32 -> Pack/Safety mailboxes",
+        "gate": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+      },
+      {
+        "gpio": 43,
+        "net": "HUB_SAFE_I2C_SCL",
+        "peripheral": "I2C1",
+        "direction": "od",
+        "endpoint": "TCA9803DGKR SCLA on 3V3_MAIN -> powered-off-Ioff boundary -> SCLB on AON_SAFE_3V3 -> M1.33 -> Pack/Safety mailboxes",
+        "gate": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
+      },
+      {
+        "gpio": 44,
+        "net": "SD_DETECT_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "microSD socket detect",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 45,
+        "net": "LCD_TE",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "HMX035CTFT-001 TE",
+        "gate": "input; external pull-down while panel reset is asserted"
+      },
+      {
+        "gpio": 46,
+        "net": "LCD_BL_PWM",
+        "peripheral": "PWM",
+        "direction": "out",
+        "endpoint": "backlight hardware gate",
+        "gate": "input/high-Z; external pull-down keeps backlight off"
+      },
+      {
+        "gpio": 47,
+        "net": "HUB_RESERVE_47",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
       }
     ],
-    "internal_fallback_headers": [
+    "rear_pin_map": [
       {
-        "domain": "S3",
-        "instance": "s3_dbg_header",
-        "mpn": "Samtec FTSH-105-01-L-DV-K-P-TR",
-        "access": "open_sandwich_only"
+        "gpio": 0,
+        "net": "AUDIO_BCLK",
+        "peripheral": "PIO1_SM0_I2S_TX",
+        "direction": "out",
+        "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 BCLK",
+        "gate": "input/high-Z; external pull-down; codec-side isolation OE low"
       },
       {
-        "domain": "C5",
-        "instance": "c5_dbg_header",
-        "mpn": "Samtec FTSH-105-01-L-DV-K-P-TR",
-        "access": "open_sandwich_only"
+        "gpio": 1,
+        "net": "AUDIO_WS",
+        "peripheral": "PIO1_SM0_I2S_TX",
+        "direction": "out",
+        "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 LRCK",
+        "gate": "input/high-Z; external pull-down; codec-side isolation OE low"
       },
       {
-        "domain": "RP",
-        "instance": "rp_dbg_header",
-        "mpn": "Samtec FTSH-105-01-L-DV-K-P-TR",
-        "access": "open_sandwich_only"
+        "gpio": 2,
+        "net": "AUDIO_DOUT",
+        "peripheral": "PIO1_SM0_I2S_TX",
+        "direction": "out",
+        "endpoint": "SN74LVC1G126DCKR Ioff isolation -> ES8311 SDIN",
+        "gate": "input/high-Z; external pull-down; codec-side isolation OE low"
+      },
+      {
+        "gpio": 3,
+        "net": "AUDIO_DIN",
+        "peripheral": "PIO1_SM1_I2S_RX",
+        "direction": "in",
+        "endpoint": "ES8311 SDOUT -> SN74LVC1G126DCKR Ioff isolation",
+        "gate": "input; external pull-down; host-side isolation OE low"
+      },
+      {
+        "gpio": 4,
+        "net": "REAR_I2C_SDA",
+        "peripheral": "I2C0",
+        "direction": "io",
+        "endpoint": "codec/Si4732/headset slow-control bus",
+        "gate": "input/open-drain released; external pull-up"
+      },
+      {
+        "gpio": 5,
+        "net": "REAR_I2C_SCL",
+        "peripheral": "I2C0",
+        "direction": "od",
+        "endpoint": "codec/Si4732/headset slow-control bus",
+        "gate": "input/open-drain released; external pull-up"
+      },
+      {
+        "gpio": 6,
+        "net": "AUDIO_ARM",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "audio reset-safe selector gate",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 7,
+        "net": "M5_UNIT_SIG0",
+        "peripheral": "PIO2_SM0_1_M5_PROFILE",
+        "direction": "io",
+        "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+        "gate": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+      },
+      {
+        "gpio": 8,
+        "net": "M5_UNIT_SIG1",
+        "peripheral": "PIO2_SM0_1_M5_PROFILE",
+        "direction": "io",
+        "endpoint": "isolated M5 Unit PIO-I2C/PIO-UART/GPIO profile",
+        "gate": "input/high-Z; branch isolation disabled; accessory-side profile pull"
+      },
+      {
+        "gpio": 9,
+        "net": "CC_CSN_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "CC1101 command buffer",
+        "gate": "input/high-Z; external pull-up"
+      },
+      {
+        "gpio": 10,
+        "net": "CC_GDO0",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "CC1101 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 11,
+        "net": "CC_GDO2",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "CC1101 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 12,
+        "net": "CAP_PIN10_BUSY_OR_NFC_CS_N",
+        "peripheral": "GPIO_IRQ_OR_OUTPUT_PROFILE",
+        "direction": "io",
+        "endpoint": "SN74CBTLV1G125: U214 BUSY input or U219 NFC_CS_N output",
+        "gate": "input/high-Z; AON /OE pull-up disconnects pin 10; U219 profile drives inactive high before POWER_EN"
+      },
+      {
+        "gpio": 13,
+        "net": "CAP_IRQ",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "exact-one profile return buffer: U214 DIO1 or U219 NFC_IRQ; polarity interpreted only by the signed profile",
+        "gate": "input; external pull-down; accessory branch remains off"
+      },
+      {
+        "gpio": 14,
+        "net": "CAP_RESET_N_OR_POWER_EN",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "exact-one profile command buffer: U214 RESET_N or U219 POWER_EN",
+        "gate": "input/high-Z; external pull-down holds U214 reset and U219 power disabled"
+      },
+      {
+        "gpio": 15,
+        "net": "RF_SLOW_IO_ALERT",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "Schmitt-conditioned rear-local shared interrupt from TCA6424/voice/headset",
+        "gate": "input; raw wired interrupt has a 10-kohm 3V3_MAIN pull-up"
+      },
+      {
+        "gpio": 16,
+        "net": "VOICE_UART_TX",
+        "peripheral": "UART0",
+        "direction": "out",
+        "endpoint": "SA818S-U/V selected command path",
+        "gate": "input/high-Z; external pull-up keeps UART idle"
+      },
+      {
+        "gpio": 17,
+        "net": "VOICE_UART_RX",
+        "peripheral": "UART0",
+        "direction": "in",
+        "endpoint": "SA818S-U/V selected response path",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 18,
+        "net": "VOICE_PTT_REQ_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "FAULT_KILL-dominant voice PTT gate",
+        "gate": "input/high-Z; external pull-up inhibits TX"
+      },
+      {
+        "gpio": 19,
+        "net": "HUB_RF_ALERT_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "od",
+        "endpoint": "M1.22 -> Hub RP GPIO17",
+        "gate": "released/high-Z; external pull-up"
+      },
+      {
+        "gpio": 20,
+        "net": "VOICE_AUDIO_ON_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "voice audio activity selector",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 21,
+        "net": "PTT_BUTTON_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "direct user PTT",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 22,
+        "net": "RF_ANY_TX_N",
+        "peripheral": "GPIO_IRQ",
+        "direction": "in",
+        "endpoint": "wired actual-TX evidence",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 23,
+        "net": "CC_PWR_EN",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "CC1101 rail switch",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 24,
+        "net": "HUB_RF_MOSI",
+        "peripheral": "SPI1",
+        "direction": "in",
+        "endpoint": "M1.26 <- Hub RP GPIO14",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 25,
+        "net": "HUB_RF_CS_N",
+        "peripheral": "SPI1",
+        "direction": "in",
+        "endpoint": "M1.23 <- Hub RP GPIO16",
+        "gate": "input; external pull-up"
+      },
+      {
+        "gpio": 26,
+        "net": "HUB_RF_SCK",
+        "peripheral": "SPI1",
+        "direction": "in",
+        "endpoint": "M1.24 <- Hub RP GPIO13",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 27,
+        "net": "HUB_RF_MISO",
+        "peripheral": "SPI1",
+        "direction": "out",
+        "endpoint": "M1.27 -> Hub RP GPIO15",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 28,
+        "net": "AIR_LO_I2C_SDA",
+        "peripheral": "PIO2_SM2_AIR_I2C",
+        "direction": "io",
+        "endpoint": "power-coherent private Si5351 SDA",
+        "gate": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+      },
+      {
+        "gpio": 29,
+        "net": "AIR_LO_I2C_SCL",
+        "peripheral": "PIO2_SM2_AIR_I2C",
+        "direction": "od",
+        "endpoint": "power-coherent private Si5351 SCL",
+        "gate": "input/open-drain released; pull-up is powered only by 3V3_AIR_SWITCHED"
+      },
+      {
+        "gpio": 30,
+        "net": "CAP_I2C_SDA",
+        "peripheral": "I2C1",
+        "direction": "io",
+        "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 4 SDA",
+        "gate": "input/open-drain released; external pull-up; isolator disabled"
+      },
+      {
+        "gpio": 31,
+        "net": "CAP_I2C_SCL",
+        "peripheral": "I2C1",
+        "direction": "od",
+        "endpoint": "TCA4307DGKR hot-plug/stuck-bus isolator to exact-one U214/U219 contact 3 SCL",
+        "gate": "input/open-drain released; external pull-up; isolator disabled"
+      },
+      {
+        "gpio": 32,
+        "net": "RF_RESERVE_32",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
+      },
+      {
+        "gpio": 33,
+        "net": "RF_RESERVE_33",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
+      },
+      {
+        "gpio": 34,
+        "net": "RF_RESERVE_34",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
+      },
+      {
+        "gpio": 35,
+        "net": "AIR_RX_EN",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "Airband switched rail and LT5560 enable",
+        "gate": "input/high-Z; external pull-down disables converted path"
+      },
+      {
+        "gpio": 36,
+        "net": "AIR_RX_MODE",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "direct FM/SW versus converted-Airband selector",
+        "gate": "input/high-Z; external pull-down selects direct FM/SW"
+      },
+      {
+        "gpio": 37,
+        "net": "RF_RESERVE_37",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
+      },
+      {
+        "gpio": 38,
+        "net": "RF_RESERVE_38",
+        "peripheral": "GPIO",
+        "direction": "reserve",
+        "endpoint": "test pad only",
+        "gate": "input/high-Z; external pull-down; DNP"
+      },
+      {
+        "gpio": 39,
+        "net": "CC_MISO",
+        "peripheral": "PIO0_SM0_CC_SPI",
+        "direction": "in",
+        "endpoint": "CC1101 return buffer",
+        "gate": "input; external pull-down"
+      },
+      {
+        "gpio": 40,
+        "net": "CAP_GNSS_TX_OR_RF_SW0",
+        "peripheral": "UART1_OR_GPIO_PROFILE",
+        "direction": "out",
+        "endpoint": "exact-one profile: U214 GNSS RX or U219 RF_SW0",
+        "gate": "input/high-Z; external pull-down until signed profile admission"
+      },
+      {
+        "gpio": 41,
+        "net": "CAP_GNSS_RX_OR_CC_GDO0",
+        "peripheral": "UART1_OR_GPIO_IRQ_PROFILE",
+        "direction": "in",
+        "endpoint": "exact-one profile return: U214 GNSS TX or U219 CC1101 GDO0",
+        "gate": "input; external pull-down; accessory branch remains off"
+      },
+      {
+        "gpio": 42,
+        "net": "CC_SCK",
+        "peripheral": "PIO0_SM0_CC_SPI",
+        "direction": "out",
+        "endpoint": "CC1101 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 43,
+        "net": "CC_MOSI",
+        "peripheral": "PIO0_SM0_CC_SPI",
+        "direction": "out",
+        "endpoint": "CC1101 command buffer",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 44,
+        "net": "CAP_SPI_MISO",
+        "peripheral": "PIO0_SM1_CAP_SPI",
+        "direction": "in",
+        "endpoint": "exact-one profile return: U214 MISO or U219 shared MISO",
+        "gate": "input; external pull-down; accessory branch remains off"
+      },
+      {
+        "gpio": 45,
+        "net": "CAP_SPI_SCK",
+        "peripheral": "PIO0_SM1_CAP_SPI",
+        "direction": "out",
+        "endpoint": "exact-one profile command: U214 SCK or U219 shared SCLK",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 46,
+        "net": "CAP_SPI_MOSI",
+        "peripheral": "PIO0_SM1_CAP_SPI",
+        "direction": "out",
+        "endpoint": "exact-one profile command: U214 MOSI or U219 shared MOSI",
+        "gate": "input/high-Z; external pull-down"
+      },
+      {
+        "gpio": 47,
+        "net": "CAP_SPI_PRIMARY_CS_N",
+        "peripheral": "GPIO",
+        "direction": "out",
+        "endpoint": "exact-one profile command: U214 NSS_N or U219 CC1101_CS_N",
+        "gate": "input/high-Z; external pull-up keeps either profile deselected"
       }
-    ]
-  },
-  "audio_headset": {
-    "owner": "S3",
-    "jack": {
-      "instance": "headphone_jack",
-      "mpn": "Same Sky SJ-43504-SMT-TR",
-      "wiring": "CTIA/AHJ",
-      "contacts": {
-        "TIP": "left headphone",
-        "RING1": "right headphone",
-        "RING2": "audio ground",
-        "SLEEVE": "biased headset microphone"
-      }
-    },
-    "detect": {
-      "endpoint": "slow_io.P02",
-      "net": "HEADSET_ABSENT",
-      "direction": "input_only",
-      "levels": {
-        "high": "absent",
-        "low": "inserted_or_open_wire"
+    ],
+    "c5_sdio_service_mux": {
+      "contract_id": "C5-SDIO-SERVICE-MUX-1",
+      "status": "machine_contract_defined_factory_mux_and_detector_latch_routes_accepted",
+      "module": "ESP32-C5-WROOM-1U-N8R8",
+      "mux_reference": {
+        "manufacturer": "onsemi",
+        "mpn": "FSUSB42MUX",
+        "package": "MSOP-10",
+        "bandwidth_mhz_typ": 720,
+        "on_resistance_ohm_typ": 3.9,
+        "break_before_make_ns_min": 2.0,
+        "power_off_isolation_required": true
       },
-      "protection": "10-kOhm series plus 100-kOhm pull-down",
-      "rule": "firmware never configures P02 as an output"
-    },
-    "microphone_select": {
-      "controller": "TCA9534APWR",
-      "i2c_address_7bit": "0x39",
-      "endpoint": "headset_control_io.P0",
-      "net": "HEADSET_INTERNAL_MIC_SEL",
-      "levels": {
-        "high_or_input": "internal microphone",
-        "low": "headset microphone"
+      "production_route": {
+        "selection_status": "accepted",
+        "candidate": {
+          "manufacturer": "onsemi",
+          "mpn": "FSUSB42MUX",
+          "jlcpcb_part_number": "C11355",
+          "package": "MSOP-10",
+          "assembly_type": "SMT Assembly",
+          "pcba_type": [
+            "Economic",
+            "Standard"
+          ],
+          "catalog_identity_url": "https://jlcpcb.com/partdetail/onsemi-FSUSB42MUX/C11355",
+          "identity_checked_on": "2026-08-30",
+          "source": "JLCPCB",
+          "part_class": "Extended",
+          "msl_level": "MSL 1"
+        },
+        "live_inventory": {
+          "checked_at": "2026-08-30T13:08:13+03:00",
+          "surface": "JLCPCB live part-detail browser surface",
+          "stock": 66698,
+          "available_order_quantity": 66045,
+          "moq": 1,
+          "full_reel_quantity": 4000,
+          "currency": "USD",
+          "price_tiers_usd": [
+            {
+              "minimum_quantity": 1,
+              "unit_price": 0.3179
+            },
+            {
+              "minimum_quantity": 50,
+              "unit_price": 0.2458
+            },
+            {
+              "minimum_quantity": 150,
+              "unit_price": 0.2106
+            },
+            {
+              "minimum_quantity": 500,
+              "unit_price": 0.1748
+            },
+            {
+              "minimum_quantity": 2500,
+              "unit_price": 0.1662
+            },
+            {
+              "minimum_quantity": 4000,
+              "unit_price": 0.1611
+            }
+          ],
+          "route": "public JLCPCB stock"
+        },
+        "release_rule": "Accepted for H2 schematic use because exact identity, Standard-PCBA eligibility, public live stock, MOQ and price were timestamped together. Recheck at architecture freeze and immediately before the exact-one order."
       },
-      "reset_default": "P0 input plus 100-kOhm pull-up selects internal microphone",
-      "reserve_endpoints": [
-        "P1",
-        "P2",
-        "P3",
-        "P4",
-        "P5",
-        "P6",
-        "P7"
+      "ownership": {
+        "service_vbus": {
+          "source": "C5 service USB connector VBUS",
+          "use": "high-impedance presence sense only",
+          "forbidden": [
+            "board power input",
+            "battery charge input",
+            "back-power path"
+          ],
+          "hardware_requirement": "An always-on hardware detector and asynchronous latch must seize service ownership without C5 or Hub firmware.",
+          "detector_and_latch_mpn_status": "accepted"
+        },
+        "detector_latch_implementation": {
+          "selection_status": "accepted",
+          "checked_at": "2026-08-30T13:36:59+03:00",
+          "aon_rail": "AON_SAFE_3V3",
+          "detector": {
+            "manufacturer": "Diodes Incorporated",
+            "mpn": "DMN2056U-7",
+            "device_id": "diodes_dmn2056u_7",
+            "jlcpcb_part_number": "C332302",
+            "package": "SOT-23",
+            "assembly_type": "SMT Assembly",
+            "pcba_type": [
+              "Economic",
+              "Standard"
+            ],
+            "part_class": "Extended",
+            "msl_level": "MSL 1",
+            "topology": "C5 service VBUS -> 1-Mohm top resistor -> MOSFET gate; 1-Mohm gate-to-ground resistor; source to ground; drain is SERVICE_VBUS_PRESENT_N with an AON 10-kohm pull-up",
+            "input_current_ua_nominal_at_5v": 2.5,
+            "gate_voltage_v_nominal_at_5v": 2.5,
+            "gate_voltage_v_min_at_4v75_with_1pct_divider": 2.351,
+            "proof": "The only service-VBUS DC path is the 2-Mohm divider to ground and the insulated MOSFET gate. No semiconductor junction or product rail is connected to service VBUS. Valid USB VBUS gives at least 2.351 V at the gate, above the exact device's 1.8-V RDS(on) test point; presence therefore pulls the active-low detector node hard low before any application domain is released.",
+            "live_inventory": {
+              "stock": 20209,
+              "available_order_quantity": 20078,
+              "moq": 1,
+              "full_reel_quantity": 3000,
+              "currency": "USD",
+              "price_tiers_usd": [
+                {
+                  "minimum_quantity": 1,
+                  "unit_price": 0.0695
+                },
+                {
+                  "minimum_quantity": 100,
+                  "unit_price": 0.0562
+                },
+                {
+                  "minimum_quantity": 300,
+                  "unit_price": 0.0495
+                },
+                {
+                  "minimum_quantity": 3000,
+                  "unit_price": 0.0404
+                },
+                {
+                  "minimum_quantity": 6000,
+                  "unit_price": 0.0365
+                },
+                {
+                  "minimum_quantity": 9000,
+                  "unit_price": 0.0346
+                }
+              ],
+              "route": "public JLCPCB stock",
+              "url": "https://jlcpcb.com/partdetail/DiodesIncorporated-DMN2056U7/C332302"
+            }
+          },
+          "latch": {
+            "manufacturer": "Texas Instruments",
+            "mpn": "SN74LVC1G74DCUR",
+            "device_id": "ti_sn74lvc1g74_dcur",
+            "jlcpcb_part_number": "C70285",
+            "package": "VSSOP-8",
+            "assembly_type": "SMT Assembly",
+            "pcba_type": [
+              "Economic",
+              "Standard"
+            ],
+            "part_class": "Extended",
+            "msl_level": "MSL 1",
+            "pin_topology": [
+              {
+                "pin": 1,
+                "name": "CLK",
+                "net": "SAFETY_GROUND",
+                "reason": "no synchronous state changes"
+              },
+              {
+                "pin": 2,
+                "name": "D",
+                "net": "SAFETY_GROUND",
+                "reason": "no synchronous state changes"
+              },
+              {
+                "pin": 3,
+                "name": "Q_N",
+                "net": "C5_SERVICE_FREE_DIAG",
+                "reason": "read-only AON diagnostic"
+              },
+              {
+                "pin": 4,
+                "name": "GND",
+                "net": "SAFETY_GROUND"
+              },
+              {
+                "pin": 5,
+                "name": "Q",
+                "net": "C5_SERVICE_OWNED"
+              },
+              {
+                "pin": 6,
+                "name": "CLR_N",
+                "net": "C5_SERVICE_CLEAR_N"
+              },
+              {
+                "pin": 7,
+                "name": "PRE_N",
+                "net": "SERVICE_VBUS_PRESENT_N"
+              },
+              {
+                "pin": 8,
+                "name": "VCC",
+                "net": "AON_SAFE_3V3"
+              }
+            ],
+            "live_inventory": {
+              "stock": 5518,
+              "available_order_quantity": 5247,
+              "moq": 1,
+              "full_reel_quantity": 3000,
+              "currency": "USD",
+              "price_tiers_usd": [
+                {
+                  "minimum_quantity": 1,
+                  "unit_price": 0.2386
+                },
+                {
+                  "minimum_quantity": 50,
+                  "unit_price": 0.1901
+                },
+                {
+                  "minimum_quantity": 150,
+                  "unit_price": 0.1693
+                },
+                {
+                  "minimum_quantity": 500,
+                  "unit_price": 0.1291
+                },
+                {
+                  "minimum_quantity": 3000,
+                  "unit_price": 0.1176
+                },
+                {
+                  "minimum_quantity": 6000,
+                  "unit_price": 0.1107
+                }
+              ],
+              "route": "public JLCPCB stock",
+              "url": "https://jlcpcb.com/partdetail/TexasInstruments-SN74LVC1G74DCUR/C70285"
+            }
+          },
+          "release_qualifier": {
+            "manufacturer": "Nexperia",
+            "mpn": "74HC20PW,118",
+            "device_id": "nexperia_74hc20pw_118",
+            "jlcpcb_part_number": "C546719",
+            "package": "TSSOP-14",
+            "assembly_type": "SMT Assembly",
+            "pcba_type": [
+              "Economic",
+              "Standard"
+            ],
+            "part_class": "Extended",
+            "msl_level": "MSL 1",
+            "used_gate": {
+              "inputs": [
+                "SERVICE_VBUS_PRESENT_N",
+                "C5_EN_LOW_PROOF",
+                "HUB_SDIO_HIGH_Z_PROOF",
+                "AON_SERVICE_RELEASE_REQ"
+              ],
+              "output": "C5_SERVICE_CLEAR_N",
+              "function": "four-input NAND; CLR_N can go low only when VBUS is absent and all three release proofs are high"
+            },
+            "unused_gate": "tie all four inputs to SAFETY_GROUND; leave the deterministic-high output unconnected",
+            "live_inventory": {
+              "stock": 21855,
+              "available_order_quantity": 21853,
+              "moq": 1,
+              "full_reel_quantity": 2500,
+              "currency": "USD",
+              "price_tiers_usd": [
+                {
+                  "minimum_quantity": 1,
+                  "unit_price": 0.2443
+                },
+                {
+                  "minimum_quantity": 50,
+                  "unit_price": 0.1903
+                },
+                {
+                  "minimum_quantity": 150,
+                  "unit_price": 0.1672
+                },
+                {
+                  "minimum_quantity": 500,
+                  "unit_price": 0.1384
+                },
+                {
+                  "minimum_quantity": 2500,
+                  "unit_price": 0.1256
+                },
+                {
+                  "minimum_quantity": 5000,
+                  "unit_price": 0.1178
+                }
+              ],
+              "route": "public JLCPCB stock",
+              "url": "https://jlcpcb.com/partdetail/Nexperia-74HC20PW118/C546719"
+            }
+          },
+          "passives": [
+            {
+              "quantity": 2,
+              "role": "VBUS-to-gate and gate-to-ground divider",
+              "mpn": "RC0402FR-071ML",
+              "jlcpcb_part_number": "C138033",
+              "value": "1 Mohm 1%",
+              "stock": 1854892,
+              "available_order_quantity": 1781522,
+              "moq": 1,
+              "unit_price_usd_quantity_1": 0.0041
+            },
+            {
+              "quantity": 1,
+              "role": "SERVICE_VBUS_PRESENT_N AON pull-up",
+              "mpn": "RC0402FR-0710KL",
+              "jlcpcb_part_number": "C60490",
+              "value": "10 kohm 1%",
+              "stock": 10270546,
+              "available_order_quantity": 7748753,
+              "moq": 1,
+              "unit_price_usd_quantity_1": 0.0037
+            },
+            {
+              "quantity": 2,
+              "role": "latch and NAND local bypass",
+              "mpn": "CC0402KRX7R9BB104",
+              "jlcpcb_part_number": "C131394",
+              "value": "100 nF 50 V X7R 10%",
+              "stock": 8992823,
+              "available_order_quantity": 7838802,
+              "moq": 1,
+              "unit_price_usd_quantity_1": 0.0107
+            }
+          ],
+          "truth_table": [
+            {
+              "service_vbus": "present",
+              "present_n": 0,
+              "release_proofs": "X",
+              "pre_n": 0,
+              "clear_n": 1,
+              "result": "asynchronously set and hold C5_SERVICE_OWNED=1"
+            },
+            {
+              "service_vbus": "absent",
+              "present_n": 1,
+              "release_proofs": "not all high",
+              "pre_n": 1,
+              "clear_n": 1,
+              "result": "hold the previous ownership state"
+            },
+            {
+              "service_vbus": "absent",
+              "present_n": 1,
+              "release_proofs": "all high",
+              "pre_n": 1,
+              "clear_n": 0,
+              "result": "clear C5_SERVICE_OWNED=0 for runtime SDIO"
+            }
+          ],
+          "invariants": [
+            "PRE_N and CLR_N cannot both be low because SERVICE_VBUS_PRESENT_N is both PRE_N and one input of the clear NAND.",
+            "C5, Hub and mux remain in the global AON-POR safe shell until either asynchronous preset or qualified clear has established a valid ownership state.",
+            "No C5, Hub or S3 firmware output reaches PRE_N, CLR_N or the VBUS detector.",
+            "The explicit AON release request is necessary but cannot clear ownership unless VBUS absence, C5 EN low and Hub SDIO high-Z are simultaneously proven in hardware."
+          ],
+          "exact_one_component_cost_usd": 0.5857,
+          "release_rule": "Accepted for native R2 schematic use. Recheck every exact JLC number, Standard-PCBA eligibility, stock/explicit route, MOQ and price at architecture freeze and immediately before the exact-one order."
+        },
+        "latch": {
+          "signal": "C5_SERVICE_OWNED",
+          "asynchronous_set": "service VBUS present",
+          "clear_condition": "service VBUS absent AND C5 EN asserted low AND Hub SDIO pins proven high-impedance AND explicit AON service-release request",
+          "service_override": [
+            "force Hub RUN low",
+            "force C5 EN low during switch",
+            "force mux OE high during branch change",
+            "force mux SEL low",
+            "deny Hub SDIO drive"
+          ],
+          "firmware_cannot_override": true
+        },
+        "states": [
+          {
+            "state": "SAFE_DISCONNECTED",
+            "c5_en": 0,
+            "hub_run": 0,
+            "hub_sdio": "high-Z",
+            "mux_oe": 1,
+            "mux_sel": "X"
+          },
+          {
+            "state": "SERVICE_USB",
+            "c5_en": 1,
+            "hub_run": 0,
+            "hub_sdio": "high-Z",
+            "mux_oe": 0,
+            "mux_sel": 0
+          },
+          {
+            "state": "RUNTIME_SDIO",
+            "c5_en": 1,
+            "hub_run": 1,
+            "hub_sdio": "SDIO host",
+            "mux_oe": 0,
+            "mux_sel": 1
+          }
+        ],
+        "power_on_default": "SERVICE_USB branch selected; C5 and Hub remain reset until the always-on sequencer has sampled service VBUS and established one legal state."
+      },
+      "transition_sequences": {
+        "runtime_to_service": [
+          "asynchronously latch C5_SERVICE_OWNED when service VBUS is detected",
+          "assert C5 EN low and Hub RUN low; deny all Hub SDIO output enables and prove the Hub pins high-impedance",
+          "drive mux OE high to disconnect both HSD branches",
+          "wait at least 1 microsecond, exceeding FSUSB42 turn-off and break-before-make maxima",
+          "drive mux SEL low for HSD1 USB",
+          "wait at least 1 microsecond, then drive mux OE low",
+          "establish all C5 boot and SDIO-edge strap levels",
+          "release C5 EN only; keep Hub RUN low and strap levels stable for at least 3 milliseconds"
+        ],
+        "service_to_runtime": [
+          "require service VBUS absent and assert C5 EN low",
+          "keep Hub SDIO pins high-impedance while releasing Hub RUN and entering the ownership stub",
+          "drive mux OE high and wait at least 1 microsecond",
+          "drive mux SEL high for HSD2 SDIO and wait at least 1 microsecond",
+          "drive mux OE low while both endpoints remain non-driving",
+          "apply GPIO25 high, GPIO3 low and GPIO7 high strap levels, then release C5 EN",
+          "hold strap levels for at least 3 milliseconds and initialize C5 SDIO slave",
+          "train at 20 MHz before enabling Hub drive; target 40 MHz only after the HIL gates pass"
+        ],
+        "illegal": [
+          "changing SEL while C5 or Hub can drive GPIO13/GPIO14",
+          "releasing Hub RUN in SERVICE_USB",
+          "letting firmware clear C5_SERVICE_OWNED while VBUS is present",
+          "using service VBUS as a power source"
+        ]
+      },
+      "performance": {
+        "bus_width_bits": 4,
+        "bringup_clock_hz": 20000000,
+        "bringup_raw_mb_s": 10.0,
+        "target_clock_hz": 40000000,
+        "target_raw_mb_s": 20.0,
+        "qualified_payload_floor_mb_s": 7.5,
+        "qualification_frequency_hz": 40000000,
+        "rule": "20 MHz is bring-up only. The 7.5 MB/s payload floor is accepted only at the 40 MHz target after reset, coexistence and long-run HIL."
+      },
+      "hil_gates": [
+        "USB enumerate, flash, reset and recovery with Hub held reset and every non-muxed SDIO signal externally pulled to a legal idle",
+        "hot insertion and removal of service VBUS from every runtime state without contention, back-power or loss of recovery ownership",
+        "CMD52/CMD53, CRC7/CRC16, DAT1 interrupt, turnaround and reset recovery at 20 MHz before 40 MHz",
+        "at least 7.5 MB/s framed payload at 40 MHz with control priority under simultaneous C5 radio load",
+        "USB Full-Speed eye/edge compliance through the selected production mux and final PCB stack-up",
+        "GPIO3/GPIO25/GPIO7 strap readback, eFuse policy and wrong-image recovery across temperature and supply corners",
+        "24-to-48-hour soak with repeated service seizure and release; no C5/Hub bus contention or stuck ownership"
+      ]
+    },
+    "pack_safety_i2c_boundary": {
+      "schema_version": 1,
+      "id": "H2-R2-PACK-SAFETY-I2C-BOUNDARY",
+      "marker": "H2-R2.0.3",
+      "status": "reviewed_exact_factory_placeable_boundary",
+      "scope": "Exact powered-off-Ioff boundary between the main-powered Hub RP I2C1 segment and the always-on Pack/Safety mailbox segment.",
+      "authority": {
+        "pin_source": "hardware/architecture/h1-r2-dual-rp-pinout.json",
+        "functional_source": "hardware/architecture/h0-r2-rebaseline.json",
+        "device_register": "hardware/architecture/devices.json",
+        "does_not_authorize": [
+          "R2 KiCad",
+          "fabrication",
+          "ordering"
+        ]
+      },
+      "bus": {
+        "name": "HUB_PACK_SAFETY",
+        "maximum_clock_hz": 400000,
+        "hub_endpoints": {
+          "sda": "Hub RP GPIO42 / M1.32",
+          "scl": "Hub RP GPIO43 / M1.33"
+        },
+        "aon_endpoints": [
+          "Pack MSPM0C1106SDGS20R PA0/PA11",
+          "Safety MSPM0C1106SDGS20R PA0/PA11"
+        ],
+        "hard_safety_dependency": false,
+        "failure_semantics": "A stuck mailbox bus may remove diagnostics but cannot inhibit the independent FAULT_KILL path or the local Safety watchdog."
+      },
+      "buffer": {
+        "device_key": "ti_tca9803_dgkr",
+        "manufacturer": "Texas Instruments",
+        "mpn": "TCA9803DGKR",
+        "jlcpcb_part_number": "C2687966",
+        "package": "VSSOP-8-0.65mm",
+        "pin_topology": [
+          {
+            "pin": 1,
+            "name": "VCCA",
+            "net": "3V3_MAIN"
+          },
+          {
+            "pin": 2,
+            "name": "SCLA",
+            "net": "HUB_SAFE_I2C_SCL_MAIN"
+          },
+          {
+            "pin": 3,
+            "name": "SDAA",
+            "net": "HUB_SAFE_I2C_SDA_MAIN"
+          },
+          {
+            "pin": 4,
+            "name": "GND",
+            "net": "GND"
+          },
+          {
+            "pin": 5,
+            "name": "EN",
+            "net": "TCA9803_EN_INTERNAL_VCCA_PULLUP"
+          },
+          {
+            "pin": 6,
+            "name": "SDAB",
+            "net": "HUB_SAFE_I2C_SDA_AON"
+          },
+          {
+            "pin": 7,
+            "name": "SCLB",
+            "net": "HUB_SAFE_I2C_SCL_AON"
+          },
+          {
+            "pin": 8,
+            "name": "VCCB",
+            "net": "AON_SAFE_3V3"
+          }
+        ],
+        "electrical_contract": {
+          "vcca_v": 3.3,
+          "vccb_v": 3.3,
+          "supply_relationship": "none; VCCA may be below, equal to or above VCCB",
+          "a_side_powered_off_state": "high impedance",
+          "all_bus_pins_back_power_protection": true,
+          "b_side_current_source_ma_typical": 3.3,
+          "b_side_external_pullups": "forbidden",
+          "b_side_capacitance_pf_max": 400,
+          "enable": "internal 150..450-kohm pull-up to VCCA; no firmware control; UVLO isolates when either supply is invalid",
+          "startup_us_max": 350
+        },
+        "factory_surface": {
+          "checked": "2026-08-30",
+          "source": "JLCPCB",
+          "assembly_type": "SMT Assembly",
+          "pcba_type": "Economic and Standard",
+          "library_type": "Extended",
+          "stock": 1864,
+          "available_order_quantity": 1818,
+          "moq": 1,
+          "unit_price_usd_quantity_1": 0.3525,
+          "url": "https://jlcpcb.com/partdetail/TexasInstruments-TCA9803DGKR/C2687966"
+        }
+      },
+      "rail_local_termination": {
+        "main_a_side": {
+          "rule": "Two external 2.2-kohm pull-ups to 3V3_MAIN, one on SDAA and one on SCLA.",
+          "quantity": 2,
+          "device_key": "uniroyal_0402wgf2201tce",
+          "mpn": "UNI-ROYAL 0402WGF2201TCE",
+          "jlcpcb_part_number": "C25879",
+          "unit_price_usd_quantity_1": 0.0039
+        },
+        "aon_b_side": {
+          "rule": "No external pull-up or other current source; the TCA9803 B-side 3.3-mA current sources are the AON-local termination.",
+          "external_pullup_quantity": 0,
+          "sink_compatibility": "3.3 mA typical is below the MSPM0C1106 6-mA SDIO sink rating at VDD >= 2.7 V."
+        }
+      },
+      "decoupling": [
+        {
+          "rail": "3V3_MAIN",
+          "value": "1 uF",
+          "quantity": 1,
+          "device_key": "samsung_cl05a105ka5nqnc",
+          "mpn": "Samsung CL05A105KA5NQNC",
+          "jlcpcb_part_number": "C52923",
+          "unit_price_usd_quantity_1": 0.012
+        },
+        {
+          "rail": "3V3_MAIN",
+          "value": "100 nF",
+          "quantity": 1,
+          "device_key": "samsung_cl05b104ko5nnnc",
+          "mpn": "Samsung CL05B104KO5NNNC",
+          "jlcpcb_part_number": "C1525",
+          "unit_price_usd_quantity_1": 0.0055
+        },
+        {
+          "rail": "AON_SAFE_3V3",
+          "value": "1 uF",
+          "quantity": 1,
+          "device_key": "samsung_cl05a105ka5nqnc",
+          "mpn": "Samsung CL05A105KA5NQNC",
+          "jlcpcb_part_number": "C52923",
+          "unit_price_usd_quantity_1": 0.012
+        },
+        {
+          "rail": "AON_SAFE_3V3",
+          "value": "100 nF",
+          "quantity": 1,
+          "device_key": "samsung_cl05b104ko5nnnc",
+          "mpn": "Samsung CL05B104KO5NNNC",
+          "jlcpcb_part_number": "C1525",
+          "unit_price_usd_quantity_1": 0.0055
+        }
       ],
-      "reserve_default": "inputs with individual 100-kOhm pull-downs and shared interrupt capability"
-    },
-    "state_policy": [
-      {
-        "state": "ABSENT",
-        "detect": "high_stable",
-        "microphone": "internal",
-        "speaker": "policy_controlled"
+      "power_truth_table": [
+        {
+          "main": 0,
+          "aon": 0,
+          "result": "both segments unpowered; all boundary bus pins high-Z"
+        },
+        {
+          "main": 0,
+          "aon": 1,
+          "result": "A-side powered-off high-Z; AON mailboxes remain locally terminated; no Hub/main back-power"
+        },
+        {
+          "main": 1,
+          "aon": 0,
+          "result": "B-side UVLO/back-power protection isolates AON; no reverse power"
+        },
+        {
+          "main": 1,
+          "aon": 1,
+          "result": "bidirectional 400-kHz mailbox bridge active after <=350 us startup"
+        }
+      ],
+      "exact_one_component_cost_usd": 0.3953,
+      "verification": {
+        "pre_ecad": [
+          "Pin topology and the no-B-side-pull-up rule are machine checked.",
+          "Each selected MPN has an exact current JLCPCB assembly route, MOQ and one-piece price."
+        ],
+        "h3_hil": [
+          "Measure <1 uA unintended cross-rail current with main off/AON on and with main on/AON off.",
+          "Measure 400-kHz rise/fall timing and prove total B-side capacitance <=400 pF.",
+          "Inject SDA/SCL stuck-low faults and prove FAULT_KILL remains independent while mailbox diagnostics fail explicitly."
+        ]
       },
-      {
-        "state": "INSERTED_HEADSET",
-        "detect": "low_stable",
-        "microphone": "headset",
-        "speaker": "forced_off"
-      },
-      {
-        "state": "INSERTED_INTERNAL_MIC",
-        "detect": "low_stable",
-        "microphone": "internal",
-        "speaker": "forced_off"
-      },
-      {
-        "state": "UNKNOWN_OR_IO_FAULT",
-        "detect": "ambiguous_or_unreadable",
-        "microphone": "internal_reset_default",
-        "speaker": "forced_off"
-      }
-    ],
-    "transition_rules": [
-      "a raw low immediately disables the loudspeaker before debounce or microphone-source change",
-      "stable insertion defaults to headset microphone; an explicit user choice may retain the internal microphone for a TRS plug",
-      "removal restores P0 to input/internal default before loudspeaker policy may enable playback",
-      "detect, selector and I2C readback disagreement is an audio fault and never enables the loudspeaker",
-      "the selected SA818S-U/V PTT path remains independent of audio samples and microphone choice"
-    ],
-    "qualification": [
-      "CTIA headset and TRS headphone insertion/removal including contact chatter",
-      "reset, I2C loss, stuck detect, selector readback mismatch and rapid unplug/replug",
-      "pop/click, bias, gain, ESD, RF immunity and simultaneous capture/playback",
-      "all seven reserve pins remain quiet and do not create interrupt storms"
-    ]
-  },
-  "lora_cap_profiles": [
-    {
-      "assembly": "LESHY2-LORA-CAP-01-EU868",
-      "module": "NiceRF LoRa1262-868",
-      "allowed_frequency_mhz": [
-        848,
-        888
+      "sources": [
+        "https://www.ti.com/lit/ds/symlink/tca9803.pdf",
+        "https://www.ti.com/product/TCA9803",
+        "https://www.ti.com/lit/ds/symlink/mspm0c1106.pdf",
+        "https://jlcpcb.com/partdetail/TexasInstruments-TCA9803DGKR/C2687966",
+        "https://jlcpcb.com/partdetail/0402WGF2201TCE/C25879",
+        "https://jlcpcb.com/partdetail/SamsungElectroMechanics-CL05A105KA5NQNC/C52923",
+        "https://jlcpcb.com/partdetail/SamsungElectroMechanics-CL05B104KO5NNNC/C1525"
       ]
     },
-    {
-      "assembly": "LESHY2-LORA-CAP-01-US915",
-      "module": "NiceRF LoRa1262-915",
-      "allowed_frequency_mhz": [
-        900,
-        940
+    "native_r2_inventory": {
+      "marker": "H2-R2.1.1",
+      "status": "pass",
+      "projects": [
+        {
+          "id": "LESHY2-UI-R2",
+          "board": "front UI/radio PCB",
+          "root": "UI_00_ROOT",
+          "sheets": [
+            {
+              "id": "UI_00_ROOT",
+              "role": "front hierarchy and named interfaces only",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "UI_10_S3_DISPLAY_TOUCH",
+              "role": "S3 core, exact direct i8080-8 display, touch and S3 service",
+              "domain_owner": "s3",
+              "sources": [
+                "functional",
+                "pin_map",
+                "display_adapter"
+              ]
+            },
+            {
+              "id": "UI_11_STORAGE_CONTROLS_INDICATORS",
+              "role": "Hub-local microSD, encoder, user keys and two-row indicators",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "UI_20_C5_WIFI_IR_SERVICE",
+              "role": "C5 native 2.4/5-GHz, IR, exact SDIO/service mux and independent recovery",
+              "domain_owner": "c5",
+              "sources": [
+                "functional",
+                "pin_map",
+                "c5_mux_and_service_vbus"
+              ]
+            },
+            {
+              "id": "UI_30_HUB_RP_CORE_SERVICE",
+              "role": "front Hub RP2354B core, flash, reset, USB, DBG10 and local transport fan-out",
+              "domain_owner": "hub_rp",
+              "sources": [
+                "functional",
+                "pin_map"
+              ]
+            },
+            {
+              "id": "UI_31_NRF24_X3_TX_EVIDENCE",
+              "role": "three independent full-function nRF24 paths, isolation, couplers and actual-TX evidence",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "UI_40_INTERBOARD_M1",
+              "role": "front endpoint of the exact 80-contact M1 contract",
+              "sources": [
+                "functional",
+                "pin_map"
+              ]
+            },
+            {
+              "id": "UI_50_FRONT_POWER_SAFETY",
+              "role": "front-local quiet-state, TX gates, reset-safe power and evidence aggregation",
+              "sources": [
+                "functional",
+                "pin_map"
+              ]
+            },
+            {
+              "id": "UI_60_TESTPOINTS_MANUFACTURING",
+              "role": "front diagnostic and manufacturing access only",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "LESHY2-RF-R2",
+          "board": "rear RF/power PCB",
+          "root": "RF_00_ROOT",
+          "sheets": [
+            {
+              "id": "RF_00_ROOT",
+              "role": "rear hierarchy and named interfaces only",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_01_USB_PD_CHARGE",
+              "role": "sole powered USB, PD input, two-cell charging and pack measurement",
+              "sources": [
+                "functional",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_02_PACK_SAFETY_AON",
+              "role": "Pack admission, Safety controller, independent watchdog, FAULT_KILL and exact powered-off I2C boundary",
+              "domain_owners": [
+                "pack",
+                "safety"
+              ],
+              "sources": [
+                "functional",
+                "pin_map",
+                "pack_safety_boundary"
+              ]
+            },
+            {
+              "id": "RF_03_MAIN_RAILS_DOMAIN_GATES",
+              "role": "AON and main rails plus independently quietable power domains",
+              "sources": [
+                "functional",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_10_RP2354_CORE_SERVICE",
+              "role": "rear RF RP2354B core, flash, reset, USB and DBG10",
+              "domain_owner": "rf_rp",
+              "sources": [
+                "functional",
+                "pin_map"
+              ]
+            },
+            {
+              "id": "RF_20_CC1101_VOICE_TX",
+              "role": "CC1101 and independent VHF/UHF voice paths with real-TX evidence",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_21_BROADCAST_AIRBAND_RX",
+              "role": "FM/AM/SW/LW and mandatory receive-only 118-137-MHz Airband conversion",
+              "sources": [
+                "functional",
+                "pin_map",
+                "airband"
+              ]
+            },
+            {
+              "id": "RF_22_AUDIO_CODEC_IO",
+              "role": "rear-local codec, microphone, speaker and CTIA headset routing",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_30_U214_U219_M5_EXT",
+              "role": "mutually exclusive U214/U219 Cap profiles and protected M5 Unit expansion",
+              "sources": [
+                "functional",
+                "pin_map",
+                "u214_u219"
+              ]
+            },
+            {
+              "id": "RF_31_REAR_CONTROLS",
+              "role": "rear power command and service-side controls",
+              "sources": [
+                "functional",
+                "physical"
+              ]
+            },
+            {
+              "id": "RF_40_INTERBOARD_M1",
+              "role": "rear endpoint of the exact 80-contact M1 contract",
+              "sources": [
+                "functional",
+                "pin_map"
+              ]
+            },
+            {
+              "id": "RF_50_TX_SAFETY_EVIDENCE",
+              "role": "rear actual-TX evidence, wired fault plane and fail-closed release gates",
+              "sources": [
+                "functional",
+                "pin_map",
+                "pack_safety_boundary"
+              ]
+            },
+            {
+              "id": "RF_60_TESTPOINTS_MANUFACTURING",
+              "role": "rear diagnostic and manufacturing access only",
+              "sources": [
+                "functional",
+                "pin_map",
+                "physical"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L2-DISP-ADP-001-B",
+          "board": "replaceable passive 40-to-50 display adapter",
+          "root": "ADP_00_DISPLAY_ADAPTER",
+          "sheets": [
+            {
+              "id": "ADP_00_DISPLAY_ADAPTER",
+              "role": "exact passive DF40-to-FH34 one-to-one/strap map; no active device",
+              "sources": [
+                "display_adapter",
+                "physical"
+              ]
+            }
+          ]
+        }
+      ],
+      "summary": {
+        "project_count": 3,
+        "sheet_count": 23,
+        "domain_count": 6,
+        "component_group_count": 242,
+        "component_quantity_per_product": 1197,
+        "external_antenna_group_count": 8,
+        "external_antenna_count": 12,
+        "unresolved_pre_ecad_prerequisites": 0,
+        "native_schematic_symbols_created": 0,
+        "native_schematic_nets_created": 0
+      },
+      "historical_quarantine": {
+        "generation": "single-RP R1",
+        "forbidden_projects": [
+          "LESHY2-UI",
+          "LESHY2-RF",
+          "LESHY2-LORA-CAP-01"
+        ],
+        "forbidden_current_sources": [
+          "hardware/ecad/H2-sheet-contract.json",
+          "hardware/ecad/h2-schematic-plan.json",
+          "hardware/ecad/generated/H2-instance-ledger.json"
+        ],
+        "rule": "These files remain review evidence only. No project, sheet, symbol, net or designator may be copied into native R2 without reconciliation against this inventory. The removable M5 Cap is supported by the host interface; Leshy2 does not manufacture a custom LoRa-Cap PCB."
+      },
+      "authorization": {
+        "native_source_and_sheet_inventory": true,
+        "schematic_symbols_or_nets": false,
+        "kicad_project_creation": false,
+        "pcb_placement_or_routing": false,
+        "fabrication": false,
+        "ordering": false
+      }
+    },
+    "exact_component_ledger": {
+      "marker": "H2-R2.1.2",
+      "status": "pass",
+      "summary": {
+        "component_group_count": 242,
+        "board_component_group_count": 237,
+        "explicit_non_pcba_group_count": 5,
+        "symbol_identity_count": 237,
+        "footprint_identity_count": 237,
+        "logical_contact_count": 1662,
+        "historical_package_hints_reconciled": 196,
+        "historical_package_conflicts_resolved": 5,
+        "explicit_current_footprint_overrides": 41,
+        "standard_kicad_footprint_identities": 202,
+        "reconciled_local_footprint_definitions": 32,
+        "new_exact_footprint_geometries_pending_materialization": 3,
+        "schematic_symbols_or_footprint_files_created": 0,
+        "native_schematic_nets_created": 0,
+        "unresolved_groups": 0
+      },
+      "authorization": {
+        "exact_group_ledger": true,
+        "symbol_or_footprint_files": false,
+        "schematic_nets": false,
+        "kicad_project_creation": false,
+        "pcb_placement_or_routing": false,
+        "fabrication": false,
+        "ordering": false
+      }
+    },
+    "native_kicad": {
+      "marker": "H2-R2.1.3",
+      "status": "pass",
+      "projects": [
+        {
+          "id": "LESHY2-UI-R2",
+          "root": "UI_00_ROOT",
+          "sheet_count": 9,
+          "populated_sheet_count": 7,
+          "instance_count": 428,
+          "physical_symbol_pin_count": 1588,
+          "external_module_interface_count": 5,
+          "canonical_net_count": 325,
+          "cross_sheet_net_count": 109
+        },
+        {
+          "id": "LESHY2-RF-R2",
+          "root": "RF_00_ROOT",
+          "sheet_count": 13,
+          "populated_sheet_count": 11,
+          "instance_count": 757,
+          "physical_symbol_pin_count": 2649,
+          "external_module_interface_count": 0,
+          "canonical_net_count": 526,
+          "cross_sheet_net_count": 124
+        },
+        {
+          "id": "L2-DISP-ADP-001-B",
+          "root": "ADP_00_DISPLAY_ADAPTER",
+          "sheet_count": 1,
+          "populated_sheet_count": 1,
+          "instance_count": 2,
+          "physical_symbol_pin_count": 90,
+          "external_module_interface_count": 0,
+          "canonical_net_count": 27,
+          "cross_sheet_net_count": 0
+        }
+      ],
+      "summary": {
+        "project_count": 3,
+        "project_graph_sheet_count": 23,
+        "populated_sheet_count": 19,
+        "fitted_symbol_instance_count": 1187,
+        "physical_symbol_pin_count": 4327,
+        "connected_physical_pin_count": 4067,
+        "explicit_no_connect_physical_pin_count": 260,
+        "external_module_interface_annotation_count": 5,
+        "canonical_net_count": 827,
+        "generated_file_count": 32,
+        "pcb_file_count": 0
+      },
+      "authorization": {
+        "native_kicad_project_creation": true,
+        "native_schematic_symbols_and_nets": true,
+        "pcb_placement_or_routing": false,
+        "fabrication": false,
+        "ordering": false
+      }
+    },
+    "h2_hwfw_reconciliation": {
+      "stage": "H2-R2.1.4",
+      "status": "pass",
+      "summary": {
+        "domain_count": 6,
+        "controller_pin_rows": 173,
+        "exact_pin_rows": 147,
+        "conditioned_boundary_rows": 14,
+        "explicit_reserve_no_connect_rows": 12,
+        "cross_project_net_count": 50,
+        "cross_sheet_net_count": 233,
+        "errors": 0
+      },
+      "source_sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157",
+      "m1_source_sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
+    },
+    "interboard": {
+      "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
+      "current_budget": {
+        "positions": 80,
+        "live_signals": 29,
+        "main_power": 14,
+        "aon_power": 2,
+        "returns": 24,
+        "no_connect_reserve": 11
+      },
+      "pin_map": [
+        {
+          "contact": 1,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 2,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 3,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 4,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 5,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 6,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 7,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 8,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 9,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 10,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 11,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 12,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 13,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 14,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 15,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 16,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 17,
+          "net": "AON_SAFE_3V3",
+          "class": "aon_power"
+        },
+        {
+          "contact": 18,
+          "net": "SAFETY_GROUND",
+          "class": "safety_return"
+        },
+        {
+          "contact": 19,
+          "net": "AON_SAFE_3V3",
+          "class": "aon_power"
+        },
+        {
+          "contact": 20,
+          "net": "SAFETY_GROUND",
+          "class": "safety_return"
+        },
+        {
+          "contact": 21,
+          "net": "POWER_GROUND",
+          "class": "ipc_return"
+        },
+        {
+          "contact": 22,
+          "net": "HUB_RF_ALERT_N",
+          "class": "ipc"
+        },
+        {
+          "contact": 23,
+          "net": "HUB_RF_CS_N",
+          "class": "ipc"
+        },
+        {
+          "contact": 24,
+          "net": "HUB_RF_SCK",
+          "class": "ipc"
+        },
+        {
+          "contact": 25,
+          "net": "POWER_GROUND",
+          "class": "ipc_return"
+        },
+        {
+          "contact": 26,
+          "net": "HUB_RF_MOSI",
+          "class": "ipc"
+        },
+        {
+          "contact": 27,
+          "net": "HUB_RF_MISO",
+          "class": "ipc"
+        },
+        {
+          "contact": 28,
+          "net": "POWER_GROUND",
+          "class": "ipc_return"
+        },
+        {
+          "contact": 29,
+          "net": "S3_USB_DM",
+          "class": "usb2"
+        },
+        {
+          "contact": 30,
+          "net": "S3_USB_DP",
+          "class": "usb2"
+        },
+        {
+          "contact": 31,
+          "net": "POWER_GROUND",
+          "class": "usb_return"
+        },
+        {
+          "contact": 32,
+          "net": "HUB_SAFE_I2C_SDA",
+          "class": "control"
+        },
+        {
+          "contact": 33,
+          "net": "HUB_SAFE_I2C_SCL",
+          "class": "control"
+        },
+        {
+          "contact": 34,
+          "net": "POWER_GROUND",
+          "class": "control_return"
+        },
+        {
+          "contact": 35,
+          "net": "NC_35",
+          "class": "reserve"
+        },
+        {
+          "contact": 36,
+          "net": "NC_36",
+          "class": "reserve"
+        },
+        {
+          "contact": 37,
+          "net": "RUN_PERMIT",
+          "class": "safety"
+        },
+        {
+          "contact": 38,
+          "net": "FAULT_ASSERT_N",
+          "class": "safety"
+        },
+        {
+          "contact": 39,
+          "net": "UI_ZONE_TEMP_ADC",
+          "class": "safety_analog"
+        },
+        {
+          "contact": 40,
+          "net": "SAFETY_GROUND",
+          "class": "safety_return"
+        },
+        {
+          "contact": 41,
+          "net": "EV_N0_S3",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 42,
+          "net": "EV_N1_C5",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 43,
+          "net": "EV_N2_NRF0",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 44,
+          "net": "EV_N3_NRF1",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 45,
+          "net": "EV_N4_NRF2",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 46,
+          "net": "EV_N7_IR",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 47,
+          "net": "SAFETY_GROUND",
+          "class": "safety_return"
+        },
+        {
+          "contact": 48,
+          "net": "EV_N5_CC",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 49,
+          "net": "EV_N6_VOICE",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 50,
+          "net": "EV_N8_LORA_EXT",
+          "class": "tx_evidence"
+        },
+        {
+          "contact": 51,
+          "net": "ENCODER_A",
+          "class": "ui"
+        },
+        {
+          "contact": 52,
+          "net": "ENCODER_B",
+          "class": "ui"
+        },
+        {
+          "contact": 53,
+          "net": "UI_ENCODER_PUSH_N",
+          "class": "ui"
+        },
+        {
+          "contact": 54,
+          "net": "POWER_GROUND",
+          "class": "ui_return"
+        },
+        {
+          "contact": 55,
+          "net": "C5_MUX_SEL_REQUEST",
+          "class": "aon_service_control"
+        },
+        {
+          "contact": 56,
+          "net": "C5_SERVICE_PATH_ACK",
+          "class": "aon_service_control"
+        },
+        {
+          "contact": 57,
+          "net": "AON_SERVICE_RELEASE_REQ",
+          "class": "aon_service_control"
+        },
+        {
+          "contact": 58,
+          "net": "C5_SERVICE_OWNED",
+          "class": "aon_service_status"
+        },
+        {
+          "contact": 59,
+          "net": "HUB_AON_ALERT_N",
+          "class": "aon_status"
+        },
+        {
+          "contact": 60,
+          "net": "NC_60",
+          "class": "reserve"
+        },
+        {
+          "contact": 61,
+          "net": "NC_61",
+          "class": "reserve"
+        },
+        {
+          "contact": 62,
+          "net": "NC_62",
+          "class": "reserve"
+        },
+        {
+          "contact": 63,
+          "net": "NC_63",
+          "class": "reserve"
+        },
+        {
+          "contact": 64,
+          "net": "NC_64",
+          "class": "reserve"
+        },
+        {
+          "contact": 65,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 66,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 67,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 68,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 69,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 70,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 71,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 72,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 73,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 74,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 75,
+          "net": "POWER_GROUND",
+          "class": "main_return"
+        },
+        {
+          "contact": 76,
+          "net": "3V3_MAIN",
+          "class": "main_power"
+        },
+        {
+          "contact": 77,
+          "net": "NC_77",
+          "class": "reserve"
+        },
+        {
+          "contact": 78,
+          "net": "NC_78",
+          "class": "reserve"
+        },
+        {
+          "contact": 79,
+          "net": "NC_79",
+          "class": "reserve"
+        },
+        {
+          "contact": 80,
+          "net": "NC_80",
+          "class": "reserve"
+        }
+      ]
+    },
+    "pre_h2_gates": [],
+    "physical_h1": {
+      "marker": "H1-R2.37",
+      "pin_authority_marker": "H1-R2.31",
+      "status": "reviewed",
+      "current_h1_blockers": [],
+      "pre_r2_h2_gates": [],
+      "review_time_pre_r2_h2_gates": [],
+      "resolved_post_h1_gates": [
+        "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price",
+        "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch and 74HC20PW,118 / C546719 release qualifier",
+        "exact TCA9803DGKR / C2687966 powered-off Pack/Safety I2C boundary"
       ]
     }
-  ],
-  "authority": {
-    "baseline": "R1",
-    "lifecycle": "historical_single_rp_integration_contract",
-    "allowed_as_r2_authority": false,
-    "superseded_by": "config/h0_r2_hardware_contract.json",
-    "r2_sync_gate": "config/r2_h2_sync_gate.json"
   }
 }

@@ -68,7 +68,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("HUB_SAFE_I2C_SDA", hub[42]["net"])
         self.assertEqual("HUB_SAFE_I2C_SCL", hub[43]["net"])
         self.assertEqual("SD_DETECT_N", hub[44]["net"])
-        self.assertEqual(2, self.actual["hub_gpio_budget"]["reserve"])
+        self.assertEqual(1, self.actual["hub_gpio_budget"]["reserve"])
         rear_reserve = {
             row["gpio"]
             for row in self.actual["rear_pin_map"]
@@ -78,7 +78,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(
             set(self.actual["rear_gpio_budget"]["reserve_gpios"]), rear_reserve
         )
-        self.assertEqual("RF_RESERVE_15", self.actual["rear_pin_map"][15]["net"])
+        self.assertEqual({32, 33, 34, 37, 38}, rear_reserve)
 
     def test_locality_first_repartition_is_explicit(self):
         domains = {row["id"]: row["role"] for row in self.actual["domains"]}
@@ -86,9 +86,9 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertIn("CC1101", domains["rf_rp"])
         self.assertNotIn("video", self.actual["interboard"])
         self.assertEqual(9, len(self.actual["interboard"]["released_legacy_nets"]))
-        self.assertEqual(16, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
+        self.assertEqual(11, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
         self.assertEqual(80, len(self.actual["interboard"]["pin_map"]))
-        self.assertIn("sixteen true NC reserve contacts", self.actual["interboard"]["result"])
+        self.assertIn("eleven true NC reserve contacts", self.actual["interboard"]["result"])
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
@@ -103,27 +103,33 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             self.assertEqual(source["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
         self.assertEqual(48, len(self.actual["hub_pin_map"]))
         self.assertEqual(48, len(self.actual["rear_pin_map"]))
-        self.assertFalse(self.actual["claims"]["h2_closed"])
-        self.assertFalse(self.actual["claims"]["kicad_authorized"])
+        self.assertTrue(self.actual["claims"]["h2_closed"])
+        self.assertTrue(self.actual["claims"]["kicad_authorized"])
         self.assertFalse(self.actual["claims"]["physical_or_hil_execution"])
-        self.assertEqual("H2-R2.1.3", self.actual["current_hardware_substep"])
+        self.assertEqual("H2-R2.1.5", self.actual["current_hardware_substep"])
         inventory = self.actual["native_r2_inventory"]
         self.assertEqual("H2-R2.1.1", inventory["marker"])
         self.assertEqual(3, inventory["summary"]["project_count"])
         self.assertEqual(23, inventory["summary"]["sheet_count"])
-        self.assertEqual(213, inventory["summary"]["component_group_count"])
+        self.assertEqual(242, inventory["summary"]["component_group_count"])
         self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
         self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
         self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
         ledger = self.actual["exact_component_ledger"]
         self.assertEqual("H2-R2.1.2", ledger["marker"])
-        self.assertEqual(208, ledger["summary"]["board_component_group_count"])
+        self.assertEqual(237, ledger["summary"]["board_component_group_count"])
         self.assertEqual(5, ledger["summary"]["explicit_non_pcba_group_count"])
-        self.assertEqual(1561, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(1662, ledger["summary"]["logical_contact_count"])
         self.assertEqual(0, ledger["summary"]["unresolved_groups"])
         self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
         self.assertFalse(ledger["authorization"]["schematic_nets"])
         self.assertTrue(self.actual["claims"]["exact_component_ledger_imported"])
+        self.assertTrue(self.actual["claims"]["native_kicad_imported"])
+        self.assertTrue(self.actual["claims"]["h2_hwfw_reconciliation_imported"])
+        self.assertEqual(1187, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(827, self.actual["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
+        self.assertEqual(0, self.actual["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(
             self.module.build()["physical_h1"]["pre_r2_h2_gates"],
             self.actual["physical_h1"]["pre_r2_h2_gates"],

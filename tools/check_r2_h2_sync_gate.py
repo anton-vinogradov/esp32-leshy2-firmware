@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Keep R2 firmware fail-closed against the historical single-RP H2 export."""
+"""Keep firmware bound to the reviewed native six-domain H2-R2 export."""
 
 from __future__ import annotations
 
@@ -33,11 +33,11 @@ HISTORICAL_INTEGRATION_AUTHORITY = {
     "r2_sync_gate": "config/r2_h2_sync_gate.json",
 }
 M1_COUNTS = {
-    "live_signals": 24,
+    "live_signals": 29,
     "main_power": 14,
     "aon_power": 2,
     "returns": 24,
-    "no_connect_reserve": 16,
+    "no_connect_reserve": 11,
 }
 
 
@@ -109,6 +109,8 @@ def expected_reconciliation(h0: dict) -> dict:
         "pack_safety_i2c_boundary": h0.get("pack_safety_i2c_boundary"),
         "native_r2_inventory": h0.get("native_r2_inventory"),
         "exact_component_ledger": h0.get("exact_component_ledger"),
+        "native_kicad": h0.get("native_kicad"),
+        "h2_hwfw_reconciliation": h0.get("h2_hwfw_reconciliation"),
         "interboard": expected_m1(h0),
         "pre_h2_gates": [],
         "physical_h1": h0.get("physical_h1"),
@@ -187,6 +189,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
         "native_inventory_source": "config/h0_r2_hardware_contract.json#/native_r2_inventory",
         "exact_component_ledger_source": "config/h0_r2_hardware_contract.json#/exact_component_ledger",
+        "native_kicad_source": "config/h0_r2_hardware_contract.json#/native_kicad",
+        "h2_hwfw_reconciliation_source": "config/h0_r2_hardware_contract.json#/h2_hwfw_reconciliation",
         "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
         "unresolved_pre_h2_gates_required": 0,
         "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
@@ -216,10 +220,11 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     native_inventory = h0.get("native_r2_inventory", {})
     exact_ledger = h0.get("exact_component_ledger", {})
     if (
-        h0.get("current_hardware_substep") != "H2-R2.1.3"
+        h0.get("current_hardware_substep") != "H2-R2.1.5"
         or native_inventory.get("marker") != "H2-R2.1.1"
         or native_inventory.get("status") != "pass"
-        or native_inventory.get("summary", {}).get("component_group_count") != 213
+        or native_inventory.get("summary", {}).get("component_group_count") != 242
+        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1197
         or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
         or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
     ):
@@ -227,15 +232,35 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         exact_ledger.get("marker") != "H2-R2.1.2"
         or exact_ledger.get("status") != "pass"
-        or exact_ledger.get("summary", {}).get("board_component_group_count") != 208
+        or exact_ledger.get("summary", {}).get("board_component_group_count") != 237
         or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 5
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1561
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1662
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
         or exact_ledger.get("authorization", {}).get("schematic_nets") is not False
     ):
         errors.append("current authority lost the reviewed net-free H2-R2.1.2 exact component ledger")
+    native_kicad = h0.get("native_kicad", {})
+    h2_hwfw = h0.get("h2_hwfw_reconciliation", {})
+    if (
+        native_kicad.get("marker") != "H2-R2.1.3"
+        or native_kicad.get("status") != "pass"
+        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1187
+        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4327
+        or native_kicad.get("summary", {}).get("canonical_net_count") != 827
+        or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
+    ):
+        errors.append("current authority lost the reviewed H2-R2.1.3 native KiCad result")
+    if (
+        h2_hwfw.get("stage") != "H2-R2.1.4"
+        or h2_hwfw.get("status") != "pass"
+        or h2_hwfw.get("summary", {}).get("domain_count") != 6
+        or h2_hwfw.get("summary", {}).get("controller_pin_rows") != 173
+        or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 50
+        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 233
+    ):
+        errors.append("current authority lost the reviewed H2-R2.1.4 HW/FW reconciliation")
     hardware_sources = h0.get("hardware_sources", {})
     if not hardware_sources or any(not row.get("path") or not row.get("sha256")
                                    for row in hardware_sources.values()):

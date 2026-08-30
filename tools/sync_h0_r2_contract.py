@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project the current pre-H2 R2 hardware boundary into firmware."""
+"""Project the current native H2-R2 hardware boundary into firmware."""
 
 from __future__ import annotations
 
@@ -21,7 +21,12 @@ R2_AUTHORITY_SOURCE = HW_ROOT / "generated/H0-R2-authority-gate.json"
 PACK_SAFETY_SOURCE = HW_ROOT / "pack-safety-i2c-boundary-contract.json"
 NATIVE_INVENTORY_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-native-inventory.json"
 EXACT_LEDGER_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json"
+NATIVE_KICAD_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-native-kicad-projects.json"
+H2_HWFW_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-hwfw-contract.json"
+H2_M1_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-interboard-m1.json"
 OUTPUT = ROOT / "config/h0_r2_hardware_contract.json"
+BSP_OUTPUT = ROOT / "config/hardware_bsp_contract.json"
+INTEGRATION_OUTPUT = ROOT / "config/hardware_integration_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
 PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
 PREORDER_OUTPUT = ROOT / "config/preorder_verification_contract.json"
@@ -80,6 +85,9 @@ def build() -> dict:
     native_inventory = json.loads(native_inventory_raw)
     exact_ledger_raw = EXACT_LEDGER_SOURCE.read_bytes()
     exact_ledger = json.loads(exact_ledger_raw)
+    native_kicad = json.loads(NATIVE_KICAD_SOURCE.read_bytes())
+    h2_hwfw = json.loads(H2_HWFW_SOURCE.read_bytes())
+    h2_m1 = json.loads(H2_M1_SOURCE.read_bytes())
     air = hw["airband_contract"]
     mux_route = c5_mux["production_mux_route"]
     mux_inventory = mux_route["live_inventory"]
@@ -125,7 +133,8 @@ def build() -> dict:
         and native_inventory.get("summary", {}).get("project_count") == 3
         and native_inventory.get("summary", {}).get("sheet_count") == 23
         and native_inventory.get("summary", {}).get("domain_count") == 6
-        and native_inventory.get("summary", {}).get("component_group_count") == 213
+        and native_inventory.get("summary", {}).get("component_group_count") == 242
+        and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1197
         and native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") == 0
         and native_inventory.get("authorization", {}).get("native_source_and_sheet_inventory") is True
         and native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is False
@@ -136,10 +145,10 @@ def build() -> dict:
     exact_ledger_closed = (
         exact_ledger.get("marker") == "H2-R2.1.2"
         and exact_ledger.get("status") == "pass"
-        and exact_ledger.get("summary", {}).get("component_group_count") == 213
-        and exact_ledger.get("summary", {}).get("board_component_group_count") == 208
+        and exact_ledger.get("summary", {}).get("component_group_count") == 242
+        and exact_ledger.get("summary", {}).get("board_component_group_count") == 237
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 5
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1561
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1662
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False
@@ -148,6 +157,36 @@ def build() -> dict:
     )
     if not exact_ledger_closed:
         raise ValueError("H2-R2.1.2 exact component ledger is not a closed, net-free input boundary")
+    native_kicad_closed = (
+        native_kicad.get("marker") == "H2-R2.1.3"
+        and native_kicad.get("status") == "pass"
+        and native_kicad.get("summary", {}).get("project_count") == 3
+        and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1187
+        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4327
+        and native_kicad.get("summary", {}).get("canonical_net_count") == 827
+        and native_kicad.get("authorization", {}).get("native_schematic_symbols_and_nets") is True
+        and native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is False
+        and native_kicad.get("errors") == []
+    )
+    if not native_kicad_closed:
+        raise ValueError("H2-R2.1.3 native KiCad result is not a clean schematic boundary")
+    h2_hwfw_closed = (
+        h2_hwfw.get("stage") == "H2-R2.1.4"
+        and h2_hwfw.get("status") == "pass"
+        and h2_hwfw.get("summary", {}).get("domain_count") == 6
+        and h2_hwfw.get("summary", {}).get("controller_pin_rows") == 173
+        and h2_hwfw.get("summary", {}).get("cross_project_net_count") == 50
+        and h2_hwfw.get("summary", {}).get("cross_sheet_net_count") == 233
+        and h2_hwfw.get("authorization", {}).get("hardware_firmware_machine_authority") is True
+        and h2_hwfw.get("errors") == []
+        and h2_m1.get("summary", {}).get("physical_contacts") == 80
+        and h2_m1.get("summary", {}).get("no_connect_reserve_contacts") == 11
+        and h2_m1.get("errors") == []
+        and r2_authority.get("status") == "pass_current_r2_h2_reconciled"
+        and r2_authority.get("r2_h2_authoritative") is True
+    )
+    if not h2_hwfw_closed:
+        raise ValueError("H2-R2.1.4 hardware/firmware reconciliation is not authoritative")
     review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
     review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
     current_pin_gates = [
@@ -205,8 +244,8 @@ def build() -> dict:
         "schema_version": 1,
         "id": "FW-H0-R2",
         "hardware_marker": dual_rp["marker"],
-        "hardware_status": "current_working_authority_h2_r2_1_2_exact_ledger_reviewed_h2_r2_1_3_not_kicad_or_hil",
-        "current_hardware_substep": "H2-R2.1.3",
+        "hardware_status": "reviewed_h2_r2_1_5_six_domain_hwfw_reconciled_not_layout_or_hil",
+        "current_hardware_substep": "H2-R2.1.5",
         "hardware_sources": {
             "functional": source_record(HW_SOURCE),
             "c5_sdio_service_mux": source_record(C5_MUX_SOURCE),
@@ -217,6 +256,9 @@ def build() -> dict:
             "pack_safety_i2c_boundary": source_record(PACK_SAFETY_SOURCE),
             "native_r2_inventory": source_record(NATIVE_INVENTORY_SOURCE),
             "exact_component_ledger": source_record(EXACT_LEDGER_SOURCE),
+            "native_kicad": source_record(NATIVE_KICAD_SOURCE),
+            "h2_hwfw_reconciliation": source_record(H2_HWFW_SOURCE),
+            "h2_interboard_m1": source_record(H2_M1_SOURCE),
         },
         "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
         "hardware_source_sha256": hashlib.sha256(raw).hexdigest(),
@@ -262,6 +304,20 @@ def build() -> dict:
             "status": exact_ledger["status"],
             "summary": exact_ledger["summary"],
             "authorization": exact_ledger["authorization"],
+        },
+        "native_kicad": {
+            "marker": native_kicad["marker"],
+            "status": native_kicad["status"],
+            "projects": native_kicad["projects"],
+            "summary": native_kicad["summary"],
+            "authorization": native_kicad["authorization"],
+        },
+        "h2_hwfw_reconciliation": {
+            "stage": h2_hwfw["stage"],
+            "status": h2_hwfw["status"],
+            "summary": h2_hwfw["summary"],
+            "source_sha256": source_record(H2_HWFW_SOURCE)["sha256"],
+            "m1_source_sha256": source_record(H2_M1_SOURCE)["sha256"],
         },
         "hub_gpio_budget": dual_rp["hub_rp"]["gpio_budget"],
         "hub_pin_map": [project_rp_pin(pin) for pin in dual_rp["hub_rp"]["pin_map"]],
@@ -337,9 +393,11 @@ def build() -> dict:
             "pack_safety_powered_off_boundary_accepted": pack_safety_closed,
             "native_r2_inventory_imported": native_inventory_closed,
             "exact_component_ledger_imported": exact_ledger_closed,
+            "native_kicad_imported": native_kicad_closed,
+            "h2_hwfw_reconciliation_imported": h2_hwfw_closed,
             "r1_f4_1_2_is_current_authority": False,
-            "h2_closed": False,
-            "kicad_authorized": False,
+            "h2_closed": True,
+            "kicad_authorized": True,
             "target_transport_implemented": False,
             "physical_or_hil_execution": False,
         },
@@ -355,6 +413,70 @@ def canonical_sha256(value: object) -> str:
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+def firmware_reconciliation(hardware_contract: dict) -> dict:
+    """Return the exact firmware-side digest of the reviewed native H2 export."""
+    return {
+        "source_contract": "config/h0_r2_hardware_contract.json",
+        "hardware_contract_sha256": canonical_sha256(hardware_contract),
+        "hardware_marker": hardware_contract.get("hardware_marker"),
+        "hardware_sources": hardware_contract.get("hardware_sources"),
+        "domain_ids": ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+        "domain_contracts": hardware_contract.get("domain_contracts"),
+        "rp_domains": ["rf_rp", "hub_rp"],
+        "hub_pin_map": hardware_contract.get("hub_pin_map"),
+        "rear_pin_map": hardware_contract.get("rear_pin_map"),
+        "c5_sdio_service_mux": hardware_contract.get("c5_sdio_service_mux"),
+        "pack_safety_i2c_boundary": hardware_contract.get("pack_safety_i2c_boundary"),
+        "native_r2_inventory": hardware_contract.get("native_r2_inventory"),
+        "exact_component_ledger": hardware_contract.get("exact_component_ledger"),
+        "native_kicad": hardware_contract.get("native_kicad"),
+        "h2_hwfw_reconciliation": hardware_contract.get("h2_hwfw_reconciliation"),
+        "interboard": {
+            "connector": hardware_contract.get("interboard", {}).get("connector"),
+            "current_budget": hardware_contract.get("interboard", {}).get("current_budget"),
+            "pin_map": hardware_contract.get("interboard", {}).get("pin_map"),
+        },
+        "pre_h2_gates": [],
+        "physical_h1": hardware_contract.get("physical_h1"),
+    }
+
+
+def current_integration_contract(hardware_contract: dict) -> dict:
+    return {
+        "schema_version": 3,
+        "contract_id": "LESHY2-HWFW-R2",
+        "status": "reviewed_native_h2_r2",
+        "authority": {
+            "baseline": "R2",
+            "lifecycle": "current_native_six_domain_h2",
+            "allowed_as_r2_authority": True,
+            "source": "config/h0_r2_hardware_contract.json",
+            "r2_sync_gate": "config/r2_h2_sync_gate.json",
+        },
+        "controllers": hardware_contract["domain_contracts"],
+        "r2_reconciliation": firmware_reconciliation(hardware_contract),
+    }
+
+
+def current_bsp_contract(hardware_contract: dict, integration: dict) -> dict:
+    return {
+        "schema_version": 3,
+        "stage": "H2-R2.1.5",
+        "status": "reviewed_native_h2_r2",
+        "export_id": "LESHY2-H2-R2-FIRMWARE-BSP",
+        "authority": {
+            "baseline": "R2",
+            "lifecycle": "current_native_six_domain_h2",
+            "allowed_as_r2_authority": True,
+            "source": "config/h0_r2_hardware_contract.json",
+            "r2_sync_gate": "config/r2_h2_sync_gate.json",
+        },
+        "bsp": {"domains": hardware_contract["domain_contracts"]},
+        "r2_reconciliation": firmware_reconciliation(hardware_contract),
+        "integration_contract": integration,
+    }
 
 
 def render_u219_policy(hardware_contract: dict) -> str:
@@ -378,8 +500,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     hardware_contract = build()
+    integration = current_integration_contract(hardware_contract)
+    bsp = current_bsp_contract(hardware_contract, integration)
     outputs = {
         OUTPUT: json.dumps(hardware_contract, ensure_ascii=False, indent=2) + "\n",
+        BSP_OUTPUT: json.dumps(bsp, ensure_ascii=False, indent=2) + "\n",
+        INTEGRATION_OUTPUT: json.dumps(integration, ensure_ascii=False, indent=2) + "\n",
         U219_POLICY_OUTPUT: render_u219_policy(hardware_contract),
         PREORDER_OUTPUT: PREORDER_SOURCE.read_text(encoding="utf-8"),
     }

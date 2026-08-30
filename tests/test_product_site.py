@@ -121,8 +121,10 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("H1-R2.37", boundary["physical_design_marker"])
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
         self.assertEqual("reviewed", boundary["physical_h1_status"])
-        self.assertEqual("H2", boundary["current_hardware_stage"])
-        self.assertEqual("H2-R2.1.3", boundary["current_hardware_substep"])
+        self.assertEqual("H3", boundary["current_hardware_stage"])
+        self.assertEqual("H3-R2.0.1", boundary["current_hardware_substep"])
+        self.assertEqual("H2-R2.1.5", boundary["reviewed_h2_marker"])
+        self.assertEqual("H2-R2.1.4", boundary["imported_h2_machine_contract"])
         self.assertEqual([], boundary["current_h1_blockers"])
         self.assertFalse(boundary["mockup_acceptance_required_after_blockers"])
 
@@ -1004,103 +1006,41 @@ class ProductSiteTests(unittest.TestCase):
     def test_hardware_integration_contract_matches_firmware(self):
         boundary = json.loads(self.read("config/hardware_integration_contract.json"))
         bsp = json.loads(self.read("config/hardware_bsp_contract.json"))
-        protocol = json.loads(self.read("config/interdomain_protocol.json"))
-        self.assertEqual("LESHY2-HWFW-1", boundary["contract_id"])
-        self.assertEqual(2, boundary["schema"])
-        self.assertEqual("h2_0_3_reviewed", boundary["review_status"])
-        self.assertEqual("LESHY2-H2-HWFW-1", bsp["export_id"])
-        self.assertEqual("reviewed_historical_r1_hwfw_export", bsp["status"])
-        self.assertEqual("R1", bsp["authority"]["baseline"])
-        self.assertEqual("historical_single_rp_import", bsp["authority"]["lifecycle"])
-        self.assertFalse(bsp["authority"]["allowed_as_r2_authority"])
-        self.assertEqual("R1", boundary["authority"]["baseline"])
-        self.assertFalse(boundary["authority"]["allowed_as_r2_authority"])
+        self.assertEqual("LESHY2-HWFW-R2", boundary["contract_id"])
+        self.assertEqual(3, boundary["schema_version"])
+        self.assertEqual("reviewed_native_h2_r2", boundary["status"])
+        self.assertEqual("LESHY2-H2-R2-FIRMWARE-BSP", bsp["export_id"])
+        self.assertEqual("H2-R2.1.5", bsp["stage"])
+        self.assertEqual("reviewed_native_h2_r2", bsp["status"])
+        self.assertEqual("R2", bsp["authority"]["baseline"])
+        self.assertEqual("current_native_six_domain_h2", bsp["authority"]["lifecycle"])
+        self.assertTrue(bsp["authority"]["allowed_as_r2_authority"])
+        self.assertEqual("R2", boundary["authority"]["baseline"])
+        self.assertTrue(boundary["authority"]["allowed_as_r2_authority"])
         self.assertEqual(boundary, bsp["integration_contract"])
-        self.assertFalse(bsp["bsp"]["temporary_pin_assignments_allowed"])
-        self.assertEqual(125, bsp["bsp"]["total_allocated_contacts"])
+
+        domains = bsp["bsp"]["domains"]
         self.assertEqual(
-            {"S3": 33, "C5": 14, "RP": 48, "PACK": 13, "SAFETY": 17},
-            {
-                domain["domain"]: domain["allocated_contact_count"]
-                for domain in bsp["bsp"]["domains"]
-            },
+            {"s3", "c5", "rf_rp", "hub_rp", "pack", "safety"},
+            {domain["id"] for domain in domains},
         )
-        service = boundary["physical_service"]
-        self.assertEqual(3, len(service["external_usb"]))
-        self.assertEqual(6, len(service["external_side_controls"]))
-        self.assertEqual(3, len(service["internal_fallback_headers"]))
         self.assertEqual(
-            boundary["protocol"],
-            {
-                "name": protocol["protocol"]["name"],
-                "major": protocol["protocol"]["major"],
-                "minor": protocol["protocol"]["minor"],
-            },
+            {"rf_rp", "hub_rp"},
+            {domain["id"] for domain in domains if domain["mpn"] == "SC1512-A4"},
         )
-
-        transports = {row["id"]: row for row in protocol["transports"]}
-        for row in boundary["transports"]:
-            firmware = transports[row["id"]]
-            for key in (
-                "raw_bytes_per_second",
-                "qualified_payload_bytes_per_second_min",
-                "control_round_trip_ms_max",
-                "alert_to_read_us_max",
-            ):
-                if key in row:
-                    self.assertEqual(row[key], firmware[key], (row["id"], key))
-            endpoints = [endpoint for pair in row["pins"].values() for endpoint in pair]
-            self.assertEqual(len(endpoints), len(set(endpoints)), row["id"])
-
-        groups = {row["name"]: row for row in protocol["signal_groups"]}
-        for row in boundary["signal_groups"]:
-            self.assertEqual(row["owner"], groups[row["firmware"]]["owner"])
-            self.assertEqual(
-                row["tx_evidence_bits"], groups[row["firmware"]]["evidence_bits"]
-            )
-
-        headset = boundary["audio_headset"]
-        self.assertEqual("Same Sky SJ-43504-SMT-TR", headset["jack"]["mpn"])
-        self.assertEqual("CTIA/AHJ", headset["jack"]["wiring"])
-        self.assertEqual("slow_io.P02", headset["detect"]["endpoint"])
-        self.assertEqual("input_only", headset["detect"]["direction"])
-        self.assertIn("never configures P02 as an output", headset["detect"]["rule"])
-        self.assertEqual("TCA9534APWR", headset["microphone_select"]["controller"])
-        self.assertEqual("0x39", headset["microphone_select"]["i2c_address_7bit"])
-        self.assertEqual(7, len(headset["microphone_select"]["reserve_endpoints"]))
-        states = {row["state"]: row for row in headset["state_policy"]}
+        reconciliation = boundary["r2_reconciliation"]
         self.assertEqual(
-            {"ABSENT", "INSERTED_HEADSET", "INSERTED_INTERNAL_MIC", "UNKNOWN_OR_IO_FAULT"},
-            set(states),
+            ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"],
+            reconciliation["domain_ids"],
         )
-        self.assertEqual("forced_off", states["UNKNOWN_OR_IO_FAULT"]["speaker"])
-
-        timing_keys = {
-            "heartbeat_period": "heartbeat_period_ms",
-            "heartbeat_gap_max": "heartbeat_gap_ms_max",
-            "tx_lease_lifetime_max": "tx_lease_lifetime_ms_max",
-            "tx_lease_renew_period_max": "tx_lease_renew_period_ms_max",
-            "unexpected_evidence_fault_max": "unexpected_evidence_fault_ms_max",
-            "post_revoke_evidence_clear_grace": "post_revoke_evidence_clear_grace_ms",
-            "safety_loop_period_max": "safety_loop_period_ms_max",
-            "external_watchdog_timeout": "external_watchdog_timeout_ms",
-            "external_watchdog_service_period_max": "external_watchdog_service_period_ms_max",
-        }
-        for boundary_key, firmware_key in timing_keys.items():
-            self.assertEqual(
-                boundary["safety_timing_ms"][boundary_key],
-                protocol["safety_timing"][firmware_key],
-            )
-
-        profiles = {
-            row["assembly"]: row for row in protocol["lora_cap_profiles"]["profiles"]
-        }
-        for row in boundary["lora_cap_profiles"]:
-            self.assertEqual(row["module"], profiles[row["assembly"]]["module"])
-            self.assertEqual(
-                row["allowed_frequency_mhz"],
-                profiles[row["assembly"]]["allowed_frequency_mhz"],
-            )
+        self.assertEqual([], reconciliation["pre_h2_gates"])
+        self.assertEqual(1187, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(827, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(173, reconciliation["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
+        self.assertEqual(50, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
+        self.assertEqual(233, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
+        self.assertEqual(0, reconciliation["h2_hwfw_reconciliation"]["summary"]["errors"])
+        self.assertEqual(80, len(reconciliation["interboard"]["pin_map"]))
 
     def test_interdomain_message_registry_is_unambiguous_and_proven(self):
         contract = json.loads(self.read("config/interdomain_protocol.json"))
