@@ -13,8 +13,10 @@
 > evidence islands; the accepted AD8314 and exact Hirose U.FL packaging-route changes have no firmware-visible contract effect. All current top-20 hardware groups are retained, and separate `ANT-433-CW-QW-SMA` units remain permanently assigned to SUB-GHz and UHF VOICE rather than becoming a firmware-visible shared antenna. The onboard video receiver,
 > decoder, connector and owner-soldered module bay are removed; eleven S3 GPIOs,
 > eight rear-RP GPIOs and two M1 contacts remain reserves. Current exterior,
-> turned-over inner faces and service views are generated. Controlled definitions
-> and joined native nets are current; schematic export/KiCad placement has not
+> turned-over inner faces and service views are generated. The H2-R2.1.3 contact
+> checkpoint maps all 1,504 board contacts to real pads or three on-module RF
+> interfaces with every named pad accounted for. Controlled R2 symbols are
+> current before joined native nets; schematic export/KiCad placement has not
 > started and ordering remains unauthorized.
 
 Status last reconciled: **30 August 2026**. This is the firmware repository's

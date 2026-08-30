@@ -130,7 +130,9 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 проекта, 23 sheets, шесть владельцев доменов и 213 точных MPN-групп без
 создания symbols или nets. `H2-R2.1.2` зафиксировал exact identities для 208
 board groups, пяти явных non-PCBA groups и 1 561 логического контакта. В
-`H2-R2.1.3` материализуются controlled definitions и joined native nets;
+contact-checkpoint `H2-R2.1.3` все 1 504 контакта платы сопоставлены реальным
+площадкам footprints или трём явным RF-интерфейсам на модулях; каждая именованная
+площадка учтена. Сейчас создаются controlled R2 symbols перед joined native nets;
 schematic export/KiCad placement ещё не начинались, а
 проверка byte reproducibility R2 и разрешение заказа остаются открыты.
 
