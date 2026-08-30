@@ -19,6 +19,7 @@ U219_SOURCE = HW_ROOT / "h1-r2-u219-cap.json"
 PHYSICAL_H1_SOURCE = HW_REPO / "hardware/product-design/h1-r2-placement.json"
 R2_AUTHORITY_SOURCE = HW_ROOT / "generated/H0-R2-authority-gate.json"
 PACK_SAFETY_SOURCE = HW_ROOT / "pack-safety-i2c-boundary-contract.json"
+NATIVE_INVENTORY_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-native-inventory.json"
 OUTPUT = ROOT / "config/h0_r2_hardware_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
 PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
@@ -74,6 +75,8 @@ def build() -> dict:
     r2_authority = json.loads(R2_AUTHORITY_SOURCE.read_bytes())
     pack_safety_raw = PACK_SAFETY_SOURCE.read_bytes()
     pack_safety = json.loads(pack_safety_raw)
+    native_inventory_raw = NATIVE_INVENTORY_SOURCE.read_bytes()
+    native_inventory = json.loads(native_inventory_raw)
     air = hw["airband_contract"]
     mux_route = c5_mux["production_mux_route"]
     mux_inventory = mux_route["live_inventory"]
@@ -113,6 +116,20 @@ def build() -> dict:
         == {"sda": "Hub RP GPIO42 / M1.32", "scl": "Hub RP GPIO43 / M1.33"}
         and pack_safety.get("bus", {}).get("hard_safety_dependency") is False
     )
+    native_inventory_closed = (
+        native_inventory.get("marker") == "H2-R2.1.1"
+        and native_inventory.get("status") == "pass"
+        and native_inventory.get("summary", {}).get("project_count") == 3
+        and native_inventory.get("summary", {}).get("sheet_count") == 23
+        and native_inventory.get("summary", {}).get("domain_count") == 6
+        and native_inventory.get("summary", {}).get("component_group_count") == 213
+        and native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") == 0
+        and native_inventory.get("authorization", {}).get("native_source_and_sheet_inventory") is True
+        and native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is False
+        and native_inventory.get("errors") == []
+    )
+    if not native_inventory_closed:
+        raise ValueError("H2-R2.1.1 native R2 inventory is not a closed, net-free input boundary")
     review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
     review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
     current_pin_gates = [
@@ -170,7 +187,8 @@ def build() -> dict:
         "schema_version": 1,
         "id": "FW-H0-R2",
         "hardware_marker": dual_rp["marker"],
-        "hardware_status": "current_working_authority_h2_prerequisites_reviewed_not_kicad_or_hil",
+        "hardware_status": "current_working_authority_h2_r2_1_1_inventory_reviewed_h2_r2_1_2_not_kicad_or_hil",
+        "current_hardware_substep": "H2-R2.1.2",
         "hardware_sources": {
             "functional": source_record(HW_SOURCE),
             "c5_sdio_service_mux": source_record(C5_MUX_SOURCE),
@@ -179,6 +197,7 @@ def build() -> dict:
             "physical_h1": source_record(PHYSICAL_H1_SOURCE),
             "r2_authority_gate": source_record(R2_AUTHORITY_SOURCE),
             "pack_safety_i2c_boundary": source_record(PACK_SAFETY_SOURCE),
+            "native_r2_inventory": source_record(NATIVE_INVENTORY_SOURCE),
         },
         "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
         "hardware_source_sha256": hashlib.sha256(raw).hexdigest(),
@@ -211,6 +230,14 @@ def build() -> dict:
             "hil_gates": c5_mux["hil_gates"],
         },
         "pack_safety_i2c_boundary": pack_safety,
+        "native_r2_inventory": {
+            "marker": native_inventory["marker"],
+            "status": native_inventory["status"],
+            "projects": native_inventory["projects"],
+            "summary": native_inventory["summary"],
+            "historical_quarantine": native_inventory["historical_quarantine"],
+            "authorization": native_inventory["authorization"],
+        },
         "hub_gpio_budget": dual_rp["hub_rp"]["gpio_budget"],
         "hub_pin_map": [project_rp_pin(pin) for pin in dual_rp["hub_rp"]["pin_map"]],
         "hub_resource_budget": {
@@ -283,6 +310,7 @@ def build() -> dict:
             "c5_production_mux_route_accepted": mux_route_closed,
             "c5_service_vbus_detector_latch_release_accepted": detector_latch_closed,
             "pack_safety_powered_off_boundary_accepted": pack_safety_closed,
+            "native_r2_inventory_imported": native_inventory_closed,
             "r1_f4_1_2_is_current_authority": False,
             "h2_closed": False,
             "kicad_authorized": False,

@@ -30,6 +30,7 @@
     "integration_controllers_required_exact": true,
     "c5_mux_source": "config/h0_r2_hardware_contract.json#/c5_sdio_service_mux",
     "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
+    "native_inventory_source": "config/h0_r2_hardware_contract.json#/native_r2_inventory",
     "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
     "unresolved_pre_h2_gates_required": 0,
     "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",

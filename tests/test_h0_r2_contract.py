@@ -106,6 +106,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertFalse(self.actual["claims"]["h2_closed"])
         self.assertFalse(self.actual["claims"]["kicad_authorized"])
         self.assertFalse(self.actual["claims"]["physical_or_hil_execution"])
+        self.assertEqual("H2-R2.1.2", self.actual["current_hardware_substep"])
+        inventory = self.actual["native_r2_inventory"]
+        self.assertEqual("H2-R2.1.1", inventory["marker"])
+        self.assertEqual(3, inventory["summary"]["project_count"])
+        self.assertEqual(23, inventory["summary"]["sheet_count"])
+        self.assertEqual(213, inventory["summary"]["component_group_count"])
+        self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
+        self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
+        self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
         self.assertEqual(
             self.module.build()["physical_h1"]["pre_r2_h2_gates"],
             self.actual["physical_h1"]["pre_r2_h2_gates"],

@@ -2,7 +2,8 @@
   "schema_version": 1,
   "id": "FW-H0-R2",
   "hardware_marker": "H1-R2.31",
-  "hardware_status": "current_working_authority_h2_prerequisites_reviewed_not_kicad_or_hil",
+  "hardware_status": "current_working_authority_h2_r2_1_1_inventory_reviewed_h2_r2_1_2_not_kicad_or_hil",
+  "current_hardware_substep": "H2-R2.1.2",
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -31,6 +32,10 @@
     "pack_safety_i2c_boundary": {
       "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
       "sha256": "5460c97ab81e9f58c41a042a5f024f5f83e5913099e11743b9ad72414eb5782c"
+    },
+    "native_r2_inventory": {
+      "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
+      "sha256": "89c2e5718627811d125805566eec35cd892ae65cbe45e8e2f851e4b212d4dde6"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -2554,6 +2559,273 @@
       "https://jlcpcb.com/partdetail/SamsungElectroMechanics-CL05B104KO5NNNC/C1525"
     ]
   },
+  "native_r2_inventory": {
+    "marker": "H2-R2.1.1",
+    "status": "pass",
+    "projects": [
+      {
+        "id": "LESHY2-UI-R2",
+        "board": "front UI/radio PCB",
+        "root": "UI_00_ROOT",
+        "sheets": [
+          {
+            "id": "UI_00_ROOT",
+            "role": "front hierarchy and named interfaces only",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "UI_10_S3_DISPLAY_TOUCH",
+            "role": "S3 core, exact direct i8080-8 display, touch and S3 service",
+            "domain_owner": "s3",
+            "sources": [
+              "functional",
+              "pin_map",
+              "display_adapter"
+            ]
+          },
+          {
+            "id": "UI_11_STORAGE_CONTROLS_INDICATORS",
+            "role": "Hub-local microSD, encoder, user keys and two-row indicators",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "UI_20_C5_WIFI_IR_SERVICE",
+            "role": "C5 native 2.4/5-GHz, IR, exact SDIO/service mux and independent recovery",
+            "domain_owner": "c5",
+            "sources": [
+              "functional",
+              "pin_map",
+              "c5_mux_and_service_vbus"
+            ]
+          },
+          {
+            "id": "UI_30_HUB_RP_CORE_SERVICE",
+            "role": "front Hub RP2354B core, flash, reset, USB, DBG10 and local transport fan-out",
+            "domain_owner": "hub_rp",
+            "sources": [
+              "functional",
+              "pin_map"
+            ]
+          },
+          {
+            "id": "UI_31_NRF24_X3_TX_EVIDENCE",
+            "role": "three independent full-function nRF24 paths, isolation, couplers and actual-TX evidence",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "UI_40_INTERBOARD_M1",
+            "role": "front endpoint of the exact 80-contact M1 contract",
+            "sources": [
+              "functional",
+              "pin_map"
+            ]
+          },
+          {
+            "id": "UI_50_FRONT_POWER_SAFETY",
+            "role": "front-local quiet-state, TX gates, reset-safe power and evidence aggregation",
+            "sources": [
+              "functional",
+              "pin_map"
+            ]
+          },
+          {
+            "id": "UI_60_TESTPOINTS_MANUFACTURING",
+            "role": "front diagnostic and manufacturing access only",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "LESHY2-RF-R2",
+        "board": "rear RF/power PCB",
+        "root": "RF_00_ROOT",
+        "sheets": [
+          {
+            "id": "RF_00_ROOT",
+            "role": "rear hierarchy and named interfaces only",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_01_USB_PD_CHARGE",
+            "role": "sole powered USB, PD input, two-cell charging and pack measurement",
+            "sources": [
+              "functional",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_02_PACK_SAFETY_AON",
+            "role": "Pack admission, Safety controller, independent watchdog, FAULT_KILL and exact powered-off I2C boundary",
+            "domain_owners": [
+              "pack",
+              "safety"
+            ],
+            "sources": [
+              "functional",
+              "pin_map",
+              "pack_safety_boundary"
+            ]
+          },
+          {
+            "id": "RF_03_MAIN_RAILS_DOMAIN_GATES",
+            "role": "AON and main rails plus independently quietable power domains",
+            "sources": [
+              "functional",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_10_RP2354_CORE_SERVICE",
+            "role": "rear RF RP2354B core, flash, reset, USB and DBG10",
+            "domain_owner": "rf_rp",
+            "sources": [
+              "functional",
+              "pin_map"
+            ]
+          },
+          {
+            "id": "RF_20_CC1101_VOICE_TX",
+            "role": "CC1101 and independent VHF/UHF voice paths with real-TX evidence",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_21_BROADCAST_AIRBAND_RX",
+            "role": "FM/AM/SW/LW and mandatory receive-only 118-137-MHz Airband conversion",
+            "sources": [
+              "functional",
+              "pin_map",
+              "airband"
+            ]
+          },
+          {
+            "id": "RF_22_AUDIO_CODEC_IO",
+            "role": "rear-local codec, microphone, speaker and CTIA headset routing",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_30_U214_U219_M5_EXT",
+            "role": "mutually exclusive U214/U219 Cap profiles and protected M5 Unit expansion",
+            "sources": [
+              "functional",
+              "pin_map",
+              "u214_u219"
+            ]
+          },
+          {
+            "id": "RF_31_REAR_CONTROLS",
+            "role": "rear power command and service-side controls",
+            "sources": [
+              "functional",
+              "physical"
+            ]
+          },
+          {
+            "id": "RF_40_INTERBOARD_M1",
+            "role": "rear endpoint of the exact 80-contact M1 contract",
+            "sources": [
+              "functional",
+              "pin_map"
+            ]
+          },
+          {
+            "id": "RF_50_TX_SAFETY_EVIDENCE",
+            "role": "rear actual-TX evidence, wired fault plane and fail-closed release gates",
+            "sources": [
+              "functional",
+              "pin_map",
+              "pack_safety_boundary"
+            ]
+          },
+          {
+            "id": "RF_60_TESTPOINTS_MANUFACTURING",
+            "role": "rear diagnostic and manufacturing access only",
+            "sources": [
+              "functional",
+              "pin_map",
+              "physical"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "L2-DISP-ADP-001-B",
+        "board": "replaceable passive 40-to-50 display adapter",
+        "root": "ADP_00_DISPLAY_ADAPTER",
+        "sheets": [
+          {
+            "id": "ADP_00_DISPLAY_ADAPTER",
+            "role": "exact passive DF40-to-FH34 one-to-one/strap map; no active device",
+            "sources": [
+              "display_adapter",
+              "physical"
+            ]
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "project_count": 3,
+      "sheet_count": 23,
+      "domain_count": 6,
+      "component_group_count": 213,
+      "component_quantity_per_product": 1106,
+      "external_antenna_group_count": 8,
+      "external_antenna_count": 12,
+      "unresolved_pre_ecad_prerequisites": 0,
+      "native_schematic_symbols_created": 0,
+      "native_schematic_nets_created": 0
+    },
+    "historical_quarantine": {
+      "generation": "single-RP R1",
+      "forbidden_projects": [
+        "LESHY2-UI",
+        "LESHY2-RF",
+        "LESHY2-LORA-CAP-01"
+      ],
+      "forbidden_current_sources": [
+        "hardware/ecad/H2-sheet-contract.json",
+        "hardware/ecad/h2-schematic-plan.json",
+        "hardware/ecad/generated/H2-instance-ledger.json"
+      ],
+      "rule": "These files remain review evidence only. No project, sheet, symbol, net or designator may be copied into native R2 without reconciliation against this inventory. The removable M5 Cap is supported by the host interface; Leshy2 does not manufacture a custom LoRa-Cap PCB."
+    },
+    "authorization": {
+      "native_source_and_sheet_inventory": true,
+      "schematic_symbols_or_nets": false,
+      "kicad_project_creation": false,
+      "pcb_placement_or_routing": false,
+      "fabrication": false,
+      "ordering": false
+    }
+  },
   "hub_gpio_budget": {
     "available": 48,
     "used": 46,
@@ -4247,6 +4519,7 @@
     "c5_production_mux_route_accepted": true,
     "c5_service_vbus_detector_latch_release_accepted": true,
     "pack_safety_powered_off_boundary_accepted": true,
+    "native_r2_inventory_imported": true,
     "r1_f4_1_2_is_current_authority": false,
     "h2_closed": false,
     "kicad_authorized": false,

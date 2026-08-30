@@ -107,6 +107,7 @@ def expected_reconciliation(h0: dict) -> dict:
         "rear_pin_map": h0.get("rear_pin_map"),
         "c5_sdio_service_mux": h0.get("c5_sdio_service_mux"),
         "pack_safety_i2c_boundary": h0.get("pack_safety_i2c_boundary"),
+        "native_r2_inventory": h0.get("native_r2_inventory"),
         "interboard": expected_m1(h0),
         "pre_h2_gates": [],
         "physical_h1": h0.get("physical_h1"),
@@ -183,6 +184,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         "integration_controllers_required_exact": True,
         "c5_mux_source": "config/h0_r2_hardware_contract.json#/c5_sdio_service_mux",
         "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
+        "native_inventory_source": "config/h0_r2_hardware_contract.json#/native_r2_inventory",
         "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
         "unresolved_pre_h2_gates_required": 0,
         "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
@@ -209,6 +211,16 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or pack_safety.get("bus", {}).get("hard_safety_dependency") is not False
     ):
         errors.append("current authority lost the reviewed exact Pack/Safety boundary")
+    native_inventory = h0.get("native_r2_inventory", {})
+    if (
+        h0.get("current_hardware_substep") != "H2-R2.1.2"
+        or native_inventory.get("marker") != "H2-R2.1.1"
+        or native_inventory.get("status") != "pass"
+        or native_inventory.get("summary", {}).get("component_group_count") != 213
+        or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
+        or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
+    ):
+        errors.append("current authority lost the reviewed net-free H2-R2.1.1 native inventory")
     hardware_sources = h0.get("hardware_sources", {})
     if not hardware_sources or any(not row.get("path") or not row.get("sha256")
                                    for row in hardware_sources.values()):

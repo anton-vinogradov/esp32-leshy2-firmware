@@ -10,7 +10,7 @@
     "physical_h1_status": "reviewed",
     "physical_h1_accepted_on": "2026-08-30",
     "current_hardware_stage": "H2",
-    "current_hardware_substep": "H2-R2.1.1",
+    "current_hardware_substep": "H2-R2.1.2",
     "current_h1_blockers": [],
     "mockup_acceptance_required_after_blockers": false,
     "cost_top20_decision": "retain_all_current_groups",
