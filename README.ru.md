@@ -133,7 +133,9 @@ board groups, пяти явных non-PCBA groups и 1 561 логическог�
 contact-checkpoint `H2-R2.1.3` все 1 504 контакта платы сопоставлены реальным
 площадкам footprints или трём явным RF-интерфейсам на модулях; каждая именованная
 площадка учтена. Controlled R2 library теперь содержит 208 symbols и 1 518
-уникальных PCB-pad pins и проходит KiCad 10; сейчас создаются joined native nets;
+уникальных PCB-pad pins и проходит KiCad 10. Все 1 096 устанавливаемых
+экземпляров распределены по трём native-проектам без импорта nets или
+designators R1; сейчас соединяются native nets;
 schematic export/KiCad placement ещё не начинались, а
 проверка byte reproducibility R2 и разрешение заказа остаются открыты.
 

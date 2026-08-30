@@ -131,7 +131,9 @@ non-PCBA groups and 1,561 logical contacts. The `H2-R2.1.3` contact checkpoint
 now maps all 1,504 board contacts to real footprint pads or three explicit
 on-module RF interfaces with every named pad accounted for. Controlled R2
 library generation has now produced 208 symbols and 1,518 unique PCB-pad pins
-and passes KiCad 10; joined native nets are current. Schematic export/KiCad placement
+and passes KiCad 10. All 1,096 fitted instances are allocated across the three
+native projects without importing R1 nets or designators; joining native nets
+is current. Schematic export/KiCad placement
 has not started, and R2 byte reproducibility
 and order authorization remain open.
 
