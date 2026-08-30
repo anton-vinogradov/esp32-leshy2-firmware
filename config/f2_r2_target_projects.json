@@ -6,7 +6,7 @@
   "inputs": {
     "build_matrix": {
       "path": "config/f2_r2_build_matrix.json",
-      "sha256": "8633a0926578558f3e8ee6b68db71a90168853b4272c007b8753824db4c46ed0"
+      "sha256": "c8ddea2fa8ceb68afcb94d804d197717745b9bdefd4d35700bca7296de189c70"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
@@ -18,7 +18,7 @@
     },
     "r2_hardware_projection": {
       "path": "config/h0_r2_hardware_contract.json",
-      "sha256": "b441072c956cc01131780f0ec0bc9d504dabaffc8e7dba5b95a9ae0124d11abc"
+      "sha256": "3f10bd039f533d056104c32207eb100e24054daff7587b6f575564580e2e00f7"
     },
     "historical_r1_project_registry": {
       "path": "config/target_projects.json",

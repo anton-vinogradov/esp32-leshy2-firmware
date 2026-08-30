@@ -125,6 +125,19 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         )
         ownership = self.actual["c5_sdio_service_mux"]["ownership"]
         self.assertTrue(ownership["latch"]["firmware_cannot_override"])
+        self.assertEqual(
+            "accepted",
+            ownership["detector_latch_implementation"]["selection_status"],
+        )
+        self.assertTrue(
+            self.actual["claims"]["c5_service_vbus_detector_latch_release_accepted"]
+        )
+        self.assertIn(
+            "SN74LVC1G74DCUR",
+            " ".join(self.actual["resolved_post_h1_gates"]),
+        )
+        self.assertNotIn("service-VBUS", " ".join(self.actual["pre_h2_gates"]))
+        self.assertIn("Pack/Safety", " ".join(self.actual["pre_h2_gates"]))
         self.assertFalse(self.actual["claims"]["r1_f4_1_2_is_current_authority"])
 
     def test_all_six_domains_have_exact_hardware_pin_maps(self):

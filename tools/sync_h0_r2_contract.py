@@ -81,21 +81,48 @@ def build() -> dict:
             for key in ("stock", "available_order_quantity", "moq", "price_tiers_usd")
         )
     )
+    detector_latch = c5_mux["ownership"].get("detector_latch_implementation", {})
+    detector_parts = [
+        detector_latch.get("detector", {}),
+        detector_latch.get("latch", {}),
+        detector_latch.get("release_qualifier", {}),
+    ]
+    detector_latch_closed = (
+        c5_mux["ownership"]["service_vbus"].get("detector_and_latch_mpn_status")
+        == "accepted"
+        and detector_latch.get("selection_status") == "accepted"
+        and all(
+            part.get("mpn")
+            and part.get("jlcpcb_part_number")
+            and all(
+                part.get("live_inventory", {}).get(key) is not None
+                for key in ("stock", "available_order_quantity", "moq", "price_tiers_usd")
+            )
+            for part in detector_parts
+        )
+    )
     review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
     review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
     current_pin_gates = [
         gate for gate in review_time_pin_gates
         if not (mux_route_closed and "FSUSB42MUX" in gate)
+        and not (detector_latch_closed and "service-VBUS" in gate)
     ]
     current_physical_gates = [
         gate for gate in review_time_physical_gates
         if not (mux_route_closed and "FSUSB42MUX" in gate)
+        and not (detector_latch_closed and "service-VBUS" in gate)
     ]
-    resolved_post_h1_gates = (
-        ["exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"]
-        if mux_route_closed
-        else []
-    )
+    resolved_post_h1_gates = []
+    if mux_route_closed:
+        resolved_post_h1_gates.append(
+            "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"
+        )
+    if detector_latch_closed:
+        resolved_post_h1_gates.append(
+            "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch "
+            "and 74HC20PW,118 / C546719 release qualifier"
+        )
     transports = []
     for transport in hw["transport_contracts"]:
         row = dict(transport)
@@ -234,6 +261,7 @@ def build() -> dict:
             "c5_fixed_sdio_contacts_imported": True,
             "c5_service_mux_hardware_owned": True,
             "c5_production_mux_route_accepted": mux_route_closed,
+            "c5_service_vbus_detector_latch_release_accepted": detector_latch_closed,
             "r1_f4_1_2_is_current_authority": False,
             "h2_closed": False,
             "kicad_authorized": False,
