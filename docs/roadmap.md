@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware H1-R2.37 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5 and H3-R2.0.1 is current. H2-R2.1.1 reviewed three native projects, 23 sheets, six domain owners, 242 exact MPN groups and 1,197 product positions, and H2-R2.1.2 reviewed 237 board groups, five explicit non-PCBA groups and 1,662 logical contacts. The earlier live FSUSB42MUX/C11355 route, exact service-VBUS detector/latch/release path and TCA9803DGKR/C2687966 Pack/Safety boundary are also reviewed. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5, H3-R2.0.1 has frozen the exact verification inputs and H3-R2.0.2 is current. H2-R2.1.1 reviewed three native projects, 23 sheets, six domain owners, 242 exact MPN groups and 1,197 product positions, and H2-R2.1.2 reviewed 237 board groups, five explicit non-PCBA groups and 1,662 logical contacts. The earlier live FSUSB42MUX/C11355 route, exact service-VBUS detector/latch/release path and TCA9803DGKR/C2687966 Pack/Safety boundary are also reviewed. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
 > 3.75-A continuous / 4.25-A step 3V3_MAIN architecture, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
@@ -22,7 +22,7 @@
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Placement/routing has not
 > started and ordering remains unauthorized.
 
-Status last reconciled: **30 August 2026**. This is the firmware repository's
+Status last reconciled: **31 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -37,7 +37,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ▶️ H0-R2, H1-R2.37 and H2-R2.1.5 are reviewed; H3-R2.0.1 is current. Three native KiCad projects contain 1,187 fitted positions, 4,327 physical pins and 827 canonical nets with zero ERC findings; six domains, 173 controller pins, 50 cross-project and 233 cross-sheet nets reconcile. Imported exact pin/config authority remains H1-R2.31; Pack/Safety is Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency. Dual-RP maps, ten SMA ports split 5+5, S3-local 24-MHz i8080-8, 16 true M1 NCs and the accepted 226-body physical model remain unchanged |
+| Hardware intersection | ▶️ H0-R2, H1-R2.37 and H2-R2.1.5 are reviewed; H3-R2.0.1 froze the exact verification inputs and H3-R2.0.2 is current. Three native KiCad projects contain 1,187 fitted positions, 4,327 physical pins and 827 canonical nets with zero ERC findings; six domains, 173 controller pins, 50 cross-project and 233 cross-sheet nets reconcile. Imported exact pin/config authority remains H1-R2.31; Pack/Safety is Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency. Dual-RP maps, ten SMA ports split 5+5, S3-local 24-MHz i8080-8, 11 true M1 NCs and the accepted 226-body physical model remain unchanged |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
