@@ -31,6 +31,7 @@
     "c5_mux_source": "config/h0_r2_hardware_contract.json#/c5_sdio_service_mux",
     "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
     "native_inventory_source": "config/h0_r2_hardware_contract.json#/native_r2_inventory",
+    "exact_component_ledger_source": "config/h0_r2_hardware_contract.json#/exact_component_ledger",
     "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
     "unresolved_pre_h2_gates_required": 0,
     "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
@@ -39,7 +40,7 @@
     "physical_pre_r2_h2_gates_required": 0
   },
   "r2_h2_synchronized": false,
-  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the reviewed H1-R2.31 dual-RP map and all three reviewed pre-ECAD electrical prerequisites, including the exact TCA9803DGKR/C2687966 Pack/Safety boundary, but no native six-domain H2/ECAD export yet.",
+  "blocker": "The retained H2.0.3 export is historical five-domain R1. Current firmware has the reviewed H1-R2.31 dual-RP map, all three reviewed pre-ECAD electrical prerequisites and the reviewed H2-R2.1.2 exact component ledger, but no native six-domain H2/ECAD export yet.",
   "claims": {
     "h0_r2_projection_is_current_firmware_authority": true,
     "historical_single_rp_import_can_authorize_r2": false,
@@ -48,6 +49,7 @@
     "exact_dual_rp_working_map_imported": true,
     "c5_quad_sdio_mux_contract_imported": true,
     "pack_safety_powered_off_boundary_imported": true,
+    "exact_component_ledger_imported": true,
     "exact_rp_pin_order_invented": false,
     "qualification_or_execution_evidence_created": false
   },

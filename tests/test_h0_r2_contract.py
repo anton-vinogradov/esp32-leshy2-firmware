@@ -106,7 +106,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertFalse(self.actual["claims"]["h2_closed"])
         self.assertFalse(self.actual["claims"]["kicad_authorized"])
         self.assertFalse(self.actual["claims"]["physical_or_hil_execution"])
-        self.assertEqual("H2-R2.1.2", self.actual["current_hardware_substep"])
+        self.assertEqual("H2-R2.1.3", self.actual["current_hardware_substep"])
         inventory = self.actual["native_r2_inventory"]
         self.assertEqual("H2-R2.1.1", inventory["marker"])
         self.assertEqual(3, inventory["summary"]["project_count"])
@@ -115,6 +115,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
         self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
         self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
+        ledger = self.actual["exact_component_ledger"]
+        self.assertEqual("H2-R2.1.2", ledger["marker"])
+        self.assertEqual(208, ledger["summary"]["board_component_group_count"])
+        self.assertEqual(5, ledger["summary"]["explicit_non_pcba_group_count"])
+        self.assertEqual(1555, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(0, ledger["summary"]["unresolved_groups"])
+        self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
+        self.assertFalse(ledger["authorization"]["schematic_nets"])
+        self.assertTrue(self.actual["claims"]["exact_component_ledger_imported"])
         self.assertEqual(
             self.module.build()["physical_h1"]["pre_r2_h2_gates"],
             self.actual["physical_h1"]["pre_r2_h2_gates"],

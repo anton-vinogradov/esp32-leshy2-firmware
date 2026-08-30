@@ -94,7 +94,7 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
-and reviewed `H1-R2.37`; its current point is `H2-R2.1.2`,
+and reviewed `H1-R2.37`; its current point is `H2-R2.1.3`,
 while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
@@ -126,8 +126,10 @@ reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed three native projects, 23 sheets,
 six domain owners and 213 exact MPN groups without creating symbols or nets.
-`H2-R2.1.2` now reconciles exact symbols, contacts, values and footprints;
-schematic export/KiCad has not started, and R2 byte reproducibility
+`H2-R2.1.2` reviewed exact identities for 208 board groups, five explicit
+non-PCBA groups and 1,555 logical contacts. `H2-R2.1.3` now materializes
+controlled definitions and joined native nets; schematic export/KiCad placement
+has not started, and R2 byte reproducibility
 and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position

@@ -20,6 +20,7 @@ PHYSICAL_H1_SOURCE = HW_REPO / "hardware/product-design/h1-r2-placement.json"
 R2_AUTHORITY_SOURCE = HW_ROOT / "generated/H0-R2-authority-gate.json"
 PACK_SAFETY_SOURCE = HW_ROOT / "pack-safety-i2c-boundary-contract.json"
 NATIVE_INVENTORY_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-native-inventory.json"
+EXACT_LEDGER_SOURCE = HW_REPO / "hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json"
 OUTPUT = ROOT / "config/h0_r2_hardware_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
 PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
@@ -77,6 +78,8 @@ def build() -> dict:
     pack_safety = json.loads(pack_safety_raw)
     native_inventory_raw = NATIVE_INVENTORY_SOURCE.read_bytes()
     native_inventory = json.loads(native_inventory_raw)
+    exact_ledger_raw = EXACT_LEDGER_SOURCE.read_bytes()
+    exact_ledger = json.loads(exact_ledger_raw)
     air = hw["airband_contract"]
     mux_route = c5_mux["production_mux_route"]
     mux_inventory = mux_route["live_inventory"]
@@ -130,6 +133,21 @@ def build() -> dict:
     )
     if not native_inventory_closed:
         raise ValueError("H2-R2.1.1 native R2 inventory is not a closed, net-free input boundary")
+    exact_ledger_closed = (
+        exact_ledger.get("marker") == "H2-R2.1.2"
+        and exact_ledger.get("status") == "pass"
+        and exact_ledger.get("summary", {}).get("component_group_count") == 213
+        and exact_ledger.get("summary", {}).get("board_component_group_count") == 208
+        and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 5
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1555
+        and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
+        and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
+        and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False
+        and exact_ledger.get("authorization", {}).get("schematic_nets") is False
+        and exact_ledger.get("errors") == []
+    )
+    if not exact_ledger_closed:
+        raise ValueError("H2-R2.1.2 exact component ledger is not a closed, net-free input boundary")
     review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
     review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
     current_pin_gates = [
@@ -187,8 +205,8 @@ def build() -> dict:
         "schema_version": 1,
         "id": "FW-H0-R2",
         "hardware_marker": dual_rp["marker"],
-        "hardware_status": "current_working_authority_h2_r2_1_1_inventory_reviewed_h2_r2_1_2_not_kicad_or_hil",
-        "current_hardware_substep": "H2-R2.1.2",
+        "hardware_status": "current_working_authority_h2_r2_1_2_exact_ledger_reviewed_h2_r2_1_3_not_kicad_or_hil",
+        "current_hardware_substep": "H2-R2.1.3",
         "hardware_sources": {
             "functional": source_record(HW_SOURCE),
             "c5_sdio_service_mux": source_record(C5_MUX_SOURCE),
@@ -198,6 +216,7 @@ def build() -> dict:
             "r2_authority_gate": source_record(R2_AUTHORITY_SOURCE),
             "pack_safety_i2c_boundary": source_record(PACK_SAFETY_SOURCE),
             "native_r2_inventory": source_record(NATIVE_INVENTORY_SOURCE),
+            "exact_component_ledger": source_record(EXACT_LEDGER_SOURCE),
         },
         "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
         "hardware_source_sha256": hashlib.sha256(raw).hexdigest(),
@@ -237,6 +256,12 @@ def build() -> dict:
             "summary": native_inventory["summary"],
             "historical_quarantine": native_inventory["historical_quarantine"],
             "authorization": native_inventory["authorization"],
+        },
+        "exact_component_ledger": {
+            "marker": exact_ledger["marker"],
+            "status": exact_ledger["status"],
+            "summary": exact_ledger["summary"],
+            "authorization": exact_ledger["authorization"],
         },
         "hub_gpio_budget": dual_rp["hub_rp"]["gpio_budget"],
         "hub_pin_map": [project_rp_pin(pin) for pin in dual_rp["hub_rp"]["pin_map"]],
@@ -311,6 +336,7 @@ def build() -> dict:
             "c5_service_vbus_detector_latch_release_accepted": detector_latch_closed,
             "pack_safety_powered_off_boundary_accepted": pack_safety_closed,
             "native_r2_inventory_imported": native_inventory_closed,
+            "exact_component_ledger_imported": exact_ledger_closed,
             "r1_f4_1_2_is_current_authority": False,
             "h2_closed": False,
             "kicad_authorized": False,

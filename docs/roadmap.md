@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware H1-R2.37 was
-> accepted and reviewed; hardware is now at H2-R2.1.2 after H2-R2.1.1 reviewed three native projects, 23 sheets, six domain owners and 213 exact MPN groups without creating symbols or nets. The earlier live FSUSB42MUX/C11355 route, exact service-VBUS detector/latch/release path and TCA9803DGKR/C2687966 Pack/Safety boundary are also reviewed. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware is now at H2-R2.1.3 after H2-R2.1.1 reviewed three native projects, 23 sheets, six domain owners and 213 exact MPN groups and H2-R2.1.2 reviewed 208 board groups, five explicit non-PCBA groups and 1,555 logical contacts. The earlier live FSUSB42MUX/C11355 route, exact service-VBUS detector/latch/release path and TCA9803DGKR/C2687966 Pack/Safety boundary are also reviewed. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
 > 3.75-A continuous / 4.25-A step 3V3_MAIN architecture, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
@@ -13,9 +13,9 @@
 > evidence islands; the accepted AD8314 and exact Hirose U.FL packaging-route changes have no firmware-visible contract effect. All current top-20 hardware groups are retained, and separate `ANT-433-CW-QW-SMA` units remain permanently assigned to SUB-GHz and UHF VOICE rather than becoming a firmware-visible shared antenna. The onboard video receiver,
 > decoder, connector and owner-soldered module bay are removed; eleven S3 GPIOs,
 > eight rear-RP GPIOs and two M1 contacts remain reserves. Current exterior,
-> turned-over inner faces and service views are generated. Exact symbol/contact/
-> value/footprint reconciliation is current; native R2 schematic nets/KiCad have
-> not started and ordering remains unauthorized.
+> turned-over inner faces and service views are generated. Controlled definitions
+> and joined native nets are current; schematic export/KiCad placement has not
+> started and ordering remains unauthorized.
 
 Status last reconciled: **30 August 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
@@ -32,7 +32,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | 🔒 [Fail-closed gate](../config/r2_h2_sync_gate.json): exact dual-RP maps and all three reviewed electrical prerequisites, including the TCA9803 Pack/Safety boundary, are hash-bound; retained H2.0.3 JSON is historical R1 and cannot authorize R2; reopen only when a native six-domain H2 export exists |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ▶️ H0-R2 and physical H1-R2.37 are reviewed; hardware is at H2-R2.1.2 after the net-free H2-R2.1.1 inventory fixed 3 projects, 23 sheets, 6 domain owners and 213 exact MPN groups; imported machine pin/config authority remains H1-R2.31; the Pack/Safety mailbox is exact Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; ten SMA ports are split 5+5; direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` remains S3-local, the flex points toward the antenna edge and F5/F6 rotate ILI9488 memory and FT6236 touch coordinates by 180°; eleven S3 GPIOs are reserves and exact 80-contact M1 carries 24 signals, 24 returns and 16 true NC contacts; the 226-body model includes all 18 U219 support bodies, the NFC loop, supplied-antenna swept volume, eight exact TX detectors, five couplers and eight bounded evidence islands |
+| Hardware intersection | ▶️ H0-R2 and physical H1-R2.37 are reviewed; hardware is at H2-R2.1.3 after the net-free H2-R2.1.1 inventory fixed 3 projects, 23 sheets, 6 domain owners and 213 exact MPN groups and H2-R2.1.2 reviewed exact identities for 208 board groups, 5 non-PCBA groups and 1,555 contacts; imported machine pin/config authority remains H1-R2.31; the Pack/Safety mailbox is exact Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency; exact legal dual-RP fixed-mux maps give rear I2C0 on GP4/5, independent Cap I2C1 on GP30/31 and a PIO2 M5 profile on GP7/8; ten SMA ports are split 5+5; direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` remains S3-local, the flex points toward the antenna edge and F5/F6 rotate ILI9488 memory and FT6236 touch coordinates by 180°; eleven S3 GPIOs are reserves and exact 80-contact M1 carries 24 signals, 24 returns and 16 true NC contacts; the 226-body model includes all 18 U219 support bodies, the NFC loop, supplied-antenna swept volume, eight exact TX detectors, five couplers and eight bounded evidence islands |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

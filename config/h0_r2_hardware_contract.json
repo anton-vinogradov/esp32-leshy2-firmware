@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "FW-H0-R2",
   "hardware_marker": "H1-R2.31",
-  "hardware_status": "current_working_authority_h2_r2_1_1_inventory_reviewed_h2_r2_1_2_not_kicad_or_hil",
-  "current_hardware_substep": "H2-R2.1.2",
+  "hardware_status": "current_working_authority_h2_r2_1_2_exact_ledger_reviewed_h2_r2_1_3_not_kicad_or_hil",
+  "current_hardware_substep": "H2-R2.1.3",
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -35,7 +35,11 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "89c2e5718627811d125805566eec35cd892ae65cbe45e8e2f851e4b212d4dde6"
+      "sha256": "4d6af3780d3d3a699e7a69a97933519c3eafc743e89960b084fe188ecafdd841"
+    },
+    "exact_component_ledger": {
+      "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
+      "sha256": "5d96818a20a116861963b570c02dd9df8a2265b5a48d97846b13ddaa3604cf02"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -2826,6 +2830,36 @@
       "ordering": false
     }
   },
+  "exact_component_ledger": {
+    "marker": "H2-R2.1.2",
+    "status": "pass",
+    "summary": {
+      "component_group_count": 213,
+      "board_component_group_count": 208,
+      "explicit_non_pcba_group_count": 5,
+      "symbol_identity_count": 208,
+      "footprint_identity_count": 208,
+      "logical_contact_count": 1555,
+      "historical_package_hints_reconciled": 196,
+      "historical_package_conflicts_resolved": 5,
+      "explicit_current_footprint_overrides": 12,
+      "standard_kicad_footprint_identities": 175,
+      "reconciled_local_footprint_definitions": 32,
+      "new_exact_footprint_geometries_pending_materialization": 1,
+      "schematic_symbols_or_footprint_files_created": 0,
+      "native_schematic_nets_created": 0,
+      "unresolved_groups": 0
+    },
+    "authorization": {
+      "exact_group_ledger": true,
+      "symbol_or_footprint_files": false,
+      "schematic_nets": false,
+      "kicad_project_creation": false,
+      "pcb_placement_or_routing": false,
+      "fabrication": false,
+      "ordering": false
+    }
+  },
   "hub_gpio_budget": {
     "available": 48,
     "used": 46,
@@ -4520,6 +4554,7 @@
     "c5_service_vbus_detector_latch_release_accepted": true,
     "pack_safety_powered_off_boundary_accepted": true,
     "native_r2_inventory_imported": true,
+    "exact_component_ledger_imported": true,
     "r1_f4_1_2_is_current_authority": false,
     "h2_closed": false,
     "kicad_authorized": false,
