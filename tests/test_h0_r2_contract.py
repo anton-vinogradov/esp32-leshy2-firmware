@@ -110,7 +110,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             self.module.build()["physical_h1"]["pre_r2_h2_gates"],
             self.actual["physical_h1"]["pre_r2_h2_gates"],
         )
-        self.assertGreater(len(self.actual["physical_h1"]["pre_r2_h2_gates"]), 0)
+        self.assertEqual([], self.actual["physical_h1"]["pre_r2_h2_gates"])
 
     def test_c5_transport_is_quad_and_40mhz_qualification_only(self):
         transport = {row["id"]: row for row in self.actual["transports"]}["HUB_C5"]
@@ -137,8 +137,22 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             " ".join(self.actual["resolved_post_h1_gates"]),
         )
         self.assertNotIn("service-VBUS", " ".join(self.actual["pre_h2_gates"]))
-        self.assertIn("Pack/Safety", " ".join(self.actual["pre_h2_gates"]))
+        self.assertEqual([], self.actual["pre_h2_gates"])
         self.assertFalse(self.actual["claims"]["r1_f4_1_2_is_current_authority"])
+
+    def test_pack_safety_boundary_is_exact_and_not_hard_kill(self):
+        boundary = self.actual["pack_safety_i2c_boundary"]
+        self.assertEqual("H2-R2.0.3", boundary["marker"])
+        self.assertEqual("TCA9803DGKR", boundary["buffer"]["mpn"])
+        self.assertEqual("C2687966", boundary["buffer"]["jlcpcb_part_number"])
+        self.assertEqual(
+            {"sda": "Hub RP GPIO42 / M1.32", "scl": "Hub RP GPIO43 / M1.33"},
+            boundary["bus"]["hub_endpoints"],
+        )
+        self.assertFalse(boundary["bus"]["hard_safety_dependency"])
+        self.assertTrue(
+            self.actual["claims"]["pack_safety_powered_off_boundary_accepted"]
+        )
 
     def test_all_six_domains_have_exact_hardware_pin_maps(self):
         contracts = self.actual["domain_contracts"]

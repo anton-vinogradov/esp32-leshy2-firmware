@@ -106,6 +106,7 @@ def expected_reconciliation(h0: dict) -> dict:
         "hub_pin_map": h0.get("hub_pin_map"),
         "rear_pin_map": h0.get("rear_pin_map"),
         "c5_sdio_service_mux": h0.get("c5_sdio_service_mux"),
+        "pack_safety_i2c_boundary": h0.get("pack_safety_i2c_boundary"),
         "interboard": expected_m1(h0),
         "pre_h2_gates": [],
         "physical_h1": h0.get("physical_h1"),
@@ -181,6 +182,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         "six_domain_pin_maps_source": "config/h0_r2_hardware_contract.json#/domain_contracts",
         "integration_controllers_required_exact": True,
         "c5_mux_source": "config/h0_r2_hardware_contract.json#/c5_sdio_service_mux",
+        "pack_safety_boundary_source": "config/h0_r2_hardware_contract.json#/pack_safety_i2c_boundary",
         "hardware_source_hashes": "config/h0_r2_hardware_contract.json#/hardware_sources",
         "unresolved_pre_h2_gates_required": 0,
         "physical_h1_source": "config/h0_r2_hardware_contract.json#/physical_h1",
@@ -198,6 +200,15 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     c5 = h0.get("c5_sdio_service_mux", {})
     if c5.get("performance", {}).get("bus_width_bits") != 4:
         errors.append("current pre-H2 authority lost C5 4-bit SDIO")
+    pack_safety = h0.get("pack_safety_i2c_boundary", {})
+    if (
+        pack_safety.get("marker") != "H2-R2.0.3"
+        or pack_safety.get("status") != "reviewed_exact_factory_placeable_boundary"
+        or pack_safety.get("buffer", {}).get("mpn") != "TCA9803DGKR"
+        or pack_safety.get("buffer", {}).get("jlcpcb_part_number") != "C2687966"
+        or pack_safety.get("bus", {}).get("hard_safety_dependency") is not False
+    ):
+        errors.append("current authority lost the reviewed exact Pack/Safety boundary")
     hardware_sources = h0.get("hardware_sources", {})
     if not hardware_sources or any(not row.get("path") or not row.get("sha256")
                                    for row in hardware_sources.values()):
@@ -221,7 +232,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         if gate.get("status") != "reviewed_six_domain_h2_export":
             errors.append("ready six-domain H2 export is not marked reviewed")
     else:
-        if gate.get("status") != "blocked_pending_six_domain_h2_export_and_open_factory_gates":
+        if gate.get("status") != "blocked_pending_six_domain_h2_export":
             errors.append("missing R2 H2 export must keep the gate blocked")
         if bsp.get("authority") != HISTORICAL_BSP_AUTHORITY:
             errors.append("single-RP BSP import is not explicitly historical and non-authoritative")
@@ -235,6 +246,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         "r2_h2_ecad_and_firmware_synchronized": current_ready,
         "exact_dual_rp_working_map_imported": True,
         "c5_quad_sdio_mux_contract_imported": True,
+        "pack_safety_powered_off_boundary_imported": True,
         "exact_rp_pin_order_invented": False,
         "qualification_or_execution_evidence_created": False,
     }
@@ -260,8 +272,8 @@ def main() -> int:
         )
     else:
         print(
-            "R2/H2 sync gate CLOSED as required: historical five-domain single-RP H2 import "
-            "cannot authorize R2; exact H1-R2.31 working pins remain pre-H2 only"
+            "R2/H2 sync gate CLOSED as required: all pre-ECAD electrical prerequisites "
+            "are reviewed, but the historical five-domain single-RP H2 import cannot authorize R2"
         )
     return 0
 

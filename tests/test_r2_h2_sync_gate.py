@@ -120,6 +120,7 @@ class R2H2SyncGateTests(unittest.TestCase):
             "Pack map": lambda h0, bsp, integration: bsp["bsp"]["domains"][4]["pin_map"].pop(),
             "Safety map": lambda h0, bsp, integration: integration["controllers"][5]["pin_map"].pop(),
             "C5 mux": lambda h0, bsp, integration: bsp["r2_reconciliation"]["c5_sdio_service_mux"].clear(),
+            "Pack/Safety boundary": lambda h0, bsp, integration: bsp["r2_reconciliation"]["pack_safety_i2c_boundary"].clear(),
             "source hash": lambda h0, bsp, integration: bsp["r2_reconciliation"]["hardware_sources"].clear(),
             "M1": lambda h0, bsp, integration: bsp["r2_reconciliation"]["interboard"]["pin_map"].pop(),
             "open gate": lambda h0, bsp, integration: h0["pre_h2_gates"].append("open"),

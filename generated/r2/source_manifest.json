@@ -5,7 +5,7 @@
   "producer": "tools/generate_f2_r2_bsp.py",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
-    "sha256": "3f10bd039f533d056104c32207eb100e24054daff7587b6f575564580e2e00f7",
+    "sha256": "87b97297b1ad864c28cffe844b7a742df3aa6eba82058ba7db2785eebed59038",
     "hardware_marker": "H1-R2.31"
   },
   "generation_model": "config/f2_r2_bsp_generation.json",
@@ -108,8 +108,8 @@
     },
     {
       "path": "generated/r2/hardware/src/hub_rp_bsp.c",
-      "bytes": 13248,
-      "sha256": "8d9e40a282f1e0094c3bdc4cca26a88b94a7fd84064381781b9991ceac88424b"
+      "bytes": 13500,
+      "sha256": "54483159d5b95f3dee3e3a100cec6b4e6a4743e5fa1c114425959930045be462"
     },
     {
       "path": "generated/r2/hardware/src/pack_bsp.c",

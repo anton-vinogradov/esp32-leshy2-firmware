@@ -18,6 +18,7 @@ DUAL_RP_SOURCE = HW_ROOT / "h1-r2-dual-rp-pinout.json"
 U219_SOURCE = HW_ROOT / "h1-r2-u219-cap.json"
 PHYSICAL_H1_SOURCE = HW_REPO / "hardware/product-design/h1-r2-placement.json"
 R2_AUTHORITY_SOURCE = HW_ROOT / "generated/H0-R2-authority-gate.json"
+PACK_SAFETY_SOURCE = HW_ROOT / "pack-safety-i2c-boundary-contract.json"
 OUTPUT = ROOT / "config/h0_r2_hardware_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
 PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
@@ -71,6 +72,8 @@ def build() -> dict:
     physical_h1_raw = PHYSICAL_H1_SOURCE.read_bytes()
     physical_h1 = json.loads(physical_h1_raw)
     r2_authority = json.loads(R2_AUTHORITY_SOURCE.read_bytes())
+    pack_safety_raw = PACK_SAFETY_SOURCE.read_bytes()
+    pack_safety = json.loads(pack_safety_raw)
     air = hw["airband_contract"]
     mux_route = c5_mux["production_mux_route"]
     mux_inventory = mux_route["live_inventory"]
@@ -101,17 +104,28 @@ def build() -> dict:
             for part in detector_parts
         )
     )
+    pack_safety_closed = (
+        pack_safety.get("marker") == "H2-R2.0.3"
+        and pack_safety.get("status") == "reviewed_exact_factory_placeable_boundary"
+        and pack_safety.get("buffer", {}).get("mpn") == "TCA9803DGKR"
+        and pack_safety.get("buffer", {}).get("jlcpcb_part_number") == "C2687966"
+        and pack_safety.get("bus", {}).get("hub_endpoints")
+        == {"sda": "Hub RP GPIO42 / M1.32", "scl": "Hub RP GPIO43 / M1.33"}
+        and pack_safety.get("bus", {}).get("hard_safety_dependency") is False
+    )
     review_time_pin_gates = dual_rp["authority_chain"]["remaining_h2_gates"]
     review_time_physical_gates = physical_h1["pre_r2_h2_gates"]
     current_pin_gates = [
         gate for gate in review_time_pin_gates
         if not (mux_route_closed and "FSUSB42MUX" in gate)
         and not (detector_latch_closed and "service-VBUS" in gate)
+        and not (pack_safety_closed and "Pack/Safety" in gate)
     ]
     current_physical_gates = [
         gate for gate in review_time_physical_gates
         if not (mux_route_closed and "FSUSB42MUX" in gate)
         and not (detector_latch_closed and "service-VBUS" in gate)
+        and not (pack_safety_closed and "Pack/Safety" in gate)
     ]
     resolved_post_h1_gates = []
     if mux_route_closed:
@@ -122,6 +136,10 @@ def build() -> dict:
         resolved_post_h1_gates.append(
             "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch "
             "and 74HC20PW,118 / C546719 release qualifier"
+        )
+    if pack_safety_closed:
+        resolved_post_h1_gates.append(
+            "exact TCA9803DGKR / C2687966 powered-off Pack/Safety I2C boundary"
         )
     transports = []
     for transport in hw["transport_contracts"]:
@@ -152,7 +170,7 @@ def build() -> dict:
         "schema_version": 1,
         "id": "FW-H0-R2",
         "hardware_marker": dual_rp["marker"],
-        "hardware_status": "current_working_authority_pre_h2_not_kicad_or_hil",
+        "hardware_status": "current_working_authority_h2_prerequisites_reviewed_not_kicad_or_hil",
         "hardware_sources": {
             "functional": source_record(HW_SOURCE),
             "c5_sdio_service_mux": source_record(C5_MUX_SOURCE),
@@ -160,6 +178,7 @@ def build() -> dict:
             "u219_cap_profile": source_record(U219_SOURCE),
             "physical_h1": source_record(PHYSICAL_H1_SOURCE),
             "r2_authority_gate": source_record(R2_AUTHORITY_SOURCE),
+            "pack_safety_i2c_boundary": source_record(PACK_SAFETY_SOURCE),
         },
         "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
         "hardware_source_sha256": hashlib.sha256(raw).hexdigest(),
@@ -191,6 +210,7 @@ def build() -> dict:
             "performance": c5_mux["performance"],
             "hil_gates": c5_mux["hil_gates"],
         },
+        "pack_safety_i2c_boundary": pack_safety,
         "hub_gpio_budget": dual_rp["hub_rp"]["gpio_budget"],
         "hub_pin_map": [project_rp_pin(pin) for pin in dual_rp["hub_rp"]["pin_map"]],
         "hub_resource_budget": {
@@ -262,6 +282,7 @@ def build() -> dict:
             "c5_service_mux_hardware_owned": True,
             "c5_production_mux_route_accepted": mux_route_closed,
             "c5_service_vbus_detector_latch_release_accepted": detector_latch_closed,
+            "pack_safety_powered_off_boundary_accepted": pack_safety_closed,
             "r1_f4_1_2_is_current_authority": False,
             "h2_closed": False,
             "kicad_authorized": False,

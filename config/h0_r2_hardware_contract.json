@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "FW-H0-R2",
   "hardware_marker": "H1-R2.31",
-  "hardware_status": "current_working_authority_pre_h2_not_kicad_or_hil",
+  "hardware_status": "current_working_authority_h2_prerequisites_reviewed_not_kicad_or_hil",
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -14,7 +14,7 @@
     },
     "dual_rp_pinout": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-      "sha256": "5ab16d6a23f7cce4b2fab4e3f2b5ace47eb1c0e1f652b076c62ea6f2efaefc9e"
+      "sha256": "44658cf8169ddbfab365aebe6e88a96658d3d75900d754cdfa08731d35a29af0"
     },
     "u219_cap_profile": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -22,11 +22,15 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "e2e5841eff0fec1bf51c9b71cc61f1cf47e070c8f9146c4d27aa386ec2905eb9"
+      "sha256": "09dabb192d4e013cdfab318a1d3f3f5a0516f1e6ca60006d93379d3a39933fea"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "6a5e7669069cece022ce0bcd76879d9db8f75be233c450c886b123a0752d6c6d"
+      "sha256": "c28145492d691f633aa887050eb8ced81ddd941b4f8c9c504cafefae416b8471"
+    },
+    "pack_safety_i2c_boundary": {
+      "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
+      "sha256": "5460c97ab81e9f58c41a042a5f024f5f83e5913099e11743b9ad72414eb5782c"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
@@ -1186,16 +1190,16 @@
           "net": "HUB_SAFE_I2C_SDA",
           "direction": "io",
           "controller": "I2C1",
-          "endpoint": "M1.32 -> Pack/Safety mailboxes",
-          "reset": "input/open-drain released; external pull-up to AON-safe compatible domain"
+          "endpoint": "TCA9803DGKR SDAA on 3V3_MAIN -> powered-off-Ioff boundary -> SDAB on AON_SAFE_3V3 -> M1.32 -> Pack/Safety mailboxes",
+          "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
         },
         {
           "gpio": 43,
           "net": "HUB_SAFE_I2C_SCL",
           "direction": "od",
           "controller": "I2C1",
-          "endpoint": "M1.33 -> Pack/Safety mailboxes",
-          "reset": "input/open-drain released; external pull-up to AON-safe compatible domain"
+          "endpoint": "TCA9803DGKR SCLA on 3V3_MAIN -> powered-off-Ioff boundary -> SCLB on AON_SAFE_3V3 -> M1.33 -> Pack/Safety mailboxes",
+          "reset": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
         },
         {
           "gpio": 44,
@@ -1245,7 +1249,7 @@
             "hub_rp.GPIO42",
             "M1.32"
           ],
-          "endpoint": "Hub RP I2C1 open-drain mailbox bus through M1.32 and the required powered-off-Ioff boundary"
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
         },
         {
           "instance": "pack_admission",
@@ -1291,7 +1295,7 @@
             "hub_rp.GPIO43",
             "M1.33"
           ],
-          "endpoint": "Hub RP I2C1 open-drain mailbox bus through M1.33 and the required powered-off-Ioff boundary"
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
         },
         {
           "instance": "pack_admission",
@@ -1404,7 +1408,7 @@
             "hub_rp.GPIO42",
             "M1.32"
           ],
-          "endpoint": "Hub RP I2C1 open-drain mailbox bus through M1.32 and the required powered-off-Ioff boundary"
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SDAA/SDAB powered-off boundary and M1.32"
         },
         {
           "instance": "safety_controller",
@@ -1450,7 +1454,7 @@
             "hub_rp.GPIO43",
             "M1.33"
           ],
-          "endpoint": "Hub RP I2C1 open-drain mailbox bus through M1.33 and the required powered-off-Ioff boundary"
+          "endpoint": "Hub RP I2C1 through TCA9803DGKR SCLA/SCLB powered-off boundary and M1.33"
         },
         {
           "instance": "safety_controller",
@@ -2350,6 +2354,206 @@
       "24-to-48-hour soak with repeated service seizure and release; no C5/Hub bus contention or stuck ownership"
     ]
   },
+  "pack_safety_i2c_boundary": {
+    "schema_version": 1,
+    "id": "H2-R2-PACK-SAFETY-I2C-BOUNDARY",
+    "marker": "H2-R2.0.3",
+    "status": "reviewed_exact_factory_placeable_boundary",
+    "scope": "Exact powered-off-Ioff boundary between the main-powered Hub RP I2C1 segment and the always-on Pack/Safety mailbox segment.",
+    "authority": {
+      "pin_source": "hardware/architecture/h1-r2-dual-rp-pinout.json",
+      "functional_source": "hardware/architecture/h0-r2-rebaseline.json",
+      "device_register": "hardware/architecture/devices.json",
+      "does_not_authorize": [
+        "R2 KiCad",
+        "fabrication",
+        "ordering"
+      ]
+    },
+    "bus": {
+      "name": "HUB_PACK_SAFETY",
+      "maximum_clock_hz": 400000,
+      "hub_endpoints": {
+        "sda": "Hub RP GPIO42 / M1.32",
+        "scl": "Hub RP GPIO43 / M1.33"
+      },
+      "aon_endpoints": [
+        "Pack MSPM0C1106SDGS20R PA0/PA11",
+        "Safety MSPM0C1106SDGS20R PA0/PA11"
+      ],
+      "hard_safety_dependency": false,
+      "failure_semantics": "A stuck mailbox bus may remove diagnostics but cannot inhibit the independent FAULT_KILL path or the local Safety watchdog."
+    },
+    "buffer": {
+      "device_key": "ti_tca9803_dgkr",
+      "manufacturer": "Texas Instruments",
+      "mpn": "TCA9803DGKR",
+      "jlcpcb_part_number": "C2687966",
+      "package": "VSSOP-8-0.65mm",
+      "pin_topology": [
+        {
+          "pin": 1,
+          "name": "VCCA",
+          "net": "3V3_MAIN"
+        },
+        {
+          "pin": 2,
+          "name": "SCLA",
+          "net": "HUB_SAFE_I2C_SCL_MAIN"
+        },
+        {
+          "pin": 3,
+          "name": "SDAA",
+          "net": "HUB_SAFE_I2C_SDA_MAIN"
+        },
+        {
+          "pin": 4,
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "pin": 5,
+          "name": "EN",
+          "net": "TCA9803_EN_INTERNAL_VCCA_PULLUP"
+        },
+        {
+          "pin": 6,
+          "name": "SDAB",
+          "net": "HUB_SAFE_I2C_SDA_AON"
+        },
+        {
+          "pin": 7,
+          "name": "SCLB",
+          "net": "HUB_SAFE_I2C_SCL_AON"
+        },
+        {
+          "pin": 8,
+          "name": "VCCB",
+          "net": "AON_SAFE_3V3"
+        }
+      ],
+      "electrical_contract": {
+        "vcca_v": 3.3,
+        "vccb_v": 3.3,
+        "supply_relationship": "none; VCCA may be below, equal to or above VCCB",
+        "a_side_powered_off_state": "high impedance",
+        "all_bus_pins_back_power_protection": true,
+        "b_side_current_source_ma_typical": 3.3,
+        "b_side_external_pullups": "forbidden",
+        "b_side_capacitance_pf_max": 400,
+        "enable": "internal 150..450-kohm pull-up to VCCA; no firmware control; UVLO isolates when either supply is invalid",
+        "startup_us_max": 350
+      },
+      "factory_surface": {
+        "checked": "2026-08-30",
+        "source": "JLCPCB",
+        "assembly_type": "SMT Assembly",
+        "pcba_type": "Economic and Standard",
+        "library_type": "Extended",
+        "stock": 1864,
+        "available_order_quantity": 1818,
+        "moq": 1,
+        "unit_price_usd_quantity_1": 0.3525,
+        "url": "https://jlcpcb.com/partdetail/TexasInstruments-TCA9803DGKR/C2687966"
+      }
+    },
+    "rail_local_termination": {
+      "main_a_side": {
+        "rule": "Two external 2.2-kohm pull-ups to 3V3_MAIN, one on SDAA and one on SCLA.",
+        "quantity": 2,
+        "device_key": "uniroyal_0402wgf2201tce",
+        "mpn": "UNI-ROYAL 0402WGF2201TCE",
+        "jlcpcb_part_number": "C25879",
+        "unit_price_usd_quantity_1": 0.0039
+      },
+      "aon_b_side": {
+        "rule": "No external pull-up or other current source; the TCA9803 B-side 3.3-mA current sources are the AON-local termination.",
+        "external_pullup_quantity": 0,
+        "sink_compatibility": "3.3 mA typical is below the MSPM0C1106 6-mA SDIO sink rating at VDD >= 2.7 V."
+      }
+    },
+    "decoupling": [
+      {
+        "rail": "3V3_MAIN",
+        "value": "1 uF",
+        "quantity": 1,
+        "device_key": "samsung_cl05a105ka5nqnc",
+        "mpn": "Samsung CL05A105KA5NQNC",
+        "jlcpcb_part_number": "C52923",
+        "unit_price_usd_quantity_1": 0.012
+      },
+      {
+        "rail": "3V3_MAIN",
+        "value": "100 nF",
+        "quantity": 1,
+        "device_key": "samsung_cl05b104ko5nnnc",
+        "mpn": "Samsung CL05B104KO5NNNC",
+        "jlcpcb_part_number": "C1525",
+        "unit_price_usd_quantity_1": 0.0055
+      },
+      {
+        "rail": "AON_SAFE_3V3",
+        "value": "1 uF",
+        "quantity": 1,
+        "device_key": "samsung_cl05a105ka5nqnc",
+        "mpn": "Samsung CL05A105KA5NQNC",
+        "jlcpcb_part_number": "C52923",
+        "unit_price_usd_quantity_1": 0.012
+      },
+      {
+        "rail": "AON_SAFE_3V3",
+        "value": "100 nF",
+        "quantity": 1,
+        "device_key": "samsung_cl05b104ko5nnnc",
+        "mpn": "Samsung CL05B104KO5NNNC",
+        "jlcpcb_part_number": "C1525",
+        "unit_price_usd_quantity_1": 0.0055
+      }
+    ],
+    "power_truth_table": [
+      {
+        "main": 0,
+        "aon": 0,
+        "result": "both segments unpowered; all boundary bus pins high-Z"
+      },
+      {
+        "main": 0,
+        "aon": 1,
+        "result": "A-side powered-off high-Z; AON mailboxes remain locally terminated; no Hub/main back-power"
+      },
+      {
+        "main": 1,
+        "aon": 0,
+        "result": "B-side UVLO/back-power protection isolates AON; no reverse power"
+      },
+      {
+        "main": 1,
+        "aon": 1,
+        "result": "bidirectional 400-kHz mailbox bridge active after <=350 us startup"
+      }
+    ],
+    "exact_one_component_cost_usd": 0.3953,
+    "verification": {
+      "pre_ecad": [
+        "Pin topology and the no-B-side-pull-up rule are machine checked.",
+        "Each selected MPN has an exact current JLCPCB assembly route, MOQ and one-piece price."
+      ],
+      "h3_hil": [
+        "Measure <1 uA unintended cross-rail current with main off/AON on and with main on/AON off.",
+        "Measure 400-kHz rise/fall timing and prove total B-side capacitance <=400 pF.",
+        "Inject SDA/SCL stuck-low faults and prove FAULT_KILL remains independent while mailbox diagnostics fail explicitly."
+      ]
+    },
+    "sources": [
+      "https://www.ti.com/lit/ds/symlink/tca9803.pdf",
+      "https://www.ti.com/product/TCA9803",
+      "https://www.ti.com/lit/ds/symlink/mspm0c1106.pdf",
+      "https://jlcpcb.com/partdetail/TexasInstruments-TCA9803DGKR/C2687966",
+      "https://jlcpcb.com/partdetail/0402WGF2201TCE/C25879",
+      "https://jlcpcb.com/partdetail/SamsungElectroMechanics-CL05A105KA5NQNC/C52923",
+      "https://jlcpcb.com/partdetail/SamsungElectroMechanics-CL05B104KO5NNNC/C1525"
+    ]
+  },
   "hub_gpio_budget": {
     "available": 48,
     "used": 46,
@@ -2701,16 +2905,16 @@
       "net": "HUB_SAFE_I2C_SDA",
       "peripheral": "I2C1",
       "direction": "io",
-      "endpoint": "M1.32 -> Pack/Safety mailboxes",
-      "gate": "input/open-drain released; external pull-up to AON-safe compatible domain"
+      "endpoint": "TCA9803DGKR SDAA on 3V3_MAIN -> powered-off-Ioff boundary -> SDAB on AON_SAFE_3V3 -> M1.32 -> Pack/Safety mailboxes",
+      "gate": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
     },
     {
       "gpio": 43,
       "net": "HUB_SAFE_I2C_SCL",
       "peripheral": "I2C1",
       "direction": "od",
-      "endpoint": "M1.33 -> Pack/Safety mailboxes",
-      "gate": "input/open-drain released; external pull-up to AON-safe compatible domain"
+      "endpoint": "TCA9803DGKR SCLA on 3V3_MAIN -> powered-off-Ioff boundary -> SCLB on AON_SAFE_3V3 -> M1.33 -> Pack/Safety mailboxes",
+      "gate": "input/open-drain released; 2.2-kohm MAIN-local pull-up; A-side high-Z when MAIN is off; no external B-side pull-up"
     },
     {
       "gpio": 44,
@@ -3375,38 +3579,32 @@
     "service_result": "S3 GPIO43/44 remain usable as default ROM UART0 TX/RX without Hub contention; Hub GPIO2/3 stay high-Z and pulled low while isolated.",
     "h2_gate": "The new R2 schematic must instantiate the exact isolator/OE pull and prove powered-off Ioff; this working GPIO authority does not authorize KiCad by itself."
   },
-  "pre_h2_gates": [
-    "exact powered-off-Ioff Pack/Safety I2C boundary with separate 3V3_MAIN/AON pull-up domains on Hub GPIO42/43"
-  ],
-  "review_time_pre_h2_gates": [
-    "exact powered-off-Ioff Pack/Safety I2C boundary with separate 3V3_MAIN/AON pull-up domains on Hub GPIO42/43"
-  ],
+  "pre_h2_gates": [],
+  "review_time_pre_h2_gates": [],
   "resolved_post_h1_gates": [
     "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price",
-    "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch and 74HC20PW,118 / C546719 release qualifier"
+    "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch and 74HC20PW,118 / C546719 release qualifier",
+    "exact TCA9803DGKR / C2687966 powered-off Pack/Safety I2C boundary"
   ],
   "physical_h1": {
     "marker": "H1-R2.37",
     "pin_authority_marker": "H1-R2.31",
     "status": "reviewed",
     "current_h1_blockers": [],
-    "pre_r2_h2_gates": [
-      "instantiate and prove the exact powered-off-Ioff isolation boundary and separate 3V3_MAIN/AON pull-up domains for Hub GPIO42/43 Pack/Safety I2C"
-    ],
-    "review_time_pre_r2_h2_gates": [
-      "instantiate and prove the exact powered-off-Ioff isolation boundary and separate 3V3_MAIN/AON pull-up domains for Hub GPIO42/43 Pack/Safety I2C"
-    ],
+    "pre_r2_h2_gates": [],
+    "review_time_pre_r2_h2_gates": [],
     "resolved_post_h1_gates": [
       "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price",
-      "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch and 74HC20PW,118 / C546719 release qualifier"
+      "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch and 74HC20PW,118 / C546719 release qualifier",
+      "exact TCA9803DGKR / C2687966 powered-off Pack/Safety I2C boundary"
     ]
   },
   "execution_gates": [
     "PIO instruction fit and Hub/RF 14/12-channel DMA allocation must compile in the six-domain firmware build matrix; exact channel IDs, DREQ routing and peak simultaneous profile remain executable proof gates.",
     "Simultaneous three-nRF RX/TX/mix, microSD, S3-Hub, Hub-C5 and Hub-RF traffic must pass emulator/dev-board timing before fabrication and HIL after assembly.",
     "Reset-state voltage and no-back-power behavior must be measured for every switched/isolated branch.",
-    "Hub GPIO42/43 Pack/Safety I2C requires an exact powered-off-Ioff boundary and separate 3V3_MAIN/AON pull-up domains before schematic authorization.",
-    "The C5 electrical pad/mux contract, exact live FSUSB42MUX/C11355 route and exact service-VBUS detector/latch/release implementation are closed; the Pack/Safety powered-off-Ioff boundary remains fail-closed before native R2 H2.",
+    "The exact TCA9803DGKR/C2687966 Pack/Safety boundary is closed: two 2.2-kohm pull-ups terminate the MAIN A-side, while the AON B-side uses only the device's 3.3-mA current sources and forbids external pull-ups.",
+    "Native R2 ECAD must instantiate the reviewed H2-R2.0.1, H2-R2.0.2 and H2-R2.0.3 circuits exactly; this H1 authority still does not authorize fabrication or ordering.",
     "The exact-one signed U214/U219 profile must pass received-unit pin continuity, protected-power, RF-switch, VNA and RX/NFC HIL before the U219 branch can be enabled."
   ],
   "cap_profile": {
@@ -4048,6 +4246,7 @@
     "c5_service_mux_hardware_owned": true,
     "c5_production_mux_route_accepted": true,
     "c5_service_vbus_detector_latch_release_accepted": true,
+    "pack_safety_powered_off_boundary_accepted": true,
     "r1_f4_1_2_is_current_authority": false,
     "h2_closed": false,
     "kicad_authorized": false,
