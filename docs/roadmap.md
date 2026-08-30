@@ -15,8 +15,9 @@
 > eight rear-RP GPIOs and two M1 contacts remain reserves. Current exterior,
 > turned-over inner faces and service views are generated. The H2-R2.1.3 contact
 > checkpoint maps all 1,504 board contacts to real pads or three on-module RF
-> interfaces with every named pad accounted for. Controlled R2 symbols are
-> current before joined native nets; schematic export/KiCad placement has not
+> interfaces with every named pad accounted for. The controlled R2 library now
+> contains 208 symbols and 1,518 unique PCB-pad pins and passes KiCad 10; joined
+> native nets are current. Schematic export/KiCad placement has not
 > started and ordering remains unauthorized.
 
 Status last reconciled: **30 August 2026**. This is the firmware repository's

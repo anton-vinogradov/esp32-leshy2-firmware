@@ -132,7 +132,8 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 board groups, пяти явных non-PCBA groups и 1 561 логического контакта. В
 contact-checkpoint `H2-R2.1.3` все 1 504 контакта платы сопоставлены реальным
 площадкам footprints или трём явным RF-интерфейсам на модулях; каждая именованная
-площадка учтена. Сейчас создаются controlled R2 symbols перед joined native nets;
+площадка учтена. Controlled R2 library теперь содержит 208 symbols и 1 518
+уникальных PCB-pad pins и проходит KiCad 10; сейчас создаются joined native nets;
 schematic export/KiCad placement ещё не начинались, а
 проверка byte reproducibility R2 и разрешение заказа остаются открыты.
 

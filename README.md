@@ -130,7 +130,8 @@ six domain owners and 213 exact MPN groups without creating symbols or nets.
 non-PCBA groups and 1,561 logical contacts. The `H2-R2.1.3` contact checkpoint
 now maps all 1,504 board contacts to real footprint pads or three explicit
 on-module RF interfaces with every named pad accounted for. Controlled R2
-symbols are current before joined native nets; schematic export/KiCad placement
+library generation has now produced 208 symbols and 1,518 unique PCB-pad pins
+and passes KiCad 10; joined native nets are current. Schematic export/KiCad placement
 has not started, and R2 byte reproducibility
 and order authorization remain open.
 
