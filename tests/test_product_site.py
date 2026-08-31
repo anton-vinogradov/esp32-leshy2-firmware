@@ -122,7 +122,7 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
         self.assertEqual("reviewed", boundary["physical_h1_status"])
         self.assertEqual("H3", boundary["current_hardware_stage"])
-        self.assertEqual("H3-R2.0.3", boundary["current_hardware_substep"])
+        self.assertEqual("H3-R2.1", boundary["current_hardware_substep"])
         self.assertEqual("H2-R2.1.5", boundary["reviewed_h2_marker"])
         self.assertEqual("H2-R2.1.4", boundary["imported_h2_machine_contract"])
         self.assertEqual([], boundary["current_h1_blockers"])
