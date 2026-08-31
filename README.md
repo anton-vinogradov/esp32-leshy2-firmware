@@ -96,8 +96,11 @@ Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.37`; H2 and the complete H3-R2.1 DC/source workstream are
 reviewed; H3-R2.2.1 reviewed 14 startup, shutdown, reset and recovery scenarios,
-and the current hardware point is `H3-R2.2.2`. Its exact firmware-facing state
-and timing contract is [imported fail-closed](config/h3_r2_transition_contract.json).
+and H3-R2.2.2 reviewed 7,316 USB/pack/DPM/brownout/source-loss transitions with
+zero unsafe admissions or automatic restarts. Its exact firmware-facing
+[sequence](config/h3_r2_transition_contract.json) and
+[handover](config/h3_r2_handover_contract.json) contracts are imported
+fail-closed; the current hardware point is `H3-R2.2.3`.
 H3-R2.1.2 reviewed explicit binding for 613 fitted powered instances—597 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
