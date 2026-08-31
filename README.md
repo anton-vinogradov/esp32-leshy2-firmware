@@ -95,8 +95,10 @@ that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.37`; H2 is reviewed at `H2-R2.1.5` and the current hardware
-point is `H3-R2.1.3`; H3-R2.1.2 reviewed explicit binding for 612 fitted powered
-power-connected instances and six external loads, while the exact H3-R2.0.1 input freeze, H3-R2.0.2
+point is `H3-R2.1.4`; H3-R2.1.2 reviewed explicit binding for 612 fitted powered
+power-connected instances and six external loads, and H3-R2.1.3 reviewed 224
+passing profiles across all four rails with 30.560% minimum current reserve and
+24.706 °C minimum junction-temperature reserve, while the exact H3-R2.0.1 input freeze, H3-R2.0.2
 parameter/model provenance register, H3-R2.0.3 method contract and H3-R2.1.1
 register of 2,266 legal power states are reviewed,
 while the exact imported pin/config authority remains the reviewed
