@@ -103,7 +103,7 @@ cases with zero analytical failures or automatic restarts. Its exact firmware-fa
 [sequence](config/h3_r2_transition_contract.json) and
 [handover](config/h3_r2_handover_contract.json) and
 [watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
-are imported fail-closed; the current hardware point is `H3-R2.3`.
+are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md) is reviewed; the current hardware point is `H3-R2.4` for digital levels, timing, loading and direct i8080-8.
 H3-R2.1.2 reviewed explicit binding for 613 fitted powered instances—597 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
@@ -145,12 +145,12 @@ mockup passes its structural audit and was accepted on 2026-08-30. Hardware
 reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed three native projects, 23 sheets,
-six domain owners, 242 exact MPN groups and 1,197 product positions.
-`H2-R2.1.2` reviewed exact identities for 237 board groups, five explicit
-non-PCBA groups and 1,662 logical contacts. `H2-R2.1.3` materialized 1,187
-fitted positions and 4,327 physical pins in the three native KiCad projects.
-All 4,323 logical contacts reconcile into 4,067 connected endpoints, 256
-explicit no-connects and 826 canonical nets; all three projects pass KiCad ERC
+six domain owners, 239 exact MPN groups and 1,195 product positions.
+`H2-R2.1.2` reviewed exact identities for 234 board groups, five explicit
+non-PCBA groups and 1,656 logical contacts. `H2-R2.1.3` materialized 1,185
+fitted positions and 4,323 physical pins in the three native KiCad projects.
+All 4,319 logical endpoints reconcile into 4,063 connected endpoints, 256
+explicit no-connects and 823 canonical nets; all three projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
 173 controller pins, 52 cross-project nets and 238 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
