@@ -630,7 +630,7 @@ class HostCoreExecutionTests(unittest.TestCase):
         self.assertEqual("reviewed", gates["P0_REQUIREMENTS_ARCHITECTURE"])
         self.assertEqual("reviewed", gates["P1_CURRENT_PHYSICAL_DESIGN"])
         self.assertEqual("reviewed", gates["P2_R2_PRODUCTION_SCHEMATIC"])
-        self.assertEqual("in_progress", gates["P3_R2_VIRTUAL_ELECTRICAL"])
+        self.assertEqual("reviewed", gates["P3_R2_VIRTUAL_ELECTRICAL"])
         self.assertEqual("blocked", gates["P6_ROUTED_PRODUCTION_PACKAGE"])
         self.assertEqual("blocked", gates["P7_FIRST_SPIN_DIAGNOSTIC"])
         self.assertEqual("not_authorized", gates["P8_IMMUTABLE_EXACT_ONE_RELEASE"])
