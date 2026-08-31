@@ -133,8 +133,8 @@ def build() -> dict:
         and native_inventory.get("summary", {}).get("project_count") == 3
         and native_inventory.get("summary", {}).get("sheet_count") == 23
         and native_inventory.get("summary", {}).get("domain_count") == 6
-        and native_inventory.get("summary", {}).get("component_group_count") == 242
-        and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1197
+        and native_inventory.get("summary", {}).get("component_group_count") == 238
+        and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1195
         and native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") == 0
         and native_inventory.get("authorization", {}).get("native_source_and_sheet_inventory") is True
         and native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is False
@@ -145,10 +145,10 @@ def build() -> dict:
     exact_ledger_closed = (
         exact_ledger.get("marker") == "H2-R2.1.2"
         and exact_ledger.get("status") == "pass"
-        and exact_ledger.get("summary", {}).get("component_group_count") == 242
-        and exact_ledger.get("summary", {}).get("board_component_group_count") == 237
+        and exact_ledger.get("summary", {}).get("component_group_count") == 238
+        and exact_ledger.get("summary", {}).get("board_component_group_count") == 233
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 5
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1662
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1654
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False
@@ -161,9 +161,9 @@ def build() -> dict:
         native_kicad.get("marker") == "H2-R2.1.3"
         and native_kicad.get("status") == "pass"
         and native_kicad.get("summary", {}).get("project_count") == 3
-        and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1187
-        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4327
-        and native_kicad.get("summary", {}).get("canonical_net_count") == 826
+        and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1185
+        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4323
+        and native_kicad.get("summary", {}).get("canonical_net_count") == 823
         and native_kicad.get("authorization", {}).get("native_schematic_symbols_and_nets") is True
         and native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is False
         and native_kicad.get("errors") == []

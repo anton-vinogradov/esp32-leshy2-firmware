@@ -223,8 +223,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         h0.get("current_hardware_substep") != "H2-R2.1.5"
         or native_inventory.get("marker") != "H2-R2.1.1"
         or native_inventory.get("status") != "pass"
-        or native_inventory.get("summary", {}).get("component_group_count") != 242
-        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1197
+        or native_inventory.get("summary", {}).get("component_group_count") != 238
+        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1195
         or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
         or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
     ):
@@ -232,9 +232,9 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         exact_ledger.get("marker") != "H2-R2.1.2"
         or exact_ledger.get("status") != "pass"
-        or exact_ledger.get("summary", {}).get("board_component_group_count") != 237
+        or exact_ledger.get("summary", {}).get("board_component_group_count") != 233
         or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 5
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1662
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1654
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
@@ -246,9 +246,9 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         native_kicad.get("marker") != "H2-R2.1.3"
         or native_kicad.get("status") != "pass"
-        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1187
-        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4327
-        or native_kicad.get("summary", {}).get("canonical_net_count") != 826
+        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1185
+        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4323
+        or native_kicad.get("summary", {}).get("canonical_net_count") != 823
         or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
     ):
         errors.append("current authority lost the reviewed H2-R2.1.3 native KiCad result")

@@ -1036,8 +1036,8 @@ class ProductSiteTests(unittest.TestCase):
             reconciliation["domain_ids"],
         )
         self.assertEqual([], reconciliation["pre_h2_gates"])
-        self.assertEqual(1187, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(826, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(1185, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(823, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, reconciliation["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(52, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
         self.assertEqual(238, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])

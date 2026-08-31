@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "9c9227c51964b1a9d8fe42309383a05aed18d873afdf827d805aae1a08526762",
+    "hardware_contract_sha256": "f332a4536a4fea25e46ab025a14110ae67c82cd0b01b110386dc8357829fbd5c",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1570,19 +1570,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "783b2c1dbc675a8dc2a9e20e025b2592c7292bcda1644d796a66becf44f62cf1"
+        "sha256": "36aff71e3668d49c2e6d31e0949929ade916b217b57bd115b047db75c3bc0f08"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "6d0a46781b50e3037c17652a25fc6bcfc669fb3fbcdbaac251d73a38c263bddd"
+        "sha256": "8fd2b01932325583edb6874e9d12ab5d3f092dcf1ffc714b23dff8c8a95f2fd4"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "ebf1946ad694917a747aa1a0e9a106b165e369f6ac34d1aaef62fc88eafdc8df"
+        "sha256": "56e78bc5818187361eaf56b3161256e459829b6dd132482137a79bad1bd737ec"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "88e7d98471737ee28678a9c8c3b8bf0302b1f52ec3beafef26e4f2a3d1cab7c8"
+        "sha256": "c938f624f4378151f87cb2ae39cabaab1a50361b23c1effe105a51ed174bc45f"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4787,8 +4787,8 @@
         "project_count": 3,
         "sheet_count": 23,
         "domain_count": 6,
-        "component_group_count": 242,
-        "component_quantity_per_product": 1197,
+        "component_group_count": 238,
+        "component_quantity_per_product": 1195,
         "external_antenna_group_count": 8,
         "external_antenna_count": 12,
         "unresolved_pre_ecad_prerequisites": 0,
@@ -4822,16 +4822,16 @@
       "marker": "H2-R2.1.2",
       "status": "pass",
       "summary": {
-        "component_group_count": 242,
-        "board_component_group_count": 237,
+        "component_group_count": 238,
+        "board_component_group_count": 233,
         "explicit_non_pcba_group_count": 5,
-        "symbol_identity_count": 237,
-        "footprint_identity_count": 237,
-        "logical_contact_count": 1662,
+        "symbol_identity_count": 233,
+        "footprint_identity_count": 233,
+        "logical_contact_count": 1654,
         "historical_package_hints_reconciled": 196,
         "historical_package_conflicts_resolved": 5,
-        "explicit_current_footprint_overrides": 41,
-        "standard_kicad_footprint_identities": 202,
+        "explicit_current_footprint_overrides": 37,
+        "standard_kicad_footprint_identities": 198,
         "reconciled_local_footprint_definitions": 32,
         "new_exact_footprint_geometries_pending_materialization": 3,
         "schematic_symbols_or_footprint_files_created": 0,
@@ -4868,10 +4868,10 @@
           "root": "RF_00_ROOT",
           "sheet_count": 13,
           "populated_sheet_count": 11,
-          "instance_count": 757,
-          "physical_symbol_pin_count": 2649,
+          "instance_count": 755,
+          "physical_symbol_pin_count": 2645,
           "external_module_interface_count": 0,
-          "canonical_net_count": 525,
+          "canonical_net_count": 522,
           "cross_sheet_net_count": 127
         },
         {
@@ -4890,12 +4890,12 @@
         "project_count": 3,
         "project_graph_sheet_count": 23,
         "populated_sheet_count": 19,
-        "fitted_symbol_instance_count": 1187,
-        "physical_symbol_pin_count": 4327,
-        "connected_physical_pin_count": 4071,
+        "fitted_symbol_instance_count": 1185,
+        "physical_symbol_pin_count": 4323,
+        "connected_physical_pin_count": 4067,
         "explicit_no_connect_physical_pin_count": 256,
         "external_module_interface_annotation_count": 5,
-        "canonical_net_count": 826,
+        "canonical_net_count": 823,
         "generated_file_count": 32,
         "pcb_file_count": 0
       },
@@ -4920,7 +4920,7 @@
         "cross_sheet_net_count": 238,
         "errors": 0
       },
-      "source_sha256": "88e7d98471737ee28678a9c8c3b8bf0302b1f52ec3beafef26e4f2a3d1cab7c8",
+      "source_sha256": "c938f624f4378151f87cb2ae39cabaab1a50361b23c1effe105a51ed174bc45f",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
