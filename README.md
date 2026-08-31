@@ -95,7 +95,8 @@ that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.37`; H2 is reviewed at `H2-R2.1.5` and the current hardware
-point is `H3-R2.0.2`; the exact H3-R2.0.1 input freeze is reviewed,
+point is `H3-R2.0.3`; the exact H3-R2.0.1 input freeze and H3-R2.0.2
+parameter/model provenance register are reviewed,
 while the exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
