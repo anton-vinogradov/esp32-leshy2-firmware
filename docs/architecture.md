@@ -6,7 +6,7 @@
 
 The machine projection in
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
-is generated from four hash-bound hardware sources: functional H0-R2, the
+is generated from hash-bound hardware sources: functional H0-R2, the
 exact C5 service mux, the exact H1-R2.31 dual-RP working map and the accepted
 U214/U219 Cap profile boundary.
 It is the current firmware input; the R1 contract below is regression evidence.
@@ -19,7 +19,7 @@ not claim ECAD, target execution or HIL closure.
 
 | Image | Physical owner | Current R2 responsibility |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB and direct 24-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | application, direct UI/touch/encoder/USB and direct exact 20-MHz i8080-8 TX to `ER-TFT035IPS-6` + `ER-TPC035-6` |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native 2.4/5-GHz Wi-Fi, IEEE 802.15.4 and IR |
 | RF RP · rear | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, M5 and exactly one signed U214/U219 Cap profile |
 | Hub RP · front | second `SC1512-A4` | S3/C5/rear-RP fan-out, microSD and three complete concurrent nRF24 paths |

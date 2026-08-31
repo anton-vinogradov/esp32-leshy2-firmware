@@ -53,7 +53,7 @@ class RefreshR2HashChainTest(unittest.TestCase):
         self.write_json(self.module.PROJECTION, self.projection)
         self.write_json(
             self.module.F0_EXECUTION_GATES,
-            {"stage": "F0-R2.4", "display_clock_mhz": 24},
+            {"stage": "F0-R2.4", "display_clock_mhz": 20},
         )
         self.write_json(
             self.module.F0_REVIEW,

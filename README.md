@@ -103,7 +103,7 @@ cases with zero analytical failures or automatic restarts. Its exact firmware-fa
 [sequence](config/h3_r2_transition_contract.json) and
 [handover](config/h3_r2_handover_contract.json) and
 [watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
-are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md) is reviewed; the current hardware point is `H3-R2.4` for digital levels, timing, loading and direct i8080-8.
+are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md) and [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md) are reviewed; the current hardware point is `H3-R2.5` for RF feeds, coexistence, quiet states and concurrent three-nRF24 operation.
 H3-R2.1.2 reviewed explicit binding for 613 fitted powered instances—597 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
@@ -120,7 +120,7 @@ and service access are generated. The 226-body physical register includes all
 eight exact TX detectors, five required couplers and eight bounded local
 evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-route changes save hardware cost without altering any
 firmware-visible net or behavior. The 2026-08-30 cost decision retains every current top-20 hardware group and permanently assigns separate
-`ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct 24-MHz i8080-8 path to
+`ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct exact 20-MHz i8080-8 path to
 exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Six S3
 GPIOs remain uncommitted after reset/service closure. M1 has an exact 80-contact
 map with 9 true NC reserves, latched `FAULT_KILL` for the front indicator on

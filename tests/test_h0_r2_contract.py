@@ -201,7 +201,11 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             self.assertEqual(binding["net"], rear[binding["rf_gpio"]]["net"])
 
     def test_direct_ui_and_display_contract_survives_rebaseline(self):
-        self.assertEqual(24_000_000, self.actual["display"]["selected_clock_hz"])
+        self.assertEqual(20_000_000, self.actual["display"]["selected_clock_hz"])
+        self.assertEqual(
+            20_000_000,
+            self.actual["display"]["idf_clock_contract"]["actual_clock_hz"],
+        )
         s3_nets = {row["net"] for row in self.actual["s3_pin_map"]}
         self.assertTrue({"LCD_WR_N", "LCD_DC", *(f"LCD_DB{i}" for i in range(8))}.issubset(s3_nets))
         self.assertIn("ordinary serial SPI, not QSPI", self.actual["display"]["fallback"])

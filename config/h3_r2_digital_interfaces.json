@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H3-R2.4-digital-interface-import",
+  "status": "reviewed_hardware_contract_imported",
+  "hardware_marker": "H3-R2.4",
+  "current_hardware_substep": "H3-R2.5",
+  "source": {
+    "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
+    "sha256": "94ad00b7f1bf211547785c8aa28654958a986340086e4c995fa7352a8999bb8d"
+  },
+  "display": {
+    "mode": "direct i8080-8",
+    "requested_clock_hz": 20000000,
+    "actual_clock_hz": 20000000,
+    "integer_prescale": 4,
+    "full_frame_wire_ms": 15.36,
+    "theoretical_full_frame_fps": 65.10416666666667,
+    "forbidden_request_hz": 24000000,
+    "forbidden_request_actual_hz": 26666666.667
+  },
+  "logic_level_margins": [
+    {
+      "boundary": "S3 -> ILI9488 direct i8080/reset",
+      "units": "V",
+      "corners": {
+        "voh_min": 2.486808,
+        "receiver_vih_min": 2.2999606,
+        "vol_max": 0.3285658,
+        "receiver_vil_max": 0.932553
+      },
+      "worst_high_margin": 0.1868474,
+      "worst_low_margin": 0.6039872,
+      "minimum_margin": 0.1868474,
+      "status": "pass"
+    },
+    {
+      "boundary": "S3/C5 -> RP2354 3V3 GPIO",
+      "units": "V",
+      "corners": {
+        "voh_min": 2.486808,
+        "receiver_vih_min": 2.0,
+        "vol_max": 0.3285658,
+        "receiver_vil_max": 0.8
+      },
+      "worst_high_margin": 0.486808,
+      "worst_low_margin": 0.4714342,
+      "minimum_margin": 0.4714342,
+      "status": "pass"
+    },
+    {
+      "boundary": "RP2354 -> S3 3V3 GPIO",
+      "units": "V",
+      "corners": {
+        "voh_min": 2.62,
+        "receiver_vih_min": 2.4642435,
+        "vol_max": 0.5,
+        "receiver_vil_max": 0.7771275
+      },
+      "worst_high_margin": 0.1557565,
+      "worst_low_margin": 0.2771275,
+      "minimum_margin": 0.1557565,
+      "status": "pass"
+    },
+    {
+      "boundary": "RP2354 -> C5 3V3 GPIO",
+      "units": "V",
+      "corners": {
+        "voh_min": 2.62,
+        "receiver_vih_min": 2.4642435,
+        "vol_max": 0.5,
+        "receiver_vil_max": 0.7771275
+      },
+      "worst_high_margin": 0.1557565,
+      "worst_low_margin": 0.2771275,
+      "minimum_margin": 0.1557565,
+      "status": "pass"
+    },
+    {
+      "boundary": "RP2354 -> RP2354 across M1",
+      "units": "V",
+      "corners": {
+        "voh_min": 2.62,
+        "receiver_vih_min": 2.0,
+        "vol_max": 0.5,
+        "receiver_vil_max": 0.8
+      },
+      "worst_high_margin": 0.62,
+      "worst_low_margin": 0.3,
+      "minimum_margin": 0.3,
+      "status": "pass"
+    }
+  ],
+  "usb_and_service_ownership": {
+    "product_usb_reaches_s3_through_m1_29_30": true,
+    "product_usb_pair_has_adjacent_returns": true,
+    "hub_and_rf_service_ports_are_native_and_data_only": true,
+    "c5_service_vbus_is_sense_only": true,
+    "c5_mux_has_hardware_default_pulldowns": true,
+    "c5_mux_switches_only_d2_d3_or_usb": true,
+    "service_ownership_latch_resets_both_compute_domains": true,
+    "service_switch_bandwidth_covers_usb_full_speed": true,
+    "power_off_leakage_has_over_2x_reserve": true
+  },
+  "m1": {
+    "checks": {
+      "both_halves_have_80_contacts": true,
+      "pin_for_pin_net_parity": true,
+      "exactly_nine_true_nc": true,
+      "no_local_payload_crosses": true,
+      "hub_rf_spi_is_ground_bounded": true,
+      "usb_pair_is_adjacent_and_ground_bounded": true,
+      "connector_bandwidth_covers_fastest_crossing": true,
+      "connector_is_not_load_bearing": true
+    },
+    "true_nc_contacts": [
+      60,
+      61,
+      62,
+      63,
+      64,
+      77,
+      78,
+      79,
+      80
+    ],
+    "contact_rating": {
+      "positions": 80,
+      "pitch_mm": 0.6,
+      "mated_height_with_fx8c_80s_sv5_mm": 11,
+      "rated_current_per_contact_a": 0.4,
+      "transmission_rate_gbps": 8,
+      "mating_cycles": 50,
+      "contact_resistance_max_mohm": 80
+    }
+  },
+  "transport_timing": [
+    {
+      "id": "S3_HUB",
+      "clock_hz": 40000000,
+      "period_ns": 25.0,
+      "prelayout_route_and_skew_budget_ns": 5.0,
+      "raw_payload_mb_s": 20.0,
+      "qualified_payload_floor_mb_s": 14.0,
+      "qualified_to_raw_pct": 70.0,
+      "status": "pass",
+      "physical_residual": "H6 constrains and extracts length/skew/return continuity; H8 measures far-end timing and payload floor"
+    },
+    {
+      "id": "HUB_C5",
+      "clock_hz": 40000000,
+      "period_ns": 25.0,
+      "prelayout_route_and_skew_budget_ns": 5.0,
+      "raw_payload_mb_s": 20.0,
+      "qualified_payload_floor_mb_s": 7.5,
+      "qualified_to_raw_pct": 37.5,
+      "status": "pass",
+      "physical_residual": "H6 constrains and extracts length/skew/return continuity; H8 measures far-end timing and payload floor"
+    },
+    {
+      "id": "HUB_RF_RP",
+      "clock_hz": 20000000,
+      "period_ns": 50.0,
+      "prelayout_route_and_skew_budget_ns": 10.0,
+      "raw_payload_mb_s": 2.5,
+      "qualified_payload_floor_mb_s": 1.5,
+      "qualified_to_raw_pct": 60.0,
+      "status": "pass",
+      "physical_residual": "H6 constrains and extracts length/skew/return continuity; H8 measures far-end timing and payload floor"
+    },
+    {
+      "id": "HUB_MICROSD",
+      "clock_hz": 50000000,
+      "period_ns": 20.0,
+      "prelayout_route_and_skew_budget_ns": 4.0,
+      "raw_payload_mb_s": 6.25,
+      "qualified_payload_floor_mb_s": 4.0,
+      "qualified_to_raw_pct": 64.0,
+      "status": "pass",
+      "physical_residual": "H6 constrains and extracts length/skew/return continuity; H8 measures far-end timing and payload floor"
+    },
+    {
+      "id": "HUB_PACK_SAFETY",
+      "clock_hz": 400000,
+      "period_ns": 2500.0,
+      "prelayout_route_and_skew_budget_ns": 500.0,
+      "raw_payload_mb_s": 0.05,
+      "qualified_payload_floor_mb_s": 0.02,
+      "qualified_to_raw_pct": 40.0,
+      "status": "pass",
+      "physical_residual": "H6 constrains and extracts length/skew/return continuity; H8 measures far-end timing and payload floor"
+    }
+  ],
+  "runtime_invariants": {
+    "display_clock": "request and verify exactly 20 MHz; reject any divider result above 25 MHz",
+    "display_owner": "S3 owns all direct i8080 traffic; UI/buttons/encoder remain S3-local",
+    "service_usb": "Hub RP, RF RP and C5 service paths never power the product",
+    "c5_mux": "hardware service-VBUS latch owns C5 USB versus SDIO selection before firmware",
+    "m1_reserve": "contacts 60-64 and 77-80 remain true NC"
+  },
+  "physical_residuals": [
+    {
+      "owner": "H6",
+      "item": "route i8080, S3-Hub, Hub-C5 SDIO, Hub-RF SPI and USB as length/return/impedance constrained groups; prove extracted delay/skew and UI-I2C capacitance <=120 pF"
+    },
+    {
+      "owner": "H8",
+      "item": "measure i8080 WR/data edges at the panel, USB eyes/ enumeration, SDIO/SPI far-end setup-hold and sustained qualified payload floors"
+    },
+    {
+      "owner": "F5/F6",
+      "item": "instantiate the locked ESP-IDF i80 config at exact 20 MHz, CS=-1, 8-bit bus and rising-edge panel capture; exercise TE, dirty-region and full-frame fixtures"
+    }
+  ],
+  "claims": {
+    "target_driver_implemented": false,
+    "pcb_routing_or_signal_integrity_measured": false,
+    "purchasing_or_fabrication_authorized": false
+  }
+}

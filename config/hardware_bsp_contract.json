@@ -1540,12 +1540,12 @@
   },
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "2d32f85f83540db5c35e1466d018456823394ddeccf6a0e8f73f3df0151f4c95",
+    "hardware_contract_sha256": "c773c3e1913828eec99d24a72255b2c0cde8e3f540c6e1e3b9f961939f0d865e",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
         "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-        "sha256": "2d8acc3cb2e8b0831bfd0ceefbd55aa4798c2f08bf9d62620760082150baba6f"
+        "sha256": "95b9536cfeb8404b4ed74c1dd2bd5825f16a640c6c242765c1ff244c4f7ca891"
       },
       "c5_sdio_service_mux": {
         "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -1561,7 +1561,7 @@
       },
       "physical_h1": {
         "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-        "sha256": "5c87457efa793572df1ff699f499b58437590e0b5b4655492552015dac8ccadc"
+        "sha256": "39b90a45de93dcee614065bbc10fa5fba9604c224583a21eaa6d510c9e183787"
       },
       "r2_authority_gate": {
         "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
@@ -1573,19 +1573,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "26a47056a531ad64d6276dc7a2f41512067725f85d417fb9cc19d6fd89e51922"
+        "sha256": "c53c6b6452923107d28ed7f87ab04b377fadffbb802e58a0749abef8c5c78323"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "c1a813404ebaf164cc3147b4afbf8fade728fd4f37ead36965c52ce05ee685f1"
+        "sha256": "b3ca4e5a5d319fd99daa4399915bef23bb96e3ef80cc6645323a1cba8cd2d75c"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "38d1854842c4210c404593e9a18a3315bedb0904c2e40542c0f650d85b4f70ef"
+        "sha256": "59a6f74c91533b47d879839896d5d14f9cf338d167ee914c573db7ce05f8a5d9"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "297b2b626e9c70c494b22a9774464bc1c6cba02840dbdfbd8b5cf4a911485b3a"
+        "sha256": "3d3e895f01676bd77f058757be254fccab43f80da3c2accf4ff013bd9bfc5464"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4923,7 +4923,7 @@
         "cross_sheet_net_count": 238,
         "errors": 0
       },
-      "source_sha256": "297b2b626e9c70c494b22a9774464bc1c6cba02840dbdfbd8b5cf4a911485b3a",
+      "source_sha256": "3d3e895f01676bd77f058757be254fccab43f80da3c2accf4ff013bd9bfc5464",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
@@ -6893,12 +6893,12 @@
     ],
     "r2_reconciliation": {
       "source_contract": "config/h0_r2_hardware_contract.json",
-      "hardware_contract_sha256": "2d32f85f83540db5c35e1466d018456823394ddeccf6a0e8f73f3df0151f4c95",
+      "hardware_contract_sha256": "c773c3e1913828eec99d24a72255b2c0cde8e3f540c6e1e3b9f961939f0d865e",
       "hardware_marker": "H1-R2.31",
       "hardware_sources": {
         "functional": {
           "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-          "sha256": "2d8acc3cb2e8b0831bfd0ceefbd55aa4798c2f08bf9d62620760082150baba6f"
+          "sha256": "95b9536cfeb8404b4ed74c1dd2bd5825f16a640c6c242765c1ff244c4f7ca891"
         },
         "c5_sdio_service_mux": {
           "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -6914,7 +6914,7 @@
         },
         "physical_h1": {
           "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-          "sha256": "5c87457efa793572df1ff699f499b58437590e0b5b4655492552015dac8ccadc"
+          "sha256": "39b90a45de93dcee614065bbc10fa5fba9604c224583a21eaa6d510c9e183787"
         },
         "r2_authority_gate": {
           "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
@@ -6926,19 +6926,19 @@
         },
         "native_r2_inventory": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-          "sha256": "26a47056a531ad64d6276dc7a2f41512067725f85d417fb9cc19d6fd89e51922"
+          "sha256": "c53c6b6452923107d28ed7f87ab04b377fadffbb802e58a0749abef8c5c78323"
         },
         "exact_component_ledger": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-          "sha256": "c1a813404ebaf164cc3147b4afbf8fade728fd4f37ead36965c52ce05ee685f1"
+          "sha256": "b3ca4e5a5d319fd99daa4399915bef23bb96e3ef80cc6645323a1cba8cd2d75c"
         },
         "native_kicad": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-          "sha256": "38d1854842c4210c404593e9a18a3315bedb0904c2e40542c0f650d85b4f70ef"
+          "sha256": "59a6f74c91533b47d879839896d5d14f9cf338d167ee914c573db7ce05f8a5d9"
         },
         "h2_hwfw_reconciliation": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-          "sha256": "297b2b626e9c70c494b22a9774464bc1c6cba02840dbdfbd8b5cf4a911485b3a"
+          "sha256": "3d3e895f01676bd77f058757be254fccab43f80da3c2accf4ff013bd9bfc5464"
         },
         "h2_interboard_m1": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -10276,7 +10276,7 @@
           "cross_sheet_net_count": 238,
           "errors": 0
         },
-        "source_sha256": "297b2b626e9c70c494b22a9774464bc1c6cba02840dbdfbd8b5cf4a911485b3a",
+        "source_sha256": "3d3e895f01676bd77f058757be254fccab43f80da3c2accf4ff013bd9bfc5464",
         "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
       },
       "interboard": {

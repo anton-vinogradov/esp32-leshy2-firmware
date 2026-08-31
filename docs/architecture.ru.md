@@ -6,7 +6,7 @@
 
 Machine projection
 [`config/h0_r2_hardware_contract.json`](../config/h0_r2_hardware_contract.json)
-генерируется из четырёх hardware sources с SHA-256: функционального H0-R2,
+генерируется из hardware sources с SHA-256: функционального H0-R2,
 точного C5 service mux, точной рабочей карты двух RP H1-R2.31 и принятой
 границы Cap-профилей U214/U219.
 Это текущий вход прошивки; контракт R1 ниже сохранён как regression evidence.
@@ -18,7 +18,7 @@ pre-H2 authority; они не заявляют ECAD, target execution или HIL
 
 | Образ | Физический владелец | Текущая ответственность R2 |
 |---|---|---|
-| S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder/USB и прямой i8080-8 TX 24 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` |
+| S3 | `ESP32-S3-WROOM-1U-N16R8` | приложение, прямые UI/touch/encoder/USB и прямой i8080-8 TX ровно 20 МГц к `ER-TFT035IPS-6` + `ER-TPC035-6` |
 | C5 | `ESP32-C5-WROOM-1U-N8R8` | native Wi-Fi 2,4/5 ГГц, IEEE 802.15.4 и IR |
 | RF RP · задний | `SC1512-A4` | CC1101, VHF/UHF voice, FM/AM/SW/LW/Airband, audio, M5 и ровно один подписанный Cap-профиль U214/U219 |
 | Hub RP · передний | второй `SC1512-A4` | fan-out S3/C5/заднего RP, microSD и три полных одновременных nRF24 |

@@ -18,11 +18,11 @@
     },
     "execution_gates": {
       "path": "config/f0_r2_execution_gate_matrix.json",
-      "sha256": "46470670dec8b53fd385c2b9f033c57b2be2799f91fb9158836082d3a24232e4"
+      "sha256": "a749e878422b97307296679e0e3d4186d54d4dc7e302d13059e6d5752594ac55"
     },
     "r2_hardware_projection": {
       "path": "config/h0_r2_hardware_contract.json",
-      "sha256": "3ae585b433cd72d4569bb08bd7ba3d723a9ddb81d271fa47a426bba38dd9ad12"
+      "sha256": "77c97a4f5df047a94dc734c110b889f8cbaa27af14f7635a5f9fa35f7adbd86d"
     },
     "historical_r1_build_matrix": {
       "path": "config/build_matrix.json",
