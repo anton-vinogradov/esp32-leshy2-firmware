@@ -16,9 +16,9 @@
 > turned-over inner faces and service views are generated. H2-R2.1.3 materialized
 > 1,187 fitted positions and 4,327 physical pins across the three native KiCad
 > projects. All 4,323 logical contacts reconcile to 4,063 connected endpoints,
-> 260 explicit no-connects and 827 canonical nets; all three projects pass KiCad
+> 260 explicit no-connects and 826 canonical nets; all three projects pass KiCad
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
-> 173 controller pins, 50 cross-project nets and 233 cross-sheet nets; the
+> 173 controller pins, 50 cross-project nets and 234 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Placement/routing has not
 > started and ordering remains unauthorized.
 
@@ -37,7 +37,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 refreshed at F2-R2.4: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain exact S3 and dual-RP maps plus the six fixed C5 SDIO pins, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ▶️ H0-R2, H1-R2.37, H2-R2.1.5 and the complete H3-R2.1 DC/source workstream are reviewed; H3-R2.2.1 ordered startup/shutdown/reset/recovery verification is current. H3-R2.1 reconciles 618 loads, 224 rail profiles and 2,266 states through 15 passing cross-checks. Maximum pack current is 3.516 A against the 8-A boundary; 9-V/3-A and 15-V/2-A run every profile, while 14 oversized 5-V/3-A USB-only states are refused. The 3V3_MAIN electrical corner is 3.046 A against the 3.2-A admission boundary. Three native KiCad projects contain 1,187 fitted positions, 4,327 physical pins and 827 canonical nets with zero ERC findings; six domains, 173 controller pins, 50 cross-project and 233 cross-sheet nets reconcile. Imported exact pin/config authority remains H1-R2.31; Pack/Safety is Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency. Dual-RP maps, ten SMA ports split 5+5, S3-local 24-MHz i8080-8, 11 true M1 NCs and the accepted 226-body physical model remain unchanged |
+| Hardware intersection | ▶️ H0-R2, H1-R2.37, H2-R2.1.5 and the complete H3-R2.1 DC/source workstream are reviewed; H3-R2.2.1 ordered startup/shutdown/reset/recovery verification is current. H3-R2.1 reconciles 618 loads, 224 rail profiles and 2,266 states through 15 passing cross-checks. Maximum pack current is 3.516 A against the 8-A boundary; 9-V/3-A and 15-V/2-A run every profile, while 14 oversized 5-V/3-A USB-only states are refused. The 3V3_MAIN electrical corner is 3.046 A against the 3.2-A admission boundary. Three native KiCad projects contain 1,187 fitted positions, 4,327 physical pins and 826 canonical nets with zero ERC findings; six domains, 173 controller pins, 50 cross-project and 234 cross-sheet nets reconcile. Imported exact pin/config authority remains H1-R2.31; Pack/Safety is Hub GPIO42/43 → TCA9803DGKR → AON MSPM0 and is not a hard-kill dependency. Dual-RP maps, ten SMA ports split 5+5, S3-local 24-MHz i8080-8, 11 true M1 NCs and the accepted 226-body physical model remain unchanged |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

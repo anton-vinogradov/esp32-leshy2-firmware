@@ -6,7 +6,7 @@
   "inputs": {
     "rebaseline_plan": {
       "path": "config/f2_r2_target_rebaseline.json",
-      "sha256": "38ae3d4d7526d5cac511935242c963feec1a4641e0218fdc3ae9d2f8b7ca7f6b"
+      "sha256": "4f16ba6abde03e3bd34b894d7e272ff0549484e1dac2e2b211a8baffddc6529b"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",

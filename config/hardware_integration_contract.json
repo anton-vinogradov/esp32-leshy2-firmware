@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "bf639a4e2b1a1aaae4c6d87de555106ce3ba31c881786a90c7f61df9b7d5fbca",
+    "hardware_contract_sha256": "24f45c924094a0f83c846f62f36c2a6d4ee636fa3746d8c231f42297977edb39",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1578,11 +1578,11 @@
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "a5fa0f31755e1969f16a67dab94436a26880affc5d993b54aedfbf935b6815f5"
+        "sha256": "57ba12fb654d00618eda166ef83e8a6291d6608e79ea0845897c84a1ee6d648f"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157"
+        "sha256": "07179d945617f13b01cea44e3e0d02041909d25cc865a265945c46e1fe02c0e1"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4871,8 +4871,8 @@
           "instance_count": 757,
           "physical_symbol_pin_count": 2649,
           "external_module_interface_count": 0,
-          "canonical_net_count": 526,
-          "cross_sheet_net_count": 124
+          "canonical_net_count": 525,
+          "cross_sheet_net_count": 125
         },
         {
           "id": "L2-DISP-ADP-001-B",
@@ -4895,7 +4895,7 @@
         "connected_physical_pin_count": 4067,
         "explicit_no_connect_physical_pin_count": 260,
         "external_module_interface_annotation_count": 5,
-        "canonical_net_count": 827,
+        "canonical_net_count": 826,
         "generated_file_count": 32,
         "pcb_file_count": 0
       },
@@ -4917,10 +4917,10 @@
         "conditioned_boundary_rows": 14,
         "explicit_reserve_no_connect_rows": 12,
         "cross_project_net_count": 50,
-        "cross_sheet_net_count": 233,
+        "cross_sheet_net_count": 234,
         "errors": 0
       },
-      "source_sha256": "8a26ab35e51cf76ca7e54e37fd1c58a3c8cdc12faec9086bfea186cf7b996157",
+      "source_sha256": "07179d945617f13b01cea44e3e0d02041909d25cc865a265945c46e1fe02c0e1",
       "m1_source_sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
     },
     "interboard": {

@@ -248,7 +248,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or native_kicad.get("status") != "pass"
         or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1187
         or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4327
-        or native_kicad.get("summary", {}).get("canonical_net_count") != 827
+        or native_kicad.get("summary", {}).get("canonical_net_count") != 826
         or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
     ):
         errors.append("current authority lost the reviewed H2-R2.1.3 native KiCad result")
@@ -258,7 +258,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or h2_hwfw.get("summary", {}).get("domain_count") != 6
         or h2_hwfw.get("summary", {}).get("controller_pin_rows") != 173
         or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 50
-        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 233
+        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 234
     ):
         errors.append("current authority lost the reviewed H2-R2.1.4 HW/FW reconciliation")
     hardware_sources = h0.get("hardware_sources", {})

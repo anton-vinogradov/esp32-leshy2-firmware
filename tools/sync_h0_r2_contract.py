@@ -163,7 +163,7 @@ def build() -> dict:
         and native_kicad.get("summary", {}).get("project_count") == 3
         and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1187
         and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4327
-        and native_kicad.get("summary", {}).get("canonical_net_count") == 827
+        and native_kicad.get("summary", {}).get("canonical_net_count") == 826
         and native_kicad.get("authorization", {}).get("native_schematic_symbols_and_nets") is True
         and native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is False
         and native_kicad.get("errors") == []
@@ -176,7 +176,7 @@ def build() -> dict:
         and h2_hwfw.get("summary", {}).get("domain_count") == 6
         and h2_hwfw.get("summary", {}).get("controller_pin_rows") == 173
         and h2_hwfw.get("summary", {}).get("cross_project_net_count") == 50
-        and h2_hwfw.get("summary", {}).get("cross_sheet_net_count") == 233
+        and h2_hwfw.get("summary", {}).get("cross_sheet_net_count") == 234
         and h2_hwfw.get("authorization", {}).get("hardware_firmware_machine_authority") is True
         and h2_hwfw.get("errors") == []
         and h2_m1.get("summary", {}).get("physical_contacts") == 80

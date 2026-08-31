@@ -127,7 +127,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertTrue(self.actual["claims"]["native_kicad_imported"])
         self.assertTrue(self.actual["claims"]["h2_hwfw_reconciliation_imported"])
         self.assertEqual(1187, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(827, self.actual["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(826, self.actual["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(0, self.actual["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(

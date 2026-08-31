@@ -1035,10 +1035,10 @@ class ProductSiteTests(unittest.TestCase):
         )
         self.assertEqual([], reconciliation["pre_h2_gates"])
         self.assertEqual(1187, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(827, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(826, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, reconciliation["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(50, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
-        self.assertEqual(233, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
+        self.assertEqual(234, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
         self.assertEqual(0, reconciliation["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(80, len(reconciliation["interboard"]["pin_map"]))
 
