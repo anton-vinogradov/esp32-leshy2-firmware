@@ -108,9 +108,11 @@ host runs; это portable evidence, а не target build.
 [handover](config/h3_r2_handover_contract.json) и
 [watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) импортированы
 fail-closed. [Аналоговый результат H3-R2.3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.ru.md)
-и [цифровой результат H3-R2.4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.ru.md)
-проведены ревью; текущая аппаратная точка — `H3-R2.5`, где проверяются RF-тракты,
-взаимное влияние, quiet states и одновременная работа трёх nRF24. H3-R2.1.2
+и [цифровой результат H3-R2.4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.ru.md),
+а также [RF-результат H3-R2.5](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.ru.md)
+проведены ревью; точный [RF/coexistence-контракт](config/h3_r2_rf_coexistence.json)
+импортирован fail-closed, а текущая аппаратная точка — `H3-R2.6` для проверки
+thermal, single-fault и unattended-operation. H3-R2.1.2
 провёл ревью явной привязки 613 устанавливаемых питаемых экземпляров — 597
 прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
 H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все
@@ -146,9 +148,9 @@ gate H3. Для фильтра Airband H3 использует bounded pre-layou
 `H2-R2.0.2` — точной реализации service-VBUS detector/latch/release. Текущий
 `H2-R2.0.3` провёл ревью точной powered-off-Ioff-границы
 `TCA9803DGKR/C2687966` для Pack/Safety. `H2-R2.1.1` провёл ревью трёх
-native-проектов, 23 sheets, шести владельцев доменов, 239 точных MPN-групп
+native-проектов, 23 sheets, шести владельцев доменов, 240 точных MPN-групп
 и 1 195 позиций. `H2-R2.1.2` закрыл exact identities для 234 board groups,
-пяти non-PCBA groups и 1 656 логических контактов. `H2-R2.1.3`
+шести non-PCBA groups и 1 658 логических контактов. `H2-R2.1.3`
 материализовал 1 185 устанавливаемых позиций и 4 323 физических pins
 в трёх native-проектах KiCad. Все 4 319 логических контактов сведены в
 4 063 подключённых endpoints, 256 явных no-connects и 823 канонических nets;

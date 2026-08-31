@@ -3,10 +3,10 @@
   "artifact": "FW-H3-R2.4-digital-interface-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H3-R2.4",
-  "current_hardware_substep": "H3-R2.5",
+  "current_hardware_substep": "H3-R2.6",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "94ad00b7f1bf211547785c8aa28654958a986340086e4c995fa7352a8999bb8d"
+    "sha256": "ddd4ebe549d43368ad6f711d8860235603e02085689c4e71a8c503983a03be04"
   },
   "display": {
     "mode": "direct i8080-8",

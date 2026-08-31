@@ -223,7 +223,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         h0.get("current_hardware_substep") != "H2-R2.1.5"
         or native_inventory.get("marker") != "H2-R2.1.1"
         or native_inventory.get("status") != "pass"
-        or native_inventory.get("summary", {}).get("component_group_count") != 239
+        or native_inventory.get("summary", {}).get("component_group_count") != 240
         or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1195
         or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
         or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
@@ -233,8 +233,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         exact_ledger.get("marker") != "H2-R2.1.2"
         or exact_ledger.get("status") != "pass"
         or exact_ledger.get("summary", {}).get("board_component_group_count") != 234
-        or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 5
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1656
+        or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 6
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1658
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
