@@ -3,15 +3,15 @@
   "artifact": "FW-H3-R2.2.4-power-transition-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H3-R2.2.4",
-  "current_hardware_substep": "H3-R2.6",
+  "current_hardware_substep": "H3-R2.7",
   "source": {
     "inrush_watchdog": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
-      "sha256": "e9e6534950cc9862bf43e2809aecf498f093ad0004cc335a9a56b61cf981d63b"
+      "sha256": "80e39224cf6b44dac66444e47f2ea7dcc049101d95d240b3c408ce88a162fb3f"
     },
     "transition_result": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
-      "sha256": "6527f17ddeea9180766f380575111c19c70c32bb0c8bbfc6e0fe4506c65a142e"
+      "sha256": "82d0b27032ff40f830b06873e0ab8e1c552c4606703965cc534a5cdd00a08477"
     }
   },
   "watchdog": {

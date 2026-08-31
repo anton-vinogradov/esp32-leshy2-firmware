@@ -110,9 +110,11 @@ host runs; это portable evidence, а не target build.
 fail-closed. [Аналоговый результат H3-R2.3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.ru.md)
 и [цифровой результат H3-R2.4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.ru.md),
 а также [RF-результат H3-R2.5](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.ru.md)
-проведены ревью; точный [RF/coexistence-контракт](config/h3_r2_rf_coexistence.json)
-импортирован fail-closed, а текущая аппаратная точка — `H3-R2.6` для проверки
-thermal, single-fault и unattended-operation. H3-R2.1.2
+и [thermal/fault-результат H3-R2.6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.ru.md)
+проведены ревью; точные [RF/coexistence](config/h3_r2_rf_coexistence.json) и
+[thermal/fault](config/h3_r2_thermal_fault.json) контракты импортированы
+fail-closed, а текущая аппаратная точка — `H3-R2.7` для итогового cross-check
+и реестра физических остатков. H3-R2.1.2
 провёл ревью явной привязки 613 устанавливаемых питаемых экземпляров — 597
 прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
 H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все

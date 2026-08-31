@@ -59,7 +59,7 @@ def build() -> dict:
         "artifact": "FW-H3-R2.2.1-transition-import",
         "status": "reviewed_hardware_contract_imported",
         "hardware_marker": source["marker"],
-        "current_hardware_substep": "H3-R2.6",
+        "current_hardware_substep": "H3-R2.7",
         "source": {
             "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-sequences.json",
             "sha256": sha256(SOURCE),

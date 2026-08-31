@@ -3,13 +3,13 @@
   "artifact": "FW-H3-R2.2.1-transition-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H3-R2.2.1",
-  "current_hardware_substep": "H3-R2.6",
+  "current_hardware_substep": "H3-R2.7",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-sequences.json",
-    "sha256": "2b451d9cf2eafe1ea8edbd54615a551ff660f1997f077277b420afe6ee5a3f48",
+    "sha256": "0ede1301a1b08eeb18f70c3fc843f52870eaca4ab10a647fc4517cc320fa2313",
     "source_sha256": {
       "hardware/verification/h3-r2-transition-sequence-contract.json": "5d7b9f1484abf3dd943e68712ea0b385f633b4483b61dc74605a1af667e9a618",
-      "hardware/verification/h3-r2-verification-plan.json": "0c3b062b07608615d26572805947a71499fc11b91662118aefa6e0029dc67887",
+      "hardware/verification/h3-r2-verification-plan.json": "295c3564480bb562f76a17bdc7a81a5f99db6b5422cb042905d4575fc683c6ee",
       "hardware/verification/generated/H3-R2-input-freeze.json": "a91d1a15e253150e3680c503b3b8ed6e30b2ac81ad000bc6e5021983a820f26f",
       "hardware/verification/generated/H3-R2-method-contract.json": "0868d2c87fac5a3fb855e14fa7b89ef4fb40ac827e85dd5330ad52ae6e4a95ca",
       "hardware/verification/generated/H3-R2-dc-source-crosscheck.json": "005121c6556ec01d1c2f75c3ed22719dd604b1feefc87f6daff59e22d1af3f38",
