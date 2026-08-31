@@ -114,9 +114,10 @@ fail-closed. [Аналоговый результат H3-R2.3](https://github.co
 и [глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md)
 проведены ревью; точные [RF/coexistence](config/h3_r2_rf_coexistence.json),
 [thermal/fault](config/h3_r2_thermal_fault.json) и [H3 acceptance](config/h3_r2_acceptance.json)
-контракты импортированы fail-closed. H4-R2.0.1 фиксирует 24 точных объединённых
-inputs; H4-R2.0.2/H4-R2.1 сводят H2/M1/H3 и находят назначенный пробел 38 BSP-строк C5/Pack/Safety.
-Текущая аппаратная точка — `H4-R2.2` для этой коррекции. H3-R2.1.2
+контракты импортированы fail-closed. Сохранённая диагностика H4 нашла назначенный
+пробел 38 BSP-строк C5/Pack/Safety; исправление восстановило 173/173 controller-строк H2,
+все 12 target-сборок повторно квалифицированы. [Глобальный итог H4-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md)
+проведён ревью без противоречий. Текущая аппаратная точка — `H5.0.3-R1`. H3-R2.1.2
 провёл ревью явной привязки 613 устанавливаемых питаемых экземпляров — 597
 прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
 H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все

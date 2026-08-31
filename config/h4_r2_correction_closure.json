@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H4-R2-correction-closure-import",
+  "status": "reviewed_hardware_correction_imported",
+  "hardware_marker": "H4-R2.2",
+  "current_hardware_substep": "H4-R2.3",
+  "source": {
+    "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-correction-closure.json",
+    "sha256": "c681bffba41f23a8493369671cc561afb378d7b3a00f1d5f6f5dc60be1160167"
+  },
+  "reviewed_boundary": {
+    "domains": 6,
+    "h2_controller_rows": 173,
+    "generated_bsp_rows": 173,
+    "restored_rows": 38,
+    "remaining_contradictions": 0,
+    "qualified_configurations": 12,
+    "verified_artifacts": 60,
+    "verified_maps": 16,
+    "passed_size_gates": 16,
+    "retained_firmware_obligations": 1,
+    "physical_residuals_carried": 51
+  },
+  "claims": {
+    "all_six_generated_bsp_maps_exact": true,
+    "all_targets_fail_closed_on_mapping_and_count": true,
+    "all_target_compilation_and_link_passed": true,
+    "runtime_boot_proven": false,
+    "i8080_target_implementation_proven": false,
+    "physical_residuals_complete": false,
+    "purchase_layout_or_fabrication_authorized": false
+  },
+  "next": {
+    "marker": "H4-R2.3",
+    "action": "publish the joined R2 pre-layout gate and transfer exact residual ownership to H5/H6/H8"
+  }
+}

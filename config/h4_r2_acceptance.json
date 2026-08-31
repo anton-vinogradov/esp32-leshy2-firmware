@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H4-R2-acceptance-import",
+  "status": "reviewed_hardware_gate_imported",
+  "hardware_marker": "H4-R2.3",
+  "current_hardware_stage": "H5",
+  "current_hardware_substep": "H5.0.3-R1",
+  "source": {
+    "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-acceptance-package.json",
+    "sha256": "32f99b5dd312275c3cc50f14fb19497063333ad426c85ea54c4aec486f25a58c"
+  },
+  "reviewed_result": {
+    "joined_inputs": 24,
+    "compute_domains": 6,
+    "h2_controller_rows": 173,
+    "generated_bsp_rows": 173,
+    "m1_contacts": 80,
+    "qualified_target_configurations": 12,
+    "cross_domain_contradictions_remaining": 0,
+    "open_analytical_findings": 0,
+    "physical_residuals_transferred": 51,
+    "physical_residuals_by_stage": {
+      "H5": 1,
+      "H6": 5,
+      "H8": 46
+    },
+    "firmware_obligations_transferred": 1,
+    "failed_checks": 0
+  },
+  "handoff": {
+    "H5": "exact production identity, current factory route and received-part evidence; current H5.0.3-R1",
+    "H6": "routed geometry, extracted values, production outputs and independent DFM/CPL review",
+    "F5/F6": "instantiate and exercise the exact direct 20-MHz i8080 target configuration",
+    "H8": "ordinary non-destructive measurement on the sole assembled prototype"
+  },
+  "claims": {
+    "joined_prelayout_gate_reviewed": true,
+    "current_hardware_and_firmware_contracts_agree": true,
+    "virtual_prelayout_blocker_open": false,
+    "runtime_boot_proven": false,
+    "physical_hardware_proven": false,
+    "routing_proven": false,
+    "purchase_layout_or_fabrication_authorized": false
+  },
+  "next": {
+    "stage": "H5",
+    "marker": "H5.0.3-R1",
+    "action": "finish the exact-one-prototype component/factory evidence route without silent substitution"
+  }
+}

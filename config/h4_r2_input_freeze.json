@@ -3,10 +3,10 @@
   "artifact": "FW-H4-R2.0.1-input-freeze-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H4-R2.0.1",
-  "current_hardware_substep": "H4-R2.2",
+  "current_hardware_substep": "H5.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-input-freeze.json",
-    "sha256": "7c84b7f8a000f7aeb6742057f61a36e3ac53de58258592c39a65269e7b7eb156"
+    "sha256": "e3b5c2aef6c0d566382d3f5d91ac15ecbe385dbef70b5aab1a2ee61e147a0ef8"
   },
   "frozen_boundary": {
     "hardware_inputs": 10,

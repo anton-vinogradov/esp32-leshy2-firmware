@@ -39,7 +39,7 @@ def build() -> dict:
         "artifact": "FW-H4-R2.0.1-input-freeze-import",
         "status": "reviewed_hardware_contract_imported",
         "hardware_marker": "H4-R2.0.1",
-        "current_hardware_substep": "H4-R2.2",
+        "current_hardware_substep": "H5.0.3-R1",
         "source": {
             "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-input-freeze.json",
             "sha256": sha256(SOURCE),
