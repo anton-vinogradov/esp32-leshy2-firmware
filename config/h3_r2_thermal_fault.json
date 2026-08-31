@@ -3,7 +3,7 @@
   "artifact": "FW-H3-R2.6-thermal-fault-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H3-R2.6",
-  "current_hardware_substep": "H4-R2.0.1",
+  "current_hardware_substep": "H4-R2.0.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-thermal-fault.json",
     "sha256": "1add6bc8eeba8850f79e7c573f03a0a34b05cd0cc4e5a98e1f9eb185978dbbab"

@@ -3,7 +3,7 @@
   "artifact": "FW-H3-R2.5-rf-coexistence-import",
   "status": "reviewed_hardware_contract_imported",
   "hardware_marker": "H3-R2.5",
-  "current_hardware_substep": "H4-R2.0.1",
+  "current_hardware_substep": "H4-R2.0.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-rf-coexistence.json",
     "sha256": "a42a4398baca3a6dae5de3cd29e2d13eddd7e306271b821b9366d8dfb5eb0d1e"

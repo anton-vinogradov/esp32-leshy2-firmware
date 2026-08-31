@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H4-R2.0.1-input-freeze-import",
+  "status": "reviewed_hardware_contract_imported",
+  "hardware_marker": "H4-R2.0.1",
+  "current_hardware_substep": "H4-R2.0.2",
+  "source": {
+    "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-input-freeze.json",
+    "sha256": "e1964127ea306dce54cb984a1e24f0b22fe1b77cee011708920839f9d1126c88"
+  },
+  "frozen_boundary": {
+    "hardware_inputs": 10,
+    "firmware_inputs": 14,
+    "total_inputs": 24,
+    "cross_repository_h3_hashes_checked": 3,
+    "cross_repository_h3_hash_mismatches": 0,
+    "physical_residuals_carried": 51,
+    "firmware_obligations_carried": 1
+  },
+  "next_contract": {
+    "marker": "H4-R2.0.2",
+    "purpose": "reconcile every hardware-visible firmware contract and retained implementation obligation"
+  },
+  "claims": {
+    "joined_inputs_frozen": true,
+    "joined_contract_reconciliation_complete": false,
+    "physical_evidence_complete": false,
+    "purchase_layout_or_fabrication_authorized": false
+  }
+}

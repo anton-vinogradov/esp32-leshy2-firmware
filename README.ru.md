@@ -114,8 +114,9 @@ fail-closed. [Аналоговый результат H3-R2.3](https://github.co
 и [глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md)
 проведены ревью; точные [RF/coexistence](config/h3_r2_rf_coexistence.json),
 [thermal/fault](config/h3_r2_thermal_fault.json) и [H3 acceptance](config/h3_r2_acceptance.json)
-контракты импортированы fail-closed, а текущая аппаратная точка — `H4-R2.0.1`
-для фиксации объединённых mechanics/ECAD/H3/firmware inputs. H3-R2.1.2
+контракты импортированы fail-closed. H4-R2.0.1 фиксирует 24 точных объединённых
+inputs при совпадении всех cross-repository H3 hashes; текущая аппаратная точка —
+`H4-R2.0.2` для сверки видимых железу firmware-контрактов. H3-R2.1.2
 провёл ревью явной привязки 613 устанавливаемых питаемых экземпляров — 597
 прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
 H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все
