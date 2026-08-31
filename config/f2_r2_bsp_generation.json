@@ -1,41 +1,43 @@
 {
   "schema_version": 1,
   "stage": "F2-R2.3",
-  "status": "reviewed_generated_boundary",
-  "reviewed_on": "2026-08-28",
+  "status": "reviewed_generated_h2_boundary",
+  "reviewed_on": "2026-09-01",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
     "sha256": "7ae70ac38df41ab54c90ef61b967771f62d3579b2ea22ddd0e70688fc281f534",
-    "hardware_marker": "H1-R2.31"
+    "hardware_marker": "H2-R2.1.5"
   },
   "domains": [
     {
       "id": "s3",
       "mapping": "exact_pins",
-      "source_key": "s3_pin_map"
+      "source_domain_id": "s3"
     },
     {
       "id": "c5",
-      "mapping": "partial_exact_pins",
-      "source_key": "c5_sdio_pin_map"
+      "mapping": "exact_pins",
+      "source_domain_id": "c5"
     },
     {
       "id": "rf_rp",
       "mapping": "exact_pins",
-      "source_key": "rear_pin_map"
+      "source_domain_id": "rf_rp"
     },
     {
       "id": "hub_rp",
       "mapping": "exact_pins",
-      "source_key": "hub_pin_map"
+      "source_domain_id": "hub_rp"
     },
     {
       "id": "pack",
-      "mapping": "identity_only"
+      "mapping": "exact_pins",
+      "source_domain_id": "pack"
     },
     {
       "id": "safety",
-      "mapping": "identity_only"
+      "mapping": "exact_pins",
+      "source_domain_id": "safety"
     }
   ],
   "outputs": {
@@ -45,10 +47,10 @@
     "manifest": "generated/r2/source_manifest.json"
   },
   "contract_boundary": {
-    "exact_gpio_assignments_are_generated_only_when_explicit_in_source": true,
-    "c5_partial_map_contains_only_official_fixed_sdio_contacts": true,
-    "dual_rp_exact_maps_are_pre_h2_working_authority": true,
-    "identity_only_domains_do_not_claim_unpublished_pin_assignments": true,
+    "all_six_domain_maps_come_from_reviewed_h2_export": true,
+    "all_173_controller_rows_are_generated": true,
+    "controller_contact_names_and_canonical_nets_are_preserved": true,
+    "conditioned_boundaries_keep_their_h2_reset_or_sharing_proof": true,
     "handwritten_production_pins_allowed": false,
     "historical_r1_tree_is_r2_input": false
   },

@@ -21,11 +21,12 @@ typedef enum {
 } l2_r2_mapping_t;
 
 typedef struct {
+    const char *contact;
     const char *net;
     const char *peripheral;
     const char *endpoint;
     const char *gate;
-    uint8_t gpio;
+    int16_t gpio;
     l2_r2_direction_t direction;
 } l2_r2_pin_t;
 

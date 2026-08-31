@@ -15,7 +15,8 @@ static l2_safety_t safety_supervisor;
 int main(void)
 {
     SYSCFG_DL_init();
-    if (l2_r2_safety_domain.mapping != L2_R2_MAPPING_IDENTITY_ONLY) {
+    if (l2_r2_safety_domain.mapping != L2_R2_MAPPING_EXACT_PINS ||
+        l2_r2_safety_domain.pin_count != UINT16_C(17)) {
         __disable_irq();
         for (;;) {
             __WFI();

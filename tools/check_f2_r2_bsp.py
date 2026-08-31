@@ -16,11 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET_IDS = ["s3", "c5", "rf_rp", "hub_rp", "pack", "safety"]
 MAPPING_COUNTS = {
     "s3": ("exact_pins", 33, 0),
-    "c5": ("partial_exact_pins", 6, 0),
+    "c5": ("exact_pins", 14, 0),
     "rf_rp": ("exact_pins", 48, 0),
     "hub_rp": ("exact_pins", 48, 0),
-    "pack": ("identity_only", 0, 0),
-    "safety": ("identity_only", 0, 0),
+    "pack": ("exact_pins", 13, 0),
+    "safety": ("exact_pins", 17, 0),
 }
 
 
@@ -39,14 +39,14 @@ def main() -> int:
     projects = load("config/f2_r2_target_projects.json")
     manifest = load("generated/r2/source_manifest.json")
 
-    if model.get("stage") != "F2-R2.3" or model.get("status") != "reviewed_generated_boundary":
+    if model.get("stage") != "F2-R2.3" or model.get("status") != "reviewed_generated_h2_boundary":
         errors.append("F2-R2.3 generation model is not reviewed")
     source = model.get("source", {})
     source_path = ROOT / source.get("path", "")
     if not source_path.is_file() or digest(source_path) != source.get("sha256"):
         errors.append("F2-R2.3 source projection is missing or hash-stale")
-    if source.get("hardware_marker") != "H1-R2.31":
-        errors.append("F2-R2.3 is not bound to H1-R2.31")
+    if source.get("hardware_marker") != "H2-R2.1.5":
+        errors.append("F2-R2.3 correction is not bound to reviewed H2-R2.1.5")
     if [row.get("id") for row in model.get("domains", [])] != TARGET_IDS:
         errors.append("generation model does not contain the exact six domains")
     for row in model.get("domains", []):
@@ -56,10 +56,10 @@ def main() -> int:
 
     boundary = model.get("contract_boundary", {})
     expected_boundary = {
-        "exact_gpio_assignments_are_generated_only_when_explicit_in_source": True,
-        "c5_partial_map_contains_only_official_fixed_sdio_contacts": True,
-        "dual_rp_exact_maps_are_pre_h2_working_authority": True,
-        "identity_only_domains_do_not_claim_unpublished_pin_assignments": True,
+        "all_six_domain_maps_come_from_reviewed_h2_export": True,
+        "all_173_controller_rows_are_generated": True,
+        "controller_contact_names_and_canonical_nets_are_preserved": True,
+        "conditioned_boundaries_keep_their_h2_reset_or_sharing_proof": True,
         "handwritten_production_pins_allowed": False,
         "historical_r1_tree_is_r2_input": False,
     }
@@ -164,11 +164,11 @@ def main() -> int:
             errors.append(f"{target_id}: entrypoint does not include its generated R2 header")
         if row["symbol"] not in entry:
             errors.append(f"{target_id}: entrypoint does not consume its domain descriptor")
-        if target_id in {"rf_rp", "hub_rp"}:
-            if "L2_R2_MAPPING_EXACT_PINS" not in entry:
-                errors.append(f"{target_id}: entrypoint does not enforce exact-pin mapping")
-            if "pin_count != UINT8_C(48)" not in entry:
-                errors.append(f"{target_id}: entrypoint does not enforce the complete 48-GPIO map")
+        if "L2_R2_MAPPING_EXACT_PINS" not in entry:
+            errors.append(f"{target_id}: entrypoint does not enforce exact-pin mapping")
+        expected_count = MAPPING_COUNTS[target_id][1]
+        if f"pin_count != UINT16_C({expected_count})" not in entry:
+            errors.append(f"{target_id}: entrypoint does not enforce all {expected_count} H2 rows")
         for foreign in set(TARGET_IDS) - {target_id}:
             if f"{foreign}_bsp.c" in build:
                 errors.append(f"{target_id}: foreign R2 domain source is an active input")
@@ -237,7 +237,7 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
     print(
-        "F2-R2.3 BSP OK: 6 deterministic H1-R2.31 domains, "
+        "F2-R2.3 BSP OK: 6 deterministic H2-R2.1.5 domains and 173 exact rows, "
         "6 unique SDK owners, C17 host syntax; 0 target configure/build runs"
     )
     return 0

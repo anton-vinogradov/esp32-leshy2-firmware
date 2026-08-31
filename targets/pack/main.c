@@ -10,7 +10,8 @@ static l2_safety_t pack_admission;
 int main(void)
 {
     SYSCFG_DL_init();
-    if (l2_r2_pack_domain.mapping != L2_R2_MAPPING_IDENTITY_ONLY) {
+    if (l2_r2_pack_domain.mapping != L2_R2_MAPPING_EXACT_PINS ||
+        l2_r2_pack_domain.pin_count != UINT16_C(13)) {
         __disable_irq();
         for (;;) {
             __WFI();

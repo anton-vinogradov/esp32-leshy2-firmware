@@ -157,6 +157,11 @@ void app_main(void)
 {
     esp_chip_info_t chip = {0};
     esp_chip_info(&chip);
+    if (l2_r2_s3_domain.mapping != L2_R2_MAPPING_EXACT_PINS ||
+        l2_r2_s3_domain.pin_count != UINT16_C(33)) {
+        ESP_LOGE(TAG, "reviewed H2 S3 BSP boundary is incomplete");
+        abort();
+    }
     run_power_on_software_self_test();
     run_s3_c5_fake_boundary_review();
     l2_system_model_init(&system_model, INT16_C(700), UINT32_C(0));
