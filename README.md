@@ -97,10 +97,13 @@ existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.37`; H2 and the complete H3-R2.1 DC/source workstream are
 reviewed; H3-R2.2.1 reviewed 14 startup, shutdown, reset and recovery scenarios,
 and H3-R2.2.2 reviewed 7,316 USB/pack/DPM/brownout/source-loss transitions with
-zero unsafe admissions or automatic restarts. Its exact firmware-facing
+zero unsafe admissions or automatic restarts. H3-R2.2.3/.4 then reviewed five
+protected-rail starts, four load-step envelopes and ten watchdog/fault-display
+cases with zero analytical failures or automatic restarts. Its exact firmware-facing
 [sequence](config/h3_r2_transition_contract.json) and
-[handover](config/h3_r2_handover_contract.json) contracts are imported
-fail-closed; the current hardware point is `H3-R2.2.3`.
+[handover](config/h3_r2_handover_contract.json) and
+[watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
+are imported fail-closed; the current hardware point is `H3-R2.3`.
 H3-R2.1.2 reviewed explicit binding for 613 fitted powered instances—597 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
@@ -120,7 +123,8 @@ firmware-visible net or behavior. The 2026-08-30 cost decision retains every cur
 `ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct 24-MHz i8080-8 path to
 exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Six S3
 GPIOs remain uncommitted after reset/service closure. M1 has an exact 80-contact
-map with 10 true NC reserves, an independent S3 fault-UI reset on contact 36 and
+map with 9 true NC reserves, latched `FAULT_KILL` for the front indicator on
+contact 35, an independent S3 fault-UI reset on contact 36 and
 a separate enclosure load path.
 The display is physically oriented with its flex toward the antenna edge; F5/F6
 must rotate ILI9488 memory orientation and FT6236 touch coordinates by 180 degrees.
@@ -145,10 +149,10 @@ six domain owners, 242 exact MPN groups and 1,197 product positions.
 `H2-R2.1.2` reviewed exact identities for 237 board groups, five explicit
 non-PCBA groups and 1,662 logical contacts. `H2-R2.1.3` materialized 1,187
 fitted positions and 4,327 physical pins in the three native KiCad projects.
-All 4,323 logical contacts reconcile into 4,065 connected endpoints, 258
+All 4,323 logical contacts reconcile into 4,067 connected endpoints, 256
 explicit no-connects and 826 canonical nets; all three projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
-173 controller pins, 51 cross-project nets and 236 cross-sheet nets; the
+173 controller pins, 52 cross-project nets and 238 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
 inputs. Placement/routing has not started,
 and R2 byte reproducibility

@@ -33,11 +33,11 @@ HISTORICAL_INTEGRATION_AUTHORITY = {
     "r2_sync_gate": "config/r2_h2_sync_gate.json",
 }
 M1_COUNTS = {
-    "live_signals": 30,
+    "live_signals": 31,
     "main_power": 14,
     "aon_power": 2,
     "returns": 24,
-    "no_connect_reserve": 10,
+    "no_connect_reserve": 9,
 }
 
 
@@ -257,8 +257,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or h2_hwfw.get("status") != "pass"
         or h2_hwfw.get("summary", {}).get("domain_count") != 6
         or h2_hwfw.get("summary", {}).get("controller_pin_rows") != 173
-        or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 51
-        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 236
+        or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 52
+        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 238
     ):
         errors.append("current authority lost the reviewed H2-R2.1.4 HW/FW reconciliation")
     hardware_sources = h0.get("hardware_sources", {})

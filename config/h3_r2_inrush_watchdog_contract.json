@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H3-R2.2.4-power-transition-import",
+  "status": "reviewed_hardware_contract_imported",
+  "hardware_marker": "H3-R2.2.4",
+  "current_hardware_substep": "H3-R2.3",
+  "source": {
+    "inrush_watchdog": {
+      "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
+      "sha256": "ee9e5c31bd4dd6026096e2ad47b2efd69dcc09377d012b2b6846ba0fb9b6ed63"
+    },
+    "transition_result": {
+      "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
+      "sha256": "1eee3648653475d10938c3a8b78b9e4e8416046c524a5650182e3ecceeef0309"
+    }
+  },
+  "watchdog": {
+    "device_id": "ti_tps3435cakagddfr",
+    "mpn": "Texas Instruments TPS3435CAKAGDDFR",
+    "device_startup_time_us_max": 500,
+    "watchdog_startup_delay_ms": {
+      "min": 0,
+      "typ": 0,
+      "max": 0
+    },
+    "timeout_ms": {
+      "min": 1440,
+      "typ": 1600,
+      "max": 1760
+    },
+    "wdo_low_ms": {
+      "min": 180,
+      "typ": 200,
+      "max": 220
+    },
+    "service_period_ms": 500,
+    "s3_heartbeat_period_ms": 500,
+    "s3_heartbeat_deadline_ms": 1000,
+    "wdo_is_output_duration_not_extra_detection_latency": true
+  },
+  "fault_journal": {
+    "controller": "Texas Instruments MSPM0C1106SDGS20R",
+    "flash_kb": 64,
+    "slots": 2,
+    "sector_bytes_each": 1024,
+    "lower_flash_endurance_cycles_per_sector": 100000,
+    "minimum_fault_commits": 200000,
+    "commit_order": [
+      "erase inactive sector",
+      "write body and CRC",
+      "verify body",
+      "write final commit marker",
+      "select newest valid event counter"
+    ],
+    "fields": [
+      "schema",
+      "event_counter",
+      "primary_cause",
+      "zone_or_group",
+      "measured_value",
+      "limit",
+      "evidence_mask",
+      "rail_and_source_state",
+      "action",
+      "crc",
+      "commit_marker"
+    ],
+    "complete_aon_loss": "final write is not guaranteed; show an explicit generic power-loss fallback instead of inventing a cause"
+  },
+  "fault_display": {
+    "screen_when": "3V3_MAIN and the UI thermal zone remain safe",
+    "screen_must_show": [
+      "plain-language cause",
+      "zone or signal group",
+      "measured value and limit when known",
+      "action already taken",
+      "event identifier",
+      "move RUN to KILL before restart"
+    ],
+    "screen_forbidden_actions": [
+      "clear FAULT_KILL",
+      "enable C5",
+      "enable either RP2354B",
+      "enable RF or IR",
+      "assert voice PTT",
+      "enable either external 5-V branch"
+    ],
+    "screen_unavailable": "UI/display overtemperature, unsafe main rail or complete AON loss; use the AON FAULT LED when powered and later readout"
+  },
+  "fault_scenarios": [
+    {
+      "id": "WD-R2-01",
+      "fault": "safety controller stops or WDI sticks",
+      "maximum_detection_ms": 1760,
+      "outcome": "TPS3435 drives FAULT_ASSERT_N low and hardware clears RUN permit"
+    },
+    {
+      "id": "WD-R2-02",
+      "fault": "S3 system heartbeat stops",
+      "maximum_detection_ms": 1000,
+      "outcome": "safety-controller lease monitor requests fault; its own stall remains covered by TPS3435"
+    },
+    {
+      "id": "WD-R2-03",
+      "fault": "TX evidence exists without the current short lease",
+      "maximum_detection_ms": 100,
+      "outcome": "AON evidence interrupt requests fault; no application-side override exists"
+    },
+    {
+      "id": "WD-R2-04",
+      "fault": "POWER_FAULT_N or a critical POWER/RF condition",
+      "maximum_detection_ms": 100,
+      "outcome": "fault request clears RUN, resets C5/RF RP and clamps voice power"
+    },
+    {
+      "id": "WD-R2-05",
+      "fault": "WDO or external fault source later recovers",
+      "maximum_detection_ms": 0,
+      "outcome": "FAULT_KILL remains latched; physical KILL-to-RUN is still required"
+    },
+    {
+      "id": "WD-R2-06",
+      "fault": "S3 application is unresponsive but main/UI rails are safe",
+      "maximum_detection_ms": 1000,
+      "outcome": "Safety records cause, pulses only S3 reset and permits bounded fault-only UI"
+    },
+    {
+      "id": "WD-R2-07",
+      "fault": "UI/display thermal zone is unsafe",
+      "maximum_detection_ms": 100,
+      "outcome": "screen stays off; AON FAULT LED and later service record replace live display"
+    },
+    {
+      "id": "WD-R2-08",
+      "fault": "complete AON loss",
+      "maximum_detection_ms": 0,
+      "outcome": "hardware falls safe; a later boot uses the generic power-loss fallback if no committed record exists"
+    },
+    {
+      "id": "WD-R2-09",
+      "fault": "power fails during fault-record update",
+      "maximum_detection_ms": 0,
+      "outcome": "previous CRC-valid slot remains authoritative; partial slot is ignored"
+    },
+    {
+      "id": "WD-R2-10",
+      "fault": "fault-only firmware attempts to enable a payload",
+      "maximum_detection_ms": 0,
+      "outcome": "C5/RP/RF/IR/voice/external rails remain blocked by the uncleared hardware latch"
+    }
+  ],
+  "external_accessory_admission": {
+    "official_u214_capacitance_uf": 470,
+    "admitted_external_capacitance_uf": 705,
+    "rule": "The official U214 schematic fits 470 uF at the 5-V input. It is enveloped at +50%; any U214 or M5 Unit accessory above 705 uF requires a separate admission calculation before connection.",
+    "u214_source": {
+      "document": "M5Stack U214 Cap LoRa-1262 schematic",
+      "version": "SCH V1.1, 2025-10-29",
+      "url": "https://m5stack-doc.oss-cn-shenzhen.aliyuncs.com/1208/U214-sche-Cap-LoRa1262_SCH_V1.1_20251029_2025_11_07_22_53_19.pdf",
+      "checked": "2026-08-31",
+      "fact": "C12 is a fitted 470-uF input reservoir."
+    }
+  },
+  "startup_envelopes": [
+    {
+      "rail": "AON_SAFE_3V3",
+      "output_net": "AON_SAFE_3V3",
+      "strategy": "minimum current limit bounds a commanded fixed-slew start",
+      "pcb_capacitance_upper_uf": "42.490000",
+      "external_capacitance_upper_uf": "0.000000",
+      "capacitance_upper_uf": "42.490000",
+      "worst_load_ma": "72.100",
+      "capacitive_inrush_ma": "92.900",
+      "combined_current_ma": "165.000",
+      "effective_hardware_min_ma": "165.000",
+      "current_margin_ma": "0.000",
+      "ramp_time_ms": "1.509333",
+      "energy_mj": "0.231358",
+      "status": "pass"
+    },
+    {
+      "rail": "3V3_MAIN",
+      "output_net": "3V3_MAIN",
+      "strategy": "fastest dV/dt corner from minimum exact control capacitance",
+      "pcb_capacitance_upper_uf": "78.890000",
+      "external_capacitance_upper_uf": "0.000000",
+      "capacitance_upper_uf": "78.890000",
+      "worst_load_ma": "3046.000",
+      "capacitive_inrush_ma": "61.545",
+      "combined_current_ma": "3107.545",
+      "effective_hardware_min_ma": "4000.000",
+      "current_margin_ma": "892.455",
+      "ramp_time_ms": "4.230000",
+      "energy_mj": "0.429556",
+      "status": "pass"
+    },
+    {
+      "rail": "VVOICE_4V",
+      "output_net": "VVOICE_4V",
+      "strategy": "fastest dV/dt corner from minimum exact control capacitance",
+      "pcb_capacitance_upper_uf": "12.000000",
+      "external_capacitance_upper_uf": "0.000000",
+      "capacitance_upper_uf": "12.000000",
+      "worst_load_ma": "750.000",
+      "capacitive_inrush_ma": "9.362",
+      "combined_current_ma": "759.362",
+      "effective_hardware_min_ma": "1550.000",
+      "current_margin_ma": "790.638",
+      "ramp_time_ms": "5.127273",
+      "energy_mj": "0.096000",
+      "status": "pass"
+    },
+    {
+      "rail": "5V_U214_PROTECTED",
+      "output_net": "5V_U214_PROTECTED",
+      "strategy": "fastest dV/dt corner from minimum exact control capacitance",
+      "pcb_capacitance_upper_uf": "2.420000",
+      "external_capacitance_upper_uf": "705.000000",
+      "capacitance_upper_uf": "707.420000",
+      "worst_load_ma": "1250.000",
+      "capacitive_inrush_ma": "334.478",
+      "combined_current_ma": "1584.478",
+      "effective_hardware_min_ma": "1632.000",
+      "current_margin_ma": "47.522",
+      "ramp_time_ms": "10.575000",
+      "energy_mj": "8.842750",
+      "status": "pass"
+    },
+    {
+      "rail": "5V_UNIT_PROTECTED",
+      "output_net": "5V_UNIT_PROTECTED",
+      "strategy": "fastest dV/dt corner from minimum exact control capacitance",
+      "pcb_capacitance_upper_uf": "2.420000",
+      "external_capacitance_upper_uf": "705.000000",
+      "capacitance_upper_uf": "707.420000",
+      "worst_load_ma": "1250.000",
+      "capacitive_inrush_ma": "334.478",
+      "combined_current_ma": "1584.478",
+      "effective_hardware_min_ma": "1632.000",
+      "current_margin_ma": "47.522",
+      "ramp_time_ms": "10.575000",
+      "energy_mj": "8.842750",
+      "status": "pass"
+    }
+  ],
+  "load_steps": {
+    "AON_SAFE_3V3": {
+      "minimum_endpoint_ma": "55.000",
+      "maximum_endpoint_ma": "72.100",
+      "maximum_upward_step_ma": "17.100",
+      "endpoint_current_margin_ma": "92.900",
+      "steady_pf03_status": "pass",
+      "status": "pass"
+    },
+    "3V3_MAIN": {
+      "minimum_endpoint_ma": "390.000",
+      "maximum_endpoint_ma": "3046.000",
+      "maximum_upward_step_ma": "2656.000",
+      "endpoint_current_margin_ma": "954.000",
+      "steady_pf03_status": "pass",
+      "status": "pass"
+    },
+    "VVOICE_4V": {
+      "minimum_endpoint_ma": "0.000",
+      "maximum_endpoint_ma": "750.000",
+      "maximum_upward_step_ma": "750.000",
+      "endpoint_current_margin_ma": "800.000",
+      "steady_pf03_status": "pass",
+      "status": "pass"
+    },
+    "5V_EXT_ACTIVE_BRANCH": {
+      "minimum_endpoint_ma": "0.000",
+      "maximum_endpoint_ma": "1250.000",
+      "maximum_upward_step_ma": "1250.000",
+      "endpoint_current_margin_ma": "382.000",
+      "steady_pf03_status": "pass",
+      "status": "pass"
+    }
+  },
+  "runtime_invariants": {
+    "watchdog_owner": "always-on safety controller toggles WDI; S3 does not service TPS3435 directly",
+    "s3_lease": "two missed 500-ms heartbeat periods request a fault",
+    "fault_latch": "software, recovered WDI or a recovered source cannot clear FAULT_KILL",
+    "restart": "a fresh qualified physical KILL-to-RUN edge is mandatory",
+    "fault_only_mode": "may render and read diagnostics only; every payload and TX enable remains blocked",
+    "power_cut_commit": "write and verify the inactive slot before its final commit marker; retain the previous CRC-valid slot"
+  },
+  "evidence": {
+    "startup_envelopes": 5,
+    "load_step_rails": 4,
+    "fault_scenarios": 10,
+    "analytical_failures": 0,
+    "automatic_restarts": 0
+  },
+  "claims": {
+    "target_implementation_or_execution_proven": false,
+    "physical_droop_ringing_or_fault_injection_proven": false,
+    "pcb_placement_or_routing_authorized": false,
+    "order_authorized": false
+  }
+}

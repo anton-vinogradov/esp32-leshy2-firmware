@@ -17,11 +17,11 @@
     "interboard_source": "config/h0_r2_hardware_contract.json#/interboard",
     "interboard_positions": 80,
     "interboard_counts": {
-      "live_signals": 30,
+      "live_signals": 31,
       "main_power": 14,
       "aon_power": 2,
       "returns": 24,
-      "no_connect_reserve": 10
+      "no_connect_reserve": 9
     },
     "exact_rp_pin_map_required_here": true,
     "working_pin_map_source": "config/h0_r2_hardware_contract.json#/hub_pin_map and #/rear_pin_map",

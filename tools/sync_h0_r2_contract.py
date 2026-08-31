@@ -175,12 +175,12 @@ def build() -> dict:
         and h2_hwfw.get("status") == "pass"
         and h2_hwfw.get("summary", {}).get("domain_count") == 6
         and h2_hwfw.get("summary", {}).get("controller_pin_rows") == 173
-        and h2_hwfw.get("summary", {}).get("cross_project_net_count") == 51
-        and h2_hwfw.get("summary", {}).get("cross_sheet_net_count") == 236
+        and h2_hwfw.get("summary", {}).get("cross_project_net_count") == 52
+        and h2_hwfw.get("summary", {}).get("cross_sheet_net_count") == 238
         and h2_hwfw.get("authorization", {}).get("hardware_firmware_machine_authority") is True
         and h2_hwfw.get("errors") == []
         and h2_m1.get("summary", {}).get("physical_contacts") == 80
-        and h2_m1.get("summary", {}).get("no_connect_reserve_contacts") == 10
+        and h2_m1.get("summary", {}).get("no_connect_reserve_contacts") == 9
         and h2_m1.get("errors") == []
         and r2_authority.get("status") == "pass_current_r2_h2_reconciled"
         and r2_authority.get("r2_h2_authoritative") is True

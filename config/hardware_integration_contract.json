@@ -1537,12 +1537,12 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "7b9b76e826a66f626933cdd15447709f73793c7a7c7d4dabed8b08c8bee9024d",
+    "hardware_contract_sha256": "9c9227c51964b1a9d8fe42309383a05aed18d873afdf827d805aae1a08526762",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
         "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-        "sha256": "f14f33a176eb6fac99365ad808cd8b99db26e672101f72dc4c02c5e5f51a2bed"
+        "sha256": "2d8acc3cb2e8b0831bfd0ceefbd55aa4798c2f08bf9d62620760082150baba6f"
       },
       "c5_sdio_service_mux": {
         "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -1562,7 +1562,7 @@
       },
       "r2_authority_gate": {
         "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-        "sha256": "8b7f593687ac424271e7b0e6340cf56d6998ba83ad1990974de29f763bc2796f"
+        "sha256": "d99ee3216e7091262e9c3a2784682fd78ef8ec286e650dab9422c829c2fd5e55"
       },
       "pack_safety_i2c_boundary": {
         "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -1570,23 +1570,23 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "4c88c32befb8d2eadbb0642d84669347e304209d0a115427a80d2b214fb8e368"
+        "sha256": "783b2c1dbc675a8dc2a9e20e025b2592c7292bcda1644d796a66becf44f62cf1"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "f56f83598ec8cfb98e0b4040bd5ae2415622291039cb50e341e15219fb5d3efe"
+        "sha256": "6d0a46781b50e3037c17652a25fc6bcfc669fb3fbcdbaac251d73a38c263bddd"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "9d9012b9473289129f48fca265eb18d60eba16ab859f70d2df6a486b46f81d4d"
+        "sha256": "ebf1946ad694917a747aa1a0e9a106b165e369f6ac34d1aaef62fc88eafdc8df"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "96ddc1124b3bb9d450fb2251f223219bf46db61aff6f723f53138854cdb9bab8"
+        "sha256": "88e7d98471737ee28678a9c8c3b8bf0302b1f52ec3beafef26e4f2a3d1cab7c8"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
-        "sha256": "baf93ef396bada362de08057604e4413bad26e2bbd1f18e520fb4bc49e43ae39"
+        "sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
       }
     },
     "domain_ids": [
@@ -4860,8 +4860,8 @@
           "instance_count": 428,
           "physical_symbol_pin_count": 1588,
           "external_module_interface_count": 5,
-          "canonical_net_count": 326,
-          "cross_sheet_net_count": 110
+          "canonical_net_count": 327,
+          "cross_sheet_net_count": 111
         },
         {
           "id": "LESHY2-RF-R2",
@@ -4872,7 +4872,7 @@
           "physical_symbol_pin_count": 2649,
           "external_module_interface_count": 0,
           "canonical_net_count": 525,
-          "cross_sheet_net_count": 126
+          "cross_sheet_net_count": 127
         },
         {
           "id": "L2-DISP-ADP-001-B",
@@ -4892,8 +4892,8 @@
         "populated_sheet_count": 19,
         "fitted_symbol_instance_count": 1187,
         "physical_symbol_pin_count": 4327,
-        "connected_physical_pin_count": 4069,
-        "explicit_no_connect_physical_pin_count": 258,
+        "connected_physical_pin_count": 4071,
+        "explicit_no_connect_physical_pin_count": 256,
         "external_module_interface_annotation_count": 5,
         "canonical_net_count": 826,
         "generated_file_count": 32,
@@ -4916,22 +4916,22 @@
         "exact_pin_rows": 147,
         "conditioned_boundary_rows": 14,
         "explicit_reserve_no_connect_rows": 12,
-        "cross_project_net_count": 51,
-        "cross_sheet_net_count": 236,
+        "cross_project_net_count": 52,
+        "cross_sheet_net_count": 238,
         "errors": 0
       },
-      "source_sha256": "96ddc1124b3bb9d450fb2251f223219bf46db61aff6f723f53138854cdb9bab8",
-      "m1_source_sha256": "baf93ef396bada362de08057604e4413bad26e2bbd1f18e520fb4bc49e43ae39"
+      "source_sha256": "88e7d98471737ee28678a9c8c3b8bf0302b1f52ec3beafef26e4f2a3d1cab7c8",
+      "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
       "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
       "current_budget": {
         "positions": 80,
-        "live_signals": 30,
+        "live_signals": 31,
         "main_power": 14,
         "aon_power": 2,
         "returns": 24,
-        "no_connect_reserve": 10
+        "no_connect_reserve": 9
       },
       "pin_map": [
         {
@@ -5106,8 +5106,8 @@
         },
         {
           "contact": 35,
-          "net": "NC_35",
-          "class": "reserve"
+          "net": "FAULT_KILL",
+          "class": "safety"
         },
         {
           "contact": 36,
