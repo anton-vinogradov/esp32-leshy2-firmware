@@ -10,7 +10,7 @@
     "physical_h1_status": "reviewed",
     "physical_h1_accepted_on": "2026-08-30",
     "current_hardware_stage": "H3",
-    "current_hardware_substep": "H3-R2.1",
+    "current_hardware_substep": "H3-R2.2.2",
     "reviewed_h2_marker": "H2-R2.1.5",
     "imported_h2_machine_contract": "H2-R2.1.4",
     "current_h1_blockers": [],

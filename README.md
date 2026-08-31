@@ -95,13 +95,16 @@ that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.37`; H2 and the complete H3-R2.1 DC/source workstream are
-reviewed, and the current hardware point is `H3-R2.2.1`; H3-R2.1.2 reviewed explicit binding for 612 fitted powered
-power-connected instances and six external loads, and H3-R2.1.3 reviewed 224
+reviewed; H3-R2.2.1 reviewed 14 startup, shutdown, reset and recovery scenarios,
+and the current hardware point is `H3-R2.2.2`. Its exact firmware-facing state
+and timing contract is [imported fail-closed](config/h3_r2_transition_contract.json).
+H3-R2.1.2 reviewed explicit binding for 613 fitted powered instances—597 direct
+and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
 24.706 °C minimum junction-temperature reserve. H3-R2.1.4 reviews all 75
 source/pack lines and safely admits all 2,266 states; maximum pack current is
 3.516 A and charging always yields before system load. H3-R2.1.5 reconciles all
-618 loads, 224 rail profiles and 2,266 states through 15 passing checks. The exact H3-R2.0.1 input freeze, H3-R2.0.2
+619 loads, 224 rail profiles and 2,266 states through 15 passing checks. The exact H3-R2.0.1 input freeze, H3-R2.0.2
 parameter/model provenance register, H3-R2.0.3 method contract and H3-R2.1.1
 register of 2,266 legal power states are reviewed,
 while the exact imported pin/config authority remains the reviewed
@@ -113,8 +116,9 @@ evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-ro
 firmware-visible net or behavior. The 2026-08-30 cost decision retains every current top-20 hardware group and permanently assigns separate
 `ANT-433-CW-QW-SMA` units to SUB-GHz and UHF VOICE; firmware must never treat those antenna loads as a manually shared resource. S3 keeps the direct 24-MHz i8080-8 path to
 exact `ER-TFT035IPS-6` + `ER-TPC035-6`, ordinary UI, encoder and USB. Six S3
-GPIOs remain uncommitted after reset/service closure. M1 has an exact 80-contact map with 11 true NC
-reserves and a separate enclosure load path.
+GPIOs remain uncommitted after reset/service closure. M1 has an exact 80-contact
+map with 10 true NC reserves, an independent S3 fault-UI reset on contact 36 and
+a separate enclosure load path.
 The display is physically oriented with its flex toward the antenna edge; F5/F6
 must rotate ILI9488 memory orientation and FT6236 touch coordinates by 180 degrees.
 That transform is required target behavior, not an implemented-driver claim.
@@ -138,10 +142,10 @@ six domain owners, 242 exact MPN groups and 1,197 product positions.
 `H2-R2.1.2` reviewed exact identities for 237 board groups, five explicit
 non-PCBA groups and 1,662 logical contacts. `H2-R2.1.3` materialized 1,187
 fitted positions and 4,327 physical pins in the three native KiCad projects.
-All 4,323 logical contacts reconcile into 4,063 connected endpoints, 260
+All 4,323 logical contacts reconcile into 4,065 connected endpoints, 258
 explicit no-connects and 826 canonical nets; all three projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
-173 controller pins, 50 cross-project nets and 234 cross-sheet nets; the
+173 controller pins, 51 cross-project nets and 236 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
 inputs. Placement/routing has not started,
 and R2 byte reproducibility

@@ -7,7 +7,7 @@
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "f46b4a95d9e76b910c5df8e5141bfea782ae550e3d5ad4badec4f2af4178c06e"
+      "sha256": "f14f33a176eb6fac99365ad808cd8b99db26e672101f72dc4c02c5e5f51a2bed"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -27,7 +27,7 @@
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "996a373d803dfe5b8fd1ba6b1baab094749e82b7061cbd2fea5547505a7fab21"
+      "sha256": "8b7f593687ac424271e7b0e6340cf56d6998ba83ad1990974de29f763bc2796f"
     },
     "pack_safety_i2c_boundary": {
       "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -35,27 +35,27 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "ae48e1145603db59a05d87f326d2f708d5484c8fb4177d7c54e39aeb74d49f2f"
+      "sha256": "e42cb9eb9c9edd3011d482fe8e19d31aa73d14f8e0ca53b9ff2e230c164efbfc"
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "c891b92bc78ac00bc5f2e1cecf7980d40f9dcb41b4e5357ca87294f7329076c8"
+      "sha256": "b99b229f78c2a755a7283636942e46eb648095b678a0b9b11496359a18fde467"
     },
     "native_kicad": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-      "sha256": "57ba12fb654d00618eda166ef83e8a6291d6608e79ea0845897c84a1ee6d648f"
+      "sha256": "410e091cf43d73162cbb8f0a5a3ede576671e5c762d8d7651206ec9df61ae96d"
     },
     "h2_hwfw_reconciliation": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-      "sha256": "07179d945617f13b01cea44e3e0d02041909d25cc865a265945c46e1fe02c0e1"
+      "sha256": "39f699a6a667aaa63834102b811a5b7a57ce527f1f8f22e1523cb3c32a5cf117"
     },
     "h2_interboard_m1": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
-      "sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
+      "sha256": "baf93ef396bada362de08057604e4413bad26e2bbd1f18e520fb4bc49e43ae39"
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "f46b4a95d9e76b910c5df8e5141bfea782ae550e3d5ad4badec4f2af4178c06e",
+  "hardware_source_sha256": "f14f33a176eb6fac99365ad808cd8b99db26e672101f72dc4c02c5e5f51a2bed",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -2884,8 +2884,8 @@
         "instance_count": 428,
         "physical_symbol_pin_count": 1588,
         "external_module_interface_count": 5,
-        "canonical_net_count": 325,
-        "cross_sheet_net_count": 109
+        "canonical_net_count": 326,
+        "cross_sheet_net_count": 110
       },
       {
         "id": "LESHY2-RF-R2",
@@ -2896,7 +2896,7 @@
         "physical_symbol_pin_count": 2649,
         "external_module_interface_count": 0,
         "canonical_net_count": 525,
-        "cross_sheet_net_count": 125
+        "cross_sheet_net_count": 126
       },
       {
         "id": "L2-DISP-ADP-001-B",
@@ -2916,8 +2916,8 @@
       "populated_sheet_count": 19,
       "fitted_symbol_instance_count": 1187,
       "physical_symbol_pin_count": 4327,
-      "connected_physical_pin_count": 4067,
-      "explicit_no_connect_physical_pin_count": 260,
+      "connected_physical_pin_count": 4069,
+      "explicit_no_connect_physical_pin_count": 258,
       "external_module_interface_annotation_count": 5,
       "canonical_net_count": 826,
       "generated_file_count": 32,
@@ -2940,12 +2940,12 @@
       "exact_pin_rows": 147,
       "conditioned_boundary_rows": 14,
       "explicit_reserve_no_connect_rows": 12,
-      "cross_project_net_count": 50,
-      "cross_sheet_net_count": 234,
+      "cross_project_net_count": 51,
+      "cross_sheet_net_count": 236,
       "errors": 0
     },
-    "source_sha256": "07179d945617f13b01cea44e3e0d02041909d25cc865a265945c46e1fe02c0e1",
-    "m1_source_sha256": "213787e5d91eeecfd1c9411381d195bfe94ba08060058c494e8f03b3365c781f"
+    "source_sha256": "39f699a6a667aaa63834102b811a5b7a57ce527f1f8f22e1523cb3c32a5cf117",
+    "m1_source_sha256": "baf93ef396bada362de08057604e4413bad26e2bbd1f18e520fb4bc49e43ae39"
   },
   "hub_gpio_budget": {
     "available": 48,
@@ -4096,7 +4096,7 @@
   },
   "interboard": {
     "connector": "FX8C-80P-SV1(92) / FX8C-80S-SV5(92), straight SMT, 80 contacts, 11-mm working gap",
-    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 29 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and eleven true NC contacts.",
+    "why_not_20_or_60": "The current 4.25-A step envelope receives fourteen parallel 3V3_MAIN contacts and fourteen primary return contacts, leaving 0.304 A per power contact versus the 0.4-A rating before H3/H5 thermal proof. After two AON contacts, signal-reference returns and 30 live signals, a 60-contact pair has no controlled reserve; 80 is the smallest current FX8C size that preserves both derating and ten true NC contacts.",
     "locality_contract": {
       "rule": "Every payload endpoint stays on the board that owns its controller. M1 carries no display bus, nRF/SPI payload, microSD payload, main RF trace or audio stream.",
       "intentional_crossings": {
@@ -4132,15 +4132,16 @@
       "EV_N3_NRF1",
       "EV_N4_NRF2",
       "RUN_PERMIT",
-      "FAULT_ASSERT_N"
+      "FAULT_ASSERT_N",
+      "S3_RESET_KILL_GATE"
     ],
     "current_budget": {
       "positions": 80,
-      "live_signals": 29,
+      "live_signals": 30,
       "main_power": 14,
       "aon_power": 2,
       "returns": 24,
-      "no_connect_reserve": 11
+      "no_connect_reserve": 10
     },
     "main_current": {
       "continuous_a": 3.75,
@@ -4328,8 +4329,8 @@
       },
       {
         "contact": 36,
-        "net": "NC_36",
-        "class": "reserve"
+        "net": "S3_RESET_KILL_GATE",
+        "class": "safety"
       },
       {
         "contact": 37,
@@ -4553,7 +4554,7 @@
       }
     ],
     "mechanical_load_path": "M1 is electrical/alignment only. Four 11.00-mm compression stops, two anti-shear enclosure datums and independent front/rear PCB capture lips constrain the boards when one screw is loose; no drop, installation or enclosure-bending load is accepted through the SMT joints.",
-    "result": "R2 uses 29 live signals, fourteen 3V3_MAIN contacts, twenty-four defined returns, two AON contacts and eleven true NC reserve contacts; five former reserves now carry only low-speed AON service/alert state, and no obsolete audio, video or M5 signal remains assigned."
+    "result": "R2 uses 30 live signals, fourteen 3V3_MAIN contacts, twenty-four defined returns, two AON contacts and ten true NC reserve contacts; one reserve now carries the bounded S3 fault-UI reset crossing, five former reserves carry only low-speed AON service/alert state, and no obsolete audio, video or M5 signal remains assigned."
   },
   "display": {
     "panel": "EastRising ER-TFT035IPS-6 configured with ER-TPC035-6 capacitive touch; ILI9488 + FT6236",
@@ -4627,7 +4628,7 @@
       "implement S3-Hub quad, Hub-C5 native 4-bit SDIO and Hub-RF SPI+alert; never reactivate the historical direct S3-C5 endpoint",
       "route Pack status and Safety heartbeat/lease/fault mailboxes through the dedicated Hub GPIO42/43 I2C1 bus and an exact powered-off-Ioff 3V3_MAIN/AON boundary without weakening local watchdog or FAULT_KILL ownership",
       "keep storage and three complete nRF24 paths on the front Hub RP while moving audio, BROADCAST_RX, CC1101, voice, M5 and exactly one signed U214/U219 Cap profile to the rear RF RP",
-      "keep all display traffic front-local and preserve the eleven released S3 GPIOs plus M1 contacts 35-36 as true reserves",
+      "keep all display traffic front-local, preserve six uncommitted S3 GPIOs and M1 contact 35 as a true reserve, and carry only the independent S3 fault-UI reset on M1-36",
       "add fail-low Airband mode control, Si5351 setup, scan/record and ACARS receive pipeline",
       "preserve direct S3 UI/display scheduling and all existing safety/quiet-state semantics",
       "qualify the six target builds before implementing R2 F4 transports, then run emulator/dev-board and HIL gates without reusing R1 physical claims"

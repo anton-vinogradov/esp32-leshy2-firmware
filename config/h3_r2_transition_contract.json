@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H3-R2.2.1-transition-import",
+  "status": "reviewed_hardware_contract_imported",
+  "hardware_marker": "H3-R2.2.1",
+  "current_hardware_substep": "H3-R2.2.2",
+  "source": {
+    "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-sequences.json",
+    "sha256": "7b1c64f7504634172b5b33581d91e5da4025ac66b5908d5eeff9c6dc25b25f55",
+    "source_sha256": {
+      "hardware/verification/h3-r2-transition-sequence-contract.json": "201b7b47d8154b5b321e8ba951505f774e0100731585b996b3bea6db84ac9c41",
+      "hardware/verification/h3-r2-verification-plan.json": "014e32c35022f39f75f1ad13164c5440f78d7cd28cacf78c9950eabbe6e4b453",
+      "hardware/verification/generated/H3-R2-input-freeze.json": "34dbdff89429c235072cac8126f2f70e01618929ff4889274e0e32fea66c792e",
+      "hardware/verification/generated/H3-R2-method-contract.json": "869fb8b8337939cbdac6035a35217c00c75ac0b1cf5efe8a47af9daa55e4a2f7",
+      "hardware/verification/generated/H3-R2-dc-source-crosscheck.json": "977e930c8c7c93db338ba9b645b2b6f43afa1deacf19be88295bc863e274f39f",
+      "hardware/ecad/generated/H2-R2-native-net-ledger.json": "a74ec13d3b2482226734436debecf360fffe3986ce0a6e9f06fe35d98b3745e7",
+      "hardware/ecad/generated/H2-R2-native-instance-ledger.json": "5f3c52f7164df747df0e11a5e8bb405d060e26ad1b649c2f6275bd8675686626",
+      "hardware/ecad/generated/H2-R2-interboard-m1.json": "baf93ef396bada362de08057604e4413bad26e2bbd1f18e520fb4bc49e43ae39",
+      "hardware/architecture/devices.json": "96bd2cf3a4bfae0af34e249d6737a16a2763fea46b3892e06b465b84e1c18e2f"
+    }
+  },
+  "firmware_contract": {
+    "states": [
+      "BOOT_HOLD_FAULT",
+      "WAIT_KILL",
+      "KILL_QUALIFY",
+      "ARMED_WAIT_RUN",
+      "RUNNING",
+      "FAULT_LATCHED"
+    ],
+    "reset_outputs": "PA25 and PA23 default low through external 10-kohm pulldowns: hazardous permit is held off while S3 reset remains released",
+    "boot_rule": "never release PA25 after self-test while RUN_EDGE is high; require 500 ms continuously low first",
+    "fault_rule": "assert PA25 low immediately, store the cause, and require a new qualified KILL-to-RUN cycle",
+    "s3_recovery": "PA23 may pulse high to reset only S3; release it low after reset so the fault-only UI can reboot"
+  },
+  "timing_contract": {
+    "qualified_kill_ms": 500,
+    "watchdog_service_period_ms": 500,
+    "watchdog_timeout_s": {
+      "min": 1.44,
+      "typ": 1.6,
+      "max": 1.76
+    },
+    "watchdog_assert_time_ms": {
+      "min": 180,
+      "typ": 200,
+      "max": 220
+    },
+    "supervisor_reset_delay_ms": {
+      "min": 12,
+      "typ": 20,
+      "max": 28
+    }
+  },
+  "evidence": {
+    "passed_scenarios": 14,
+    "failed_scenarios": 0,
+    "checked_topology_endpoints": 51,
+    "checked_nets": 4
+  },
+  "claims": {
+    "automatic_restart_allowed": false,
+    "fresh_qualified_kill_to_run_required": true,
+    "c5_and_rf_rp_direct_fault_reset": true,
+    "s3_fault_ui_reset_independent": true,
+    "target_implementation_or_execution_proven": false,
+    "order_authorized": false
+  }
+}

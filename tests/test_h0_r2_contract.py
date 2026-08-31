@@ -86,9 +86,9 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertIn("CC1101", domains["rf_rp"])
         self.assertNotIn("video", self.actual["interboard"])
         self.assertEqual(9, len(self.actual["interboard"]["released_legacy_nets"]))
-        self.assertEqual(11, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
+        self.assertEqual(10, self.actual["interboard"]["current_budget"]["no_connect_reserve"])
         self.assertEqual(80, len(self.actual["interboard"]["pin_map"]))
-        self.assertIn("eleven true NC reserve contacts", self.actual["interboard"]["result"])
+        self.assertIn("ten true NC reserve contacts", self.actual["interboard"]["result"])
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
