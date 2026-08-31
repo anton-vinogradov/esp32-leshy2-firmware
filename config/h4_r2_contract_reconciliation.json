@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "artifact": "FW-H4-R2-contract-reconciliation-import",
+  "status": "reviewed_hardware_contract_imported",
+  "hardware_markers": [
+    "H4-R2.0.2",
+    "H4-R2.1"
+  ],
+  "current_hardware_substep": "H4-R2.2",
+  "sources": {
+    "reconciliation": {
+      "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-contract-reconciliation.json",
+      "sha256": "acabed7190267c22571e314e2b05ebaa69cc892acb032fa80640706a7b9cf2dc"
+    },
+    "joined_crosscheck": {
+      "path": "../esp32-leshy2/hardware/verification/generated/H4-R2-joined-crosscheck.json",
+      "sha256": "89836ba2b022e150cc0710d0e564711c0d4263f9f2269e30b772c08932893a2e"
+    }
+  },
+  "reviewed_boundary": {
+    "domains": 6,
+    "hardware_pin_rows": 173,
+    "generated_bsp_pin_rows": 135,
+    "missing_generated_bsp_rows": 38,
+    "correction_domains": [
+      "c5",
+      "pack",
+      "safety"
+    ],
+    "unowned_contradictions": 0,
+    "retained_firmware_obligations": 1,
+    "physical_residuals_carried": 51
+  },
+  "claims": {
+    "hardware_firmware_contract_reconciliation_reviewed": true,
+    "generated_bsp_complete": false,
+    "joined_h4_complete": false,
+    "i8080_target_implementation_proven": false,
+    "physical_residuals_complete": false,
+    "purchase_layout_or_fabrication_authorized": false
+  },
+  "next": {
+    "marker": "H4-R2.2",
+    "action": "regenerate complete exact C5, Pack and Safety BSP maps and target guards"
+  }
+}

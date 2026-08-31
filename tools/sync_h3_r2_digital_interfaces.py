@@ -52,7 +52,7 @@ def build() -> dict:
         "artifact": "FW-H3-R2.4-digital-interface-import",
         "status": "reviewed_hardware_contract_imported",
         "hardware_marker": source["marker"],
-        "current_hardware_substep": "H4-R2.0.2",
+        "current_hardware_substep": "H4-R2.2",
         "source": {
             "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
             "sha256": sha256(SOURCE),

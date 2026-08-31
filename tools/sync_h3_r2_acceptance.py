@@ -54,7 +54,7 @@ def build() -> dict:
         "artifact": "FW-H3-R2.7-acceptance-import",
         "status": "reviewed_hardware_phase_imported",
         "hardware_marker": "H3-R2.7",
-        "current_hardware_substep": "H4-R2.0.2",
+        "current_hardware_substep": "H4-R2.2",
         "sources": {
             "acceptance": {"path": "../esp32-leshy2/hardware/verification/generated/H3-R2-acceptance-package.json", "sha256": sha256(ACCEPTANCE)},
             "crosscheck": {"path": "../esp32-leshy2/hardware/verification/generated/H3-R2-crosscheck.json", "sha256": sha256(CROSSCHECK)},

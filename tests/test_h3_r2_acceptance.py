@@ -28,7 +28,7 @@ class H3R2AcceptanceContractTests(unittest.TestCase):
         self.assertGreater(boundary["recorded_source_hashes_checked"], 50)
         self.assertEqual(0, boundary["hash_mismatches"])
         self.assertEqual(51, boundary["physical_residuals"])
-        self.assertEqual("H4-R2.0.2", self.contract["current_hardware_substep"])
+        self.assertEqual("H4-R2.2", self.contract["current_hardware_substep"])
 
     def test_firmware_obligation_remains_open(self):
         self.assertEqual("F5/F6", self.contract["firmware_obligations"][0]["owner"])
