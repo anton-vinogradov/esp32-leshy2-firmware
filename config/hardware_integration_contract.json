@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "02e3ecd75744930a39b97a0987a4e6a310155301add3606681e0da9b5a001cd8",
+    "hardware_contract_sha256": "640bff8bff729ee114f591b6ed30b16252a517a5790f37ec2b091ab30ff217a3",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1558,7 +1558,7 @@
       },
       "physical_h1": {
         "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-        "sha256": "219cdebfe3336b744056d019dc1ed57515fd574b2b545c083867e04155f3c1d8"
+        "sha256": "deb1e0629342daeb9fc0624bf5c9780d6bc08665193b2b3c92d1bf9d2c2c1257"
       },
       "r2_authority_gate": {
         "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
@@ -1570,19 +1570,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "6b459e2e695cead85cba8f65fe2ee02120f0f8165b01e829f433fd6cb5cb2a5a"
+        "sha256": "e58f530b63be6f207fa92abbf29cc046e55e35cd2582bd3cafba1161ce41a189"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "745e1bf7438e7dc2348d03e59473a135a2c31fced3d031e1a24acdc84ce998a4"
+        "sha256": "b14648597c68c7f566725dc5ec4f008d42e720b8c5b80271c7653976dc8c4ab2"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "69aefceff339dd39916640b4d72bce2b2e217827997922b338aa21c8bf3c76a9"
+        "sha256": "9d38329370fd786b617e44ce2b75d07ffd11bc4c4497ac80815242fb9a4affaa"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "c1efe901f1ffdf90d6c7c4f67c76495f205fd762526972cd7355076d6000958a"
+        "sha256": "36d57f13fd4dd3bd30649779fb93bc29413226996fb2bebf8cd7f4c7b588ebc9"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4571,12 +4571,12 @@
             },
             {
               "id": "UI_10_S3_DISPLAY_TOUCH",
-              "role": "S3 core, exact direct i8080-8 display, touch and S3 service",
+              "role": "S3 core, exact direct i8080-8 display through the UI-board ZIF, touch and S3 service",
               "domain_owner": "s3",
               "sources": [
                 "functional",
                 "pin_map",
-                "display_adapter"
+                "display_mount"
               ]
             },
             {
@@ -4766,29 +4766,14 @@
               ]
             }
           ]
-        },
-        {
-          "id": "L2-DISP-ADP-001-B",
-          "board": "replaceable passive 40-to-50 display adapter",
-          "root": "ADP_00_DISPLAY_ADAPTER",
-          "sheets": [
-            {
-              "id": "ADP_00_DISPLAY_ADAPTER",
-              "role": "exact passive DF40-to-FH34 one-to-one/strap map; no active device",
-              "sources": [
-                "display_adapter",
-                "physical"
-              ]
-            }
-          ]
         }
       ],
       "summary": {
-        "project_count": 3,
-        "sheet_count": 23,
+        "project_count": 2,
+        "sheet_count": 22,
         "domain_count": 6,
-        "component_group_count": 240,
-        "component_quantity_per_product": 1195,
+        "component_group_count": 238,
+        "component_quantity_per_product": 1193,
         "external_antenna_group_count": 8,
         "external_antenna_count": 12,
         "unresolved_pre_ecad_prerequisites": 0,
@@ -4822,16 +4807,16 @@
       "marker": "H2-R2.1.2",
       "status": "pass",
       "summary": {
-        "component_group_count": 240,
-        "board_component_group_count": 234,
+        "component_group_count": 238,
+        "board_component_group_count": 232,
         "explicit_non_pcba_group_count": 6,
-        "symbol_identity_count": 234,
-        "footprint_identity_count": 234,
-        "logical_contact_count": 1658,
-        "historical_package_hints_reconciled": 196,
+        "symbol_identity_count": 232,
+        "footprint_identity_count": 232,
+        "logical_contact_count": 1578,
+        "historical_package_hints_reconciled": 194,
         "historical_package_conflicts_resolved": 5,
         "explicit_current_footprint_overrides": 38,
-        "standard_kicad_footprint_identities": 199,
+        "standard_kicad_footprint_identities": 197,
         "reconciled_local_footprint_definitions": 32,
         "new_exact_footprint_geometries_pending_materialization": 3,
         "schematic_symbols_or_footprint_files_created": 0,
@@ -4858,10 +4843,10 @@
           "sheet_count": 9,
           "populated_sheet_count": 7,
           "instance_count": 428,
-          "physical_symbol_pin_count": 1588,
+          "physical_symbol_pin_count": 1598,
           "external_module_interface_count": 5,
-          "canonical_net_count": 327,
-          "cross_sheet_net_count": 111
+          "canonical_net_count": 329,
+          "cross_sheet_net_count": 103
         },
         {
           "id": "LESHY2-RF-R2",
@@ -4873,30 +4858,19 @@
           "external_module_interface_count": 0,
           "canonical_net_count": 522,
           "cross_sheet_net_count": 127
-        },
-        {
-          "id": "L2-DISP-ADP-001-B",
-          "root": "ADP_00_DISPLAY_ADAPTER",
-          "sheet_count": 1,
-          "populated_sheet_count": 1,
-          "instance_count": 2,
-          "physical_symbol_pin_count": 90,
-          "external_module_interface_count": 0,
-          "canonical_net_count": 27,
-          "cross_sheet_net_count": 0
         }
       ],
       "summary": {
-        "project_count": 3,
-        "project_graph_sheet_count": 23,
-        "populated_sheet_count": 19,
-        "fitted_symbol_instance_count": 1185,
-        "physical_symbol_pin_count": 4323,
-        "connected_physical_pin_count": 4067,
-        "explicit_no_connect_physical_pin_count": 256,
+        "project_count": 2,
+        "project_graph_sheet_count": 22,
+        "populated_sheet_count": 18,
+        "fitted_symbol_instance_count": 1183,
+        "physical_symbol_pin_count": 4243,
+        "connected_physical_pin_count": 4006,
+        "explicit_no_connect_physical_pin_count": 237,
         "external_module_interface_annotation_count": 5,
-        "canonical_net_count": 823,
-        "generated_file_count": 32,
+        "canonical_net_count": 816,
+        "generated_file_count": 28,
         "pcb_file_count": 0
       },
       "authorization": {
@@ -4916,11 +4890,11 @@
         "exact_pin_rows": 147,
         "conditioned_boundary_rows": 14,
         "explicit_reserve_no_connect_rows": 12,
-        "cross_project_net_count": 52,
-        "cross_sheet_net_count": 238,
+        "cross_project_net_count": 35,
+        "cross_sheet_net_count": 230,
         "errors": 0
       },
-      "source_sha256": "c1efe901f1ffdf90d6c7c4f67c76495f205fd762526972cd7355076d6000958a",
+      "source_sha256": "36d57f13fd4dd3bd30649779fb93bc29413226996fb2bebf8cd7f4c7b588ebc9",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
@@ -5338,7 +5312,7 @@
     },
     "pre_h2_gates": [],
     "physical_h1": {
-      "marker": "H1-R2.37",
+      "marker": "H1-R2.38",
       "pin_authority_marker": "H1-R2.31",
       "status": "reviewed",
       "current_h1_blockers": [],

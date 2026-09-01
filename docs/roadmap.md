@@ -4,8 +4,8 @@
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
-> remains regression evidence, not the current topology. Hardware H1-R2.37 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) is reviewed: 20 current artifacts and 129 recorded source hashes cross-check with zero mismatch or open analytical finding, while 51 physical-only rows remain owned by H5/H6/H8. Exact firmware-facing sequence, handover, watchdog/fault-display, digital-interface, RF/coexistence, thermal/fault and [H3 acceptance](../config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The current hardware point is H5.0.3-R1. H2-R2.1.1 reviewed three native projects, 23 sheets, six domain owners, 240 exact MPN groups and 1,195 product positions, and H2-R2.1.2 reviewed 234 board groups, six explicit non-PCBA groups and 1,658 logical contacts. The earlier live FSUSB42MUX/C11355 route, exact service-VBUS detector/latch/release path and TCA9803DGKR/C2687966 Pack/Safety boundary are also reviewed. Its exact imported pin/config authority remains the reviewed
+> remains regression evidence, not the current topology. Hardware H1-R2.38 was
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) and [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) are reviewed with zero open analytical contradiction; 51 physical-only rows remain owned downstream. The current hardware point is H5.0.3-R1. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 238 exact MPN groups and 1,193 product positions; H2-R2.1.2 reviewed 232 board groups, six explicit non-PCBA groups and 1,578 logical contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
 > 3.046-A worst electrical corner / 3.2-A admission boundary on 3V3_MAIN, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
@@ -16,11 +16,11 @@
 > `FAULT_KILL` to the front indicator and M1-36 carries the independent S3
 > fault-UI reset. Current exterior,
 > turned-over inner faces and service views are generated. H2-R2.1.3 materialized
-> 1,185 fitted positions and 4,323 physical pins across the three native KiCad
-> projects. All 4,319 logical contacts reconcile to 4,063 connected endpoints,
-> 256 explicit no-connects and 823 canonical nets; all three projects pass KiCad
+> 1,183 fitted positions and 4,243 physical pins across the two native KiCad
+> projects. All 4,239 ledger endpoints reconcile to 4,002 connected endpoints,
+> 237 explicit no-connects and 816 canonical nets; both projects pass KiCad
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
-> 173 controller pins, 52 cross-project nets and 238 cross-sheet nets; the
+> 173 controller pins, 35 cross-project nets and 230 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Placement/routing has not
 > started and ordering remains unauthorized.
 

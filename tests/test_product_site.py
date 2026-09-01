@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.5",
-                "H1-R2.37", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.38", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.5",
-                "H1-R2.37", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.38", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():
@@ -111,14 +111,14 @@ class ProductSiteTests(unittest.TestCase):
         pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
         for name in pages:
             page = self.read(name)
-            self.assertIn("H1-R2.37", page, name)
+            self.assertIn("H1-R2.38", page, name)
             self.assertIn("H1-R2.31", page, name)
             self.assertNotIn("four explicit H1", page, name)
             self.assertNotIn("четыре явных", page, name)
 
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         boundary = state["hardware_boundary"]
-        self.assertEqual("H1-R2.37", boundary["physical_design_marker"])
+        self.assertEqual("H1-R2.38", boundary["physical_design_marker"])
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
         self.assertEqual("reviewed", boundary["physical_h1_status"])
         self.assertEqual("H5", boundary["current_hardware_stage"])
@@ -1043,11 +1043,11 @@ class ProductSiteTests(unittest.TestCase):
             reconciliation["domain_ids"],
         )
         self.assertEqual([], reconciliation["pre_h2_gates"])
-        self.assertEqual(1185, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(823, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(1183, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(816, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, reconciliation["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
-        self.assertEqual(52, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
-        self.assertEqual(238, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
+        self.assertEqual(35, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
+        self.assertEqual(230, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
         self.assertEqual(0, reconciliation["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(80, len(reconciliation["interboard"]["pin_map"]))
 

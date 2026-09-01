@@ -223,8 +223,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         h0.get("current_hardware_substep") != "H2-R2.1.5"
         or native_inventory.get("marker") != "H2-R2.1.1"
         or native_inventory.get("status") != "pass"
-        or native_inventory.get("summary", {}).get("component_group_count") != 240
-        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1195
+        or native_inventory.get("summary", {}).get("component_group_count") != 238
+        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1193
         or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
         or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
     ):
@@ -232,9 +232,9 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         exact_ledger.get("marker") != "H2-R2.1.2"
         or exact_ledger.get("status") != "pass"
-        or exact_ledger.get("summary", {}).get("board_component_group_count") != 234
+        or exact_ledger.get("summary", {}).get("board_component_group_count") != 232
         or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 6
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1658
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1578
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
@@ -246,9 +246,9 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         native_kicad.get("marker") != "H2-R2.1.3"
         or native_kicad.get("status") != "pass"
-        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1185
-        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4323
-        or native_kicad.get("summary", {}).get("canonical_net_count") != 823
+        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1183
+        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4243
+        or native_kicad.get("summary", {}).get("canonical_net_count") != 816
         or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
     ):
         errors.append("current authority lost the reviewed H2-R2.1.3 native KiCad result")
@@ -257,8 +257,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or h2_hwfw.get("status") != "pass"
         or h2_hwfw.get("summary", {}).get("domain_count") != 6
         or h2_hwfw.get("summary", {}).get("controller_pin_rows") != 173
-        or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 52
-        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 238
+        or h2_hwfw.get("summary", {}).get("cross_project_net_count") != 35
+        or h2_hwfw.get("summary", {}).get("cross_sheet_net_count") != 230
     ):
         errors.append("current authority lost the reviewed H2-R2.1.4 HW/FW reconciliation")
     hardware_sources = h0.get("hardware_sources", {})
@@ -268,8 +268,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     physical_h1 = h0.get("physical_h1", {})
     if physical_h1.get("pin_authority_marker") != h0.get("hardware_marker"):
         errors.append("physical H1 lost its exact pin-authority marker")
-    if physical_h1.get("marker") != "H1-R2.37":
-        errors.append("physical H1 projection is not the current H1-R2.37 design")
+    if physical_h1.get("marker") != "H1-R2.38":
+        errors.append("physical H1 projection is not the current H1-R2.38 design")
     if "pre_r2_h2_gates" not in physical_h1:
         errors.append("physical H1 projection lost its pre-R2/H2 factory gates")
 

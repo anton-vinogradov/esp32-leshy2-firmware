@@ -42,7 +42,7 @@ Button edges terminate on the S3-local
 `TCA9539PWR`; encoder A/B remain direct PCNT inputs. The first visible response
 target remains 20 ms under qualified concurrent load.
 
-The H1-R2.37 physical orientation points the display flex toward the antenna edge;
+The H1-R2.38 physical orientation points the display flex toward the antenna edge and into the direct UI-board ZIF;
 the S3 display/touch driver therefore applies one 180-degree transform to both
 ILI9488 memory addressing and FT6236 touch coordinates. Normal display traffic
 uses i8080-8; ordinary 4-wire serial is a recovery strap, not QSPI.

@@ -92,7 +92,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
 
     def test_current_sources_are_hash_bound_and_pre_h2(self):
         self.assertEqual("H1-R2.31", self.actual["hardware_marker"])
-        self.assertEqual("H1-R2.37", self.actual["physical_h1"]["marker"])
+        self.assertEqual("H1-R2.38", self.actual["physical_h1"]["marker"])
         self.assertEqual(
             self.actual["hardware_marker"],
             self.actual["physical_h1"]["pin_authority_marker"],
@@ -109,25 +109,25 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("H2-R2.1.5", self.actual["current_hardware_substep"])
         inventory = self.actual["native_r2_inventory"]
         self.assertEqual("H2-R2.1.1", inventory["marker"])
-        self.assertEqual(3, inventory["summary"]["project_count"])
-        self.assertEqual(23, inventory["summary"]["sheet_count"])
-        self.assertEqual(240, inventory["summary"]["component_group_count"])
+        self.assertEqual(2, inventory["summary"]["project_count"])
+        self.assertEqual(22, inventory["summary"]["sheet_count"])
+        self.assertEqual(238, inventory["summary"]["component_group_count"])
         self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
         self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
         self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
         ledger = self.actual["exact_component_ledger"]
         self.assertEqual("H2-R2.1.2", ledger["marker"])
-        self.assertEqual(234, ledger["summary"]["board_component_group_count"])
+        self.assertEqual(232, ledger["summary"]["board_component_group_count"])
         self.assertEqual(6, ledger["summary"]["explicit_non_pcba_group_count"])
-        self.assertEqual(1658, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(1578, ledger["summary"]["logical_contact_count"])
         self.assertEqual(0, ledger["summary"]["unresolved_groups"])
         self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
         self.assertFalse(ledger["authorization"]["schematic_nets"])
         self.assertTrue(self.actual["claims"]["exact_component_ledger_imported"])
         self.assertTrue(self.actual["claims"]["native_kicad_imported"])
         self.assertTrue(self.actual["claims"]["h2_hwfw_reconciliation_imported"])
-        self.assertEqual(1185, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(823, self.actual["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(1183, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(816, self.actual["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(0, self.actual["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(
