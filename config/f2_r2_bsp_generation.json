@@ -5,7 +5,7 @@
   "reviewed_on": "2026-09-01",
   "source": {
     "path": "config/h0_r2_hardware_contract.json",
-    "sha256": "484b76b1a8067f362e656f88c94aeae1740fd44e01e272688db76ec84b31f0a9",
+    "sha256": "8217f8d9be23ca05c79cfdbc9a9cc16b5f9c08cd5ff8deba307b74a568c80fe5",
     "hardware_marker": "H2-R2.1.5"
   },
   "domains": [

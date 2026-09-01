@@ -6,7 +6,7 @@
   "current_hardware_substep": "H4-R2.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-rf-coexistence.json",
-    "sha256": "2a1d6f935eee404a2dcf1df93bbacd0abc2df56b9f9bc6d6b7208f329fbb74b4"
+    "sha256": "d44477f8aad2982bbae0a80a48d2c5fadbb36b92aa70754888d2e180718f038c"
   },
   "port_topology": {
     "front": [

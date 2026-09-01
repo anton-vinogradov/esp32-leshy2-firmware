@@ -7,7 +7,7 @@
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "95b9536cfeb8404b4ed74c1dd2bd5825f16a640c6c242765c1ff244c4f7ca891"
+      "sha256": "833970eca629e1ab9a6079d9f2a3d7078103a897195f1458479a95726b17fffc"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -15,7 +15,7 @@
     },
     "dual_rp_pinout": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-      "sha256": "45d7b02e86a626c5be841fef4d249fd304e98ce1715776e79d073ca9bc144753"
+      "sha256": "2805b468a903179e5450a097aec5e88f9d6d153f10cca41c2f7f73048a17069d"
     },
     "u219_cap_profile": {
       "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -35,19 +35,19 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "e58f530b63be6f207fa92abbf29cc046e55e35cd2582bd3cafba1161ce41a189"
+      "sha256": "d0e9edfb67fdc83d07c4e03005f5d8ec38d4aa513cbb1f962599e0c7baf8a90a"
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "b14648597c68c7f566725dc5ec4f008d42e720b8c5b80271c7653976dc8c4ab2"
+      "sha256": "6bdbd40b6a2bf9d86e7e812c954a806710b2fe8be4eead592a92a1436829da4a"
     },
     "native_kicad": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-      "sha256": "9d38329370fd786b617e44ce2b75d07ffd11bc4c4497ac80815242fb9a4affaa"
+      "sha256": "68ae91b18b3f65ce58ab9de41e38c7f72fe3311df560924eefee30793bbe66be"
     },
     "h2_hwfw_reconciliation": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-      "sha256": "36d57f13fd4dd3bd30649779fb93bc29413226996fb2bebf8cd7f4c7b588ebc9"
+      "sha256": "0225052142778b7f84144f9692d1ed4cc32fe845208624591cfe00f84f57804b"
     },
     "h2_interboard_m1": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -55,7 +55,7 @@
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "95b9536cfeb8404b4ed74c1dd2bd5825f16a640c6c242765c1ff244c4f7ca891",
+  "hardware_source_sha256": "833970eca629e1ab9a6079d9f2a3d7078103a897195f1458479a95726b17fffc",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -1697,7 +1697,7 @@
       "net": "LCD_RST_N",
       "peripheral": "GPIO",
       "direction": "out",
-      "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
+      "gate": "direct ILI9488 panel reset through the 50-contact UI-PCB ZIF; reset-time pull-down keeps the panel disabled"
     },
     {
       "gpio": 6,
@@ -2918,7 +2918,7 @@
       "cross_sheet_net_count": 230,
       "errors": 0
     },
-    "source_sha256": "36d57f13fd4dd3bd30649779fb93bc29413226996fb2bebf8cd7f4c7b588ebc9",
+    "source_sha256": "0225052142778b7f84144f9692d1ed4cc32fe845208624591cfe00f84f57804b",
     "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
   },
   "hub_gpio_budget": {
@@ -3295,7 +3295,7 @@
       "net": "LCD_TE",
       "peripheral": "GPIO_IRQ",
       "direction": "in",
-      "endpoint": "HMX035CTFT-001 TE",
+      "endpoint": "ER-TFT035IPS-6 ILI9488 TE",
       "gate": "input; external pull-down while panel reset is asserted"
     },
     {

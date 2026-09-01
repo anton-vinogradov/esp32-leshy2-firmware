@@ -6,7 +6,7 @@
   "inputs": {
     "f0_review": {
       "path": "config/f0_r2_review.json",
-      "sha256": "535cbc5b01da1133680684063173606bda876aa6271d1677578bee7ab2d61747"
+      "sha256": "74352e9663e6b5875367ac667bbe859eb053148565541e8bdf54af112199ee92"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
