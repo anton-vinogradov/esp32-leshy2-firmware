@@ -9,7 +9,9 @@
 > [Глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md), [глобальный итог H4-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md) и [актуальный итог маршрутов H5-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.ru.md) проведены ревью; H5 контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. Текущая аппаратная точка — H6.0.1-R1. H2-R2.1.1 провёл ревью двух native-проектов, 22 sheets, шести владельцев доменов, 251 точной component-group и 1 218 позиций. Точной импортированной pin/config
 > authority остаётся прошедший ревью артефакт H1-R2.31. [Текущее размещение точных footprints H6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.ru.md)
 > материализует две нативные шестислойные платы и размещает все 1 208 экземпляров
-> без жёстких коллизий; трассировка и фиксация корпуса остаются открытыми. Locality-first
+> без жёстких коллизий. [Точный механический стек H6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.ru.md)
+> фиксирует 20-мм нейлоновый крепёж M2.5, захваченные гайки, 11-мм упоры и
+> независимые захваты PCB без нагрузки на M1; до трассировки остаются пять microcoax-коридоров. Locality-first
 > размещение двух плат, фильтр Airband, худший электрический угол 3V3_MAIN 3,046 А
 > против границы допуска 3,2 А, точный дисплей и все корпуса U219 проходят текущие структурные
 > проверки. Реестр из 226 тел также содержит все восемь точных TX-детекторов,
@@ -24,7 +26,7 @@
 > проходят KiCad ERC с нулём ошибок и предупреждений. H2-R2.1.4 свёл шесть доменов,
 > 173 строки контроллеров, 35 межпроектных и 231 межлистовую net; sync gate
 > результата H2-R2.1.5 открыт. Теперь H3 фиксирует эти входы. Hardware H6
-> H6.0.1 выполняет точное размещение; трассировка не начиналась, заказ не разрешён.
+> H6.0.1 выполняет точное размещение и локальный механический крепёж; трассировка не начиналась, заказ не разрешён.
 
 Последняя сверка статуса: **3 сентября 2026 года**. Это собственный роадмап
 firmware-репозитория. Пересечения с железом указаны явно, но hardware-этапы не
@@ -41,7 +43,7 @@ firmware-репозитория. Пересечения с железом ука
 | Владение generated BSP R2 | ✅ F2-R2.3 исправлен и повторно квалифицирован: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат все 173 точные controller-строки H2 с fail-closed mapping/count guards; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | ✅ [Синхронизированный gate](../config/r2_h2_sync_gate.json): H2-R2.1.5 импортирует exact six-domain native KiCad/HW↔FW boundary, карты двух RP и все три electrical prerequisite fail-closed; сохранённый H2.0.3 остаётся только historical R1 |
 | Target builds, maps и S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) прошёл все 12 locked debug/release builds, 60 artifacts, 16 maps и 16 size gates; остаются два чистых побайтно идентичных прохода, а S3 QEMU остаётся F3-R2 |
-| Пересечение с железом | ✅ H0-R2 — актуальный итог маршрутов H5-R2 проведены ревью; H5 контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. Сейчас выполняется hardware H6.0.1-R1 placement/routing. H3-R2.4 доказывает прямой i8080-8 ровно 20 МГц, однозначное владение USB и паритет 80/80 контактов M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
+| Пересечение с железом | ✅ H0-R2 — актуальный итог маршрутов H5-R2 проведены ревью; H5 контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. В hardware H6.0.1-R1 проходят placement и точный стек разгрузки M1; до трассировки остаются пять microcoax-коридоров. H3-R2.4 доказывает прямой i8080-8 ровно 20 МГц, однозначное владение USB и паритет 80/80 контактов M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |
