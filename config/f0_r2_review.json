@@ -4,7 +4,7 @@
   "status": "reviewed",
   "closed_on": "2026-08-27",
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "833970eca629e1ab9a6079d9f2a3d7078103a897195f1458479a95726b17fffc",
+  "hardware_source_sha256": "e6f4e43ddf9c6839e233cfbb791f6f1ec4da82f1f9e49ea94ded632ca5822cdf",
   "artifacts": [
     {"stage": "F0-R2.0", "path": "config/h0_r2_hardware_contract.json", "checker": "tests/test_h0_r2_contract.py"},
     {"stage": "F0-R2.1", "path": "config/f0_r2_target_identity_contract.json", "checker": "tools/check_f0_r2_target_identities.py"},

@@ -115,8 +115,8 @@
     "source": "config/h0_r2_hardware_contract.json",
     "marker": "H1-R2.31",
     "u219_source": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
-    "u219_source_sha256": "01f01f750ceedaa9818b59968962a3484f4660057137e6ef43431a54b71c98fa",
-    "cap_profile_sha256": "3f95f4dd899be93036c452473fea1c73c543218b5a9dde4d4ef958ebb3defcca",
+    "u219_source_sha256": "ab14f5e4e9fbc2c360f44defdd45b8c16922ada108085239463aac1603cf7f2e",
+    "cap_profile_sha256": "1610373a232bed78446af7d48c9c298cf27f10aa6e25f4aeeaa5dafd713d6a20",
     "authority": "pre-H2 working hardware contract; not ECAD, target adapter or HIL closure",
     "contacts": [
       {

@@ -7,11 +7,11 @@
   "source": {
     "inrush_watchdog": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
-      "sha256": "c88211f345076ed25e4eaa73340337be12b169f9fbd5dea7a05b2ff55ae686c7"
+      "sha256": "ad7eafbc7a5dd514787287480f5bb9dbfbb2a69d15a50f76a20f5e881213d1f4"
     },
     "transition_result": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
-      "sha256": "ff459d3402a92c2b1b56ab8dcc0cccc163535302aa2117389fff1d5555f40e83"
+      "sha256": "4707c4c90130220dfab632ba96d7316362b4d60c9a331b821b056befe695b4c0"
     }
   },
   "watchdog": {
@@ -166,32 +166,32 @@
       "rail": "AON_SAFE_3V3",
       "output_net": "AON_SAFE_3V3",
       "strategy": "minimum current limit bounds a commanded fixed-slew start",
-      "pcb_capacitance_upper_uf": "42.490000",
+      "pcb_capacitance_upper_uf": "42.710000",
       "external_capacitance_upper_uf": "0.000000",
-      "capacitance_upper_uf": "42.490000",
+      "capacitance_upper_uf": "42.710000",
       "worst_load_ma": "72.100",
       "capacitive_inrush_ma": "92.900",
       "combined_current_ma": "165.000",
       "effective_hardware_min_ma": "165.000",
       "current_margin_ma": "0.000",
-      "ramp_time_ms": "1.509333",
-      "energy_mj": "0.231358",
+      "ramp_time_ms": "1.517147",
+      "energy_mj": "0.232556",
       "status": "pass"
     },
     {
       "rail": "3V3_MAIN",
       "output_net": "3V3_MAIN",
       "strategy": "fastest dV/dt corner from minimum exact control capacitance",
-      "pcb_capacitance_upper_uf": "78.890000",
+      "pcb_capacitance_upper_uf": "91.110000",
       "external_capacitance_upper_uf": "0.000000",
-      "capacitance_upper_uf": "78.890000",
+      "capacitance_upper_uf": "91.110000",
       "worst_load_ma": "3046.000",
-      "capacitive_inrush_ma": "61.545",
-      "combined_current_ma": "3107.545",
+      "capacitive_inrush_ma": "71.079",
+      "combined_current_ma": "3117.079",
       "effective_hardware_min_ma": "4000.000",
-      "current_margin_ma": "892.455",
+      "current_margin_ma": "882.921",
       "ramp_time_ms": "4.230000",
-      "energy_mj": "0.429556",
+      "energy_mj": "0.496094",
       "status": "pass"
     },
     {

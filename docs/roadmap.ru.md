@@ -6,7 +6,7 @@
 > **▶️ Текущая граница: F2-R2.5 — квалификация воспроизводимости.**
 > Работа F0–F4 R1 сохранена как regression evidence, а не текущая топология.
 > Физическое H1-R2.38 принято и прошло ревью; H2 проведено ревью как H2-R2.1.5,
-> [Глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md), [глобальный итог H4-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md) и [глобальный итог H5-R1](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r1-acceptance.ru.md) проведены ревью; H5 контролирует все 210 component/factory routes без замен. Текущая аппаратная точка — H6.0.1-R1. H2-R2.1.1 провёл ревью двух native-проектов, 22 sheets, шести владельцев доменов, 238 точных MPN-групп и 1 193 позиций. Точной импортированной pin/config
+> [Глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md), [глобальный итог H4-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md) и [актуальный итог маршрутов H5-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.ru.md) проведены ревью; H5 контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. Текущая аппаратная точка — H6.0.1-R1. H2-R2.1.1 провёл ревью двух native-проектов, 22 sheets, шести владельцев доменов, 251 точной component-group и 1 218 позиций. Точной импортированной pin/config
 > authority остаётся прошедший ревью артефакт H1-R2.31. Locality-first
 > размещение двух плат, фильтр Airband, худший электрический угол 3V3_MAIN 3,046 А
 > против границы допуска 3,2 А, точный дисплей и все корпуса U219 проходят текущие структурные
@@ -16,11 +16,11 @@
 > модуля удалены; 6 GPIO S3, 5 GPIO заднего RP и 9 контактов M1 остаются
 > резервами. M1-35 переносит latched `FAULT_KILL` к лицевому индикатору, а
 > M1-36 — отдельный reset S3 fault-UI. Внешние, прямые внутренние после переворота плат и сервисные виды
-> сгенерированы. H2-R2.1.3 материализовал 1 183 устанавливаемых позиций
-> и 4 243 физических pins в двух native-проектах KiCad. Все 4 239 ledger-endpoints сведены в
-> 4 002 подключённых endpoints, 237 явных no-connects и 816 канонических nets; оба проекта
+> сгенерированы. H2-R2.1.3 материализовал 1 208 устанавливаемых позиций
+> и 4 306 физических pins в двух native-проектах KiCad. Все 4 302 ledger-endpoints сведены в
+> 4 064 подключённых endpoints, 238 явных no-connects и 823 канонические nets; оба проекта
 > проходят KiCad ERC с нулём ошибок и предупреждений. H2-R2.1.4 свёл шесть доменов,
-> 173 строки контроллеров, 35 межпроектных и 230 межлистовых nets; sync gate
+> 173 строки контроллеров, 35 межпроектных и 231 межлистовую net; sync gate
 > результата H2-R2.1.5 открыт. Теперь H3 фиксирует эти входы. Hardware H6
 > placement/routing выполняются; заказ не разрешён.
 
@@ -39,7 +39,7 @@ firmware-репозитория. Пересечения с железом ука
 | Владение generated BSP R2 | ✅ F2-R2.3 исправлен и повторно квалифицирован: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат все 173 точные controller-строки H2 с fail-closed mapping/count guards; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | ✅ [Синхронизированный gate](../config/r2_h2_sync_gate.json): H2-R2.1.5 импортирует exact six-domain native KiCad/HW↔FW boundary, карты двух RP и все три electrical prerequisite fail-closed; сохранённый H2.0.3 остаётся только historical R1 |
 | Target builds, maps и S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) прошёл все 12 locked debug/release builds, 60 artifacts, 16 maps и 16 size gates; остаются два чистых побайтно идентичных прохода, а S3 QEMU остаётся F3-R2 |
-| Пересечение с железом | ✅ H0-R2 — глобальный H5-R1 проведены ревью; H5 контролирует все 210 component/factory routes и 1 050 установок без замен. Сейчас выполняется hardware H6.0.1-R1 placement/routing. H3-R2.4 доказывает прямой i8080-8 ровно 20 МГц, однозначное владение USB и паритет 80/80 контактов M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
+| Пересечение с железом | ✅ H0-R2 — актуальный итог маршрутов H5-R2 проведены ревью; H5 контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. Сейчас выполняется hardware H6.0.1-R1 placement/routing. H3-R2.4 доказывает прямой i8080-8 ровно 20 МГц, однозначное владение USB и паритет 80/80 контактов M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
 | Полный подписанный all-in-one update | ⏳ Portable rollback-модель есть; target boot/flash/signature integration отсутствует |

@@ -103,8 +103,8 @@ cases with zero analytical failures or automatic restarts. Its exact firmware-fa
 [sequence](config/h3_r2_transition_contract.json) and
 [handover](config/h3_r2_handover_contract.json) and
 [watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
-are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md), [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md), [H3-R2.5 RF result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.md), [H3-R2.6 thermal/fault result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.md) and the [global H3-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) are reviewed. The exact [RF/coexistence](config/h3_r2_rf_coexistence.json), [thermal/fault](config/h3_r2_thermal_fault.json) and [H3 acceptance](config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The [global H5-R1 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r1-acceptance.md) reviews 210/210 controlled component/factory routes with zero substitutions. The current hardware point is `H6.0.1-R1`.
-H3-R2.1.2 reviewed explicit binding for 611 fitted powered instances—595 direct
+are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md), [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md), [H3-R2.5 RF result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.md), [H3-R2.6 thermal/fault result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.md) and the [global H3-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) are reviewed. The exact [RF/coexistence](config/h3_r2_rf_coexistence.json), [thermal/fault](config/h3_r2_thermal_fault.json) and [H3 acceptance](config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. The current hardware point is `H6.0.1-R1`.
+H3-R2.1.2 reviewed explicit binding for 623 fitted powered instances—607 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
 24.706 °C minimum junction-temperature reserve. H3-R2.1.4 reviews all 75
@@ -145,14 +145,14 @@ mockup passes its structural audit and was accepted on 2026-08-30. Hardware
 reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed two native projects, 22 sheets,
-six domain owners, 238 exact MPN groups and 1,193 product positions.
-`H2-R2.1.2` reviewed exact identities for 232 board groups, six explicit
-non-PCBA groups and 1,578 logical contacts. `H2-R2.1.3` materialized 1,183
-fitted positions and 4,243 physical pins in the two native KiCad projects.
-All 4,239 ledger endpoints reconcile into 4,002 connected endpoints, 237
-explicit no-connects and 816 canonical nets; both projects pass KiCad ERC
+six domain owners, 251 exact component groups and 1,218 product positions.
+`H2-R2.1.2` reviewed exact identities for 245 board groups, six explicit
+non-PCBA groups and 1,617 logical contacts. `H2-R2.1.3` materialized 1,208
+fitted positions and 4,306 physical pins in the two native KiCad projects.
+All 4,302 ledger endpoints reconcile into 4,064 connected endpoints, 238
+explicit no-connects and 823 canonical nets; both projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
-173 controller pins, 35 cross-project nets and 230 cross-sheet nets; the
+173 controller pins, 35 cross-project nets and 231 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
 inputs. Placement/routing has not started,
 and R2 byte reproducibility
