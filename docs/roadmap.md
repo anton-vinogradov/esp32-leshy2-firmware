@@ -6,7 +6,9 @@
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware H1-R2.38 was
 > accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. The current hardware point is H6.0.1-R1. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,617 logical contacts. Its exact imported pin/config authority remains the reviewed
-> H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
+> H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
+> materializes two native six-layer boards and places all 1,208 fitted instances
+> with zero hard conflict; routing and enclosure retention remain open. The locality-first two-board placement, Airband filter,
 > 3.046-A worst electrical corner / 3.2-A admission boundary on 3V3_MAIN, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
 > contains all eight exact TX detectors, five couplers and eight bounded local
@@ -22,9 +24,9 @@
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 35 cross-project nets and 231 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
-> H6 placement/routing is current; ordering remains unauthorized.
+> H6.0.1 exact placement is current; routing has not started and ordering remains unauthorized.
 
-Status last reconciled: **2 September 2026**. This is the firmware repository's
+Status last reconciled: **3 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
