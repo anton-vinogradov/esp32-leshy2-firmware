@@ -5,7 +5,7 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware H1-R2.38 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) and [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) are reviewed with zero open analytical contradiction; 51 physical-only rows remain owned downstream. The current hardware point is H5.0.3-R1. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 238 exact MPN groups and 1,193 product positions; H2-R2.1.2 reviewed 232 board groups, six explicit non-PCBA groups and 1,578 logical contacts. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [global H5-R1 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r1-acceptance.md) are reviewed; H5 controls all 210 component/factory routes with zero substitution. The current hardware point is H6.0.1-R1. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 238 exact MPN groups and 1,193 product positions; H2-R2.1.2 reviewed 232 board groups, six explicit non-PCBA groups and 1,578 logical contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The locality-first two-board placement, Airband filter,
 > 3.046-A worst electrical corner / 3.2-A admission boundary on 3V3_MAIN, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
@@ -21,10 +21,10 @@
 > 237 explicit no-connects and 816 canonical nets; both projects pass KiCad
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 35 cross-project nets and 230 cross-sheet nets; the
-> reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Placement/routing has not
-> started and ordering remains unauthorized.
+> reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
+> H6 placement/routing is current; ordering remains unauthorized.
 
-Status last reconciled: **1 September 2026**. This is the firmware repository's
+Status last reconciled: **2 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -39,7 +39,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 corrected and requalified: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain all 173 exact H2 controller rows with fail-closed mapping/count guards, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ✅ H0-R2 through global H4-R2 are reviewed; the BSP covers 173/173 H2 controller rows, all 12 target builds pass and no cross-domain contradiction remains. Hardware H5.0.3-R1 is current. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
+| Hardware intersection | ✅ H0-R2 through global H5-R1 are reviewed; H5 controls all 210 component/factory routes and 1,050 placements with zero substitution. Hardware H6.0.1-R1 placement/routing is current. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
