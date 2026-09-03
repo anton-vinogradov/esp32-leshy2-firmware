@@ -156,9 +156,9 @@ six domain owners, 251 exact component groups and 1,218 product positions.
 non-PCBA groups and 1,617 logical contacts. `H2-R2.1.3` materialized 1,208
 fitted positions and 4,306 physical pins in the two native KiCad projects.
 All 4,302 ledger endpoints reconcile into 4,064 connected endpoints, 238
-explicit no-connects and 823 canonical nets; both projects pass KiCad ERC
+explicit no-connects and 789 global canonical / 823 board-local nets; both projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
-173 controller pins, 35 cross-project nets and 231 cross-sheet nets; the
+173 controller pins, 34 cross-project nets and 228 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
 inputs. Placement/routing has not started,
 and R2 byte reproducibility

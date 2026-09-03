@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "f177e3335bcd6b5957ddf16b17d5b24657fab0ed3fa45b834b17912335412c82",
+    "hardware_contract_sha256": "1c6e98619644bd2edfbdfd6a958ada200ddc6a2ae7378ac77be350a0d3b32dc5",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1578,11 +1578,11 @@
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "647c7a013efa038294412b9b51d5a81fe6bf9de053d2f0392f049a161e22dd34"
+        "sha256": "ae424ca8bd6bd2ce294e7d55e286a5ab7af2a5376bddda3653e61db8f7a2fa67"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "e86983261b6cb7ba3754d59ce6324b550ff9f276f5ac2f747307cc9b9e072d37"
+        "sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4845,8 +4845,8 @@
           "instance_count": 428,
           "physical_symbol_pin_count": 1598,
           "external_module_interface_count": 5,
-          "canonical_net_count": 325,
-          "cross_sheet_net_count": 103
+          "canonical_net_count": 307,
+          "cross_sheet_net_count": 101
         },
         {
           "id": "LESHY2-RF-R2",
@@ -4856,8 +4856,8 @@
           "instance_count": 780,
           "physical_symbol_pin_count": 2708,
           "external_module_interface_count": 0,
-          "canonical_net_count": 533,
-          "cross_sheet_net_count": 128
+          "canonical_net_count": 516,
+          "cross_sheet_net_count": 127
         }
       ],
       "summary": {
@@ -4869,7 +4869,7 @@
         "connected_physical_pin_count": 4068,
         "explicit_no_connect_physical_pin_count": 238,
         "external_module_interface_annotation_count": 5,
-        "canonical_net_count": 823,
+        "canonical_net_count": 789,
         "generated_file_count": 28,
         "pcb_file_count": 0
       },
@@ -4890,11 +4890,11 @@
         "exact_pin_rows": 145,
         "conditioned_boundary_rows": 15,
         "explicit_reserve_no_connect_rows": 13,
-        "cross_project_net_count": 35,
-        "cross_sheet_net_count": 231,
+        "cross_project_net_count": 34,
+        "cross_sheet_net_count": 228,
         "errors": 0
       },
-      "source_sha256": "e86983261b6cb7ba3754d59ce6324b550ff9f276f5ac2f747307cc9b9e072d37",
+      "source_sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
