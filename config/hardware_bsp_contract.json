@@ -1540,7 +1540,7 @@
   },
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "1c6e98619644bd2edfbdfd6a958ada200ddc6a2ae7378ac77be350a0d3b32dc5",
+    "hardware_contract_sha256": "888739b77c2f4505a63f722aea3d1041fd29b3c346ba2b0954913caba46d1dbb",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1581,11 +1581,11 @@
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "ae424ca8bd6bd2ce294e7d55e286a5ab7af2a5376bddda3653e61db8f7a2fa67"
+        "sha256": "89c5752cdd05ac22f308245bab8b808ab6c300ab72c696716a331267be634f3a"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07"
+        "sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4897,7 +4897,7 @@
         "cross_sheet_net_count": 228,
         "errors": 0
       },
-      "source_sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07",
+      "source_sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
@@ -6867,7 +6867,7 @@
     ],
     "r2_reconciliation": {
       "source_contract": "config/h0_r2_hardware_contract.json",
-      "hardware_contract_sha256": "1c6e98619644bd2edfbdfd6a958ada200ddc6a2ae7378ac77be350a0d3b32dc5",
+      "hardware_contract_sha256": "888739b77c2f4505a63f722aea3d1041fd29b3c346ba2b0954913caba46d1dbb",
       "hardware_marker": "H1-R2.31",
       "hardware_sources": {
         "functional": {
@@ -6908,11 +6908,11 @@
         },
         "native_kicad": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-          "sha256": "ae424ca8bd6bd2ce294e7d55e286a5ab7af2a5376bddda3653e61db8f7a2fa67"
+          "sha256": "89c5752cdd05ac22f308245bab8b808ab6c300ab72c696716a331267be634f3a"
         },
         "h2_hwfw_reconciliation": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-          "sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07"
+          "sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e"
         },
         "h2_interboard_m1": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -10224,7 +10224,7 @@
           "cross_sheet_net_count": 228,
           "errors": 0
         },
-        "source_sha256": "0b136d5b6cf4e5f000bf0611b38c5ebc818c064c765d507d29dbc26c13995d07",
+        "source_sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e",
         "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
       },
       "interboard": {
