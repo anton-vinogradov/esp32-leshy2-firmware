@@ -10,8 +10,8 @@
 > materializes two native six-layer boards and places all 1,208 fitted instances
 > with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
 > locks 20-mm nylon M2.5 retention, captive nuts, 11-mm stops and independent PCB
-> capture without loading M1. H6.0.1 is complete; the accepted [H6.0.2 routing bootstrap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
-> resolves all 346/346 `GENERAL_CONTROL` connections with zero DRC violations, while oscillator, safety-control and analogue/audio/sense routing remains current. The locality-first two-board placement, Airband filter,
+> capture without loading M1. H6.0.1 is complete; the accepted [H6.0.2 routing slice](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
+> resolves all 366/366 connections across 165 `GENERAL_CONTROL` and 12 `OSCILLATOR` nets with zero DRC violations, while safety-control and analogue/audio/sense routing remains current. The locality-first two-board placement, Airband filter,
 > 3.046-A worst electrical corner / 3.2-A admission boundary on 3V3_MAIN, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
 > contains all eight exact TX detectors, five couplers and eight bounded local
@@ -27,7 +27,7 @@
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 34 cross-project nets and 228 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
-> H6.0.1 is complete and the `GENERAL_CONTROL` routing bootstrap passes; H6.0.2
+> H6.0.1 is complete and the `GENERAL_CONTROL` + `OSCILLATOR` routing slice passes; H6.0.2
 > critical manual routing is current and ordering remains unauthorized.
 
 Status last reconciled: **3 September 2026**. This is the firmware repository's
@@ -45,7 +45,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 corrected and requalified: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain all 173 exact H2 controller rows with fail-closed mapping/count guards, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ✅ H0-R2 through the current H5-R2 route result are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 passes; the H6.0.2 `GENERAL_CONTROL` bootstrap resolves 346/346 connections with zero DRC violations, while critical manual routing and native net parity are current. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
+| Hardware intersection | ✅ H0-R2 through the current H5-R2 route result are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 passes; the H6.0.2 `GENERAL_CONTROL` + `OSCILLATOR` slice resolves 366/366 connections with zero DRC violations, while safety-control, analogue/audio/sense routing and native net parity are current. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |

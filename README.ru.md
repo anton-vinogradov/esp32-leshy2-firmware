@@ -124,9 +124,10 @@ fail-closed. [Аналоговый результат H3-R2.3](https://github.co
 без жёстких коллизий. [Механический стек H6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.ru.md)
 теперь фиксирует 20-мм нейлоновые винты M2.5, захваченные гайки, 11-мм упоры и
 независимые захваты PCB без несущей роли M1. H6.0.1 завершена. Принятый
-[bootstrap трассировки H6.0.2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.ru.md)
-замыкает все 346/346 соединений `GENERAL_CONTROL` с нулём нарушений DRC;
-кварцы, safety-control и аналоговые/audio/sense-сети остаются текущей работой.
+[принятый срез трассировки H6.0.2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.ru.md)
+замыкает все 366/366 соединений в 165 сетях `GENERAL_CONTROL` и 12 сетях
+`OSCILLATOR` с нулём нарушений DRC; safety-control и аналоговые/audio/sense-сети
+остаются текущей работой.
 H3-R2.1.2 провёл ревью явной привязки 623 устанавливаемых питаемых экземпляров — 607
 прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
 H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все
