@@ -108,8 +108,10 @@ The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/e
 materializes both native six-layer boards and places all 1,208 fitted instances
 with zero hard conflict. The [H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
 now locks the 20-mm nylon M2.5 screws, captive nuts, 11-mm stops and independent
-PCB capture without making M1 structural. Routing has not started; only five
-microcoax corridors and their enclosure/inspection clearances keep H6.0.1 open.
+PCB capture without making M1 structural. H6.0.1 is complete. The accepted
+[H6.0.2 routing bootstrap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
+resolves all 346/346 `GENERAL_CONTROL` connections with zero DRC violations;
+oscillator, safety-control and analogue/audio/sense routing remains current.
 H3-R2.1.2 reviewed explicit binding for 623 fitted powered instances—607 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
