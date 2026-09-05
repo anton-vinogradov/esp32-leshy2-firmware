@@ -72,7 +72,7 @@ class R2H2SyncGateTests(unittest.TestCase):
         self.assertIn("R2/H2 sync gate OPEN", result.stdout)
         self.assertTrue(self.gate["r2_h2_synchronized"])
         self.assertEqual([], self.checker.check(self.gate, self.h0, self.bsp, self.integration))
-        self.assertEqual("H1-R2.38", self.h0["physical_h1"]["marker"])
+        self.assertEqual("H1-R2.39", self.h0["physical_h1"]["marker"])
         self.assertEqual(
             self.h0["hardware_marker"],
             self.h0["physical_h1"]["pin_authority_marker"],

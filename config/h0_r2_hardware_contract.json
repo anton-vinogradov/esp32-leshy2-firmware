@@ -23,7 +23,7 @@
     },
     "physical_h1": {
       "path": "esp32-leshy2/hardware/product-design/h1-r2-placement.json",
-      "sha256": "66321938e7ea53875639ad6841f02209aaf08510054323c0108d8a5077813054"
+      "sha256": "2e3cb75934679422de060d92f15521d4c74b1029324e5e915141e323fb5c4818"
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
@@ -35,19 +35,19 @@
     },
     "native_r2_inventory": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-      "sha256": "5b59d8dbcf142296f2d299f136987486325e7758b9c2bb76bdd82e824559acaf"
+      "sha256": "2af54e1755c4963b7ac9251c05181b19069a80a2c7df6a98f28455b310ed93d8"
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "2ae060f2348e22720bc23fcd169e168693c16db2dfba064036f25bf12bd5e759"
+      "sha256": "b9ddf24206882aff70c66273a7999a84cddca437a5205b9afc152a28a59679e4"
     },
     "native_kicad": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-      "sha256": "89c5752cdd05ac22f308245bab8b808ab6c300ab72c696716a331267be634f3a"
+      "sha256": "9581528cc45f8ef8c77fdc3e07f5834aeb65cd0fd9baf5a7b45a41e125a5cd46"
     },
     "h2_hwfw_reconciliation": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-      "sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e"
+      "sha256": "4d6fc79ac0641d572e1631d16401f519bf732c4b5854f2beec458a4e75016e18"
     },
     "h2_interboard_m1": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -2918,7 +2918,7 @@
       "cross_sheet_net_count": 228,
       "errors": 0
     },
-    "source_sha256": "a9cc3adeec76551374e1b25892b14bcf686a7a5c410a69b851da2a704f138e3e",
+    "source_sha256": "4d6fc79ac0641d572e1631d16401f519bf732c4b5854f2beec458a4e75016e18",
     "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
   },
   "hub_gpio_budget": {
@@ -3955,7 +3955,7 @@
     "exact TCA9803DGKR / C2687966 powered-off Pack/Safety I2C boundary"
   ],
   "physical_h1": {
-    "marker": "H1-R2.38",
+    "marker": "H1-R2.39",
     "pin_authority_marker": "H1-R2.31",
     "status": "reviewed",
     "current_h1_blockers": [],

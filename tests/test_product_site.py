@@ -67,11 +67,11 @@ class ProductSiteTests(unittest.TestCase):
         landing_pages = {
             "README.md": (
                 "Firmware roadmap and current position", "Firmware is at F2-R2.5",
-                "H1-R2.38", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
+                "H1-R2.39", "H1-R2.31", "flex toward the antenna edge", "touch coordinates by 180 degrees",
             ),
             "README.ru.md": (
                 "Роадмап прошивки и текущая позиция", "Прошивка находится на F2-R2.5",
-                "H1-R2.38", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
+                "H1-R2.39", "H1-R2.31", "шлейфом к антенному", "touch-координаты", "180°",
             ),
         }
         for name, tokens in landing_pages.items():
@@ -111,18 +111,18 @@ class ProductSiteTests(unittest.TestCase):
         pages = ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md")
         for name in pages:
             page = self.read(name)
-            self.assertIn("H1-R2.38", page, name)
+            self.assertIn("H1-R2.39", page, name)
             self.assertIn("H1-R2.31", page, name)
             self.assertNotIn("four explicit H1", page, name)
             self.assertNotIn("четыре явных", page, name)
 
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         boundary = state["hardware_boundary"]
-        self.assertEqual("H1-R2.38", boundary["physical_design_marker"])
+        self.assertEqual("H1-R2.39", boundary["physical_design_marker"])
         self.assertEqual("H1-R2.31", boundary["machine_pin_config_marker"])
         self.assertEqual("reviewed", boundary["physical_h1_status"])
         self.assertEqual("H6", boundary["current_hardware_stage"])
-        self.assertEqual("H6.0.2-R1", boundary["current_hardware_substep"])
+        self.assertEqual("H6.0.3-R1", boundary["current_hardware_substep"])
         self.assertEqual("H5-R2.1", boundary["reviewed_h5_marker"])
         self.assertTrue(state["current_claims"]["h3_r2_7_acceptance_imported"])
         self.assertTrue(state["current_claims"]["h4_r2_0_1_joined_input_freeze_imported"])

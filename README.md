@@ -94,7 +94,7 @@ Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
-and reviewed `H1-R2.38`; H2 and the complete H3-R2.1 DC/source workstream are
+and reviewed `H1-R2.39`; H2 and the complete H3-R2.1 DC/source workstream are
 reviewed; H3-R2.2.1 reviewed 14 startup, shutdown, reset and recovery scenarios,
 and H3-R2.2.2 reviewed 7,316 USB/pack/DPM/brownout/source-loss transitions with
 zero unsafe admissions or automatic restarts. H3-R2.2.3/.4 then reviewed five
@@ -103,7 +103,7 @@ cases with zero analytical failures or automatic restarts. Its exact firmware-fa
 [sequence](config/h3_r2_transition_contract.json) and
 [handover](config/h3_r2_handover_contract.json) and
 [watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
-are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md), [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md), [H3-R2.5 RF result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.md), [H3-R2.6 thermal/fault result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.md) and the [global H3-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) are reviewed. The exact [RF/coexistence](config/h3_r2_rf_coexistence.json), [thermal/fault](config/h3_r2_thermal_fault.json) and [H3 acceptance](config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 placement, mechanical stack and five microcoax service corridors are complete; the current hardware point is `H6.0.2-R1` routing and native net parity.
+are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md), [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md), [H3-R2.5 RF result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.md), [H3-R2.6 thermal/fault result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.md) and the [global H3-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) are reviewed. The exact [RF/coexistence](config/h3_r2_rf_coexistence.json), [thermal/fault](config/h3_r2_thermal_fault.json) and [H3 acceptance](config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 placement, mechanical stack and five microcoax service corridors are complete; the current hardware point is `H6.0.3-R1`: both boards are 80 x 150 mm, all 1,208 positions remain frozen without hard conflicts, and routing is being requalified through the new 5-mm inner-face corridor.
 The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 materializes both native six-layer boards and places all 1,208 fitted instances
 with zero hard conflict. The [H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
@@ -161,9 +161,9 @@ All 4,302 ledger endpoints reconcile into 4,064 connected endpoints, 238
 explicit no-connects and 789 global canonical / 823 board-local nets; both projects pass KiCad ERC
 with zero errors and zero warnings. `H2-R2.1.4` reconciles six domains,
 173 controller pins, 34 cross-project nets and 228 cross-sheet nets; the
-reviewed `H2-R2.1.5` firmware sync gate is open. H3 now freezes those exact
-inputs. Placement/routing has not started,
-and R2 byte reproducibility
+reviewed `H2-R2.1.5` firmware sync gate is open. H3 freezes those exact
+inputs. Current H6 placement is complete and routing is being requalified on
+the 80 × 150-mm boards; the routed release candidate is not complete. R2 byte reproducibility
 and order authorization remain open.
 
 ### Current phase F2-R2 — detailed position

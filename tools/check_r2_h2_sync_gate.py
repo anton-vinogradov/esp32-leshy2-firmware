@@ -268,8 +268,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     physical_h1 = h0.get("physical_h1", {})
     if physical_h1.get("pin_authority_marker") != h0.get("hardware_marker"):
         errors.append("physical H1 lost its exact pin-authority marker")
-    if physical_h1.get("marker") != "H1-R2.38":
-        errors.append("physical H1 projection is not the current H1-R2.38 design")
+    if physical_h1.get("marker") != "H1-R2.39":
+        errors.append("physical H1 projection is not the current H1-R2.39 design")
     if "pre_r2_h2_gates" not in physical_h1:
         errors.append("physical H1 projection lost its pre-R2/H2 factory gates")
 
