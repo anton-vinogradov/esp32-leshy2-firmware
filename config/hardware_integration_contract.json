@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "5ff926f09a75b89da52297ad9eda9bc0c9412a581cf9717d0acef39948a965bd",
+    "hardware_contract_sha256": "87d9bdf780058178b0a992f931443ab30b9d2ff8b2de5833d2dc9c595cf5e5ad",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1570,19 +1570,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "22766287f6108a7b33063a26f808508f7244a184f0ae38c1e3c302c8a98e80a7"
+        "sha256": "77362ed0083d2eab23f072637a360e1ff99e17d408db0c4196132e9a7a104c3a"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "3dd280a3247fe737160827530012148dad5286adde277af18d27ceb2559bd6da"
+        "sha256": "d49e6b18cc5494569b35ea6997dde36257b8cc6492e232e9268821f8636ff4ea"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "d40fa728af9394e10bc70ad0b31d4f60245333fa5fbe7b1c02a5268271bf1946"
+        "sha256": "dcf305427ad785c97ca6f38fda7cb859593687a571f5112f6340780db61828e3"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "7a9bd3a9b68f4b0c127600caa8763088c3b45423867edc8631b5523ce8e24297"
+        "sha256": "5164e68b1ce1ccd22affa8e46126a33ad30ce763ba4bcd96e5d0f4d5986a960c"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4894,7 +4894,7 @@
         "cross_sheet_net_count": 228,
         "errors": 0
       },
-      "source_sha256": "7a9bd3a9b68f4b0c127600caa8763088c3b45423867edc8631b5523ce8e24297",
+      "source_sha256": "5164e68b1ce1ccd22affa8e46126a33ad30ce763ba4bcd96e5d0f4d5986a960c",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {

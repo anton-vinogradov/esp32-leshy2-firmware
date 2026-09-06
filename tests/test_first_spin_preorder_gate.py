@@ -20,6 +20,8 @@ class FirstSpinPreorderGateTests(unittest.TestCase):
         self.assertEqual(1, boundary["assembled_device_quantity"])
         self.assertFalse(boundary["full_product_f6_f8_required_before_order"])
         self.assertIn("optional", boundary["factory_powered_function_test"])
+        self.assertIn("fabricate and populate", boundary["factory_role"])
+        self.assertIn("owner performs display", boundary["factory_role"])
         self.assertEqual("blocked", self.gate["order_authorization"]["status"])
 
     def test_every_required_first_spin_evidence_is_explicit_and_open(self):
@@ -42,6 +44,7 @@ class FirstSpinPreorderGateTests(unittest.TestCase):
 
     def test_f5_diagnostic_slice_is_a_hard_fail_closed_dependency(self):
         dependencies = {row["id"]: row for row in self.gate["hard_dependencies"]}
+        self.assertEqual("reviewed", dependencies["H2_R2_PRODUCTION_ECAD"]["status"])
         self.assertIn("H6_R2_ROUTED_RELEASE_CANDIDATE", dependencies)
         self.assertNotIn("H6_R2_RELEASED_LAYOUT", dependencies)
         h6 = dependencies["H6_R2_ROUTED_RELEASE_CANDIDATE"]

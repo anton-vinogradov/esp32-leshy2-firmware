@@ -6,7 +6,7 @@
   "purpose": "block ordering the single R2-EVT1 prototype until the reviewed H2/H6 release candidate and a recoverable six-domain diagnostic firmware package have exhausted the inexpensive pre-order evidence and are locked together as P8",
   "procurement_boundary": {
     "assembled_device_quantity": 1,
-    "factory_role": "deterministically manufacture, populate and assemble the released package, including the exact production display and specified final-assembly parts",
+    "factory_role": "deterministically fabricate and populate the two released PCBAs; the owner performs display, microcoax, knob, fastener and enclosure final assembly",
     "factory_powered_function_test": "optional only when the final quote makes it near-free; never a release prerequisite",
     "first_full_power_on_owner": "owner after delivery using the reviewed current-limited bring-up procedure",
     "full_product_f6_f8_required_before_order": false
@@ -14,7 +14,7 @@
   "hard_dependencies": [
     {
       "id": "H2_R2_PRODUCTION_ECAD",
-      "status": "blocked",
+      "status": "reviewed",
       "required": "reviewed six-domain production schematic and machine-readable HW/FW export"
     },
     {
