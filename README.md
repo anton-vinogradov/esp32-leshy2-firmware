@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; [historical F2-R2.4](config/f2_r2_build_qualification.json) records 12 R2 builds, 60 artifacts, 16 maps and 16 size gates; fresh qualification of the updated matrix is pending, R1 [report retained](docs/f2-target-build-system-report.md) | requalify the current matrix, then prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; fresh [F2-R2.4](config/f2_r2_build_qualification.json) passed 12 R2 builds, 60 artifacts, 16 maps and 16 size gates against the updated matrix, R1 [report retained](docs/f2-target-build-system-report.md) | prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -73,11 +73,11 @@ trees, entry sources and image identities. The hash-bound
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
 SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
 records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
-size gates for input commit `344cb89`. This record is now historical: the H1/H2/H3
-provenance refresh changed the matrix hash and imported one Airband concept-frame
-coordinate correction, without changing GPIO/API or generated BSP code. Fresh
-qualification of the updated matrix is pending; no evidence hash was restamped.
-The recorded run proves compilation, linkage and static image fit for its inputs, not boot,
+size gates for input commit `ea5b9fa`. The H1/H2/H3 refresh changed source provenance
+and one Airband concept-frame coordinate, without changing GPIO/API or generated BSP
+code. A real clean 12-job qualification was repeated against matrix `566373099e64…`;
+the dispatcher recorded new evidence and `verify-evidence` passed.
+This run proves compilation, linkage and static image fit for its inputs, not boot,
 peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
@@ -213,12 +213,12 @@ projects in debug and release. Its inputs remain the reviewed
 [BSP ownership](config/f2_r2_bsp_consumption.json) and
 [build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
 artifacts and 16 maps exist, and all 16 image-size gates pass without warnings.
-The historical record is bound to input commit `344cb89` and its earlier matrix;
-`verify-evidence` correctly rejects it as proof of the updated matrix. A real
-clean 12-job run is pending, without manually changing the evidence. The exact S3, C5,
+The fresh record is bound to input commit `ea5b9fa` and the updated matrix
+`566373099e64…`; the dispatcher wrote it only after all 12 clean jobs passed,
+and `verify-evidence` confirmed the binding. The exact S3, C5,
 dual-RP and Pack/Safety boundaries are unchanged. No target boot, peripheral,
 emulator, development-board or physical run occurred, and byte reproducibility
-is not yet proven. After current-matrix requalification, F2-R2.5 must run two clean passes, compare every declared
+is not yet proven. F2-R2.5 must run two clean passes, compare every declared
 artifact byte-for-byte and publish the bilingual F2-R2 closure report only if
 that comparison passes.
 The exact marker and its evidence move together in every commit.

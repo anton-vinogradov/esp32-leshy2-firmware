@@ -7,8 +7,8 @@
 > Current native power prerequisites are `review_required`: the retained H3
 > analytical results below are not qualification of the fitted power cell.
 > The H1/H2/H3 refresh changes provenance and one Airband concept-frame coordinate,
-> not GPIO/API or generated BSP code. The 12-job qualification from input commit `344cb89`
-> is historical for its earlier matrix; a real clean run against the updated matrix is pending.
+> not GPIO/API or generated BSP code. A fresh clean 12-job qualification passed from
+> input commit `ea5b9fa` against matrix `566373099e64…`; `verify-evidence` passed.
 > Earlier RF-footprint/NC5 corrections remain in the retained hardware boundary.
 > The [interface follow-up](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
 > leaves Cap physical contact handedness, exact holder/encoder mounting geometry and
@@ -64,7 +64,7 @@ duplicated or given a second status here.
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ✅ F2-R2.2: [six production-SDK roots are reviewed](../config/f2_r2_target_projects.json); RF-RP and Hub-RP use separate pin-free Pico SDK trees, entries and image identities |
 | Generated R2 BSP ownership | ✅ F2-R2.3 corrected and requalified: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain all 173 exact H2 controller rows with fail-closed mapping/count guards, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
-| Target builds, maps and S3 QEMU | ▶️ F2-R2.5: historical [F2-R2.4](../config/f2_r2_build_qualification.json) records 12 clean builds, 60 artifacts, 16 maps and 16 size gates. Qualification of the updated matrix is pending, followed by two clean byte-identical passes; S3 QEMU remains F3-R2 |
+| Target builds, maps and S3 QEMU | ▶️ F2-R2.5: fresh [F2-R2.4](../config/f2_r2_build_qualification.json) passed 12 clean builds against the updated matrix, with 60 artifacts, 16 maps and 16 size gates. Two clean byte-identical passes remain; S3 QEMU remains F3-R2 |
 | Hardware intersection | ▶️ H6.0.3-R1 remains open, including native power prerequisites. Prior H3 analytical and H4 review records are not current power acceptance; H5 still owns sourcing. H3-R2.4 models exact 20-MHz direct i8080-8, USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
@@ -121,9 +121,9 @@ configure/build jobs across the six production-SDK roots, 60 verified artifacts,
 16 maps and 16 passed image-size gates, with no warnings. The result proves
 compilation, linkage and static fit against the exact R2 BSP; it does not prove
 byte reproducibility, target boot, peripherals, emulation or physical hardware.
-This historical record is bound to input commit `344cb89` and its earlier matrix.
-`verify-evidence` rejects the stale matrix binding; no execution record was restamped.
-First requalify the updated matrix, then run two clean passes and compare every declared artifact byte-for-byte.
+This fresh record is bound to input commit `ea5b9fa` and matrix `566373099e64…`.
+The dispatcher completed all 12 clean jobs before writing evidence; `verify-evidence` passed.
+Next run two clean passes and compare every declared artifact byte-for-byte.
 Publish the bilingual F2-R2 closure report only after that gate passes.
 The exact marker and its evidence move together in every commit.
 
@@ -325,8 +325,8 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F2-R2.5`. Historical F2-R2.4 passed its locked 12-job matrix,
-verified all 60 artifacts and 16 maps, and passed all 16 size gates. Requalify the updated matrix, then run two
+The current boundary is `F2-R2.5`. Fresh F2-R2.4 passed the updated locked 12-job matrix,
+verified all 60 artifacts and 16 maps, and passed all 16 size gates. Run two
 clean passes and compare every declared artifact byte-for-byte. Runtime and S3
 QEMU remain F3-R2 gates; no emulator, development-board or hardware execution
 is claimed by F2-R2.4.

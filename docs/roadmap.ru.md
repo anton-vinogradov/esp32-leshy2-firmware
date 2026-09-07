@@ -7,8 +7,8 @@
 > Условия запуска текущего native-питания имеют статус `review_required`:
 > сохранённые аналитические результаты H3 ниже не квалифицируют установленную ячейку.
 > Обновление H1/H2/H3 меняет происхождение данных и одну координату концепта Airband,
-> но не GPIO/API или код BSP. Квалификация 12 jobs для входного commit `344cb89`
-> историческая для прежней matrix; настоящий чистый прогон по обновлённой matrix ожидается.
+> но не GPIO/API или код BSP. Свежий чистый прогон из 12 jobs прошёл для входного
+> commit `ea5b9fa` по matrix `566373099e64…`; `verify-evidence` прошёл.
 > Прежние исправления RF-footprints/NC5 сохранены в аппаратной границе.
 > [Продолжение ревью интерфейсов](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.ru.md)
 > оставляет открытыми ориентацию физических контактов Cap, точную геометрию крепления
@@ -65,7 +65,7 @@ firmware-репозитория. Пересечения с железом ука
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
 | Владение generated BSP R2 | ✅ F2-R2.3 исправлен и повторно квалифицирован: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат все 173 точные controller-строки H2 с fail-closed mapping/count guards; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | ✅ [Синхронизированный gate](../config/r2_h2_sync_gate.json): H2-R2.1.5 импортирует exact six-domain native KiCad/HW↔FW boundary, карты двух RP и все три electrical prerequisite fail-closed; сохранённый H2.0.3 остаётся только historical R1 |
-| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: историческая квалификация [F2-R2.4](../config/f2_r2_build_qualification.json) фиксирует 12 чистых сборок, 60 artifacts, 16 maps и 16 size gates. Ожидается квалификация обновлённой matrix, затем два чистых побайтно идентичных прохода; S3 QEMU остаётся F3-R2 |
+| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: свежая квалификация [F2-R2.4](../config/f2_r2_build_qualification.json) прошла 12 чистых сборок по обновлённой matrix, с 60 artifacts, 16 maps и 16 size gates. Остаются два чистых побайтно идентичных прохода; S3 QEMU остаётся F3-R2 |
 | Пересечение с железом | ▶️ H6.0.3-R1 остаётся открытым, включая условия запуска native-питания. Прежние аналитические результаты H3 и ревью H4 не означают текущую приёмку питания; sourcing остаётся у H5. H3-R2.4 моделирует прямой i8080-8 20 МГц, владение USB и паритет 80/80 M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
@@ -122,9 +122,9 @@ display/flex/touch, RF/антенны, analog audio/IR или механичес
 artifacts, 16 maps и 16 пройденных size gates без warnings. Результат доказывает
 компиляцию, линковку и статическую помещаемость с точным BSP R2; он не доказывает
 byte reproducibility, target boot, peripherals, emulation или физическое железо.
-Историческая запись привязана к входному commit `344cb89` и прежней matrix.
-`verify-evidence` отвергает устаревшую привязку; запись о выполнении не переписывалась.
-Сначала нужно повторно квалифицировать обновлённую matrix, затем выполнить два чистых прохода и побайтно сравнить каждый объявленный
+Свежая запись привязана к входному commit `ea5b9fa` и matrix `566373099e64…`.
+Dispatcher выполнил все 12 чистых jobs до записи evidence; `verify-evidence` прошёл.
+Далее нужно выполнить два чистых прохода и побайтно сравнить каждый объявленный
 artifact. Двуязычный итог F2-R2 публикуется только после прохождения этого gate.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
@@ -326,8 +326,8 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F2-R2.5`. Исторический F2-R2.4 прошёл свою locked 12-job matrix, проверил все
-60 artifacts и 16 maps и прошёл все 16 size gates. Нужно повторно квалифицировать обновлённую matrix, затем выполнить два
+Текущая граница — `F2-R2.5`. Свежий F2-R2.4 прошёл обновлённую locked 12-job matrix, проверил все
+60 artifacts и 16 maps и прошёл все 16 size gates. Нужно выполнить два
 чистых прохода и побайтно сравнить каждый объявленный artifact. Runtime и S3
 QEMU остаются gates F3-R2; F2-R2.4 не заявляет emulator, development-board или
 hardware execution.

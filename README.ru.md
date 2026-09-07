@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; [исторический F2-R2.4](config/f2_r2_build_qualification.json) фиксирует 12 сборок R2, 60 artifacts, 16 maps и 16 size gates; свежая квалификация обновлённой matrix ожидается, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | повторно квалифицировать текущую matrix, затем доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; свежая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 сборок R2, 60 artifacts, 16 maps и 16 size gates по обновлённой matrix, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -74,11 +74,11 @@ entry sources и image identities. Связанный hash
 domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
 к одному SDK project. Атомарная [квалификация F2-R2.4](config/f2_r2_build_qualification.json)
 зафиксировала 12 успешных configure/build jobs, 60 artifacts, 16 maps и 16
-пройденных size gates для входного commit `344cb89`. Эта запись теперь историческая:
-обновление происхождения H1/H2/H3 изменило hash matrix и импортировало одну поправку
-координаты концепта Airband, не меняя GPIO/API или код BSP. Свежая квалификация
-обновлённой matrix ожидается; хеши evidence вручную не переписывались.
-Сохранённый прогон доказывает для своих входов компиляцию, линковку и статическую
+пройденных size gates для входного commit `ea5b9fa`. Обновление H1/H2/H3 изменило
+происхождение данных и одну координату концепта Airband, не меняя GPIO/API или код
+BSP. Настоящий чистый прогон из 12 jobs повторён по matrix `566373099e64…`;
+dispatcher записал новый evidence, и `verify-evidence` прошёл.
+Этот прогон доказывает для своих входов компиляцию, линковку и статическую
 помещаемость образов, но не boot, peripheral execution, воспроизводимость,
 эмуляцию или физическое железо.
 [Контракт memory и rollback](config/f0_r2_memory_rollback_contract.json),
@@ -224,12 +224,12 @@ projects в debug и release. Её inputs — прошедшие ревью
 [владение BSP](config/f2_r2_bsp_consumption.json) и
 [build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
 artifacts и 16 maps присутствуют, а все 16 size gates прошли без warnings.
-Исторический evidence связан с входным commit `344cb89` и прежней matrix;
-`verify-evidence` корректно отвергает его как доказательство для обновлённой matrix.
-Ожидается настоящий чистый прогон из 12 jobs, без ручного изменения evidence. Точные границы S3, C5,
+Свежий evidence связан с входным commit `ea5b9fa` и обновлённой matrix
+`566373099e64…`; dispatcher записал его только после прохождения всех 12 чистых jobs,
+а `verify-evidence` подтвердил привязку. Точные границы S3, C5,
 двух RP и Pack/Safety не изменились. Target boot, peripheral, emulator,
 development-board и physical runs не выполнялись, а byte reproducibility ещё не
-доказана. После повторной квалификации текущей matrix F2-R2.5 должен выполнить два чистых прохода, побайтно сравнить
+доказана. F2-R2.5 должен выполнить два чистых прохода, побайтно сравнить
 каждый объявленный artifact и опубликовать двуязычный итог F2-R2 только при
 успешном сравнении.
 Точный маркер и его evidence меняются вместе в каждом commit.
