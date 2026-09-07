@@ -73,9 +73,9 @@ trees, entry sources and image identities. The hash-bound
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
 SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
 records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
-size gates for its recorded input commit. The RF-footprint contract refresh changed
-the current matrix hash; its new 12-job qualification is pending. The preserved
-record is not fresh evidence for that matrix. It proves compilation, linkage and static image fit, not boot,
+size gates for input commit `344cb89`. After the RF-footprint/NC5 contract refresh,
+one new clean 12-job qualification passed against the current matrix hash.
+It proves compilation, linkage and static image fit, not boot,
 peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
@@ -203,8 +203,8 @@ projects in debug and release. Its inputs remain the reviewed
 [BSP ownership](config/f2_r2_bsp_consumption.json) and
 [build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
 artifacts and 16 maps exist, and all 16 image-size gates pass without warnings.
-The preserved record remains bound to its recorded matrix and build policy;
-requalification against the refreshed matrix is pending. The exact S3, C5,
+The fresh record is bound to input commit `344cb89`, the refreshed matrix and
+the locked build policy. The exact S3, C5,
 dual-RP and Pack/Safety boundaries are unchanged. No target boot, peripheral,
 emulator, development-board or physical run occurred, and byte reproducibility
 is not yet proven. F2-R2.5 must now run two clean passes, compare every declared

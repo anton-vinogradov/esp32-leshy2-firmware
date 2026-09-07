@@ -74,9 +74,9 @@ entry sources и image identities. Связанный hash
 domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
 к одному SDK project. Атомарная [квалификация F2-R2.4](config/f2_r2_build_qualification.json)
 зафиксировала 12 успешных configure/build jobs, 60 artifacts, 16 maps и 16
-пройденных size gates для записанного входного commit. Обновление контракта
-RF-footprints изменило hash текущей matrix; её новая квалификация 12 jobs
-ещё ожидается. Сохранённая запись не является свежим evidence этой matrix.
+пройденных size gates для входного commit `344cb89`. После обновления контракта
+RF-footprints/NC5 один новый чистый квалификационный прогон из 12 jobs прошёл
+по текущему hash matrix.
 Она доказывает компиляцию, линковку и статическую
 помещаемость образов, но не boot, peripheral execution, воспроизводимость,
 эмуляцию или физическое железо.
@@ -216,8 +216,8 @@ projects в debug и release. Её inputs — прошедшие ревью
 [владение BSP](config/f2_r2_bsp_consumption.json) и
 [build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
 artifacts и 16 maps присутствуют, а все 16 size gates прошли без warnings.
-Сохранённый evidence связан со своей записанной matrix и build policy;
-повторная квалификация обновлённой matrix ожидается. Точные границы S3, C5,
+Свежий evidence связан с входным commit `344cb89`, обновлённой matrix и
+зафиксированной build policy. Точные границы S3, C5,
 двух RP и Pack/Safety не изменились. Target boot, peripheral, emulator,
 development-board и physical runs не выполнялись, а byte reproducibility ещё не
 доказана. Теперь F2-R2.5 должен выполнить два чистых прохода, побайтно сравнить

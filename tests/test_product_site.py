@@ -285,6 +285,13 @@ class ProductSiteTests(unittest.TestCase):
         self.assertTrue(state["current_claims"]["f2_r2_build_policy_reviewed"])
         self.assertTrue(state["current_claims"]["f2_r2_shell_free_dispatcher_reviewed"])
         self.assertTrue(state["current_claims"]["f2_r2_target_build_qualification_reviewed"])
+        qualification = json.loads(self.read("config/f2_r2_build_qualification.json"))
+        self.assertEqual(
+            qualification["repo_commit"],
+            state["current_claims"]["r2_build_qualification_input_commit"],
+        )
+        for name in pages:
+            self.assertIn(qualification["repo_commit"][:7], self.read(name), name)
         self.assertEqual(12, state["current_claims"]["r2_target_configure_runs"])
         self.assertEqual(12, state["current_claims"]["r2_target_build_runs"])
         self.assertEqual(12, state["current_claims"]["r2_artifact_verify_runs"])
