@@ -169,6 +169,21 @@ class ProductSiteTests(unittest.TestCase):
         self.assertEqual(40000, state["claims"]["r2_hub_c5_target_frequency_khz"])
         self.assertFalse(state["claims"]["r2_hub_c5_target_endpoint_implemented"])
 
+    def test_current_native_power_findings_are_not_hidden_by_h3_import(self):
+        for name in ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md"):
+            current = self.read(name).split("<details>", 1)[0]
+            for token in ("review_required", "TPS566231P", "TPS564252", "PGTH", "RILIM", "NC5"):
+                self.assertIn(token, current, name)
+            self.assertIn("h6-r2-electrical-semantics", current, name)
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        review = state["hardware_boundary"]["current_native_power_review"]
+        self.assertEqual("review_required", review["status"])
+        self.assertEqual(4, len(review["open_findings"]))
+        self.assertFalse(review["gpio_or_api_changed"])
+        self.assertFalse(review["powered_startup_proven"])
+        self.assertFalse(review["hardware_order_authorized"])
+        self.assertTrue(state["current_claims"]["h3_r2_7_acceptance_imported"])
+
     def test_completed_global_phase_has_bilingual_result_report(self):
         reports = {
             "docs/f0-product-contracts-report.md": (

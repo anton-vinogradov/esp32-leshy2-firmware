@@ -3,7 +3,7 @@
   "baseline": "R2",
   "phase": "F2",
   "current_substep": "F2-R2.5",
-  "updated_on": "2026-09-02",
+  "updated_on": "2026-09-07",
   "hardware_boundary": {
     "physical_design_marker": "H1-R2.39",
     "machine_pin_config_marker": "H1-R2.31",
@@ -11,6 +11,21 @@
     "physical_h1_accepted_on": "2026-08-30",
     "current_hardware_stage": "H6",
     "current_hardware_substep": "H6.0.3-R1",
+    "current_native_power_review": {
+      "status": "review_required",
+      "report": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-electrical-semantics.md",
+      "audit": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/hardware/verification/h6_r2_power_startup.py",
+      "scope": "H3 algebraic results remain imported within their analytical scope, not qualification of the current native power cell",
+      "open_findings": [
+        "fitted R67 1.65k versus accepted 1.18k protection envelope",
+        "H3 TPS564252 model versus fitted TPS566231P",
+        "main PGTH worst-case assertion headroom",
+        "AON eFuse resistance bound uses a different RILIM test condition"
+      ],
+      "gpio_or_api_changed": false,
+      "powered_startup_proven": false,
+      "hardware_order_authorized": false
+    },
     "reviewed_h2_marker": "H2-R2.1.5",
     "reviewed_h5_marker": "H5-R2.1",
     "imported_h2_machine_contract": "H2-R2.1.4",

@@ -73,7 +73,9 @@ trees, entry sources and image identities. The hash-bound
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
 SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
 records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
-size gates. It proves compilation, linkage and static image fit, not boot,
+size gates for its recorded input commit. The RF-footprint contract refresh changed
+the current matrix hash; its new 12-job qualification is pending. The preserved
+record is not fresh evidence for that matrix. It proves compilation, linkage and static image fit, not boot,
 peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
 keeps six independent dual-slot domains: both RP2354B and both MSPM0 devices
@@ -92,6 +94,10 @@ The [reviewed F1-R2 result](docs/f1-portable-cores-report.md) adds independent
 RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrated
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
+The H3 numerical results below describe the retained analytical models. Current
+native power prerequisites have reopened; those results are not acceptance of
+the fitted power cell (see the current electrical checkpoint below).
+
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
 existing Si4732 audio path. Airband TX is absent. Physical hardware completed
 and reviewed `H1-R2.39`; H2 and the complete H3-R2.1 DC/source workstream are
@@ -144,8 +150,9 @@ The Airband filter has a nominal/stress feasibility audit and a 24×11-mm tuning
 cell, and port/antenna kit codes are synchronized. The onboard analog-video
 receiver, decoder, connector and all firmware contracts are removed: no
 post-PCBA active module or owner soldering remains in the product boundary.
-The exact 3V3_MAIN cell admits 3.75 A continuous / 4.25 A step across all 12
-allowed signal groups; dynamic and enclosure proof remains an H3 gate. Airband
+The accepted 3V3_MAIN requirement remains 3.75 A continuous / 4.25 A step across all 12
+allowed signal groups; the fitted current limit does not yet satisfy that envelope.
+Current-cell electrical, dynamic and enclosure proof remains open. Airband
 filter H3 uses bounded pre-layout parasitics, H6 repeats routed extraction
 before order and H8 selects the VNA-qualified fitted/DNP state. The complete R2
 mockup passes its structural audit and was accepted on 2026-08-30. Hardware
@@ -168,6 +175,13 @@ The expanded [electrical review](https://github.com/anton-vinogradov/esp32-leshy
 also corrects TPS3839, TPD2EUSB30A, B3S and FH34 source definitions. Its refreshed
 H2/H3 contracts leave generated BSP code, display scheduling and transport APIs
 unchanged; typed ERC and physical assembly remain hardware release gates.
+The current checkpoint corrects RF footprints and NC5 labels without changing GPIOs,
+APIs or generated BSP code. Its native-bound power audit is `review_required`:
+R67 is 1.65 kΩ while the H3 protection model assumes 1.18 kΩ; that model cites
+TPS564252 rather than fitted TPS566231P. Main PGTH lacks guaranteed low-rail
+assertion headroom, and the AON eFuse resistance bound uses the wrong RILIM
+test condition. No power part was changed. H3 contract synchronization retains
+the analytical scope; it does not close these findings or prove powered startup.
 `H2-R2.1.4` reconciles six domains,
 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 freezes those exact
@@ -189,8 +203,9 @@ projects in debug and release. Its inputs remain the reviewed
 [BSP ownership](config/f2_r2_bsp_consumption.json) and
 [build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
 artifacts and 16 maps exist, and all 16 image-size gates pass without warnings.
-The record remains bound to the reviewed matrix and build policy and preserves
-the exact S3, C5, dual-RP and Pack/Safety boundaries. No target boot, peripheral,
+The preserved record remains bound to its recorded matrix and build policy;
+requalification against the refreshed matrix is pending. The exact S3, C5,
+dual-RP and Pack/Safety boundaries are unchanged. No target boot, peripheral,
 emulator, development-board or physical run occurred, and byte reproducibility
 is not yet proven. F2-R2.5 must now run two clean passes, compare every declared
 artifact byte-for-byte and publish the bilingual F2-R2 closure report only if
