@@ -20,6 +20,51 @@ def load_dispatcher():
     return module
 
 
+def fixture_git(repo, *arguments):
+    return subprocess.check_output(
+        ["git", "-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false",
+         "-c", "user.name=Qualification test", "-c", "user.email=test@example.invalid",
+         *arguments], cwd=repo, stderr=subprocess.PIPE, text=True,
+    ).strip()
+
+
+def evidence_fixture(repo):
+    """Real temporary Git provenance and tiny files; no SDK/build-tree dependency."""
+    dispatcher = load_dispatcher()
+    matrix_path = repo / "config/f2_r2_build_matrix.json"
+    matrix = json.loads((ROOT / "config/f2_r2_build_matrix.json").read_text())
+    paths = ["config/f2_r2_build_matrix.json"] + [
+        row["path"] for row in [*matrix["inputs"].values(), *matrix["size_gate_sources"].values()]
+    ]
+    for relative in paths:
+        path = repo / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes((ROOT / relative).read_bytes())
+    fixture_git(repo, "init", "-q")
+    fixture_git(repo, "add", ".")
+    fixture_git(repo, "commit", "-qm", "test input snapshot")
+    commit = fixture_git(repo, "rev-parse", "HEAD")
+    epoch = fixture_git(repo, "show", "-s", "--format=%ct", commit)
+    jobs = []
+    for target in matrix["targets"]:
+        for configuration in dispatcher.CONFIGURATIONS:
+            build = dispatcher.job_build_root(matrix, target["id"], configuration, repo)
+            for artifact in target["artifacts"]:
+                path = dispatcher.artifact_path(artifact["path"], build)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"ok")
+            jobs.append(dispatcher.verify_job(matrix, target, configuration, repo))
+    commands = dispatcher.evidence_command_rows(
+        matrix, dispatcher.TARGET_IDS, dispatcher.CONFIGURATIONS, ("configure", "build")
+    )
+    for command in commands:
+        command["status"] = "passed"
+    evidence = dispatcher.qualification_evidence(
+        matrix_path, matrix, jobs, commands, {"SOURCE_DATE_EPOCH": epoch}, commit, repo
+    )
+    return dispatcher, matrix_path, matrix, evidence
+
+
 class F2R2DispatcherTest(unittest.TestCase):
     def run_tool(self, *arguments: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -80,86 +125,18 @@ class F2R2DispatcherTest(unittest.TestCase):
         self.assertIn("qualification evidence is absent", result.stdout)
 
     def test_complete_synthetic_evidence_validates_and_tampering_fails(self):
-        dispatcher = load_dispatcher()
-        matrix_path = ROOT / "config/f2_r2_build_matrix.json"
-        matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
-        environment = dispatcher.local_environment()
-        source_date_epoch = environment["SOURCE_DATE_EPOCH"]
-        environment.update(matrix["locked_environment"]["environment"])
-        environment["SOURCE_DATE_EPOCH"] = source_date_epoch
-        targets = dispatcher.matrix_targets(matrix)
-        jobs = []
-        for target_id in dispatcher.TARGET_IDS:
-            target = targets[target_id]
-            for configuration in dispatcher.CONFIGURATIONS:
-                build = dispatcher.job_build_root(matrix, target_id, configuration)
-                artifacts = [
-                    {
-                        "kind": artifact["kind"],
-                        "path": str(
-                            dispatcher.artifact_path(
-                                artifact["path"], build
-                            ).relative_to(ROOT)
-                        ),
-                        "bytes": 1,
-                        "sha256": "0" * 64,
-                    }
-                    for artifact in target["artifacts"]
-                ]
-                gates = [
-                    {
-                        "artifact": str(
-                            dispatcher.artifact_path(
-                                gate["artifact"], build
-                            ).relative_to(ROOT)
-                        ),
-                        "bytes": 1,
-                        "warning_bytes": gate["warning_bytes"],
-                        "maximum_bytes": gate["maximum_bytes"],
-                        "status": "passed",
-                        "source": gate["source"],
-                    }
-                    for gate in target["size_gates"]
-                ]
-                jobs.append(
-                    {
-                        "target": target_id,
-                        "configuration": configuration,
-                        "artifacts": artifacts,
-                        "size_gates": gates,
-                        "warnings": [],
-                    }
-                )
-        commands = dispatcher.evidence_command_rows(
-            matrix,
-            dispatcher.TARGET_IDS,
-            dispatcher.CONFIGURATIONS,
-            ("configure", "build"),
-        )
-        for command in commands:
-            command["status"] = "passed"
-        evidence = dispatcher.qualification_evidence(
-            matrix_path,
-            matrix,
-            jobs,
-            commands,
-            environment,
-            "0" * 40,
-        )
         with tempfile.TemporaryDirectory() as temporary:
-            path = Path(temporary) / "evidence.json"
+            repo = Path(temporary)
+            dispatcher, matrix_path, matrix, evidence = evidence_fixture(repo)
+            path = repo / "evidence.json"
             path.write_text(json.dumps(evidence), encoding="utf-8")
             self.assertEqual(
-                [],
-                dispatcher.check_evidence(
-                    path, matrix_path, matrix
-                ),
+                [], dispatcher.check_evidence(path, matrix_path, matrix, repo)
             )
-            evidence["jobs"][0]["artifacts"][0]["sha256"] = "tampered"
+            evidence["jobs"][0]["artifacts"][0]["sha256"] = "f" * 64
             path.write_text(json.dumps(evidence), encoding="utf-8")
-            self.assertTrue(
-                dispatcher.check_evidence(path, matrix_path, matrix)
-            )
+            errors = dispatcher.check_evidence(path, matrix_path, matrix, repo)
+            self.assertTrue(any("artifact bytes/hash differ" in e for e in errors), errors)
 
     def test_artifact_verifier_rejects_missing_and_oversized_images(self):
         dispatcher = load_dispatcher()

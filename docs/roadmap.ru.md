@@ -8,9 +8,9 @@
 > сохранённые аналитические результаты H3 ниже не квалифицируют установленную ячейку.
 > Обновление источников интерфейсов 8 сентября удаляет устаревший неиспользуемый контакт 6
 > аудиоразъёма и уточняет происхождение корпусов, но не меняет GPIO/API или любой из 13 C/H-файлов BSP.
-> Неизменённая квалификация входного commit `ea5b9fa` и matrix `566373099e64…`
-> остаётся доказательством для прежних входов. Текущая matrix ждёт нового чистого
-> прогона из 12 jobs; новый результат сборки пока не заявлен.
+> Настоящий чистый прогон из 12 jobs прошёл для входного commit `c8e349b` по
+> matrix `354f1a37a0a9…`. Dispatcher атомарно записал свежий evidence после
+> прохождения всех jobs; `verify-evidence` подтвердил текущие входы и artifacts.
 > Прежние исправления RF-footprints/NC5 сохранены в аппаратной границе.
 > [Продолжение ревью интерфейсов](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.ru.md)
 > исправляет выбранные позиции органов управления/портов native PCB, оставляя открытыми
@@ -68,7 +68,7 @@ firmware-репозитория. Пересечения с железом ука
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
 | Владение generated BSP R2 | ✅ F2-R2.3 исправлен и повторно квалифицирован: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат все 173 точные controller-строки H2 с fail-closed mapping/count guards; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | ✅ [Синхронизированный gate](../config/r2_h2_sync_gate.json): H2-R2.1.5 импортирует exact six-domain native KiCad/HW↔FW boundary, карты двух RP и все три electrical prerequisite fail-closed; сохранённый H2.0.3 остаётся только historical R1 |
-| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: сохранённая [F2-R2.4](../config/f2_r2_build_qualification.json) прошла 12 чистых сборок для прежних входов, с 60 artifacts, 16 maps и 16 size gates. До двух чистых побайтно идентичных проходов нужна переквалификация текущей matrix; S3 QEMU остаётся F3-R2 |
+| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: свежая [F2-R2.4](../config/f2_r2_build_qualification.json) прошла 12 чистых сборок для текущей matrix, с 60 artifacts, 16 maps и 16 size gates. Остаются два чистых побайтно идентичных прохода; S3 QEMU остаётся F3-R2 |
 | Пересечение с железом | ▶️ H6.0.3-R1 остаётся открытым, включая условия запуска native-питания. Прежние аналитические результаты H3 и ревью H4 не означают текущую приёмку питания; sourcing остаётся у H5. H3-R2.4 моделирует прямой i8080-8 20 МГц, владение USB и паритет 80/80 M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
@@ -125,10 +125,10 @@ display/flex/touch, RF/антенны, analog audio/IR или механичес
 artifacts, 16 maps и 16 пройденных size gates без warnings. Результат доказывает
 компиляцию, линковку и статическую помещаемость с точным BSP R2; он не доказывает
 byte reproducibility, target boot, peripherals, emulation или физическое железо.
-Сохранённая запись привязана к входному commit `ea5b9fa` и matrix `566373099e64…`.
-Dispatcher выполнил все 12 чистых jobs до её записи. Это не квалификация текущей
-обновлённой matrix. Сначала должны пройти новый чистый прогон из 12 jobs и
-`verify-evidence`, затем два чистых прохода с побайтным сравнением каждого artifact.
+Свежая запись привязана к входному commit `c8e349b` и matrix `354f1a37a0a9…`.
+Dispatcher выполнил все 12 чистых jobs до её записи; `verify-evidence` подтвердил
+текущие входы и artifacts. Прежние build-каталоги и evidence сохранены отдельно.
+Далее нужны два чистых прохода с побайтным сравнением каждого artifact.
 Двуязычный итог F2-R2 публикуется только после прохождения этого gate.
 Точный маркер и его evidence меняются вместе в каждом commit.
 
@@ -298,7 +298,7 @@ flowchart TD
 |---|---|---|---|
 | **F0. Контракты продукта** | ✅ [Итог F0-R2 проведён ревью](f0-product-contracts-report.ru.md) | Шесть доменов, Hub transports, identities, rollback, update и execution gates согласованы и проверяются машинно | Firmware согласована с hash-bound текущей входной границей H0/H2 R2; прежний single-RP export H2 исторический, а приёмка H6 и разрешение заказа остаются отдельными |
 | **F1. Portable cores** | ✅ [Итог F1-R2 проведён ревью](f1-portable-cores-report.ru.md) | Six-domain update, receive-only Airband заднего RP и integrated faults проходят 34 normal+sanitizer scenarios | Normal и ASan/UBSan сценарии покрывают heartbeat, lease, receiver-mode и update ownership |
-| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.5 | Переквалифицировать обновлённую 12-job matrix, затем побайтно сравнить все объявленные artifacts в двух чистых проходах | 12 debug/release configurations воспроизводятся; каждый target выдаёт named artifact/map и проходит size gate |
+| **F2. Target-проекты и build system** | ▶️ Сейчас: F2-R2.5 | Повторить квалифицированную текущую 12-job matrix двумя чистыми проходами и побайтно сравнить все объявленные artifacts | 12 debug/release configurations воспроизводятся; каждый target выдаёт named artifact/map и проходит size gate |
 | **F3. Boot, память и эмуляция** | ⏳ Ожидает F2-R2 | Повторная квалификация S3 QEMU, artifacts шести targets, size/memory/rollback и физических gates | Шесть образов укладываются и воспроизводятся; отсутствующая периферия и non-S3 execution остаются dev-board gates |
 | **F4. IPC и scheduling** | ⏳ Ожидает F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert и Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery работают end-to-end; display/UI локальны, safety/control вытесняет bulk traffic |
 | **F5. BSP и drivers** | ⏳ Ожидает F4 и актуальную схему | Драйверы display/touch, microSD, codec, receiver, detect CTIA-разъёма, управление источником гарнитуры по `0x39`, IR, 3×nRF24, CC, voice, взаимоисключающие U214/U219, M5 Unit, controls, LEDs, sensors и power states | Каждый driver имеет fake/host boundary и target smoke test; Cap reset/unknown безопасен для U214 и выключен, sequence контактов 8/10 и общей SPI точна, U219 остаётся RX плюс NFC poll/read, а непредставленная периферия сохраняет dev-board/HIL gate |
@@ -330,10 +330,9 @@ flowchart TD
 
 ## Следующее действие
 
-Текущая граница — `F2-R2.5`. Сохранённый evidence F2-R2.4 действителен для прежних
-входов, а не обновлённой matrix. После commit проверенных входов нужно выполнить
-locked чистый прогон из 12 jobs и проверить все artifacts, maps и size gates до
-записи текущего результата. Два побайтно идентичных чистых прохода остаются
-отдельным gate воспроизводимости. Runtime и S3
+Текущая граница — `F2-R2.5`. Свежий F2-R2.4 прошёл текущую locked 12-job matrix,
+проверил все 60 artifacts и 16 maps и прошёл все 16 size gates. Два побайтно
+идентичных чистых прохода остаются отдельным gate воспроизводимости; нужно выполнить
+их и побайтно сравнить каждый объявленный artifact. Runtime и S3
 QEMU остаются gates F3-R2; F2-R2.4 не заявляет emulator, development-board или
 hardware execution.

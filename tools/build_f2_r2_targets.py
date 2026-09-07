@@ -489,6 +489,61 @@ def qualification_evidence(
     }
 
 
+def commit_input_errors(
+    evidence: dict,
+    matrix_path: Path,
+    matrix: dict,
+    repo_root: Path = REPO_ROOT,
+) -> list[str]:
+    """Bind retained execution to a real input commit, not necessarily HEAD."""
+    commit = str(evidence.get("repo_commit", ""))
+    epoch = str(evidence.get("source_date_epoch", ""))
+    errors: list[str] = []
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        return ["qualification Git commit is missing"]
+    try:
+        kind = subprocess.check_output(
+            ["git", "cat-file", "-t", commit], cwd=repo_root,
+            stderr=subprocess.PIPE, text=True,
+        ).strip()
+        if kind != "commit":
+            return ["qualification Git object is not a commit"]
+        actual_epoch = subprocess.check_output(
+            ["git", "show", "-s", "--format=%ct", commit], cwd=repo_root,
+            stderr=subprocess.PIPE, text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ["qualification Git commit is unavailable"]
+    if not epoch.isdigit() or epoch != actual_epoch:
+        errors.append("qualification SOURCE_DATE_EPOCH differs from its Git commit")
+    records = [
+        {"path": str(matrix_path.relative_to(repo_root)), "sha256": sha256(matrix_path)},
+        *matrix.get("inputs", {}).values(),
+        *matrix.get("size_gate_sources", {}).values(),
+    ]
+    for record in records:
+        relative = record.get("path", "")
+        path = Path(relative)
+        if not relative or path.is_absolute() or ".." in path.parts:
+            errors.append("qualification input path is unsafe")
+            continue
+        try:
+            blob = subprocess.check_output(
+                ["git", "show", f"{commit}:{relative}"], cwd=repo_root,
+                stderr=subprocess.PIPE,
+            )
+            current = repo_root / path
+            if (
+                hashlib.sha256(blob).hexdigest() != record.get("sha256")
+                or not current.is_file()
+                or sha256(current) != record.get("sha256")
+            ):
+                errors.append(f"qualification input differs from its Git commit: {relative}")
+        except (OSError, subprocess.CalledProcessError):
+            errors.append(f"qualification input is absent from its Git commit: {relative}")
+    return errors
+
+
 def check_evidence(
     evidence_path: Path,
     matrix_path: Path,
@@ -509,10 +564,7 @@ def check_evidence(
         errors.append("qualification matrix input is stale")
     if inputs.get("build_policy") != matrix["inputs"]["build_policy"]:
         errors.append("qualification build-policy input is stale")
-    if not re.fullmatch(r"[0-9a-f]{40}", str(evidence.get("repo_commit", ""))):
-        errors.append("qualification Git commit is missing")
-    if not str(evidence.get("source_date_epoch", "")).isdigit():
-        errors.append("qualification SOURCE_DATE_EPOCH is invalid")
+    errors.extend(commit_input_errors(evidence, matrix_path, matrix, repo_root))
     expected_jobs = [
         (target_id, configuration)
         for target_id in TARGET_IDS
@@ -547,14 +599,23 @@ def check_evidence(
             for artifact in actual_artifacts
         ] != expected_artifacts:
             errors.append(f"{target_id}:{configuration}: artifact inventory changed")
+            continue
         for artifact in actual_artifacts:
-            if artifact.get("bytes", 0) <= 0 or not re.fullmatch(
+            if type(artifact.get("bytes")) is not int or artifact["bytes"] <= 0 or not re.fullmatch(
                 r"[0-9a-f]{64}", str(artifact.get("sha256", ""))
             ):
                 errors.append(
                     f"{target_id}:{configuration}: invalid artifact evidence"
                 )
                 break
+            path = repo_root / artifact["path"]
+            try:
+                if not path.is_file() or path.is_symlink():
+                    errors.append(f"{target_id}:{configuration}: missing or aliased artifact: {artifact['path']}")
+                elif path.stat().st_size != artifact["bytes"] or sha256(path) != artifact["sha256"]:
+                    errors.append(f"{target_id}:{configuration}: artifact bytes/hash differ from evidence: {artifact['path']}")
+            except OSError as error:
+                errors.append(f"{target_id}:{configuration}: cannot read artifact {artifact['path']}: {error}")
         artifact_sizes = {
             artifact.get("path"): artifact.get("bytes")
             for artifact in actual_artifacts

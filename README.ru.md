@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; сохранённая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 сборок R2, 60 artifacts, 16 maps и 16 size gates для прежних входов; текущая matrix ждёт чистой переквалификации, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | переквалифицировать текущую matrix, затем доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; свежая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 чистых сборок R2, 60 artifacts, 16 maps и 16 size gates для текущей matrix, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -74,12 +74,12 @@ entry sources и image identities. Связанный hash
 domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
 к одному SDK project. Атомарная [квалификация F2-R2.4](config/f2_r2_build_qualification.json)
 зафиксировала 12 успешных configure/build jobs, 60 artifacts, 16 maps и 16
-пройденных size gates для входного commit `ea5b9fa` и его matrix `566373099e64…`.
-Эта запись сохранена без изменений как доказательство для прежних входов.
+пройденных size gates для входного commit `c8e349b` и matrix `354f1a37a0a9…`.
 Обновление источников интерфейсов 8 сентября удаляет устаревший контакт 6
 аудиоразъёма и уточняет происхождение точных корпусов; GPIO/API и все 13
-сгенерированных C/H-файлов BSP не изменились. Обновлённая matrix требует
-нового чистого прогона из 12 jobs; новый результат сборки пока не заявлен.
+сгенерированных C/H-файлов BSP не изменились. Настоящий чистый прогон из 12 jobs
+прошёл для этих закоммиченных входов; dispatcher атомарно записал свежий evidence,
+а `verify-evidence` подтвердил его.
 Этот прогон доказывает для своих входов компиляцию, линковку и статическую
 помещаемость образов, но не boot, peripheral execution, воспроизводимость,
 эмуляцию или физическое железо.
@@ -228,10 +228,10 @@ projects в debug и release. Текущие inputs — прошедшие ре�
 [владение BSP](config/f2_r2_bsp_consumption.json) и
 [build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
 artifacts и 16 maps были проверены, а все 16 size gates прошли без warnings
-для сохранённого входного commit `ea5b9fa` и matrix `566373099e64…`.
-Dispatcher записал этот результат только после прохождения всех 12 чистых jobs.
-Это не квалификация текущей обновлённой matrix: перед восстановлением такого
-утверждения должны пройти новый чистый прогон из 12 jobs и `verify-evidence`.
+для входного commit `c8e349b` и текущей matrix `354f1a37a0a9…`.
+Dispatcher записал свежий результат только после прохождения всех 12 чистых jobs;
+`verify-evidence` подтвердил текущие хеши входов и artifacts. Прежние build-каталоги
+и evidence сохранены отдельно, а не переименованы в результат этого прогона.
 Точные границы S3, C5,
 двух RP и Pack/Safety не изменились. Target boot, peripheral, emulator,
 development-board и physical runs не выполнялись, а byte reproducibility ещё не

@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; retained [F2-R2.4](config/f2_r2_build_qualification.json) passed 12 R2 builds, 60 artifacts, 16 maps and 16 size gates for its previous inputs; the current matrix awaits clean requalification, R1 [report retained](docs/f2-target-build-system-report.md) | requalify the current matrix, then prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; fresh [F2-R2.4](config/f2_r2_build_qualification.json) passed 12 clean R2 builds, 60 artifacts, 16 maps and 16 size gates for the current matrix, R1 [report retained](docs/f2-target-build-system-report.md) | prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -73,12 +73,11 @@ trees, entry sources and image identities. The hash-bound
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
 SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
 records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
-size gates for input commit `ea5b9fa` and its matrix `566373099e64…`.
-That record is retained unchanged as evidence for the previous inputs. The
-8 September interface-source refresh removes obsolete headset contact 6 and
+size gates for input commit `c8e349b` and matrix `354f1a37a0a9…`.
+The 8 September interface-source refresh removes obsolete headset contact 6 and
 updates exact package provenance; GPIO/API and all 13 generated BSP C/H files
-remain unchanged. The updated matrix requires a new clean 12-job qualification;
-no new build result is claimed yet.
+remain unchanged. A genuine clean 12-job qualification passed for these committed
+inputs; the dispatcher wrote fresh evidence atomically and `verify-evidence` passed.
 This run proves compilation, linkage and static image fit for its inputs, not boot,
 peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
@@ -218,10 +217,10 @@ projects in debug and release. The current inputs are the reviewed
 [BSP ownership](config/f2_r2_bsp_consumption.json) and
 [build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
 artifacts and 16 maps were verified, and all 16 image-size gates passed without warnings
-for the retained input commit `ea5b9fa` and matrix `566373099e64…`.
-The dispatcher wrote that record only after all 12 clean jobs passed.
-It is not qualification of the current refreshed matrix: a new clean 12-job
-run and `verify-evidence` must succeed before the current-input claim is restored.
+for input commit `c8e349b` and the current matrix `354f1a37a0a9…`.
+The dispatcher wrote this fresh record only after all 12 clean jobs passed;
+`verify-evidence` confirmed the current input and artifact hashes. Previous build
+directories and evidence were preserved separately, not relabelled as this run.
 The exact S3, C5,
 dual-RP and Pack/Safety boundaries are unchanged. No target boot, peripheral,
 emulator, development-board or physical run occurred, and byte reproducibility
