@@ -5,15 +5,15 @@
   "inputs": {
     "matrix": {
       "path": "config/f2_r2_build_matrix.json",
-      "sha256": "deb307c6fa714a646f0422c9b4d3d74c52f5ae262583d59a6f6776944c03347c"
+      "sha256": "d73fd184f3d6d5020e39ce1c37760b05d6bf8f26b57bbd26b3d9366edc6b2783"
     },
     "build_policy": {
       "path": "config/f2_r2_build_policy.json",
       "sha256": "e3f6bfd58d7e69845f79cdc1b16aa597778cff25b844ad20b0ac955aaa7d7e94"
     }
   },
-  "repo_commit": "cb1318058a9902e842d841fcc592bd3bfa6a2d15",
-  "source_date_epoch": "1788775105",
+  "repo_commit": "e0e991aa2414ee3734ec430704754133302154c7",
+  "source_date_epoch": "1788775512",
   "jobs": [
     {
       "target": "s3",
@@ -23,13 +23,13 @@
           "kind": "application_bin",
           "path": "build/r2/targets/s3/debug/leshy2_s3.bin",
           "bytes": 154768,
-          "sha256": "daf94d728b80c37cb0d6addb32abf8bb44b722a7e5bd5ecad675850a78a0aa61"
+          "sha256": "7fc8e7a3db14512e36906682c24799708cdcfec2a264f4c3a5ea8a963064533c"
         },
         {
           "kind": "elf",
           "path": "build/r2/targets/s3/debug/leshy2_s3.elf",
           "bytes": 3144436,
-          "sha256": "67b9f2867aa4071ec403d7cd702c60e0e8288eb507b0e30306b9c525414c4ed4"
+          "sha256": "64d29408445019eac971c0b6c98fa1edc36b5ff9290f06a55cb2a71b2dd6987b"
         },
         {
           "kind": "map",
@@ -70,13 +70,13 @@
           "kind": "application_bin",
           "path": "build/r2/targets/s3/release/leshy2_s3.bin",
           "bytes": 117936,
-          "sha256": "9ce1a5689edba4a950ec93ad29534002e327d8a7a519ad7be697dddc113ba0cd"
+          "sha256": "c9fdddd02f4bab051b24ca7f1da796860fc432882fecc66f9608f94bb28387db"
         },
         {
           "kind": "elf",
           "path": "build/r2/targets/s3/release/leshy2_s3.elf",
           "bytes": 3034080,
-          "sha256": "24a0c4c1dc1da846c39f2a8a6d5ac3f8547e0c57c5aaede2f8c87efe9747da5c"
+          "sha256": "29a747511bc4036bd0f9384ff8ad1fd54f1e45e4dbb6ed4fa46dee23c747717c"
         },
         {
           "kind": "map",
@@ -117,13 +117,13 @@
           "kind": "application_bin",
           "path": "build/r2/targets/c5/debug/leshy2_c5.bin",
           "bytes": 136256,
-          "sha256": "e2a06bddd21c9e68883f88ca73f06a179269635995d95f40309c417876aa847c"
+          "sha256": "2d671bd856503fbe2f13983a34f4502a4395d6885cb6a9ee883fbae6cc3caae8"
         },
         {
           "kind": "elf",
           "path": "build/r2/targets/c5/debug/leshy2_c5.elf",
           "bytes": 3508140,
-          "sha256": "abdf2268357b38713011eb8d2fda0ca4bf26b76eac11a20caab699a57912b313"
+          "sha256": "f69fd9670ade5d8745c7b37e6a1841eeb002fb1ba38e9fd7bee124b0726a46f7"
         },
         {
           "kind": "map",
@@ -164,13 +164,13 @@
           "kind": "application_bin",
           "path": "build/r2/targets/c5/release/leshy2_c5.bin",
           "bytes": 112048,
-          "sha256": "6410b0828c0710017572101aee77b62ceb645a16543e6e6ba688bb75d8972126"
+          "sha256": "baa558fed06beead8cf3655b0a170f778ef4b1e249a41dbcf39677d75587bb7d"
         },
         {
           "kind": "elf",
           "path": "build/r2/targets/c5/release/leshy2_c5.elf",
           "bytes": 3401268,
-          "sha256": "c99b4fdede56873d04579ad0c7a4b48bdb6a8143ec910af140f3f282c6f089dc"
+          "sha256": "fa38fc9f16ea950f49abdb2b14a42d6147443a375ed03c89aaba51547829d183"
         },
         {
           "kind": "map",
@@ -387,7 +387,7 @@
           "kind": "boot_map",
           "path": "build/r2/targets/pack/debug/leshy2_pack_boot.map",
           "bytes": 8927,
-          "sha256": "b5ee69fa52b6a5b919a2473e2dcd4b9ae30cf22c400133982b4733060742fff7"
+          "sha256": "3aceac73c01f8bba3f9d03bc93071c25b85b9bc513ae94b6e8741544611d3642"
         },
         {
           "kind": "elf",
@@ -405,7 +405,7 @@
           "kind": "map",
           "path": "build/r2/targets/pack/debug/leshy2_pack.map",
           "bytes": 18601,
-          "sha256": "276efc94f14a9559754c74147201687896a7bd67e6f00e7d0f188a9cee12ea30"
+          "sha256": "e0fefa2839994e326dc225c3301419ed4852024d51628b7be4d08648682ca339"
         }
       ],
       "size_gates": [
@@ -448,7 +448,7 @@
           "kind": "boot_map",
           "path": "build/r2/targets/pack/release/leshy2_pack_boot.map",
           "bytes": 8931,
-          "sha256": "853cf5f1bdd48fbb9739cc07c3e3622f5c9a8d920bf82b6c41c2efeea371905b"
+          "sha256": "dafc97b43043bbbea05a8eaa2663759bb44faf96d32ee5aacef5cf2caa611680"
         },
         {
           "kind": "elf",
@@ -466,7 +466,7 @@
           "kind": "map",
           "path": "build/r2/targets/pack/release/leshy2_pack.map",
           "bytes": 18605,
-          "sha256": "c5a99e49c1967702ce8c76902b67f720dd53234dfd6e92af4b72ebd5ac787bf9"
+          "sha256": "3d7255c4bac580098ac68668b5f83b50f19823658ddaa8f7adab3e55c00985b0"
         }
       ],
       "size_gates": [
@@ -509,7 +509,7 @@
           "kind": "boot_map",
           "path": "build/r2/targets/safety/debug/leshy2_safety_boot.map",
           "bytes": 8955,
-          "sha256": "861e48d92aed64d5a2830016192b26f28a2576d98fd23668460ee4543beefee4"
+          "sha256": "4a4265457807e6340d82ddbf95874fde8994b20f59bb5c8e7137a6c2d0da2112"
         },
         {
           "kind": "elf",
@@ -527,7 +527,7 @@
           "kind": "map",
           "path": "build/r2/targets/safety/debug/leshy2_safety.map",
           "bytes": 19413,
-          "sha256": "726bfdc77c8eaa05b9e978f59fbaccf639cae2f2fcecc6a580acb923f925c480"
+          "sha256": "6e3231b998bd43160f917c41567cf1ce6afc6744dd54170c78f1e64b46b65307"
         }
       ],
       "size_gates": [
@@ -570,7 +570,7 @@
           "kind": "boot_map",
           "path": "build/r2/targets/safety/release/leshy2_safety_boot.map",
           "bytes": 8959,
-          "sha256": "0488c4601ac4a49209441328d1018769821e04cc77ae41bd58c0e13d740b77a2"
+          "sha256": "33dd5798bd394e30fe3f7a392eb2ad7b163cae9dd33114f387bee0fdc6ccda25"
         },
         {
           "kind": "elf",
@@ -588,7 +588,7 @@
           "kind": "map",
           "path": "build/r2/targets/safety/release/leshy2_safety.map",
           "bytes": 19417,
-          "sha256": "5a2640e3922d0dfef1737c7d33c8159b7c4b60a8715f9a90736576abbc0382d2"
+          "sha256": "a084a179471fbe54bf7d0738e6e0eb60b77c4b411052bbf3b6f429f4ebde79e7"
         }
       ],
       "size_gates": [
