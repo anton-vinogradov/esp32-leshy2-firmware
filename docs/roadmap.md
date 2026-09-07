@@ -22,12 +22,15 @@
 > fault-UI reset. Current exterior,
 > turned-over inner faces and service views are generated. H2-R2.1.3 materialized
 > 1,208 fitted positions and 4,306 physical pins across the two native KiCad
-> projects. All 4,302 ledger endpoints reconcile to 4,066 connected endpoints,
-> 236 explicit no-connects and 788 global canonical / 822 board-local nets; both projects pass KiCad
+> projects: 4,070 connected physical pins, 236 explicit no-connects and
+> 788 global canonical / 822 board-local nets; both projects pass KiCad
 > ERC with zero errors and zero warnings under the current passive-pin library. This does not prove
 > rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
 > The 7 September physical-pin corrections restore both RP2354 QSPI supplies and correct
 > three component pin mappings: 4,070 connected physical pins, unchanged firmware GPIOs/APIs.
+> The expanded [electrical review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-electrical-semantics.md)
+> adds TPS3839/TPD2EUSB30A/B3S/FH34 source corrections; the refreshed H2/H3 contracts
+> preserve generated BSP code and do not constitute hardware electrical sign-off.
 > H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
