@@ -5,13 +5,13 @@
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.** R1 F0–F4
 > remains regression evidence, not the current topology. Hardware H1-R2.39 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 placement, mechanical stack and five microcoax service corridors are complete; H6.0.3-R1 is current: both boards are 80 x 150 mm, all 1,208 positions remain frozen without hard conflicts, and the [live routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md) binds 5,432 DRC-clean copper items with 723 physical connections resolved and 2,542 remaining through the new 5-mm inner-face corridor; UI analogue/audio/sense is complete; RF/power has 12 connections remaining in that class after 115 new clean connections. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,617 logical contacts. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.3-R1 is current: routing is being requalified after correcting component locality on the two 80 × 150-mm boards. Exact copper counts, connectivity, DRC evidence and images are maintained in the [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md). The former routing results are historical and do not establish completion of any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,617 logical contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 > materializes two native six-layer boards and places all 1,208 fitted instances
 > with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
 > locks 20-mm nylon M2.5 retention, captive nuts, 11-mm stops and independent PCB
-> capture without loading M1. H6.0.1 is complete; the accepted [H6.0.2 routing slice](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
-> resolves all 366/366 connections across 165 `GENERAL_CONTROL` and 12 `OSCILLATOR` nets with zero DRC violations, while safety-control and analogue/audio/sense routing remains current. The locality-first two-board placement, Airband filter,
+> capture without loading M1. Placement, mechanical and cable checks repeat when affected by a geometry change; the [H6 routing policy](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
+> controls the ongoing routing work. The locality-first two-board placement, Airband filter,
 > 3.046-A worst electrical corner / 3.2-A admission boundary on 3V3_MAIN, exact display and all
 > U219 bodies pass the current structural checks. The 226-body register also
 > contains all eight exact TX detectors, five couplers and eight bounded local
@@ -27,10 +27,9 @@
 > ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 34 cross-project nets and 228 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
-> H6.0.1 is complete and the `GENERAL_CONTROL` + `OSCILLATOR` routing slice passes; H6.0.2
-> critical manual routing is current and ordering remains unauthorized.
+> H6.0.3-R1 routing remains in progress and ordering remains unauthorized.
 
-Status last reconciled: **3 September 2026**. This is the firmware repository's
+Hardware-status text last reconciled: **7 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -45,7 +44,7 @@ duplicated or given a second status here.
 | Generated R2 BSP ownership | ✅ F2-R2.3 corrected and requalified: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain all 173 exact H2 controller rows with fail-closed mapping/count guards, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
 | Target builds, maps and S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) passed all 12 locked debug/release builds, 60 artifacts, 16 maps and 16 size gates; two clean byte-identical passes remain, while S3 QEMU stays F3-R2 |
-| Hardware intersection | ✅ H0-R2 through the current H5-R2 route result are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.1 passes; the H6.0.2 `GENERAL_CONTROL` + `OSCILLATOR` slice resolves 366/366 connections with zero DRC violations, while safety-control, analogue/audio/sense routing and native net parity are current. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
+| Hardware intersection | ✅ H0-R2 through the current H5-R2 route result are reviewed. ▶️ H6.0.3-R1 routing is being requalified; the linked hardware checkpoint above owns its exact progress. H3-R2.4 proves exact 20-MHz direct i8080-8, deterministic USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
 | Complete signed all-in-one update | ⏳ Portable rollback model exists; target boot/flash/signature integration does not |
