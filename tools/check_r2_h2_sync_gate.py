@@ -234,7 +234,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         or exact_ledger.get("status") != "pass"
         or exact_ledger.get("summary", {}).get("board_component_group_count") != 245
         or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 6
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1617
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1616
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
@@ -247,7 +247,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         native_kicad.get("marker") != "H2-R2.1.3"
         or native_kicad.get("status") != "pass"
         or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1208
-        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4306
+        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4305
         or native_kicad.get("summary", {}).get("canonical_net_count") != 788
         or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
     ):
@@ -321,7 +321,8 @@ def main() -> int:
     if gate["r2_h2_synchronized"]:
         print(
             "R2/H2 sync gate OPEN: exact domains, dual-RP maps, C5 mux/source hashes and "
-            "H0 M1 exported with reviewed physical H1 and zero unresolved pre-H2 gates"
+            "H0 M1 exported against the reviewed H1/H2 input boundary; "
+            "this does not close current H6 electrical, placement or assembly gates"
         )
     else:
         print(

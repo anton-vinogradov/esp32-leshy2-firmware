@@ -55,9 +55,9 @@ class H0R2FirmwareContractTest(unittest.TestCase):
 
     def test_native_boundary_includes_both_rp2354_qspi_supplies(self):
         summary = self.actual["native_kicad"]["summary"]
-        self.assertEqual(4306, summary["physical_symbol_pin_count"])
+        self.assertEqual(4305, summary["physical_symbol_pin_count"])
         self.assertEqual(4070, summary["connected_physical_pin_count"])
-        self.assertEqual(236, summary["explicit_no_connect_physical_pin_count"])
+        self.assertEqual(235, summary["explicit_no_connect_physical_pin_count"])
         self.assertEqual(
             summary["physical_symbol_pin_count"],
             summary["connected_physical_pin_count"]
@@ -142,7 +142,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("H2-R2.1.2", ledger["marker"])
         self.assertEqual(245, ledger["summary"]["board_component_group_count"])
         self.assertEqual(6, ledger["summary"]["explicit_non_pcba_group_count"])
-        self.assertEqual(1617, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(1616, ledger["summary"]["logical_contact_count"])
         self.assertEqual(0, ledger["summary"]["unresolved_groups"])
         self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
         self.assertFalse(ledger["authorization"]["schematic_nets"])

@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; свежая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 сборок R2, 60 artifacts, 16 maps и 16 size gates по обновлённой matrix, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; сохранённая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 сборок R2, 60 artifacts, 16 maps и 16 size gates для прежних входов; текущая matrix ждёт чистой переквалификации, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | переквалифицировать текущую matrix, затем доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -58,14 +58,14 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки и display ос
 локальными на передней плате. Hub RP владеет microSD и всеми тремя nRF24;
 задний RF RP — CC1101, voice, audio, `BROADCAST_RX`, M5 и
 ровно один подписанный профиль Cap U214/U219.
-Сохранённые [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json) и
+Сгенерированные [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json) и
 [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
-явно помечены как исторический single-RP import R1 и не могут авторизовать R2.
-[Gate authority R2/H2](config/r2_h2_sync_gate.json) остаётся fail-closed, пока
-новый export H2 не содержит шесть доменов, оба `SC1512-A4`, точные RP-карты
-H1-R2.31 и точную M1 из H0-R2. Рабочий BSP уже содержит все 48 GPIO каждого
-RP и шесть фиксированных C5 SDIO contacts, но это pre-H2 authority, а не
-закрытие ECAD, target-build, emulator или HIL.
+теперь отражают текущую native-границу R2.
+[Gate authority R2/H2](config/r2_h2_sync_gate.json) открыт для шести доменов,
+обоих `SC1512-A4`, точных RP-карт H1-R2.31 и точной M1 из H0-R2.
+Рабочий BSP содержит все 48 GPIO каждого RP и шесть фиксированных C5 SDIO contacts.
+Эта проверка входной authority не закрывает текущие электрические, компоновочные
+и сборочные gates H6, а также target runtime, emulator или HIL.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,
@@ -74,10 +74,12 @@ entry sources и image identities. Связанный hash
 domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumption.json) ровно
 к одному SDK project. Атомарная [квалификация F2-R2.4](config/f2_r2_build_qualification.json)
 зафиксировала 12 успешных configure/build jobs, 60 artifacts, 16 maps и 16
-пройденных size gates для входного commit `ea5b9fa`. Обновление H1/H2/H3 изменило
-происхождение данных и одну координату концепта Airband, не меняя GPIO/API или код
-BSP. Настоящий чистый прогон из 12 jobs повторён по matrix `566373099e64…`;
-dispatcher записал новый evidence, и `verify-evidence` прошёл.
+пройденных size gates для входного commit `ea5b9fa` и его matrix `566373099e64…`.
+Эта запись сохранена без изменений как доказательство для прежних входов.
+Обновление источников интерфейсов 8 сентября удаляет устаревший контакт 6
+аудиоразъёма и уточняет происхождение точных корпусов; GPIO/API и все 13
+сгенерированных C/H-файлов BSP не изменились. Обновлённая matrix требует
+нового чистого прогона из 12 jobs; новый результат сборки пока не заявлен.
 Этот прогон доказывает для своих входов компиляцию, линковку и статическую
 помещаемость образов, но не boot, peripheral execution, воспроизводимость,
 эмуляцию или физическое железо.
@@ -173,10 +175,10 @@ RESET/BOOT и внутренний DBG10. Экран физически орие
 `TCA9803DGKR/C2687966` для Pack/Safety. `H2-R2.1.1` провёл ревью двух
 native-проектов, 22 sheets, шести владельцев доменов, 251 точной component-group
 и 1 218 позиций. `H2-R2.1.2` закрыл exact identities для 245 board groups,
-шести non-PCBA groups и 1 617 логических контактов. `H2-R2.1.3`
-материализовал 1 208 устанавливаемых позиций и 4 306 физических pins
+шести non-PCBA groups и 1 616 логических контактов. `H2-R2.1.3`
+материализовал 1 208 устанавливаемых позиций и 4 305 физических pins
 в двух native-проектах KiCad. Подключены 4 070 физических pins,
-236 явно не подключены; используются 788 глобальных канонических / 822 локальных для плат nets;
+235 явно не подключены; используются 788 глобальных канонических / 822 локальных для плат nets;
 оба проекта проходят KiCad ERC с нулём ошибок и предупреждений при текущей библиотеке passive-выводов.
 Это не доказывает наличие источников у всех шин или отсутствие конфликтующих выходов;
 такая аппаратная проверка остаётся обязательной до производственного выпуска.
@@ -188,8 +190,10 @@ native-проектов, 22 sheets, шести владельцев домено
 Обновлённые контракты H2/H3 не меняют сгенерированный код BSP, управление
 дисплеем или транспортные API; типизированный ERC и физическая сборка
 остаются аппаратными условиями выпуска.
-Текущий срез исправляет RF-footprints и метки NC5, не меняя GPIO, API или
-сгенерированный код BSP. Привязанный к native audit питания имеет статус
+Текущий срез также исправляет точные корпуса интерфейсов и их физическую
+ориентацию; устаревший неиспользуемый контакт 6 аудиоразъёма удалён без изменения
+подключённых endpoints, GPIO, API или сгенерированного кода BSP. Прежние
+исправления RF-footprints и меток NC5 сохранены. Привязанный к native audit питания имеет статус
 `review_required`: R67 равен 1,65 кОм, а модель защиты H3 предполагает 1,18 кОм;
 она ссылается на TPS564252 вместо установленного TPS566231P. У main PGTH нет
 гарантированного запаса срабатывания при нижнем напряжении шины, а сопротивление
@@ -203,10 +207,10 @@ H3 фиксирует эти входы. [Ревью интерфейсов на
 Эти механические исправления и шелкография не меняют границу GPIO/API прошивки.
 Продолжение ревью отделяет концепт H1 из 223 тел от текущей геометрии native PCB.
 Нумерация логических контактов Cap пока не подтверждена относительно физического
-вида сочленения Samtec; ни один вариант карты не выбран и не применён. Точная
-геометрия крепления держателя/энкодера и позиции органов управления/портов RF
-остаются открытыми. Это препятствует выпуску сборки, но не меняет сохранённый
-логический контракт выводов прошивки.
+вида сочленения Samtec; ни один вариант карты не выбран и не применён. Выбранные
+позиции органов управления/портов native PCB исправлены; точное крепление
+держателя/энкодера и акустический доступ остаются открытыми. Исправления в плоскости
+не доказывают готовность сборки и не меняют сохранённый логический контракт прошивки.
 Размещение H6 и разводка исправляются и повторно квалифицируются на платах 80 × 150 мм; routed release candidate ещё не готов.
 Проверка byte reproducibility R2 и разрешение заказа остаются открыты.
 
@@ -217,16 +221,18 @@ H3 фиксирует эти входы. [Ревью интерфейсов на
 ▶️ **`F2-R2.5` — сейчас.** Атомарная
 [квалификация F2-R2.4](config/f2_r2_build_qualification.json) запустила locked
 [shell-free dispatcher](tools/build_f2_r2_targets.py) для всех шести SDK
-projects в debug и release. Её inputs — прошедшие ревью
+projects в debug и release. Текущие inputs — прошедшие ревью
 [план R2](config/f2_r2_target_rebaseline.json),
 [matrix](config/f2_r2_build_matrix.json),
 [project roots](config/f2_r2_target_projects.json),
 [владение BSP](config/f2_r2_bsp_consumption.json) и
 [build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
-artifacts и 16 maps присутствуют, а все 16 size gates прошли без warnings.
-Свежий evidence связан с входным commit `ea5b9fa` и обновлённой matrix
-`566373099e64…`; dispatcher записал его только после прохождения всех 12 чистых jobs,
-а `verify-evidence` подтвердил привязку. Точные границы S3, C5,
+artifacts и 16 maps были проверены, а все 16 size gates прошли без warnings
+для сохранённого входного commit `ea5b9fa` и matrix `566373099e64…`.
+Dispatcher записал этот результат только после прохождения всех 12 чистых jobs.
+Это не квалификация текущей обновлённой matrix: перед восстановлением такого
+утверждения должны пройти новый чистый прогон из 12 jobs и `verify-evidence`.
+Точные границы S3, C5,
 двух RP и Pack/Safety не изменились. Target boot, peripheral, emulator,
 development-board и physical runs не выполнялись, а byte reproducibility ещё не
 доказана. F2-R2.5 должен выполнить два чистых прохода, побайтно сравнить

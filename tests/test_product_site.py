@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import importlib.util
 import json
 import re
@@ -12,6 +13,25 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class ProductSiteTests(unittest.TestCase):
     def read(self, relative: str) -> str:
         return (REPO_ROOT / relative).read_text(encoding="utf-8")
+
+    def test_current_matrix_claim_does_not_relabel_retained_qualification(self):
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        qualification = json.loads(self.read("config/f2_r2_build_qualification.json"))
+        current_matrix_hash = hashlib.sha256(
+            (REPO_ROOT / "config/f2_r2_build_matrix.json").read_bytes()
+        ).hexdigest()
+        matches_current = (
+            qualification["inputs"]["matrix"]["sha256"] == current_matrix_hash
+        )
+        claims = state["current_claims"]
+        self.assertEqual(matches_current, claims["r2_current_matrix_build_qualified"])
+        self.assertEqual(
+            "qualified_current_matrix" if matches_current else "pending_clean_requalification",
+            claims["r2_current_matrix_build_qualification_status"],
+        )
+        self.assertEqual(
+            qualification["repo_commit"], claims["r2_build_qualification_input_commit"]
+        )
 
     def test_public_site_is_small_and_bilingual(self):
         expected = {

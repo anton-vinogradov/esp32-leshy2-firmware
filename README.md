@@ -17,7 +17,7 @@ are kept in the [firmware roadmap](docs/roadmap.md).
 |---|---|---|
 | F0 · Product contracts | ✅ **Reviewed:** [F0-R2 result](docs/f0-product-contracts-report.md) | six domains, identities, independent rollback, S3-last update and honest execution gates |
 | F1 · Portable cores | ✅ **Reviewed:** [F1-R2 result](docs/f1-portable-cores-report.md) | 34 scenarios pass normal and ASan/UBSan; six-domain update, rear-RP Airband and integrated faults |
-| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; fresh [F2-R2.4](config/f2_r2_build_qualification.json) passed 12 R2 builds, 60 artifacts, 16 maps and 16 size gates against the updated matrix, R1 [report retained](docs/f2-target-build-system-report.md) | prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
+| **F2 · Target projects and build system** | **▶️ Current: F2-R2.5**; retained [F2-R2.4](config/f2_r2_build_qualification.json) passed 12 R2 builds, 60 artifacts, 16 maps and 16 size gates for its previous inputs; the current matrix awaits clean requalification, R1 [report retained](docs/f2-target-build-system-report.md) | requalify the current matrix, then prove two byte-identical clean passes and publish the bilingual F2-R2 closure report |
 | F3 · Boot, memory and emulation | ⏳ R1 [report retained](docs/f3-boot-memory-emulation-report.md); waiting for F2-R2 | requalified six-target memory, boot, emulator and physical gates |
 | F4 · IPC and scheduling | ⏳ R1 work paused; waiting for F3-R2 | Hub-centered transports, typed messages, credits and priority isolation |
 | F5 · BSP and drivers | ⏳ Waiting for F4 and current R2 schematic | all device, control, sensor and power-state drivers |
@@ -57,14 +57,14 @@ targets: S3, C5, RF RP, Hub RP, Pack and Safety. UI, buttons and display remain
 front-local. Hub RP owns microSD and all three nRF24 paths; rear RF RP owns
 CC1101, voice, audio, `BROADCAST_RX`,
 M5 and exactly one signed U214/U219 Cap profile.
-The retained [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json)
+The generated [`hardware_bsp_contract.json`](config/hardware_bsp_contract.json)
 and [`hardware_integration_contract.json`](config/hardware_integration_contract.json)
-are explicitly historical R1 single-RP imports and cannot authorize R2. The
-[R2/H2 authority gate](config/r2_h2_sync_gate.json) remains fail-closed until a
-new H2 export contains all six domains, both `SC1512-A4` instances, the exact
-H1-R2.31 RP maps and the exact H0-R2 M1 map. The working BSP contains all 48
-GPIO positions for each RP and the six fixed C5 SDIO contacts, but this is
-pre-H2 authority, not ECAD, target-build, emulator or HIL closure.
+now project the current native R2 boundary. The
+[R2/H2 authority gate](config/r2_h2_sync_gate.json) is open for all six domains,
+both `SC1512-A4` instances, the exact H1-R2.31 RP maps and the exact H0-R2 M1 map.
+The working BSP contains all 48 GPIO positions for each RP and the six fixed C5
+SDIO contacts. This input-authority check does not close current H6 electrical,
+placement or assembly gates, nor target runtime, emulator or HIL qualification.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK
@@ -73,10 +73,12 @@ trees, entry sources and image identities. The hash-bound
 domain descriptors and [binds each](config/f2_r2_bsp_consumption.json) to one
 SDK project. The atomic [F2-R2.4 qualification](config/f2_r2_build_qualification.json)
 records 12 successful configure/build jobs, 60 artifacts, 16 maps and 16 passed
-size gates for input commit `ea5b9fa`. The H1/H2/H3 refresh changed source provenance
-and one Airband concept-frame coordinate, without changing GPIO/API or generated BSP
-code. A real clean 12-job qualification was repeated against matrix `566373099e64…`;
-the dispatcher recorded new evidence and `verify-evidence` passed.
+size gates for input commit `ea5b9fa` and its matrix `566373099e64…`.
+That record is retained unchanged as evidence for the previous inputs. The
+8 September interface-source refresh removes obsolete headset contact 6 and
+updates exact package provenance; GPIO/API and all 13 generated BSP C/H files
+remain unchanged. The updated matrix requires a new clean 12-job qualification;
+no new build result is claimed yet.
 This run proves compilation, linkage and static image fit for its inputs, not boot,
 peripheral execution, reproducibility, emulation or physical hardware.
 The reviewed [memory and rollback contract](config/f0_r2_memory_rollback_contract.json)
@@ -164,9 +166,9 @@ reviewed the exact service-VBUS detector/latch/release implementation. Current
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed two native projects, 22 sheets,
 six domain owners, 251 exact component groups and 1,218 product positions.
 `H2-R2.1.2` reviewed exact identities for 245 board groups, six explicit
-non-PCBA groups and 1,617 logical contacts. `H2-R2.1.3` materialized 1,208
-fitted positions and 4,306 physical pins in the two native KiCad projects.
-There are 4,070 connected physical pins, 236 explicit no-connects and
+non-PCBA groups and 1,616 logical contacts. `H2-R2.1.3` materialized 1,208
+fitted positions and 4,305 physical pins in the two native KiCad projects.
+There are 4,070 connected physical pins, 235 explicit no-connects and
 788 global canonical / 822 board-local nets; both projects pass KiCad ERC
 with zero errors and zero warnings under the current passive-pin library. This does not prove
 rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
@@ -177,8 +179,10 @@ The expanded [electrical review](https://github.com/anton-vinogradov/esp32-leshy
 also corrects TPS3839, TPD2EUSB30A, B3S and FH34 source definitions. Its refreshed
 H2/H3 contracts leave generated BSP code, display scheduling and transport APIs
 unchanged; typed ERC and physical assembly remain hardware release gates.
-The current checkpoint corrects RF footprints and NC5 labels without changing GPIOs,
-APIs or generated BSP code. Its native-bound power audit is `review_required`:
+The current checkpoint also corrects exact interface packages and physical
+orientations; obsolete unused headset contact 6 is removed without changing
+connected endpoints, GPIOs, APIs or generated BSP code. The previous RF-footprint
+and NC5 corrections remain. Its native-bound power audit is `review_required`:
 R67 is 1.65 kΩ while the H3 protection model assumes 1.18 kΩ; that model cites
 TPS564252 rather than fitted TPS566231P. Main PGTH lacks guaranteed low-rail
 assertion headroom, and the AON eFuse resistance bound uses the wrong RILIM
@@ -192,9 +196,10 @@ reopened physical connector orientation, mating and required cutouts; collision-
 These mechanical/silkscreen corrections do not change the firmware GPIO/API boundary.
 The follow-up distinguishes the 223-body H1 concept from current native PCB geometry.
 Cap logical-contact numbering is not yet qualified against the physical Samtec mating
-view; no candidate map has been selected or applied. Exact holder/encoder mounting
-geometry and native RF control/port positions remain open. These findings prevent
-assembly release; they do not alter the retained logical firmware pin contract.
+view; no candidate map has been selected or applied. Selected native control/port
+poses are corrected; exact holder/encoder mounting and acoustic access remain open.
+Planar corrections do not establish assembly readiness or alter the retained
+logical firmware pin contract.
 Current H6 placement and routing are being corrected and requalified on
 the 80 × 150-mm boards; the routed release candidate is not complete. R2 byte reproducibility
 and order authorization remain open.
@@ -206,16 +211,18 @@ and order authorization remain open.
 ▶️ **`F2-R2.5` — current.** The atomic
 [F2-R2.4 qualification](config/f2_r2_build_qualification.json) ran the locked
 [shell-free dispatcher](tools/build_f2_r2_targets.py) against all six SDK
-projects in debug and release. Its inputs remain the reviewed
+projects in debug and release. The current inputs are the reviewed
 [R2 plan](config/f2_r2_target_rebaseline.json),
 [matrix](config/f2_r2_build_matrix.json),
 [project roots](config/f2_r2_target_projects.json),
 [BSP ownership](config/f2_r2_bsp_consumption.json) and
 [build policy](config/f2_r2_build_policy.json). All 12 configure/build jobs passed; all 60 named
-artifacts and 16 maps exist, and all 16 image-size gates pass without warnings.
-The fresh record is bound to input commit `ea5b9fa` and the updated matrix
-`566373099e64…`; the dispatcher wrote it only after all 12 clean jobs passed,
-and `verify-evidence` confirmed the binding. The exact S3, C5,
+artifacts and 16 maps were verified, and all 16 image-size gates passed without warnings
+for the retained input commit `ea5b9fa` and matrix `566373099e64…`.
+The dispatcher wrote that record only after all 12 clean jobs passed.
+It is not qualification of the current refreshed matrix: a new clean 12-job
+run and `verify-evidence` must succeed before the current-input claim is restored.
+The exact S3, C5,
 dual-RP and Pack/Safety boundaries are unchanged. No target boot, peripheral,
 emulator, development-board or physical run occurred, and byte reproducibility
 is not yet proven. F2-R2.5 must run two clean passes, compare every declared

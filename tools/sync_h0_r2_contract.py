@@ -148,7 +148,7 @@ def build() -> dict:
         and exact_ledger.get("summary", {}).get("component_group_count") == 251
         and exact_ledger.get("summary", {}).get("board_component_group_count") == 245
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 6
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1617
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1616
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False
@@ -162,7 +162,7 @@ def build() -> dict:
         and native_kicad.get("status") == "pass"
         and native_kicad.get("summary", {}).get("project_count") == 2
         and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1208
-        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4306
+        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4305
         and native_kicad.get("summary", {}).get("canonical_net_count") == 788
         and native_kicad.get("authorization", {}).get("native_schematic_symbols_and_nets") is True
         and native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is False

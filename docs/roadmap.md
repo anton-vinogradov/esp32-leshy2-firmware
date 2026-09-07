@@ -6,16 +6,19 @@
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.**
 > Current native power prerequisites are `review_required`: the retained H3
 > analytical results below are not qualification of the fitted power cell.
-> The H1/H2/H3 refresh changes provenance and one Airband concept-frame coordinate,
-> not GPIO/API or generated BSP code. A fresh clean 12-job qualification passed from
-> input commit `ea5b9fa` against matrix `566373099e64…`; `verify-evidence` passed.
-> Earlier RF-footprint/NC5 corrections remain in the retained hardware boundary.
+> The 8 September interface-source refresh removes obsolete unused headset contact 6
+> and updates exact package provenance, not GPIO/API or any of the 13 generated BSP C/H files.
+> The unchanged qualification from input commit `ea5b9fa` and matrix `566373099e64…`
+> remains evidence for its previous inputs. The current matrix awaits a new clean
+> 12-job qualification; no new build result is claimed yet.
+> Earlier RF-footprint/NC5 corrections remain in the hardware boundary.
 > The [interface follow-up](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
-> leaves Cap physical contact handedness, exact holder/encoder mounting geometry and
-> native RF control/port placement unresolved. No Cap map or firmware GPIO/API was changed.
+> corrects selected native control/port poses while keeping Cap physical contact
+> handedness, exact holder/encoder mounting and acoustic access open.
+> No Cap map or firmware GPIO/API was changed; planar correction is not full assembly approval.
 > The 223-body H1 concept is not the current native PCB geometry or assembly approval.
 > R1 F0–F4 remains regression evidence, not the current topology. Hardware H1-R2.39 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.3-R1 is current: routing is being requalified after correcting component locality on the two 80 × 150-mm boards. Exact copper counts, connectivity, DRC evidence and images are maintained in the [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md). The former routing results are historical and do not establish completion of any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,617 logical contacts. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.3-R1 is current: routing is being requalified after correcting component locality on the two 80 × 150-mm boards. Exact copper counts, connectivity, DRC evidence and images are maintained in the [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md). The former routing results are historical and do not establish completion of any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,616 logical contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 > materializes two native six-layer boards and places all 1,208 fitted instances
 > with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
@@ -31,8 +34,8 @@
 > `FAULT_KILL` to the front indicator and M1-36 carries the independent S3
 > fault-UI reset. Current exterior,
 > turned-over inner faces and service views are generated. H2-R2.1.3 materialized
-> 1,208 fitted positions and 4,306 physical pins across the two native KiCad
-> projects: 4,070 connected physical pins, 236 explicit no-connects and
+> 1,208 fitted positions and 4,305 physical pins across the two native KiCad
+> projects: 4,070 connected physical pins, 235 explicit no-connects and
 > 788 global canonical / 822 board-local nets; both projects pass KiCad
 > ERC with zero errors and zero warnings under the current passive-pin library. This does not prove
 > rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
@@ -50,7 +53,7 @@
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
 > H6.0.3-R1 routing remains in progress and ordering remains unauthorized.
 
-Hardware-status text last reconciled: **7 September 2026**. This is the firmware repository's
+Hardware-status text last reconciled: **8 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -64,7 +67,7 @@ duplicated or given a second status here.
 | S3/C5/RF-RP/Hub-RP/Pack/Safety projects | ✅ F2-R2.2: [six production-SDK roots are reviewed](../config/f2_r2_target_projects.json); RF-RP and Hub-RP use separate pin-free Pico SDK trees, entries and image identities |
 | Generated R2 BSP ownership | ✅ F2-R2.3 corrected and requalified: [six deterministic H1-R2.31 domains](../config/f2_r2_bsp_generation.json) contain all 173 exact H2 controller rows with fail-closed mapping/count guards, and [each has one SDK owner](../config/f2_r2_bsp_consumption.json); the retained five-domain BSP is historical only |
 | R2 authority versus production H2 | ✅ [Synchronized gate](../config/r2_h2_sync_gate.json): reviewed H2-R2.1.5 imports the exact six-domain native KiCad/HW↔FW boundary, dual-RP maps and all three electrical prerequisites fail-closed; retained H2.0.3 JSON remains historical R1 only |
-| Target builds, maps and S3 QEMU | ▶️ F2-R2.5: fresh [F2-R2.4](../config/f2_r2_build_qualification.json) passed 12 clean builds against the updated matrix, with 60 artifacts, 16 maps and 16 size gates. Two clean byte-identical passes remain; S3 QEMU remains F3-R2 |
+| Target builds, maps and S3 QEMU | ▶️ F2-R2.5: retained [F2-R2.4](../config/f2_r2_build_qualification.json) passed 12 clean builds for its previous inputs, with 60 artifacts, 16 maps and 16 size gates. Requalify the current matrix before two clean byte-identical passes; S3 QEMU remains F3-R2 |
 | Hardware intersection | ▶️ H6.0.3-R1 remains open, including native power prerequisites. Prior H3 analytical and H4 review records are not current power acceptance; H5 still owns sourcing. H3-R2.4 models exact 20-MHz direct i8080-8, USB ownership and 80/80 M1 parity. The separate F5/F6 i8080 implementation obligation and all 51 physical residuals remain open under exact owners. |
 | C5, both RP2354B and MSPM0 platform/dev-board tests | 🔒 Exact target boot/peripherals wait for the R2 build matrix and hardware |
 | Menu, waterfall, storage, audio and radio features | ⏳ Described as target behavior; no production implementation |
@@ -121,9 +124,10 @@ configure/build jobs across the six production-SDK roots, 60 verified artifacts,
 16 maps and 16 passed image-size gates, with no warnings. The result proves
 compilation, linkage and static fit against the exact R2 BSP; it does not prove
 byte reproducibility, target boot, peripherals, emulation or physical hardware.
-This fresh record is bound to input commit `ea5b9fa` and matrix `566373099e64…`.
-The dispatcher completed all 12 clean jobs before writing evidence; `verify-evidence` passed.
-Next run two clean passes and compare every declared artifact byte-for-byte.
+This retained record is bound to input commit `ea5b9fa` and matrix `566373099e64…`.
+The dispatcher completed all 12 clean jobs before writing it. It is not qualification
+of the current refreshed matrix. First complete a new clean 12-job qualification
+and `verify-evidence`, then run two clean passes and compare every declared artifact byte-for-byte.
 Publish the bilingual F2-R2 closure report only after that gate passes.
 The exact marker and its evidence move together in every commit.
 
@@ -291,9 +295,9 @@ flowchart TD
 
 | Stage | Status | Output | Exit criterion |
 |---|---|---|---|
-| **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Firmware agrees with the hash-bound H0 source; the former single-RP H2 export is historical and the separate R2/H2 production gate remains closed |
+| **F0. Product contracts** | ✅ [Reviewed F0-R2 result](f0-product-contracts-report.md) | Six domains, Hub transports, identities, rollback, update and execution gates are coherent and machine-checked | Firmware agrees with the hash-bound current H0/H2 R2 input boundary; the former single-RP H2 export is historical, and H6/order approval remains separate |
 | **F1. Portable cores** | ✅ [Reviewed F1-R2 result](f1-portable-cores-report.md) | Six-domain update, receive-only rear-RP Airband and integrated faults pass 34 normal plus sanitizer scenarios | Normal and ASan/UBSan scenarios cover heartbeat, lease, receiver-mode and update ownership |
-| **F2. Target projects and build system** | ▶️ Current: F2-R2.5 | Repeat the qualified 12-job matrix in two clean passes and compare all declared artifacts byte-for-byte | 12 debug/release configurations reproduce; every target emits its named artifact/map and passes its size gate |
+| **F2. Target projects and build system** | ▶️ Current: F2-R2.5 | Requalify the refreshed 12-job matrix, then compare all declared artifacts byte-for-byte in two clean passes | 12 debug/release configurations reproduce; every target emits its named artifact/map and passes its size gate |
 | **F3. Boot, memory and emulation** | ⏳ Waiting for F2-R2 | Requalify S3 QEMU, six-target artifacts, size/memory/rollback and named physical gates | Six images fit and reproduce; absent peripherals and non-S3 execution remain explicit dev-board gates |
 | **F4. IPC and scheduling** | ⏳ Waiting for F3-R2 | S3↔Hub quad-SPI, Hub↔C5 SDIO, Hub↔RF-RP SPI+alert and Hub↔Pack/Safety I²C | CRC/replay/deadline/duplicate/reset recovery works end-to-end; display/UI remain local and safety/control preempts bulk traffic |
 | **F5. BSP and drivers** | ⏳ Waiting for F4 and current schematic | Display/touch, microSD, codec, receiver, CTIA jack detect, `0x39` headset-source control, IR, 3×nRF24, CC, voice, mutually exclusive U214/U219, M5 Unit, controls, LEDs, sensors and power-state drivers | Every driver has a fake/host boundary and target smoke test; Cap reset/unknown is U214-safe and off, pin 8/10 and shared-SPI sequencing is exact, U219 stays RX plus NFC poll/read only, and unmodeled peripherals keep a dev-board/HIL gate |
@@ -325,8 +329,10 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F2-R2.5`. Fresh F2-R2.4 passed the updated locked 12-job matrix,
-verified all 60 artifacts and 16 maps, and passed all 16 size gates. Run two
-clean passes and compare every declared artifact byte-for-byte. Runtime and S3
+The current boundary is `F2-R2.5`. Retained F2-R2.4 evidence remains valid for its
+previous inputs, not the refreshed matrix. Commit the checked input checkpoint,
+then run the locked clean 12-job qualification and verify every artifact, map and
+size gate before recording a current result. Two byte-identical clean passes remain
+a separate reproducibility gate. Runtime and S3
 QEMU remain F3-R2 gates; no emulator, development-board or hardware execution
 is claimed by F2-R2.4.
