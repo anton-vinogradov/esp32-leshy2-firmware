@@ -53,6 +53,18 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("rf_rp", self.actual["airband"]["owner"])
         self.assertEqual(6, self.actual["firmware_rebaseline"]["target_count"])
 
+    def test_native_boundary_includes_both_rp2354_qspi_supplies(self):
+        summary = self.actual["native_kicad"]["summary"]
+        self.assertEqual(4306, summary["physical_symbol_pin_count"])
+        self.assertEqual(4070, summary["connected_physical_pin_count"])
+        self.assertEqual(236, summary["explicit_no_connect_physical_pin_count"])
+        self.assertEqual(
+            summary["physical_symbol_pin_count"],
+            summary["connected_physical_pin_count"]
+            + summary["explicit_no_connect_physical_pin_count"],
+        )
+        self.assertEqual(788, summary["canonical_net_count"])
+
     def test_airband_is_receive_only_and_fail_low(self):
         air = self.actual["airband"]
         self.assertEqual([118.0, 137.0], air["user_range_mhz"])

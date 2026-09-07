@@ -1537,7 +1537,7 @@
   ],
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "e903251d51756d8d97e6056577454d56241c9193ff34df28fe433c2574a2a268",
+    "hardware_contract_sha256": "aa5a0587b071ec786309e0fae294c4b86ea554b9f6d6fd972cf16b8d4eec3cee",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1570,19 +1570,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "ee4b89ba81443d29e3abb226300374cc755fbfc9240cda293427fc178ec69659"
+        "sha256": "42a990c7240e692569cd7c23c67cd92cf657f08c6a3dfe2a79ca4fa8340f2717"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "a592c4a6700dd4f572197c65c755eb2a5257baab720227383492aa080d4b0636"
+        "sha256": "f59ed6290eed183d8c191aab535647aab3ef3694709fed0f6144ec0e1ad6e761"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "08eb1a99fb404e2e366b39ed43b89452f5af1e51ddbe2d8e1da0204a55af59c1"
+        "sha256": "cdc8e3842d4d7a0e55bb4f022dff18a33a34a8d75c7dfbcef9ee648ad410f5b0"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "50334623aef768d86a59a2ff2830c4d39b219d0b6c563db56a76039149b33c26"
+        "sha256": "510cfb16e2f049d7fe6810009506195c22c2a45f2477adf1aa4a2e26a82a8201"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4866,8 +4866,8 @@
         "populated_sheet_count": 18,
         "fitted_symbol_instance_count": 1208,
         "physical_symbol_pin_count": 4306,
-        "connected_physical_pin_count": 4068,
-        "explicit_no_connect_physical_pin_count": 238,
+        "connected_physical_pin_count": 4070,
+        "explicit_no_connect_physical_pin_count": 236,
         "external_module_interface_annotation_count": 5,
         "canonical_net_count": 788,
         "generated_file_count": 28,
@@ -4894,7 +4894,7 @@
         "cross_sheet_net_count": 227,
         "errors": 0
       },
-      "source_sha256": "50334623aef768d86a59a2ff2830c4d39b219d0b6c563db56a76039149b33c26",
+      "source_sha256": "510cfb16e2f049d7fe6810009506195c22c2a45f2477adf1aa4a2e26a82a8201",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {

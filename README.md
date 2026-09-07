@@ -157,10 +157,13 @@ six domain owners, 251 exact component groups and 1,218 product positions.
 `H2-R2.1.2` reviewed exact identities for 245 board groups, six explicit
 non-PCBA groups and 1,617 logical contacts. `H2-R2.1.3` materialized 1,208
 fitted positions and 4,306 physical pins in the two native KiCad projects.
-All 4,302 ledger endpoints reconcile into 4,064 connected endpoints, 238
+All 4,302 ledger endpoints reconcile into 4,066 connected endpoints, 236
 explicit no-connects and 788 global canonical / 822 board-local nets; both projects pass KiCad ERC
 with zero errors and zero warnings under the current passive-pin library. This does not prove
 rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
+The 7 September physical-pin review corrected three component pin mappings and restored
+both RP2354 QSPI supply inputs: 4,070 physical pins are connected, with no change to
+the six firmware domains, controller GPIO assignments or transport APIs.
 `H2-R2.1.4` reconciles six domains,
 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 freezes those exact

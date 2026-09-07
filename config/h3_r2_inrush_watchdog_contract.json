@@ -7,11 +7,11 @@
   "source": {
     "inrush_watchdog": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
-      "sha256": "c135ed4cbff856f53e793df1f61873fb5a450c1d225527167b701d6319dddb0b"
+      "sha256": "1e523dfa8251edfed6c657f87bb62c19582aa2768546a103dd1e5cc379fc2a10"
     },
     "transition_result": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
-      "sha256": "036500869dc0612b0f8b9b26f1b1e84d4b36f981267a3e419f96bca4e43adf8f"
+      "sha256": "5442d4c175823f9dcea5d3eeb8d9d0bf2f042cd9fc7e7bd7a69a9cfb75769c70"
     }
   },
   "watchdog": {

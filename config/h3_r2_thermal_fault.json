@@ -6,7 +6,7 @@
   "current_hardware_substep": "H4-R2.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-thermal-fault.json",
-    "sha256": "24a940ba3cc9105b484afcf93dcd9141ead4c3a1339ecb87b7654a5413e08d4b"
+    "sha256": "a5cc7a22830e3f24d754227f4d6ea1fe00fe6aed08272de3cc79d0fc86dc78a6"
   },
   "thermal_contract": {
     "ambient_design_target_c": {
