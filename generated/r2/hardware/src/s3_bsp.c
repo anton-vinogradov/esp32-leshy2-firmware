@@ -52,7 +52,7 @@ static const l2_r2_pin_t l2_r2_s3_pins[] = {
         .net = "LCD_RST_N",
         .peripheral = "GPIO",
         .endpoint = NULL,
-        .gate = "direct display-adapter reset; reset-time pull-down keeps the panel disabled",
+        .gate = "direct ILI9488 panel reset through the 50-contact UI-PCB ZIF; reset-time pull-down keeps the panel disabled",
         .gpio = INT16_C(5),
         .direction = L2_R2_DIRECTION_OUTPUT,
     },

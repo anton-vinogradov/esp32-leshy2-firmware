@@ -7,7 +7,7 @@
   "hardware_sources": {
     "functional": {
       "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-      "sha256": "e6f4e43ddf9c6839e233cfbb791f6f1ec4da82f1f9e49ea94ded632ca5822cdf"
+      "sha256": "bab7bf6cb3e80842229704169c8b3297bcdff87ec6bb309aad75814701dd3c2b"
     },
     "c5_sdio_service_mux": {
       "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -27,7 +27,7 @@
     },
     "r2_authority_gate": {
       "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-      "sha256": "d99ee3216e7091262e9c3a2784682fd78ef8ec286e650dab9422c829c2fd5e55"
+      "sha256": "402420f4e0dc33f4efcde33330735472265753821a00aa47446a47d892fd1ea4"
     },
     "pack_safety_i2c_boundary": {
       "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -39,15 +39,15 @@
     },
     "exact_component_ledger": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-      "sha256": "d49e6b18cc5494569b35ea6997dde36257b8cc6492e232e9268821f8636ff4ea"
+      "sha256": "5af6daa34c5b01552eb1e936bf7a8bf5d877357cc1f446ba2c750a88bc80bbdb"
     },
     "native_kicad": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-      "sha256": "dcf305427ad785c97ca6f38fda7cb859593687a571f5112f6340780db61828e3"
+      "sha256": "b583531b8b8583e902e5c7c3e6220cf74fca8d65f1e4df7390425cabf295acf3"
     },
     "h2_hwfw_reconciliation": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-      "sha256": "5164e68b1ce1ccd22affa8e46126a33ad30ce763ba4bcd96e5d0f4d5986a960c"
+      "sha256": "6c5437c792f05f73a34b46841850b1f86740ac1b26072db5d4797e0234854521"
     },
     "h2_interboard_m1": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -55,7 +55,7 @@
     }
   },
   "hardware_source": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-  "hardware_source_sha256": "e6f4e43ddf9c6839e233cfbb791f6f1ec4da82f1f9e49ea94ded632ca5822cdf",
+  "hardware_source_sha256": "bab7bf6cb3e80842229704169c8b3297bcdff87ec6bb309aad75814701dd3c2b",
   "firmware_marker": "F2-R2.0",
   "domains": [
     {
@@ -131,7 +131,7 @@
           "net": "LCD_RST_N",
           "peripheral": "GPIO",
           "direction": "out",
-          "gate": "direct display-adapter reset; reset-time pull-down keeps the panel disabled"
+          "gate": "direct ILI9488 panel reset through the 50-contact UI-PCB ZIF; reset-time pull-down keeps the panel disabled"
         },
         {
           "gpio": 6,
@@ -1232,11 +1232,11 @@
         },
         {
           "gpio": 45,
-          "net": "LCD_TE",
-          "direction": "in",
-          "controller": "GPIO_IRQ",
-          "endpoint": "HMX035CTFT-001 TE",
-          "reset": "input; external pull-down while panel reset is asserted"
+          "net": "HUB_RESERVE_45",
+          "direction": "reserve",
+          "controller": "GPIO",
+          "endpoint": "uncommitted electrical reserve; no board connection because the accepted panel TE contact is deliberately open",
+          "reset": "input/high-Z; no external connection; DNP"
         },
         {
           "gpio": 46,
@@ -2869,8 +2869,8 @@
         "instance_count": 428,
         "physical_symbol_pin_count": 1598,
         "external_module_interface_count": 5,
-        "canonical_net_count": 307,
-        "cross_sheet_net_count": 101
+        "canonical_net_count": 306,
+        "cross_sheet_net_count": 100
       },
       {
         "id": "LESHY2-RF-R2",
@@ -2893,7 +2893,7 @@
       "connected_physical_pin_count": 4068,
       "explicit_no_connect_physical_pin_count": 238,
       "external_module_interface_annotation_count": 5,
-      "canonical_net_count": 789,
+      "canonical_net_count": 788,
       "generated_file_count": 28,
       "pcb_file_count": 0
     },
@@ -2915,10 +2915,10 @@
       "conditioned_boundary_rows": 15,
       "explicit_reserve_no_connect_rows": 13,
       "cross_project_net_count": 34,
-      "cross_sheet_net_count": 228,
+      "cross_sheet_net_count": 227,
       "errors": 0
     },
-    "source_sha256": "5164e68b1ce1ccd22affa8e46126a33ad30ce763ba4bcd96e5d0f4d5986a960c",
+    "source_sha256": "6c5437c792f05f73a34b46841850b1f86740ac1b26072db5d4797e0234854521",
     "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
   },
   "hub_gpio_budget": {
@@ -4534,7 +4534,7 @@
   },
   "display": {
     "panel": "EastRising ER-TFT035IPS-6 configured with ER-TPC035-6 capacitive touch; ILI9488 + FT6236",
-    "interface": "dedicated direct i8080-8 (Intel 8080) on S3 LCD_CAM TX with GDMA; D0..D7, WR and DC are direct, CS is hard-low because the bus is exclusive, RD is hard-high, IM[2:0]=011, reset remains on the local slow-I/O output, and front Hub captures TE plus drives reset-off backlight PWM",
+    "interface": "dedicated direct i8080-8 (Intel 8080) on S3 LCD_CAM TX with GDMA; D0..D7, WR and DC are direct, CS is hard-low because the bus is exclusive, RD is hard-high, IM[2:0]=011, reset is S3-local, and front Hub drives reset-off backlight PWM; panel TE contact 39 is deliberately open and firmware must not wait for a TE interrupt",
     "controller_limit_hz": 25000000,
     "controller_limit_basis": "ILI9488 v1.00 section 17.4.1 specifies a 40-ns minimum DBI Type-B write cycle, 15-ns minimum WR high/low widths, and 10-ns data setup/hold. The locked ESP-IDF v6.0.2 i80 driver derives the S3 bus clock from 80 MHz with an integer prescaler: a requested 24 MHz becomes 26.667 MHz and is illegal, while 20 MHz is exact.",
     "s3_supported_sources": "ESP32-S3 LCD_CAM supports an 8-bit i8080 output and GDMA. With ESP-IDF v6.0.2's standard integer divider, the selected exact 20-MHz write clock gives a 50-ns cycle and nominal 25-ns high/low phases: 10 ns of cycle margin and 10 ns of pulse-width margin against the exact ILI9488 limits.",
@@ -4555,10 +4555,10 @@
     "full_frame_bytes": 307200,
     "full_frame_wire_ms": 15.36,
     "theoretical_full_frame_fps": 65.104166667,
-    "gpio_closure": "Twenty-seven of 33 exposed S3 GPIO are assigned: 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder, 1 wired-OR UI/Hub alert, BOOT, display reset, touch reset and 2 service-UART lines. Six GPIO remain uncommitted reserves. TE and backlight PWM consume Hub GPIO45/46 instead of S3 pins.",
+    "gpio_closure": "Twenty-seven of 33 exposed S3 GPIO are assigned: 10 direct i8080 outputs, 5 chip-select-free S3-Hub quad data/clock, 2 UI I2C, 2 USB, 2 encoder, 1 wired-OR UI/Hub alert, BOOT, display reset, touch reset and 2 service-UART lines. Six GPIO remain uncommitted reserves. Backlight PWM uses Hub GPIO46; Hub GPIO45 remains an unconnected reserve because panel TE contact 39 is deliberately open.",
     "fallback": "The exact 50-contact panel also exposes ILI9488 4-wire serial mode. A deliberate adapter strap revision can select it only as first-prototype recovery if the i8080 timing gate fails; it is ordinary serial SPI, not QSPI, and is not the preferred interface.",
     "maximality_result": "Direct i8080-8 at the exact panel-safe 20 MHz matches the former 40-MHz four-lane QSPI raw wire rate while using the panel's fully documented native path, without adding a processor, moving buttons off S3 or sharing display traffic with storage/radio IPC.",
-    "hil": "Before fabrication, compile and run the LCD_TX DMA harness on the emulator-supported register model. H5 then proves ILI9488 IM straps, exact 20-MHz edges, TE timestamp latency and full-frame/dirty-region timing; 25 MHz is the controller limit, a 24-MHz ESP-IDF request is forbidden because it resolves to 26.667 MHz, and neither value is assumed as a production clock."
+    "hil": "Before fabrication, compile and run the LCD_TX DMA harness on the emulator-supported register model. Verify ILI9488 IM straps, exact 20-MHz edges and full-frame/dirty-region completion without TE interrupts; H8 measures actual display timing and visible tearing on the assembled panel. No TE-synchronized or tear-free claim is made with contact 39 open. 25 MHz is the controller limit, a 24-MHz ESP-IDF request is forbidden because it resolves to 26.667 MHz, and neither value is assumed as a production clock."
   },
   "airband": {
     "owner": "rf_rp",

@@ -68,6 +68,7 @@ def build() -> dict:
             "physical_residuals": len(registry),
             "physical_residuals_by_stage": residuals["summary"]["by_closure_stage"],
         },
+        "coverage_limit": acceptance["coverage_limit"],
         "firmware_obligations": obligations,
         "firmware_invariants": {
             "h4_join": "H4-R2 consumes current R2 evidence only; retained R1 F3/F4 execution evidence is regression evidence, not current-topology proof",

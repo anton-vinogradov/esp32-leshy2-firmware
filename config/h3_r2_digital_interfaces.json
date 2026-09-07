@@ -6,7 +6,7 @@
   "current_hardware_substep": "H4-R2.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "6a526e494b776290c524452807d16f2ce779946ef4869f82d47e05eb9ddafd0b"
+    "sha256": "bb24624b1ac45bd2a25f155c3e181777150374c03011292c05a9fa26120bd335"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -208,7 +208,7 @@
     },
     {
       "owner": "F5/F6",
-      "item": "instantiate the locked ESP-IDF i80 config at exact 20 MHz, CS=-1, 8-bit bus and rising-edge panel capture; exercise TE, dirty-region and full-frame fixtures"
+      "item": "instantiate the locked ESP-IDF i80 config at exact 20 MHz, CS=-1, 8-bit bus and rising-edge panel capture; exercise dirty-region and full-frame fixtures without waiting for TE, because panel contact 39 is deliberately open; no TE-synchronized or tear-free claim"
     }
   ],
   "claims": {

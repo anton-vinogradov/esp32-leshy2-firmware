@@ -23,9 +23,11 @@
 > turned-over inner faces and service views are generated. H2-R2.1.3 materialized
 > 1,208 fitted positions and 4,306 physical pins across the two native KiCad
 > projects. All 4,302 ledger endpoints reconcile to 4,064 connected endpoints,
-> 238 explicit no-connects and 789 global canonical / 823 board-local nets; both projects pass KiCad
-> ERC with zero errors and zero warnings. H2-R2.1.4 reconciles six domains,
-> 173 controller pins, 34 cross-project nets and 228 cross-sheet nets; the
+> 238 explicit no-connects and 788 global canonical / 822 board-local nets; both projects pass KiCad
+> ERC with zero errors and zero warnings under the current passive-pin library. This does not prove
+> rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
+> H2-R2.1.4 reconciles six domains,
+> 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
 > H6.0.3-R1 routing remains in progress and ordering remains unauthorized.
 

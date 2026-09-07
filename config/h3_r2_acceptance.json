@@ -7,15 +7,15 @@
   "sources": {
     "acceptance": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-acceptance-package.json",
-      "sha256": "1f619de474f0f94910203e66664e99d86fdad1cdf3c3443a29163495008e21e6"
+      "sha256": "0bdf4396fbf4fad19e82fc5321b89ebde53fadd7e3451b9606cbc9f71f9d2b80"
     },
     "crosscheck": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-crosscheck.json",
-      "sha256": "b80b0dbb01f2e6c14f9f1f871a862cd8211d36912a61ff8d78253633c76d5034"
+      "sha256": "047d0ba9f5f7424cc427b618038d1c7bbf5226edbee835873ba93e9617ff2f8a"
     },
     "physical_residuals": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-physical-residuals.json",
-      "sha256": "89a1d873f6f18e6da034a953351c66c0531bd08b4ae95bbccc127e62cef41d8b"
+      "sha256": "2055ad431d3a04656d6a0d2cbf77334f54e4ac6ab900e4e0d4de4c9119c86e66"
     }
   },
   "reviewed_boundary": {
@@ -30,10 +30,15 @@
       "H8": 42
     }
   },
+  "coverage_limit": {
+    "native_physical_pin_electrical_semantics_verified": false,
+    "production_gate": "H6-NATIVE-ELECTRICAL-SEMANTICS",
+    "reason": "passive-pin ERC and existing analytical models do not prove rail-driver completeness or exclude output conflicts; a reviewed physical-pin type map and fresh electrical checks are required"
+  },
   "firmware_obligations": [
     {
       "owner": "F5/F6",
-      "obligation": "instantiate the locked ESP-IDF i80 config at exact 20 MHz, CS=-1, 8-bit bus and rising-edge panel capture; exercise TE, dirty-region and full-frame fixtures",
+      "obligation": "instantiate the locked ESP-IDF i80 config at exact 20 MHz, CS=-1, 8-bit bus and rising-edge panel capture; exercise dirty-region and full-frame fixtures without waiting for TE, because panel contact 39 is deliberately open; no TE-synchronized or tear-free claim",
       "handoff": "H4-R2 joined review and the owning firmware phase",
       "status": "implementation_evidence_required"
     }

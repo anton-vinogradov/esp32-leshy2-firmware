@@ -60,6 +60,17 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertIn("pulled low", air["gp35"])
         self.assertTrue(any("transmit" in item.lower() for item in air["excluded"]))
 
+    def test_open_panel_te_has_no_hub_irq_assignment(self):
+        hub = {row["gpio"]: row for row in self.actual["hub_pin_map"]}
+        s3 = {row["gpio"]: row for row in self.actual["domain_contracts"][0]["pin_map"]}
+        self.assertEqual(("HUB_RESERVE_45", "reserve"), (hub[45]["net"], hub[45]["direction"]))
+        self.assertEqual("LCD_BL_PWM", hub[46]["net"])
+        self.assertEqual("LCD_DC", s3[45]["net"])
+        self.assertNotIn("LCD_TE", {row["net"] for row in hub.values()})
+        self.assertIn("contact 39 is deliberately open", self.actual["display"]["interface"])
+        self.assertIn("must not wait for a TE interrupt", self.actual["display"]["interface"])
+        self.assertIn("No TE-synchronized or tear-free claim", self.actual["display"]["hil"])
+
     def test_pack_and_safety_have_a_real_hub_transport(self):
         transports = {row["id"]: row for row in self.actual["transports"]}
         self.assertIn("HUB_PACK_SAFETY", transports)
@@ -127,7 +138,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertTrue(self.actual["claims"]["native_kicad_imported"])
         self.assertTrue(self.actual["claims"]["h2_hwfw_reconciliation_imported"])
         self.assertEqual(1208, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(789, self.actual["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(788, self.actual["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(0, self.actual["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(

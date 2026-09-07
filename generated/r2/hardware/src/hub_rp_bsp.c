@@ -409,12 +409,12 @@ static const l2_r2_pin_t l2_r2_hub_rp_pins[] = {
     },
     {
         .contact = "GPIO45",
-        .net = "LCD_TE",
-        .peripheral = "GPIO_IRQ",
-        .endpoint = "HMX035CTFT-001 TE",
+        .net = "HUB_RESERVE_45",
+        .peripheral = "GPIO",
+        .endpoint = "uncommitted electrical reserve; no board connection because the accepted panel TE contact is deliberately open",
         .gate = NULL,
         .gpio = INT16_C(45),
-        .direction = L2_R2_DIRECTION_INPUT,
+        .direction = L2_R2_DIRECTION_RESERVED,
     },
     {
         .contact = "GPIO46",
