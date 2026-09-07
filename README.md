@@ -190,6 +190,11 @@ artifact byte-for-byte and publish the bilingual F2-R2 closure report only if
 that comparison passes.
 The exact marker and its evidence move together in every commit.
 
+Known runtime gap: the current S3 component selection does not pull in `esp_psram`;
+configure reports the requested `CONFIG_SPIRAM*` settings as unknown and the generated
+configuration does not enable PSRAM. Successful compilation therefore does not prove
+8-MiB PSRAM initialization. This must be corrected and exercised before display bring-up.
+
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>
 
