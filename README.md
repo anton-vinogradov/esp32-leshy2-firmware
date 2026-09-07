@@ -114,10 +114,10 @@ The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/e
 materializes both native six-layer boards and places all 1,208 fitted instances
 with zero hard conflict. The [H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
 now locks the 20-mm nylon M2.5 screws, captive nuts, 11-mm stops and independent
-PCB capture without making M1 structural. H6.0.1 is complete. The accepted
+PCB capture without making M1 structural. H6.0.1 is historical 2D evidence; current physical assembly has been reopened. The earlier
 [H6.0.2 routing slice](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
-resolves all 366/366 connections across 165 `GENERAL_CONTROL` and 12 `OSCILLATOR`
-nets with zero DRC violations; safety-control and analogue/audio/sense routing remains current.
+is retained as historical evidence, not the current completion state of the
+80-mm boards; the live H6.0.3 checkpoint above owns current routing results.
 H3-R2.1.2 reviewed explicit binding for 623 fitted powered instances—607 direct
 and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
 passing profiles across all four rails with 30.560% minimum current reserve and
@@ -185,7 +185,10 @@ the analytical scope; it does not close these findings or prove powered startup.
 `H2-R2.1.4` reconciles six domains,
 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 freezes those exact
-inputs. Current H6 placement is complete and routing is being requalified on
+inputs. The [native interface review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
+reopened physical connector orientation, mating and required cutouts; collision-free placement and clean DRC do not establish assembly readiness.
+These mechanical/silkscreen corrections do not change the firmware GPIO/API boundary.
+Current H6 placement and routing are being corrected and requalified on
 the 80 × 150-mm boards; the routed release candidate is not complete. R2 byte reproducibility
 and order authorization remain open.
 

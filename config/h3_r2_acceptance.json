@@ -7,15 +7,15 @@
   "sources": {
     "acceptance": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-acceptance-package.json",
-      "sha256": "4e9dab63e8d18386d14ea51b3ffa34b4048deb2ea0610deb9c718feca9bf9e0f"
+      "sha256": "2d81c33bd2f6a5b11112e78cf7507835d0cbfc8482a940f3902841562b8b3184"
     },
     "crosscheck": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-crosscheck.json",
-      "sha256": "d51e4f27abd017dd8efad463644db5d76e1753055b5cbec96d627fbcd8336de6"
+      "sha256": "2036883c011721520b1f4c6634617e83222ab475de9850ce4589f5a51b5b2741"
     },
     "physical_residuals": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-physical-residuals.json",
-      "sha256": "542171bfba62767271d7a71004b5829430b5ff0e59b5769359904e8fd27ebc6c"
+      "sha256": "88138ce67c7508e3f330666e14468dd5eef43a643b36752038a3ab3da3a8ed65"
     }
   },
   "reviewed_boundary": {
