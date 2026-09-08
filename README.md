@@ -236,12 +236,14 @@ artifact byte-for-byte and publish the bilingual F2-R2 closure report only if
 that comparison passes.
 The exact marker and its evidence move together in every commit.
 
-S3 PSRAM source correction: `esp_psram` is now an explicit component dependency,
-and a configure-time guard checks the resolved configuration against the existing
-16-MiB flash / 8-MiB octal PSRAM contract (80 MHz, boot initialization, ECC;
-7.5 MiB addressable after ECC). A fresh clean configure probe is still pending;
-the retained build does not enable PSRAM. Initialization, usable capacity and the
-memory self-test remain unproven until runtime testing before display bring-up.
+PSRAM component selection is corrected separately for S3 and C5. At input
+`4a00887`, one clean S3 DEBUG configure and one build passed: octal PSRAM at
+80 MHz with ECC is configured, and its initialization code is linked
+([scoped receipt](config/f2_r2_s3_psram_probe.json)). Current C5 source now requires
+`esp_psram` and checks its own 8-MiB flash / quad PSRAM, 40-MHz, ECC-off contract;
+a fresh C5 configure and build are pending. Neither result proves runtime memory
+initialization or usable capacity. The retained twelve-job qualification is
+unchanged; current full-matrix qualification and byte reproducibility remain open.
 
 <details>
 <summary><strong>Retained R1 F0–F4 evidence — not the current topology</strong></summary>
