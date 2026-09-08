@@ -7,11 +7,11 @@
   "source": {
     "inrush_watchdog": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
-      "sha256": "85d7adadc1bdbfdfcbe54037ffa5d57aaa05d024a44cbbb2545a11ad25f266ee"
+      "sha256": "a5cc5b6aaa3497726afba5ae4f7be31d3cc63393cb14935744b65ea65833051a"
     },
     "transition_result": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
-      "sha256": "cbe7196cd6c428aa8d60c31a8308c0314ea1874ac5aa77dfa29035bc0d1b8f6e"
+      "sha256": "363763a6b13f263d32d4c99cc7e7eb0cd8e6e1ee3a4a78a952669a11a215fddd"
     }
   },
   "watchdog": {
@@ -315,7 +315,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "a6589b89d3d82e779e0a224d2adf07def4c39eca9e4be9ea2d656a5f9151593d"
+        "sha256": "8aeb1aae0524328837de937755d8b091e393e898097b072ab5049e199f480b07"
       },
       "H3-R2-handover": {
         "status": "review_required",
@@ -324,7 +324,7 @@
           "applicability:source_inputs",
           "applicability:sequence_inputs"
         ],
-        "sha256": "7978a072a35e337bbe6573fa1bb876c436117bf1d93bf0efaa4cd66c5d3cfd61"
+        "sha256": "8b42811d9a7554a19e3f0bf4b31131b06bd4b5193d9cf22e813e02893c9a5ea3"
       },
       "H3-R2-inrush-watchdog": {
         "status": "review_required",
@@ -335,7 +335,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "85d7adadc1bdbfdfcbe54037ffa5d57aaa05d024a44cbbb2545a11ad25f266ee"
+        "sha256": "a5cc5b6aaa3497726afba5ae4f7be31d3cc63393cb14935744b65ea65833051a"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -348,7 +348,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "123d5f1f5e0a3d4ca3b7eb7b53da2ecf5b2558f129c06a3b0120a6deac92d47e"
+        "sha256": "9b1eed2c804d50de8a32df4fee16e84721af4cf7b24c73d4b75b9690d921581a"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -357,7 +357,7 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "f791db277f6315f6abeaad8be8038263197184e9540072ea3e736e1802bc9a59"
+        "sha256": "e70e0c50d9dcc8ea5c7357ef402b10890ad8ce174fc7f5028b4baaea91cdaa32"
       },
       "H3-R2-transition-result": {
         "status": "review_required",
@@ -368,7 +368,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "cbe7196cd6c428aa8d60c31a8308c0314ea1874ac5aa77dfa29035bc0d1b8f6e"
+        "sha256": "363763a6b13f263d32d4c99cc7e7eb0cd8e6e1ee3a4a78a952669a11a215fddd"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -378,7 +378,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "ab7c49b83a1fafb8f06c492f30db854ba595f4292f7f8c820a6f9a3c275a6e90"
+        "sha256": "27cd6ec145eeb3b2d6e0af3625e45b6c53095b4681422e74d4fb5dd84815b9e6"
       }
     },
     "source_files_checked": 19,

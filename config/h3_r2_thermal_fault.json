@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-thermal-fault.json",
-    "sha256": "929f74386301099203768bd36f10df06ffbd434f8f1068076a98fa487d6bcfc4"
+    "sha256": "89e55c474d486cdda61c05dfee48b4bc019966fd21ce58483508615e872aac2a"
   },
   "thermal_contract": {
     "ambient_design_target_c": {
@@ -576,7 +576,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "e2b0d51ad31bf63e69aeced50bfec8941aec8cdd1a8fb3a6fc825760d6b4424e"
+        "sha256": "2b793f3c0c50cce0a69877d74a360875366ab039210436850aac18b22124eb7c"
       },
       "H3-R2-dc-source-crosscheck": {
         "status": "review_required",
@@ -586,7 +586,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "a6589b89d3d82e779e0a224d2adf07def4c39eca9e4be9ea2d656a5f9151593d"
+        "sha256": "8aeb1aae0524328837de937755d8b091e393e898097b072ab5049e199f480b07"
       },
       "H3-R2-digital-interfaces": {
         "status": "review_required",
@@ -594,7 +594,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "7e776005f2d8363e55972c64c04b897dc61ff773cfcbb5688e74369d0348c66e"
+        "sha256": "74adc81715c1bf29b17c93f68816725a471d85d7cf14b8f9c8972ddd45968585"
       },
       "H3-R2-handover": {
         "status": "review_required",
@@ -603,7 +603,7 @@
           "applicability:source_inputs",
           "applicability:sequence_inputs"
         ],
-        "sha256": "7978a072a35e337bbe6573fa1bb876c436117bf1d93bf0efaa4cd66c5d3cfd61"
+        "sha256": "8b42811d9a7554a19e3f0bf4b31131b06bd4b5193d9cf22e813e02893c9a5ea3"
       },
       "H3-R2-inrush-watchdog": {
         "status": "review_required",
@@ -614,7 +614,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "85d7adadc1bdbfdfcbe54037ffa5d57aaa05d024a44cbbb2545a11ad25f266ee"
+        "sha256": "a5cc5b6aaa3497726afba5ae4f7be31d3cc63393cb14935744b65ea65833051a"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -627,7 +627,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "123d5f1f5e0a3d4ca3b7eb7b53da2ecf5b2558f129c06a3b0120a6deac92d47e"
+        "sha256": "9b1eed2c804d50de8a32df4fee16e84721af4cf7b24c73d4b75b9690d921581a"
       },
       "H3-R2-rf-coexistence": {
         "status": "review_required",
@@ -636,7 +636,7 @@
           "applicability:digital_inputs",
           "applicability:analog_inputs"
         ],
-        "sha256": "e468c7420fdf3264ff90039f32538300587b18bb846ef51844a3458130256b9d"
+        "sha256": "44eb038f73fb0a482c0a622f8802b0b588b5dd110445c054e3b34ac5b927cd8f"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -645,7 +645,7 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "f791db277f6315f6abeaad8be8038263197184e9540072ea3e736e1802bc9a59"
+        "sha256": "e70e0c50d9dcc8ea5c7357ef402b10890ad8ce174fc7f5028b4baaea91cdaa32"
       },
       "H3-R2-thermal-fault": {
         "status": "review_required",
@@ -657,7 +657,7 @@
           "applicability:transition_inputs",
           "applicability:rf_inputs"
         ],
-        "sha256": "929f74386301099203768bd36f10df06ffbd434f8f1068076a98fa487d6bcfc4"
+        "sha256": "89e55c474d486cdda61c05dfee48b4bc019966fd21ce58483508615e872aac2a"
       },
       "H3-R2-transition-result": {
         "status": "review_required",
@@ -668,7 +668,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "cbe7196cd6c428aa8d60c31a8308c0314ea1874ac5aa77dfa29035bc0d1b8f6e"
+        "sha256": "363763a6b13f263d32d4c99cc7e7eb0cd8e6e1ee3a4a78a952669a11a215fddd"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -678,7 +678,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "ab7c49b83a1fafb8f06c492f30db854ba595f4292f7f8c820a6f9a3c275a6e90"
+        "sha256": "27cd6ec145eeb3b2d6e0af3625e45b6c53095b4681422e74d4fb5dd84815b9e6"
       }
     },
     "source_files_checked": 23,
