@@ -65,6 +65,10 @@ both `SC1512-A4` instances, the exact H1-R2.31 RP maps and the exact H0-R2 M1 ma
 The working BSP contains all 48 GPIO positions for each RP and the six fixed C5
 SDIO contacts. This input-authority check does not close current H6 electrical,
 placement or assembly gates, nor target runtime, emulator or HIL qualification.
+In particular, the [open C5 mux-control defect](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-c5-mux-control-review.md)
+prevents treating the imported USB/SDIO sequence as implemented: SEL lacks a
+driver and OE cannot provide the required disconnected interval in both modes.
+The native pair-name refresh changes source hashes, not this circuit or firmware behavior.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK
@@ -94,7 +98,7 @@ The reviewed [execution matrix](config/f0_r2_execution_gate_matrix.json) keeps
 five evidence layers distinct. Only S3 has an exact official QEMU machine. S3,
 C5, Pack and Safety have exact selected-module/MCU development-board paths;
 Pico 2 is explicitly only a non-exact RP2350A surrogate for both RP2354B
-targets. No R2 build, dev-board or Leshy2 HIL run is claimed.
+targets. No current-input R2 build, dev-board or Leshy2 HIL run is claimed.
 The [reviewed F1-R2 result](docs/f1-portable-cores-report.md) adds independent
 RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrated
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;

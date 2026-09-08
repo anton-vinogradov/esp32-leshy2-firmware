@@ -43,11 +43,11 @@
     },
     "native_kicad": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-      "sha256": "56c31a225afd92eb4628144b309e0c2adacbb61cc629cab942db14ccf6a10778"
+      "sha256": "57056385116edbe4e26ec9c4c93ad942346dea5e199fe8603cd3b7f51943cd7d"
     },
     "h2_hwfw_reconciliation": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-      "sha256": "9e8c5f116a045261cf8c1bd26c63b642dad56365d1be6fbf166d9647a28ceab7"
+      "sha256": "13b2ba162e418bfff29839037ab8e04aef5e95ae2011b6a58061019d433e4816"
     },
     "h2_interboard_m1": {
       "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -2919,7 +2919,7 @@
       "cross_sheet_net_count": 227,
       "errors": 0
     },
-    "source_sha256": "9e8c5f116a045261cf8c1bd26c63b642dad56365d1be6fbf166d9647a28ceab7",
+    "source_sha256": "13b2ba162e418bfff29839037ab8e04aef5e95ae2011b6a58061019d433e4816",
     "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
   },
   "hub_gpio_budget": {

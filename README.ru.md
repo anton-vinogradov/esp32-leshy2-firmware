@@ -66,6 +66,10 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки и display ос
 Рабочий BSP содержит все 48 GPIO каждого RP и шесть фиксированных C5 SDIO contacts.
 Эта проверка входной authority не закрывает текущие электрические, компоновочные
 и сборочные gates H6, а также target runtime, emulator или HIL.
+В частности, [незакрытый дефект управления mux C5](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-c5-mux-control-review.ru.md)
+не позволяет считать импортированную последовательность USB/SDIO реализованной:
+у SEL нет драйвера, а OE не обеспечивает требуемый интервал отключения в обоих режимах.
+Обновление нативных имён пары меняет хеши источников, не эту схему или поведение прошивки.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,
@@ -98,7 +102,7 @@ breaking IPC changes. Budget окна RP TBYB 16,7 с явно ещё не из�
 не смешивает пять слоёв evidence. Только S3 имеет точную официальную QEMU
 machine. Для S3, C5, Pack и Safety есть dev-board paths с точным выбранным
 module/MCU; Pico 2 явно остаётся лишь неточным surrogate RP2350A для обоих
-targets RP2354B. Ни один R2 build, dev-board или Leshy2 HIL run не заявлен.
+targets RP2354B. Сборка актуальных входов R2, прогон на dev-board или Leshy2 HIL пока не заявлены.
 [Итог F1-R2](docs/f1-portable-cores-report.ru.md), проведённый ревью, добавляет
 независимые update state RF-RP/Hub-RP, пять receive-only states Airband заднего RP и
 integrated faults Hub/Pack/Safety. Его 34 сценария проходят normal и ASan/UBSan

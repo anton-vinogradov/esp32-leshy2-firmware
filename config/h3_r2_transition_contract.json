@@ -6,13 +6,13 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-sequences.json",
-    "sha256": "27cd6ec145eeb3b2d6e0af3625e45b6c53095b4681422e74d4fb5dd84815b9e6",
+    "sha256": "74c4d04b8c763686c99fb7ca9225bf37db7a6c3280c8487a6a97697ed7e38979",
     "source_sha256": {
       "hardware/verification/h3-r2-transition-sequence-contract.json": "3c68bdd74fcb6be83f9a014822db1e1bb88c3180b7c477d78b5a4bcf95f5443b",
       "hardware/verification/h3-r2-verification-plan.json": "54143b22eeddf73fbe05ea5f0996c363e22bf7830c49e13ced6f3dcca8c7d16c",
-      "hardware/verification/generated/H3-R2-input-freeze.json": "0bf84eea5d9617d90696bf35225ec95ecee9ec5376e1a7adb34b39f836eb7397",
-      "hardware/verification/generated/H3-R2-method-contract.json": "51bb244dddb763d24ecbbc7441a958339001c9d2c430614ff199f20479d93c23",
-      "hardware/verification/generated/H3-R2-dc-source-crosscheck.json": "8aeb1aae0524328837de937755d8b091e393e898097b072ab5049e199f480b07",
+      "hardware/verification/generated/H3-R2-input-freeze.json": "f3ac4a2682d76ae6e96735e3ca1f91f7798ea38dcc3665b216deaff09fdda11e",
+      "hardware/verification/generated/H3-R2-method-contract.json": "c40f0e7d2c728d61096ca9f65d1f54fc46177ab158045293b84bf82881bd6c0b",
+      "hardware/verification/generated/H3-R2-dc-source-crosscheck.json": "332083105860a48140442cff49fe16a19fcda3136c81d0ba3c43275531785b15",
       "hardware/ecad/generated/H2-R2-native-net-ledger.json": "a6d6d9defa240766644ff5afef2164aefffeaf920ecdfe0a5fdb39c8db2398d9",
       "hardware/ecad/generated/H2-R2-native-instance-ledger.json": "57f0ed517509911b8b7c3e003cd4c47a35e6a924850cfb3a1f710e66fd9fd512",
       "hardware/ecad/generated/H2-R2-interboard-m1.json": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd",
@@ -85,7 +85,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "8aeb1aae0524328837de937755d8b091e393e898097b072ab5049e199f480b07"
+        "sha256": "332083105860a48140442cff49fe16a19fcda3136c81d0ba3c43275531785b15"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -98,7 +98,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "9b1eed2c804d50de8a32df4fee16e84721af4cf7b24c73d4b75b9690d921581a"
+        "sha256": "907c7fb69f1c9d24c62a2407b3f5b727198c79292cc8026b19f4634114cb140e"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -107,7 +107,7 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "e70e0c50d9dcc8ea5c7357ef402b10890ad8ce174fc7f5028b4baaea91cdaa32"
+        "sha256": "f65bee936f8bdd742d9ba0a93b8e886ce50384aea62b36ac7b11b98a9d763d6d"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -117,7 +117,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "27cd6ec145eeb3b2d6e0af3625e45b6c53095b4681422e74d4fb5dd84815b9e6"
+        "sha256": "74c4d04b8c763686c99fb7ca9225bf37db7a6c3280c8487a6a97697ed7e38979"
       }
     },
     "source_files_checked": 14,
