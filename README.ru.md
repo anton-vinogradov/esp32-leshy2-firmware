@@ -70,6 +70,9 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки и display ос
 не позволяет считать импортированную последовательность USB/SDIO реализованной:
 у SEL нет драйвера, а OE не обеспечивает требуемый интервал отключения в обоих режимах.
 Обновление нативных имён пары меняет хеши источников, не эту схему или поведение прошивки.
+В [актуальном ревью интерфейсов](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.ru.md)
+также сохранены отсутствующее соединение BOOT с C5 GPIO28 и противоречие между
+reset при KILL и политикой обновления. Видимые USB/BOOT ещё не доказывают рабочее восстановление.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,
