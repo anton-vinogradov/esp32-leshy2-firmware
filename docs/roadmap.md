@@ -168,10 +168,12 @@ python3 tools/review_f2_r2_reproducibility.py --check
 python3 tools/build_f2_r2_targets.py verify-evidence
 ```
 
-Known runtime gap: the current S3 component selection does not pull in `esp_psram`;
-configure reports the requested `CONFIG_SPIRAM*` settings as unknown and the generated
-configuration does not enable PSRAM. Successful compilation therefore does not prove
-8-MiB PSRAM initialization. This must be corrected and exercised before display bring-up.
+S3 PSRAM source correction: `esp_psram` is now an explicit component dependency,
+and a configure-time guard checks the resolved configuration against the existing
+16-MiB flash / 8-MiB octal PSRAM contract (80 MHz, boot initialization, ECC;
+7.5 MiB addressable after ECC). A fresh clean configure probe is still pending;
+the retained build does not enable PSRAM. Initialization, usable capacity and the
+memory self-test remain unproven until runtime testing before display bring-up.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>
