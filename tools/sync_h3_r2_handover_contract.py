@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from h3_current_scope import inspect_current_power, bind_scope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,11 +27,12 @@ def render(data: dict) -> str:
 
 
 def build() -> dict:
+    scope = inspect_current_power([(SOURCE, "H3-R2-handover")])
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
     summary = source.get("summary", {})
-    if (
+    if scope["current_analytical_scope_complete"] and (
         source.get("marker") != "H3-R2.2.2"
-        or source.get("status") != "reviewed_usb_pack_handover_dpm_brownout_and_source_loss"
+        or source.get("status") != "pass"
         or summary.get("transition_cases") != summary.get("passed_cases")
         or summary.get("failed_cases") != 0
         or summary.get("unsafe_admissions") != 0
@@ -45,7 +50,7 @@ def build() -> dict:
     }:
         raise ValueError("charger reverse-power policy changed")
 
-    return {
+    imported = {
         "schema_version": 1,
         "artifact": "FW-H3-R2.2.2-handover-import",
         "status": "reviewed_hardware_contract_imported",
@@ -86,6 +91,7 @@ def build() -> dict:
             "order_authorized": False,
         },
     }
+    return bind_scope(imported, scope)
 
 
 def main() -> int:
@@ -102,7 +108,7 @@ def main() -> int:
     if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != expected:
         print(f"stale: {OUTPUT.relative_to(ROOT)}")
         return 1
-    print("ok: reviewed H3-R2.2.2 handover contract is synchronized")
+    print("ok: current H3-R2.2.2 handover contract is synchronized (see imported qualification status)")
     return 0
 
 

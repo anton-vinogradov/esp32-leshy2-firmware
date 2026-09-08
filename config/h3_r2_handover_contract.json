@@ -1,20 +1,22 @@
 {
   "schema_version": 1,
   "artifact": "FW-H3-R2.2.2-handover-import",
-  "status": "reviewed_hardware_contract_imported",
+  "status": "review_required",
   "hardware_marker": "H3-R2.2.2",
-  "current_hardware_substep": "H4-R2.2",
+  "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-handover.json",
-    "sha256": "5f6f1cd789a429a80993f4aa5e65361bf3c133046413ea751e1a7ee65256ae1e",
+    "sha256": "b0dd3c5d16a260e6770707daae1022fcc87c624587cf4b1f76c97702b29a8932",
     "source_sha256": {
       "hardware/verification/h3-r2-handover-contract.json": "7247e7083ad38732123131f9cf27157abe15db5a5553019493364d038344d55e",
       "hardware/verification/h3-r2-verification-plan.json": "54143b22eeddf73fbe05ea5f0996c363e22bf7830c49e13ced6f3dcca8c7d16c",
-      "hardware/verification/generated/H3-R2-source-margins.json": "8341df14e8643c0dc884437f901e038be78e789bf7f2cfcd0fd4b5889a5f257b",
-      "hardware/verification/generated/H3-R2-transition-sequences.json": "c7af6cac47972dab436b7399569d44cc9f71f13ecd27679bf987f015454f6a71",
-      "hardware/ecad/generated/H2-R2-native-net-ledger.json": "1cdc59edda649d09c07077bbd17864cfca446a9c431910d603d7d1a4785c9b5b",
-      "hardware/ecad/generated/H2-R2-native-instance-ledger.json": "7d1b6c309e398f410a3ec109374388548eddfd4574676cf7d77a9ea5453bab91",
-      "hardware/architecture/devices.json": "3e5e60a9f6535492d72d384272e7f1c216628a4285accfa195b2a09d03cd727c"
+      "hardware/verification/generated/H3-R2-source-margins.json": "a47b5eae89e57707f93d0df93070bbd6a4fe0105c18b0562709c0abf75549a27",
+      "hardware/verification/generated/H3-R2-transition-sequences.json": "2671fb9e0b96e7ba755a84d56e4ccdd33c4b1c1f6735786ea60a3dc0ea7dadab",
+      "hardware/ecad/generated/H2-R2-native-net-ledger.json": "bb0ee548efc0ecfe02299f3757c58cd7a4e7c5a8b50160d8648411ab330ac411",
+      "hardware/ecad/generated/H2-R2-native-instance-ledger.json": "7ca7596c728f2dc2fe50516b6309438dfaca2fc9c7f6fbef62c18d005cf8616b",
+      "hardware/architecture/devices.json": "26b43365139d800e3c8e18541136dcf6b0c719075e5d468c3f3e86c852553974",
+      "hardware/verification/h3_r2_handover.py": "8cb17d54341126e069c9ce2bef8aab4bb80fa2d4b2a27c763c26fd4ce9a4147f",
+      "hardware/verification/h3_r2_current_scope.py": "a49f37d76f9aae63c9a74e206c034c8148fd653ea6fd2ff288ea0ee5351cee8c"
     }
   },
   "charger": {
@@ -66,6 +68,74 @@
   "claims": {
     "target_implementation_or_execution_proven": false,
     "physical_droop_or_handover_time_proven": false,
-    "order_authorized": false
-  }
+    "order_authorized": false,
+    "current_h3_analytical_scope_complete": false,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "current_power_scope": {
+    "schema_version": 1,
+    "status": "review_required",
+    "current_analytical_scope_complete": false,
+    "artifacts": {
+      "H3-R2-dc-source-crosscheck": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:rail_inputs",
+          "applicability:source_inputs"
+        ],
+        "sha256": "c9c90141b93c48df4047f63322c925f636932cb0e4ca0229cd018c1b0eafd232"
+      },
+      "H3-R2-handover": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:source_inputs",
+          "applicability:sequence_inputs"
+        ],
+        "sha256": "b0dd3c5d16a260e6770707daae1022fcc87c624587cf4b1f76c97702b29a8932"
+      },
+      "H3-R2-rail-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:main_raw_model",
+          "applicability:main_protection_model",
+          "applicability:main_thermal_model",
+          "applicability:aon_ron_model",
+          "applicability:series_distribution_scope"
+        ],
+        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+      },
+      "H3-R2-source-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs",
+          "applicability:source_model_binding"
+        ],
+        "sha256": "a47b5eae89e57707f93d0df93070bbd6a4fe0105c18b0562709c0abf75549a27"
+      },
+      "H3-R2-transition-sequences": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:dc_inputs",
+          "applicability:supervisor_assertion_bound",
+          "applicability:supervisor_hysteresis_bound"
+        ],
+        "sha256": "2671fb9e0b96e7ba755a84d56e4ccdd33c4b1c1f6735786ea60a3dc0ea7dadab"
+      }
+    },
+    "source_files_checked": 16,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "evidence_status": "provisional",
+  "scope_boundary": "Retained timing, envelopes and invariants describe requirements and provisional comparisons. They do not qualify the fitted power cell, authorize RUN/TX or close a hardware phase."
 }

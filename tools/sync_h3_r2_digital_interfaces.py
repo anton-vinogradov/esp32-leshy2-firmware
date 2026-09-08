@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from h3_current_scope import inspect_current_power, bind_scope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,11 +27,12 @@ def all_true(value: dict) -> bool:
 
 
 def build() -> dict:
+    scope = inspect_current_power([(SOURCE, "H3-R2-digital-interfaces")])
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
     timing = source["display_timing"]
     margins = source["logic_level_margins"]
     loading = source["loading"]
-    if (
+    if scope["current_analytical_scope_complete"] and (
         source.get("marker") != "H3-R2.4"
         or source.get("status") != "pass"
         or source.get("errors") != []
@@ -47,7 +52,7 @@ def build() -> dict:
     }:
         raise ValueError("display clock/divider contract changed")
 
-    return {
+    imported = {
         "schema_version": 1,
         "artifact": "FW-H3-R2.4-digital-interface-import",
         "status": "reviewed_hardware_contract_imported",
@@ -85,6 +90,7 @@ def build() -> dict:
             "purchasing_or_fabrication_authorized": False,
         },
     }
+    return bind_scope(imported, scope)
 
 
 def main() -> int:
@@ -101,7 +107,7 @@ def main() -> int:
     if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != expected:
         print(f"stale: {OUTPUT.relative_to(ROOT)}")
         return 1
-    print("ok: reviewed H3-R2.4 digital-interface contract is synchronized")
+    print("ok: current H3-R2.4 digital-interface contract is synchronized (see imported qualification status)")
     return 0
 
 

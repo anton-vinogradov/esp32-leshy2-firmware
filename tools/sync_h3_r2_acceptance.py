@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from h3_current_scope import inspect_current_power, bind_scope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,14 +30,15 @@ def load(path: Path) -> dict:
 
 
 def build() -> dict:
+    scope = inspect_current_power([(ACCEPTANCE, "H3-R2-acceptance-package"), (CROSSCHECK, "H3-R2-crosscheck"), (RESIDUALS, "H3-R2-physical-residuals")])
     acceptance = load(ACCEPTANCE)
     crosscheck = load(CROSSCHECK)
     residuals = load(RESIDUALS)
     registry = residuals.get("registry", [])
     obligations = crosscheck.get("firmware_obligations", [])
-    if (
+    if scope["current_analytical_scope_complete"] and (
         acceptance.get("marker") != "H3-R2.7"
-        or acceptance.get("status") != "reviewed"
+        or acceptance.get("status") != "pass"
         or acceptance.get("result", {}).get("open_analytical_findings") != 0
         or acceptance.get("result", {}).get("next_marker") != "H4-R2.0.1"
         or crosscheck.get("summary", {}).get("current_artifacts") != 20
@@ -49,7 +54,7 @@ def build() -> dict:
     ):
         raise ValueError("hardware H3-R2.7 acceptance evidence is not closed")
 
-    return {
+    imported = {
         "schema_version": 1,
         "artifact": "FW-H3-R2.7-acceptance-import",
         "status": "reviewed_hardware_phase_imported",
@@ -63,8 +68,8 @@ def build() -> dict:
         "reviewed_boundary": {
             "current_artifacts": crosscheck["summary"]["current_artifacts"],
             "recorded_source_hashes_checked": crosscheck["summary"]["recorded_source_hashes_checked"],
-            "hash_mismatches": 0,
-            "open_analytical_findings": 0,
+            "hash_mismatches": crosscheck["summary"]["hash_mismatches"],
+            "open_analytical_findings": crosscheck["summary"]["open_analytical_findings"],
             "physical_residuals": len(registry),
             "physical_residuals_by_stage": residuals["summary"]["by_closure_stage"],
         },
@@ -84,6 +89,7 @@ def build() -> dict:
             "purchasing_or_fabrication_authorized": False,
         },
     }
+    return bind_scope(imported, scope)
 
 
 def main() -> int:
@@ -100,7 +106,7 @@ def main() -> int:
     if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != expected:
         print(f"stale: {OUTPUT.relative_to(ROOT)}")
         return 1
-    print("ok: reviewed H3-R2.7 phase boundary is synchronized")
+    print("ok: current H3-R2.7 phase boundary is synchronized (see imported qualification status)")
     return 0
 
 

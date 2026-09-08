@@ -4,8 +4,12 @@
 [Hardware roadmap](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/roadmap.md)
 
 > **▶️ Current boundary: F2-R2.5 — reproducibility qualification.**
-> Current native power prerequisites are `review_required`: the retained H3
-> analytical results below are not qualification of the fitted power cell.
+> [Current H3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md)
+> is `review_required`; the corrected [rail-voltage paths](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/power-rail-margins.md)
+> remain provisional, not qualification of the installed MAIN/AON circuit.
+> All seven firmware H3 imports preserve this scope with `evidence_status=provisional`.
+> `make h3-current-scope-review` (part of `make test`) checks their full source chain;
+> production, battery-energization and target-execution authority remain false.
 > The 8 September interface-source refresh removes obsolete unused headset contact 6
 > and updates exact package provenance, not GPIO/API or any of the 13 generated BSP C/H files.
 > The genuine clean 12-job result from input commit `c8e349b`, matrix `354f1a37a0a9…`,
@@ -19,7 +23,22 @@
 > No Cap map or firmware GPIO/API was changed; planar correction is not full assembly approval.
 > The 223-body H1 concept is not the current native PCB geometry or assembly approval.
 > R1 F0–F4 remains regression evidence, not the current topology. Hardware H1-R2.39 was
-> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The complete [H3-R2 global result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md), [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) and [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) are reviewed; H5 controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. Hardware H6.0.3-R1 is current: routing is being requalified after correcting component locality on the two 80 × 150-mm boards. Exact copper counts, connectivity, DRC evidence and images are maintained in the [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md). The former routing results are historical and do not establish completion of any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets, six domain owners, 251 exact component groups and 1,218 product positions; H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,616 logical contacts. Its exact imported pin/config authority remains the reviewed
+> accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The historical H3
+> review does not close the current `review_required` result above.
+> The [H4 review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md)
+> and [H5 route report](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md)
+> retain their own reviewed baseline scopes. The H5 snapshot covers 249 purchasable
+> groups / 1,216 articles with no unmapped route and an explicit `WBC16-1TLC`
+> order-time sourcing gate; it does not replace a fresh check before order.
+> Hardware H6.0.3-R1 is current: routing is being requalified after correcting
+> component locality on the two 80 × 150-mm boards. Exact copper counts,
+> connectivity, DRC evidence and images are maintained in the
+> [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md).
+> The former routing results are historical and do not establish completion of
+> any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets,
+> six domain owners, 251 exact component groups and 1,218 product positions;
+> H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,616
+> logical contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 > materializes two native six-layer boards and places all 1,208 fitted instances
 > with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)

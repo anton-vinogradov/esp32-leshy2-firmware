@@ -1,28 +1,28 @@
 {
   "schema_version": 1,
   "artifact": "FW-H3-R2.7-acceptance-import",
-  "status": "reviewed_hardware_phase_imported",
+  "status": "review_required",
   "hardware_marker": "H3-R2.7",
-  "current_hardware_substep": "H4-R2.2",
+  "current_hardware_substep": "H6.0.3-R1",
   "sources": {
     "acceptance": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-acceptance-package.json",
-      "sha256": "a64411e8b614ac9b51e6db555fc8a7f9ee3a72e289a4c7b53d53cf6572e14808"
+      "sha256": "3ad23131e4f2477c52d6f2bfeb8174b75f1e08220c3bd5144dd872fe630b92d5"
     },
     "crosscheck": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-crosscheck.json",
-      "sha256": "96da46209f3a1f8cec313b3eb2208c8c78743620d2bc20697cb56f94e257b814"
+      "sha256": "dfaed2e3368927d07e58a250c6523c0551ee283dae71c77e5e2004d1001f7251"
     },
     "physical_residuals": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-physical-residuals.json",
-      "sha256": "1ccf10404cd64f78faf6b4a29acdb93184ccfb3bbba919d5b5e776cd9c98e060"
+      "sha256": "fcb201cea4969d72acf917c1f01e45c9667be47dad8f901f7bb1062d5a499948"
     }
   },
   "reviewed_boundary": {
     "current_artifacts": 20,
-    "recorded_source_hashes_checked": 129,
+    "recorded_source_hashes_checked": 155,
     "hash_mismatches": 0,
-    "open_analytical_findings": 0,
+    "open_analytical_findings": 2,
     "physical_residuals": 51,
     "physical_residuals_by_stage": {
       "H5": 2,
@@ -50,10 +50,160 @@
     "release": "H3 completion does not authorize purchase, PCB placement/routing, fabrication or a final-product claim"
   },
   "claims": {
-    "h3_r2_analytical_scope_imported": true,
+    "h3_r2_analytical_scope_imported": false,
     "h4_r2_join_complete": false,
     "i8080_target_implementation_proven": false,
     "physical_residuals_complete": false,
-    "purchasing_or_fabrication_authorized": false
-  }
+    "purchasing_or_fabrication_authorized": false,
+    "current_h3_analytical_scope_complete": false,
+    "target_implementation_or_execution_proven": false,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "current_power_scope": {
+    "schema_version": 1,
+    "status": "review_required",
+    "current_analytical_scope_complete": false,
+    "artifacts": {
+      "H3-R2-acceptance-package": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:crosscheck_inputs"
+        ],
+        "sha256": "3ad23131e4f2477c52d6f2bfeb8174b75f1e08220c3bd5144dd872fe630b92d5"
+      },
+      "H3-R2-analog-corners": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs"
+        ],
+        "sha256": "02e05ba4ca72a8ec88d082dd6acca02eb5f2e57e8557c80831089b353ec280ec"
+      },
+      "H3-R2-crosscheck": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:current_power_inputs"
+        ],
+        "sha256": "dfaed2e3368927d07e58a250c6523c0551ee283dae71c77e5e2004d1001f7251"
+      },
+      "H3-R2-dc-source-crosscheck": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:rail_inputs",
+          "applicability:source_inputs"
+        ],
+        "sha256": "c9c90141b93c48df4047f63322c925f636932cb0e4ca0229cd018c1b0eafd232"
+      },
+      "H3-R2-digital-interfaces": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs"
+        ],
+        "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+      },
+      "H3-R2-handover": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:source_inputs",
+          "applicability:sequence_inputs"
+        ],
+        "sha256": "b0dd3c5d16a260e6770707daae1022fcc87c624587cf4b1f76c97702b29a8932"
+      },
+      "H3-R2-inrush-watchdog": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs",
+          "applicability:sequence_inputs",
+          "applicability:handover_inputs"
+        ],
+        "sha256": "5eb0f797c0fc387c6dbcc7956fc5fc8bdb667f7c8713e43eed8afa258a83db08"
+      },
+      "H3-R2-physical-residuals": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:crosscheck_inputs"
+        ],
+        "sha256": "fcb201cea4969d72acf917c1f01e45c9667be47dad8f901f7bb1062d5a499948"
+      },
+      "H3-R2-rail-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:main_raw_model",
+          "applicability:main_protection_model",
+          "applicability:main_thermal_model",
+          "applicability:aon_ron_model",
+          "applicability:series_distribution_scope"
+        ],
+        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+      },
+      "H3-R2-rf-coexistence": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:digital_inputs",
+          "applicability:analog_inputs"
+        ],
+        "sha256": "5f99664bcaf10e7092eb35ad09045f8da29233ed7a6755638a29c8917e5a35b6"
+      },
+      "H3-R2-source-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs",
+          "applicability:source_model_binding"
+        ],
+        "sha256": "a47b5eae89e57707f93d0df93070bbd6a4fe0105c18b0562709c0abf75549a27"
+      },
+      "H3-R2-thermal-fault": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs",
+          "applicability:source_inputs",
+          "applicability:transition_inputs",
+          "applicability:rf_inputs"
+        ],
+        "sha256": "b124e49e734cadf4157ed66039a86c426fc096b352677e217d7252471768aedc"
+      },
+      "H3-R2-transition-result": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:inrush_inputs",
+          "applicability:sequence_inputs",
+          "applicability:handover_inputs"
+        ],
+        "sha256": "af2cc88a8b03a675f43396a11b59b22b94b877c4553091524e6279b3f9e65f8f"
+      },
+      "H3-R2-transition-sequences": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:dc_inputs",
+          "applicability:supervisor_assertion_bound",
+          "applicability:supervisor_hysteresis_bound"
+        ],
+        "sha256": "2671fb9e0b96e7ba755a84d56e4ccdd33c4b1c1f6735786ea60a3dc0ea7dadab"
+      }
+    },
+    "source_files_checked": 26,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "evidence_status": "provisional",
+  "scope_boundary": "Retained timing, envelopes and invariants describe requirements and provisional comparisons. They do not qualify the fitted power cell, authorize RUN/TX or close a hardware phase."
 }

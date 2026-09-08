@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "artifact": "FW-H3-R2.5-rf-coexistence-import",
-  "status": "reviewed_hardware_contract_imported",
+  "status": "review_required",
   "hardware_marker": "H3-R2.5",
-  "current_hardware_substep": "H4-R2.2",
+  "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-rf-coexistence.json",
-    "sha256": "605931d58f9bb31db2ca8746bf2f7f2a7375162dd16b3953cd0650261f14438f"
+    "sha256": "5f99664bcaf10e7092eb35ad09045f8da29233ed7a6755638a29c8917e5a35b6"
   },
   "port_topology": {
     "front": [
@@ -372,6 +372,62 @@
   "claims": {
     "runtime_radio_arbiter_implemented": false,
     "routed_rf_or_antenna_performance_measured": false,
-    "purchasing_or_fabrication_authorized": false
-  }
+    "purchasing_or_fabrication_authorized": false,
+    "current_h3_analytical_scope_complete": false,
+    "target_implementation_or_execution_proven": false,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "current_power_scope": {
+    "schema_version": 1,
+    "status": "review_required",
+    "current_analytical_scope_complete": false,
+    "artifacts": {
+      "H3-R2-analog-corners": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs"
+        ],
+        "sha256": "02e05ba4ca72a8ec88d082dd6acca02eb5f2e57e8557c80831089b353ec280ec"
+      },
+      "H3-R2-digital-interfaces": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs"
+        ],
+        "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+      },
+      "H3-R2-rail-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:main_raw_model",
+          "applicability:main_protection_model",
+          "applicability:main_thermal_model",
+          "applicability:aon_ron_model",
+          "applicability:series_distribution_scope"
+        ],
+        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+      },
+      "H3-R2-rf-coexistence": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:digital_inputs",
+          "applicability:analog_inputs"
+        ],
+        "sha256": "5f99664bcaf10e7092eb35ad09045f8da29233ed7a6755638a29c8917e5a35b6"
+      }
+    },
+    "source_files_checked": 12,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "evidence_status": "provisional",
+  "scope_boundary": "Retained timing, envelopes and invariants describe requirements and provisional comparisons. They do not qualify the fitted power cell, authorize RUN/TX or close a hardware phase."
 }

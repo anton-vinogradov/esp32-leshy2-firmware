@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from h3_current_scope import inspect_current_power, bind_scope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,12 +28,13 @@ def render(data: dict) -> str:
 
 
 def build() -> dict:
+    scope = inspect_current_power([(SOURCE, "H3-R2-inrush-watchdog"), (RESULT, "H3-R2-transition-result")])
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
     result = json.loads(RESULT.read_text(encoding="utf-8"))
     summary = source.get("summary", {})
-    if (
+    if scope["current_analytical_scope_complete"] and (
         source.get("marker") != "H3-R2.2.3"
-        or source.get("status") != "reviewed_inrush_load_steps_watchdog_and_retained_fault_display"
+        or source.get("status") != "pass"
         or summary.get("startup_envelopes") != summary.get("passed_startup_envelopes")
         or summary.get("load_step_rails") != summary.get("passed_load_step_rails")
         or summary.get("fault_scenarios") != summary.get("passed_fault_scenarios")
@@ -37,7 +42,7 @@ def build() -> dict:
         or summary.get("automatic_restarts") != 0
         or not all(source.get("topology_checks", {}).values())
         or result.get("marker") != "H3-R2.2.4"
-        or result.get("status") != "reviewed_h3_r2_2_power_transitions_complete"
+        or result.get("status") != "pass"
         or not all(result.get("checks", {}).values())
     ):
         raise ValueError("hardware H3-R2.2 power-transition result is not reviewed and complete")
@@ -49,7 +54,7 @@ def build() -> dict:
     if record["slots"] != 2 or record["sector_bytes_each"] != 1024:
         raise ValueError("fault journal geometry changed")
 
-    return {
+    imported = {
         "schema_version": 1,
         "artifact": "FW-H3-R2.2.4-power-transition-import",
         "status": "reviewed_hardware_contract_imported",
@@ -105,6 +110,7 @@ def build() -> dict:
             "order_authorized": False,
         },
     }
+    return bind_scope(imported, scope)
 
 
 def main() -> int:
@@ -121,7 +127,7 @@ def main() -> int:
     if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != expected:
         print(f"stale: {OUTPUT.relative_to(ROOT)}")
         return 1
-    print("ok: reviewed H3-R2.2 power-transition contract is synchronized")
+    print("ok: current H3-R2.2 power-transition contract is synchronized (see imported qualification status)")
     return 0
 
 

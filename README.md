@@ -99,22 +99,42 @@ The [reviewed F1-R2 result](docs/f1-portable-cores-report.md) adds independent
 RF-RP/Hub-RP update state, five rear-RP Airband receive-only states and integrated
 Hub/Pack/Safety faults. Its 34 scenarios pass normal and ASan/UBSan host runs;
 that remains portable evidence, not a target build.
-The H3 numerical results below describe the retained analytical models. Current
-native power prerequisites have reopened; those results are not acceptance of
-the fitted power cell (see the current electrical checkpoint below).
 
 Mandatory receive-only Airband uses rear-RP GP35/36, a fixed 112-MHz LO and the
-existing Si4732 audio path. Airband TX is absent. Physical hardware completed
-and reviewed `H1-R2.39`; H2 and the complete H3-R2.1 DC/source workstream are
-reviewed; H3-R2.2.1 reviewed 14 startup, shutdown, reset and recovery scenarios,
-and H3-R2.2.2 reviewed 7,316 USB/pack/DPM/brownout/source-loss transitions with
-zero unsafe admissions or automatic restarts. H3-R2.2.3/.4 then reviewed five
-protected-rail starts, four load-step envelopes and ten watchdog/fault-display
-cases with zero analytical failures or automatic restarts. Its exact firmware-facing
-[sequence](config/h3_r2_transition_contract.json) and
-[handover](config/h3_r2_handover_contract.json) and
-[watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) contracts
-are imported fail-closed. The [H3-R2.3 analog result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.md), [H3-R2.4 digital result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.md), [H3-R2.5 RF result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.md), [H3-R2.6 thermal/fault result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.md) and the [global H3-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md) are reviewed. The exact [RF/coexistence](config/h3_r2_rf_coexistence.json), [thermal/fault](config/h3_r2_thermal_fault.json) and [H3 acceptance](config/h3_r2_acceptance.json) contracts are imported fail-closed. The preserved H4 diagnostic found an owned 38-row C5/Pack/Safety BSP-generation gap; the correction restored 173/173 H2 controller rows and all 12 target builds requalified. The [global H4-R2 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md) is reviewed with zero contradiction. The [current H5-R2 route result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md) controls all 249 purchasable groups / 1,216 articles with zero unmapped route and one explicit `WBC16-1TLC` order-time sourcing gate. The current hardware point is `H6.0.3-R1`: placement and routing on the two 80 × 150-mm boards are being requalified after source corrections. The [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md) owns current copper counts, connectivity, DRC and images; earlier routing figures are not current completion evidence.
+existing Si4732 audio path. Airband TX is absent.
+
+**Current H3 is `review_required`.** The [current H3 result](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.md)
+and [rail-voltage paths](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/power-rail-margins.md)
+separate provisional calculations from qualification of the installed MAIN/AON
+power circuit. Earlier passing numerical results describe their retained model;
+they do not qualify the current power cell.
+
+The seven firmware imports cover [sequences](config/h3_r2_transition_contract.json),
+[source handover](config/h3_r2_handover_contract.json),
+[inrush/watchdog](config/h3_r2_inrush_watchdog_contract.json),
+[digital interfaces](config/h3_r2_digital_interfaces.json),
+[RF/coexistence](config/h3_r2_rf_coexistence.json),
+[thermal/fault](config/h3_r2_thermal_fault.json) and
+[H3 acceptance](config/h3_r2_acceptance.json). They are diagnostic,
+`evidence_status=provisional` imports. `make h3-current-scope-review`, included in
+`make test`, checks the complete source chain and preserves the unqualified scope.
+Production release, battery energization and target-execution authority remain
+false. Retained timing, envelopes and safety invariants are requirements and
+provisional comparisons, not permission to enter RUN/TX.
+
+The historical hardware reviews of `H1-R2.39` and H2 retain their own scope.
+The preserved [H4 review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md)
+records a 38-row C5/Pack/Safety BSP-generation gap, its correction to 173/173 H2
+controller rows and requalification of 12 builds for that input—not current
+power or build qualification. The [H5 route report](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md)
+retains its reviewed 249-group / 1,216-article sourcing snapshot and explicit
+`WBC16-1TLC` order-time gate; procurement still requires a fresh order-time check.
+The current hardware point is `H6.0.3-R1`: placement and routing on the two
+80 × 150-mm boards are being requalified after source corrections. The
+[live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md)
+owns current copper counts, connectivity, DRC and images; earlier routing figures
+are not current completion evidence.
+
 The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 materializes both native six-layer boards and places all 1,208 fitted instances
 with zero hard conflict. The [H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
@@ -123,16 +143,8 @@ PCB capture without making M1 structural. H6.0.1 is historical 2D evidence; curr
 [H6.0.2 routing slice](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
 is retained as historical evidence, not the current completion state of the
 80-mm boards; the live H6.0.3 checkpoint above owns current routing results.
-H3-R2.1.2 reviewed explicit binding for 623 fitted powered instances—607 direct
-and 16 indirect—and six external loads, and H3-R2.1.3 reviewed 224
-passing profiles across all four rails with 30.560% minimum current reserve and
-24.706 °C minimum junction-temperature reserve. H3-R2.1.4 reviews all 75
-source/pack lines and safely admits all 2,266 states; maximum pack current is
-3.516 A and charging always yields before system load. H3-R2.1.5 reconciles all
-617 fitted/external loads, 224 rail profiles and 2,266 states through 15 passing checks. The exact H3-R2.0.1 input freeze, H3-R2.0.2
-parameter/model provenance register, H3-R2.0.3 method contract and H3-R2.1.1
-register of 2,266 legal power states are reviewed,
-while the exact imported pin/config authority remains the reviewed
+
+The exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
 and service access are generated. The 226-body physical register includes all

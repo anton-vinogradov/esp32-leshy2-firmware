@@ -103,34 +103,43 @@ targets RP2354B. Ни один R2 build, dev-board или Leshy2 HIL run не з
 независимые update state RF-RP/Hub-RP, пять receive-only states Airband заднего RP и
 integrated faults Hub/Pack/Safety. Его 34 сценария проходят normal и ASan/UBSan
 host runs; это portable evidence, а не target build.
-Численные результаты H3 ниже относятся к сохранённым аналитическим моделям.
-Проверка условий запуска текущего питания вновь открыта; эти результаты не
-означают приёмку установленной ячейки питания (см. текущий электрический срез ниже).
 
 Обязательный receive-only Airband использует GP35/36 заднего RP, фиксированный LO
-112 МГц и существующий audio path Si4732. Airband TX отсутствует. Физическое
-железо завершило `H1-R2.39`, принято и прошло ревью; H2 прошло ревью как
-`H2-R2.1.5`, весь DC/source-workstream H3-R2.1 проведён ревью, H3-R2.2.1
-проверил 14 сценариев запуска, останова, сброса и восстановления, а H3-R2.2.2 —
-7 316 переходов USB/pack/DPM/brownout/source-loss без небезопасного допуска или
-автоматического перезапуска. H3-R2.2.3/.4 затем провёл ревью пяти запусков
-защищённых шин, четырёх load-step envelope и десяти watchdog/fault-display cases
-без аналитических failures или автоматического перезапуска. Точные firmware-контракты
-[последовательностей](config/h3_r2_transition_contract.json) и
-[handover](config/h3_r2_handover_contract.json) и
-[watchdog/fault-display](config/h3_r2_inrush_watchdog_contract.json) импортированы
-fail-closed. [Аналоговый результат H3-R2.3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/analog-electrical-verification.ru.md)
-и [цифровой результат H3-R2.4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/digital-electrical-verification.ru.md),
-а также [RF-результат H3-R2.5](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/rf-electrical-verification.ru.md)
-и [thermal/fault-результат H3-R2.6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/thermal-fault-electrical-verification.ru.md)
-и [глобальный итог H3-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md)
-проведены ревью; точные [RF/coexistence](config/h3_r2_rf_coexistence.json),
-[thermal/fault](config/h3_r2_thermal_fault.json) и [H3 acceptance](config/h3_r2_acceptance.json)
-контракты импортированы fail-closed. Сохранённая диагностика H4 нашла назначенный
-пробел 38 BSP-строк C5/Pack/Safety; исправление восстановило 173/173 controller-строк H2,
-все 12 target-сборок повторно квалифицированы. [Глобальный итог H4-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md)
-проведён ревью без противоречий. [Актуальный итог маршрутов H5-R2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.ru.md)
-контролирует все 249 закупаемых групп / 1 216 изделий без неназначенных маршрутов и с одним явным order-time sourcing gate `WBC16-1TLC`. Текущая аппаратная точка — `H6.0.3-R1`: размещение и разводка двух плат 80 × 150 мм повторно проверяются после исходных исправлений. [Актуальный аппаратный срез](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.ru.md) содержит текущие числа меди, связность, DRC и изображения; прежние результаты не подтверждают текущую готовность. H3-R2.1.2
+112 МГц и существующий audio path Si4732. Airband TX отсутствует.
+
+**Текущий H3 — `review_required`.** [Актуальный результат H3](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h3-r2-acceptance.ru.md)
+и [пути напряжения шин](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/power-rail-margins.ru.md)
+отделяют предварительные расчёты от подтверждения установленной схемы питания
+MAIN/AON. Прежние проходящие численные результаты описывают сохранённую модель,
+а не подтверждают текущую ячейку питания.
+
+Семь импортов прошивки охватывают [последовательности](config/h3_r2_transition_contract.json),
+[переключение источников](config/h3_r2_handover_contract.json),
+[пусковой ток/watchdog](config/h3_r2_inrush_watchdog_contract.json),
+[цифровые интерфейсы](config/h3_r2_digital_interfaces.json),
+[RF/coexistence](config/h3_r2_rf_coexistence.json),
+[тепловые и аварийные режимы](config/h3_r2_thermal_fault.json) и
+[приёмку H3](config/h3_r2_acceptance.json). Это диагностические импорты со статусом
+`evidence_status=provisional`. Команда `make h3-current-scope-review`, включённая
+в `make test`, проверяет полную цепочку источников и сохраняет неподтверждённый
+статус расчётов. Разрешения на производство, подачу питания от аккумулятора и
+исполнение на целевом контроллере остаются false. Сохранённые времена, пределы
+и инварианты безопасности — требования и предварительные сравнения, а не
+разрешение перейти в RUN/TX.
+
+Исторические аппаратные ревью `H1-R2.39` и H2 сохраняют свои исходные границы.
+Сохранённое [ревью H4](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.ru.md)
+фиксирует пробел 38 BSP-строк C5/Pack/Safety, его исправление до 173/173
+controller-строк H2 и повторную квалификацию 12 сборок для того входа — не
+текущую квалификацию питания или сборок. [Отчёт маршрутов H5](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.ru.md)
+сохраняет проверенный закупочный снимок 249 групп / 1 216 изделий и явную проверку
+`WBC16-1TLC` перед заказом; закупка требует новой проверки непосредственно перед
+заказом. Текущая аппаратная точка — `H6.0.3-R1`: размещение и разводка двух плат
+80 × 150 мм повторно проверяются после исходных исправлений.
+[Актуальный аппаратный срез](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.ru.md)
+содержит текущие числа меди, связность, DRC и изображения; прежние результаты
+не подтверждают текущую готовность.
+
 [Текущее размещение точных footprints H6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.ru.md)
 материализует обе нативные шестислойные платы и размещает все 1 208 экземпляров
 без жёстких коллизий. [Механический стек H6](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.ru.md)
@@ -139,12 +148,8 @@ fail-closed. [Аналоговый результат H3-R2.3](https://github.co
 [срез трассировки H6.0.2](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.ru.md)
 сохранён как историческое свидетельство, а не текущая готовность 80-мм плат;
 актуальные результаты разводки находятся в указанном выше срезе H6.0.3.
-H3-R2.1.2 провёл ревью явной привязки 623 устанавливаемых питаемых экземпляров — 607
-прямых и 16 косвенных — и шести внешних нагрузок, а H3-R2.1.3 — 224 проходящих профилей четырёх шин с минимальным запасом тока 30,560% и температуры кристалла 24,706 °C.
-H3-R2.1.4 проводит ревью всех 75 source/pack-строк и безопасно допускает все
-2 266 состояний; максимальный ток pack — 3,516 А, заряд всегда уступает системной нагрузке. H3-R2.1.5 сводит все 617 установленных/внешних нагрузок, 224 rail-профиля и 2 266 состояний в 15 проходящих проверках. Точная фиксация входов
-`H3-R2.0.1`, реестр происхождения параметров/моделей `H3-R2.0.2`, контракт
-методов `H3-R2.0.3` и реестр 2 266 разрешённых power states `H3-R2.1.1` проведены ревью, а точной импортированной pin/config authority
+
+Точной импортированной pin/config authority
 остаётся прошедший ревью артефакт `H1-R2.31`: сгенерированы locality-first размещение двух плат,
 согласованные внешние и прямые внутренние стороны после переворота плат и сервисный доступ.
 Физический реестр из 226 тел включает все восемь точных TX-детекторов, пять

@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from h3_current_scope import inspect_current_power, bind_scope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +23,7 @@ def sha256(path: Path) -> str:
 
 
 def build() -> dict:
+    scope = inspect_current_power([(SOURCE, "H3-R2-thermal-fault")])
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
     summary = source.get("summary", {})
     checks = source.get("checks", {})
@@ -26,7 +31,7 @@ def build() -> dict:
     single_fault = source.get("single_fault", {})
     unattended = source.get("unattended", {})
     faults = single_fault.get("faults", [])
-    if (
+    if scope["current_analytical_scope_complete"] and (
         source.get("marker") != "H3-R2.6"
         or source.get("status") != "pass"
         or source.get("errors") != []
@@ -44,7 +49,7 @@ def build() -> dict:
     ):
         raise ValueError("hardware H3-R2.6 thermal/fault evidence is not closed")
 
-    return {
+    imported = {
         "schema_version": 1,
         "artifact": "FW-H3-R2.6-thermal-fault-import",
         "status": "reviewed_hardware_contract_imported",
@@ -84,6 +89,7 @@ def build() -> dict:
             "purchasing_or_fabrication_authorized": False,
         },
     }
+    return bind_scope(imported, scope)
 
 
 def main() -> int:
@@ -100,7 +106,7 @@ def main() -> int:
     if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8") != expected:
         print(f"stale: {OUTPUT.relative_to(ROOT)}")
         return 1
-    print("ok: reviewed H3-R2.6 thermal/fault contract is synchronized")
+    print("ok: current H3-R2.6 thermal/fault contract is synchronized (see imported qualification status)")
     return 0
 
 

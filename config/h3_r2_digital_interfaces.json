@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "artifact": "FW-H3-R2.4-digital-interface-import",
-  "status": "reviewed_hardware_contract_imported",
+  "status": "review_required",
   "hardware_marker": "H3-R2.4",
-  "current_hardware_substep": "H4-R2.2",
+  "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "102d6a17f86d7a4a3d007e347ba7682557a5f075095ac2d3af4a35336b9f5388"
+    "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -23,28 +23,28 @@
       "boundary": "S3 -> ILI9488 direct i8080/reset",
       "units": "V",
       "corners": {
-        "voh_min": 2.486808,
+        "voh_min": 2.364968,
         "receiver_vih_min": 2.2999606,
         "vol_max": 0.3285658,
-        "receiver_vil_max": 0.932553
+        "receiver_vil_max": 0.886863
       },
-      "worst_high_margin": 0.1868474,
-      "worst_low_margin": 0.6039872,
-      "minimum_margin": 0.1868474,
+      "worst_high_margin": 0.0650074,
+      "worst_low_margin": 0.5582972,
+      "minimum_margin": 0.0650074,
       "status": "pass"
     },
     {
       "boundary": "S3/C5 -> RP2354 3V3 GPIO",
       "units": "V",
       "corners": {
-        "voh_min": 2.486808,
+        "voh_min": 2.364968,
         "receiver_vih_min": 2.0,
         "vol_max": 0.3285658,
         "receiver_vil_max": 0.8
       },
-      "worst_high_margin": 0.486808,
+      "worst_high_margin": 0.364968,
       "worst_low_margin": 0.4714342,
-      "minimum_margin": 0.4714342,
+      "minimum_margin": 0.364968,
       "status": "pass"
     },
     {
@@ -54,10 +54,10 @@
         "voh_min": 2.62,
         "receiver_vih_min": 2.4642435,
         "vol_max": 0.5,
-        "receiver_vil_max": 0.7771275
+        "receiver_vil_max": 0.7390525
       },
       "worst_high_margin": 0.1557565,
-      "worst_low_margin": 0.2771275,
+      "worst_low_margin": 0.2390525,
       "minimum_margin": 0.1557565,
       "status": "pass"
     },
@@ -68,10 +68,10 @@
         "voh_min": 2.62,
         "receiver_vih_min": 2.4642435,
         "vol_max": 0.5,
-        "receiver_vil_max": 0.7771275
+        "receiver_vil_max": 0.7390525
       },
       "worst_high_margin": 0.1557565,
-      "worst_low_margin": 0.2771275,
+      "worst_low_margin": 0.2390525,
       "minimum_margin": 0.1557565,
       "status": "pass"
     },
@@ -214,6 +214,45 @@
   "claims": {
     "target_driver_implemented": false,
     "pcb_routing_or_signal_integrity_measured": false,
-    "purchasing_or_fabrication_authorized": false
-  }
+    "purchasing_or_fabrication_authorized": false,
+    "current_h3_analytical_scope_complete": false,
+    "target_implementation_or_execution_proven": false,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "current_power_scope": {
+    "schema_version": 1,
+    "status": "review_required",
+    "current_analytical_scope_complete": false,
+    "artifacts": {
+      "H3-R2-digital-interfaces": {
+        "status": "review_required",
+        "numerical_status": "provisional_pass",
+        "open_findings": [
+          "applicability:rail_inputs"
+        ],
+        "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+      },
+      "H3-R2-rail-margins": {
+        "status": "review_required",
+        "numerical_status": "provisional_fail",
+        "open_findings": [
+          "numerical:existing_checks",
+          "applicability:main_raw_model",
+          "applicability:main_protection_model",
+          "applicability:main_thermal_model",
+          "applicability:aon_ron_model",
+          "applicability:series_distribution_scope"
+        ],
+        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+      }
+    },
+    "source_files_checked": 10,
+    "production_release_authorized": false,
+    "battery_energization_authorized": false,
+    "target_execution_authorized": false
+  },
+  "evidence_status": "provisional",
+  "scope_boundary": "Retained timing, envelopes and invariants describe requirements and provisional comparisons. They do not qualify the fitted power cell, authorize RUN/TX or close a hardware phase."
 }
