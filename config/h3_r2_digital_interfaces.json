@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+    "sha256": "7e776005f2d8363e55972c64c04b897dc61ff773cfcbb5688e74369d0348c66e"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -23,28 +23,28 @@
       "boundary": "S3 -> ILI9488 direct i8080/reset",
       "units": "V",
       "corners": {
-        "voh_min": 2.364968,
-        "receiver_vih_min": 2.2999606,
-        "vol_max": 0.3285658,
-        "receiver_vil_max": 0.886863
+        "voh_min": 2.3541704,
+        "receiver_vih_min": 2.3097865,
+        "vol_max": 0.3299695,
+        "receiver_vil_max": 0.8828139
       },
-      "worst_high_margin": 0.0650074,
-      "worst_low_margin": 0.5582972,
-      "minimum_margin": 0.0650074,
+      "worst_high_margin": 0.0443839,
+      "worst_low_margin": 0.5528444,
+      "minimum_margin": 0.0443839,
       "status": "pass"
     },
     {
       "boundary": "S3/C5 -> RP2354 3V3 GPIO",
       "units": "V",
       "corners": {
-        "voh_min": 2.364968,
+        "voh_min": 2.3541704,
         "receiver_vih_min": 2.0,
-        "vol_max": 0.3285658,
+        "vol_max": 0.3299695,
         "receiver_vil_max": 0.8
       },
-      "worst_high_margin": 0.364968,
-      "worst_low_margin": 0.4714342,
-      "minimum_margin": 0.364968,
+      "worst_high_margin": 0.3541704,
+      "worst_low_margin": 0.4700305,
+      "minimum_margin": 0.3541704,
       "status": "pass"
     },
     {
@@ -52,13 +52,13 @@
       "units": "V",
       "corners": {
         "voh_min": 2.62,
-        "receiver_vih_min": 2.4642435,
+        "receiver_vih_min": 2.47477125,
         "vol_max": 0.5,
-        "receiver_vil_max": 0.7390525
+        "receiver_vil_max": 0.73567825
       },
-      "worst_high_margin": 0.1557565,
-      "worst_low_margin": 0.2390525,
-      "minimum_margin": 0.1557565,
+      "worst_high_margin": 0.14522875,
+      "worst_low_margin": 0.23567825,
+      "minimum_margin": 0.14522875,
       "status": "pass"
     },
     {
@@ -66,13 +66,13 @@
       "units": "V",
       "corners": {
         "voh_min": 2.62,
-        "receiver_vih_min": 2.4642435,
+        "receiver_vih_min": 2.47477125,
         "vol_max": 0.5,
-        "receiver_vil_max": 0.7390525
+        "receiver_vil_max": 0.73567825
       },
-      "worst_high_margin": 0.1557565,
-      "worst_low_margin": 0.2390525,
-      "minimum_margin": 0.1557565,
+      "worst_high_margin": 0.14522875,
+      "worst_low_margin": 0.23567825,
+      "minimum_margin": 0.14522875,
       "status": "pass"
     },
     {
@@ -232,7 +232,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+        "sha256": "7e776005f2d8363e55972c64c04b897dc61ff773cfcbb5688e74369d0348c66e"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -245,7 +245,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+        "sha256": "123d5f1f5e0a3d4ca3b7eb7b53da2ecf5b2558f129c06a3b0120a6deac92d47e"
       }
     },
     "source_files_checked": 10,

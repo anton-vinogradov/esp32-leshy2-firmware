@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-thermal-fault.json",
-    "sha256": "b124e49e734cadf4157ed66039a86c426fc096b352677e217d7252471768aedc"
+    "sha256": "929f74386301099203768bd36f10df06ffbd434f8f1068076a98fa487d6bcfc4"
   },
   "thermal_contract": {
     "ambient_design_target_c": {
@@ -576,7 +576,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "02e05ba4ca72a8ec88d082dd6acca02eb5f2e57e8557c80831089b353ec280ec"
+        "sha256": "e2b0d51ad31bf63e69aeced50bfec8941aec8cdd1a8fb3a6fc825760d6b4424e"
       },
       "H3-R2-dc-source-crosscheck": {
         "status": "review_required",
@@ -586,7 +586,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "c9c90141b93c48df4047f63322c925f636932cb0e4ca0229cd018c1b0eafd232"
+        "sha256": "a6589b89d3d82e779e0a224d2adf07def4c39eca9e4be9ea2d656a5f9151593d"
       },
       "H3-R2-digital-interfaces": {
         "status": "review_required",
@@ -594,7 +594,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "0c5fc7e70dc022d63ee24e19a1d52b2b394c94dede46c4bb947cac523489cd8b"
+        "sha256": "7e776005f2d8363e55972c64c04b897dc61ff773cfcbb5688e74369d0348c66e"
       },
       "H3-R2-handover": {
         "status": "review_required",
@@ -603,17 +603,18 @@
           "applicability:source_inputs",
           "applicability:sequence_inputs"
         ],
-        "sha256": "b0dd3c5d16a260e6770707daae1022fcc87c624587cf4b1f76c97702b29a8932"
+        "sha256": "7978a072a35e337bbe6573fa1bb876c436117bf1d93bf0efaa4cd66c5d3cfd61"
       },
       "H3-R2-inrush-watchdog": {
         "status": "review_required",
-        "numerical_status": "provisional_pass",
+        "numerical_status": "provisional_fail",
         "open_findings": [
+          "numerical:existing_checks",
           "applicability:rail_inputs",
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "5eb0f797c0fc387c6dbcc7956fc5fc8bdb667f7c8713e43eed8afa258a83db08"
+        "sha256": "85d7adadc1bdbfdfcbe54037ffa5d57aaa05d024a44cbbb2545a11ad25f266ee"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -626,7 +627,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "06b97ec6e2cf9baf6c6701867543245791f7e99f57b4a49779590d3e13a457fa"
+        "sha256": "123d5f1f5e0a3d4ca3b7eb7b53da2ecf5b2558f129c06a3b0120a6deac92d47e"
       },
       "H3-R2-rf-coexistence": {
         "status": "review_required",
@@ -635,7 +636,7 @@
           "applicability:digital_inputs",
           "applicability:analog_inputs"
         ],
-        "sha256": "5f99664bcaf10e7092eb35ad09045f8da29233ed7a6755638a29c8917e5a35b6"
+        "sha256": "e468c7420fdf3264ff90039f32538300587b18bb846ef51844a3458130256b9d"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -644,28 +645,30 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "a47b5eae89e57707f93d0df93070bbd6a4fe0105c18b0562709c0abf75549a27"
+        "sha256": "f791db277f6315f6abeaad8be8038263197184e9540072ea3e736e1802bc9a59"
       },
       "H3-R2-thermal-fault": {
         "status": "review_required",
-        "numerical_status": "provisional_pass",
+        "numerical_status": "provisional_fail",
         "open_findings": [
+          "numerical:existing_checks",
           "applicability:rail_inputs",
           "applicability:source_inputs",
           "applicability:transition_inputs",
           "applicability:rf_inputs"
         ],
-        "sha256": "b124e49e734cadf4157ed66039a86c426fc096b352677e217d7252471768aedc"
+        "sha256": "929f74386301099203768bd36f10df06ffbd434f8f1068076a98fa487d6bcfc4"
       },
       "H3-R2-transition-result": {
         "status": "review_required",
-        "numerical_status": "provisional_pass",
+        "numerical_status": "provisional_fail",
         "open_findings": [
+          "numerical:existing_checks",
           "applicability:inrush_inputs",
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "af2cc88a8b03a675f43396a11b59b22b94b877c4553091524e6279b3f9e65f8f"
+        "sha256": "cbe7196cd6c428aa8d60c31a8308c0314ea1874ac5aa77dfa29035bc0d1b8f6e"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -675,7 +678,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "2671fb9e0b96e7ba755a84d56e4ccdd33c4b1c1f6735786ea60a3dc0ea7dadab"
+        "sha256": "ab7c49b83a1fafb8f06c492f30db854ba595f4292f7f8c820a6f9a3c275a6e90"
       }
     },
     "source_files_checked": 23,
