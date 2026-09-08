@@ -33,6 +33,17 @@ class ProductSiteTests(unittest.TestCase):
             qualification["repo_commit"], claims["r2_build_qualification_input_commit"]
         )
 
+    def test_r2_reproducibility_scope_does_not_drop_debug_or_maps(self):
+        policy = json.loads(self.read("config/f2_r2_build_policy.json"))["reproducibility"]
+        self.assertIs(False, policy["absolute_source_paths_in_artifacts"])
+        self.assertEqual("all 60 declared artifacts, including debug and maps", policy["map_publication_step"]["comparison_scope"])
+        for name in ("docs/roadmap.md", "docs/roadmap.ru.md"):
+            text = self.read(name)
+            self.assertIn("review_f2_r2_reproducibility.py --run --write-evidence", text)
+            self.assertIn("review_f2_r2_reproducibility.py --check", text)
+            self.assertIn("PSRAM", text)
+            self.assertIn("review_required", text)
+
     def test_public_site_is_small_and_bilingual(self):
         expected = {
             "README.md",

@@ -6,7 +6,7 @@
   "inputs": {
     "rebaseline_plan": {
       "path": "config/f2_r2_target_rebaseline.json",
-      "sha256": "61044f996c005c3aec7a3b9ef308119742311ddd296e5b45ffd9de961cbc83c2"
+      "sha256": "4e3206cd442989a6c3734d5b1776221151499953b90c2db9cbf6c61fe5504efc"
     },
     "target_identities": {
       "path": "config/f0_r2_target_identity_contract.json",
@@ -30,7 +30,7 @@
     },
     "build_policy": {
       "path": "config/f2_r2_build_policy.json",
-      "sha256": "e3f6bfd58d7e69845f79cdc1b16aa597778cff25b844ad20b0ac955aaa7d7e94"
+      "sha256": "965c469c86020f57163df49c8feb42a3c8dea93defb6cba923db16c8c709b0b3"
     }
   },
   "size_gate_sources": {

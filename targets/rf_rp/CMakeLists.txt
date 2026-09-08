@@ -28,6 +28,12 @@ set(LESHY2_RF_RP_PROJECT_SOURCES
     "${LESHY2_GENERATED_R2_HW_DIR}/src/rf_rp_bsp.c"
 )
 add_executable(leshy2_rf_rp ${LESHY2_RF_RP_PROJECT_SOURCES})
+# SDK assertion strings and debug records need the same path remap. Do not
+# propagate the project warning policy or C17-only flags to SDK sources.
+target_compile_options(leshy2_rf_rp PRIVATE
+    "-ffile-prefix-map=${LESHY2_REPO_ROOT}=."
+    "-fdebug-prefix-map=${LESHY2_REPO_ROOT}=."
+)
 target_include_directories(
     leshy2_rf_rp PRIVATE "${LESHY2_GENERATED_R2_HW_DIR}/include"
 )

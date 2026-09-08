@@ -8,9 +8,10 @@
 > сохранённые аналитические результаты H3 ниже не квалифицируют установленную ячейку.
 > Обновление источников интерфейсов 8 сентября удаляет устаревший неиспользуемый контакт 6
 > аудиоразъёма и уточняет происхождение корпусов, но не меняет GPIO/API или любой из 13 C/H-файлов BSP.
-> Настоящий чистый прогон из 12 jobs прошёл для входного commit `c8e349b` по
-> matrix `354f1a37a0a9…`. Dispatcher атомарно записал свежий evidence после
-> прохождения всех jobs; `verify-evidence` подтвердил текущие входы и artifacts.
+> Настоящий результат 12 чистых jobs из input commit `c8e349b`, matrix `354f1a37a0a9…`,
+> сохранён для того прежнего входа. Последующая привязка footprint `1048P` только
+> по полярности и обновление build path maps требуют двух новых чистых проходов:
+> текущая квалификация ожидается, а не выводится из старых artifacts. GPIO/API и 13 C/H-файлов BSP не изменились.
 > Прежние исправления RF-footprints/NC5 сохранены в аппаратной границе.
 > [Продолжение ревью интерфейсов](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.ru.md)
 > исправляет выбранные позиции органов управления/портов native PCB, оставляя открытыми
@@ -68,7 +69,7 @@ firmware-репозитория. Пересечения с железом ука
 | Проекты S3/C5/RF-RP/Hub-RP/Pack/Safety | ✅ F2-R2.2: [шесть production-SDK roots проведены ревью](../config/f2_r2_target_projects.json); RF-RP и Hub-RP используют разные pin-free Pico SDK trees, entries и image identities |
 | Владение generated BSP R2 | ✅ F2-R2.3 исправлен и повторно квалифицирован: [шесть детерминированных доменов H1-R2.31](../config/f2_r2_bsp_generation.json) содержат все 173 точные controller-строки H2 с fail-closed mapping/count guards; [у каждого один SDK owner](../config/f2_r2_bsp_consumption.json), а сохранённый BSP пяти доменов только исторический |
 | Authority R2 и production H2 | ✅ [Синхронизированный gate](../config/r2_h2_sync_gate.json): H2-R2.1.5 импортирует exact six-domain native KiCad/HW↔FW boundary, карты двух RP и все три electrical prerequisite fail-closed; сохранённый H2.0.3 остаётся только historical R1 |
-| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: свежая [F2-R2.4](../config/f2_r2_build_qualification.json) прошла 12 чистых сборок для текущей matrix, с 60 artifacts, 16 maps и 16 size gates. Остаются два чистых побайтно идентичных прохода; S3 QEMU остаётся F3-R2 |
+| Target builds, maps и S3 QEMU | ▶️ F2-R2.5: [F2-R2.4](../config/f2_r2_build_qualification.json) сохраняет 12 чистых сборок прежнего входа, 60 artifacts, 16 maps и 16 size gates. Обновлённые входы ожидают двух новых побайтно идентичных проходов; S3 QEMU остаётся F3-R2 |
 | Пересечение с железом | ▶️ H6.0.3-R1 остаётся открытым, включая условия запуска native-питания. Прежние аналитические результаты H3 и ревью H4 не означают текущую приёмку питания; sourcing остаётся у H5. H3-R2.4 моделирует прямой i8080-8 20 МГц, владение USB и паритет 80/80 M1. Все 51 physical-остаток и отдельное обязательство F5/F6 по i8080 остаются открытыми у точных владельцев. |
 | C5, оба RP2354B и MSPM0 platform/dev-board tests | 🔒 Точный target boot/peripherals ожидает R2 build matrix и hardware |
 | Меню, waterfall, storage, audio и radio features | ⏳ Описаны как целевой продукт, production-кода ещё нет |
@@ -119,18 +120,55 @@ display/flex/touch, RF/антенны, analog audio/IR или механичес
 
 <!-- current-substep: F2-R2.5 -->
 
-▶️ **`F2-R2.5` — сейчас.** Атомарный
+▶️ **`F2-R2.5` — сейчас; новые прогоны ожидаются.** Сохранённый атомарный
 [evidence F2-R2.4](../config/f2_r2_build_qualification.json) фиксирует 12
 успешных configure/build jobs шести production-SDK roots, 60 проверенных
 artifacts, 16 maps и 16 пройденных size gates без warnings. Результат доказывает
 компиляцию, линковку и статическую помещаемость с точным BSP R2; он не доказывает
 byte reproducibility, target boot, peripherals, emulation или физическое железо.
-Свежая запись привязана к входному commit `c8e349b` и matrix `354f1a37a0a9…`.
-Dispatcher выполнил все 12 чистых jobs до её записи; `verify-evidence` подтвердил
-текущие входы и artifacts. Прежние build-каталоги и evidence сохранены отдельно.
-Далее нужны два чистых прохода с побайтным сравнением каждого artifact.
+Запись привязана к прежнему input commit `c8e349b` и matrix `354f1a37a0a9…`.
+Это не свежий evidence для новых контрактов и build path maps. Исходная запись
+и каталоги сохранены. Далее нужны два настоящих чистых прохода с побайтным сравнением
+каждого artifact; сохранённый прогон нельзя объявить первым из них.
 Двуязычный итог F2-R2 публикуется только после прохождения этого gate.
 Точный маркер и его evidence меняются вместе в каждом commit.
+
+<a id="r2-reproducibility-procedure"></a>
+### Процедура воспроизводимости R2
+
+Отдельный [runner](../tools/review_f2_r2_reproducibility.py) требует один чистый
+input commit для обоих проходов и берёт `SOURCE_DATE_EPOCH` из timestamp именно
+этого commit. Все 12 существующих build-каталогов переносятся в уникальный recovery
+каталог в `work/` рабочего пространства, без удаления. Затем повторяются locked SDK
+preflight и 24 настоящие configure/build jobs. В обоих проходах используются одинаковые
+канонические пути; равенство между разными workspace не заявляется. Сравниваются все
+60 пар artifacts, включая debug и по 16 maps; запрет абсолютных путей исходников сохранён.
+
+Нормализация префикса maps — явный build-шаг публикации до вычисления hash:
+только точный префикс каталога checkout заменяется на `.`. Сохраняются исходные SDK maps
+и maps до публикации, SHA-256 до/после и число замен. Только известный заголовок TI
+`>> Linked` использует фиксированный epoch; неизвестные пути и timestamps не удаляются.
+Проверка повторно читает обе сборки и исходники maps и доказывает, что других изменений
+байтов нет. Отсутствие или подмена локального recovery приводит к отказу проверки.
+Только два полных успешных прохода публикуют новые канонические evidence.
+При ошибке сборки, path scan или сравнения прежний evidence не меняется, а результаты
+неудачного прогона и запись причины сохраняются. Добавление runner само по себе не
+закрывает фазу прошивки, PSRAM, native-питание, target runtime или физические gates.
+
+Предварительный разбор выявил ещё один открытый вопрос path policy: предсобранные
+runtime-библиотеки locked toolchains содержат пути сборки производителя в DWARF
+(`.debug_line_str` у ESP/RP, `.debug_info`/`.debug_line` у TI). Project compile prefix
+maps не меняют уже собранные объекты. Строгий runner их отклонит; новые target-прогоны
+ожидают проверенного решения с сохранением debug. Удаление debug-секций или незаметное
+разрешение этих путей не принято в качестве обхода.
+
+```sh
+python3 tools/review_f2_r2_reproducibility.py --plan
+# После commit проверенных inputs, на чистом рабочем дереве:
+.toolchains/python/idf6_py3.12_env/bin/python tools/review_f2_r2_reproducibility.py --run --write-evidence
+python3 tools/review_f2_r2_reproducibility.py --check
+python3 tools/build_f2_r2_targets.py verify-evidence
+```
 
 Известный runtime-пробел: текущий набор компонентов S3 не подключает `esp_psram`;
 configure считает запрошенные `CONFIG_SPIRAM*` неизвестными, и сгенерированная

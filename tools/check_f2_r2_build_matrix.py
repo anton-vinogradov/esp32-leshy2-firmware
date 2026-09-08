@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
+import re
 from pathlib import Path
 
 
@@ -21,6 +22,21 @@ def load(relative: str) -> dict:
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def pico_sdk_option_errors(cmake: str, target_name: str) -> list[str]:
+    """SDK sources get path remapping, never the project's strict warnings."""
+    blocks = re.findall(
+        rf"target_compile_options\(\s*{re.escape(target_name)}\s+PRIVATE\s+(.*?)\)",
+        cmake, re.DOTALL,
+    )
+    expected = [
+        '"-ffile-prefix-map=${LESHY2_REPO_ROOT}=."',
+        '"-fdebug-prefix-map=${LESHY2_REPO_ROOT}=."',
+    ]
+    if len(blocks) != 1 or blocks[0].split() != expected:
+        return ["Pico SDK target options must contain only the two exact path maps"]
+    return []
 
 
 def main() -> int:
@@ -144,10 +160,7 @@ def main() -> int:
                 )
             if "-std=c17" not in cmake:
                 errors.append(f"{target_id}: Leshy2 sources do not enforce ISO C17")
-            if f"target_compile_options({target_name} PRIVATE" in cmake:
-                errors.append(
-                    f"{target_id}: project warnings leak into Pico SDK interface sources"
-                )
+            errors.extend(f"{target_id}: {error}" for error in pico_sdk_option_errors(cmake, target_name))
 
     memory = {row["id"]: row for row in load(
         "config/f0_r2_memory_rollback_contract.json"

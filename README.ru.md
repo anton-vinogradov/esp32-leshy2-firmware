@@ -18,7 +18,7 @@
 |---|---|---|
 | F0 · Контракты продукта | ✅ **Проведено ревью:** [итог F0-R2](docs/f0-product-contracts-report.ru.md) | шесть доменов, identities, независимый rollback, S3-last update и честные execution gates |
 | F1 · Portable cores | ✅ **Проведено ревью:** [итог F1-R2](docs/f1-portable-cores-report.ru.md) | 34 сценария проходят normal и ASan/UBSan; six-domain update, Airband заднего RP и integrated faults |
-| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; свежая [F2-R2.4](config/f2_r2_build_qualification.json) прошла 12 чистых сборок R2, 60 artifacts, 16 maps и 16 size gates для текущей matrix, [отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать два побайтно идентичных чистых прохода и опубликовать двуязычный итог F2-R2 |
+| **F2 · Target-проекты и build system** | **▶️ Сейчас: F2-R2.5**; [F2-R2.4](config/f2_r2_build_qualification.json) сохраняет 12 чистых сборок прежнего входа; обновлённые источники и path policy ожидают двух новых чистых проходов. [Отчёт R1 сохранён](docs/f2-target-build-system-report.ru.md) | доказать побайтное равенство всех 60 artifacts и опубликовать двуязычный итог F2-R2 |
 | F3 · Boot, память и эмуляция | ⏳ [Отчёт R1 сохранён](docs/f3-boot-memory-emulation-report.ru.md); ожидает F2-R2 | повторная квалификация шести targets, emulator и физических gates |
 | F4 · IPC и scheduling | ⏳ Работа R1 приостановлена; ожидает F3-R2 | Hub-centered transports, typed messages, credits и priority isolation |
 | F5 · BSP и drivers | ⏳ Ожидает F4 и актуальную схему R2 | все драйверы устройств, органов управления, датчиков и power states |
@@ -77,9 +77,11 @@ domain descriptors, и [каждый привязан](config/f2_r2_bsp_consumpt
 пройденных size gates для входного commit `c8e349b` и matrix `354f1a37a0a9…`.
 Обновление источников интерфейсов 8 сентября удаляет устаревший контакт 6
 аудиоразъёма и уточняет происхождение точных корпусов; GPIO/API и все 13
-сгенерированных C/H-файлов BSP не изменились. Настоящий чистый прогон из 12 jobs
-прошёл для этих закоммиченных входов; dispatcher атомарно записал свежий evidence,
-а `verify-evidence` подтвердил его.
+сгенерированных C/H-файлов BSP не изменились. Настоящий результат 12 jobs сохранён
+для своих закоммиченных входов. Последующее обновление привязки footprint `1048P`
+только по полярности и build path maps требует новой квалификации: прежний evidence
+не переименован в свежий. Оставшаяся механическая неопределённость держателя
+не меняет GPIO/API прошивки.
 Этот прогон доказывает для своих входов компиляцию, линковку и статическую
 помещаемость образов, но не boot, peripheral execution, воспроизводимость,
 эмуляцию или физическое железо.
@@ -218,7 +220,7 @@ H3 фиксирует эти входы. [Ревью интерфейсов на
 
 <!-- current-substep: F2-R2.5 -->
 
-▶️ **`F2-R2.5` — сейчас.** Атомарная
+▶️ **`F2-R2.5` — сейчас; новые прогоны ожидаются.** Сохранённая атомарная
 [квалификация F2-R2.4](config/f2_r2_build_qualification.json) запустила locked
 [shell-free dispatcher](tools/build_f2_r2_targets.py) для всех шести SDK
 projects в debug и release. Текущие inputs — прошедшие ревью
@@ -228,10 +230,15 @@ projects в debug и release. Текущие inputs — прошедшие ре�
 [владение BSP](config/f2_r2_bsp_consumption.json) и
 [build policy](config/f2_r2_build_policy.json). Все 12 configure/build jobs прошли; все 60 named
 artifacts и 16 maps были проверены, а все 16 size gates прошли без warnings
-для входного commit `c8e349b` и текущей matrix `354f1a37a0a9…`.
-Dispatcher записал свежий результат только после прохождения всех 12 чистых jobs;
-`verify-evidence` подтвердил текущие хеши входов и artifacts. Прежние build-каталоги
-и evidence сохранены отдельно, а не переименованы в результат этого прогона.
+для входного commit `c8e349b` и его прежней matrix `354f1a37a0a9…`.
+Эти файлы сохранены, но не квалифицируют обновлённые текущие входы.
+Отдельный [runner воспроизводимости R2](tools/review_f2_r2_reproducibility.py)
+сохранит существующие build-каталоги и выполнит два настоящих чистых прохода
+по 12 jobs на одном новом input commit и его точном Git timestamp. Он сравнивает
+все 60 artifacts, включая ELF/debug и все 16 maps, и отклоняет обнаруженные
+абсолютные пути исходников. Явный шаг публикации maps заменяет только точный
+префикс каталога checkout, сохраняет исходные SDK maps и проверяет неизменность
+всех остальных байтов. См. [процедуру запуска и проверки](docs/roadmap.ru.md#r2-reproducibility-procedure).
 Точные границы S3, C5,
 двух RP и Pack/Safety не изменились. Target boot, peripheral, emulator,
 development-board и physical runs не выполнялись, а byte reproducibility ещё не

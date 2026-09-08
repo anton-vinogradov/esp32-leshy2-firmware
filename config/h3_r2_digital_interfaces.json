@@ -6,7 +6,7 @@
   "current_hardware_substep": "H4-R2.2",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "ecfc00f5435bb2c1e4e9a1c83a11bcf00848c2d7ccc65a7837b6f21c724da5e4"
+    "sha256": "102d6a17f86d7a4a3d007e347ba7682557a5f075095ac2d3af4a35336b9f5388"
   },
   "display": {
     "mode": "direct i8080-8",

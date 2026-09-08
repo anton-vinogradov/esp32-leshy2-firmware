@@ -80,6 +80,17 @@
     "source_date_epoch_source": "git commit timestamp",
     "absolute_source_paths_in_artifacts": false,
     "prefix_maps": ["-ffile-prefix-map", "-fdebug-prefix-map"],
+    "map_publication_step": {
+      "runner": "tools/review_f2_r2_reproducibility.py",
+      "scope": "all 16 declared map artifacts in each of two clean passes",
+      "rule": "replace only the exact checkout-root byte prefix with a dot before artifact hashing; all other bytes remain unchanged",
+      "raw_sdk_maps_retained": true,
+      "raw_to_published_sha256_and_replacement_counts_required": true,
+      "ti_header_rule": "existing single >> Linked header uses the fixed SOURCE_DATE_EPOCH; its raw SDK preimage is retained",
+      "unknown_absolute_roots_or_timestamps_may_be_stripped": false,
+      "comparison_scope": "all 60 declared artifacts, including debug and maps",
+      "workspace_scope": "two clean passes at the same canonical paths and one input commit; cross-workspace equality is not claimed"
+    },
     "build_root": "build/r2/targets/{target}/{configuration}",
     "network_during_configure_or_build": false
   },

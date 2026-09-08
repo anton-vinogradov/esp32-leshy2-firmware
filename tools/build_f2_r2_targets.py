@@ -549,6 +549,8 @@ def check_evidence(
     matrix_path: Path,
     matrix: dict,
     repo_root: Path = REPO_ROOT,
+    *,
+    artifact_root: Path | None = None,
 ) -> list[str]:
     if not evidence_path.is_file():
         return [f"qualification evidence is absent: {evidence_path}"]
@@ -608,7 +610,9 @@ def check_evidence(
                     f"{target_id}:{configuration}: invalid artifact evidence"
                 )
                 break
-            path = repo_root / artifact["path"]
+            # The reproducibility runner retains pass 1 under an isolated mirror
+            # of the build tree. Inputs and Git provenance still use repo_root.
+            path = (artifact_root or repo_root) / artifact["path"]
             try:
                 if not path.is_file() or path.is_symlink():
                     errors.append(f"{target_id}:{configuration}: missing or aliased artifact: {artifact['path']}")

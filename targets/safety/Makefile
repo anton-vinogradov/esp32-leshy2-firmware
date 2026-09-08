@@ -29,7 +29,7 @@ $(error CONFIG must be debug or release)
 endif
 
 PROJECT_CFLAGS := $(ARCH_FLAGS) $(INCLUDE_FLAGS) $(PROJECT_WARNINGS) $(PROJECT_CODEGEN) $(OPT_FLAGS)
-SDK_CFLAGS := $(ARCH_FLAGS) $(INCLUDE_FLAGS) $(OPT_FLAGS)
+SDK_CFLAGS := $(ARCH_FLAGS) $(INCLUDE_FLAGS) $(OPT_FLAGS) -ffile-prefix-map=$(PROJECT_ROOT)=. -fdebug-prefix-map=$(PROJECT_ROOT)=.
 LINK_FLAGS := $(ARCH_FLAGS) -Wl,--rom_model -Wl,--warn_sections -Wl,--emit_warnings_as_errors
 SDK_LINK_PATH := -L$(MSPM0_SDK_PATH)/source
 APP_OUT := $(BUILD_DIR)/leshy2_safety.out

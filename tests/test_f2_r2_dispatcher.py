@@ -101,9 +101,8 @@ class F2R2DispatcherTest(unittest.TestCase):
             self.assertIn("set(CMAKE_C_EXTENSIONS ON)", cmake)
             self.assertIn("set_source_files_properties(", cmake)
             self.assertIn("-std=c17", cmake)
-            self.assertNotIn(
-                f"target_compile_options(leshy2_{target} PRIVATE", cmake
-            )
+            from check_f2_r2_build_matrix import pico_sdk_option_errors
+            self.assertEqual([], pico_sdk_option_errors(cmake, f"leshy2_{target}"))
 
     def test_full_qualification_dry_run_is_24_shell_free_argv_commands(self):
         evidence = ROOT / "config/f2_r2_build_qualification.json"
