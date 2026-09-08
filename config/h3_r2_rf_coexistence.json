@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-rf-coexistence.json",
-    "sha256": "77236004cdfa2d0a97b8012c1c255c57a32268917591d53f98eeb16b4e5984a7"
+    "sha256": "923a4930bbbfc438cf104674ff88fdff5aa6f18c46c8bff1a886ec5c8ff15242"
   },
   "port_topology": {
     "front": [
@@ -390,7 +390,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "4d2751da609d3eec571a6f02016eed4e9344bef3ce178d8ffa82c1d0be4ee579"
+        "sha256": "f964f22da59bb75777bfa0e0b5eabd4c15d63cc5d48ec66b78beb4ae7c3eaac7"
       },
       "H3-R2-digital-interfaces": {
         "status": "review_required",
@@ -420,7 +420,7 @@
           "applicability:digital_inputs",
           "applicability:analog_inputs"
         ],
-        "sha256": "77236004cdfa2d0a97b8012c1c255c57a32268917591d53f98eeb16b4e5984a7"
+        "sha256": "923a4930bbbfc438cf104674ff88fdff5aa6f18c46c8bff1a886ec5c8ff15242"
       }
     },
     "source_files_checked": 12,

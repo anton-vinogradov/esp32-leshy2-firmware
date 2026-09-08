@@ -7,15 +7,15 @@
   "sources": {
     "acceptance": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-acceptance-package.json",
-      "sha256": "612634a5961add3d240ad0d635b04bb900a71d329bf8897a8853d1f279c82301"
+      "sha256": "8b4787f66ed9fc204e69b4187158914389376493e42c8895e18a73ca4939c43f"
     },
     "crosscheck": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-crosscheck.json",
-      "sha256": "63334ceabc93f61a331f58e28415fa217b1149193fd48031a125d8d7b46f27c2"
+      "sha256": "211e804c039ba76dfcbfdd2d36a417c902dd167f54fc9268a7063b69cb235ebc"
     },
     "physical_residuals": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-physical-residuals.json",
-      "sha256": "b166b1d3baaae2a0e2d5dd8b6a3e5505d27143684c19074f69c988456290d6cc"
+      "sha256": "d8628e5bce9e92013f086e585a4aa5a214aa8c8bf6fc13dd15530de61373310a"
     }
   },
   "reviewed_boundary": {
@@ -72,7 +72,7 @@
         "open_findings": [
           "applicability:crosscheck_inputs"
         ],
-        "sha256": "612634a5961add3d240ad0d635b04bb900a71d329bf8897a8853d1f279c82301"
+        "sha256": "8b4787f66ed9fc204e69b4187158914389376493e42c8895e18a73ca4939c43f"
       },
       "H3-R2-analog-corners": {
         "status": "review_required",
@@ -80,7 +80,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "4d2751da609d3eec571a6f02016eed4e9344bef3ce178d8ffa82c1d0be4ee579"
+        "sha256": "f964f22da59bb75777bfa0e0b5eabd4c15d63cc5d48ec66b78beb4ae7c3eaac7"
       },
       "H3-R2-crosscheck": {
         "status": "review_required",
@@ -89,7 +89,7 @@
           "numerical:existing_checks",
           "applicability:current_power_inputs"
         ],
-        "sha256": "63334ceabc93f61a331f58e28415fa217b1149193fd48031a125d8d7b46f27c2"
+        "sha256": "211e804c039ba76dfcbfdd2d36a417c902dd167f54fc9268a7063b69cb235ebc"
       },
       "H3-R2-dc-source-crosscheck": {
         "status": "review_required",
@@ -135,7 +135,7 @@
         "open_findings": [
           "applicability:crosscheck_inputs"
         ],
-        "sha256": "b166b1d3baaae2a0e2d5dd8b6a3e5505d27143684c19074f69c988456290d6cc"
+        "sha256": "d8628e5bce9e92013f086e585a4aa5a214aa8c8bf6fc13dd15530de61373310a"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -157,7 +157,7 @@
           "applicability:digital_inputs",
           "applicability:analog_inputs"
         ],
-        "sha256": "77236004cdfa2d0a97b8012c1c255c57a32268917591d53f98eeb16b4e5984a7"
+        "sha256": "923a4930bbbfc438cf104674ff88fdff5aa6f18c46c8bff1a886ec5c8ff15242"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -178,7 +178,7 @@
           "applicability:transition_inputs",
           "applicability:rf_inputs"
         ],
-        "sha256": "9e54083fb6b5c8753eeda907cbbae2ca71ea4baf7ec1ca6423c41ca16015d75c"
+        "sha256": "1ab6ab0042f2e150b738a8942a28705938717b4d875ac01def07fda9f405bcdc"
       },
       "H3-R2-transition-result": {
         "status": "review_required",
