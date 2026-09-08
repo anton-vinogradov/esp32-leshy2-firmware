@@ -142,6 +142,11 @@ The current hardware point is `H6.0.3-R1`: placement and routing on the two
 owns current copper counts, connectivity, DRC and images; earlier routing figures
 are not current completion evidence.
 
+The [placement correction report](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-placement-repair.md)
+tracks the centred holder, left encoder, internal audio and recessed ports.
+These mechanical changes do not change the selected MPNs, pin/net identities
+or six-domain firmware boundary; they do not close the first-unit order gate.
+
 The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 materializes both native six-layer boards and places all 1,208 fitted instances
 with zero hard conflict. The [H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
