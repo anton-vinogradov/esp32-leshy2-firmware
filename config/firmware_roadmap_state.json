@@ -15,12 +15,12 @@
       "status": "review_required",
       "report": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-electrical-semantics.md",
       "audit": "https://github.com/anton-vinogradov/esp32-leshy2/blob/main/hardware/verification/h6_r2_power_startup.py",
-      "scope": "H3 algebraic results remain imported within their analytical scope, not qualification of the current native power cell",
+      "scope": "Four summary categories, not an exhaustive H6 finding count: current H3 fitted-part calculations are conditioned diagnostics, not qualification of the native power cell",
       "open_findings": [
-        "fitted R67 1.65k versus accepted 1.18k protection envelope",
-        "H3 TPS564252 model versus fitted TPS566231P",
+        "fitted R67 1.65k current limit does not cover the 3.75A continuous / 4.25A step requirement",
+        "conditioned fitted TPS566231P model does not qualify actual VIN, ripple or protected-rail drop",
         "main PGTH worst-case assertion headroom",
-        "AON eFuse resistance bound uses a different RILIM test condition"
+        "AON eFuse RILIM-conditioned resistance and powered startup remain unqualified"
       ],
       "gpio_or_api_changed": false,
       "powered_startup_proven": false,

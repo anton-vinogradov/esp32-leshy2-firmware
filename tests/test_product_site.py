@@ -203,17 +203,35 @@ class ProductSiteTests(unittest.TestCase):
     def test_current_native_power_findings_are_not_hidden_by_h3_import(self):
         for name in ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md"):
             current = self.read(name).split("<details>", 1)[0]
-            for token in ("review_required", "TPS566231P", "TPS564252", "PGTH", "RILIM", "NC5"):
+            for token in ("review_required", "TPS566231P", "R67", "VIN", "PGTH", "RILIM", "NC5"):
                 self.assertIn(token, current, name)
+            self.assertNotIn("H3 protection model assumes 1.18", current, name)
+            self.assertNotIn("H3 TPS564252 model versus fitted", current, name)
+            self.assertNotIn("модель защиты H3 предполагает 1,18", current, name)
             self.assertIn("h6-r2-electrical-semantics", current, name)
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         review = state["hardware_boundary"]["current_native_power_review"]
         self.assertEqual("review_required", review["status"])
-        self.assertEqual(4, len(review["open_findings"]))
+        self.assertEqual([
+            "fitted R67 1.65k current limit does not cover the 3.75A continuous / 4.25A step requirement",
+            "conditioned fitted TPS566231P model does not qualify actual VIN, ripple or protected-rail drop",
+            "main PGTH worst-case assertion headroom",
+            "AON eFuse RILIM-conditioned resistance and powered startup remain unqualified",
+        ], review["open_findings"])
         self.assertFalse(review["gpio_or_api_changed"])
         self.assertFalse(review["powered_startup_proven"])
         self.assertFalse(review["hardware_order_authorized"])
         self.assertTrue(state["current_claims"]["h3_r2_7_acceptance_imported"])
+
+    def test_usb_identity_refresh_does_not_relabel_retained_builds(self):
+        for name in ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md"):
+            current = self.read(name).split("<details>", 1)[0]
+            for token in ("GCT USB4105-GF-A", "250", "244", "17", "13", "F2-R2.5", "c8e349b"):
+                self.assertIn(token, current, name)
+            self.assertIn("1 599" if ".ru." in name else "1,599", current, name)
+        state = json.loads(self.read("config/firmware_roadmap_state.json"))
+        self.assertFalse(state["current_claims"]["r2_current_matrix_build_qualified"])
+        self.assertFalse(state["current_claims"]["r2_byte_reproducibility_proven"])
 
     def test_completed_global_phase_has_bilingual_result_report(self):
         reports = {

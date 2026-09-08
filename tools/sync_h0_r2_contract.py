@@ -133,7 +133,7 @@ def build() -> dict:
         and native_inventory.get("summary", {}).get("project_count") == 2
         and native_inventory.get("summary", {}).get("sheet_count") == 22
         and native_inventory.get("summary", {}).get("domain_count") == 6
-        and native_inventory.get("summary", {}).get("component_group_count") == 251
+        and native_inventory.get("summary", {}).get("component_group_count") == 250
         and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1218
         and native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") == 0
         and native_inventory.get("authorization", {}).get("native_source_and_sheet_inventory") is True
@@ -145,10 +145,12 @@ def build() -> dict:
     exact_ledger_closed = (
         exact_ledger.get("marker") == "H2-R2.1.2"
         and exact_ledger.get("status") == "pass"
-        and exact_ledger.get("summary", {}).get("component_group_count") == 251
-        and exact_ledger.get("summary", {}).get("board_component_group_count") == 245
+        and exact_ledger.get("summary", {}).get("component_group_count") == 250
+        and exact_ledger.get("summary", {}).get("board_component_group_count") == 244
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 6
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1616
+        # Four USB ports now share GCT: one unique 17-contact JAE definition
+        # disappears, not any fitted endpoint (4305 physical pins below).
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1599
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False

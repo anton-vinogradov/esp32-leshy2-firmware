@@ -134,15 +134,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("H2-R2.1.1", inventory["marker"])
         self.assertEqual(2, inventory["summary"]["project_count"])
         self.assertEqual(22, inventory["summary"]["sheet_count"])
-        self.assertEqual(251, inventory["summary"]["component_group_count"])
+        self.assertEqual(250, inventory["summary"]["component_group_count"])
         self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
         self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
         self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
         ledger = self.actual["exact_component_ledger"]
         self.assertEqual("H2-R2.1.2", ledger["marker"])
-        self.assertEqual(245, ledger["summary"]["board_component_group_count"])
+        self.assertEqual(244, ledger["summary"]["board_component_group_count"])
         self.assertEqual(6, ledger["summary"]["explicit_non_pcba_group_count"])
-        self.assertEqual(1616, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(1599, ledger["summary"]["logical_contact_count"])
         self.assertEqual(0, ledger["summary"]["unresolved_groups"])
         self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
         self.assertFalse(ledger["authorization"]["schematic_nets"])
@@ -158,6 +158,24 @@ class H0R2FirmwareContractTest(unittest.TestCase):
             self.actual["physical_h1"]["pre_r2_h2_gates"],
         )
         self.assertEqual([], self.actual["physical_h1"]["pre_r2_h2_gates"])
+
+    def test_usb_unification_removes_only_a_unique_part_definition(self):
+        source = self.module.HW_REPO / "hardware/ecad/generated/H2-R2-native-instance-ledger.json"
+        rows = json.loads(source.read_text())["rows"]
+        ports = [row for row in rows if row["device_id"] == "gct_usb4105_gf_a"]
+        self.assertEqual(
+            {("LESHY2-UI-R2", "J9"), ("LESHY2-UI-R2", "J11"),
+             ("LESHY2-RF-R2", "J1"), ("LESHY2-RF-R2", "J4")},
+            {(row["project"], row["reference"]) for row in ports},
+        )
+        self.assertEqual(4, len(ports))
+        self.assertFalse(any(row["device_id"] == "jae_dx07s016ja1r1500" for row in rows))
+        self.assertEqual(1208, len(rows))
+        self.assertEqual(244, len({row["device_id"] for row in rows}))
+        self.assertEqual(1616 - 17, self.actual["exact_component_ledger"]["summary"]["logical_contact_count"])
+        self.assertEqual(4305, self.actual["native_kicad"]["summary"]["physical_symbol_pin_count"])
+        self.assertEqual(4070, self.actual["native_kicad"]["summary"]["connected_physical_pin_count"])
+        self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
 
     def test_c5_transport_is_quad_and_40mhz_qualification_only(self):
         transport = {row["id"]: row for row in self.actual["transports"]}["HUB_C5"]

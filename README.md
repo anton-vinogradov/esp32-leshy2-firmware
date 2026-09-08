@@ -134,8 +134,8 @@ The preserved [H4 review](https://github.com/anton-vinogradov/esp32-leshy2/blob/
 records a 38-row C5/Pack/Safety BSP-generation gap, its correction to 173/173 H2
 controller rows and requalification of 12 builds for that input—not current
 power or build qualification. The [H5 route report](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md)
-retains its reviewed 249-group / 1,216-article sourcing snapshot and explicit
-`WBC16-1TLC` order-time gate; procurement still requires a fresh order-time check.
+owns the current sourcing snapshot and explicit order-time gates, including
+`WBC16-1TLC`; procurement still requires a fresh order-time check.
 The current hardware point is `H6.0.3-R1`: placement and routing on the two
 80 × 150-mm boards are being requalified after source corrections. The
 [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md)
@@ -189,14 +189,19 @@ mockup passes its structural audit and was accepted on 2026-08-30. Hardware
 reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed two native projects, 22 sheets,
-six domain owners, 251 exact component groups and 1,218 product positions.
-`H2-R2.1.2` reviewed exact identities for 245 board groups, six explicit
-non-PCBA groups and 1,616 logical contacts. `H2-R2.1.3` materialized 1,208
+six domain owners, 250 exact component groups and 1,218 product positions.
+`H2-R2.1.2` reviewed exact identities for 244 board groups, six explicit
+non-PCBA groups and 1,599 unique-definition contacts. `H2-R2.1.3` materialized 1,208
 fitted positions and 4,305 physical pins in the two native KiCad projects.
 There are 4,070 connected physical pins, 235 explicit no-connects and
 788 global canonical / 822 board-local nets; both projects pass KiCad ERC
 with zero errors and zero warnings under the current passive-pin library. This does not prove
 rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
+The user-approved 9 September source refresh unifies all four USB-C receptacles
+as `GCT USB4105-GF-A`. It removes one unused JAE part definition and its 17
+definition contacts, not any fitted endpoint: 1,208 positions and 4,305 physical
+pins remain. GPIO, transport APIs and all 13 BSP C/H files are byte-identical.
+The old 12-job build receipt is unchanged; `F2-R2.5` reproducibility remains pending.
 The 7 September physical-pin review corrected three component pin mappings and restored
 both RP2354 QSPI supply inputs: 4,070 physical pins are connected, with no change to
 the six firmware domains, controller GPIO assignments or transport APIs.
@@ -207,12 +212,11 @@ unchanged; typed ERC and physical assembly remain hardware release gates.
 The current checkpoint also corrects exact interface packages and physical
 orientations; obsolete unused headset contact 6 is removed without changing
 connected endpoints, GPIOs, APIs or generated BSP code. The previous RF-footprint
-and NC5 corrections remain. Its native-bound power audit is `review_required`:
-R67 is 1.65 kΩ while the H3 protection model assumes 1.18 kΩ; that model cites
-TPS564252 rather than fitted TPS566231P. Main PGTH lacks guaranteed low-rail
-assertion headroom, and the AON eFuse resistance bound uses the wrong RILIM
-test condition. No power part was changed. H3 contract synchronization retains
-the analytical scope; it does not close these findings or prove powered startup.
+and NC5 corrections remain. Current H3 includes a conditioned model of fitted
+TPS566231P and R67 = 1.65 kΩ, but its native-bound power scope remains
+`review_required`. Actual VIN, ripple, protected-rail drop, PGTH headroom, AON eFuse
+RILIM applicability and startup still require evidence. No power part was changed;
+source synchronization does not qualify the power cell or prove powered startup.
 `H2-R2.1.4` reconciles six domains,
 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 reviewed `H2-R2.1.5` firmware sync gate is open. H3 freezes those exact

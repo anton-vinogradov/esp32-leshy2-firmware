@@ -1540,7 +1540,7 @@
   },
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "87313a224545c5a90e9c80a91b037c17d4cfbe8f8b9691bce01de1fc132be03c",
+    "hardware_contract_sha256": "9bafb856174cc51965d91e007452c0968216e4f24edd88ec1349c3184fde8f67",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
@@ -1573,19 +1573,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "e928c8f337a73005ace55331c145db8199340d23fa54a6806fa6c5619fdd8040"
+        "sha256": "1e899cfca17f311309d1add013d0feb3f14f1bc2d4679e0c61c5785268fda3db"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "6abe80697040f1445075dd4ae7f79c0715c325a2e586d59225e30ac5fa7c16fe"
+        "sha256": "d192652242066d6a9bc74d22d82e4202236ccd0b34fbdc97aff2de2de784bbf5"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "5347ea2c4fc426276dbbe24654da0b5d51829a1ee7dfcdf0f4f5bbbc726bf28d"
+        "sha256": "6ca4d66414111e95d84d669e8c3adac57b44df5bd739451cb9578704c1e6cf3a"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "f905dc21bb79165a3af13f39916f0b5fd977ba1a37836a2c3835ec2883228cc0"
+        "sha256": "1bc50dd8b11ad09215b8528cb3ad8f1588c68868f0a63ec6b2ca0195e492f899"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -4775,7 +4775,7 @@
         "project_count": 2,
         "sheet_count": 22,
         "domain_count": 6,
-        "component_group_count": 251,
+        "component_group_count": 250,
         "component_quantity_per_product": 1218,
         "external_antenna_group_count": 8,
         "external_antenna_count": 12,
@@ -4810,18 +4810,18 @@
       "marker": "H2-R2.1.2",
       "status": "pass",
       "summary": {
-        "component_group_count": 251,
-        "board_component_group_count": 245,
+        "component_group_count": 250,
+        "board_component_group_count": 244,
         "explicit_non_pcba_group_count": 6,
-        "symbol_identity_count": 245,
-        "footprint_identity_count": 245,
-        "logical_contact_count": 1616,
-        "historical_package_hints_reconciled": 182,
+        "symbol_identity_count": 244,
+        "footprint_identity_count": 244,
+        "logical_contact_count": 1599,
+        "historical_package_hints_reconciled": 181,
         "historical_package_conflicts_resolved": 5,
         "explicit_current_footprint_overrides": 63,
         "standard_kicad_footprint_identities": 205,
         "reconciled_local_footprint_definitions": 25,
-        "new_exact_footprint_geometries_materialized": 13,
+        "new_exact_footprint_geometries_materialized": 12,
         "partial_local_footprint_definitions_mechanics_open": 2,
         "schematic_symbols_or_footprint_files_created": 0,
         "native_schematic_nets_created": 0,
@@ -4898,7 +4898,7 @@
         "cross_sheet_net_count": 227,
         "errors": 0
       },
-      "source_sha256": "f905dc21bb79165a3af13f39916f0b5fd977ba1a37836a2c3835ec2883228cc0",
+      "source_sha256": "1bc50dd8b11ad09215b8528cb3ad8f1588c68868f0a63ec6b2ca0195e492f899",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
@@ -6868,7 +6868,7 @@
     ],
     "r2_reconciliation": {
       "source_contract": "config/h0_r2_hardware_contract.json",
-      "hardware_contract_sha256": "87313a224545c5a90e9c80a91b037c17d4cfbe8f8b9691bce01de1fc132be03c",
+      "hardware_contract_sha256": "9bafb856174cc51965d91e007452c0968216e4f24edd88ec1349c3184fde8f67",
       "hardware_marker": "H1-R2.31",
       "hardware_sources": {
         "functional": {
@@ -6901,19 +6901,19 @@
         },
         "native_r2_inventory": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-          "sha256": "e928c8f337a73005ace55331c145db8199340d23fa54a6806fa6c5619fdd8040"
+          "sha256": "1e899cfca17f311309d1add013d0feb3f14f1bc2d4679e0c61c5785268fda3db"
         },
         "exact_component_ledger": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-          "sha256": "6abe80697040f1445075dd4ae7f79c0715c325a2e586d59225e30ac5fa7c16fe"
+          "sha256": "d192652242066d6a9bc74d22d82e4202236ccd0b34fbdc97aff2de2de784bbf5"
         },
         "native_kicad": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-          "sha256": "5347ea2c4fc426276dbbe24654da0b5d51829a1ee7dfcdf0f4f5bbbc726bf28d"
+          "sha256": "6ca4d66414111e95d84d669e8c3adac57b44df5bd739451cb9578704c1e6cf3a"
         },
         "h2_hwfw_reconciliation": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-          "sha256": "f905dc21bb79165a3af13f39916f0b5fd977ba1a37836a2c3835ec2883228cc0"
+          "sha256": "1bc50dd8b11ad09215b8528cb3ad8f1588c68868f0a63ec6b2ca0195e492f899"
         },
         "h2_interboard_m1": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -10103,7 +10103,7 @@
           "project_count": 2,
           "sheet_count": 22,
           "domain_count": 6,
-          "component_group_count": 251,
+          "component_group_count": 250,
           "component_quantity_per_product": 1218,
           "external_antenna_group_count": 8,
           "external_antenna_count": 12,
@@ -10138,18 +10138,18 @@
         "marker": "H2-R2.1.2",
         "status": "pass",
         "summary": {
-          "component_group_count": 251,
-          "board_component_group_count": 245,
+          "component_group_count": 250,
+          "board_component_group_count": 244,
           "explicit_non_pcba_group_count": 6,
-          "symbol_identity_count": 245,
-          "footprint_identity_count": 245,
-          "logical_contact_count": 1616,
-          "historical_package_hints_reconciled": 182,
+          "symbol_identity_count": 244,
+          "footprint_identity_count": 244,
+          "logical_contact_count": 1599,
+          "historical_package_hints_reconciled": 181,
           "historical_package_conflicts_resolved": 5,
           "explicit_current_footprint_overrides": 63,
           "standard_kicad_footprint_identities": 205,
           "reconciled_local_footprint_definitions": 25,
-          "new_exact_footprint_geometries_materialized": 13,
+          "new_exact_footprint_geometries_materialized": 12,
           "partial_local_footprint_definitions_mechanics_open": 2,
           "schematic_symbols_or_footprint_files_created": 0,
           "native_schematic_nets_created": 0,
@@ -10226,7 +10226,7 @@
           "cross_sheet_net_count": 227,
           "errors": 0
         },
-        "source_sha256": "f905dc21bb79165a3af13f39916f0b5fd977ba1a37836a2c3835ec2883228cc0",
+        "source_sha256": "1bc50dd8b11ad09215b8528cb3ad8f1588c68868f0a63ec6b2ca0195e492f899",
         "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
       },
       "interboard": {

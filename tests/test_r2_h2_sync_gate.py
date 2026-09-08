@@ -78,6 +78,19 @@ class R2H2SyncGateTests(unittest.TestCase):
             self.h0["physical_h1"]["pin_authority_marker"],
         )
 
+    def test_old_usb_unique_definition_counts_are_not_current_authority(self):
+        cases = (
+            ("native_r2_inventory", "component_group_count", 251, "H2-R2.1.1"),
+            ("exact_component_ledger", "board_component_group_count", 245, "H2-R2.1.2"),
+            ("exact_component_ledger", "logical_contact_count", 1616, "H2-R2.1.2"),
+        )
+        for section, field, old_value, expected in cases:
+            with self.subTest(section=section, field=field):
+                h0 = copy.deepcopy(self.h0)
+                h0[section]["summary"][field] = old_value
+                errors = self.checker.check(self.gate, h0, self.bsp, self.integration)
+                self.assertTrue(any(expected in error for error in errors), errors)
+
     def test_historical_markers_survive_every_import_write(self):
         raw = copy.deepcopy(self.bsp)
         raw.pop("authority")

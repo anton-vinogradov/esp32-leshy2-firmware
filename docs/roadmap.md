@@ -16,6 +16,10 @@
 > is retained for that previous input. The subsequent `1048P` polarity-only footprint
 > binding and build path-map refresh need two new clean passes; current qualification
 > is pending, not inferred from old artifacts. GPIO/API and the 13 BSP C/H files remain unchanged.
+> The user-approved 9 September source refresh unifies all four USB-C receptacles
+> as `GCT USB4105-GF-A`: one unique JAE definition and its 17 definition contacts
+> disappear, not fitted endpoints. The 1,208 instances / 4,305 physical pins,
+> GPIO/API, 13 BSP C/H files and retained 12-job receipt are unchanged.
 > Earlier RF-footprint/NC5 corrections remain in the hardware boundary.
 > The [interface follow-up](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
 > corrects selected native control/port poses while keeping Cap physical contact
@@ -27,18 +31,18 @@
 > review does not close the current `review_required` result above.
 > The [H4 review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h4-r2-acceptance.md)
 > and [H5 route report](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h5-r2-current-route.md)
-> retain their own reviewed baseline scopes. The H5 snapshot covers 249 purchasable
-> groups / 1,216 articles with no unmapped route and an explicit `WBC16-1TLC`
-> order-time sourcing gate; it does not replace a fresh check before order.
+> retain their own reviewed baseline scopes. The H5 report owns current sourcing
+> coverage and explicit order-time gates, including `WBC16-1TLC`;
+> it does not replace a fresh check before order.
 > Hardware H6.0.3-R1 is current: routing is being requalified after correcting
 > component locality on the two 80 × 150-mm boards. Exact copper counts,
 > connectivity, DRC evidence and images are maintained in the
 > [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md).
 > The former routing results are historical and do not establish completion of
 > any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets,
-> six domain owners, 251 exact component groups and 1,218 product positions;
-> H2-R2.1.2 reviewed 245 board groups, six explicit non-PCBA groups and 1,616
-> logical contacts. Its exact imported pin/config authority remains the reviewed
+> six domain owners, 250 exact component groups and 1,218 product positions;
+> H2-R2.1.2 reviewed 244 board groups, six explicit non-PCBA groups and 1,599
+> unique-definition contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
 > materializes two native six-layer boards and places all 1,208 fitted instances
 > with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
@@ -64,16 +68,16 @@
 > The expanded [electrical review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-electrical-semantics.md)
 > adds TPS3839/TPD2EUSB30A/B3S/FH34 source corrections; the refreshed H2/H3 contracts
 > preserve generated BSP code and do not constitute hardware electrical sign-off.
-> Current power findings are R67 1.65 kΩ versus the H3 1.18-kΩ assumption,
-> TPS564252 model versus fitted TPS566231P, insufficient worst-case main PGTH
-> assertion headroom and an AON eFuse resistance bound from the wrong RILIM
-> test condition. No power part changed; H3 synchronization does not prove powered startup.
+> Current H3 models fitted TPS566231P and R67 = 1.65 kΩ conditionally, not as a
+> qualified power cell. Actual VIN, ripple, protected-rail drop, PGTH headroom,
+> AON eFuse RILIM applicability and startup remain open. No power part changed;
+> source synchronization does not prove powered startup.
 > H2-R2.1.4 reconciles six domains,
 > 173 controller pins, 34 cross-project nets and 227 cross-sheet nets; the
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
 > H6.0.3-R1 routing remains in progress and ordering remains unauthorized.
 
-Hardware-status text last reconciled: **8 September 2026**. This is the firmware repository's
+Hardware-status text last reconciled: **9 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
