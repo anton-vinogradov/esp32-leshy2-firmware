@@ -34,6 +34,15 @@ class H3R2DigitalInterfaceContractTests(unittest.TestCase):
         self.assertTrue(all(self.contract["usb_and_service_ownership"].values()))
         self.assertFalse(self.contract["claims"]["target_driver_implemented"])
 
+    def test_c5_boot_topology_does_not_qualify_download_recovery(self):
+        boot = self.contract["c5_boot_strap"]
+        self.assertEqual("pass", boot["topology_status"])
+        self.assertEqual({"GPIO27": 1, "GPIO28": 0}, boot["joint_download_boot_0_straps"])
+        self.assertEqual(3, boot["hold_after_en_release_ms_min"])
+        for field in ("sampled_levels_and_timing_qualified", "usb_mux_sel_oe_qualified",
+                      "kill_recovery_policy_qualified", "end_to_end_download_qualified"):
+            self.assertIs(False, boot[field])
+
 
 if __name__ == "__main__":
     unittest.main()

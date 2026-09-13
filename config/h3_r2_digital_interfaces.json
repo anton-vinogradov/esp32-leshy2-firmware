@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "466f4917da513e95e57db1c93507b7ff37bd06f98047f22a4bbd66be220f06ef"
+    "sha256": "591f430ae6bc2bd28a4a987e66a70712ac8e3c32c6ac592e4d3df9239762ac85"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -101,6 +101,37 @@
     "service_switch_bandwidth_covers_usb_full_speed": true,
     "power_off_leakage_has_over_2x_reserve": true
   },
+  "c5_boot_strap": {
+    "checks": {
+      "identity:c5": true,
+      "identity:c5_boot_pullup": true,
+      "identity:c5_dbg_boot_series": true,
+      "identity:c5_gpio27_pullup": true,
+      "identity:c5_boot_button": true,
+      "pin:c5.GPIO28": true,
+      "pin:c5.GPIO27": true,
+      "pin:c5_boot_pullup.END_1": true,
+      "pin:c5_boot_pullup.END_2": true,
+      "pin:c5_dbg_boot_series.END_1": true,
+      "pin:c5_dbg_boot_series.END_2": true,
+      "pin:c5_gpio27_pullup.END_1": true,
+      "pin:c5_gpio27_pullup.END_2": true,
+      "pin:c5_boot_button.C1": true,
+      "pin:c5_boot_button.C2": true,
+      "pin:c5_boot_button.NO": true
+    },
+    "topology_status": "pass",
+    "joint_download_boot_0_straps": {
+      "GPIO27": 1,
+      "GPIO28": 0
+    },
+    "hold_after_en_release_ms_min": 3,
+    "scope": "Native endpoint/component topology only; press BOOT through EN release and the required strap hold interval. Actual sampled levels, contact bounce and timing remain unqualified.",
+    "sampled_levels_and_timing_qualified": false,
+    "usb_mux_sel_oe_qualified": false,
+    "kill_recovery_policy_qualified": false,
+    "end_to_end_download_qualified": false
+  },
   "m1": {
     "checks": {
       "both_halves_have_80_contacts": true,
@@ -194,7 +225,7 @@
     "display_clock": "request and verify exactly 20 MHz; reject any divider result above 25 MHz",
     "display_owner": "S3 owns all direct i8080 traffic; UI/buttons/encoder remain S3-local",
     "service_usb": "Hub RP, RF RP and C5 service paths never power the product",
-    "c5_mux": "hardware service-VBUS latch owns C5 USB versus SDIO selection before firmware",
+    "c5_mux": "required: hardware service-VBUS latch owns C5 USB versus SDIO selection before firmware; current SEL/OE and KILL recovery remain unqualified",
     "m1_reserve": "contacts 60-64 and 77-80 remain true NC"
   },
   "physical_residuals": [
@@ -232,7 +263,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "466f4917da513e95e57db1c93507b7ff37bd06f98047f22a4bbd66be220f06ef"
+        "sha256": "591f430ae6bc2bd28a4a987e66a70712ac8e3c32c6ac592e4d3df9239762ac85"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -245,7 +276,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "b91979ca9ae803e2b335eff8d17bdaa92cd9e8547661602108122cc69bb57455"
+        "sha256": "0ec215575fa19bb06014fa2b3bdf3854bafc71b60702551413d331a8edb2af56"
       }
     },
     "source_files_checked": 10,

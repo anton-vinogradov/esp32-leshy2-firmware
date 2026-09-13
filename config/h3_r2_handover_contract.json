@@ -6,13 +6,13 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-handover.json",
-    "sha256": "94ec56398eb857e7f73850fa02ca1bb99624a4742f50b6e82a6acef909b8fee9",
+    "sha256": "5dac59ae0deed0dee8b82876048b44f6cc94142fa9fa053b7da9e429524d175f",
     "source_sha256": {
       "hardware/verification/h3-r2-handover-contract.json": "7247e7083ad38732123131f9cf27157abe15db5a5553019493364d038344d55e",
       "hardware/verification/h3-r2-verification-plan.json": "54143b22eeddf73fbe05ea5f0996c363e22bf7830c49e13ced6f3dcca8c7d16c",
-      "hardware/verification/generated/H3-R2-source-margins.json": "cc1bcb15bd0dc125c8e55008ac922764ce7f36176901652ac0e218b5e82e0ed2",
-      "hardware/verification/generated/H3-R2-transition-sequences.json": "e82b8b4239c7b50d4729c4f6e9cda2770a1214f0043f49300dfed4936ec9ec44",
-      "hardware/ecad/generated/H2-R2-native-net-ledger.json": "94bd7d64fc1d6c2ea3dde8e55f1390fb31cafc2a213cc99d290ce234d60878e8",
+      "hardware/verification/generated/H3-R2-source-margins.json": "126cf4cf06202a9da7f98b6105d0773c61c921123f34da08d238afbe3196cc55",
+      "hardware/verification/generated/H3-R2-transition-sequences.json": "2e520c6a4693ae7914c79c551b83b94e246e40def7c45bf7918cefa35f815dd6",
+      "hardware/ecad/generated/H2-R2-native-net-ledger.json": "eddbf9f53b513cf3d991a79c75f976bdcffa5c09542fa1670bf4f782fbdc80d5",
       "hardware/ecad/generated/H2-R2-native-instance-ledger.json": "7e5594bf5130524096b2683040b153409611b92c2df088dd33cb5c30f2f7a597",
       "hardware/architecture/devices.json": "60faca70697d475d5414641d74cc1f13ea232561c5d3f1bcfdee74bf9f1bbdc9",
       "hardware/verification/h3_r2_handover.py": "8cb17d54341126e069c9ce2bef8aab4bb80fa2d4b2a27c763c26fd4ce9a4147f",
@@ -87,7 +87,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "2953616ea7f3f2b788bfacfc6c13dbd59bdc04ef768f19eba4ef720d07f201e7"
+        "sha256": "ec9e7662b3cd16365912db9447a64950b784e58eb687031a875b4e4cd0422f22"
       },
       "H3-R2-handover": {
         "status": "review_required",
@@ -96,7 +96,7 @@
           "applicability:source_inputs",
           "applicability:sequence_inputs"
         ],
-        "sha256": "94ec56398eb857e7f73850fa02ca1bb99624a4742f50b6e82a6acef909b8fee9"
+        "sha256": "5dac59ae0deed0dee8b82876048b44f6cc94142fa9fa053b7da9e429524d175f"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -109,7 +109,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "b91979ca9ae803e2b335eff8d17bdaa92cd9e8547661602108122cc69bb57455"
+        "sha256": "0ec215575fa19bb06014fa2b3bdf3854bafc71b60702551413d331a8edb2af56"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -118,7 +118,7 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "cc1bcb15bd0dc125c8e55008ac922764ce7f36176901652ac0e218b5e82e0ed2"
+        "sha256": "126cf4cf06202a9da7f98b6105d0773c61c921123f34da08d238afbe3196cc55"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -128,7 +128,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "e82b8b4239c7b50d4729c4f6e9cda2770a1214f0043f49300dfed4936ec9ec44"
+        "sha256": "2e520c6a4693ae7914c79c551b83b94e246e40def7c45bf7918cefa35f815dd6"
       }
     },
     "source_files_checked": 16,

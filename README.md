@@ -70,8 +70,12 @@ prevents treating the imported USB/SDIO sequence as implemented: SEL lacks a
 driver and OE cannot provide the required disconnected interval in both modes.
 The native pair-name refresh changes source hashes, not this circuit or firmware behavior.
 The [current interface review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
-also retains the missing C5 GPIO28 BOOT connection and the reset-under-KILL/update
-policy conflict. Visible USB/BOOT components do not establish working recovery.
+records the restored C5 GPIO28 BOOT net membership; its copper routing and sampled
+strap timing remain unqualified, as does the reset-under-KILL/update policy conflict.
+Visible USB/BOOT components do not establish working recovery.
+The [six-target physical recovery review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/service-recovery.md)
+also records the open S3 ROM-UART fallback and SWD-first recovery for blank
+Pack/Safety devices; their current boot-manager entrypoints remain placeholders.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK

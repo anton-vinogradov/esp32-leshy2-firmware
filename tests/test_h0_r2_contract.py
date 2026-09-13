@@ -56,8 +56,8 @@ class H0R2FirmwareContractTest(unittest.TestCase):
     def test_native_boundary_includes_both_rp2354_qspi_supplies(self):
         summary = self.actual["native_kicad"]["summary"]
         self.assertEqual(4305, summary["physical_symbol_pin_count"])
-        self.assertEqual(4070, summary["connected_physical_pin_count"])
-        self.assertEqual(235, summary["explicit_no_connect_physical_pin_count"])
+        self.assertEqual(4071, summary["connected_physical_pin_count"])
+        self.assertEqual(234, summary["explicit_no_connect_physical_pin_count"])
         self.assertEqual(
             summary["physical_symbol_pin_count"],
             summary["connected_physical_pin_count"]
@@ -174,7 +174,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual(244, len({row["device_id"] for row in rows}))
         self.assertEqual(1616 - 17, self.actual["exact_component_ledger"]["summary"]["logical_contact_count"])
         self.assertEqual(4305, self.actual["native_kicad"]["summary"]["physical_symbol_pin_count"])
-        self.assertEqual(4070, self.actual["native_kicad"]["summary"]["connected_physical_pin_count"])
+        self.assertEqual(4071, self.actual["native_kicad"]["summary"]["connected_physical_pin_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
 
     def test_c5_transport_is_quad_and_40mhz_qualification_only(self):
