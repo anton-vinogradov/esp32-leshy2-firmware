@@ -75,8 +75,11 @@ targets: S3, C5, RF RP, Hub RP, Pack и Safety. UI, кнопки и display ос
 тайминг считывания strap ещё не квалифицированы. Противоречие между reset при KILL
 и политикой обновления также открыто. Видимые USB/BOOT ещё не доказывают рабочее восстановление.
 [Ревью физических путей шести контроллеров](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/service-recovery.ru.md)
-также фиксирует незакрытый резервный ROM-UART S3 и восстановление пустых
-Pack/Safety прежде всего по SWD; их текущие boot-manager entrypoints остаются заглушками.
+фиксирует исправление площадок и сетей ROM-UART S3: сервисные TX/RX теперь
+используют GPIO43/44, а Hub D2/D3 — GPIO7/8. Сгенерированные дескрипторы BSP
+S3/Hub меняются; прежние build receipts не квалифицируют новую карту или сквозное
+восстановление. Пустые Pack/Safety восстанавливаются прежде всего по SWD;
+их текущие boot-manager entrypoints остаются заглушками.
 [Структура target projects](config/f2_r2_target_projects.json), прошедшая ревью,
 задаёт шесть production-SDK roots, шесть уникальных application images и два
 boot images защитных контроллеров. RF RP и Hub RP имеют разные Pico SDK trees,

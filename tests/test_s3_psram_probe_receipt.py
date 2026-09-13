@@ -11,6 +11,14 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 RECEIPT = ROOT / "config/f2_r2_s3_psram_probe.json"
 INPUT = "4a0088726dcdecf30de48e0f63e5d9678338716f"
+# Verified with git show INPUT:path; fixed historical bytes, never today's
+# regenerated BSP. Keep source-snapshot integrity after the UART0 correction.
+HISTORICAL_BSP = {
+    "generated/r2/hardware/include/leshy2/r2/hardware/s3_bsp.h": {
+        "sha256": "62819ee19a1336a7b3e9058fb21f85feab8bd64b3bdd21466535520e9f45f41b", "bytes": 1359},
+    "generated/r2/hardware/src/s3_bsp.c": {
+        "sha256": "39e2d9f9aa6b52b4f7c514e2948f04d1ac2e9e0e9dca3fdd1021372f7582b57e", "bytes": 8741},
+}
 ARTIFACTS = {"leshy2_s3.bin", "leshy2_s3.elf", "leshy2_s3.map", "bootloader/bootloader.bin",
              "bootloader/bootloader.elf", "bootloader/bootloader.map", "partition_table/partition-table.bin"}
 PSRAM_OBJECTS = {
@@ -73,6 +81,9 @@ def receipt_errors(receipt, source_reader=lambda path: (ROOT / path).read_bytes(
     sources = receipt["sources"]
     if set(sources) != MANDATORY_SOURCES:
         errors.append("scoped S3 source inventory is incomplete or widened")
+    for path, captured in HISTORICAL_BSP.items():
+        if sources.get(path) != captured or type(sources.get(path, {}).get("bytes")) is not int:
+            errors.append(f"historical BSP input identity differs: {path}")
     for path, expected in sources.items():
         if path not in MANDATORY_SOURCES:
             continue  # An unexpected receipt path must never cause a filesystem read.
@@ -139,8 +150,25 @@ class S3PsramProbeReceiptTests(unittest.TestCase):
     def setUp(self):
         self.receipt = json.loads(RECEIPT.read_text())
 
-    def test_public_receipt_and_current_scoped_sources_match(self):
-        self.assertEqual([], receipt_errors(self.receipt))
+    def test_historical_probe_is_not_current_after_the_s3_uart_pin_correction(self):
+        # Keep the actual probe receipt and its input hashes unchanged. The
+        # dedicated UART0 correction changes these two generated source files;
+        # the strict validator must reject current-source applicability, not
+        # silently rebind the old binary to today's GPIO map. Every other
+        # receipt field and scoped source must still validate.
+        self.assertCountEqual(
+            [f"current scoped S3 source differs from probe input: {path}" for path in HISTORICAL_BSP],
+            receipt_errors(self.receipt),
+        )
+        self.assertIs(False, self.receipt["scope"]["current_head_build_qualified"])
+
+    def test_historical_bsp_hashes_and_sizes_cannot_be_rebound(self):
+        for path in HISTORICAL_BSP:
+            for key, value in (("sha256", "0" * 64), ("bytes", 1)):
+                with self.subTest(path=path, key=key):
+                    changed = copy.deepcopy(self.receipt)
+                    changed["sources"][path][key] = value
+                    self.assertIn(f"historical BSP input identity differs: {path}", receipt_errors(changed))
 
     def test_current_head_or_other_commit_cannot_replace_input(self):
         self.receipt["input_commit"] = "0" * 40
@@ -162,7 +190,8 @@ class S3PsramProbeReceiptTests(unittest.TestCase):
         def changed(path):
             data = (ROOT / path).read_bytes()
             return data + b"\n" if path == "targets/s3/main/CMakeLists.txt" else data
-        self.assertIn("current scoped S3 source differs", "\n".join(receipt_errors(self.receipt, changed)))
+        self.assertIn("current scoped S3 source differs from probe input: targets/s3/main/CMakeLists.txt",
+                      receipt_errors(self.receipt, changed))
 
     def test_missing_source_or_artifact_is_rejected(self):
         self.receipt["sources"].pop("targets/s3/verify_memory_config.py")
@@ -203,7 +232,9 @@ class S3PsramProbeReceiptTests(unittest.TestCase):
             with self.subTest(section=section, key=key):
                 changed = copy.deepcopy(self.receipt)
                 changed[section][key] = value
-                self.assertTrue(receipt_errors(changed))
+                baseline_errors = set(receipt_errors(self.receipt))
+                self.assertTrue(set(receipt_errors(changed)) - baseline_errors,
+                                "mutation must add an error beyond the expected historical BSP drift")
         for key in ("CONFIG_SPIRAM_ECC_ENABLE", "CONFIG_SPIRAM_MEMTEST", "CONFIG_SPIRAM_TYPE_AUTO",
                     "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE"):
             with self.subTest(key=key):

@@ -103,6 +103,22 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         )
         self.assertEqual({32, 33, 34, 37, 38}, rear_reserve)
 
+    def test_s3_rom_uart_and_hub_have_separate_exact_pins(self):
+        pins = {row["gpio"]: row for row in self.actual["s3_pin_map"]}
+        for gpio, expected in {
+            7: ("S3_HUB_D2", "SPI3", "io"), 8: ("S3_HUB_D3", "SPI3", "io"),
+            43: ("S3_UART_SERVICE_TX", "UART0_TX", "out"),
+            44: ("S3_UART_SERVICE_RX", "UART0_RX", "in"),
+        }.items():
+            self.assertEqual(expected, tuple(pins[gpio][key] for key in ("net", "peripheral", "direction")))
+        self.assertNotIn("s3_rom_uart_isolation", self.actual)
+        routing = self.actual["s3_rom_uart_routing"]
+        self.assertEqual("dedicated_gpio", routing["mode"])
+        self.assertEqual({"tx": 43, "rx": 44}, routing["uart0_gpio"])
+        self.assertEqual({"S3_HUB_D2": 7, "S3_HUB_D3": 8}, routing["hub_data_gpio"])
+        self.assertIs(False, routing["uart0_shared_with_hub"])
+        self.assertTrue(all(value is False for value in routing["qualification"].values()))
+
     def test_locality_first_repartition_is_explicit(self):
         domains = {row["id"]: row["role"] for row in self.actual["domains"]}
         self.assertIn("three fully concurrent local nRF24", domains["hub_rp"])

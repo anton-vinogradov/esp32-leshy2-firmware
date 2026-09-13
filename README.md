@@ -74,8 +74,11 @@ records the restored C5 GPIO28 BOOT net membership; its copper routing and sampl
 strap timing remain unqualified, as does the reset-under-KILL/update policy conflict.
 Visible USB/BOOT components do not establish working recovery.
 The [six-target physical recovery review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/service-recovery.md)
-also records the open S3 ROM-UART fallback and SWD-first recovery for blank
-Pack/Safety devices; their current boot-manager entrypoints remain placeholders.
+records the S3 ROM-UART pad/net correction: service TX/RX now use GPIO43/44
+and Hub D2/D3 use GPIO7/8. The generated S3/Hub BSP descriptors change; existing
+build receipts do not qualify this new map or end-to-end recovery. Blank
+Pack/Safety devices require SWD-first recovery; their boot-manager entrypoints
+remain placeholders.
 The reviewed [target-project structure](config/f2_r2_target_projects.json)
 establishes six production-SDK roots, six unique application images and two
 protected-controller boot images. RF RP and Hub RP have separate Pico SDK

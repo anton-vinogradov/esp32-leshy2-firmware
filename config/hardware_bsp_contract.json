@@ -64,17 +64,17 @@
           },
           {
             "gpio": 7,
-            "net": "S3_UART_SERVICE_TX",
-            "peripheral": "UART1_TX",
-            "direction": "out",
-            "gate": "DBG10 series path; idle high only after strap sampling"
+            "net": "S3_HUB_D2",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 8,
-            "net": "S3_UART_SERVICE_RX",
-            "peripheral": "UART1_RX",
-            "direction": "in",
-            "gate": "DBG10 series path with fixture-side protection"
+            "net": "S3_HUB_D3",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 9,
@@ -192,15 +192,17 @@
           },
           {
             "gpio": 43,
-            "net": "S3_HUB_D2",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_TX",
+            "peripheral": "UART0_TX",
+            "direction": "out",
+            "gate": "dedicated ROM UART0 TX to DBG10 through existing R4; no Hub endpoint; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 44,
-            "net": "S3_HUB_D3",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_RX",
+            "peripheral": "UART0_RX",
+            "direction": "in",
+            "gate": "dedicated ROM UART0 RX from DBG10 through existing R5; fixture must not back-power the target; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 45,
@@ -813,16 +815,16 @@
             "net": "S3_HUB_D2",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO43 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO7 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 3,
             "net": "S3_HUB_D3",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO44 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO8 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 4,
@@ -1540,12 +1542,12 @@
   },
   "r2_reconciliation": {
     "source_contract": "config/h0_r2_hardware_contract.json",
-    "hardware_contract_sha256": "6b872deae92a6241fa1fb901b3fd103ba11c703955522119c2edfa122ea64ea6",
+    "hardware_contract_sha256": "dbcc0eac277711a491c6301066c6111610f814f5b8290eb0a9d6bf16f0299a16",
     "hardware_marker": "H1-R2.31",
     "hardware_sources": {
       "functional": {
         "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-        "sha256": "bab7bf6cb3e80842229704169c8b3297bcdff87ec6bb309aad75814701dd3c2b"
+        "sha256": "800ae7c3ad05e717eea11f4a1b547f52db4495681181c6234c37481c01719fbd"
       },
       "c5_sdio_service_mux": {
         "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -1553,7 +1555,7 @@
       },
       "dual_rp_pinout": {
         "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-        "sha256": "28289ca9dcaf2c3af2b133c3fc09223a2737d764f5a9b6e075150d9aef15229a"
+        "sha256": "a146ebd096894794ec123031c7e35bfe4cb509db98d120409065bdd30c084e15"
       },
       "u219_cap_profile": {
         "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -1565,7 +1567,7 @@
       },
       "r2_authority_gate": {
         "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-        "sha256": "402420f4e0dc33f4efcde33330735472265753821a00aa47446a47d892fd1ea4"
+        "sha256": "ca92e054af95dde1397b4c09f26ae77712ac0d1e24ef29864ae937c16e49cc06"
       },
       "pack_safety_i2c_boundary": {
         "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -1573,19 +1575,19 @@
       },
       "native_r2_inventory": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-        "sha256": "1e899cfca17f311309d1add013d0feb3f14f1bc2d4679e0c61c5785268fda3db"
+        "sha256": "6916cc064ed77537db44f3e9f9384f4b71b5caefaa42d242095690ad1a3d5675"
       },
       "exact_component_ledger": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-        "sha256": "d192652242066d6a9bc74d22d82e4202236ccd0b34fbdc97aff2de2de784bbf5"
+        "sha256": "cef0ca72463b045189ff7d5619b80d8a2b1f81d676be8711a044d3620cdd124e"
       },
       "native_kicad": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-        "sha256": "20400555f2c6595f7b7bde96e7e6de90d09136f6888a2fed221fc36a8dcb82f9"
+        "sha256": "76cb7d4160a7de92bf10d54109e57f7dd51500681d99b54abd6b29336f0924b3"
       },
       "h2_hwfw_reconciliation": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-        "sha256": "ece2cd6abb52f8369c5a086b80cd184825524af0faa1d83718f089d8188b5b42"
+        "sha256": "ed58c845efa404f3823b81342a7d85beff18c1211e95271f4ef32633036979ae"
       },
       "h2_interboard_m1": {
         "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -1653,17 +1655,17 @@
           },
           {
             "gpio": 7,
-            "net": "S3_UART_SERVICE_TX",
-            "peripheral": "UART1_TX",
-            "direction": "out",
-            "gate": "DBG10 series path; idle high only after strap sampling"
+            "net": "S3_HUB_D2",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 8,
-            "net": "S3_UART_SERVICE_RX",
-            "peripheral": "UART1_RX",
-            "direction": "in",
-            "gate": "DBG10 series path with fixture-side protection"
+            "net": "S3_HUB_D3",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 9,
@@ -1781,15 +1783,17 @@
           },
           {
             "gpio": 43,
-            "net": "S3_HUB_D2",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_TX",
+            "peripheral": "UART0_TX",
+            "direction": "out",
+            "gate": "dedicated ROM UART0 TX to DBG10 through existing R4; no Hub endpoint; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 44,
-            "net": "S3_HUB_D3",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_RX",
+            "peripheral": "UART0_RX",
+            "direction": "in",
+            "gate": "dedicated ROM UART0 RX from DBG10 through existing R5; fixture must not back-power the target; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 45,
@@ -2402,16 +2406,16 @@
             "net": "S3_HUB_D2",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO43 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO7 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 3,
             "net": "S3_HUB_D3",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO44 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO8 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 4,
@@ -3152,16 +3156,16 @@
         "net": "S3_HUB_D2",
         "peripheral": "PIO1_SM0_S3_QUAD",
         "direction": "io",
-        "endpoint": "S3 GPIO43 through ROM-UART isolation",
-        "gate": "input/high-Z; Hub-side external pull-down; isolation open"
+        "endpoint": "S3 GPIO7 through GPIO matrix",
+        "gate": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
       },
       {
         "gpio": 3,
         "net": "S3_HUB_D3",
         "peripheral": "PIO1_SM0_S3_QUAD",
         "direction": "io",
-        "endpoint": "S3 GPIO44 through ROM-UART isolation",
-        "gate": "input/high-Z; Hub-side external pull-down; isolation open"
+        "endpoint": "S3 GPIO8 through GPIO matrix",
+        "gate": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
       },
       {
         "gpio": 4,
@@ -4898,7 +4902,7 @@
         "cross_sheet_net_count": 227,
         "errors": 0
       },
-      "source_sha256": "ece2cd6abb52f8369c5a086b80cd184825524af0faa1d83718f089d8188b5b42",
+      "source_sha256": "ed58c845efa404f3823b81342a7d85beff18c1211e95271f4ef32633036979ae",
       "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
     },
     "interboard": {
@@ -5393,17 +5397,17 @@
           },
           {
             "gpio": 7,
-            "net": "S3_UART_SERVICE_TX",
-            "peripheral": "UART1_TX",
-            "direction": "out",
-            "gate": "DBG10 series path; idle high only after strap sampling"
+            "net": "S3_HUB_D2",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 8,
-            "net": "S3_UART_SERVICE_RX",
-            "peripheral": "UART1_RX",
-            "direction": "in",
-            "gate": "DBG10 series path with fixture-side protection"
+            "net": "S3_HUB_D3",
+            "peripheral": "SPI3",
+            "direction": "io",
+            "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
           },
           {
             "gpio": 9,
@@ -5521,15 +5525,17 @@
           },
           {
             "gpio": 43,
-            "net": "S3_HUB_D2",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_TX",
+            "peripheral": "UART0_TX",
+            "direction": "out",
+            "gate": "dedicated ROM UART0 TX to DBG10 through existing R4; no Hub endpoint; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 44,
-            "net": "S3_HUB_D3",
-            "peripheral": "SPI3",
-            "direction": "io"
+            "net": "S3_UART_SERVICE_RX",
+            "peripheral": "UART0_RX",
+            "direction": "in",
+            "gate": "dedicated ROM UART0 RX from DBG10 through existing R5; fixture must not back-power the target; power/reset/BOOT recovery qualification remains open"
           },
           {
             "gpio": 45,
@@ -6142,16 +6148,16 @@
             "net": "S3_HUB_D2",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO43 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO7 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 3,
             "net": "S3_HUB_D3",
             "direction": "io",
             "controller": "PIO1_SM0_S3_QUAD",
-            "endpoint": "S3 GPIO44 through ROM-UART isolation",
-            "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+            "endpoint": "S3 GPIO8 through GPIO matrix",
+            "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
           },
           {
             "gpio": 4,
@@ -6868,12 +6874,12 @@
     ],
     "r2_reconciliation": {
       "source_contract": "config/h0_r2_hardware_contract.json",
-      "hardware_contract_sha256": "6b872deae92a6241fa1fb901b3fd103ba11c703955522119c2edfa122ea64ea6",
+      "hardware_contract_sha256": "dbcc0eac277711a491c6301066c6111610f814f5b8290eb0a9d6bf16f0299a16",
       "hardware_marker": "H1-R2.31",
       "hardware_sources": {
         "functional": {
           "path": "esp32-leshy2/hardware/architecture/h0-r2-rebaseline.json",
-          "sha256": "bab7bf6cb3e80842229704169c8b3297bcdff87ec6bb309aad75814701dd3c2b"
+          "sha256": "800ae7c3ad05e717eea11f4a1b547f52db4495681181c6234c37481c01719fbd"
         },
         "c5_sdio_service_mux": {
           "path": "esp32-leshy2/hardware/architecture/c5-sdio-service-mux-contract.json",
@@ -6881,7 +6887,7 @@
         },
         "dual_rp_pinout": {
           "path": "esp32-leshy2/hardware/architecture/h1-r2-dual-rp-pinout.json",
-          "sha256": "28289ca9dcaf2c3af2b133c3fc09223a2737d764f5a9b6e075150d9aef15229a"
+          "sha256": "a146ebd096894794ec123031c7e35bfe4cb509db98d120409065bdd30c084e15"
         },
         "u219_cap_profile": {
           "path": "esp32-leshy2/hardware/architecture/h1-r2-u219-cap.json",
@@ -6893,7 +6899,7 @@
         },
         "r2_authority_gate": {
           "path": "esp32-leshy2/hardware/architecture/generated/H0-R2-authority-gate.json",
-          "sha256": "402420f4e0dc33f4efcde33330735472265753821a00aa47446a47d892fd1ea4"
+          "sha256": "ca92e054af95dde1397b4c09f26ae77712ac0d1e24ef29864ae937c16e49cc06"
         },
         "pack_safety_i2c_boundary": {
           "path": "esp32-leshy2/hardware/architecture/pack-safety-i2c-boundary-contract.json",
@@ -6901,19 +6907,19 @@
         },
         "native_r2_inventory": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-inventory.json",
-          "sha256": "1e899cfca17f311309d1add013d0feb3f14f1bc2d4679e0c61c5785268fda3db"
+          "sha256": "6916cc064ed77537db44f3e9f9384f4b71b5caefaa42d242095690ad1a3d5675"
         },
         "exact_component_ledger": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-symbol-footprint-ledger.json",
-          "sha256": "d192652242066d6a9bc74d22d82e4202236ccd0b34fbdc97aff2de2de784bbf5"
+          "sha256": "cef0ca72463b045189ff7d5619b80d8a2b1f81d676be8711a044d3620cdd124e"
         },
         "native_kicad": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-native-kicad-projects.json",
-          "sha256": "20400555f2c6595f7b7bde96e7e6de90d09136f6888a2fed221fc36a8dcb82f9"
+          "sha256": "76cb7d4160a7de92bf10d54109e57f7dd51500681d99b54abd6b29336f0924b3"
         },
         "h2_hwfw_reconciliation": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-hwfw-contract.json",
-          "sha256": "ece2cd6abb52f8369c5a086b80cd184825524af0faa1d83718f089d8188b5b42"
+          "sha256": "ed58c845efa404f3823b81342a7d85beff18c1211e95271f4ef32633036979ae"
         },
         "h2_interboard_m1": {
           "path": "esp32-leshy2/hardware/ecad/generated/H2-R2-interboard-m1.json",
@@ -6981,17 +6987,17 @@
             },
             {
               "gpio": 7,
-              "net": "S3_UART_SERVICE_TX",
-              "peripheral": "UART1_TX",
-              "direction": "out",
-              "gate": "DBG10 series path; idle high only after strap sampling"
+              "net": "S3_HUB_D2",
+              "peripheral": "SPI3",
+              "direction": "io",
+              "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
             },
             {
               "gpio": 8,
-              "net": "S3_UART_SERVICE_RX",
-              "peripheral": "UART1_RX",
-              "direction": "in",
-              "gate": "DBG10 series path with fixture-side protection"
+              "net": "S3_HUB_D3",
+              "peripheral": "SPI3",
+              "direction": "io",
+              "gate": "GPIO matrix; Hub remains high-Z and no bus clocks are permitted before application startup and the idle handshake; power-up low glitch requires measurement"
             },
             {
               "gpio": 9,
@@ -7109,15 +7115,17 @@
             },
             {
               "gpio": 43,
-              "net": "S3_HUB_D2",
-              "peripheral": "SPI3",
-              "direction": "io"
+              "net": "S3_UART_SERVICE_TX",
+              "peripheral": "UART0_TX",
+              "direction": "out",
+              "gate": "dedicated ROM UART0 TX to DBG10 through existing R4; no Hub endpoint; power/reset/BOOT recovery qualification remains open"
             },
             {
               "gpio": 44,
-              "net": "S3_HUB_D3",
-              "peripheral": "SPI3",
-              "direction": "io"
+              "net": "S3_UART_SERVICE_RX",
+              "peripheral": "UART0_RX",
+              "direction": "in",
+              "gate": "dedicated ROM UART0 RX from DBG10 through existing R5; fixture must not back-power the target; power/reset/BOOT recovery qualification remains open"
             },
             {
               "gpio": 45,
@@ -7730,16 +7738,16 @@
               "net": "S3_HUB_D2",
               "direction": "io",
               "controller": "PIO1_SM0_S3_QUAD",
-              "endpoint": "S3 GPIO43 through ROM-UART isolation",
-              "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+              "endpoint": "S3 GPIO7 through GPIO matrix",
+              "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
             },
             {
               "gpio": 3,
               "net": "S3_HUB_D3",
               "direction": "io",
               "controller": "PIO1_SM0_S3_QUAD",
-              "endpoint": "S3 GPIO44 through ROM-UART isolation",
-              "reset": "input/high-Z; Hub-side external pull-down; isolation open"
+              "endpoint": "S3 GPIO8 through GPIO matrix",
+              "reset": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
             },
             {
               "gpio": 4,
@@ -8480,16 +8488,16 @@
           "net": "S3_HUB_D2",
           "peripheral": "PIO1_SM0_S3_QUAD",
           "direction": "io",
-          "endpoint": "S3 GPIO43 through ROM-UART isolation",
-          "gate": "input/high-Z; Hub-side external pull-down; isolation open"
+          "endpoint": "S3 GPIO7 through GPIO matrix",
+          "gate": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
         },
         {
           "gpio": 3,
           "net": "S3_HUB_D3",
           "peripheral": "PIO1_SM0_S3_QUAD",
           "direction": "io",
-          "endpoint": "S3 GPIO44 through ROM-UART isolation",
-          "gate": "input/high-Z; Hub-side external pull-down; isolation open"
+          "endpoint": "S3 GPIO8 through GPIO matrix",
+          "gate": "input/high-Z required; no clocks until application and idle/ready handshake; reset asymmetry requires re-handshake"
         },
         {
           "gpio": 4,
@@ -10226,7 +10234,7 @@
           "cross_sheet_net_count": 227,
           "errors": 0
         },
-        "source_sha256": "ece2cd6abb52f8369c5a086b80cd184825524af0faa1d83718f089d8188b5b42",
+        "source_sha256": "ed58c845efa404f3823b81342a7d85beff18c1211e95271f4ef32633036979ae",
         "m1_source_sha256": "127965ec1e68cbf8c57d028fd067c56a724a3259248bab4ba5c86c8f9307b6fd"
       },
       "interboard": {

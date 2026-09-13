@@ -334,7 +334,7 @@ def build() -> dict:
             "dma": dual_rp["rf_rp"]["dma_budget"],
         },
         "hub_rf_m1_binding": dual_rp["m1_binding"],
-        "s3_rom_uart_isolation": dual_rp["s3_rom_uart_isolation"],
+        "s3_rom_uart_routing": dual_rp["s3_rom_uart_routing"],
         "pre_h2_gates": current_pin_gates,
         "review_time_pre_h2_gates": review_time_pin_gates,
         "resolved_post_h1_gates": resolved_post_h1_gates,

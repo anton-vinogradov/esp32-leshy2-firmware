@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "591f430ae6bc2bd28a4a987e66a70712ac8e3c32c6ac592e4d3df9239762ac85"
+    "sha256": "07d3a794ff1fb2f938812d3ccbf8e3913f038a7830316349ccfbd056648f3818"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -263,7 +263,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "591f430ae6bc2bd28a4a987e66a70712ac8e3c32c6ac592e4d3df9239762ac85"
+        "sha256": "07d3a794ff1fb2f938812d3ccbf8e3913f038a7830316349ccfbd056648f3818"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -276,7 +276,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "0ec215575fa19bb06014fa2b3bdf3854bafc71b60702551413d331a8edb2af56"
+        "sha256": "aaae4c3b9701145e98da0c5710b37115b25bc2ab720824eb4f5d117bcdf2bb8c"
       }
     },
     "source_files_checked": 10,

@@ -25,6 +25,10 @@
 > corrects selected native control/port poses while keeping Cap physical contact
 > handedness, exact holder/encoder mounting and acoustic access open.
 > No Cap map or firmware GPIO/API was changed; planar correction is not full assembly approval.
+> The 14 September [S3 recovery correction](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/service-recovery.md)
+> does change the GPIO map: UART0 TX/RX use GPIO43/44, Hub D2/D3 use GPIO7/8.
+> `s3_bsp.h`, `s3_bsp.c` and `hub_rp_bsp.c` change; previous build receipts,
+> including the S3 PSRAM probe, do not qualify these current inputs or recovery.
 > The 223-body H1 concept is not the current native PCB geometry or assembly approval.
 > R1 F0–F4 remains regression evidence, not the current topology. Hardware H1-R2.39 was
 > accepted and reviewed; hardware H2 is reviewed at H2-R2.1.5. The historical H3
