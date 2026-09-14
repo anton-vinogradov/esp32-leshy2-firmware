@@ -206,9 +206,11 @@ PSRAM component selection is corrected separately for S3 and C5. At input
 80 MHz with ECC is configured, and its initialization code is linked
 ([scoped receipt](../config/f2_r2_s3_psram_probe.json)). Current C5 source now requires
 `esp_psram` and checks its own 8-MiB flash / quad PSRAM, 40-MHz, ECC-off contract;
-a fresh C5 configure and build are pending. Neither result proves runtime memory
-initialization or usable capacity. The retained twelve-job qualification is
-unchanged; current full-matrix qualification and byte reproducibility remain open.
+one clean C5 DEBUG configure and build passed at input `34ec149`, with seven
+artifacts verified and `esp_psram_init` linked ([scoped receipt](../config/f2_r2_c5_build_probe.json)).
+Neither result proves runtime memory initialization or usable capacity. The retained
+twelve-job qualification is unchanged; current full-matrix qualification, byte
+reproducibility and recovery remain open.
 
 <details>
 <summary><strong>Retained R1 F2–F4 breakdown — not current topology</strong></summary>

@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "status": "passed_c5_debug_configure_and_build_only",
+  "target": "c5",
+  "configuration": "debug",
+  "input_commit": "34ec1493f35aac15ad96f6ccb9a38fe1d7c4e5a6",
+  "input_tree": "e84f2a1bf68ba18f8552c526f29d88c57dbf121f",
+  "source_date_epoch": 1789349895,
+  "captured_utc": "2026-09-14T01:46:32.999Z",
+  "execution": {
+    "clean_configure_runs": 1,
+    "build_runs": 1,
+    "configure_returncode": 0,
+    "build_returncode": 0,
+    "preflight_exact_checks": 20,
+    "ccache_enabled": false,
+    "dependency_downloads_disabled": true,
+    "runtime_or_flash_runs": 0
+  },
+  "scope": {
+    "input_snapshot_not_moving_head": true,
+    "isolated_tracked_tree_clean": true,
+    "toolchain_alias_only_untracked_item": true,
+    "full_matrix_qualified": false,
+    "byte_reproducibility_proven": false,
+    "psram_capacity_measured": false,
+    "psram_runtime_initialization_proven": false,
+    "service_recovery_qualified": false,
+    "release_build_run": false,
+    "production_release_allowed": false
+  },
+  "sources": {
+    "common/include/leshy2/high_speed_adapter.h": {
+      "sha256": "6c1d17c9dfe0e73525a45a9d3fdd8e01043d8228d946d7669506c9f444377b7e",
+      "bytes": 5200
+    },
+    "common/include/leshy2/l2ip.h": {
+      "sha256": "5ef249d678be7300f99b798218295e3dfa30f96c75269df0395937d54a03918e",
+      "bytes": 1676
+    },
+    "common/include/leshy2/receiver_core.h": {
+      "sha256": "103be6ab9bf6f18ca09deb259a8cedc55c5624bc8a2d44ad6608b0793990fdfc",
+      "bytes": 1616
+    },
+    "common/include/leshy2/safety_core.h": {
+      "sha256": "fcd5166d24f006e2f1c3bedb43218220629cd0ff74cc10e324695b504d6db32c",
+      "bytes": 2631
+    },
+    "common/include/leshy2/system_model.h": {
+      "sha256": "1e074afd9977abea11872b2cfc2dfbb2a58270e6a549f34c8ad9ea90072f6dc0",
+      "bytes": 4330
+    },
+    "common/include/leshy2/update_core.h": {
+      "sha256": "1c323a19812d18b4d8eb9ae20ac1d7f994686f1d38fbbdec6cefc057e1f43889",
+      "bytes": 2169
+    },
+    "common/src/high_speed_adapter.c": {
+      "sha256": "059c25bd4440c1214023f700b83b966e2e1f05173f49fa405323d5b8aa6ad5c9",
+      "bytes": 21962
+    },
+    "common/src/l2ip.c": {
+      "sha256": "89dbec630e92bd5b71dacba23b7a43aa2b6a00935b5d5e5b79fc7cdf81a5af5a",
+      "bytes": 5644
+    },
+    "common/src/receiver_core.c": {
+      "sha256": "bcc8c83e92af4593d80866a86eb10b029ffff2d880ba5d8b5375e17e6e790bda",
+      "bytes": 3798
+    },
+    "common/src/safety_core.c": {
+      "sha256": "a7548f0e110e79374a1f4e8578b2b1630669bf00b2034b729a72c3994e2d0a94",
+      "bytes": 8051
+    },
+    "common/src/system_model.c": {
+      "sha256": "d10039f5b699974c0dba1f3d0b7100c7af8480680f823269584f14b372ac19d0",
+      "bytes": 11836
+    },
+    "common/src/update_core.c": {
+      "sha256": "db1031c7099709742fc7575ce41c996e242752b80717cecb4b465d5f36bd4b0a",
+      "bytes": 5522
+    },
+    "config/c5_image_limits.json": {
+      "sha256": "32ef900ff75cbed7b49ab61b44449a176ef240fe54850a33f34eeb735013673c",
+      "bytes": 270
+    },
+    "config/f2_r2_build_matrix.json": {
+      "sha256": "97a8b0e908e7ba06d0c33a2e0789253b91e6b18f8ba949e26b25183d7ae09152",
+      "bytes": 16563
+    },
+    "config/partitions_8m_c5.csv": {
+      "sha256": "baed4a7e5e644fa9814c69dd328666019e59ddc2a8bc14377d906449ef52b86c",
+      "bytes": 496
+    },
+    "config/sdkconfig.defaults.esp32c5": {
+      "sha256": "c3b33824f715d4476b39d7015d85d016454ce07a613e668033d3d195b3d91a5a",
+      "bytes": 296
+    },
+    "environment/toolchains.lock.json": {
+      "sha256": "2193c7703e47ef2f41c96edf072805d97aea7093659635c99d24b6884ce68604",
+      "bytes": 13549
+    },
+    "generated/r2/hardware/include/leshy2/r2/hardware/bsp_types.h": {
+      "sha256": "0db119d5363c77b1f5f477225ee80c2265c578eabc0b127ea9e6dd457c5c8ea0",
+      "bytes": 1200
+    },
+    "generated/r2/hardware/include/leshy2/r2/hardware/c5_bsp.h": {
+      "sha256": "45f42b2cf4ad6ed3e221e9f402ff5b3aa8ce922a8fe218e334f776de49e8e4f2",
+      "bytes": 835
+    },
+    "generated/r2/hardware/src/c5_bsp.c": {
+      "sha256": "a8fa974b09e1351743a33f5dfc3ae64e9be76d44eea59fc74dc9984b060463e3",
+      "bytes": 4600
+    },
+    "targets/c5/CMakeLists.txt": {
+      "sha256": "459833679e8503b6b3e6edcf4b0a65a8fb4af9db46cb9e9804f4231c0b2cb6f3",
+      "bytes": 1497
+    },
+    "targets/c5/components/leshy2_portable/CMakeLists.txt": {
+      "sha256": "e50d31d024885ee44981ab01e6e273497c7dfc550a54769e178bde9b5b5708f3",
+      "bytes": 1041
+    },
+    "targets/c5/components/leshy2_s3_c5/CMakeLists.txt": {
+      "sha256": "5325910f8798bf2991639a48982a9775a41f808a171d8697589d03a1bd4e8b22",
+      "bytes": 526
+    },
+    "targets/c5/components/leshy2_s3_c5/include/leshy2/s3_c5_slave.h": {
+      "sha256": "59dd583ceb9def4874d350cf736c8dab5117d7d17ec1f678472bbd675b12b710",
+      "bytes": 996
+    },
+    "targets/c5/components/leshy2_s3_c5/s3_c5_slave.c": {
+      "sha256": "1b0efa8377f3db94a5016cb97247b112c800eb15c7c565af041858cf595c133b",
+      "bytes": 7980
+    },
+    "targets/c5/main/CMakeLists.txt": {
+      "sha256": "cd6e4e1a50d0cf65b1d45d5ff101f85e26a828feab09bfe0eedff0f500a4de5b",
+      "bytes": 572
+    },
+    "targets/c5/main/app_main.c": {
+      "sha256": "be4074c38c0ff3d9e788f880ed58b6ddf3fec36391913aed9e76a636ead99838",
+      "bytes": 887
+    },
+    "targets/c5/sdkconfig.debug": {
+      "sha256": "fbbc95993ca7373ed1720af6014a9e30f923f2da3b084e8919761e816308e0c3",
+      "bytes": 86
+    },
+    "targets/c5/sdkconfig.defaults": {
+      "sha256": "af7999e291334bb67b82dbb79a39f98e6c3e0113f73f3ab6926228b5d309e60a",
+      "bytes": 503
+    },
+    "targets/c5/sdkconfig.release": {
+      "sha256": "2e2623d0488cb64ce697d4f0baab22803ced0e4e448e58b5dd844359d3aa4a61",
+      "bytes": 133
+    },
+    "targets/c5/verify_memory_config.py": {
+      "sha256": "9449cf212ff9d967c038ba26e4e551ca8aac0a21614a91eb395fbf8c5c7ff8a7",
+      "bytes": 5057
+    },
+    "tools/build_f2_r2_targets.py": {
+      "sha256": "5e41eec966d9f7f1dbe301b5a54376e5007b286505195ce6a5ede7c29a077d9e",
+      "bytes": 36152
+    },
+    "tools/review_f2_4_preflight.py": {
+      "sha256": "3681760ed25fd5ab6ee8213e04f536c9c7e36aeb07aa4734fdb60c1078b4931d",
+      "bytes": 5653
+    },
+    "tools/toolchain_preflight.py": {
+      "sha256": "f11bca03fa4eb61629d8c7b7fb4558a1e3d6a1144c8aef09b94c1d8d0282a9aa",
+      "bytes": 10709
+    }
+  },
+  "configuration_evidence": {
+    "component_count": 51,
+    "esp_psram_in_build_components": true,
+    "sdkconfig": {
+      "sha256": "a9ea05a62023a5feeb439a24d7e7e1955da83869279737dc357eef4f4123188f",
+      "bytes": 60085
+    },
+    "settings": {
+      "CONFIG_ESPTOOLPY_FLASHSIZE": "8MB",
+      "CONFIG_SPIRAM": true,
+      "CONFIG_SPIRAM_MODE_QUAD": true,
+      "CONFIG_SPIRAM_SPEED": 40,
+      "CONFIG_SPIRAM_ECC_ENABLE": false,
+      "CONFIG_SPIRAM_BOOT_HW_INIT": true,
+      "CONFIG_SPIRAM_BOOT_INIT": true,
+      "CONFIG_SPIRAM_IGNORE_NOTFOUND": false,
+      "CONFIG_SPIRAM_MEMTEST": true,
+      "CONFIG_SPIRAM_USE_MALLOC": true
+    }
+  },
+  "artifacts": {
+    "leshy2_c5.bin": {
+      "sha256": "9385559e8c08e7d423a1f462b7a57a41970e6072e9b8fbadac7f60f8352b4721",
+      "bytes": 143296
+    },
+    "leshy2_c5.elf": {
+      "sha256": "73c30f1677793c8ca007640b7d6a4e898c4874561cdce3dbbd6c723b8e3b3025",
+      "bytes": 3592220
+    },
+    "leshy2_c5.map": {
+      "sha256": "06bee6b49358d9e0f92ab9ce1539a484ec9ff7f2a24416500731596e08f6bdea",
+      "bytes": 2494972
+    },
+    "bootloader/bootloader.bin": {
+      "sha256": "3fef67d3954bb554135449925294dc79b158068d4950ad78f03f87dcc3a1d00f",
+      "bytes": 22336
+    },
+    "bootloader/bootloader.elf": {
+      "sha256": "31ad5e0a43c4aa38ac99369573669ee49cbbdd3b12e3c50fb04e1801f9739d25",
+      "bytes": 661448
+    },
+    "bootloader/bootloader.map": {
+      "sha256": "3db7ecf4a34209c60dbf7051b91623673ccca8bd7fdec4729696418a1e4e67b9",
+      "bytes": 389473
+    },
+    "partition_table/partition-table.bin": {
+      "sha256": "0dbd1b753321e2d7f507bebeee3ce73c7b32d13b1e29716f66a5b6f8af3c05df",
+      "bytes": 3072
+    }
+  },
+  "psram_compiled_objects": {
+    "esp-idf/esp_psram/libesp_psram.a": {
+      "sha256": "ffd8c89d5a92c89c5d30ea20051485668d8c3969ebc4cae5e20022b11155b1f6",
+      "bytes": 274868
+    },
+    "esp-idf/esp_psram/CMakeFiles/__idf_esp_psram.dir/system_layer/esp_psram.c.obj": {
+      "sha256": "87ad1c235ff252cfbf28b8271a719368ac5ddff42cf85f9d708788e28137a4c9",
+      "bytes": 84396
+    },
+    "esp-idf/esp_psram/CMakeFiles/__idf_esp_psram.dir/device/esp_psram_impl_ap_quad.c.obj": {
+      "sha256": "4bca10bc18d85dd602d1d154277ce03c0e34c1ffb83b9261a3884e0fac2fb279",
+      "bytes": 176756
+    }
+  },
+  "linked_defined_symbols": [
+    "esp_psram_check_ptr_addr",
+    "esp_psram_chip_init",
+    "esp_psram_extram_add_to_heap_allocator",
+    "esp_psram_extram_reserve_dma_pool",
+    "esp_psram_extram_test",
+    "esp_psram_get_effective_mapped_size",
+    "esp_psram_get_heap_size_to_protect",
+    "esp_psram_impl_enable",
+    "esp_psram_impl_get_available_size",
+    "esp_psram_impl_get_cs_io",
+    "esp_psram_impl_get_physical_size",
+    "esp_psram_init",
+    "esp_psram_io_get_cs_io",
+    "esp_psram_is_initialized",
+    "esp_psram_mspi_mb_init"
+  ],
+  "application_size_gate": {
+    "status": "ok",
+    "size_bytes": 143296,
+    "maximum_image_bytes": 3538944,
+    "warning_bytes": 3145728,
+    "slot_bytes": 3670016
+  },
+  "historical_receipts_unchanged": {
+    "config/f2_r2_build_qualification.json": {
+      "sha256": "4857bb258cc1da5493c151c9950fe700502acb1d89d38ec7c58e49d3ba64d8a7",
+      "bytes": 32019
+    },
+    "config/f2_5_reproducibility_review.json": {
+      "sha256": "af60fae540a614091be1910236ac78733079cd5ffa147579b26e7e238d4f5196",
+      "bytes": 9950
+    },
+    "config/f2_r2_s3_psram_probe.json": {
+      "sha256": "6f14485556ba65f86584a0c3d90f5a5672cc31756ff4d96f5cb8bbc17bf40565",
+      "bytes": 10432
+    }
+  },
+  "diagnostics": {
+    "compiler_warning_count": 0,
+    "wrapper_warning": "The isolated checkout uses a symlink to the same installed Python environment; IDF emits one lexical venv-path warning per invocation. Real paths are identical and the exact preflight passed. Not a compiler diagnostic.",
+    "full_reproducibility_blocker": "Vendor-library DWARF build roots remain an open path-policy gate; this probe does not waive it."
+  },
+  "evidence_retention": "Local isolated checkout retains binaries, maps, configuration and raw logs. CI checks this receipt and scoped input hashes, not unavailable local build artifacts."
+}
