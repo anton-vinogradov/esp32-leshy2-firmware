@@ -20,6 +20,11 @@
 > as `GCT USB4105-GF-A`: one unique JAE definition and its 17 definition contacts
 > disappear, not fitted endpoints. The 1,208 instances / 4,305 physical pins,
 > GPIO/API, 13 BSP C/H files and retained 12-job receipt are unchanged.
+> The subsequent 14 September C5 source correction adds one NAND and one bypass
+> capacitor: TS3USB221ERSER/LV20A/NX3008NBKS source topology now passes its exact
+> witness, but the service manager is not implemented and all four C5 qualification
+> flags remain false. Physical KILL is unchanged. Only four C5/Hub BSP endpoint
+> descriptions change; no GPIO/API or previous build receipt is requalified.
 > Earlier RF-footprint/NC5 corrections remain in the hardware boundary.
 > The [interface follow-up](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
 > corrects selected native control/port poses while keeping Cap physical contact
@@ -44,12 +49,12 @@
 > [live hardware routing checkpoint](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-current-routing.md).
 > The former routing results are historical and do not establish completion of
 > any current routing class. H2-R2.1.1 reviewed two native projects, 22 sheets,
-> six domain owners, 250 exact component groups and 1,218 product positions;
-> H2-R2.1.2 reviewed 244 board groups, six explicit non-PCBA groups and 1,599
+> six domain owners, 252 exact component groups and 1,220 product positions;
+> H2-R2.1.2 reviewed 246 board groups, six explicit non-PCBA groups and 1,615
 > unique-definition contacts. Its exact imported pin/config authority remains the reviewed
 > H1-R2.31 artifact. The [current H6 exact-footprint placement](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-exact-placement.md)
-> materializes two native six-layer boards and places all 1,208 fitted instances
-> with zero hard conflict. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
+> owns the two native six-layer boards; fit of the current 1,210-instance source
+> requires its own refreshed evidence. The [exact H6 mechanical stack](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-mechanical-stack.md)
 > locks 20-mm nylon M2.5 retention, captive nuts, 11-mm stops and independent PCB
 > capture without loading M1. Placement, mechanical and cable checks repeat when affected by a geometry change; the [H6 routing policy](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-routing-policy.md)
 > controls the ongoing routing work. The locality-first two-board placement, Airband filter,
@@ -61,12 +66,13 @@
 > five rear-RP GPIOs and nine M1 contacts remain reserves; M1-35 carries latched
 > `FAULT_KILL` to the front indicator and M1-36 carries the independent S3
 > fault-UI reset. Current exterior,
-> turned-over inner faces and service views are generated. H2-R2.1.3 materialized
-> 1,208 fitted positions and 4,305 physical pins across the two native KiCad
-> projects: 4,070 connected physical pins, 235 explicit no-connects and
-> 788 global canonical / 822 board-local nets; both projects pass KiCad
-> ERC with zero errors and zero warnings under the current passive-pin library. This does not prove
-> rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
+> turned-over inner faces and service views are generated. Current R2 after the
+> 14 September C5 ECO materializes
+> 1,210 fitted positions and 4,321 physical pins across the two native KiCad
+> projects: 4,085 connected physical pins, 236 explicit no-connects and
+> 789 global canonical nets. These schematic counts do not prove routed continuity,
+> rail-driver completeness or absence of output conflicts; electrical and physical
+> review remain production gates.
 > The 7 September physical-pin corrections restore both RP2354 QSPI supplies and correct
 > three component pin mappings: 4,070 connected physical pins, unchanged firmware GPIOs/APIs.
 > The expanded [electrical review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-electrical-semantics.md)
@@ -81,7 +87,7 @@
 > reviewed H2-R2.1.5 sync gate is open. H3 now freezes those inputs. Hardware
 > H6.0.3-R1 routing remains in progress and ordering remains unauthorized.
 
-Hardware-status text last reconciled: **9 September 2026**. This is the firmware repository's
+Hardware-status text last reconciled: **14 September 2026**. This is the firmware repository's
 own roadmap. Hardware intersections are explicit, but hardware stages are not
 duplicated or given a second status here.
 
@@ -397,9 +403,10 @@ flowchart TD
 
 ## Next action
 
-The current boundary is `F2-R2.5`. Fresh F2-R2.4 passed the current locked 12-job
-matrix, verified all 60 artifacts and 16 maps, and passed all 16 size gates.
-Two byte-identical clean passes remain a separate reproducibility gate; run them
-and compare every declared artifact byte-for-byte. Runtime and S3
-QEMU remain F3-R2 gates; no emulator, development-board or hardware execution
-is claimed by F2-R2.4.
+The current boundary is `F2-R2.5`. The historical F2-R2.4 result at `c8e349b`
+passed its locked 12-job matrix, verified all 60 artifacts and 16 maps, and
+passed all 16 size gates; it does not qualify the current inputs. Next, build
+the current-input locked matrix and verify two byte-identical clean passes,
+comparing every declared artifact byte-for-byte while preserving the historical
+receipts. Runtime and S3 QEMU remain F3-R2 gates; no emulator, development-board
+or hardware execution is claimed by F2-R2.4.

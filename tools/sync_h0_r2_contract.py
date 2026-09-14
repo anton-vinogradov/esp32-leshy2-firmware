@@ -7,6 +7,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from check_r2_h2_sync_gate import c5_boundary_errors
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +34,66 @@ INTEGRATION_OUTPUT = ROOT / "config/hardware_integration_contract.json"
 U219_POLICY_OUTPUT = ROOT / "config/u219_cap_policy.json"
 PREORDER_SOURCE = HW_REPO / "hardware/verification/preorder-verification-contract.json"
 PREORDER_OUTPUT = ROOT / "config/preorder_verification_contract.json"
+
+
+def documented_pcba_route(part: dict, inventory: dict) -> bool:
+    """A captured stock/pre-order route is not electrical or order approval."""
+    if (not part.get("manufacturer") or not part.get("mpn")
+            or not part.get("jlcpcb_part_number")
+            or part.get("assembly_type") != "SMT Assembly"
+            or "Standard" not in part.get("pcba_type", [])
+            or type(inventory.get("moq")) is not int or inventory["moq"] < 1):
+        return False
+    stocked = (
+        isinstance(inventory.get("stock"), (int, float)) and inventory["stock"] > 0
+        and isinstance(inventory.get("available_order_quantity"), (int, float))
+        and inventory["available_order_quantity"] >= inventory["moq"]
+        and bool(inventory.get("price_tiers_usd"))
+    )
+    estimate = inventory.get("preorder_estimate", {})
+    preorder = (
+        inventory.get("stock") == 0
+        and inventory.get("route") == "explicit JLCPCB Pre-order"
+        and inventory.get("explicit_preorder_offered") is True
+        and inventory.get("price_is_estimate") is True
+        and inventory.get("price_tiers_usd") == []
+        and estimate.get("not_a_stocked_price_tier") is True
+        and estimate.get("minimum_quantity") == inventory["moq"]
+        and isinstance(estimate.get("unit_price"), (int, float))
+        and estimate["unit_price"] > 0
+        and bool(inventory.get("checked_at"))
+    )
+    return stocked or preorder
+
+
+def c5_projection(c5_mux: dict, inventory: dict) -> dict:
+    """Retain the engineering boundary, including every unqualified gate."""
+    expected = {
+        "ti_ts3usb221erser": ("TS3USB221ERSER", 1),
+        "ti_sn74lv20apwr": ("SN74LV20APWR", 2),
+        "nexperia_nx3008nbks_115": ("NX3008NBKS,115", 3),
+    }
+    selected = [row for row in inventory["component_groups"] if row["device_id"] in expected]
+    if (len(selected) != len(expected) or
+            {row["device_id"]: (row["mpn"], row["quantity_per_product"])
+             for row in selected} != expected):
+        raise ValueError("current C5 TS/LV/NX source identities or quantities changed")
+    projected = {
+        "contract_id": c5_mux["contract_id"], "status": c5_mux["status"],
+        "scope": c5_mux["scope"],
+        "module": c5_mux["c5_module"]["mpn"],
+        "mux_reference": c5_mux["mux"]["electrical_reference"],
+        "production_route": c5_mux["production_mux_route"],
+        "source_components": selected,
+        "ownership": c5_mux["ownership"],
+        "transition_sequences": c5_mux["transition_sequences"],
+        "performance": c5_mux["performance"], "hil_gates": c5_mux["hil_gates"],
+        "qualification": c5_mux["qualification"],
+    }
+    errors = c5_boundary_errors(projected)
+    if errors:
+        raise ValueError("; ".join(errors))
+    return projected
 
 
 def source_record(path: Path) -> dict:
@@ -93,10 +157,9 @@ def build() -> dict:
     mux_inventory = mux_route["live_inventory"]
     mux_route_closed = (
         mux_route["selection_status"] == "accepted"
-        and all(
-            mux_inventory.get(key) is not None
-            for key in ("stock", "available_order_quantity", "moq", "price_tiers_usd")
-        )
+        and mux_route["candidate"].get("mpn") == "TS3USB221ERSER"
+        and mux_route["candidate"].get("jlcpcb_part_number") == "C129313"
+        and documented_pcba_route(mux_route["candidate"], mux_inventory)
     )
     detector_latch = c5_mux["ownership"].get("detector_latch_implementation", {})
     detector_parts = [
@@ -109,14 +172,12 @@ def build() -> dict:
         == "accepted"
         and detector_latch.get("selection_status") == "accepted"
         and all(
-            part.get("mpn")
-            and part.get("jlcpcb_part_number")
-            and all(
-                part.get("live_inventory", {}).get(key) is not None
-                for key in ("stock", "available_order_quantity", "moq", "price_tiers_usd")
-            )
+            documented_pcba_route(part, part.get("live_inventory", {}))
             for part in detector_parts
         )
+        and detector_parts[2].get("mpn") == "SN74LV20APWR"
+        and detector_parts[2].get("jlcpcb_part_number") == "C2862070"
+        and detector_parts[2].get("quantity") == 2
     )
     pack_safety_closed = (
         pack_safety.get("marker") == "H2-R2.0.3"
@@ -133,8 +194,8 @@ def build() -> dict:
         and native_inventory.get("summary", {}).get("project_count") == 2
         and native_inventory.get("summary", {}).get("sheet_count") == 22
         and native_inventory.get("summary", {}).get("domain_count") == 6
-        and native_inventory.get("summary", {}).get("component_group_count") == 250
-        and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1218
+        and native_inventory.get("summary", {}).get("component_group_count") == 252
+        and native_inventory.get("summary", {}).get("component_quantity_per_product") == 1220
         and native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") == 0
         and native_inventory.get("authorization", {}).get("native_source_and_sheet_inventory") is True
         and native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is False
@@ -145,12 +206,12 @@ def build() -> dict:
     exact_ledger_closed = (
         exact_ledger.get("marker") == "H2-R2.1.2"
         and exact_ledger.get("status") == "pass"
-        and exact_ledger.get("summary", {}).get("component_group_count") == 250
-        and exact_ledger.get("summary", {}).get("board_component_group_count") == 244
+        and exact_ledger.get("summary", {}).get("component_group_count") == 252
+        and exact_ledger.get("summary", {}).get("board_component_group_count") == 246
         and exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") == 6
-        # Four USB ports now share GCT: one unique 17-contact JAE definition
-        # disappears, not any fitted endpoint (4305 physical pins below).
-        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1599
+        # USB unification removed one 17-contact definition; C5 adds TS10/NX6
+        # definitions. Its second NAND + bypass add 16 fitted pins separately.
+        and exact_ledger.get("summary", {}).get("logical_contact_count") == 1615
         and exact_ledger.get("summary", {}).get("unresolved_groups") == 0
         and exact_ledger.get("authorization", {}).get("exact_group_ledger") is True
         and exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is False
@@ -163,9 +224,9 @@ def build() -> dict:
         native_kicad.get("marker") == "H2-R2.1.3"
         and native_kicad.get("status") == "pass"
         and native_kicad.get("summary", {}).get("project_count") == 2
-        and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1208
-        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4305
-        and native_kicad.get("summary", {}).get("canonical_net_count") == 788
+        and native_kicad.get("summary", {}).get("fitted_symbol_instance_count") == 1210
+        and native_kicad.get("summary", {}).get("physical_symbol_pin_count") == 4321
+        and native_kicad.get("summary", {}).get("canonical_net_count") == 789
         and native_kicad.get("authorization", {}).get("native_schematic_symbols_and_nets") is True
         and native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is False
         and native_kicad.get("errors") == []
@@ -206,12 +267,12 @@ def build() -> dict:
     resolved_post_h1_gates = []
     if mux_route_closed:
         resolved_post_h1_gates.append(
-            "exact live onsemi FSUSB42MUX / JLCPCB C11355 Standard-PCBA route, MOQ and price"
+            "TI TS3USB221ERSER / C129313 captured Standard-PCBA stock route; engineering source selection, not electrical qualification"
         )
     if detector_latch_closed:
         resolved_post_h1_gates.append(
             "exact DMN2056U-7 / C332302 detector, SN74LVC1G74DCUR / C70285 latch "
-            "and 74HC20PW,118 / C546719 release qualifier"
+            "and two SN74LV20APWR / C2862070 logic packages via explicit pre-order MOQ21, estimated price only; not latch/recovery qualification"
         )
     if pack_safety_closed:
         resolved_post_h1_gates.append(
@@ -224,7 +285,7 @@ def build() -> dict:
             performance = c5_mux["performance"]
             row.update(
                 {
-                    "transport": "native C5 4-bit SDIO through fail-safe service mux",
+                    "transport": "native C5 4-bit SDIO through engineering service-mux topology",
                     "clock_hz": performance["target_clock_hz"],
                     "bringup_clock_hz": performance["bringup_clock_hz"],
                     "raw_payload_mb_s": performance["target_raw_mb_s"],
@@ -235,9 +296,10 @@ def build() -> dict:
                         "qualification_frequency_hz"
                     ],
                     "service_mux": (
-                        "FSUSB42 reference switches C5 GPIO13/14 between data-only "
-                        "service USB and runtime SDIO D3/D2; an always-on latch owns "
-                        "reset, high-Z and break-before-make sequencing"
+                        "TS3USB221ERSER source topology switches C5 GPIO13/14 between data-only "
+                        "service USB and runtime SDIO D3/D2. Independent KILL is retained; "
+                        "ordered A0/L1 disconnect, reset/high-Z and settle waits are requirements. "
+                        "The firmware service manager and switching qualification are not implemented/proven."
                     ),
                 }
             )
@@ -281,17 +343,7 @@ def build() -> dict:
         "c5_sdio_pin_map": [
             project_c5_pin(signal) for signal in c5_mux["c5_module"]["signals"]
         ],
-        "c5_sdio_service_mux": {
-            "contract_id": c5_mux["contract_id"],
-            "status": c5_mux["status"],
-            "module": c5_mux["c5_module"]["mpn"],
-            "mux_reference": c5_mux["mux"]["electrical_reference"],
-            "production_route": c5_mux["production_mux_route"],
-            "ownership": c5_mux["ownership"],
-            "transition_sequences": c5_mux["transition_sequences"],
-            "performance": c5_mux["performance"],
-            "hil_gates": c5_mux["hil_gates"],
-        },
+        "c5_sdio_service_mux": c5_projection(c5_mux, native_inventory),
         "pack_safety_i2c_boundary": pack_safety,
         "native_r2_inventory": {
             "marker": native_inventory["marker"],
@@ -392,6 +444,8 @@ def build() -> dict:
             "c5_service_mux_hardware_owned": True,
             "c5_production_mux_route_accepted": mux_route_closed,
             "c5_service_vbus_detector_latch_release_accepted": detector_latch_closed,
+            "c5_firmware_service_manager_implemented": False,
+            "c5_switching_or_recovery_qualified": False,
             "pack_safety_powered_off_boundary_accepted": pack_safety_closed,
             "native_r2_inventory_imported": native_inventory_closed,
             "exact_component_ledger_imported": exact_ledger_closed,

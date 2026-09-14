@@ -81,11 +81,15 @@ routes are now Hub-centered.
 
 The C5 link uses Espressif's FIFO/register/interrupt slave transport. The exact
 module lot must contain **ESP32-C5 revision v1.2 or later**. GPIO7–10 are direct;
-GPIO13/14 pass through a fail-safe hardware-owned mux between runtime DAT3/DAT2
-and data-only service USB. Service VBUS asynchronously seizes ownership, holds
-Hub reset/high-Z and uses break-before-make switching; firmware cannot override
-that latch. The Hub-RF link uses RP2354B hardware SPI1 slave DMA. These are
-working pre-H2 targets, not implemented or physically qualified links.
+GPIO13/14 pass through TS3USB221ERSER between runtime DAT3/DAT2 and data-only
+service USB. The source equations are `SEL=R`, `VALID=!(O&R)`,
+`OE=!(A&VALID&P&F)` and `HUB_HOLD=O|L|!R`; NOT(Q), not raw latch Q_N, supplies
+the owner inverse. Independent physical KILL is unchanged. Before changing R,
+the required sequence requests A=0/L=1, establishes reset/pad-high-Z and waits;
+connection follows a separate settle interval, and Hub hold persists through
+C5 strap/ready timing. These waits are conditional requirements, not measured
+qualification; no firmware service manager exists yet. The Hub-RF link uses
+RP2354B hardware SPI1 slave DMA. Neither link is physically qualified.
 
 ## Optional U214/U219 Cap profiles
 

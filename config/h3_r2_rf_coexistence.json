@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-rf-coexistence.json",
-    "sha256": "8b7b67ae11409fa8988eca931d2f14558f42ab27d5d617c225f5b8d6690682a8"
+    "sha256": "c35928078f937aab692505e4fd462a13766777fbd64dd7c9fa91decf826c3570"
   },
   "port_topology": {
     "front": [
@@ -390,7 +390,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "9873d267791ad7519a779aeaf6c901ad3a3581aa0b7ea208bb42bedb339b5116"
+        "sha256": "82af7b88cad0e3934625bc617202ab8d76c4d19a1d1635efdecd70d33a9d683f"
       },
       "H3-R2-digital-interfaces": {
         "status": "review_required",
@@ -398,7 +398,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "07d3a794ff1fb2f938812d3ccbf8e3913f038a7830316349ccfbd056648f3818"
+        "sha256": "88388bcf5542d8f20c7e3f3c24871225aa0e26bb22c7f5b91d7d968519d2effd"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -411,7 +411,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "aaae4c3b9701145e98da0c5710b37115b25bc2ab720824eb4f5d117bcdf2bb8c"
+        "sha256": "e03e2cafc1c81752704848992a68101271fa83eb93d892ff1032f527a5e027d9"
       },
       "H3-R2-rf-coexistence": {
         "status": "review_required",
@@ -420,7 +420,7 @@
           "applicability:digital_inputs",
           "applicability:analog_inputs"
         ],
-        "sha256": "8b7b67ae11409fa8988eca931d2f14558f42ab27d5d617c225f5b8d6690682a8"
+        "sha256": "c35928078f937aab692505e4fd462a13766777fbd64dd7c9fa91decf826c3570"
       }
     },
     "source_files_checked": 12,

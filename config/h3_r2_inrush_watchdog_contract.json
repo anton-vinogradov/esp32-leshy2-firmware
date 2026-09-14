@@ -7,11 +7,11 @@
   "source": {
     "inrush_watchdog": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-inrush-watchdog.json",
-      "sha256": "22a303a356742baa5028eaebebae1683e7bd44ef5638b8e38441d5d8a35fb84d"
+      "sha256": "9e53a178ed08c338aabd110f2647e5e428e658deb43e638c0c9463df836373ec"
     },
     "transition_result": {
       "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-transition-result.json",
-      "sha256": "1f585d239c3e5fb7ff70f396f1e88acdd2eb6c1459efd0cd12d4b68b7e0dd52b"
+      "sha256": "33b006bfe3af6468b2f46d4e82957e9222cbf9e1b7112cb44624013177ed5179"
     }
   },
   "watchdog": {
@@ -166,16 +166,16 @@
       "rail": "AON_SAFE_3V3",
       "output_net": "AON_SAFE_3V3",
       "strategy": "minimum current limit bounds a commanded fixed-slew start",
-      "pcb_capacitance_upper_uf": "42.710000",
+      "pcb_capacitance_upper_uf": "42.820000",
       "external_capacitance_upper_uf": "0.000000",
-      "capacitance_upper_uf": "42.710000",
+      "capacitance_upper_uf": "42.820000",
       "worst_load_ma": "72.100",
       "capacitive_inrush_ma": "92.900",
       "combined_current_ma": "165.000",
       "effective_hardware_min_ma": "165.000",
       "current_margin_ma": "0.000",
-      "ramp_time_ms": "1.517147",
-      "energy_mj": "0.232556",
+      "ramp_time_ms": "1.521055",
+      "energy_mj": "0.233155",
       "status": "pass"
     },
     {
@@ -315,7 +315,7 @@
           "applicability:rail_inputs",
           "applicability:source_inputs"
         ],
-        "sha256": "9ad484f49db9a6e7248dfa39dc7fcfe3ada43751283a792c9311e0894af285cd"
+        "sha256": "d1138339c095d65e781634355059e40d094363a02ad8e66ef36b604a3a1c55d2"
       },
       "H3-R2-handover": {
         "status": "review_required",
@@ -324,7 +324,7 @@
           "applicability:source_inputs",
           "applicability:sequence_inputs"
         ],
-        "sha256": "5d874675525d50769e6e16a9ae51a4d2effa789a7eba476745bc103636ba2a24"
+        "sha256": "5cea16d632bfdc67e2eeb6d0b463288b9ced0820e38877d2124e0e2bf6b2af6e"
       },
       "H3-R2-inrush-watchdog": {
         "status": "review_required",
@@ -335,7 +335,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "22a303a356742baa5028eaebebae1683e7bd44ef5638b8e38441d5d8a35fb84d"
+        "sha256": "9e53a178ed08c338aabd110f2647e5e428e658deb43e638c0c9463df836373ec"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -348,7 +348,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "aaae4c3b9701145e98da0c5710b37115b25bc2ab720824eb4f5d117bcdf2bb8c"
+        "sha256": "e03e2cafc1c81752704848992a68101271fa83eb93d892ff1032f527a5e027d9"
       },
       "H3-R2-source-margins": {
         "status": "review_required",
@@ -357,7 +357,7 @@
           "applicability:rail_inputs",
           "applicability:source_model_binding"
         ],
-        "sha256": "9169af2ee2536967f7d96a6b0434b5b283ba585c8de8fa589af93593eb50ea34"
+        "sha256": "fa186ce6fc61851270d918dbcc495fd73006f2939e50cfd098581b5bd0ca2e42"
       },
       "H3-R2-transition-result": {
         "status": "review_required",
@@ -368,7 +368,7 @@
           "applicability:sequence_inputs",
           "applicability:handover_inputs"
         ],
-        "sha256": "1f585d239c3e5fb7ff70f396f1e88acdd2eb6c1459efd0cd12d4b68b7e0dd52b"
+        "sha256": "33b006bfe3af6468b2f46d4e82957e9222cbf9e1b7112cb44624013177ed5179"
       },
       "H3-R2-transition-sequences": {
         "status": "review_required",
@@ -378,7 +378,7 @@
           "applicability:supervisor_assertion_bound",
           "applicability:supervisor_hysteresis_bound"
         ],
-        "sha256": "079e6dfb10bcaaad7378e20501ae542be6b259bdf969ca06a584ffbce0050624"
+        "sha256": "3852ecaf993321cf0408400c8f697448998fd36f0c7bfad6b1cb479bf323d461"
       }
     },
     "source_files_checked": 19,

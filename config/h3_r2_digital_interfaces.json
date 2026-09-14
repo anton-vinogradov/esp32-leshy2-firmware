@@ -6,7 +6,7 @@
   "current_hardware_substep": "H6.0.3-R1",
   "source": {
     "path": "../esp32-leshy2/hardware/verification/generated/H3-R2-digital-interfaces.json",
-    "sha256": "07d3a794ff1fb2f938812d3ccbf8e3913f038a7830316349ccfbd056648f3818"
+    "sha256": "88388bcf5542d8f20c7e3f3c24871225aa0e26bb22c7f5b91d7d968519d2effd"
   },
   "display": {
     "mode": "direct i8080-8",
@@ -98,8 +98,177 @@
     "c5_mux_has_hardware_default_pulldowns": true,
     "c5_mux_switches_only_d2_d3_or_usb": true,
     "service_ownership_latch_resets_both_compute_domains": true,
-    "service_switch_bandwidth_covers_usb_full_speed": true,
-    "power_off_leakage_has_over_2x_reserve": true
+    "service_switch_has_usb_full_speed_capability": true,
+    "power_off_port_leakage_limit_is_2ua": true
+  },
+  "c5_mux_control": {
+    "checks": {
+      "identity:c5_service_usb_switch": true,
+      "identity:c5_service_release_logic": true,
+      "identity:c5_service_path_logic": true,
+      "identity:c5_service_mux_logic_inverters": true,
+      "identity:c5_service_owner_latch": true,
+      "identity:c5_service_hub_reset_sink": true,
+      "identity:safe_reset_sink_a": true,
+      "identity:safe_reset_sink_b": true,
+      "identity:c5_service_path_logic_bypass": true,
+      "identity:evidence_mask": true,
+      "identity:m1_ui_plug": true,
+      "identity:m1_rf_receptacle": true,
+      "identity:c5_mux_oe_pulldown": true,
+      "identity:c5_mux_sel_pulldown": true,
+      "identity:c5_service_reset_sink": true,
+      "pin:c5_service_usb_switch.HSD1_PLUS": true,
+      "pin:c5_service_usb_switch.HSD1_MINUS": true,
+      "pin:c5_service_usb_switch.HSD2_PLUS": true,
+      "pin:c5_service_usb_switch.HSD2_MINUS": true,
+      "pin:c5_service_usb_switch.GND": true,
+      "pin:c5_service_usb_switch.OE": true,
+      "pin:c5_service_usb_switch.D_MINUS": true,
+      "pin:c5_service_usb_switch.D_PLUS": true,
+      "pin:c5_service_usb_switch.SEL": true,
+      "pin:c5_service_usb_switch.VCC": true,
+      "pin:c5_service_mux_logic_inverters.1A": true,
+      "pin:c5_service_mux_logic_inverters.GND": true,
+      "pin:c5_service_mux_logic_inverters.2A": true,
+      "pin:c5_service_mux_logic_inverters.2Y": true,
+      "pin:c5_service_mux_logic_inverters.VCC": true,
+      "pin:c5_service_mux_logic_inverters.1Y": true,
+      "pin:c5_service_owner_latch.Q_N": true,
+      "pin:c5_service_owner_latch.Q": true,
+      "pin:c5_service_path_logic_bypass.END_1": true,
+      "pin:c5_service_path_logic_bypass.END_2": true,
+      "pin:evidence_mask.P12": true,
+      "pin:evidence_mask.P13": true,
+      "pin:evidence_mask.P14": true,
+      "pin:evidence_mask.P15": true,
+      "pin:c5_mux_oe_pulldown.END_1": true,
+      "pin:c5_mux_oe_pulldown.END_2": true,
+      "pin:c5_mux_sel_pulldown.END_1": true,
+      "pin:c5_mux_sel_pulldown.END_2": true,
+      "pin:c5_service_reset_sink.G": true,
+      "pin:c5_service_reset_sink.S": true,
+      "pin:c5_service_reset_sink.D": true,
+      "pin:m1_ui_plug.P37": true,
+      "pin:m1_ui_plug.P38": true,
+      "pin:m1_ui_plug.P55": true,
+      "pin:m1_ui_plug.P56": true,
+      "pin:m1_ui_plug.P57": true,
+      "pin:m1_ui_plug.P58": true,
+      "pin:m1_rf_receptacle.P37": true,
+      "pin:m1_rf_receptacle.P38": true,
+      "pin:m1_rf_receptacle.P55": true,
+      "pin:m1_rf_receptacle.P56": true,
+      "pin:m1_rf_receptacle.P57": true,
+      "pin:m1_rf_receptacle.P58": true,
+      "pin:c5_service_release_logic.1A": true,
+      "pin:c5_service_release_logic.1B": true,
+      "pin:c5_service_release_logic.NC_3": true,
+      "pin:c5_service_release_logic.1C": true,
+      "pin:c5_service_release_logic.1D": true,
+      "pin:c5_service_release_logic.1Y": true,
+      "pin:c5_service_release_logic.GND": true,
+      "pin:c5_service_release_logic.2Y": true,
+      "pin:c5_service_release_logic.2A": true,
+      "pin:c5_service_release_logic.2B": true,
+      "pin:c5_service_release_logic.NC_11": true,
+      "pin:c5_service_release_logic.2C": true,
+      "pin:c5_service_release_logic.2D": true,
+      "pin:c5_service_release_logic.VCC": true,
+      "pin:c5_service_path_logic.1A": true,
+      "pin:c5_service_path_logic.1B": true,
+      "pin:c5_service_path_logic.NC_3": true,
+      "pin:c5_service_path_logic.1C": true,
+      "pin:c5_service_path_logic.1D": true,
+      "pin:c5_service_path_logic.1Y": true,
+      "pin:c5_service_path_logic.GND": true,
+      "pin:c5_service_path_logic.2Y": true,
+      "pin:c5_service_path_logic.2A": true,
+      "pin:c5_service_path_logic.2B": true,
+      "pin:c5_service_path_logic.NC_11": true,
+      "pin:c5_service_path_logic.2C": true,
+      "pin:c5_service_path_logic.2D": true,
+      "pin:c5_service_path_logic.VCC": true,
+      "pin:c5_service_hub_reset_sink.S1": true,
+      "pin:c5_service_hub_reset_sink.G1": true,
+      "pin:c5_service_hub_reset_sink.D2": true,
+      "pin:c5_service_hub_reset_sink.S2": true,
+      "pin:c5_service_hub_reset_sink.G2": true,
+      "pin:c5_service_hub_reset_sink.D1": true,
+      "pin:safe_reset_sink_a.S1": true,
+      "pin:safe_reset_sink_a.G1": true,
+      "pin:safe_reset_sink_a.D2": true,
+      "pin:safe_reset_sink_a.S2": true,
+      "pin:safe_reset_sink_a.G2": true,
+      "pin:safe_reset_sink_a.D1": true,
+      "pin:safe_reset_sink_b.S1": true,
+      "pin:safe_reset_sink_b.G1": true,
+      "pin:safe_reset_sink_b.D2": true,
+      "pin:safe_reset_sink_b.S2": true,
+      "pin:safe_reset_sink_b.G2": true,
+      "pin:safe_reset_sink_b.D1": true,
+      "members:C5_SERVICE_OWNER_NOT": true,
+      "members:C5_SERVICE_RELEASE_NOT": true,
+      "members:C5_SERVICE_PATH_VALID": true,
+      "members:C5_SERVICE_HUB_HOLD": true,
+      "members:C5_MUX_DISABLE": true,
+      "members:C5_MUX_SEL_REQUEST": true
+    },
+    "source_topology_status": "pass",
+    "scope": "Exact source pins and control-net membership only; neither routed-board parity nor voltage, reset-to-high-Z, asynchronous hazards or firmware sequencing is inferred.",
+    "timing_qualified": false,
+    "power_sequences_qualified": false,
+    "firmware_service_manager_implemented": false,
+    "production_release_allowed": false
+  },
+  "loading": {
+    "models": {
+      "i8080": {
+        "fanout_per_driven_line": 1,
+        "route_rule": "one S3 output -> one direct UI-board ZIF contact -> one ILI9488 input"
+      },
+      "hub_c5_sdio": {
+        "fanout_per_line": 1,
+        "series_elements": 6,
+        "d2_d3_switch_bandwidth_mhz": 1000,
+        "switch_to_bus_clock_ratio": 25.0,
+        "bandwidth_is_typical_not_timing_proof": true
+      },
+      "hub_rf_m1": {
+        "fanout_per_line": 1,
+        "signal_contacts": [
+          22,
+          23,
+          24,
+          26,
+          27
+        ],
+        "reference_contacts": [
+          21,
+          25,
+          28
+        ]
+      },
+      "sys_ui_i2c": {
+        "pullup_ohm": 2200,
+        "clock_hz": 400000,
+        "maximum_allowed_bus_capacitance_pf": 120,
+        "rise_time_at_max_cap_ns": 223.68720000000002,
+        "fast_mode_rise_limit_ns": 300
+      },
+      "usb": {
+        "signalling_mbps": 12,
+        "product_series_ohm_per_line": 22,
+        "service_series_ohm_per_line": 27,
+        "m1_rating_gbps": 8
+      }
+    },
+    "checks": {
+      "all_fast_single_ended_buses_are_point_to_point": true,
+      "c5_mux_typical_bandwidth_screen_is_at_least_10x_bus_clock": true,
+      "ui_i2c_rise_time_has_positive_margin": true,
+      "usb_series_values_are_bounded": true
+    }
   },
   "c5_boot_strap": {
     "checks": {
@@ -225,7 +394,8 @@
     "display_clock": "request and verify exactly 20 MHz; reject any divider result above 25 MHz",
     "display_owner": "S3 owns all direct i8080 traffic; UI/buttons/encoder remain S3-local",
     "service_usb": "Hub RP, RF RP and C5 service paths never power the product",
-    "c5_mux": "required: hardware service-VBUS latch owns C5 USB versus SDIO selection before firmware; current SEL/OE and KILL recovery remain unqualified",
+    "c5_mux": "source requirements: SEL=R; VALID=!(O&R); OE=!(A&VALID&P&F); HUB_HOLD=O|L|!R, using NOT(Q), not raw Q_N. Before changing R, request A=0/L=1 and establish reset/pad-high-Z; settle before A=1 and retain Hub hold through the C5 strap/ready interval. Waits are conditional, not measured. Preserve independent physical KILL; no firmware service manager or recovery/timing qualification is implemented/proven.",
+    "c5_bandwidth": "1000 MHz is a datasheet typical-only comparison, not a guaranteed SDIO bandwidth or switching-timing qualification",
     "m1_reserve": "contacts 60-64 and 77-80 remain true NC"
   },
   "physical_residuals": [
@@ -263,7 +433,7 @@
         "open_findings": [
           "applicability:rail_inputs"
         ],
-        "sha256": "07d3a794ff1fb2f938812d3ccbf8e3913f038a7830316349ccfbd056648f3818"
+        "sha256": "88388bcf5542d8f20c7e3f3c24871225aa0e26bb22c7f5b91d7d968519d2effd"
       },
       "H3-R2-rail-margins": {
         "status": "review_required",
@@ -276,7 +446,7 @@
           "applicability:aon_ron_model",
           "applicability:series_distribution_scope"
         ],
-        "sha256": "aaae4c3b9701145e98da0c5710b37115b25bc2ab720824eb4f5d117bcdf2bb8c"
+        "sha256": "e03e2cafc1c81752704848992a68101271fa83eb93d892ff1032f527a5e027d9"
       }
     },
     "source_files_checked": 10,

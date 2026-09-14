@@ -1,4 +1,5 @@
 import importlib.util
+import copy
 import hashlib
 import json
 import subprocess
@@ -55,15 +56,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
 
     def test_native_boundary_includes_both_rp2354_qspi_supplies(self):
         summary = self.actual["native_kicad"]["summary"]
-        self.assertEqual(4305, summary["physical_symbol_pin_count"])
-        self.assertEqual(4071, summary["connected_physical_pin_count"])
-        self.assertEqual(234, summary["explicit_no_connect_physical_pin_count"])
+        self.assertEqual(4321, summary["physical_symbol_pin_count"])
+        self.assertEqual(4085, summary["connected_physical_pin_count"])
+        self.assertEqual(236, summary["explicit_no_connect_physical_pin_count"])
         self.assertEqual(
             summary["physical_symbol_pin_count"],
             summary["connected_physical_pin_count"]
             + summary["explicit_no_connect_physical_pin_count"],
         )
-        self.assertEqual(788, summary["canonical_net_count"])
+        self.assertEqual(789, summary["canonical_net_count"])
 
     def test_airband_is_receive_only_and_fail_low(self):
         air = self.actual["airband"]
@@ -150,23 +151,23 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertEqual("H2-R2.1.1", inventory["marker"])
         self.assertEqual(2, inventory["summary"]["project_count"])
         self.assertEqual(22, inventory["summary"]["sheet_count"])
-        self.assertEqual(250, inventory["summary"]["component_group_count"])
+        self.assertEqual(252, inventory["summary"]["component_group_count"])
         self.assertEqual(0, inventory["summary"]["native_schematic_nets_created"])
         self.assertFalse(inventory["authorization"]["schematic_symbols_or_nets"])
         self.assertTrue(self.actual["claims"]["native_r2_inventory_imported"])
         ledger = self.actual["exact_component_ledger"]
         self.assertEqual("H2-R2.1.2", ledger["marker"])
-        self.assertEqual(244, ledger["summary"]["board_component_group_count"])
+        self.assertEqual(246, ledger["summary"]["board_component_group_count"])
         self.assertEqual(6, ledger["summary"]["explicit_non_pcba_group_count"])
-        self.assertEqual(1599, ledger["summary"]["logical_contact_count"])
+        self.assertEqual(1615, ledger["summary"]["logical_contact_count"])
         self.assertEqual(0, ledger["summary"]["unresolved_groups"])
         self.assertFalse(ledger["authorization"]["symbol_or_footprint_files"])
         self.assertFalse(ledger["authorization"]["schematic_nets"])
         self.assertTrue(self.actual["claims"]["exact_component_ledger_imported"])
         self.assertTrue(self.actual["claims"]["native_kicad_imported"])
         self.assertTrue(self.actual["claims"]["h2_hwfw_reconciliation_imported"])
-        self.assertEqual(1208, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(788, self.actual["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(1210, self.actual["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(789, self.actual["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(0, self.actual["h2_hwfw_reconciliation"]["summary"]["errors"])
         self.assertEqual(
@@ -175,7 +176,7 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         )
         self.assertEqual([], self.actual["physical_h1"]["pre_r2_h2_gates"])
 
-    def test_usb_unification_removes_only_a_unique_part_definition(self):
+    def test_usb_unification_is_preserved_after_c5_source_correction(self):
         source = self.module.HW_REPO / "hardware/ecad/generated/H2-R2-native-instance-ledger.json"
         rows = json.loads(source.read_text())["rows"]
         ports = [row for row in rows if row["device_id"] == "gct_usb4105_gf_a"]
@@ -186,11 +187,13 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         )
         self.assertEqual(4, len(ports))
         self.assertFalse(any(row["device_id"] == "jae_dx07s016ja1r1500" for row in rows))
-        self.assertEqual(1208, len(rows))
-        self.assertEqual(244, len({row["device_id"] for row in rows}))
-        self.assertEqual(1616 - 17, self.actual["exact_component_ledger"]["summary"]["logical_contact_count"])
-        self.assertEqual(4305, self.actual["native_kicad"]["summary"]["physical_symbol_pin_count"])
-        self.assertEqual(4071, self.actual["native_kicad"]["summary"]["connected_physical_pin_count"])
+        self.assertEqual(1210, len(rows))
+        self.assertEqual(246, len({row["device_id"] for row in rows}))
+        # Four unchanged GCT instances; TS10/NX6 unique definitions are added
+        # independently of the second NAND14 + bypass2 fitted-pin increment.
+        self.assertEqual(1616 - 17 + 10 + 6, self.actual["exact_component_ledger"]["summary"]["logical_contact_count"])
+        self.assertEqual(4305 + 14 + 2, self.actual["native_kicad"]["summary"]["physical_symbol_pin_count"])
+        self.assertEqual(4085, self.actual["native_kicad"]["summary"]["connected_physical_pin_count"])
         self.assertEqual(173, self.actual["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
 
     def test_c5_transport_is_quad_and_40mhz_qualification_only(self):
@@ -220,6 +223,15 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         self.assertNotIn("service-VBUS", " ".join(self.actual["pre_h2_gates"]))
         self.assertEqual([], self.actual["pre_h2_gates"])
         self.assertFalse(self.actual["claims"]["r1_f4_1_2_is_current_authority"])
+        c5 = self.actual["c5_sdio_service_mux"]
+        self.assertEqual([], self.module.c5_boundary_errors(c5))
+        self.assertFalse(any(c5["qualification"].values()))
+        self.assertFalse(self.actual["claims"]["c5_firmware_service_manager_implemented"])
+        self.assertFalse(self.actual["claims"]["c5_switching_or_recovery_qualified"])
+        route = ownership["detector_latch_implementation"]["release_qualifier"]["live_inventory"]
+        self.assertEqual((0, None, 21, []), tuple(route[k] for k in
+                         ("stock", "available_order_quantity", "moq", "price_tiers_usd")))
+        self.assertTrue(route["price_is_estimate"])
 
     def test_pack_safety_boundary_is_exact_and_not_hard_kill(self):
         boundary = self.actual["pack_safety_i2c_boundary"]
@@ -327,6 +339,60 @@ class H0R2FirmwareContractTest(unittest.TestCase):
         )
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertIn("F0-R2 closure review OK", result.stdout)
+
+
+class C5SourceProjectionTests(unittest.TestCase):
+    """Pure source fixtures: these do not rewrite/wait for generated imports."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.module = load_sync_module()
+        cls.source = json.loads(cls.module.C5_MUX_SOURCE.read_text())
+        cls.inventory = {"component_groups": [
+            {"device_id": "ti_ts3usb221erser", "mpn": "TS3USB221ERSER", "quantity_per_product": 1},
+            {"device_id": "ti_sn74lv20apwr", "mpn": "SN74LV20APWR", "quantity_per_product": 2},
+            {"device_id": "nexperia_nx3008nbks_115", "mpn": "NX3008NBKS,115", "quantity_per_product": 3},
+        ]}
+
+    def test_current_projection_preserves_qualification_and_inputs(self):
+        before = copy.deepcopy((self.source, self.inventory))
+        result = self.module.c5_projection(self.source, self.inventory)
+        self.assertEqual([], self.module.c5_boundary_errors(result))
+        self.assertEqual(self.source["qualification"], result["qualification"])
+        self.assertEqual(before, (self.source, self.inventory))
+
+    def test_source_identity_quantity_and_duplicate_are_rejected(self):
+        for mutate in (
+            lambda x: x["component_groups"].pop(),
+            lambda x: x["component_groups"].append(x["component_groups"][0]),
+            lambda x: x["component_groups"][0].update(mpn="FSUSB42MUX"),
+            lambda x: x["component_groups"][1].update(quantity_per_product=1),
+        ):
+            inventory = copy.deepcopy(self.inventory)
+            mutate(inventory)
+            with self.assertRaises(ValueError):
+                self.module.c5_projection(self.source, inventory)
+
+    def test_preorder_is_explicit_not_zero_stock_inferred_availability(self):
+        part = self.source["ownership"]["detector_latch_implementation"]["release_qualifier"]
+        inventory = part["live_inventory"]
+        self.assertTrue(self.module.documented_pcba_route(part, inventory))
+        for key in ("explicit_preorder_offered", "preorder_estimate", "moq", "checked_at"):
+            broken = copy.deepcopy(inventory)
+            broken.pop(key)
+            self.assertFalse(self.module.documented_pcba_route(part, broken), key)
+        broken = copy.deepcopy(inventory)
+        broken["price_is_estimate"] = False
+        self.assertFalse(self.module.documented_pcba_route(part, broken))
+
+    def test_stocked_route_needs_actual_order_quantity_and_price(self):
+        route = self.source["production_mux_route"]
+        self.assertTrue(self.module.documented_pcba_route(route["candidate"], route["live_inventory"]))
+        for field, value in (("available_order_quantity", None), ("stock", 0),
+                             ("moq", 0), ("price_tiers_usd", [])):
+            broken = copy.deepcopy(route["live_inventory"])
+            broken[field] = value
+            self.assertFalse(self.module.documented_pcba_route(route["candidate"], broken))
 
 
 if __name__ == "__main__":

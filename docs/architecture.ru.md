@@ -80,11 +80,15 @@ I²C1 переднего Hub GP42/43. Обязательная powered-off-Ioff 
 
 Канал C5 использует штатный Espressif FIFO/register/interrupt transport. В
 реальном модуле должен быть **ESP32-C5 revision v1.2 или новее**. GPIO7–10 идут
-напрямую; GPIO13/14 проходят через fail-safe hardware-owned mux между runtime
-DAT3/DAT2 и data-only service USB. Service VBUS асинхронно захватывает владение,
-держит Hub в reset/high-Z и переключает break-before-make; firmware не может
-обойти эту защёлку. Hub-RF использует hardware SPI1 slave DMA RP2354B. Это
-рабочие pre-H2 цели, а не реализованные или физически квалифицированные связи.
+напрямую; GPIO13/14 проходят через TS3USB221ERSER между runtime DAT3/DAT2 и
+data-only service USB. Исходные формулы: `SEL=R`, `VALID=!(O&R)`,
+`OE=!(A&VALID&P&F)`, `HUB_HOLD=O|L|!R`; инверсию владельца создаёт NOT(Q),
+а не Q_N защёлки. Независимый физический KILL не меняется. До изменения R
+требуется запросить A=0/L=1, обеспечить reset/pad-high-Z и выдержку; соединение
+разрешается после отдельной выдержки установления, а Hub удерживается до
+выполнения C5 strap/ready timing. Это условные требования, не измеренная
+квалификация; программного менеджера переключения ещё нет. Hub-RF использует
+hardware SPI1 slave DMA RP2354B. Обе связи физически не квалифицированы.
 
 ## Опциональные Cap-профили U214/U219
 

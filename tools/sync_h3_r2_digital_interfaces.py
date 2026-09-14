@@ -26,9 +26,36 @@ def all_true(value: dict) -> bool:
     return bool(value) and all(item is True for item in value.values())
 
 
+def validate_c5_diagnostics(source: dict) -> None:
+    """Import failed diagnostics too, but never missing proof or new authority."""
+    control = source.get("c5_mux_control", {})
+    checks = control.get("checks", {})
+    if (not isinstance(checks, dict) or not checks
+            or any(type(value) is not bool for value in checks.values())
+            or control.get("source_topology_status") != ("pass" if all_true(checks) else "fail")
+            or not control.get("scope")):
+        raise ValueError("C5 source-topology diagnostic is missing or inconsistent")
+    for key in ("timing_qualified", "power_sequences_qualified",
+                "firmware_service_manager_implemented", "production_release_allowed"):
+        if control.get(key) is not False:
+            raise ValueError("C5 diagnostic must retain false qualification: " + key)
+    usb = source.get("usb_and_service_ownership", {})
+    loading = source.get("loading", {})
+    for checks, key in (
+        (usb, "service_switch_has_usb_full_speed_capability"),
+        (usb, "power_off_port_leakage_limit_is_2ua"),
+        (loading.get("checks", {}), "c5_mux_typical_bandwidth_screen_is_at_least_10x_bus_clock"),
+    ):
+        if type(checks.get(key)) is not bool:
+            raise ValueError("current C5 diagnostic key is missing: " + key)
+    if loading.get("models", {}).get("hub_c5_sdio", {}).get("bandwidth_is_typical_not_timing_proof") is not True:
+        raise ValueError("C5 bandwidth must remain a typical-only comparison")
+
+
 def build() -> dict:
     scope = inspect_current_power([(SOURCE, "H3-R2-digital-interfaces")])
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
+    validate_c5_diagnostics(source)
     timing = source["display_timing"]
     margins = source["logic_level_margins"]
     loading = source["loading"]
@@ -41,6 +68,7 @@ def build() -> dict:
         or not all_true(source.get("usb_and_service_ownership", {}))
         or not all_true(source.get("m1", {}).get("checks", {}))
         or not all_true(loading.get("checks", {}))
+        or not all_true(source["c5_mux_control"]["checks"])
         or any(float(row["minimum_margin"]) <= 0 for row in margins)
     ):
         raise ValueError("hardware H3-R2.4 digital-interface evidence is not closed")
@@ -74,6 +102,8 @@ def build() -> dict:
         },
         "logic_level_margins": margins,
         "usb_and_service_ownership": source["usb_and_service_ownership"],
+        "c5_mux_control": source["c5_mux_control"],
+        "loading": loading,
         "c5_boot_strap": source["c5_boot_strap"],
         "m1": source["m1"],
         "transport_timing": source["transport_timing"],
@@ -81,7 +111,8 @@ def build() -> dict:
             "display_clock": "request and verify exactly 20 MHz; reject any divider result above 25 MHz",
             "display_owner": "S3 owns all direct i8080 traffic; UI/buttons/encoder remain S3-local",
             "service_usb": "Hub RP, RF RP and C5 service paths never power the product",
-            "c5_mux": "required: hardware service-VBUS latch owns C5 USB versus SDIO selection before firmware; current SEL/OE and KILL recovery remain unqualified",
+            "c5_mux": "source requirements: SEL=R; VALID=!(O&R); OE=!(A&VALID&P&F); HUB_HOLD=O|L|!R, using NOT(Q), not raw Q_N. Before changing R, request A=0/L=1 and establish reset/pad-high-Z; settle before A=1 and retain Hub hold through the C5 strap/ready interval. Waits are conditional, not measured. Preserve independent physical KILL; no firmware service manager or recovery/timing qualification is implemented/proven.",
+            "c5_bandwidth": "1000 MHz is a datasheet typical-only comparison, not a guaranteed SDIO bandwidth or switching-timing qualification",
             "m1_reserve": "contacts 60-64 and 77-80 remain true NC",
         },
         "physical_residuals": source["physical_residuals"],

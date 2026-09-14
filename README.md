@@ -65,10 +65,14 @@ both `SC1512-A4` instances, the exact H1-R2.31 RP maps and the exact H0-R2 M1 ma
 The working BSP contains all 48 GPIO positions for each RP and the six fixed C5
 SDIO contacts. This input-authority check does not close current H6 electrical,
 placement or assembly gates, nor target runtime, emulator or HIL qualification.
-In particular, the [open C5 mux-control defect](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-c5-mux-control-review.md)
-prevents treating the imported USB/SDIO sequence as implemented: SEL lacks a
-driver and OE cannot provide the required disconnected interval in both modes.
-The native pair-name refresh changes source hashes, not this circuit or firmware behavior.
+The [C5 mux-control correction](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-c5-mux-control-review.md)
+now has an exact source-topology witness: TS3USB221ERSER, two SN74LV20APWR
+logic packages and three NX3008NBKS reset-sink packages preserve independent
+physical KILL. SEL follows the explicit request; connect permission and Hub hold
+are separate. This does not implement the firmware service manager or qualify
+reset-to-high-Z, rail ramps, switching delays or recovery. All four C5 H3
+qualification/implementation flags remain false. The LV20A route is an explicit
+MOQ-21 pre-order with an estimated price, not stocked inventory.
 The [current interface review](https://github.com/anton-vinogradov/esp32-leshy2/blob/main/docs/h6-r2-interface-review.md)
 records the restored C5 GPIO28 BOOT net membership; its copper routing and sampled
 strap timing remain unqualified, as does the reset-under-KILL/update policy conflict.
@@ -196,19 +200,23 @@ mockup passes its structural audit and was accepted on 2026-08-30. Hardware
 reviewed the exact service-VBUS detector/latch/release implementation. Current
 `H2-R2.0.3` reviewed the exact `TCA9803DGKR/C2687966` Pack/Safety
 powered-off-Ioff boundary. `H2-R2.1.1` reviewed two native projects, 22 sheets,
-six domain owners, 250 exact component groups and 1,218 product positions.
-`H2-R2.1.2` reviewed exact identities for 244 board groups, six explicit
-non-PCBA groups and 1,599 unique-definition contacts. `H2-R2.1.3` materialized 1,208
-fitted positions and 4,305 physical pins in the two native KiCad projects.
-There are 4,070 connected physical pins, 235 explicit no-connects and
-788 global canonical / 822 board-local nets; both projects pass KiCad ERC
-with zero errors and zero warnings under the current passive-pin library. This does not prove
-rail-driver completeness or exclude output conflicts; that hardware review remains a production gate.
+six domain owners, 252 exact component groups and 1,220 product positions.
+`H2-R2.1.2` reviewed exact identities for 246 board groups, six explicit
+non-PCBA groups and 1,615 unique-definition contacts. Current `H2-R2.1.3`
+contains 1,210 fitted positions and 4,321 physical pins: 4,085 connected,
+236 explicit no-connects and 789 global canonical nets. These are schematic
+source counts, not proof of routed continuity, rail-driver completeness or
+absence of output conflicts; electrical and physical review remain production gates.
 The user-approved 9 September source refresh unifies all four USB-C receptacles
 as `GCT USB4105-GF-A`. It removes one unused JAE part definition and its 17
 definition contacts, not any fitted endpoint: 1,208 positions and 4,305 physical
 pins remain. GPIO, transport APIs and all 13 BSP C/H files are byte-identical.
 The old 12-job build receipt is unchanged; `F2-R2.5` reproducibility remains pending.
+The 14 September C5 correction then adds one NAND package and one bypass
+capacitor without renumbering existing references. It changes only four C5/Hub BSP
+endpoint descriptions from FSUSB42 to TS3USB221E; the other 11 C/H files and all
+GPIO, direction and transport API fields are unchanged from the preceding input.
+Source-topology PASS is not service-manager implementation or switching qualification.
 The 7 September physical-pin review corrected three component pin mappings and restored
 both RP2354 QSPI supply inputs: 4,070 physical pins are connected, with no change to
 the six firmware domains, controller GPIO assignments or transport APIs.

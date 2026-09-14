@@ -45,6 +45,46 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def c5_boundary_errors(c5: dict) -> list[str]:
+    """Source reconciliation must not promote a Boolean witness to execution."""
+    errors = []
+    expected_parts = {
+        "ti_ts3usb221erser": ("TS3USB221ERSER", 1),
+        "ti_sn74lv20apwr": ("SN74LV20APWR", 2),
+        "nexperia_nx3008nbks_115": ("NX3008NBKS,115", 3),
+    }
+    parts = c5.get("source_components", [])
+    if (len(parts) != 3 or {row.get("device_id"): (row.get("mpn"), row.get("quantity_per_product"))
+                           for row in parts} != expected_parts):
+        errors.append("C5 current TS/LV/NX identities or quantities differ")
+    qualification_fields = {
+        "native_topology_verified", "full_temperature_levels_qualified", "voltage_ramps_qualified",
+        "vbus_detector_latch_qualified", "switching_timing_qualified", "recovery_qualified",
+        "production_release_allowed",
+    }
+    q = c5.get("qualification", {})
+    if set(q) != qualification_fields or any(value is not False for value in q.values()):
+        errors.append("C5 engineering source must retain all explicit unqualified gates")
+    route = c5.get("production_route", {})
+    logic = c5.get("ownership", {}).get("detector_latch_implementation", {})
+    if (c5.get("status") != "engineering_schematic_contract_not_functionally_qualified"
+            or c5.get("mux_reference", {}).get("device_id") != "ti_ts3usb221erser"
+            or c5.get("mux_reference", {}).get("mpn") != "TS3USB221ERSER"
+            or logic.get("release_qualifier", {}).get("device_id") != "ti_sn74lv20apwr"
+            or any(row.get("selection_scope") != "engineering_schematic_only"
+                   or row.get("production_release_allowed") is not False for row in (route, logic))):
+        errors.append("C5 source selection is not the scoped engineering contract")
+    control = c5.get("ownership", {}).get("control_mapping", {})
+    if (control.get("equations") != {"SEL": "R", "VALID": "!(O&R)",
+                                    "OE": "!(A&!(O&R)&P&F)", "HUB_HOLD": "O|L|!R"}
+            or control.get("owner_q_n_used") is not False
+            or control.get("independent_kill_fault_sinks_preserved") is not True
+            or control.get("kill_policy_changed") is not False
+            or control.get("firmware_service_manager_implemented") is not False):
+        errors.append("C5 control/KILL or unimplemented service-manager boundary changed")
+    return errors
+
+
 def normalized_domain_id(row: dict) -> str:
     raw = row.get("id") or row.get("domain") or row.get("instance") or ""
     normalized = str(raw).strip().lower()
@@ -206,6 +246,7 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if h0.get("hardware_marker") != "H1-R2.31":
         errors.append("current pre-H2 authority is not H1-R2.31")
     c5 = h0.get("c5_sdio_service_mux", {})
+    errors.extend(c5_boundary_errors(c5))
     if c5.get("performance", {}).get("bus_width_bits") != 4:
         errors.append("current pre-H2 authority lost C5 4-bit SDIO")
     pack_safety = h0.get("pack_safety_i2c_boundary", {})
@@ -223,8 +264,8 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
         h0.get("current_hardware_substep") != "H2-R2.1.5"
         or native_inventory.get("marker") != "H2-R2.1.1"
         or native_inventory.get("status") != "pass"
-        or native_inventory.get("summary", {}).get("component_group_count") != 250
-        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1218
+        or native_inventory.get("summary", {}).get("component_group_count") != 252
+        or native_inventory.get("summary", {}).get("component_quantity_per_product") != 1220
         or native_inventory.get("summary", {}).get("unresolved_pre_ecad_prerequisites") != 0
         or native_inventory.get("authorization", {}).get("schematic_symbols_or_nets") is not False
     ):
@@ -232,10 +273,11 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         exact_ledger.get("marker") != "H2-R2.1.2"
         or exact_ledger.get("status") != "pass"
-        or exact_ledger.get("summary", {}).get("board_component_group_count") != 244
+        or exact_ledger.get("summary", {}).get("component_group_count") != 252
+        or exact_ledger.get("summary", {}).get("board_component_group_count") != 246
         or exact_ledger.get("summary", {}).get("explicit_non_pcba_group_count") != 6
-        # Unique-definition count after USB unification, not fitted pin loss.
-        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1599
+        # Unique definitions: post-USB1599 + TS10/NX6, not fitted pin count.
+        or exact_ledger.get("summary", {}).get("logical_contact_count") != 1615
         or exact_ledger.get("summary", {}).get("unresolved_groups") != 0
         or exact_ledger.get("authorization", {}).get("exact_group_ledger") is not True
         or exact_ledger.get("authorization", {}).get("symbol_or_footprint_files") is not False
@@ -247,9 +289,9 @@ def check(gate: dict, h0: dict, bsp: dict, integration: dict) -> list[str]:
     if (
         native_kicad.get("marker") != "H2-R2.1.3"
         or native_kicad.get("status") != "pass"
-        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1208
-        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4305
-        or native_kicad.get("summary", {}).get("canonical_net_count") != 788
+        or native_kicad.get("summary", {}).get("fitted_symbol_instance_count") != 1210
+        or native_kicad.get("summary", {}).get("physical_symbol_pin_count") != 4321
+        or native_kicad.get("summary", {}).get("canonical_net_count") != 789
         or native_kicad.get("authorization", {}).get("pcb_placement_or_routing") is not False
     ):
         errors.append("current authority lost the reviewed H2-R2.1.3 native KiCad result")

@@ -78,11 +78,17 @@ class R2H2SyncGateTests(unittest.TestCase):
             self.h0["physical_h1"]["pin_authority_marker"],
         )
 
-    def test_old_usb_unique_definition_counts_are_not_current_authority(self):
+    def test_old_usb_and_pre_c5_counts_are_not_current_authority(self):
         cases = (
             ("native_r2_inventory", "component_group_count", 251, "H2-R2.1.1"),
             ("exact_component_ledger", "board_component_group_count", 245, "H2-R2.1.2"),
             ("exact_component_ledger", "logical_contact_count", 1616, "H2-R2.1.2"),
+            ("native_r2_inventory", "component_group_count", 250, "H2-R2.1.1"),
+            ("exact_component_ledger", "board_component_group_count", 244, "H2-R2.1.2"),
+            ("exact_component_ledger", "logical_contact_count", 1599, "H2-R2.1.2"),
+            ("native_kicad", "fitted_symbol_instance_count", 1208, "H2-R2.1.3"),
+            ("native_kicad", "physical_symbol_pin_count", 4305, "H2-R2.1.3"),
+            ("native_kicad", "canonical_net_count", 788, "H2-R2.1.3"),
         )
         for section, field, old_value, expected in cases:
             with self.subTest(section=section, field=field):
@@ -90,6 +96,35 @@ class R2H2SyncGateTests(unittest.TestCase):
                 h0[section]["summary"][field] = old_value
                 errors = self.checker.check(self.gate, h0, self.bsp, self.integration)
                 self.assertTrue(any(expected in error for error in errors), errors)
+
+    def test_c5_source_gate_rejects_self_qualification_and_kill_drift(self):
+        sync = load_module("sync_h0_c5_fixture", ROOT / "tools/sync_h0_r2_contract.py")
+        source = json.loads(sync.C5_MUX_SOURCE.read_text())
+        inventory = {"component_groups": [
+            {"device_id": "ti_ts3usb221erser", "mpn": "TS3USB221ERSER", "quantity_per_product": 1},
+            {"device_id": "ti_sn74lv20apwr", "mpn": "SN74LV20APWR", "quantity_per_product": 2},
+            {"device_id": "nexperia_nx3008nbks_115", "mpn": "NX3008NBKS,115", "quantity_per_product": 3},
+        ]}
+        current = sync.c5_projection(source, inventory)
+        self.assertEqual([], self.checker.c5_boundary_errors(current))
+        for key in current["qualification"]:
+            for missing in (False, True):
+                candidate = copy.deepcopy(current)
+                if missing:
+                    candidate["qualification"].pop(key)
+                else:
+                    candidate["qualification"][key] = True
+                self.assertTrue(self.checker.c5_boundary_errors(candidate), (key, missing))
+        for key, value in (("kill_policy_changed", True), ("owner_q_n_used", True),
+                           ("independent_kill_fault_sinks_preserved", False),
+                           ("firmware_service_manager_implemented", True),
+                           ("equations", {"HUB_HOLD": "O|L"})):
+            candidate = copy.deepcopy(current)
+            candidate["ownership"]["control_mapping"][key] = value
+            self.assertTrue(self.checker.c5_boundary_errors(candidate), key)
+        candidate = copy.deepcopy(current)
+        candidate["source_components"][0]["mpn"] = "FSUSB42MUX"
+        self.assertTrue(self.checker.c5_boundary_errors(candidate))
 
     def test_historical_markers_survive_every_import_write(self):
         raw = copy.deepcopy(self.bsp)

@@ -223,12 +223,15 @@ class ProductSiteTests(unittest.TestCase):
         self.assertFalse(review["hardware_order_authorized"])
         self.assertTrue(state["current_claims"]["h3_r2_7_acceptance_imported"])
 
-    def test_usb_identity_refresh_does_not_relabel_retained_builds(self):
+    def test_usb_and_c5_source_refreshes_do_not_relabel_retained_builds(self):
         for name in ("README.md", "README.ru.md", "docs/roadmap.md", "docs/roadmap.ru.md"):
             current = self.read(name).split("<details>", 1)[0]
-            for token in ("GCT USB4105-GF-A", "250", "244", "17", "13", "F2-R2.5", "c8e349b"):
+            # USB's historical -17 definition contacts and unchanged 13-file
+            # slice remain documented; current C5 adds two groups/16 contacts.
+            for token in ("GCT USB4105-GF-A", "252", "246", "17", "13", "F2-R2.5", "c8e349b",
+                          "TS3USB221ERSER", "LV20A", "NX3008NBKS"):
                 self.assertIn(token, current, name)
-            self.assertIn("1 599" if ".ru." in name else "1,599", current, name)
+            self.assertIn("1 615" if ".ru." in name else "1,615", current, name)
         state = json.loads(self.read("config/firmware_roadmap_state.json"))
         self.assertFalse(state["current_claims"]["r2_current_matrix_build_qualified"])
         self.assertFalse(state["current_claims"]["r2_byte_reproducibility_proven"])
@@ -1116,8 +1119,8 @@ class ProductSiteTests(unittest.TestCase):
             reconciliation["domain_ids"],
         )
         self.assertEqual([], reconciliation["pre_h2_gates"])
-        self.assertEqual(1208, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
-        self.assertEqual(788, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
+        self.assertEqual(1210, reconciliation["native_kicad"]["summary"]["fitted_symbol_instance_count"])
+        self.assertEqual(789, reconciliation["native_kicad"]["summary"]["canonical_net_count"])
         self.assertEqual(173, reconciliation["h2_hwfw_reconciliation"]["summary"]["controller_pin_rows"])
         self.assertEqual(34, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_project_net_count"])
         self.assertEqual(227, reconciliation["h2_hwfw_reconciliation"]["summary"]["cross_sheet_net_count"])
