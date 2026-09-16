@@ -44,9 +44,14 @@ pre-order package is six reproducible diagnostic images, S3 QEMU, one
 flash/recovery bundle and a reviewed safe bring-up script. Factory powered
 Function Test is optional and is
 considered only when the final quote makes it near-free. The factory
-deterministically manufactures and assembles that single unit, including the
-exact production display; the owner performs the first full power-on after
-delivery under the reviewed procedure.
+manufactures and assembles two populated PCBAs. The owner completes the
+reviewed solder-free final assembly, including installation of the exact
+production display, and performs the first full power-on under the reviewed procedure.
+
+Repairability is not a design priority and does not justify greater cost, size,
+or layout/manufacturing complexity. Optional service conveniences are acceptable
+only without those penalties. Safety, reliability, required assembly and test
+access, and firmware programming/recovery remain mandatory.
 
 **Firmware is at F2-R2.5.** The [reviewed F0-R2 result](docs/f0-product-contracts-report.md)
 closes the contract foundation without claiming an implemented target. The generated
@@ -170,7 +175,7 @@ is retained as historical evidence, not the current completion state of the
 The exact imported pin/config authority remains the reviewed
 `H1-R2.31` artifact:
 the locality-first two-board placement, matched outer/turned-over inner faces
-and service access are generated. The 226-body physical register includes all
+and required assembly/programming/test access are generated. The 226-body physical register includes all
 eight exact TX detectors, five required couplers and eight bounded local
 evidence islands; the accepted AD8314 package and exact Hirose U.FL packaging-route changes save hardware cost without altering any
 firmware-visible net or behavior. The 2026-08-30 cost decision retains every current top-20 hardware group and permanently assigns separate
