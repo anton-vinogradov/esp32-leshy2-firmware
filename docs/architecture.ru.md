@@ -121,7 +121,8 @@ CC1101 на U219 жёстко ограничен приёмом. Каждая ra
 `MCSM0.PIN_CTRL_EN=1` и автоматические состояния `FSTXON/TX` после RX. Для NFC
 доступны только poll/read; write и card emulation отсутствуют в принятой policy.
 Намеренное поле reader 13,56 МГц — отдельная группа `U219_NFC`: active-low
-`EV_N9_U219_NFC` на P12 регистра evidence одновременно приходит в
+`EV_N9_U219_NFC` на физическом P17 регистра evidence (raw-бит 15, сохранённый
+логический ABI-бит 12) одновременно приходит в
 `ANY_TX_AON_N` и обязано совпадать с ограниченной lease физического поля.
 Compile-gate по умолчанию равен нулю и не определён ни в одном target, поэтому
 поле остаётся выключенным до VNA и HIL на реальном U219 в финальном корпусе с
@@ -129,6 +130,17 @@ fault/latency/range-тестами. Host-тесты доказывают тол�
 command firewall и fail-closed gate, но не target, RF или HIL. M5Unit-NFC и
 RadioLib остаются MIT reference candidates; ни ST driver, ни эти библиотеки пока
 не интегрированы.
+
+[Проверка native evidence binding](../tools/check_evidence_register.py) связывает
+все 16 контактов U111 через текущие H2 native ledgers с проверкой происхождения
+исходников; свежая проверка KiCad/PCB выполняется отдельно. Переносимые функции
+преобразуют active-low raw-маску `0x81ff` в asserted-high логическую `0x11ff` и
+проверяют переданные слова readback configuration/polarity. P12 — raw-бит 10
+запроса service, а не EV9; P12/P13/P14 могут оставаться service-выходами.
+Host-тесты перебирают все 65 536 raw-слов и комбинации каждого регистра. Отдельный
+адаптер `evidence_register` проверяется только на host, не компилируется в текущие
+SDK targets и не подключён к target driver: реальные configuration/readback TCA, режимы
+input/pull Safety PA22 и C5 GPIO23/24, утечки и электрическая квалификация открыты.
 
 <details>
 <summary><strong>Сохранённая архитектура R1 — не текущая физическая топология</strong></summary>

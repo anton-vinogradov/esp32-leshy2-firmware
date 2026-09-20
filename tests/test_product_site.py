@@ -1233,7 +1233,9 @@ class ProductSiteTests(unittest.TestCase):
         nfc = policy["nfc_reader"]
         self.assertEqual(["POLL", "READ"], nfc["allowed_operations"])
         self.assertEqual({"WRITE", "CARD_EMULATION"}, set(nfc["forbidden_operations"]))
-        self.assertEqual("P12", nfc["evidence"]["input"])
+        self.assertEqual("P17", nfc["evidence"]["input"])
+        self.assertEqual(15, nfc["evidence"]["raw_bit"])
+        self.assertEqual(12, nfc["evidence"]["bit"])
         self.assertEqual(12, nfc["evidence"]["bit"])
         self.assertEqual("ANY_TX_AON_N", nfc["evidence"]["aggregate"])
         self.assertEqual(0, nfc["compile_gate"]["default"])

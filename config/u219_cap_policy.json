@@ -181,8 +181,10 @@
     "evidence": {
       "name": "EV_N9_U219_NFC",
       "register": "TCA9535PWR",
-      "input": "P12",
+      "input": "P17",
+      "raw_bit": 15,
       "bit": 12,
+      "bit_numbering": "logical_evidence_abi",
       "polarity": "active_low",
       "aggregate": "ANY_TX_AON_N",
       "lease_group": "U219_NFC"

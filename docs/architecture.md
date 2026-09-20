@@ -119,13 +119,25 @@ rejects `SFSTXON`, `STX`, PATABLE/TX-FIFO writes, `MCSM0.PIN_CTRL_EN=1` and
 post-RX `FSTXON/TX` states. NFC exposes poll/read only; write and card emulation
 are absent from the accepted policy. Its intentional 13.56-MHz reader field is
 a separate `U219_NFC` signal group: active-low `EV_N9_U219_NFC` on evidence
-register P12 also reaches `ANY_TX_AON_N` and must match a bounded physical-field
+register physical P17 (raw bit 15, preserved logical ABI bit 12) also reaches
+`ANY_TX_AON_N` and must match a bounded physical-field
 lease. The compile gate defaults to zero and no target defines it, so field
 generation remains disabled until a real U219, final enclosure, VNA tuning and
 HIL fault/latency/range tests close the hardware gate. Host tests prove only the
 state machine, command firewall and fail-closed gate—not target, RF or HIL
 operation. M5Unit-NFC and RadioLib are MIT reference candidates; neither an ST
 driver nor either library is integrated yet.
+
+The [native evidence binding checker](../tools/check_evidence_register.py) joins
+all 16 U111 contacts through current H2 native ledgers with source provenance;
+fresh KiCad/PCB checking is separate. Portable helpers normalize
+active-low raw mask `0x81ff` to asserted-high logical mask `0x11ff` and check
+supplied configuration/polarity readback words. P12 is raw bit 10, a service
+request, not EV9; P12/P13/P14 remain eligible service outputs. Exhaustive host
+tests cover all 65,536 raw words and each register's bit patterns. The separate
+`evidence_register` adapter is host-tested only, not compiled into current SDK
+targets or connected to a target driver: actual TCA configuration/readback, Safety PA22 and
+C5 GPIO23/24 input/pull modes, leakage and electrical qualification remain open.
 
 <details>
 <summary><strong>Retained R1 architecture — not the current physical topology</strong></summary>

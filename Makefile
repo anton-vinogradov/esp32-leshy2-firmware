@@ -24,6 +24,9 @@ h3-current-scope-review:
 
 u219-cap-policy-review:
 	python3 tools/check_u219_cap_policy.py
+	python3 -m unittest tests.test_evidence_register tests.test_u219_cap_policy
+	$(MAKE) $(HOST_SAFETY_TEST)
+	./$(HOST_SAFETY_TEST)
 
 r2-h2-sync-review:
 	python3 tools/check_r2_h2_sync_gate.py
@@ -208,9 +211,9 @@ host-test: $(HOST_SAFETY_TEST) $(HOST_L2IP_TEST) $(HOST_HS_TEST) $(HOST_UPDATE_T
 host-sanitize:
 	$(MAKE) HOST_BUILD=build_host_sanitized CFLAGS="-std=c17 -O1 -g -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined -fno-omit-frame-pointer" host-test
 
-$(HOST_SAFETY_TEST): common/src/safety_core.c host/tests/test_safety_core.c common/include/leshy2/safety_core.h
+$(HOST_SAFETY_TEST): common/src/safety_core.c common/src/evidence_register.c host/tests/test_safety_core.c common/include/leshy2/safety_core.h common/include/leshy2/evidence_register.h
 	mkdir -p $(HOST_BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) common/src/safety_core.c host/tests/test_safety_core.c -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) common/src/safety_core.c common/src/evidence_register.c host/tests/test_safety_core.c -o $@
 
 $(HOST_L2IP_TEST): common/src/l2ip.c host/tests/test_l2ip.c common/include/leshy2/l2ip.h
 	mkdir -p $(HOST_BUILD)

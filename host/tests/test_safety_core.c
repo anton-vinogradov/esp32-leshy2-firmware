@@ -1,4 +1,5 @@
 #include "leshy2/safety_core.h"
+#include "leshy2/evidence_register.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -145,8 +146,55 @@ static void test_loop_deadline_is_fail_closed(void)
     assert(state.first_fault == L2_FAULT_SAFETY_LOOP_OVERRUN);
 }
 
+static void test_tca9535_physical_to_logical_boundary(void)
+{
+    const unsigned raw_bits[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 15};
+    const unsigned logical_bits[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12};
+    for (uint32_t word = 0; word <= UINT16_MAX; ++word) {
+        uint16_t expected = 0;
+        for (unsigned index = 0; index < 10; ++index) {
+            if ((word & (UINT32_C(1) << raw_bits[index])) == 0) {
+                expected |= (uint16_t)(UINT16_C(1) << logical_bits[index]);
+            }
+        }
+        assert(l2_evidence_decode_tca9535((uint8_t)word, (uint8_t)(word >> 8)) == expected);
+        /* Exhaust all configuration and polarity words independently. */
+        bool input_ok = true;
+        bool polarity_ok = true;
+        for (unsigned bit = 0; bit < 16; ++bit) {
+            if (bit != 10 && bit != 11 && bit != 12 && !(word & (UINT32_C(1) << bit))) {
+                input_ok = false;
+            }
+        }
+        for (unsigned index = 0; index < 10; ++index) {
+            if (word & (UINT32_C(1) << raw_bits[index])) {
+                polarity_ok = false;
+            }
+        }
+        assert(l2_evidence_tca9535_readback_valid((uint16_t)word, 0) == input_ok);
+        assert(l2_evidence_tca9535_readback_valid(UINT16_MAX, (uint16_t)word) == polarity_ok);
+    }
+    for (unsigned bit = 0; bit < 16; ++bit) {
+        const uint16_t mask = (uint16_t)(UINT16_C(1) << bit);
+        const bool is_evidence = bit <= 8 || bit == 15;
+        const uint16_t expected = is_evidence ? (bit == 15 ? UINT16_C(0x1000) : mask) : 0;
+        const uint16_t raw = (uint16_t)~mask;
+        assert(l2_evidence_decode_tca9535((uint8_t)raw, (uint8_t)(raw >> 8)) == expected);
+        assert(l2_evidence_tca9535_readback_valid(UINT16_C(0xe3ff), mask) == !is_evidence);
+    }
+    assert(l2_evidence_decode_tca9535(0xff, 0x7f) == 0x1000);
+    assert(l2_evidence_decode_tca9535(0xfb, 0xff) == 0x0004);
+    assert(l2_evidence_decode_tca9535(0xff, 0xfb) == 0);
+    assert(l2_evidence_tca9535_readback_valid(0xffff, 0));
+    assert(l2_evidence_tca9535_readback_valid(0xe3ff, 0));
+    assert(!l2_evidence_tca9535_readback_valid(0x81ff, 0));
+    assert(!l2_evidence_tca9535_readback_valid(0, 0x81ff));
+    puts("TCA9535 boundary: all 65536 raw/configuration/polarity words and bit flips passed; no driver claimed");
+}
+
 int main(void)
 {
+    test_tca9535_physical_to_logical_boundary();
     test_reset_and_physical_rearm();
     test_full_nrf_mix_and_u219_field_evidence();
     test_duplicate_or_stale_heartbeat_does_not_extend_session();

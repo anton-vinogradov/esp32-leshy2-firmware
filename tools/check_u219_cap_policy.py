@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "config/u219_cap_policy.json"
 PROTOCOL_PATH = ROOT / "config/interdomain_protocol.json"
 HARDWARE_PATH = ROOT / "config/h0_r2_hardware_contract.json"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from tools import check_evidence_register
 
 
 def load(path: Path) -> dict:
@@ -66,6 +69,9 @@ def main() -> int:
     hardware = load(HARDWARE_PATH)
     errors: list[str] = []
     errors.extend(hardware_binding_errors(policy, hardware))
+    evidence_binding = check_evidence_register.build()
+    if evidence_binding["status"] != "pass":
+        errors.extend("current native evidence binding: " + error for error in evidence_binding["errors"])
 
     if policy.get("policy_id") != "LESHY2-CAP-PROFILES-01":
         errors.append("unexpected Cap policy identity")
@@ -156,8 +162,8 @@ def main() -> int:
     if gate.get("target_definitions") != []:
         errors.append("a target claims the U219 field gate is closed")
     evidence = nfc.get("evidence", {})
-    if (evidence.get("input"), evidence.get("bit"), evidence.get("aggregate")) != (
-        "P12", 12, "ANY_TX_AON_N"
+    if (evidence.get("input"), evidence.get("raw_bit"), evidence.get("bit"), evidence.get("aggregate")) != (
+        "P17", 15, 12, "ANY_TX_AON_N"
     ):
         errors.append("EV_N9 evidence route changed")
 
@@ -174,17 +180,17 @@ def main() -> int:
 
     groups = {row["name"]: row for row in protocol.get("signal_groups", [])}
     if groups.get("U219_NFC", {}).get("evidence_bits") != [12]:
-        errors.append("interdomain U219_NFC lease lacks P12 evidence")
+        errors.append("interdomain U219_NFC lease lacks logical bit 12 evidence")
     register = protocol.get("evidence_register", {})
     if register.get("used_bits") != 10 or 12 in register.get("unused_bits", []):
-        errors.append("interdomain evidence register does not consume P12")
+        errors.append("interdomain evidence register does not consume logical bit 12")
     bit_names = register.get("bit_names", [])
     if (
         not isinstance(bit_names, list)
         or len(bit_names) <= 12
         or bit_names[12] != "EV_N9_U219_NFC"
     ):
-        errors.append("interdomain evidence register lost the P12 EV_N9 name")
+        errors.append("interdomain evidence register lost the logical bit 12 EV_N9 name")
     if protocol.get("cap_profile_policy", {}).get("canonical_contract") != str(
         POLICY_PATH.relative_to(ROOT)
     ):
